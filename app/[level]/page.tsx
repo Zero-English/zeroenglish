@@ -88,7 +88,7 @@ function Pagination({ currentPage, totalPages, gradient }: { currentPage: number
         {isPrev ? (
           <ArrowLeft className="w-4 h-4"/>
         ) : null}
-        <span>{isPrev ? "Prev" : "Next"}</span>
+        <span>{isPrev ? "" : ""}</span>
         {!isPrev ? (
           <ArrowRight className="w-4 h-4"/>
         ) : null}
@@ -98,7 +98,7 @@ function Pagination({ currentPage, totalPages, gradient }: { currentPage: number
 
   return (
     <nav className="mt-10 mb-8" aria-label="Pagination">
-      <div className="inline-flex items-center gap-1 rounded-xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm px-2 py-1.5 shadow-sm shadow-zinc-200/60 dark:shadow-black/20">
+      <div className="inline-flex items-center gap-1">
         {btn("prev")}
         <div className="w-px h-5 mx-1 bg-zinc-200 dark:bg-zinc-800" />
         {items.map((item, i) =>
