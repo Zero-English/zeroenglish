@@ -1,8 +1,20 @@
 import Link from "next/link";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getWordsByLevel } from "@/lib/data";
 import { WordPagination } from "@/components/word-pagination";
 
-const levelConfig: Record<string, { bg: string; border: string; text: string; gradient: string; label: string }> = {
+interface LevelConfig {
+  readonly bg: string;
+  readonly border: string;
+  readonly text: string;
+  readonly gradient: string;
+  readonly label: string;
+}
+
+const VALID_LEVELS = ["A1", "A2", "B1", "B2"] as const;
+
+const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
   A1: {
     bg: "bg-emerald-50 dark:bg-emerald-950/40",
     border: "border-emerald-200 dark:border-emerald-800",
@@ -32,51 +44,75 @@ const levelConfig: Record<string, { bg: string; border: string; text: string; gr
     label: "Upper Intermediate",
   },
 };
-
-const levels = Object.keys(levelConfig);
 const ITEMS_PER_PAGE = 10;
+export const revalidate = 3600; // ISR: revalidate every hour
 
 export function generateStaticParams() {
-  return levels.map((level) => ({ level: level.toLowerCase() }));
+  return VALID_LEVELS.map((level) => ({ level: level.toLowerCase() }));
 }
 
-function NotFound() {
-  return (
-    <div className="min-h-dvh flex flex-col items-center justify-center gap-4 px-4">
-      <div className="text-6xl font-black text-zinc-200 dark:text-zinc-800 select-none">404</div>
-      <h1 className="text-2xl font-bold text-zinc-400">Level not found</h1>
-      <p className="text-sm text-zinc-400 dark:text-zinc-500">Choose A1, A2, B1, or B2 to start learning.</p>
-      <Link
-        href="/"
-        className="mt-2 inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
-      >
-        &larr; Back to levels
-      </Link>
-    </div>
-  );
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ level: string }>;
+}): Promise<Metadata> {
+  const { level } = await params;
+  const upper = level.toUpperCase();
+
+  if (!VALID_LEVELS.includes(upper as typeof VALID_LEVELS[number])) {
+    return {
+      title: "Level Not Found",
+    };
+  }
+
+  const config = levelConfig[upper as (typeof VALID_LEVELS)[number]];
+  const words = getWordsByLevel(upper);
+  const description = `Learn ${words.length} essential English words at ${config.label.toLowerCase()} level (${upper}). Oxford 3000 vocabulary list.`;
+
+  return {
+    title: `English Vocabulary - Level ${upper} (${config.label})`,
+    description,
+    openGraph: {
+      title: `Learn English - Level ${upper}`,
+      description,
+      type: "website",
+    },
+  };
 }
 
 export default async function Page({
   params,
   searchParams,
 }: {
-  params: Promise<{ level: string }>
-  searchParams: Promise<{ page?: string }>
+  params: Promise<{ level: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { level } = await params;
   const { page: pageStr } = await searchParams;
   const upper = level.toUpperCase();
 
-  if (!levels.includes(upper)) {
-    return <NotFound />;
+  // Validate level
+  if (!VALID_LEVELS.includes(upper as typeof VALID_LEVELS[number])) {
+    notFound();
   }
 
-  const c = levelConfig[upper];
+  const config = levelConfig[upper as (typeof VALID_LEVELS)[number]];
   const allWords = getWordsByLevel(upper);
+
+  // Handle empty results
+  if (allWords.length === 0) {
+    notFound();
+  }
+
+  // Validate and parse page number
+  const pageNum = parseInt(pageStr || "1", 10);
   const totalPages = Math.ceil(allWords.length / ITEMS_PER_PAGE);
-  const pageNum = Number(pageStr);
-  const currentPage = Math.max(1, Math.min(Number.isNaN(pageNum) ? 1 : pageNum, totalPages));
-  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  
+  if (pageNum < 1 || pageNum > totalPages || Number.isNaN(pageNum)) {
+    notFound();
+  }
+
+  const start = (pageNum - 1) * ITEMS_PER_PAGE;
   const words = allWords.slice(start, start + ITEMS_PER_PAGE);
 
   return (
@@ -98,17 +134,16 @@ export default async function Page({
           </Link>
 
           <div className="mt-8 mb-12">
-            <div className="relative rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-6 sm:p-8 shadow-xl shadow-zinc-200/60 dark:shadow-black/30">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/70 via-transparent to-white/30 dark:from-white/5 pointer-events-none" />
+            <div className="relative rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-6 sm:p-8 shadow-xl shadow-zinc-200/60 dark:shadow-black/30">
               <div className="relative flex items-start gap-5">
-                <div className={`h-14 w-1.5 shrink-0 rounded-full bg-gradient-to-b ${c.gradient}`} />
+                <div className={`h-14 w-1.5 shrink-0 rounded-full bg-gradient-to-b ${config.gradient}`} />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-baseline gap-3 flex-wrap">
-                    <h1 className={`text-5xl sm:text-6xl font-black bg-gradient-to-br ${c.gradient} bg-clip-text text-transparent tracking-tight`}>
+                    <h1 className={`text-5xl sm:text-6xl font-black bg-gradient-to-br ${config.gradient} bg-clip-text text-transparent tracking-tight`}>
                       {upper}
                     </h1>
-                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${c.text} ${c.bg} border ${c.border}`}>
-                      {c.label}
+                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${config.text} ${config.bg} border ${config.border}`}>
+                      {config.label}
                     </span>
                   </div>
                   <div className="mt-2 flex items-center gap-3 text-sm text-zinc-400 dark:text-zinc-500">
@@ -118,7 +153,7 @@ export default async function Page({
                     {totalPages > 1 && (
                       <>
                         <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-600" />
-                        <span>{currentPage} of {totalPages} pages</span>
+                        <span>{pageNum} of {totalPages} pages</span>
                       </>
                     )}
                   </div>
@@ -137,7 +172,7 @@ export default async function Page({
                 key={word.id}
                 className="group relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-zinc-200/60 dark:hover:shadow-black/40 hover:-translate-y-0.5"
               >
-                <div className={`absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b ${c.gradient} opacity-60 transition-all duration-300 group-hover:opacity-100 group-hover:w-1.5`} />
+                <div className={`absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b ${config.gradient} opacity-60 transition-all duration-300 group-hover:opacity-100 group-hover:w-1.5`} />
                 <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br from-white/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-white/5" />
                 <div className="pl-4 sm:pl-5">
                   <div className="flex items-baseline gap-2.5 mb-1.5">
@@ -175,7 +210,7 @@ export default async function Page({
               <p className="mt-8 text-center text-sm text-zinc-400 dark:text-zinc-500">
                 Showing {start + 1}&ndash;{Math.min(start + ITEMS_PER_PAGE, allWords.length)} of {allWords.length}
               </p>
-              <WordPagination currentPage={currentPage} totalPages={totalPages} />
+              <WordPagination currentPage={pageNum} totalPages={totalPages} />
             </>
           )}
         </div>
