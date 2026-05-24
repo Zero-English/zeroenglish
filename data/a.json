@@ -1,20 +1,22 @@
 [
-    {
+  {
     "id": 1,
-    "word": "a,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for a,",
-    "definition_bn": "...",
+    "word": "a, an",
+    "meaning_bn": "একটি; একজন; কোনো (অনির্দিষ্ট ব্যক্তি, বস্তু বা বিষয় বোঝাতে ব্যবহৃত)",
+    "definition_en": "Used before a singular countable noun to refer to a person or thing that is not specific or not previously known.",
+    "definition_bn": "একবচন গণনাযোগ্য বিশেষ্যের আগে ব্যবহৃত হয় যখন ব্যক্তি বা বস্তুটি নির্দিষ্ট নয় বা আগে উল্লেখ করা হয়নি।",
     "examples_en": [
-      "This is an example sentence with the word a,."
+      "I saw a dog in the park.",
+      "She is an engineer."
     ],
     "examples_bn": [
-      "a, শব্দটির একটি উদাহরণ বাক্য।"
+      "আমি পার্কে একটি কুকুর দেখেছি।",
+      "তিনি একজন প্রকৌশলী।"
     ],
     "synonyms": [],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "an indefinite article"
+    "parts_of_speech": "indefinite article"
   },
   {
     "id": 2,
