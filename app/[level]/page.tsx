@@ -134,7 +134,7 @@ export default async function Page({
           </Link>
 
           <div className="mt-8 mb-12">
-            <div className="relative rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-6 sm:p-8 shadow-xl shadow-zinc-200/60 dark:shadow-black/30">
+            <div className="relative rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80  p-6 sm:p-8 ">
               <div className="relative flex items-start gap-5">
                 <div className={`h-14 w-1.5 shrink-0 rounded-full bg-gradient-to-b ${config.gradient}`} />
                 <div className="min-w-0 flex-1">
@@ -189,11 +189,20 @@ export default async function Page({
                     </p>
                   )}
                   <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                    {word.definition_en}
+                    {`${word.definition_en} (${word.definition_bn})`}
                   </p>
                   {word.examples_en.length > 0 && (
                     <div className="mt-3 space-y-1.5 border-t border-zinc-100 dark:border-zinc-800 pt-3">
                       {word.examples_en.map((ex, i) => (
+                        <p key={i} className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
+                          &ldquo;{ex}&rdquo;
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                  {word.examples_bn.length > 0 && (
+                    <div className="mt-1 space-y-1.5 dark:border-zinc-800 pt-1">
+                      {word.examples_bn.map((ex, i) => (
                         <p key={i} className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
                           &ldquo;{ex}&rdquo;
                         </p>
