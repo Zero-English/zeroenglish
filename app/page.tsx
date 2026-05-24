@@ -56,7 +56,7 @@ export default function Home() {
             <Link
               key={level}
               href={`/${level.toLowerCase()}`}
-              className={`group relative flex flex-col items-center justify-center w-44 h-44 sm:w-48 sm:h-48 rounded-3xl border-2 ${c.border} ${c.bg} backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 active:scale-[0.98]`}
+              className={`group relative flex flex-row items-center justify-center w-35 h-35 sm:w-48 sm:h-48 rounded-3xl border-2 ${c.border} ${c.bg} backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 active:scale-[0.98]`}
               style={{ animationDelay: `${i * 0.1}s` }}
             >
               <div
