@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getWordsByLevel } from "@/lib/data";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { WordPagination } from "@/components/word-pagination";
+
 const levelConfig: Record<string, { bg: string; border: string; text: string; gradient: string; label: string }> = {
   A1: {
     bg: "bg-emerald-50 dark:bg-emerald-950/40",
@@ -37,87 +38,6 @@ const ITEMS_PER_PAGE = 10;
 
 export function generateStaticParams() {
   return levels.map((level) => ({ level: level.toLowerCase() }));
-}
-
-function PageLink({ page, active, gradient }: { page: number; active: boolean; gradient: string }) {
-  return (
-    <Link
-      href={`?page=${page}`}
-      className={`relative inline-flex items-center justify-center min-w-[36px] h-9 rounded-lg text-sm font-semibold transition-all duration-200 ${
-        active
-          ? `bg-gradient-to-br ${gradient} text-white shadow-lg shadow-zinc-200/60 dark:shadow-black/30 scale-105 ring-2 ring-white/60 dark:ring-zinc-800/70 pointer-events-none`
-          : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200/70 dark:hover:bg-zinc-700/70"
-      }`}
-      aria-current={active ? "page" : undefined}
-    >
-      <span className={`relative ${active ? "scale-100" : ""}`}>{page}</span>
-    </Link>
-  );
-}
-
-function Pagination({ currentPage, totalPages, gradient }: { currentPage: number; totalPages: number; gradient: string }) {
-  const items: (number | "more")[] = [];
-
-  if (totalPages <= 7) {
-    for (let i = 1; i <= totalPages; i++) items.push(i);
-  } else {
-    items.push(1);
-    if (currentPage > 3) items.push("more");
-    const start = Math.max(2, currentPage - 1);
-    const end = Math.min(totalPages - 1, currentPage + 1);
-    for (let i = start; i <= end; i++) items.push(i);
-    if (currentPage < totalPages - 2) items.push("more");
-    items.push(totalPages);
-  }
-
-  const btn = (dir: "prev" | "next") => {
-    const isPrev = dir === "prev";
-    const disabled = isPrev ? currentPage === 1 : currentPage === totalPages;
-    const href = disabled ? `?page=${currentPage}` : isPrev ? `?page=${currentPage - 1}` : `?page=${currentPage + 1}`;
-    return (
-      <Link
-        href={href}
-        className={`inline-flex items-center justify-center gap-1.5 px-3.5 h-9 rounded-lg text-sm font-medium transition-all duration-200 ${
-          disabled
-            ? "text-zinc-300 dark:text-zinc-700 cursor-default pointer-events-none"
-            : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200/70 dark:hover:bg-zinc-700/70 active:scale-95"
-        }`}
-        aria-disabled={disabled}
-        tabIndex={disabled ? -1 : undefined}
-      >
-        {isPrev ? (
-          <ArrowLeft className="w-4 h-4"/>
-        ) : null}
-        <span>{isPrev ? "" : ""}</span>
-        {!isPrev ? (
-          <ArrowRight className="w-4 h-4"/>
-        ) : null}
-      </Link>
-    );
-  };
-
-  return (
-    <nav className="mt-10 mb-8" aria-label="Pagination">
-      <div className="inline-flex items-center gap-1">
-        {btn("prev")}
-        <div className="w-px h-5 mx-1 bg-zinc-200 dark:bg-zinc-800" />
-        {items.map((item, i) =>
-          item === "more" ? (
-            <span
-              key={`e${i}`}
-              className="inline-flex items-center justify-center w-[26px] h-9 text-sm tracking-wider text-zinc-300 dark:text-zinc-600 select-none"
-            >
-              ...
-            </span>
-          ) : (
-            <PageLink key={item} page={item} active={item === currentPage} gradient={gradient} />
-          )
-        )}
-        <div className="w-px h-5 mx-1 bg-zinc-200 dark:bg-zinc-800" />
-        {btn("next")}
-      </div>
-    </nav>
-  );
 }
 
 function NotFound() {
@@ -255,7 +175,7 @@ export default async function Page({
               <p className="mt-8 text-center text-sm text-zinc-400 dark:text-zinc-500">
                 Showing {start + 1}&ndash;{Math.min(start + ITEMS_PER_PAGE, allWords.length)} of {allWords.length}
               </p>
-              <Pagination currentPage={currentPage} totalPages={totalPages} gradient={c.gradient} />
+              <WordPagination currentPage={currentPage} totalPages={totalPages} />
             </>
           )}
         </div>
