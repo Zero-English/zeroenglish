@@ -896,1872 +896,1432 @@
   {
     "id": 63,
     "word": "approval",
-    "meaning_bn": "...",
-    "definition_en": "English definition for approval",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word approval."
-    ],
-    "examples_bn": [
-      "approval শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অনুমোদন; সম্মতি",
+    "definition_en": "Official permission or agreement for something.",
+    "definition_bn": "কোনো কিছুর জন্য আনুষ্ঠানিক অনুমতি বা সম্মতি।",
+    "examples_en": ["The project received government approval."],
+    "examples_bn": ["প্রকল্পটি সরকারি অনুমোদন পেয়েছে।"],
+    "synonyms": ["authorization", "consent"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 64,
-    "word": "award n. A2,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for award n. A2,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word award n. A2,."
-    ],
-    "examples_bn": [
-      "award n. A2, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "B1",
+    "word": "award",
+    "meaning_bn": "পুরস্কার; পুরস্কৃত করা",
+    "definition_en": "A prize given for achievement; to give a prize or honor.",
+    "definition_bn": "কৃতিত্বের জন্য দেওয়া পুরস্কার; পুরস্কার প্রদান করা।",
+    "examples_en": ["She won an award for her research."],
+    "examples_bn": ["তার গবেষণার জন্য তিনি একটি পুরস্কার পেয়েছেন।"],
+    "synonyms": ["prize", "honor"],
+    "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "noun, verb"
   },
   {
     "id": 65,
-    "word": "account n. B1,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for account n. B1,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word account n. B1,."
-    ],
-    "examples_bn": [
-      "account n. B1, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "B2",
+    "word": "account",
+    "meaning_bn": "হিসাব; অ্যাকাউন্ট",
+    "definition_en": "A record of financial transactions or a user profile on a service.",
+    "definition_bn": "আর্থিক লেনদেনের হিসাব বা কোনো সেবার ব্যবহারকারী পরিচয়।",
+    "examples_en": ["I opened a bank account yesterday."],
+    "examples_bn": ["আমি গতকাল একটি ব্যাংক অ্যাকাউন্ট খুলেছি।"],
+    "synonyms": ["record", "profile"],
+    "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "noun"
   },
   {
     "id": 66,
     "word": "alcohol",
-    "meaning_bn": "...",
-    "definition_en": "English definition for alcohol",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word alcohol."
-    ],
-    "examples_bn": [
-      "alcohol শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অ্যালকোহল; মদ্যপ পানীয়",
+    "definition_en": "A chemical substance found in alcoholic drinks.",
+    "definition_bn": "মদ্যপ পানীয়তে থাকা একটি রাসায়নিক পদার্থ।",
+    "examples_en": ["The drink contains alcohol."],
+    "examples_bn": ["পানীয়টিতে অ্যালকোহল রয়েছে।"],
+    "synonyms": ["liquor", "spirits"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 67,
     "word": "approve",
-    "meaning_bn": "...",
-    "definition_en": "English definition for approve",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word approve."
-    ],
-    "examples_bn": [
-      "approve শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অনুমোদন করা; সমর্থন করা",
+    "definition_en": "To officially agree to or accept something.",
+    "definition_bn": "আনুষ্ঠানিকভাবে কোনো কিছু অনুমোদন বা গ্রহণ করা।",
+    "examples_en": ["The committee approved the proposal."],
+    "examples_bn": ["কমিটি প্রস্তাবটি অনুমোদন করেছে।"],
+    "synonyms": ["authorize", "accept"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 68,
     "word": "aware",
-    "meaning_bn": "...",
-    "definition_en": "English definition for aware",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word aware."
-    ],
-    "examples_bn": [
-      "aware শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "সচেতন; অবগত",
+    "definition_en": "Knowing about a situation or fact.",
+    "definition_bn": "কোনো বিষয় সম্পর্কে জানা বা সচেতন থাকা।",
+    "examples_en": ["She is aware of the risks."],
+    "examples_bn": ["সে ঝুঁকিগুলো সম্পর্কে সচেতন।"],
+    "synonyms": ["conscious", "informed"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 69,
     "word": "accurate",
-    "meaning_bn": "...",
-    "definition_en": "English definition for accurate",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word accurate."
-    ],
-    "examples_bn": [
-      "accurate শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "সঠিক; নির্ভুল",
+    "definition_en": "Correct and free from mistakes.",
+    "definition_bn": "সঠিক এবং ভুলমুক্ত।",
+    "examples_en": ["The report is accurate."],
+    "examples_bn": ["প্রতিবেদনটি নির্ভুল।"],
+    "synonyms": ["precise", "correct"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 70,
     "word": "alcoholic",
-    "meaning_bn": "...",
-    "definition_en": "English definition for alcoholic",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word alcoholic."
-    ],
-    "examples_bn": [
-      "alcoholic শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অ্যালকোহলযুক্ত",
+    "definition_en": "Containing alcohol.",
+    "definition_bn": "অ্যালকোহল রয়েছে এমন।",
+    "examples_en": ["This is an alcoholic beverage."],
+    "examples_bn": ["এটি একটি অ্যালকোহলযুক্ত পানীয়।"],
+    "synonyms": ["intoxicating"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 71,
     "word": "approximately",
-    "meaning_bn": "...",
-    "definition_en": "English definition for approximately",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word approximately."
-    ],
-    "examples_bn": [
-      "approximately শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "প্রায়; আনুমানিকভাবে",
+    "definition_en": "Close to a particular number or amount.",
+    "definition_bn": "কোনো সংখ্যা বা পরিমাণের কাছাকাছি।",
+    "examples_en": ["Approximately 100 people attended the event."],
+    "examples_bn": ["প্রায় ১০০ জন মানুষ অনুষ্ঠানে অংশ নিয়েছিল।"],
+    "synonyms": ["roughly", "about"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 72,
     "word": "away",
-    "meaning_bn": "...",
-    "definition_en": "English definition for away",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word away."
-    ],
-    "examples_bn": [
-      "away শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "দূরে; অন্যত্র",
+    "definition_en": "To or at a distance from a place.",
+    "definition_bn": "কোনো স্থান থেকে দূরে বা অন্যত্র।",
+    "examples_en": ["He walked away from the crowd."],
+    "examples_bn": ["সে ভিড় থেকে দূরে চলে গেল।"],
+    "synonyms": ["apart"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 73,
     "word": "accuse",
-    "meaning_bn": "...",
-    "definition_en": "English definition for accuse",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word accuse."
-    ],
-    "examples_bn": [
-      "accuse শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অভিযুক্ত করা",
+    "definition_en": "To say that someone has done something wrong or illegal.",
+    "definition_bn": "কাউকে ভুল বা অবৈধ কাজের জন্য দোষারোপ করা।",
+    "examples_en": ["They accused him of stealing money."],
+    "examples_bn": ["তারা তাকে টাকা চুরির অভিযোগে অভিযুক্ত করেছে।"],
+    "synonyms": ["blame", "charge"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 74,
     "word": "alive",
-    "meaning_bn": "...",
-    "definition_en": "English definition for alive",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word alive."
-    ],
-    "examples_bn": [
-      "alive শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "জীবিত",
+    "definition_en": "Living and not dead.",
+    "definition_bn": "জীবিত এবং মৃত নয়।",
+    "examples_en": ["The animal was still alive."],
+    "examples_bn": ["প্রাণীটি তখনও জীবিত ছিল।"],
+    "synonyms": ["living"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 75,
     "word": "April",
-    "meaning_bn": "...",
-    "definition_en": "English definition for April",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word April."
-    ],
-    "examples_bn": [
-      "April শব্দটির একটি উদাহরণ বাক্য।"
-    ],
+    "meaning_bn": "এপ্রিল",
+    "definition_en": "The fourth month of the year.",
+    "definition_bn": "বছরের চতুর্থ মাস।",
+    "examples_en": ["School starts in April."],
+    "examples_bn": ["স্কুল এপ্রিল মাসে শুরু হয়।"],
     "synonyms": [],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 76,
     "word": "awesome",
-    "meaning_bn": "...",
-    "definition_en": "English definition for awesome",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word awesome."
-    ],
-    "examples_bn": [
-      "awesome শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "দারুণ; অসাধারণ",
+    "definition_en": "Very impressive or excellent.",
+    "definition_bn": "খুবই চমৎকার বা অসাধারণ।",
+    "examples_en": ["The concert was awesome."],
+    "examples_bn": ["কনসার্টটি ছিল দারুণ।"],
+    "synonyms": ["amazing", "fantastic"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 77,
     "word": "achieve",
-    "meaning_bn": "...",
-    "definition_en": "English definition for achieve",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word achieve."
-    ],
-    "examples_bn": [
-      "achieve শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অর্জন করা",
+    "definition_en": "To succeed in reaching a goal.",
+    "definition_bn": "কোনো লক্ষ্য অর্জনে সফল হওয়া।",
+    "examples_en": ["She achieved her dream of becoming a doctor."],
+    "examples_bn": ["সে ডাক্তার হওয়ার স্বপ্ন পূরণ করেছে।"],
+    "synonyms": ["accomplish", "attain"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 78,
-    "word": "all det., pron. A1,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for all det., pron. A1,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word all det., pron. A1,."
-    ],
-    "examples_bn": [
-      "all det., pron. A1, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "A2",
+    "word": "all",
+    "meaning_bn": "সব; সকল",
+    "definition_en": "The whole amount, quantity, or number.",
+    "definition_bn": "সমস্ত পরিমাণ, সংখ্যা বা ব্যক্তি।",
+    "examples_en": ["All students must attend the meeting."],
+    "examples_bn": ["সব শিক্ষার্থীকে সভায় উপস্থিত থাকতে হবে।"],
+    "synonyms": ["every", "entire"],
+    "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "determiner, pronoun"
   },
   {
     "id": 79,
     "word": "architect",
-    "meaning_bn": "...",
-    "definition_en": "English definition for architect",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word architect."
-    ],
-    "examples_bn": [
-      "architect শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "স্থপতি",
+    "definition_en": "A person who designs buildings.",
+    "definition_bn": "যিনি ভবনের নকশা তৈরি করেন।",
+    "examples_en": ["The architect designed a modern house."],
+    "examples_bn": ["স্থপতি একটি আধুনিক বাড়ির নকশা করেছেন।"],
+    "synonyms": ["designer"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 80,
     "word": "awful",
-    "meaning_bn": "...",
-    "definition_en": "English definition for awful",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word awful."
-    ],
-    "examples_bn": [
-      "awful শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "ভয়ংকর; খুব খারাপ",
+    "definition_en": "Very bad or unpleasant.",
+    "definition_bn": "খুব খারাপ বা অপ্রীতিকর।",
+    "examples_en": ["The weather was awful yesterday."],
+    "examples_bn": ["গতকাল আবহাওয়া খুব খারাপ ছিল।"],
+    "synonyms": ["terrible", "horrible"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 81,
     "word": "achievement",
-    "meaning_bn": "...",
-    "definition_en": "English definition for achievement",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word achievement."
-    ],
-    "examples_bn": [
-      "achievement শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অর্জন; কৃতিত্ব",
+    "definition_en": "Something accomplished successfully through effort.",
+    "definition_bn": "প্রচেষ্টার মাধ্যমে সফলভাবে অর্জিত কিছু।",
+    "examples_en": ["Winning the championship was a great achievement."],
+    "examples_bn": ["চ্যাম্পিয়নশিপ জয় ছিল একটি বড় অর্জন।"],
+    "synonyms": ["accomplishment", "success"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 82,
-    "word": "all",
-    "meaning_bn": "...",
-    "definition_en": "English definition for all",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word all."
-    ],
-    "examples_bn": [
-      "all শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "word": "all right",
+    "meaning_bn": "ঠিক আছে; সন্তোষজনক",
+    "definition_en": "Acceptable, satisfactory, or safe.",
+    "definition_bn": "গ্রহণযোগ্য, সন্তোষজনক বা নিরাপদ।",
+    "examples_en": ["Everything is all right now."],
+    "examples_bn": ["এখন সবকিছু ঠিক আছে।"],
+    "synonyms": ["okay", "fine"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "right adj./adv."
+    "parts_of_speech": "adjective, adverb"
   },
   {
     "id": 83,
     "word": "architecture",
-    "meaning_bn": "...",
-    "definition_en": "English definition for architecture",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word architecture."
-    ],
-    "examples_bn": [
-      "architecture শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "স্থাপত্য; স্থাপত্যবিদ্যা",
+    "definition_en": "The art and science of designing buildings.",
+    "definition_bn": "ভবন নকশা ও নির্মাণের শিল্প ও বিজ্ঞান।",
+    "examples_en": ["The city is famous for its modern architecture."],
+    "examples_bn": ["শহরটি তার আধুনিক স্থাপত্যের জন্য বিখ্যাত।"],
+    "synonyms": ["building design"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 84,
     "word": "baby",
-    "meaning_bn": "...",
-    "definition_en": "English definition for baby",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word baby."
-    ],
-    "examples_bn": [
-      "baby শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "শিশু; নবজাতক",
+    "definition_en": "A very young child.",
+    "definition_bn": "খুব ছোট শিশু বা নবজাতক।",
+    "examples_en": ["The baby is sleeping peacefully."],
+    "examples_bn": ["শিশুটি শান্তিতে ঘুমাচ্ছে।"],
+    "synonyms": ["infant"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 85,
     "word": "acknowledge",
-    "meaning_bn": "...",
-    "definition_en": "English definition for acknowledge",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word acknowledge."
-    ],
-    "examples_bn": [
-      "acknowledge শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "স্বীকার করা",
+    "definition_en": "To accept or admit that something is true.",
+    "definition_bn": "কোনো কিছু সত্য বলে স্বীকার করা।",
+    "examples_en": ["He acknowledged his mistake."],
+    "examples_bn": ["সে তার ভুল স্বীকার করেছে।"],
+    "synonyms": ["admit", "recognize"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 86,
     "word": "allow",
-    "meaning_bn": "...",
-    "definition_en": "English definition for allow",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word allow."
-    ],
-    "examples_bn": [
-      "allow শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অনুমতি দেওয়া",
+    "definition_en": "To let someone do something.",
+    "definition_bn": "কাউকে কিছু করার অনুমতি দেওয়া।",
+    "examples_en": ["My parents allow me to stay up late."],
+    "examples_bn": ["আমার বাবা-মা আমাকে রাত জাগার অনুমতি দেন।"],
+    "synonyms": ["permit", "let"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 87,
     "word": "area",
-    "meaning_bn": "...",
-    "definition_en": "English definition for area",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word area."
-    ],
-    "examples_bn": [
-      "area শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "এলাকা; ক্ষেত্র",
+    "definition_en": "A particular region or part of a place.",
+    "definition_bn": "কোনো নির্দিষ্ট অঞ্চল বা স্থান।",
+    "examples_en": ["This area is very quiet."],
+    "examples_bn": ["এই এলাকাটি খুব শান্ত।"],
+    "synonyms": ["region", "zone"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 88,
-    "word": "back n., adv. A1, adj. A2,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for back n., adv. A1, adj. A2,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word back n., adv. A1, adj. A2,."
-    ],
-    "examples_bn": [
-      "back n., adv. A1, adj. A2, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "B2",
+    "word": "back",
+    "meaning_bn": "পেছন; পিছনে; ফিরে",
+    "definition_en": "The rear part of something; toward the rear or to a previous place.",
+    "definition_bn": "কোনো কিছুর পিছনের অংশ; পিছনের দিকে বা পূর্বের স্থানে ফিরে।",
+    "examples_en": ["He sat at the back of the room."],
+    "examples_bn": ["সে ঘরের পেছনে বসেছিল।"],
+    "synonyms": ["rear", "behind"],
+    "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "noun, adverb, adjective"
   },
   {
     "id": 89,
     "word": "acquire",
-    "meaning_bn": "...",
-    "definition_en": "English definition for acquire",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word acquire."
-    ],
-    "examples_bn": [
-      "acquire শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অর্জন করা; সংগ্রহ করা",
+    "definition_en": "To gain or obtain something.",
+    "definition_bn": "কোনো কিছু অর্জন বা সংগ্রহ করা।",
+    "examples_en": ["She acquired new skills during the course."],
+    "examples_bn": ["কোর্স চলাকালে সে নতুন দক্ষতা অর্জন করেছে।"],
+    "synonyms": ["obtain", "gain"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 90,
     "word": "almost",
-    "meaning_bn": "...",
-    "definition_en": "English definition for almost",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word almost."
-    ],
-    "examples_bn": [
-      "almost শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "প্রায়",
+    "definition_en": "Not quite; nearly.",
+    "definition_bn": "সম্পূর্ণ নয় কিন্তু খুব কাছাকাছি।",
+    "examples_en": ["I am almost ready."],
+    "examples_bn": ["আমি প্রায় প্রস্তুত।"],
+    "synonyms": ["nearly"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 91,
     "word": "argue",
-    "meaning_bn": "...",
-    "definition_en": "English definition for argue",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word argue."
-    ],
-    "examples_bn": [
-      "argue শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "তর্ক করা",
+    "definition_en": "To disagree with someone and express different opinions.",
+    "definition_bn": "মতভেদ প্রকাশ করে তর্ক করা।",
+    "examples_en": ["They often argue about politics."],
+    "examples_bn": ["তারা প্রায়ই রাজনীতি নিয়ে তর্ক করে।"],
+    "synonyms": ["debate", "dispute"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 92,
     "word": "background",
-    "meaning_bn": "...",
-    "definition_en": "English definition for background",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word background."
-    ],
-    "examples_bn": [
-      "background শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "পটভূমি; পেছনের অংশ",
+    "definition_en": "The situation or information that explains something.",
+    "definition_bn": "কোনো বিষয় ব্যাখ্যা করার জন্য প্রয়োজনীয় তথ্য বা পটভূমি।",
+    "examples_en": ["She has a background in engineering."],
+    "examples_bn": ["তার প্রকৌশল বিষয়ে পটভূমি রয়েছে।"],
+    "synonyms": ["history", "context"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 93,
     "word": "across",
-    "meaning_bn": "...",
-    "definition_en": "English definition for across",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word across."
-    ],
-    "examples_bn": [
-      "across শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "জুড়ে; ওপারে",
+    "definition_en": "From one side to the other side.",
+    "definition_bn": "এক পাশ থেকে অন্য পাশে।",
+    "examples_en": ["They walked across the bridge."],
+    "examples_bn": ["তারা সেতু পার হয়ে হেঁটেছিল।"],
+    "synonyms": ["over"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "prep., adv."
+    "parts_of_speech": "preposition, adverb"
   },
   {
     "id": 94,
     "word": "alone",
-    "meaning_bn": "...",
-    "definition_en": "English definition for alone",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word alone."
-    ],
-    "examples_bn": [
-      "alone শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "একা",
+    "definition_en": "Without any other people.",
+    "definition_bn": "অন্য কাউকে ছাড়া।",
+    "examples_en": ["She lives alone."],
+    "examples_bn": ["সে একা থাকে।"],
+    "synonyms": ["by oneself"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj./adv."
+    "parts_of_speech": "adjective, adverb"
   },
   {
     "id": 95,
     "word": "argument",
-    "meaning_bn": "...",
-    "definition_en": "English definition for argument",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word argument."
-    ],
-    "examples_bn": [
-      "argument শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "তর্ক; বিতর্ক",
+    "definition_en": "A disagreement between people.",
+    "definition_bn": "মানুষের মধ্যে মতবিরোধ বা তর্ক।",
+    "examples_en": ["They had an argument yesterday."],
+    "examples_bn": ["গতকাল তাদের মধ্যে তর্ক হয়েছিল।"],
+    "synonyms": ["dispute", "debate"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 96,
     "word": "backward",
-    "meaning_bn": "...",
-    "definition_en": "English definition for backward",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word backward."
-    ],
-    "examples_bn": [
-      "backward শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "পেছনের দিকে",
+    "definition_en": "Toward the back or in reverse direction.",
+    "definition_bn": "পিছনের দিকে বা উল্টো দিকে।",
+    "examples_en": ["He took a step backward."],
+    "examples_bn": ["সে এক পা পিছিয়ে গেল।"],
+    "synonyms": ["backwards"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 97,
-    "word": "act v. A2,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for act v. A2,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word act v. A2,."
-    ],
-    "examples_bn": [
-      "act v. A2, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "B1",
+    "word": "act",
+    "meaning_bn": "কাজ করা; কার্য",
+    "definition_en": "To do something; a particular action.",
+    "definition_bn": "কোনো কাজ করা; একটি নির্দিষ্ট কার্য।",
+    "examples_en": ["We must act quickly."],
+    "examples_bn": ["আমাদের দ্রুত কাজ করতে হবে।"],
+    "synonyms": ["behave", "action"],
+    "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "verb, noun"
   },
   {
     "id": 98,
     "word": "along",
-    "meaning_bn": "...",
-    "definition_en": "English definition for along",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word along."
-    ],
-    "examples_bn": [
-      "along শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "বরাবর; সঙ্গে",
+    "definition_en": "Moving on or beside a line or path.",
+    "definition_bn": "কোনো পথ বা রেখার পাশে বা বরাবর।",
+    "examples_en": ["We walked along the river."],
+    "examples_bn": ["আমরা নদীর ধারে হাঁটলাম।"],
+    "synonyms": ["beside"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "prep., adv."
+    "parts_of_speech": "preposition, adverb"
   },
   {
     "id": 99,
     "word": "arise",
-    "meaning_bn": "...",
-    "definition_en": "English definition for arise",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word arise."
-    ],
-    "examples_bn": [
-      "arise শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "উত্থিত হওয়া; সৃষ্টি হওয়া",
+    "definition_en": "To happen or begin to exist.",
+    "definition_bn": "ঘটা বা সৃষ্টি হওয়া।",
+    "examples_en": ["Problems may arise during the project."],
+    "examples_bn": ["প্রকল্প চলাকালে সমস্যা দেখা দিতে পারে।"],
+    "synonyms": ["occur", "emerge"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 100,
     "word": "bacteria",
-    "meaning_bn": "...",
-    "definition_en": "English definition for bacteria",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word bacteria."
-    ],
-    "examples_bn": [
-      "bacteria শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "ব্যাকটেরিয়া",
+    "definition_en": "Very small living organisms, some of which can cause disease.",
+    "definition_bn": "অতি ক্ষুদ্র জীব, যাদের কিছু রোগ সৃষ্টি করতে পারে।",
+    "examples_en": ["Bacteria can grow quickly in warm conditions."],
+    "examples_bn": ["উষ্ণ পরিবেশে ব্যাকটেরিয়া দ্রুত বৃদ্ধি পায়।"],
+    "synonyms": ["microorganisms"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 101,
     "word": "action",
-    "meaning_bn": "...",
-    "definition_en": "English definition for action",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word action."
-    ],
-    "examples_bn": [
-      "action শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "কর্ম; পদক্ষেপ",
+    "definition_en": "Something that is done.",
+    "definition_bn": "যা করা হয়; কোনো পদক্ষেপ।",
+    "examples_en": ["The government took immediate action."],
+    "examples_bn": ["সরকার তাৎক্ষণিক পদক্ষেপ নিয়েছে।"],
+    "synonyms": ["deed", "step"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 102,
     "word": "already",
-    "meaning_bn": "...",
-    "definition_en": "English definition for already",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word already."
-    ],
-    "examples_bn": [
-      "already শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "ইতোমধ্যে",
+    "definition_en": "Before now or before a particular time.",
+    "definition_bn": "এরই মধ্যে বা আগে থেকেই।",
+    "examples_en": ["I have already finished my work."],
+    "examples_bn": ["আমি ইতোমধ্যে আমার কাজ শেষ করেছি।"],
+    "synonyms": ["previously"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 103,
     "word": "arm",
-    "meaning_bn": "...",
-    "definition_en": "English definition for arm",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word arm."
-    ],
-    "examples_bn": [
-      "arm শব্দটির একটি উদাহরণ বাক্য।"
-    ],
+    "meaning_bn": "বাহু",
+    "definition_en": "The part of the body between the shoulder and the hand.",
+    "definition_bn": "কাঁধ থেকে হাত পর্যন্ত শরীরের অংশ।",
+    "examples_en": ["He injured his arm."],
+    "examples_bn": ["তার বাহুতে আঘাত লেগেছে।"],
     "synonyms": [],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 104,
     "word": "bad",
-    "meaning_bn": "...",
-    "definition_en": "English definition for bad",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word bad."
-    ],
-    "examples_bn": [
-      "bad শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "খারাপ",
+    "definition_en": "Not good; unpleasant.",
+    "definition_bn": "ভালো নয়; অপ্রীতিকর।",
+    "examples_en": ["The weather is bad today."],
+    "examples_bn": ["আজ আবহাওয়া খারাপ।"],
+    "synonyms": ["poor", "terrible"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 105,
     "word": "active",
-    "meaning_bn": "...",
-    "definition_en": "English definition for active",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word active."
-    ],
-    "examples_bn": [
-      "active শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "সক্রিয়",
+    "definition_en": "Busy and involved in activities.",
+    "definition_bn": "কাজকর্মে ব্যস্ত ও অংশগ্রহণকারী।",
+    "examples_en": ["She is very active in sports."],
+    "examples_bn": ["সে খেলাধুলায় খুব সক্রিয়।"],
+    "synonyms": ["energetic"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 106,
     "word": "also",
-    "meaning_bn": "...",
-    "definition_en": "English definition for also",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word also."
-    ],
-    "examples_bn": [
-      "also শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "এছাড়াও",
+    "definition_en": "In addition; too.",
+    "definition_bn": "অতিরিক্তভাবে; এছাড়াও।",
+    "examples_en": ["She speaks English and also French."],
+    "examples_bn": ["সে ইংরেজির পাশাপাশি ফরাসিও বলতে পারে।"],
+    "synonyms": ["too", "as well"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 107,
     "word": "armed",
-    "meaning_bn": "...",
-    "definition_en": "English definition for armed",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word armed."
-    ],
-    "examples_bn": [
-      "armed শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "সশস্ত্র",
+    "definition_en": "Carrying or equipped with weapons.",
+    "definition_bn": "অস্ত্র বহন করছে বা অস্ত্রে সজ্জিত।",
+    "examples_en": ["The guards were armed."],
+    "examples_bn": ["প্রহরীরা সশস্ত্র ছিল।"],
+    "synonyms": ["equipped"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 108,
     "word": "badly",
-    "meaning_bn": "...",
-    "definition_en": "English definition for badly",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word badly."
-    ],
-    "examples_bn": [
-      "badly শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "খারাপভাবে",
+    "definition_en": "In a poor or unsuccessful way.",
+    "definition_bn": "খারাপ বা অসফলভাবে।",
+    "examples_en": ["The team played badly."],
+    "examples_bn": ["দলটি খারাপভাবে খেলেছে।"],
+    "synonyms": ["poorly"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 109,
     "word": "activity",
-    "meaning_bn": "...",
-    "definition_en": "English definition for activity",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word activity."
-    ],
-    "examples_bn": [
-      "activity শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "কার্যক্রম; কর্মকাণ্ড",
+    "definition_en": "Something that people do for work, pleasure, or learning.",
+    "definition_bn": "কাজ, আনন্দ বা শেখার জন্য করা কোনো কর্মকাণ্ড।",
+    "examples_en": ["Reading is a useful activity."],
+    "examples_bn": ["পড়াশোনা একটি উপকারী কার্যক্রম।"],
+    "synonyms": ["task", "exercise"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 110,
     "word": "alter",
-    "meaning_bn": "...",
-    "definition_en": "English definition for alter",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word alter."
-    ],
-    "examples_bn": [
-      "alter শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "পরিবর্তন করা",
+    "definition_en": "To change something.",
+    "definition_bn": "কোনো কিছু পরিবর্তন করা।",
+    "examples_en": ["They altered the design slightly."],
+    "examples_bn": ["তারা নকশাটি সামান্য পরিবর্তন করেছে।"],
+    "synonyms": ["change", "modify"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 111,
     "word": "arms",
-    "meaning_bn": "...",
-    "definition_en": "English definition for arms",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word arms."
-    ],
-    "examples_bn": [
-      "arms শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অস্ত্রশস্ত্র",
+    "definition_en": "Weapons used in fighting or war.",
+    "definition_bn": "যুদ্ধ বা লড়াইয়ে ব্যবহৃত অস্ত্রশস্ত্র।",
+    "examples_en": ["The country reduced its arms production."],
+    "examples_bn": ["দেশটি অস্ত্র উৎপাদন কমিয়েছে।"],
+    "synonyms": ["weapons"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 112,
     "word": "bag",
-    "meaning_bn": "...",
-    "definition_en": "English definition for bag",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word bag."
-    ],
-    "examples_bn": [
-      "bag শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "ব্যাগ; থলে",
+    "definition_en": "A container made of paper, cloth, leather, or plastic.",
+    "definition_bn": "কাগজ, কাপড়, চামড়া বা প্লাস্টিকের তৈরি বহনযোগ্য পাত্র।",
+    "examples_en": ["She put the books in her bag."],
+    "examples_bn": ["সে বইগুলো তার ব্যাগে রেখেছে।"],
+    "synonyms": ["sack"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 113,
     "word": "actor",
-    "meaning_bn": "...",
-    "definition_en": "English definition for actor",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word actor."
-    ],
-    "examples_bn": [
-      "actor শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অভিনেতা",
+    "definition_en": "A person who performs in plays, movies, or television shows.",
+    "definition_bn": "যিনি নাটক, চলচ্চিত্র বা টেলিভিশনে অভিনয় করেন।",
+    "examples_en": ["He is a famous actor."],
+    "examples_bn": ["তিনি একজন বিখ্যাত অভিনেতা।"],
+    "synonyms": ["performer"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 114,
-    "word": "alternative n. A2,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for alternative n. A2,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word alternative n. A2,."
-    ],
-    "examples_bn": [
-      "alternative n. A2, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "B1",
+    "word": "alternative",
+    "meaning_bn": "বিকল্প; বিকল্পধর্মী",
+    "definition_en": "Something that can be used instead of something else.",
+    "definition_bn": "অন্য কিছুর পরিবর্তে ব্যবহার করা যেতে পারে এমন কিছু।",
+    "examples_en": ["We need an alternative plan."],
+    "examples_bn": ["আমাদের একটি বিকল্প পরিকল্পনা দরকার।"],
+    "synonyms": ["option", "substitute"],
+    "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "noun, adjective"
   },
   {
     "id": 115,
     "word": "army",
-    "meaning_bn": "...",
-    "definition_en": "English definition for army",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word army."
-    ],
-    "examples_bn": [
-      "army শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "সেনাবাহিনী",
+    "definition_en": "A country's organized military force trained for land warfare.",
+    "definition_bn": "স্থলযুদ্ধের জন্য প্রশিক্ষিত একটি দেশের সামরিক বাহিনী।",
+    "examples_en": ["He joined the army at the age of 20."],
+    "examples_bn": ["সে ২০ বছর বয়সে সেনাবাহিনীতে যোগ দেয়।"],
+    "synonyms": ["military"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 116,
     "word": "bake",
-    "meaning_bn": "...",
-    "definition_en": "English definition for bake",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word bake."
-    ],
-    "examples_bn": [
-      "bake শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "বেক করা; চুলায় সেঁকা",
+    "definition_en": "To cook food using dry heat in an oven.",
+    "definition_bn": "চুলা বা ওভেনে শুকনো তাপে খাবার রান্না করা।",
+    "examples_en": ["She likes to bake cakes."],
+    "examples_bn": ["সে কেক বেক করতে পছন্দ করে।"],
+    "synonyms": ["cook"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 117,
     "word": "actress",
-    "meaning_bn": "...",
-    "definition_en": "English definition for actress",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word actress."
-    ],
-    "examples_bn": [
-      "actress শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অভিনেত্রী",
+    "definition_en": "A woman who performs in plays, movies, or television shows.",
+    "definition_bn": "যিনি নাটক, চলচ্চিত্র বা টেলিভিশনে অভিনয় করেন।",
+    "examples_en": ["The actress won an award."],
+    "examples_bn": ["অভিনেত্রীটি একটি পুরস্কার জিতেছেন।"],
+    "synonyms": ["performer"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 118,
     "word": "although",
-    "meaning_bn": "...",
-    "definition_en": "English definition for although",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word although."
-    ],
-    "examples_bn": [
-      "although শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "যদিও",
+    "definition_en": "Despite the fact that.",
+    "definition_bn": "এটি সত্য হওয়া সত্ত্বেও।",
+    "examples_en": ["Although it was raining, we went outside."],
+    "examples_bn": ["যদিও বৃষ্টি হচ্ছিল, আমরা বাইরে গিয়েছিলাম।"],
+    "synonyms": ["though"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "conj."
+    "parts_of_speech": "conjunction"
   },
   {
     "id": 119,
     "word": "around",
-    "meaning_bn": "...",
-    "definition_en": "English definition for around",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word around."
-    ],
-    "examples_bn": [
-      "around শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "চারপাশে; প্রায়",
+    "definition_en": "On every side of; approximately.",
+    "definition_bn": "চারদিকে; আনুমানিক।",
+    "examples_en": ["We walked around the park."],
+    "examples_bn": ["আমরা পার্কের চারপাশে হাঁটলাম।"],
+    "synonyms": ["about", "surrounding"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "prep., adv."
+    "parts_of_speech": "preposition, adverb"
   },
   {
     "id": 120,
     "word": "balance",
-    "meaning_bn": "...",
-    "definition_en": "English definition for balance",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word balance."
-    ],
-    "examples_bn": [
-      "balance শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "ভারসাম্য; ভারসাম্য রাখা",
+    "definition_en": "A state of stability; to keep something steady.",
+    "definition_bn": "স্থিতিশীল অবস্থা; কোনো কিছুকে স্থির রাখা।",
+    "examples_en": ["She lost her balance and fell."],
+    "examples_bn": ["সে ভারসাম্য হারিয়ে পড়ে গেল।"],
+    "synonyms": ["stability"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "n., v."
+    "parts_of_speech": "noun, verb"
   },
   {
     "id": 121,
     "word": "actual",
-    "meaning_bn": "...",
-    "definition_en": "English definition for actual",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word actual."
-    ],
-    "examples_bn": [
-      "actual শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "প্রকৃত; বাস্তব",
+    "definition_en": "Real or existing in fact.",
+    "definition_bn": "বাস্তবে বিদ্যমান বা প্রকৃত।",
+    "examples_en": ["The actual cost was higher than expected."],
+    "examples_bn": ["প্রকৃত খরচ প্রত্যাশার চেয়ে বেশি ছিল।"],
+    "synonyms": ["real", "genuine"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 122,
     "word": "always",
-    "meaning_bn": "...",
-    "definition_en": "English definition for always",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word always."
-    ],
-    "examples_bn": [
-      "always শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "সবসময়",
+    "definition_en": "At all times.",
+    "definition_bn": "সব সময়।",
+    "examples_en": ["She always arrives on time."],
+    "examples_bn": ["সে সবসময় সময়মতো আসে।"],
+    "synonyms": ["constantly"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 123,
     "word": "arrange",
-    "meaning_bn": "...",
-    "definition_en": "English definition for arrange",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word arrange."
-    ],
-    "examples_bn": [
-      "arrange শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "ব্যবস্থা করা; সাজানো",
+    "definition_en": "To organize or put things in order.",
+    "definition_bn": "কোনো কিছু সংগঠিত বা সুশৃঙ্খলভাবে সাজানো।",
+    "examples_en": ["She arranged the books on the shelf."],
+    "examples_bn": ["সে তাকের ওপর বইগুলো সাজিয়েছে।"],
+    "synonyms": ["organize"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 124,
     "word": "ball",
-    "meaning_bn": "...",
-    "definition_en": "English definition for ball",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word ball."
-    ],
-    "examples_bn": [
-      "ball শব্দটির একটি উদাহরণ বাক্য।"
-    ],
+    "meaning_bn": "বল",
+    "definition_en": "A round object used in games and sports.",
+    "definition_bn": "খেলা বা খেলাধুলায় ব্যবহৃত গোলাকার বস্তু।",
+    "examples_en": ["The children are playing with a ball."],
+    "examples_bn": ["শিশুরা একটি বল নিয়ে খেলছে।"],
     "synonyms": [],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 125,
     "word": "actually",
-    "meaning_bn": "...",
-    "definition_en": "English definition for actually",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word actually."
-    ],
-    "examples_bn": [
-      "actually শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "আসলে; প্রকৃতপক্ষে",
+    "definition_en": "In fact or really.",
+    "definition_bn": "বাস্তবে বা প্রকৃতপক্ষে।",
+    "examples_en": ["I actually enjoyed the movie."],
+    "examples_bn": ["আমি আসলে সিনেমাটি উপভোগ করেছি।"],
+    "synonyms": ["really", "in fact"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 126,
     "word": "amazed",
-    "meaning_bn": "...",
-    "definition_en": "English definition for amazed",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word amazed."
-    ],
-    "examples_bn": [
-      "amazed শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "বিস্মিত",
+    "definition_en": "Very surprised.",
+    "definition_bn": "অত্যন্ত বিস্মিত।",
+    "examples_en": ["I was amazed by her talent."],
+    "examples_bn": ["তার প্রতিভা দেখে আমি বিস্মিত হয়েছিলাম।"],
+    "synonyms": ["astonished"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 127,
     "word": "arrangement",
-    "meaning_bn": "...",
-    "definition_en": "English definition for arrangement",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word arrangement."
-    ],
-    "examples_bn": [
-      "arrangement শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "ব্যবস্থা; বিন্যাস",
+    "definition_en": "A plan or organization of something.",
+    "definition_bn": "কোনো কিছুর পরিকল্পনা বা বিন্যাস।",
+    "examples_en": ["We made travel arrangements."],
+    "examples_bn": ["আমরা ভ্রমণের ব্যবস্থা করেছি।"],
+    "synonyms": ["organization", "plan"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 128,
     "word": "ban",
-    "meaning_bn": "...",
-    "definition_en": "English definition for ban",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word ban."
-    ],
-    "examples_bn": [
-      "ban শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "নিষেধাজ্ঞা; নিষিদ্ধ করা",
+    "definition_en": "An official prohibition; to officially forbid something.",
+    "definition_bn": "আনুষ্ঠানিক নিষেধাজ্ঞা; আনুষ্ঠানিকভাবে নিষিদ্ধ করা।",
+    "examples_en": ["The city banned smoking in public places."],
+    "examples_bn": ["শহরটি জনসমক্ষে ধূমপান নিষিদ্ধ করেছে।"],
+    "synonyms": ["prohibit", "forbid"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "v., n."
+    "parts_of_speech": "verb, noun"
   },
   {
     "id": 129,
     "word": "ad",
-    "meaning_bn": "...",
-    "definition_en": "English definition for ad",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word ad."
-    ],
-    "examples_bn": [
-      "ad শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "বিজ্ঞাপন",
+    "definition_en": "A short form of advertisement.",
+    "definition_bn": "বিজ্ঞাপন শব্দের সংক্ষিপ্ত রূপ।",
+    "examples_en": ["I saw an ad on television."],
+    "examples_bn": ["আমি টেলিভিশনে একটি বিজ্ঞাপন দেখেছি।"],
+    "synonyms": ["advertisement"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 130,
     "word": "amazing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for amazing",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word amazing."
-    ],
-    "examples_bn": [
-      "amazing শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অসাধারণ; বিস্ময়কর",
+    "definition_en": "Very surprising or impressive.",
+    "definition_bn": "খুবই বিস্ময়কর বা চমৎকার।",
+    "examples_en": ["The view from the mountain was amazing."],
+    "examples_bn": ["পাহাড়ের চূড়া থেকে দৃশ্যটি অসাধারণ ছিল।"],
+    "synonyms": ["wonderful", "incredible"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 131,
     "word": "arrest",
-    "meaning_bn": "...",
-    "definition_en": "English definition for arrest",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word arrest."
-    ],
-    "examples_bn": [
-      "arrest শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "গ্রেপ্তার; গ্রেপ্তার করা",
+    "definition_en": "To take someone into legal custody; the act of doing so.",
+    "definition_bn": "কাউকে আইনগত হেফাজতে নেওয়া; সেই কাজ।",
+    "examples_en": ["The police arrested the suspect."],
+    "examples_bn": ["পুলিশ সন্দেহভাজন ব্যক্তিকে গ্রেপ্তার করেছে।"],
+    "synonyms": ["detain"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "v., n."
+    "parts_of_speech": "verb, noun"
   },
   {
     "id": 132,
     "word": "banana",
-    "meaning_bn": "...",
-    "definition_en": "English definition for banana",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word banana."
-    ],
-    "examples_bn": [
-      "banana শব্দটির একটি উদাহরণ বাক্য।"
-    ],
+    "meaning_bn": "কলা",
+    "definition_en": "A long curved fruit with a yellow skin.",
+    "definition_bn": "হলুদ খোসাযুক্ত লম্বা বাঁকা ফল।",
+    "examples_en": ["She ate a banana for breakfast."],
+    "examples_bn": ["সে সকালের নাস্তায় একটি কলা খেয়েছে।"],
     "synonyms": [],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 133,
     "word": "adapt",
-    "meaning_bn": "...",
-    "definition_en": "English definition for adapt",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word adapt."
-    ],
-    "examples_bn": [
-      "adapt শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "খাপ খাওয়ানো; মানিয়ে নেওয়া",
+    "definition_en": "To change in order to fit new conditions.",
+    "definition_bn": "নতুন পরিস্থিতির সঙ্গে মানিয়ে নেওয়ার জন্য পরিবর্তিত হওয়া।",
+    "examples_en": ["Animals adapt to their environment."],
+    "examples_bn": ["প্রাণীরা তাদের পরিবেশের সঙ্গে মানিয়ে নেয়।"],
+    "synonyms": ["adjust"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 134,
     "word": "ambition",
-    "meaning_bn": "...",
-    "definition_en": "English definition for ambition",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word ambition."
-    ],
-    "examples_bn": [
-      "ambition শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "উচ্চাকাঙ্ক্ষা",
+    "definition_en": "A strong desire to achieve something.",
+    "definition_bn": "কোনো কিছু অর্জনের প্রবল ইচ্ছা।",
+    "examples_en": ["Her ambition is to become a scientist."],
+    "examples_bn": ["তার উচ্চাকাঙ্ক্ষা একজন বিজ্ঞানী হওয়া।"],
+    "synonyms": ["aspiration", "goal"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 135,
     "word": "arrival",
-    "meaning_bn": "...",
-    "definition_en": "English definition for arrival",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word arrival."
-    ],
-    "examples_bn": [
-      "arrival শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "আগমন",
+    "definition_en": "The act of reaching a place.",
+    "definition_bn": "কোনো স্থানে পৌঁছানোর ঘটনা।",
+    "examples_en": ["We were waiting for her arrival."],
+    "examples_bn": ["আমরা তার আগমনের অপেক্ষা করছিলাম।"],
+    "synonyms": ["coming"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 136,
     "word": "band",
-    "meaning_bn": "...",
-    "definition_en": "English definition for band",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word band."
-    ],
-    "examples_bn": [
-      "band শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "সঙ্গীতদল; ব্যান্ড",
+    "definition_en": "A group of musicians who play music together.",
+    "definition_bn": "একসঙ্গে সঙ্গীত পরিবেশনকারী শিল্পীদের দল।",
+    "examples_en": ["The band played at the festival."],
+    "examples_bn": ["ব্যান্ডটি উৎসবে সঙ্গীত পরিবেশন করেছে।"],
+    "synonyms": ["music group"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 137,
     "word": "add",
-    "meaning_bn": "...",
-    "definition_en": "English definition for add",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word add."
-    ],
-    "examples_bn": [
-      "add শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "যোগ করা",
+    "definition_en": "To put something together with something else.",
+    "definition_bn": "কোনো কিছুর সঙ্গে অন্য কিছু যুক্ত করা।",
+    "examples_en": ["Add some sugar to the tea."],
+    "examples_bn": ["চায়ে কিছু চিনি যোগ করো।"],
+    "synonyms": ["include"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 138,
     "word": "among",
-    "meaning_bn": "...",
-    "definition_en": "English definition for among",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word among."
-    ],
-    "examples_bn": [
-      "among শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "মধ্যে",
+    "definition_en": "In the middle of or surrounded by people or things.",
+    "definition_bn": "অনেক ব্যক্তি বা বস্তুর মধ্যে।",
+    "examples_en": ["She was sitting among her friends."],
+    "examples_bn": ["সে তার বন্ধুদের মধ্যে বসেছিল।"],
+    "synonyms": ["amid"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "prep."
+    "parts_of_speech": "preposition"
   },
   {
     "id": 139,
     "word": "arrive",
-    "meaning_bn": "...",
-    "definition_en": "English definition for arrive",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word arrive."
-    ],
-    "examples_bn": [
-      "arrive শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "পৌঁছানো",
+    "definition_en": "To reach a place.",
+    "definition_bn": "কোনো স্থানে পৌঁছানো।",
+    "examples_en": ["The train arrived on time."],
+    "examples_bn": ["ট্রেনটি সময়মতো পৌঁছেছে।"],
+    "synonyms": ["reach"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 140,
     "word": "bank",
-    "meaning_bn": "...",
-    "definition_en": "English definition for bank",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word bank."
-    ],
-    "examples_bn": [
-      "bank শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "ব্যাংক",
+    "definition_en": "A financial institution where money is kept and managed.",
+    "definition_bn": "অর্থ জমা রাখা ও ব্যবস্থাপনার আর্থিক প্রতিষ্ঠান।",
+    "examples_en": ["She deposited money in the bank."],
+    "examples_bn": ["সে ব্যাংকে টাকা জমা দিয়েছে।"],
+    "synonyms": ["financial institution"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "(money) n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 141,
     "word": "addition",
-    "meaning_bn": "...",
-    "definition_en": "English definition for addition",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word addition."
-    ],
-    "examples_bn": [
-      "addition শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "সংযোজন; যোগ",
+    "definition_en": "Something added to something else.",
+    "definition_bn": "অন্য কিছুর সঙ্গে যুক্ত করা কোনো কিছু।",
+    "examples_en": ["The new room is a useful addition to the house."],
+    "examples_bn": ["নতুন কক্ষটি বাড়ির একটি উপকারী সংযোজন।"],
+    "synonyms": ["increase", "extension"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 142,
-    "word": "amount n. A2,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for amount n. A2,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word amount n. A2,."
-    ],
-    "examples_bn": [
-      "amount n. A2, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "B2",
+    "word": "amount",
+    "meaning_bn": "পরিমাণ; পরিমাণে হওয়া",
+    "definition_en": "A quantity of something.",
+    "definition_bn": "কোনো কিছুর পরিমাণ।",
+    "examples_en": ["A large amount of water was used."],
+    "examples_bn": ["অনেক পরিমাণ পানি ব্যবহার করা হয়েছে।"],
+    "synonyms": ["quantity", "total"],
+    "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "noun"
   },
   {
     "id": 143,
     "word": "art",
-    "meaning_bn": "...",
-    "definition_en": "English definition for art",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word art."
-    ],
-    "examples_bn": [
-      "art শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "শিল্প; চারুকলা",
+    "definition_en": "The creation of beautiful or meaningful works such as paintings, music, or literature.",
+    "definition_bn": "চিত্রকলা, সঙ্গীত বা সাহিত্য ইত্যাদির মাধ্যমে সৃজনশীল প্রকাশ।",
+    "examples_en": ["She studies art at university."],
+    "examples_bn": ["সে বিশ্ববিদ্যালয়ে শিল্পকলা নিয়ে পড়াশোনা করে।"],
+    "synonyms": ["creative work"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 144,
     "word": "bank",
-    "meaning_bn": "...",
-    "definition_en": "English definition for bank",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word bank."
-    ],
-    "examples_bn": [
-      "bank শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "নদীর তীর",
+    "definition_en": "The land alongside or sloping down to a river.",
+    "definition_bn": "নদীর পাশের বা ঢালু ভূমি।",
+    "examples_en": ["They sat on the bank of the river."],
+    "examples_bn": ["তারা নদীর তীরে বসেছিল।"],
+    "synonyms": ["riverbank"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "(river) n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 145,
     "word": "additional",
-    "meaning_bn": "...",
-    "definition_en": "English definition for additional",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word additional."
-    ],
-    "examples_bn": [
-      "additional শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "অতিরিক্ত",
+    "definition_en": "More than what is already present or available.",
+    "definition_bn": "ইতিমধ্যে যা আছে তার অতিরিক্ত।",
+    "examples_en": ["Additional information is available online."],
+    "examples_bn": ["অতিরিক্ত তথ্য অনলাইনে পাওয়া যায়।"],
+    "synonyms": ["extra", "added"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 146,
     "word": "analysis",
-    "meaning_bn": "...",
-    "definition_en": "English definition for analysis",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word analysis."
-    ],
-    "examples_bn": [
-      "analysis শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "বিশ্লেষণ",
+    "definition_en": "A detailed examination of something.",
+    "definition_bn": "কোনো কিছুর বিস্তারিত পরীক্ষা বা বিশ্লেষণ।",
+    "examples_en": ["The analysis showed interesting results."],
+    "examples_bn": ["বিশ্লেষণে আকর্ষণীয় ফলাফল পাওয়া গেছে।"],
+    "synonyms": ["examination", "study"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 147,
     "word": "article",
-    "meaning_bn": "...",
-    "definition_en": "English definition for article",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word article."
-    ],
-    "examples_bn": [
-      "article শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "প্রবন্ধ; নিবন্ধ",
+    "definition_en": "A piece of writing published in a newspaper, magazine, or online.",
+    "definition_bn": "পত্রিকা, ম্যাগাজিন বা অনলাইনে প্রকাশিত লেখা।",
+    "examples_en": ["I read an interesting article today."],
+    "examples_bn": ["আজ আমি একটি আকর্ষণীয় নিবন্ধ পড়েছি।"],
+    "synonyms": ["essay", "report"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 148,
-    "word": "bar n. A1,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for bar n. A1,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word bar n. A1,."
-    ],
-    "examples_bn": [
-      "bar n. A1, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "B2",
+    "word": "bar",
+    "meaning_bn": "দণ্ড; বার; বাধা দেওয়া",
+    "definition_en": "A long piece of material; to prevent someone from doing something.",
+    "definition_bn": "লম্বা দণ্ডসদৃশ বস্তু; কাউকে কিছু করতে বাধা দেওয়া।",
+    "examples_en": ["The window was protected by iron bars."],
+    "examples_bn": ["জানালাটি লোহার শিক দিয়ে সুরক্ষিত ছিল।"],
+    "synonyms": ["rod", "block"],
+    "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "noun, verb"
   },
   {
     "id": 149,
-    "word": "address n. A1,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for address n. A1,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word address n. A1,."
-    ],
-    "examples_bn": [
-      "address n. A1, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "B2",
+    "word": "address",
+    "meaning_bn": "ঠিকানা; সম্বোধন করা",
+    "definition_en": "The details of where someone lives; to speak to or deal with something.",
+    "definition_bn": "কোনো ব্যক্তির অবস্থানের বিবরণ; সম্বোধন করা বা কোনো সমস্যা মোকাবিলা করা।",
+    "examples_en": ["Please write your address here."],
+    "examples_bn": ["অনুগ্রহ করে এখানে আপনার ঠিকানা লিখুন।"],
+    "synonyms": ["location", "speak to"],
+    "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "noun, verb"
   },
   {
     "id": 150,
     "word": "analyze",
-    "meaning_bn": "...",
-    "definition_en": "English definition for analyze",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word analyze."
-    ],
-    "examples_bn": [
-      "analyze শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "বিশ্লেষণ করা",
+    "definition_en": "To examine something carefully in detail.",
+    "definition_bn": "কোনো কিছু বিস্তারিতভাবে পরীক্ষা করা।",
+    "examples_en": ["Scientists analyzed the data."],
+    "examples_bn": ["বিজ্ঞানীরা তথ্য বিশ্লেষণ করেছেন।"],
+    "synonyms": ["examine", "study"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 151,
     "word": "artificial",
-    "meaning_bn": "...",
-    "definition_en": "English definition for artificial",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word artificial."
-    ],
-    "examples_bn": [
-      "artificial শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "কৃত্রিম",
+    "definition_en": "Made by humans rather than occurring naturally.",
+    "definition_bn": "প্রাকৃতিক নয়, মানুষের তৈরি।",
+    "examples_en": ["The flowers are artificial."],
+    "examples_bn": ["ফুলগুলো কৃত্রিম।"],
+    "synonyms": ["synthetic", "man-made"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 152,
     "word": "barrier",
-    "meaning_bn": "...",
-    "definition_en": "English definition for barrier",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word barrier."
-    ],
-    "examples_bn": [
-      "barrier শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "বাধা; প্রতিবন্ধকতা",
+    "definition_en": "Something that blocks movement or progress.",
+    "definition_bn": "যা চলাচল বা অগ্রগতিতে বাধা সৃষ্টি করে।",
+    "examples_en": ["Language can be a barrier to communication."],
+    "examples_bn": ["ভাষা যোগাযোগের ক্ষেত্রে একটি বাধা হতে পারে।"],
+    "synonyms": ["obstacle", "block"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 153,
     "word": "administration",
-    "meaning_bn": "...",
-    "definition_en": "English definition for administration",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word administration."
-    ],
-    "examples_bn": [
-      "administration শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "প্রশাসন",
+    "definition_en": "The management of an organization or institution.",
+    "definition_bn": "কোনো প্রতিষ্ঠান বা সংস্থার পরিচালনা ব্যবস্থা।",
+    "examples_en": ["She works in university administration."],
+    "examples_bn": ["তিনি বিশ্ববিদ্যালয়ের প্রশাসনে কাজ করেন।"],
+    "synonyms": ["management"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 154,
     "word": "ancient",
-    "meaning_bn": "...",
-    "definition_en": "English definition for ancient",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word ancient."
-    ],
-    "examples_bn": [
-      "ancient শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "প্রাচীন",
+    "definition_en": "Belonging to a very old time in history.",
+    "definition_bn": "ইতিহাসের অনেক পুরনো সময়ের।",
+    "examples_en": ["They visited an ancient temple."],
+    "examples_bn": ["তারা একটি প্রাচীন মন্দির পরিদর্শন করেছে।"],
+    "synonyms": ["old", "historic"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 155,
     "word": "artist",
-    "meaning_bn": "...",
-    "definition_en": "English definition for artist",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word artist."
-    ],
-    "examples_bn": [
-      "artist শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "শিল্পী",
+    "definition_en": "A person who creates art.",
+    "definition_bn": "যিনি শিল্পকর্ম সৃষ্টি করেন।",
+    "examples_en": ["The artist painted a beautiful picture."],
+    "examples_bn": ["শিল্পীটি একটি সুন্দর ছবি এঁকেছেন।"],
+    "synonyms": ["painter", "creator"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 156,
     "word": "base",
-    "meaning_bn": "...",
-    "definition_en": "English definition for base",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word base."
-    ],
-    "examples_bn": [
-      "base শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "ভিত্তি; ভিত্তি করা",
+    "definition_en": "The lowest part of something; to use something as a foundation.",
+    "definition_bn": "কোনো কিছুর নিচের অংশ; কোনো কিছুকে ভিত্তি হিসেবে ব্যবহার করা।",
+    "examples_en": ["The statue stands on a stone base."],
+    "examples_bn": ["মূর্তিটি একটি পাথরের ভিত্তির ওপর দাঁড়িয়ে আছে।"],
+    "synonyms": ["foundation"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "n., v."
+    "parts_of_speech": "noun, verb"
   },
   {
     "id": 157,
     "word": "admire",
-    "meaning_bn": "...",
-    "definition_en": "English definition for admire",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word admire."
-    ],
-    "examples_bn": [
-      "admire শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "প্রশংসা করা",
+    "definition_en": "To respect or like someone because of their qualities.",
+    "definition_bn": "কারো গুণের জন্য তাকে সম্মান বা প্রশংসা করা।",
+    "examples_en": ["I admire her honesty."],
+    "examples_bn": ["আমি তার সততার প্রশংসা করি।"],
+    "synonyms": ["respect", "appreciate"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 158,
     "word": "and",
-    "meaning_bn": "...",
-    "definition_en": "English definition for and",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word and."
-    ],
-    "examples_bn": [
-      "and শব্দটির একটি উদাহরণ বাক্য।"
-    ],
+    "meaning_bn": "এবং",
+    "definition_en": "Used to connect words, phrases, or clauses.",
+    "definition_bn": "শব্দ, বাক্যাংশ বা বাক্য যুক্ত করতে ব্যবহৃত হয়।",
+    "examples_en": ["Tom and Jerry are friends."],
+    "examples_bn": ["টম এবং জেরি বন্ধু।"],
     "synonyms": [],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "conj."
+    "parts_of_speech": "conjunction"
   },
   {
     "id": 159,
     "word": "artistic",
-    "meaning_bn": "...",
-    "definition_en": "English definition for artistic",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word artistic."
-    ],
-    "examples_bn": [
-      "artistic শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "শৈল্পিক",
+    "definition_en": "Showing creativity or skill in art.",
+    "definition_bn": "শিল্পে সৃজনশীলতা বা দক্ষতা প্রদর্শনকারী।",
+    "examples_en": ["She has great artistic talent."],
+    "examples_bn": ["তার অসাধারণ শৈল্পিক প্রতিভা রয়েছে।"],
+    "synonyms": ["creative"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 160,
     "word": "baseball",
-    "meaning_bn": "...",
-    "definition_en": "English definition for baseball",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word baseball."
-    ],
-    "examples_bn": [
-      "baseball শব্দটির একটি উদাহরণ বাক্য।"
-    ],
+    "meaning_bn": "বেসবল",
+    "definition_en": "A game played with a bat and ball between two teams.",
+    "definition_bn": "ব্যাট ও বল দিয়ে খেলা একটি দলীয় খেলা।",
+    "examples_en": ["He enjoys playing baseball."],
+    "examples_bn": ["সে বেসবল খেলতে পছন্দ করে।"],
     "synonyms": [],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 161,
     "word": "admit",
-    "meaning_bn": "...",
-    "definition_en": "English definition for admit",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word admit."
-    ],
-    "examples_bn": [
-      "admit শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "স্বীকার করা; প্রবেশের অনুমতি দেওয়া",
+    "definition_en": "To agree that something is true or allow entry.",
+    "definition_bn": "কোনো কিছু সত্য বলে স্বীকার করা বা প্রবেশ করতে দেওয়া।",
+    "examples_en": ["He admitted his mistake."],
+    "examples_bn": ["সে তার ভুল স্বীকার করেছে।"],
+    "synonyms": ["acknowledge", "confess"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 162,
     "word": "anger",
-    "meaning_bn": "...",
-    "definition_en": "English definition for anger",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word anger."
-    ],
-    "examples_bn": [
-      "anger শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "রাগ",
+    "definition_en": "A strong feeling of annoyance or displeasure.",
+    "definition_bn": "তীব্র বিরক্তি বা অসন্তোষের অনুভূতি।",
+    "examples_en": ["His anger was obvious."],
+    "examples_bn": ["তার রাগ স্পষ্ট ছিল।"],
+    "synonyms": ["rage", "fury"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 163,
-    "word": "as prep. A1,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for as prep. A1,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word as prep. A1,."
-    ],
-    "examples_bn": [
-      "as prep. A1, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "A2",
+    "word": "as",
+    "meaning_bn": "যেমন; হিসেবে; যখন",
+    "definition_en": "Used to compare, describe a role, or indicate time.",
+    "definition_bn": "তুলনা, ভূমিকা বা সময় বোঝাতে ব্যবহৃত হয়।",
+    "examples_en": ["She works as a teacher."],
+    "examples_bn": ["তিনি একজন শিক্ষক হিসেবে কাজ করেন।"],
+    "synonyms": ["like"],
+    "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "adv., conj."
+    "parts_of_speech": "preposition, adverb, conjunction"
   },
   {
     "id": 164,
     "word": "based",
-    "meaning_bn": "...",
-    "definition_en": "English definition for based",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word based."
-    ],
-    "examples_bn": [
-      "based শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "ভিত্তিক",
+    "definition_en": "Having a particular foundation or location.",
+    "definition_bn": "নির্দিষ্ট ভিত্তি বা অবস্থানের ওপর প্রতিষ্ঠিত।",
+    "examples_en": ["The story is based on real events."],
+    "examples_bn": ["গল্পটি বাস্তব ঘটনার ওপর ভিত্তি করে লেখা।"],
+    "synonyms": ["founded"],
     "level": "A2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 165,
     "word": "adopt",
-    "meaning_bn": "...",
-    "definition_en": "English definition for adopt",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word adopt."
-    ],
-    "examples_bn": [
-      "adopt শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "গ্রহণ করা; দত্তক নেওয়া",
+    "definition_en": "To take something as one's own or legally take a child into a family.",
+    "definition_bn": "কোনো কিছু গ্রহণ করা বা আইনগতভাবে শিশুকে দত্তক নেওয়া।",
+    "examples_en": ["They decided to adopt a child."],
+    "examples_bn": ["তারা একটি শিশুকে দত্তক নেওয়ার সিদ্ধান্ত নিয়েছে।"],
+    "synonyms": ["accept"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "v."
+    "parts_of_speech": "verb"
   },
   {
     "id": 166,
     "word": "angle",
-    "meaning_bn": "...",
-    "definition_en": "English definition for angle",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word angle."
-    ],
-    "examples_bn": [
-      "angle শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "কোণ",
+    "definition_en": "The space between two lines that meet.",
+    "definition_bn": "দুটি রেখার মিলনে সৃষ্ট স্থান।",
+    "examples_en": ["The angle measures ninety degrees."],
+    "examples_bn": ["কোণটির পরিমাপ নব্বই ডিগ্রি।"],
+    "synonyms": ["corner"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "n."
+    "parts_of_speech": "noun"
   },
   {
     "id": 167,
     "word": "ashamed",
-    "meaning_bn": "...",
-    "definition_en": "English definition for ashamed",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word ashamed."
-    ],
-    "examples_bn": [
-      "ashamed শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "লজ্জিত",
+    "definition_en": "Feeling guilty or embarrassed about something.",
+    "definition_bn": "কোনো কিছুর জন্য অপরাধবোধ বা লজ্জা অনুভব করা।",
+    "examples_en": ["She felt ashamed of her behavior."],
+    "examples_bn": ["সে তার আচরণের জন্য লজ্জিত ছিল।"],
+    "synonyms": ["embarrassed"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 168,
     "word": "basic",
-    "meaning_bn": "...",
-    "definition_en": "English definition for basic",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word basic."
-    ],
-    "examples_bn": [
-      "basic শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "মৌলিক; প্রাথমিক",
+    "definition_en": "Simple and forming the foundation of something.",
+    "definition_bn": "সহজ এবং কোনো কিছুর ভিত্তি গঠনকারী।",
+    "examples_en": ["You need basic computer skills."],
+    "examples_bn": ["তোমার মৌলিক কম্পিউটার দক্ষতা প্রয়োজন।"],
+    "synonyms": ["fundamental", "simple"],
     "level": "B1",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "adjective"
   },
   {
     "id": 169,
-    "word": "adult n. A1,",
-    "meaning_bn": "...",
-    "definition_en": "English definition for adult n. A1,",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word adult n. A1,."
-    ],
-    "examples_bn": [
-      "adult n. A1, শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
-    "level": "A2",
+    "word": "adult",
+    "meaning_bn": "প্রাপ্তবয়স্ক",
+    "definition_en": "A fully grown person or animal.",
+    "definition_bn": "সম্পূর্ণভাবে বেড়ে ওঠা মানুষ বা প্রাণী।",
+    "examples_en": ["Adults must buy a ticket."],
+    "examples_bn": ["প্রাপ্তবয়স্কদের টিকিট কিনতে হবে।"],
+    "synonyms": ["grown-up"],
+    "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "adj."
+    "parts_of_speech": "noun, adjective"
   },
   {
     "id": 170,
     "word": "across",
-    "meaning_bn": "...",
-    "definition_en": "English definition for across",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word across."
-    ],
-    "examples_bn": [
-      "across শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "এপার থেকে ওপার; জুড়ে",
+    "definition_en": "From one side to the other side.",
+    "definition_bn": "এক পাশ থেকে অন্য পাশে।",
+    "examples_en": ["They swam across the river."],
+    "examples_bn": ["তারা নদী পার হয়ে সাঁতার কেটেছে।"],
+    "synonyms": ["over"],
     "level": "A1",
     "category": "Oxford3000",
-    "parts_of_speech": "prep., adv."
+    "parts_of_speech": "preposition, adverb"
   },
   {
     "id": 171,
     "word": "aside",
-    "meaning_bn": "...",
-    "definition_en": "English definition for aside",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word aside."
-    ],
-    "examples_bn": [
-      "aside শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "একপাশে",
+    "definition_en": "To one side; out of the way.",
+    "definition_bn": "একদিকে বা পথের বাইরে।",
+    "examples_en": ["She stepped aside to let him pass."],
+    "examples_bn": ["তাকে যেতে দিতে সে একপাশে সরে দাঁড়াল।"],
+    "synonyms": ["apart"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 172,
     "word": "basically",
-    "meaning_bn": "...",
-    "definition_en": "English definition for basically",
-    "definition_bn": "...",
-    "examples_en": [
-      "This is an example sentence with the word basically."
-    ],
-    "examples_bn": [
-      "basically শব্দটির একটি উদাহরণ বাক্য।"
-    ],
-    "synonyms": [],
+    "meaning_bn": "মূলত",
+    "definition_en": "In the most important ways; fundamentally.",
+    "definition_bn": "মূল বিষয় অনুযায়ী; মৌলিকভাবে।",
+    "examples_en": ["Basically, the plan is simple."],
+    "examples_bn": ["মূলত, পরিকল্পনাটি সহজ।"],
+    "synonyms": ["essentially"],
     "level": "B2",
     "category": "Oxford3000",
-    "parts_of_speech": "adv."
+    "parts_of_speech": "adverb"
   },
   {
     "id": 173,
