@@ -1,0 +1,5323 @@
+[
+  {
+    "id": 1,
+    "word": "table",
+    "meaning_bn": "...",
+    "definition_en": "English definition for table",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'table'."
+    ],
+    "examples_bn": [
+      "এটি 'table' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 2,
+    "word": "tablet",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tablet",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tablet'."
+    ],
+    "examples_bn": [
+      "এটি 'tablet' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 3,
+    "word": "tail",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tail",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tail'."
+    ],
+    "examples_bn": [
+      "এটি 'tail' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 5,
+    "word": "tale",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tale",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tale'."
+    ],
+    "examples_bn": [
+      "এটি 'tale' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 6,
+    "word": "talent",
+    "meaning_bn": "...",
+    "definition_en": "English definition for talent",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'talent'."
+    ],
+    "examples_bn": [
+      "এটি 'talent' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 7,
+    "word": "talented",
+    "meaning_bn": "...",
+    "definition_en": "English definition for talented",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'talented'."
+    ],
+    "examples_bn": [
+      "এটি 'talented' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 9,
+    "word": "tall",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tall",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tall'."
+    ],
+    "examples_bn": [
+      "এটি 'tall' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 10,
+    "word": "tank",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tank",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tank'."
+    ],
+    "examples_bn": [
+      "এটি 'tank' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 11,
+    "word": "tape",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tape",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tape'."
+    ],
+    "examples_bn": [
+      "এটি 'tape' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 13,
+    "word": "task",
+    "meaning_bn": "...",
+    "definition_en": "English definition for task",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'task'."
+    ],
+    "examples_bn": [
+      "এটি 'task' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 14,
+    "word": "taste",
+    "meaning_bn": "...",
+    "definition_en": "English definition for taste",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'taste'."
+    ],
+    "examples_bn": [
+      "এটি 'taste' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 15,
+    "word": "tax",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tax",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tax'."
+    ],
+    "examples_bn": [
+      "এটি 'tax' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 16,
+    "word": "taxi",
+    "meaning_bn": "...",
+    "definition_en": "English definition for taxi",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'taxi'."
+    ],
+    "examples_bn": [
+      "এটি 'taxi' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 17,
+    "word": "tea",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tea",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tea'."
+    ],
+    "examples_bn": [
+      "এটি 'tea' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 18,
+    "word": "teach",
+    "meaning_bn": "...",
+    "definition_en": "English definition for teach",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'teach'."
+    ],
+    "examples_bn": [
+      "এটি 'teach' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 19,
+    "word": "teacher",
+    "meaning_bn": "...",
+    "definition_en": "English definition for teacher",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'teacher'."
+    ],
+    "examples_bn": [
+      "এটি 'teacher' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 20,
+    "word": "teaching",
+    "meaning_bn": "...",
+    "definition_en": "English definition for teaching",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'teaching'."
+    ],
+    "examples_bn": [
+      "এটি 'teaching' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 21,
+    "word": "team",
+    "meaning_bn": "...",
+    "definition_en": "English definition for team",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'team'."
+    ],
+    "examples_bn": [
+      "এটি 'team' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 22,
+    "word": "tear1",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tear1",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tear1'."
+    ],
+    "examples_bn": [
+      "এটি 'tear1' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 23,
+    "word": "technical",
+    "meaning_bn": "...",
+    "definition_en": "English definition for technical",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'technical'."
+    ],
+    "examples_bn": [
+      "এটি 'technical' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 24,
+    "word": "technique",
+    "meaning_bn": "...",
+    "definition_en": "English definition for technique",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'technique'."
+    ],
+    "examples_bn": [
+      "এটি 'technique' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 25,
+    "word": "technology",
+    "meaning_bn": "...",
+    "definition_en": "English definition for technology",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'technology'."
+    ],
+    "examples_bn": [
+      "এটি 'technology' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 26,
+    "word": "teenage",
+    "meaning_bn": "...",
+    "definition_en": "English definition for teenage",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'teenage'."
+    ],
+    "examples_bn": [
+      "এটি 'teenage' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 27,
+    "word": "teenager",
+    "meaning_bn": "...",
+    "definition_en": "English definition for teenager",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'teenager'."
+    ],
+    "examples_bn": [
+      "এটি 'teenager' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 28,
+    "word": "telephone",
+    "meaning_bn": "...",
+    "definition_en": "English definition for telephone",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'telephone'."
+    ],
+    "examples_bn": [
+      "এটি 'telephone' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 29,
+    "word": "television",
+    "meaning_bn": "...",
+    "definition_en": "English definition for television",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'television'."
+    ],
+    "examples_bn": [
+      "এটি 'television' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 30,
+    "word": "tell",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tell",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tell'."
+    ],
+    "examples_bn": [
+      "এটি 'tell' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 31,
+    "word": "temperature",
+    "meaning_bn": "...",
+    "definition_en": "English definition for temperature",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'temperature'."
+    ],
+    "examples_bn": [
+      "এটি 'temperature' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 32,
+    "word": "temple",
+    "meaning_bn": "...",
+    "definition_en": "English definition for temple",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'temple'."
+    ],
+    "examples_bn": [
+      "এটি 'temple' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 33,
+    "word": "ten",
+    "meaning_bn": "...",
+    "definition_en": "English definition for ten",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'ten'."
+    ],
+    "examples_bn": [
+      "এটি 'ten' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 34,
+    "word": "tend",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tend",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tend'."
+    ],
+    "examples_bn": [
+      "এটি 'tend' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 35,
+    "word": "tennis",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tennis",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tennis'."
+    ],
+    "examples_bn": [
+      "এটি 'tennis' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 36,
+    "word": "tent",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tent",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tent'."
+    ],
+    "examples_bn": [
+      "এটি 'tent' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 38,
+    "word": "terrible",
+    "meaning_bn": "...",
+    "definition_en": "English definition for terrible",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'terrible'."
+    ],
+    "examples_bn": [
+      "এটি 'terrible' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 39,
+    "word": "test",
+    "meaning_bn": "...",
+    "definition_en": "English definition for test",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'test'."
+    ],
+    "examples_bn": [
+      "এটি 'test' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 41,
+    "word": "than",
+    "meaning_bn": "...",
+    "definition_en": "English definition for than",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'than'."
+    ],
+    "examples_bn": [
+      "এটি 'than' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "conj."
+  },
+  {
+    "id": 42,
+    "word": "thank",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thank",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thank'."
+    ],
+    "examples_bn": [
+      "এটি 'thank' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 43,
+    "word": "thanks",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thanks",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thanks'."
+    ],
+    "examples_bn": [
+      "এটি 'thanks' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "exclam., n."
+  },
+  {
+    "id": 45,
+    "word": "the definite",
+    "meaning_bn": "...",
+    "definition_en": "English definition for the definite",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'the definite'."
+    ],
+    "examples_bn": [
+      "এটি 'the definite' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "article"
+  },
+  {
+    "id": 46,
+    "word": "theater",
+    "meaning_bn": "...",
+    "definition_en": "English definition for theater",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'theater'."
+    ],
+    "examples_bn": [
+      "এটি 'theater' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 47,
+    "word": "their",
+    "meaning_bn": "...",
+    "definition_en": "English definition for their",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'their'."
+    ],
+    "examples_bn": [
+      "এটি 'their' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "det."
+  },
+  {
+    "id": 48,
+    "word": "theirs",
+    "meaning_bn": "...",
+    "definition_en": "English definition for theirs",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'theirs'."
+    ],
+    "examples_bn": [
+      "এটি 'theirs' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 49,
+    "word": "them",
+    "meaning_bn": "...",
+    "definition_en": "English definition for them",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'them'."
+    ],
+    "examples_bn": [
+      "এটি 'them' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 50,
+    "word": "theme",
+    "meaning_bn": "...",
+    "definition_en": "English definition for theme",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'theme'."
+    ],
+    "examples_bn": [
+      "এটি 'theme' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 51,
+    "word": "themselves",
+    "meaning_bn": "...",
+    "definition_en": "English definition for themselves",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'themselves'."
+    ],
+    "examples_bn": [
+      "এটি 'themselves' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 52,
+    "word": "then",
+    "meaning_bn": "...",
+    "definition_en": "English definition for then",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'then'."
+    ],
+    "examples_bn": [
+      "এটি 'then' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 53,
+    "word": "theory",
+    "meaning_bn": "...",
+    "definition_en": "English definition for theory",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'theory'."
+    ],
+    "examples_bn": [
+      "এটি 'theory' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 54,
+    "word": "therapy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for therapy",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'therapy'."
+    ],
+    "examples_bn": [
+      "এটি 'therapy' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 55,
+    "word": "there",
+    "meaning_bn": "...",
+    "definition_en": "English definition for there",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'there'."
+    ],
+    "examples_bn": [
+      "এটি 'there' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 56,
+    "word": "therefore",
+    "meaning_bn": "...",
+    "definition_en": "English definition for therefore",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'therefore'."
+    ],
+    "examples_bn": [
+      "এটি 'therefore' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 57,
+    "word": "they",
+    "meaning_bn": "...",
+    "definition_en": "English definition for they",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'they'."
+    ],
+    "examples_bn": [
+      "এটি 'they' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 58,
+    "word": "thick",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thick",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thick'."
+    ],
+    "examples_bn": [
+      "এটি 'thick' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 59,
+    "word": "thin",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thin",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thin'."
+    ],
+    "examples_bn": [
+      "এটি 'thin' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 60,
+    "word": "thing",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thing",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thing'."
+    ],
+    "examples_bn": [
+      "এটি 'thing' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 61,
+    "word": "think",
+    "meaning_bn": "...",
+    "definition_en": "English definition for think",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'think'."
+    ],
+    "examples_bn": [
+      "এটি 'think' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 62,
+    "word": "thinking",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thinking",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thinking'."
+    ],
+    "examples_bn": [
+      "এটি 'thinking' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 64,
+    "word": "thirsty",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thirsty",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thirsty'."
+    ],
+    "examples_bn": [
+      "এটি 'thirsty' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 65,
+    "word": "thirteen",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thirteen",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thirteen'."
+    ],
+    "examples_bn": [
+      "এটি 'thirteen' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 66,
+    "word": "thirty",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thirty",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thirty'."
+    ],
+    "examples_bn": [
+      "এটি 'thirty' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 69,
+    "word": "thought",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thought",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thought'."
+    ],
+    "examples_bn": [
+      "এটি 'thought' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 70,
+    "word": "thousand",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thousand",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thousand'."
+    ],
+    "examples_bn": [
+      "এটি 'thousand' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 71,
+    "word": "threat",
+    "meaning_bn": "...",
+    "definition_en": "English definition for threat",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'threat'."
+    ],
+    "examples_bn": [
+      "এটি 'threat' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 72,
+    "word": "threaten",
+    "meaning_bn": "...",
+    "definition_en": "English definition for threaten",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'threaten'."
+    ],
+    "examples_bn": [
+      "এটি 'threaten' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 73,
+    "word": "three",
+    "meaning_bn": "...",
+    "definition_en": "English definition for three",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'three'."
+    ],
+    "examples_bn": [
+      "এটি 'three' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 74,
+    "word": "throat",
+    "meaning_bn": "...",
+    "definition_en": "English definition for throat",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'throat'."
+    ],
+    "examples_bn": [
+      "এটি 'throat' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 75,
+    "word": "through",
+    "meaning_bn": "...",
+    "definition_en": "English definition for through",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'through'."
+    ],
+    "examples_bn": [
+      "এটি 'through' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep., adv."
+  },
+  {
+    "id": 76,
+    "word": "throughout",
+    "meaning_bn": "...",
+    "definition_en": "English definition for throughout",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'throughout'."
+    ],
+    "examples_bn": [
+      "এটি 'throughout' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep., adv."
+  },
+  {
+    "id": 77,
+    "word": "throw",
+    "meaning_bn": "...",
+    "definition_en": "English definition for throw",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'throw'."
+    ],
+    "examples_bn": [
+      "এটি 'throw' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 78,
+    "word": "Thursday",
+    "meaning_bn": "...",
+    "definition_en": "English definition for Thursday",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'Thursday'."
+    ],
+    "examples_bn": [
+      "এটি 'Thursday' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 79,
+    "word": "thus",
+    "meaning_bn": "...",
+    "definition_en": "English definition for thus",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'thus'."
+    ],
+    "examples_bn": [
+      "এটি 'thus' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 80,
+    "word": "ticket",
+    "meaning_bn": "...",
+    "definition_en": "English definition for ticket",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'ticket'."
+    ],
+    "examples_bn": [
+      "এটি 'ticket' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 81,
+    "word": "tidy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tidy",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tidy'."
+    ],
+    "examples_bn": [
+      "এটি 'tidy' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., v."
+  },
+  {
+    "id": 82,
+    "word": "tie",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tie",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tie'."
+    ],
+    "examples_bn": [
+      "এটি 'tie' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 83,
+    "word": "tight",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tight",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tight'."
+    ],
+    "examples_bn": [
+      "এটি 'tight' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 84,
+    "word": "till",
+    "meaning_bn": "...",
+    "definition_en": "English definition for till",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'till'."
+    ],
+    "examples_bn": [
+      "এটি 'till' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "conj., prep."
+  },
+  {
+    "id": 86,
+    "word": "tin",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tin",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tin'."
+    ],
+    "examples_bn": [
+      "এটি 'tin' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 87,
+    "word": "tiny",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tiny",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tiny'."
+    ],
+    "examples_bn": [
+      "এটি 'tiny' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 89,
+    "word": "tired",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tired",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tired'."
+    ],
+    "examples_bn": [
+      "এটি 'tired' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 90,
+    "word": "tiring",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tiring",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tiring'."
+    ],
+    "examples_bn": [
+      "এটি 'tiring' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 92,
+    "word": "to",
+    "meaning_bn": "...",
+    "definition_en": "English definition for to",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'to'."
+    ],
+    "examples_bn": [
+      "এটি 'to' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep., infinitive marker"
+  },
+  {
+    "id": 93,
+    "word": "today",
+    "meaning_bn": "...",
+    "definition_en": "English definition for today",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'today'."
+    ],
+    "examples_bn": [
+      "এটি 'today' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv., n."
+  },
+  {
+    "id": 94,
+    "word": "toe",
+    "meaning_bn": "...",
+    "definition_en": "English definition for toe",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'toe'."
+    ],
+    "examples_bn": [
+      "এটি 'toe' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 95,
+    "word": "together",
+    "meaning_bn": "...",
+    "definition_en": "English definition for together",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'together'."
+    ],
+    "examples_bn": [
+      "এটি 'together' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 96,
+    "word": "toilet",
+    "meaning_bn": "...",
+    "definition_en": "English definition for toilet",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'toilet'."
+    ],
+    "examples_bn": [
+      "এটি 'toilet' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 97,
+    "word": "tomato",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tomato",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tomato'."
+    ],
+    "examples_bn": [
+      "এটি 'tomato' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 98,
+    "word": "tomorrow",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tomorrow",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tomorrow'."
+    ],
+    "examples_bn": [
+      "এটি 'tomorrow' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv., n."
+  },
+  {
+    "id": 99,
+    "word": "tone",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tone",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tone'."
+    ],
+    "examples_bn": [
+      "এটি 'tone' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 100,
+    "word": "tongue",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tongue",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tongue'."
+    ],
+    "examples_bn": [
+      "এটি 'tongue' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 101,
+    "word": "tonight",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tonight",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tonight'."
+    ],
+    "examples_bn": [
+      "এটি 'tonight' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv., n."
+  },
+  {
+    "id": 102,
+    "word": "too",
+    "meaning_bn": "...",
+    "definition_en": "English definition for too",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'too'."
+    ],
+    "examples_bn": [
+      "এটি 'too' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 103,
+    "word": "tool",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tool",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tool'."
+    ],
+    "examples_bn": [
+      "এটি 'tool' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 104,
+    "word": "tooth",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tooth",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tooth'."
+    ],
+    "examples_bn": [
+      "এটি 'tooth' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 105,
+    "word": "top",
+    "meaning_bn": "...",
+    "definition_en": "English definition for top",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'top'."
+    ],
+    "examples_bn": [
+      "এটি 'top' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., adj."
+  },
+  {
+    "id": 106,
+    "word": "topic",
+    "meaning_bn": "...",
+    "definition_en": "English definition for topic",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'topic'."
+    ],
+    "examples_bn": [
+      "এটি 'topic' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 107,
+    "word": "total",
+    "meaning_bn": "...",
+    "definition_en": "English definition for total",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'total'."
+    ],
+    "examples_bn": [
+      "এটি 'total' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 108,
+    "word": "totally",
+    "meaning_bn": "...",
+    "definition_en": "English definition for totally",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'totally'."
+    ],
+    "examples_bn": [
+      "এটি 'totally' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 109,
+    "word": "touch",
+    "meaning_bn": "...",
+    "definition_en": "English definition for touch",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'touch'."
+    ],
+    "examples_bn": [
+      "এটি 'touch' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 110,
+    "word": "tough",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tough",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tough'."
+    ],
+    "examples_bn": [
+      "এটি 'tough' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 112,
+    "word": "tourism",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tourism",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tourism'."
+    ],
+    "examples_bn": [
+      "এটি 'tourism' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 113,
+    "word": "tourist",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tourist",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tourist'."
+    ],
+    "examples_bn": [
+      "এটি 'tourist' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 114,
+    "word": "toward",
+    "meaning_bn": "...",
+    "definition_en": "English definition for toward",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'toward'."
+    ],
+    "examples_bn": [
+      "এটি 'toward' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep."
+  },
+  {
+    "id": 115,
+    "word": "towel",
+    "meaning_bn": "...",
+    "definition_en": "English definition for towel",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'towel'."
+    ],
+    "examples_bn": [
+      "এটি 'towel' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 116,
+    "word": "tower",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tower",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tower'."
+    ],
+    "examples_bn": [
+      "এটি 'tower' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 117,
+    "word": "town",
+    "meaning_bn": "...",
+    "definition_en": "English definition for town",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'town'."
+    ],
+    "examples_bn": [
+      "এটি 'town' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 118,
+    "word": "toy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for toy",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'toy'."
+    ],
+    "examples_bn": [
+      "এটি 'toy' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 120,
+    "word": "trade",
+    "meaning_bn": "...",
+    "definition_en": "English definition for trade",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'trade'."
+    ],
+    "examples_bn": [
+      "এটি 'trade' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 121,
+    "word": "tradition",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tradition",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tradition'."
+    ],
+    "examples_bn": [
+      "এটি 'tradition' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 122,
+    "word": "traditional",
+    "meaning_bn": "...",
+    "definition_en": "English definition for traditional",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'traditional'."
+    ],
+    "examples_bn": [
+      "এটি 'traditional' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 123,
+    "word": "traffic",
+    "meaning_bn": "...",
+    "definition_en": "English definition for traffic",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'traffic'."
+    ],
+    "examples_bn": [
+      "এটি 'traffic' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 125,
+    "word": "trainer",
+    "meaning_bn": "...",
+    "definition_en": "English definition for trainer",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'trainer'."
+    ],
+    "examples_bn": [
+      "এটি 'trainer' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 126,
+    "word": "training",
+    "meaning_bn": "...",
+    "definition_en": "English definition for training",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'training'."
+    ],
+    "examples_bn": [
+      "এটি 'training' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 127,
+    "word": "transfer",
+    "meaning_bn": "...",
+    "definition_en": "English definition for transfer",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'transfer'."
+    ],
+    "examples_bn": [
+      "এটি 'transfer' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 128,
+    "word": "transform",
+    "meaning_bn": "...",
+    "definition_en": "English definition for transform",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'transform'."
+    ],
+    "examples_bn": [
+      "এটি 'transform' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 129,
+    "word": "transition",
+    "meaning_bn": "...",
+    "definition_en": "English definition for transition",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'transition'."
+    ],
+    "examples_bn": [
+      "এটি 'transition' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 130,
+    "word": "translate",
+    "meaning_bn": "...",
+    "definition_en": "English definition for translate",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'translate'."
+    ],
+    "examples_bn": [
+      "এটি 'translate' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 131,
+    "word": "translation",
+    "meaning_bn": "...",
+    "definition_en": "English definition for translation",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'translation'."
+    ],
+    "examples_bn": [
+      "এটি 'translation' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 134,
+    "word": "traveler",
+    "meaning_bn": "...",
+    "definition_en": "English definition for traveler",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'traveler'."
+    ],
+    "examples_bn": [
+      "এটি 'traveler' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 135,
+    "word": "treasure",
+    "meaning_bn": "...",
+    "definition_en": "English definition for treasure",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'treasure'."
+    ],
+    "examples_bn": [
+      "এটি 'treasure' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 137,
+    "word": "treatment",
+    "meaning_bn": "...",
+    "definition_en": "English definition for treatment",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'treatment'."
+    ],
+    "examples_bn": [
+      "এটি 'treatment' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 138,
+    "word": "tree",
+    "meaning_bn": "গাছ",
+    "definition_en": "A woody perennial plant.",
+    "definition_bn": "একটি কাষ্ঠল বহুবর্ষজীবী উদ্ভিদ।",
+    "examples_en": [
+      "This is an example for 'tree'."
+    ],
+    "examples_bn": [
+      "এটি 'tree' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 139,
+    "word": "trend",
+    "meaning_bn": "...",
+    "definition_en": "English definition for trend",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'trend'."
+    ],
+    "examples_bn": [
+      "এটি 'trend' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 140,
+    "word": "trial",
+    "meaning_bn": "...",
+    "definition_en": "English definition for trial",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'trial'."
+    ],
+    "examples_bn": [
+      "এটি 'trial' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 141,
+    "word": "trick",
+    "meaning_bn": "...",
+    "definition_en": "English definition for trick",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'trick'."
+    ],
+    "examples_bn": [
+      "এটি 'trick' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 143,
+    "word": "tropical",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tropical",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tropical'."
+    ],
+    "examples_bn": [
+      "এটি 'tropical' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 145,
+    "word": "trousers",
+    "meaning_bn": "...",
+    "definition_en": "English definition for trousers",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'trousers'."
+    ],
+    "examples_bn": [
+      "এটি 'trousers' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 146,
+    "word": "truck",
+    "meaning_bn": "...",
+    "definition_en": "English definition for truck",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'truck'."
+    ],
+    "examples_bn": [
+      "এটি 'truck' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 147,
+    "word": "true",
+    "meaning_bn": "...",
+    "definition_en": "English definition for true",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'true'."
+    ],
+    "examples_bn": [
+      "এটি 'true' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 148,
+    "word": "truly",
+    "meaning_bn": "...",
+    "definition_en": "English definition for truly",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'truly'."
+    ],
+    "examples_bn": [
+      "এটি 'truly' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 149,
+    "word": "trust",
+    "meaning_bn": "...",
+    "definition_en": "English definition for trust",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'trust'."
+    ],
+    "examples_bn": [
+      "এটি 'trust' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 150,
+    "word": "truth",
+    "meaning_bn": "...",
+    "definition_en": "English definition for truth",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'truth'."
+    ],
+    "examples_bn": [
+      "এটি 'truth' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 152,
+    "word": "T-shirt",
+    "meaning_bn": "...",
+    "definition_en": "English definition for T-shirt",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'T-shirt'."
+    ],
+    "examples_bn": [
+      "এটি 'T-shirt' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 153,
+    "word": "tube",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tube",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tube'."
+    ],
+    "examples_bn": [
+      "এটি 'tube' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 154,
+    "word": "Tuesday",
+    "meaning_bn": "...",
+    "definition_en": "English definition for Tuesday",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'Tuesday'."
+    ],
+    "examples_bn": [
+      "এটি 'Tuesday' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 155,
+    "word": "tune",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tune",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tune'."
+    ],
+    "examples_bn": [
+      "এটি 'tune' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 156,
+    "word": "tunnel",
+    "meaning_bn": "...",
+    "definition_en": "English definition for tunnel",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'tunnel'."
+    ],
+    "examples_bn": [
+      "এটি 'tunnel' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 157,
+    "word": "turn",
+    "meaning_bn": "...",
+    "definition_en": "English definition for turn",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'turn'."
+    ],
+    "examples_bn": [
+      "এটি 'turn' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 158,
+    "word": "TV",
+    "meaning_bn": "...",
+    "definition_en": "English definition for TV",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'TV'."
+    ],
+    "examples_bn": [
+      "এটি 'TV' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 159,
+    "word": "twelve",
+    "meaning_bn": "...",
+    "definition_en": "English definition for twelve",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'twelve'."
+    ],
+    "examples_bn": [
+      "এটি 'twelve' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 160,
+    "word": "twenty",
+    "meaning_bn": "...",
+    "definition_en": "English definition for twenty",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'twenty'."
+    ],
+    "examples_bn": [
+      "এটি 'twenty' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 161,
+    "word": "twice",
+    "meaning_bn": "...",
+    "definition_en": "English definition for twice",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'twice'."
+    ],
+    "examples_bn": [
+      "এটি 'twice' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 162,
+    "word": "twin",
+    "meaning_bn": "...",
+    "definition_en": "English definition for twin",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'twin'."
+    ],
+    "examples_bn": [
+      "এটি 'twin' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., adj."
+  },
+  {
+    "id": 163,
+    "word": "two",
+    "meaning_bn": "...",
+    "definition_en": "English definition for two",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'two'."
+    ],
+    "examples_bn": [
+      "এটি 'two' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 165,
+    "word": "typical",
+    "meaning_bn": "...",
+    "definition_en": "English definition for typical",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'typical'."
+    ],
+    "examples_bn": [
+      "এটি 'typical' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 166,
+    "word": "typically",
+    "meaning_bn": "...",
+    "definition_en": "English definition for typically",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'typically'."
+    ],
+    "examples_bn": [
+      "এটি 'typically' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 167,
+    "word": "ugly",
+    "meaning_bn": "...",
+    "definition_en": "English definition for ugly",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'ugly'."
+    ],
+    "examples_bn": [
+      "এটি 'ugly' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 168,
+    "word": "ultimate",
+    "meaning_bn": "...",
+    "definition_en": "English definition for ultimate",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'ultimate'."
+    ],
+    "examples_bn": [
+      "এটি 'ultimate' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 169,
+    "word": "ultimately",
+    "meaning_bn": "...",
+    "definition_en": "English definition for ultimately",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'ultimately'."
+    ],
+    "examples_bn": [
+      "এটি 'ultimately' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 170,
+    "word": "umbrella",
+    "meaning_bn": "...",
+    "definition_en": "English definition for umbrella",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'umbrella'."
+    ],
+    "examples_bn": [
+      "এটি 'umbrella' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 171,
+    "word": "unable",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unable",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unable'."
+    ],
+    "examples_bn": [
+      "এটি 'unable' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 172,
+    "word": "uncle",
+    "meaning_bn": "...",
+    "definition_en": "English definition for uncle",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'uncle'."
+    ],
+    "examples_bn": [
+      "এটি 'uncle' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 173,
+    "word": "under",
+    "meaning_bn": "...",
+    "definition_en": "English definition for under",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'under'."
+    ],
+    "examples_bn": [
+      "এটি 'under' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep., adv."
+  },
+  {
+    "id": 174,
+    "word": "underground",
+    "meaning_bn": "...",
+    "definition_en": "English definition for underground",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'underground'."
+    ],
+    "examples_bn": [
+      "এটি 'underground' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., adv."
+  },
+  {
+    "id": 175,
+    "word": "understand",
+    "meaning_bn": "বুঝতে পারা",
+    "definition_en": "Perceive the intended meaning of.",
+    "definition_bn": "উদ্দিষ্ট অর্থ উপলব্ধি করা।",
+    "examples_en": [
+      "This is an example for 'understand'."
+    ],
+    "examples_bn": [
+      "এটি 'understand' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 176,
+    "word": "understanding",
+    "meaning_bn": "...",
+    "definition_en": "English definition for understanding",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'understanding'."
+    ],
+    "examples_bn": [
+      "এটি 'understanding' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 177,
+    "word": "unfortunate",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unfortunate",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unfortunate'."
+    ],
+    "examples_bn": [
+      "এটি 'unfortunate' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 178,
+    "word": "unfortunately",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unfortunately",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unfortunately'."
+    ],
+    "examples_bn": [
+      "এটি 'unfortunately' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 179,
+    "word": "unhappy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unhappy",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unhappy'."
+    ],
+    "examples_bn": [
+      "এটি 'unhappy' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 180,
+    "word": "uniform",
+    "meaning_bn": "...",
+    "definition_en": "English definition for uniform",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'uniform'."
+    ],
+    "examples_bn": [
+      "এটি 'uniform' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 181,
+    "word": "union",
+    "meaning_bn": "...",
+    "definition_en": "English definition for union",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'union'."
+    ],
+    "examples_bn": [
+      "এটি 'union' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 182,
+    "word": "unique",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unique",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unique'."
+    ],
+    "examples_bn": [
+      "এটি 'unique' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 183,
+    "word": "unit",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unit",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unit'."
+    ],
+    "examples_bn": [
+      "এটি 'unit' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 184,
+    "word": "united",
+    "meaning_bn": "...",
+    "definition_en": "English definition for united",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'united'."
+    ],
+    "examples_bn": [
+      "এটি 'united' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 185,
+    "word": "universe",
+    "meaning_bn": "...",
+    "definition_en": "English definition for universe",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'universe'."
+    ],
+    "examples_bn": [
+      "এটি 'universe' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 186,
+    "word": "university",
+    "meaning_bn": "...",
+    "definition_en": "English definition for university",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'university'."
+    ],
+    "examples_bn": [
+      "এটি 'university' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 187,
+    "word": "unknown",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unknown",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unknown'."
+    ],
+    "examples_bn": [
+      "এটি 'unknown' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 188,
+    "word": "unless",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unless",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unless'."
+    ],
+    "examples_bn": [
+      "এটি 'unless' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "conj."
+  },
+  {
+    "id": 189,
+    "word": "unlike",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unlike",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unlike'."
+    ],
+    "examples_bn": [
+      "এটি 'unlike' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep."
+  },
+  {
+    "id": 190,
+    "word": "unlikely",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unlikely",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unlikely'."
+    ],
+    "examples_bn": [
+      "এটি 'unlikely' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 191,
+    "word": "until",
+    "meaning_bn": "...",
+    "definition_en": "English definition for until",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'until'."
+    ],
+    "examples_bn": [
+      "এটি 'until' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "conj., prep."
+  },
+  {
+    "id": 192,
+    "word": "unusual",
+    "meaning_bn": "...",
+    "definition_en": "English definition for unusual",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'unusual'."
+    ],
+    "examples_bn": [
+      "এটি 'unusual' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 193,
+    "word": "up",
+    "meaning_bn": "...",
+    "definition_en": "English definition for up",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'up'."
+    ],
+    "examples_bn": [
+      "এটি 'up' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv., prep."
+  },
+  {
+    "id": 194,
+    "word": "upon",
+    "meaning_bn": "...",
+    "definition_en": "English definition for upon",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'upon'."
+    ],
+    "examples_bn": [
+      "এটি 'upon' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep."
+  },
+  {
+    "id": 195,
+    "word": "upper",
+    "meaning_bn": "...",
+    "definition_en": "English definition for upper",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'upper'."
+    ],
+    "examples_bn": [
+      "এটি 'upper' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 196,
+    "word": "upset",
+    "meaning_bn": "...",
+    "definition_en": "English definition for upset",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'upset'."
+    ],
+    "examples_bn": [
+      "এটি 'upset' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., v."
+  },
+  {
+    "id": 198,
+    "word": "upward",
+    "meaning_bn": "...",
+    "definition_en": "English definition for upward",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'upward'."
+    ],
+    "examples_bn": [
+      "এটি 'upward' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 199,
+    "word": "urban",
+    "meaning_bn": "...",
+    "definition_en": "English definition for urban",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'urban'."
+    ],
+    "examples_bn": [
+      "এটি 'urban' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 200,
+    "word": "us",
+    "meaning_bn": "...",
+    "definition_en": "English definition for us",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'us'."
+    ],
+    "examples_bn": [
+      "এটি 'us' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 202,
+    "word": "used1",
+    "meaning_bn": "...",
+    "definition_en": "English definition for used1",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'used1'."
+    ],
+    "examples_bn": [
+      "এটি 'used1' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 203,
+    "word": "used2 (to)",
+    "meaning_bn": "...",
+    "definition_en": "English definition for used2 (to)",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'used2 (to)'."
+    ],
+    "examples_bn": [
+      "এটি 'used2 (to)' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 204,
+    "word": "useful",
+    "meaning_bn": "...",
+    "definition_en": "English definition for useful",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'useful'."
+    ],
+    "examples_bn": [
+      "এটি 'useful' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 205,
+    "word": "user",
+    "meaning_bn": "...",
+    "definition_en": "English definition for user",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'user'."
+    ],
+    "examples_bn": [
+      "এটি 'user' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 206,
+    "word": "usual",
+    "meaning_bn": "...",
+    "definition_en": "English definition for usual",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'usual'."
+    ],
+    "examples_bn": [
+      "এটি 'usual' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 207,
+    "word": "usually",
+    "meaning_bn": "...",
+    "definition_en": "English definition for usually",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'usually'."
+    ],
+    "examples_bn": [
+      "এটি 'usually' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 208,
+    "word": "vacation",
+    "meaning_bn": "...",
+    "definition_en": "English definition for vacation",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'vacation'."
+    ],
+    "examples_bn": [
+      "এটি 'vacation' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 209,
+    "word": "valley",
+    "meaning_bn": "...",
+    "definition_en": "English definition for valley",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'valley'."
+    ],
+    "examples_bn": [
+      "এটি 'valley' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 210,
+    "word": "valuable",
+    "meaning_bn": "...",
+    "definition_en": "English definition for valuable",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'valuable'."
+    ],
+    "examples_bn": [
+      "এটি 'valuable' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 212,
+    "word": "van",
+    "meaning_bn": "...",
+    "definition_en": "English definition for van",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'van'."
+    ],
+    "examples_bn": [
+      "এটি 'van' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 213,
+    "word": "variety",
+    "meaning_bn": "...",
+    "definition_en": "English definition for variety",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'variety'."
+    ],
+    "examples_bn": [
+      "এটি 'variety' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 214,
+    "word": "various",
+    "meaning_bn": "...",
+    "definition_en": "English definition for various",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'various'."
+    ],
+    "examples_bn": [
+      "এটি 'various' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 215,
+    "word": "vary",
+    "meaning_bn": "...",
+    "definition_en": "English definition for vary",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'vary'."
+    ],
+    "examples_bn": [
+      "এটি 'vary' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 216,
+    "word": "vast",
+    "meaning_bn": "...",
+    "definition_en": "English definition for vast",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'vast'."
+    ],
+    "examples_bn": [
+      "এটি 'vast' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 217,
+    "word": "vegetable",
+    "meaning_bn": "...",
+    "definition_en": "English definition for vegetable",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'vegetable'."
+    ],
+    "examples_bn": [
+      "এটি 'vegetable' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 218,
+    "word": "vehicle",
+    "meaning_bn": "...",
+    "definition_en": "English definition for vehicle",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'vehicle'."
+    ],
+    "examples_bn": [
+      "এটি 'vehicle' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 219,
+    "word": "venue",
+    "meaning_bn": "...",
+    "definition_en": "English definition for venue",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'venue'."
+    ],
+    "examples_bn": [
+      "এটি 'venue' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 220,
+    "word": "version",
+    "meaning_bn": "...",
+    "definition_en": "English definition for version",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'version'."
+    ],
+    "examples_bn": [
+      "এটি 'version' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 222,
+    "word": "via",
+    "meaning_bn": "...",
+    "definition_en": "English definition for via",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'via'."
+    ],
+    "examples_bn": [
+      "এটি 'via' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep."
+  },
+  {
+    "id": 223,
+    "word": "victim",
+    "meaning_bn": "...",
+    "definition_en": "English definition for victim",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'victim'."
+    ],
+    "examples_bn": [
+      "এটি 'victim' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 224,
+    "word": "victory",
+    "meaning_bn": "...",
+    "definition_en": "English definition for victory",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'victory'."
+    ],
+    "examples_bn": [
+      "এটি 'victory' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 225,
+    "word": "video",
+    "meaning_bn": "...",
+    "definition_en": "English definition for video",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'video'."
+    ],
+    "examples_bn": [
+      "এটি 'video' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 227,
+    "word": "viewer",
+    "meaning_bn": "...",
+    "definition_en": "English definition for viewer",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'viewer'."
+    ],
+    "examples_bn": [
+      "এটি 'viewer' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 228,
+    "word": "village",
+    "meaning_bn": "গ্রাম",
+    "definition_en": "A group of houses and associated buildings, larger than a hamlet and smaller than a town.",
+    "definition_bn": "বাড়ি এবং সংশ্লিষ্ট ভবনগুলির একটি দল, একটি ছোট গ্রামের চেয়ে বড় এবং শহরের চেয়ে ছোট।",
+    "examples_en": [
+      "This is an example for 'village'."
+    ],
+    "examples_bn": [
+      "এটি 'village' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 229,
+    "word": "violence",
+    "meaning_bn": "...",
+    "definition_en": "English definition for violence",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'violence'."
+    ],
+    "examples_bn": [
+      "এটি 'violence' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 230,
+    "word": "violent",
+    "meaning_bn": "...",
+    "definition_en": "English definition for violent",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'violent'."
+    ],
+    "examples_bn": [
+      "এটি 'violent' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 231,
+    "word": "virtual",
+    "meaning_bn": "...",
+    "definition_en": "English definition for virtual",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'virtual'."
+    ],
+    "examples_bn": [
+      "এটি 'virtual' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 232,
+    "word": "virus",
+    "meaning_bn": "...",
+    "definition_en": "English definition for virus",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'virus'."
+    ],
+    "examples_bn": [
+      "এটি 'virus' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 233,
+    "word": "vision",
+    "meaning_bn": "...",
+    "definition_en": "English definition for vision",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'vision'."
+    ],
+    "examples_bn": [
+      "এটি 'vision' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 234,
+    "word": "visit",
+    "meaning_bn": "...",
+    "definition_en": "English definition for visit",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'visit'."
+    ],
+    "examples_bn": [
+      "এটি 'visit' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 235,
+    "word": "visitor",
+    "meaning_bn": "...",
+    "definition_en": "English definition for visitor",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'visitor'."
+    ],
+    "examples_bn": [
+      "এটি 'visitor' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 236,
+    "word": "visual",
+    "meaning_bn": "...",
+    "definition_en": "English definition for visual",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'visual'."
+    ],
+    "examples_bn": [
+      "এটি 'visual' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 237,
+    "word": "vital",
+    "meaning_bn": "...",
+    "definition_en": "English definition for vital",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'vital'."
+    ],
+    "examples_bn": [
+      "এটি 'vital' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 238,
+    "word": "vocabulary",
+    "meaning_bn": "...",
+    "definition_en": "English definition for vocabulary",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'vocabulary'."
+    ],
+    "examples_bn": [
+      "এটি 'vocabulary' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 239,
+    "word": "voice",
+    "meaning_bn": "...",
+    "definition_en": "English definition for voice",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'voice'."
+    ],
+    "examples_bn": [
+      "এটি 'voice' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 240,
+    "word": "volume",
+    "meaning_bn": "...",
+    "definition_en": "English definition for volume",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'volume'."
+    ],
+    "examples_bn": [
+      "এটি 'volume' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 241,
+    "word": "vote",
+    "meaning_bn": "...",
+    "definition_en": "English definition for vote",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'vote'."
+    ],
+    "examples_bn": [
+      "এটি 'vote' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 242,
+    "word": "wage",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wage",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wage'."
+    ],
+    "examples_bn": [
+      "এটি 'wage' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 244,
+    "word": "waiter",
+    "meaning_bn": "...",
+    "definition_en": "English definition for waiter",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'waiter'."
+    ],
+    "examples_bn": [
+      "এটি 'waiter' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 245,
+    "word": "wake",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wake",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wake'."
+    ],
+    "examples_bn": [
+      "এটি 'wake' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 246,
+    "word": "walk",
+    "meaning_bn": "...",
+    "definition_en": "English definition for walk",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'walk'."
+    ],
+    "examples_bn": [
+      "এটি 'walk' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 247,
+    "word": "wall",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wall",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wall'."
+    ],
+    "examples_bn": [
+      "এটি 'wall' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 248,
+    "word": "want",
+    "meaning_bn": "...",
+    "definition_en": "English definition for want",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'want'."
+    ],
+    "examples_bn": [
+      "এটি 'want' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 249,
+    "word": "war",
+    "meaning_bn": "...",
+    "definition_en": "English definition for war",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'war'."
+    ],
+    "examples_bn": [
+      "এটি 'war' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 251,
+    "word": "warn",
+    "meaning_bn": "...",
+    "definition_en": "English definition for warn",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'warn'."
+    ],
+    "examples_bn": [
+      "এটি 'warn' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 252,
+    "word": "warning",
+    "meaning_bn": "...",
+    "definition_en": "English definition for warning",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'warning'."
+    ],
+    "examples_bn": [
+      "এটি 'warning' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 254,
+    "word": "washing",
+    "meaning_bn": "...",
+    "definition_en": "English definition for washing",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'washing'."
+    ],
+    "examples_bn": [
+      "এটি 'washing' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 255,
+    "word": "waste",
+    "meaning_bn": "...",
+    "definition_en": "English definition for waste",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'waste'."
+    ],
+    "examples_bn": [
+      "এটি 'waste' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v., adj."
+  },
+  {
+    "id": 256,
+    "word": "watch",
+    "meaning_bn": "...",
+    "definition_en": "English definition for watch",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'watch'."
+    ],
+    "examples_bn": [
+      "এটি 'watch' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 260,
+    "word": "we",
+    "meaning_bn": "...",
+    "definition_en": "English definition for we",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'we'."
+    ],
+    "examples_bn": [
+      "এটি 'we' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 261,
+    "word": "weak",
+    "meaning_bn": "...",
+    "definition_en": "English definition for weak",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'weak'."
+    ],
+    "examples_bn": [
+      "এটি 'weak' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 262,
+    "word": "weapon",
+    "meaning_bn": "...",
+    "definition_en": "English definition for weapon",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'weapon'."
+    ],
+    "examples_bn": [
+      "এটি 'weapon' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 263,
+    "word": "wear",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wear",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wear'."
+    ],
+    "examples_bn": [
+      "এটি 'wear' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 264,
+    "word": "weather",
+    "meaning_bn": "...",
+    "definition_en": "English definition for weather",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'weather'."
+    ],
+    "examples_bn": [
+      "এটি 'weather' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 265,
+    "word": "web",
+    "meaning_bn": "...",
+    "definition_en": "English definition for web",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'web'."
+    ],
+    "examples_bn": [
+      "এটি 'web' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 266,
+    "word": "website",
+    "meaning_bn": "...",
+    "definition_en": "English definition for website",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'website'."
+    ],
+    "examples_bn": [
+      "এটি 'website' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 267,
+    "word": "wedding",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wedding",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wedding'."
+    ],
+    "examples_bn": [
+      "এটি 'wedding' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 268,
+    "word": "Wednesday",
+    "meaning_bn": "...",
+    "definition_en": "English definition for Wednesday",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'Wednesday'."
+    ],
+    "examples_bn": [
+      "এটি 'Wednesday' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 269,
+    "word": "week",
+    "meaning_bn": "...",
+    "definition_en": "English definition for week",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'week'."
+    ],
+    "examples_bn": [
+      "এটি 'week' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 270,
+    "word": "weekend",
+    "meaning_bn": "...",
+    "definition_en": "English definition for weekend",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'weekend'."
+    ],
+    "examples_bn": [
+      "এটি 'weekend' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 271,
+    "word": "weekly",
+    "meaning_bn": "...",
+    "definition_en": "English definition for weekly",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'weekly'."
+    ],
+    "examples_bn": [
+      "এটি 'weekly' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., adv."
+  },
+  {
+    "id": 272,
+    "word": "weigh",
+    "meaning_bn": "...",
+    "definition_en": "English definition for weigh",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'weigh'."
+    ],
+    "examples_bn": [
+      "এটি 'weigh' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 273,
+    "word": "weight",
+    "meaning_bn": "...",
+    "definition_en": "English definition for weight",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'weight'."
+    ],
+    "examples_bn": [
+      "এটি 'weight' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 275,
+    "word": "well",
+    "meaning_bn": "...",
+    "definition_en": "English definition for well",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'well'."
+    ],
+    "examples_bn": [
+      "এটি 'well' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv., adj., exclam."
+  },
+  {
+    "id": 276,
+    "word": "west",
+    "meaning_bn": "...",
+    "definition_en": "English definition for west",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'west'."
+    ],
+    "examples_bn": [
+      "এটি 'west' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., adj., adv."
+  },
+  {
+    "id": 277,
+    "word": "western",
+    "meaning_bn": "...",
+    "definition_en": "English definition for western",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'western'."
+    ],
+    "examples_bn": [
+      "এটি 'western' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 278,
+    "word": "wet",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wet",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wet'."
+    ],
+    "examples_bn": [
+      "এটি 'wet' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 279,
+    "word": "what",
+    "meaning_bn": "...",
+    "definition_en": "English definition for what",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'what'."
+    ],
+    "examples_bn": [
+      "এটি 'what' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron./det."
+  },
+  {
+    "id": 280,
+    "word": "whatever",
+    "meaning_bn": "...",
+    "definition_en": "English definition for whatever",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'whatever'."
+    ],
+    "examples_bn": [
+      "এটি 'whatever' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "det./pron."
+  },
+  {
+    "id": 281,
+    "word": "wheel",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wheel",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wheel'."
+    ],
+    "examples_bn": [
+      "এটি 'wheel' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 282,
+    "word": "when",
+    "meaning_bn": "...",
+    "definition_en": "English definition for when",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'when'."
+    ],
+    "examples_bn": [
+      "এটি 'when' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv., pron., conj."
+  },
+  {
+    "id": 283,
+    "word": "whenever",
+    "meaning_bn": "...",
+    "definition_en": "English definition for whenever",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'whenever'."
+    ],
+    "examples_bn": [
+      "এটি 'whenever' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "conj."
+  },
+  {
+    "id": 284,
+    "word": "where",
+    "meaning_bn": "...",
+    "definition_en": "English definition for where",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'where'."
+    ],
+    "examples_bn": [
+      "এটি 'where' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv., conj."
+  },
+  {
+    "id": 285,
+    "word": "whereas",
+    "meaning_bn": "...",
+    "definition_en": "English definition for whereas",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'whereas'."
+    ],
+    "examples_bn": [
+      "এটি 'whereas' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "conj."
+  },
+  {
+    "id": 286,
+    "word": "wherever",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wherever",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wherever'."
+    ],
+    "examples_bn": [
+      "এটি 'wherever' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "conj."
+  },
+  {
+    "id": 287,
+    "word": "whether",
+    "meaning_bn": "...",
+    "definition_en": "English definition for whether",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'whether'."
+    ],
+    "examples_bn": [
+      "এটি 'whether' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "conj."
+  },
+  {
+    "id": 288,
+    "word": "which",
+    "meaning_bn": "...",
+    "definition_en": "English definition for which",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'which'."
+    ],
+    "examples_bn": [
+      "এটি 'which' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron./det."
+  },
+  {
+    "id": 290,
+    "word": "whisper",
+    "meaning_bn": "...",
+    "definition_en": "English definition for whisper",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'whisper'."
+    ],
+    "examples_bn": [
+      "এটি 'whisper' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 291,
+    "word": "white",
+    "meaning_bn": "...",
+    "definition_en": "English definition for white",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'white'."
+    ],
+    "examples_bn": [
+      "এটি 'white' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 292,
+    "word": "who",
+    "meaning_bn": "...",
+    "definition_en": "English definition for who",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'who'."
+    ],
+    "examples_bn": [
+      "এটি 'who' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 294,
+    "word": "whom",
+    "meaning_bn": "...",
+    "definition_en": "English definition for whom",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'whom'."
+    ],
+    "examples_bn": [
+      "এটি 'whom' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 295,
+    "word": "whose",
+    "meaning_bn": "...",
+    "definition_en": "English definition for whose",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'whose'."
+    ],
+    "examples_bn": [
+      "এটি 'whose' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "det./pron."
+  },
+  {
+    "id": 296,
+    "word": "why",
+    "meaning_bn": "...",
+    "definition_en": "English definition for why",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'why'."
+    ],
+    "examples_bn": [
+      "এটি 'why' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 297,
+    "word": "wide",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wide",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wide'."
+    ],
+    "examples_bn": [
+      "এটি 'wide' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 298,
+    "word": "widely",
+    "meaning_bn": "...",
+    "definition_en": "English definition for widely",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'widely'."
+    ],
+    "examples_bn": [
+      "এটি 'widely' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 299,
+    "word": "wife",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wife",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wife'."
+    ],
+    "examples_bn": [
+      "এটি 'wife' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 300,
+    "word": "wild",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wild",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wild'."
+    ],
+    "examples_bn": [
+      "এটি 'wild' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 301,
+    "word": "wildlife",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wildlife",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wildlife'."
+    ],
+    "examples_bn": [
+      "এটি 'wildlife' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 303,
+    "word": "willing",
+    "meaning_bn": "...",
+    "definition_en": "English definition for willing",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'willing'."
+    ],
+    "examples_bn": [
+      "এটি 'willing' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 305,
+    "word": "wind1",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wind1",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wind1'."
+    ],
+    "examples_bn": [
+      "এটি 'wind1' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 306,
+    "word": "wind2",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wind2",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wind2'."
+    ],
+    "examples_bn": [
+      "এটি 'wind2' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 307,
+    "word": "window",
+    "meaning_bn": "...",
+    "definition_en": "English definition for window",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'window'."
+    ],
+    "examples_bn": [
+      "এটি 'window' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 308,
+    "word": "wine",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wine",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wine'."
+    ],
+    "examples_bn": [
+      "এটি 'wine' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 309,
+    "word": "wing",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wing",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wing'."
+    ],
+    "examples_bn": [
+      "এটি 'wing' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 310,
+    "word": "winner",
+    "meaning_bn": "...",
+    "definition_en": "English definition for winner",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'winner'."
+    ],
+    "examples_bn": [
+      "এটি 'winner' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 311,
+    "word": "winter",
+    "meaning_bn": "...",
+    "definition_en": "English definition for winter",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'winter'."
+    ],
+    "examples_bn": [
+      "এটি 'winter' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 312,
+    "word": "wire",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wire",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wire'."
+    ],
+    "examples_bn": [
+      "এটি 'wire' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 313,
+    "word": "wise",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wise",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wise'."
+    ],
+    "examples_bn": [
+      "এটি 'wise' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 314,
+    "word": "wish",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wish",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wish'."
+    ],
+    "examples_bn": [
+      "এটি 'wish' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 315,
+    "word": "with",
+    "meaning_bn": "...",
+    "definition_en": "English definition for with",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'with'."
+    ],
+    "examples_bn": [
+      "এটি 'with' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep."
+  },
+  {
+    "id": 316,
+    "word": "within",
+    "meaning_bn": "...",
+    "definition_en": "English definition for within",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'within'."
+    ],
+    "examples_bn": [
+      "এটি 'within' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep."
+  },
+  {
+    "id": 317,
+    "word": "without",
+    "meaning_bn": "...",
+    "definition_en": "English definition for without",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'without'."
+    ],
+    "examples_bn": [
+      "এটি 'without' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep."
+  },
+  {
+    "id": 318,
+    "word": "witness",
+    "meaning_bn": "...",
+    "definition_en": "English definition for witness",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'witness'."
+    ],
+    "examples_bn": [
+      "এটি 'witness' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 319,
+    "word": "woman",
+    "meaning_bn": "...",
+    "definition_en": "English definition for woman",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'woman'."
+    ],
+    "examples_bn": [
+      "এটি 'woman' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 320,
+    "word": "wonder",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wonder",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wonder'."
+    ],
+    "examples_bn": [
+      "এটি 'wonder' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 321,
+    "word": "wonderful",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wonderful",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wonderful'."
+    ],
+    "examples_bn": [
+      "এটি 'wonderful' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 322,
+    "word": "wood",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wood",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wood'."
+    ],
+    "examples_bn": [
+      "এটি 'wood' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 323,
+    "word": "wooden",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wooden",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wooden'."
+    ],
+    "examples_bn": [
+      "এটি 'wooden' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 324,
+    "word": "wool",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wool",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wool'."
+    ],
+    "examples_bn": [
+      "এটি 'wool' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 325,
+    "word": "word",
+    "meaning_bn": "...",
+    "definition_en": "English definition for word",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'word'."
+    ],
+    "examples_bn": [
+      "এটি 'word' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 326,
+    "word": "work",
+    "meaning_bn": "...",
+    "definition_en": "English definition for work",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'work'."
+    ],
+    "examples_bn": [
+      "এটি 'work' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 327,
+    "word": "worker",
+    "meaning_bn": "...",
+    "definition_en": "English definition for worker",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'worker'."
+    ],
+    "examples_bn": [
+      "এটি 'worker' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 328,
+    "word": "working",
+    "meaning_bn": "...",
+    "definition_en": "English definition for working",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'working'."
+    ],
+    "examples_bn": [
+      "এটি 'working' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 329,
+    "word": "world",
+    "meaning_bn": "পৃথিবী / জগত",
+    "definition_en": "The earth, together with all of its countries, peoples, and natural features.",
+    "definition_bn": "পৃথিবী, তার সমস্ত দেশ, মানুষ এবং প্রাকৃতিক বৈশিষ্ট্য সহ।",
+    "examples_en": [
+      "This is an example for 'world'."
+    ],
+    "examples_bn": [
+      "এটি 'world' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 330,
+    "word": "worldwide",
+    "meaning_bn": "...",
+    "definition_en": "English definition for worldwide",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'worldwide'."
+    ],
+    "examples_bn": [
+      "এটি 'worldwide' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., adv."
+  },
+  {
+    "id": 335,
+    "word": "would modal",
+    "meaning_bn": "...",
+    "definition_en": "English definition for would modal",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'would modal'."
+    ],
+    "examples_bn": [
+      "এটি 'would modal' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 336,
+    "word": "wound",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wound",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wound'."
+    ],
+    "examples_bn": [
+      "এটি 'wound' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 337,
+    "word": "wrap",
+    "meaning_bn": "...",
+    "definition_en": "English definition for wrap",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'wrap'."
+    ],
+    "examples_bn": [
+      "এটি 'wrap' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 338,
+    "word": "write",
+    "meaning_bn": "...",
+    "definition_en": "English definition for write",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'write'."
+    ],
+    "examples_bn": [
+      "এটি 'write' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 339,
+    "word": "writer",
+    "meaning_bn": "...",
+    "definition_en": "English definition for writer",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'writer'."
+    ],
+    "examples_bn": [
+      "এটি 'writer' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 340,
+    "word": "writing",
+    "meaning_bn": "...",
+    "definition_en": "English definition for writing",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'writing'."
+    ],
+    "examples_bn": [
+      "এটি 'writing' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 342,
+    "word": "yard",
+    "meaning_bn": "...",
+    "definition_en": "English definition for yard",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'yard'."
+    ],
+    "examples_bn": [
+      "এটি 'yard' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 343,
+    "word": "yeah",
+    "meaning_bn": "...",
+    "definition_en": "English definition for yeah",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'yeah'."
+    ],
+    "examples_bn": [
+      "এটি 'yeah' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "exclam."
+  },
+  {
+    "id": 344,
+    "word": "year",
+    "meaning_bn": "বছর",
+    "definition_en": "The time taken by the earth to make one revolution around the sun.",
+    "definition_bn": "পৃথিবীর সূর্যের চারদিকে একবার প্রদক্ষিণ করতে যে সময় লাগে।",
+    "examples_en": [
+      "This is an example for 'year'."
+    ],
+    "examples_bn": [
+      "এটি 'year' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 345,
+    "word": "yellow",
+    "meaning_bn": "...",
+    "definition_en": "English definition for yellow",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'yellow'."
+    ],
+    "examples_bn": [
+      "এটি 'yellow' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 346,
+    "word": "yes",
+    "meaning_bn": "...",
+    "definition_en": "English definition for yes",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'yes'."
+    ],
+    "examples_bn": [
+      "এটি 'yes' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "exclam."
+  },
+  {
+    "id": 347,
+    "word": "yesterday",
+    "meaning_bn": "...",
+    "definition_en": "English definition for yesterday",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'yesterday'."
+    ],
+    "examples_bn": [
+      "এটি 'yesterday' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv., n."
+  },
+  {
+    "id": 349,
+    "word": "you",
+    "meaning_bn": "...",
+    "definition_en": "English definition for you",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'you'."
+    ],
+    "examples_bn": [
+      "এটি 'you' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 350,
+    "word": "young",
+    "meaning_bn": "...",
+    "definition_en": "English definition for young",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'young'."
+    ],
+    "examples_bn": [
+      "এটি 'young' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 351,
+    "word": "your",
+    "meaning_bn": "...",
+    "definition_en": "English definition for your",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'your'."
+    ],
+    "examples_bn": [
+      "এটি 'your' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "det."
+  },
+  {
+    "id": 352,
+    "word": "yours",
+    "meaning_bn": "...",
+    "definition_en": "English definition for yours",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'yours'."
+    ],
+    "examples_bn": [
+      "এটি 'yours' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 353,
+    "word": "yourself",
+    "meaning_bn": "...",
+    "definition_en": "English definition for yourself",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'yourself'."
+    ],
+    "examples_bn": [
+      "এটি 'yourself' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 354,
+    "word": "youth",
+    "meaning_bn": "...",
+    "definition_en": "English definition for youth",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'youth'."
+    ],
+    "examples_bn": [
+      "এটি 'youth' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 355,
+    "word": "zero",
+    "meaning_bn": "...",
+    "definition_en": "English definition for zero",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'zero'."
+    ],
+    "examples_bn": [
+      "এটি 'zero' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 356,
+    "word": "zone",
+    "meaning_bn": "...",
+    "definition_en": "English definition for zone",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'zone'."
+    ],
+    "examples_bn": [
+      "এটি 'zone' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 357,
+    "word": "zoo",
+    "meaning_bn": "...",
+    "definition_en": "English definition for zoo",
+    "definition_bn": "...",
+    "examples_en": [
+      "This is an example for 'zoo'."
+    ],
+    "examples_bn": [
+      "এটি 'zoo' এর একটি উদাহরণ।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  }
+]

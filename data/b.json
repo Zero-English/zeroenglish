@@ -1,0 +1,2338 @@
+[
+  {
+    "id": 1,
+    "word": "baby",
+    "meaning_bn": "শিশু",
+    "definition_en": "A very young child.",
+    "definition_bn": "খুব ছোট বাচ্চা।",
+    "examples_en": [
+      "Sentence using the word 'baby'."
+    ],
+    "examples_bn": [
+      "'baby' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [
+      "infant",
+      "newborn"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 3,
+    "word": "background",
+    "meaning_bn": "...",
+    "definition_en": "English definition for background",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'background'."
+    ],
+    "examples_bn": [
+      "'background' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 4,
+    "word": "backward",
+    "meaning_bn": "...",
+    "definition_en": "English definition for backward",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'backward'."
+    ],
+    "examples_bn": [
+      "'backward' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 5,
+    "word": "bacteria",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bacteria",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bacteria'."
+    ],
+    "examples_bn": [
+      "'bacteria' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 6,
+    "word": "bad",
+    "meaning_bn": "খারাপ",
+    "definition_en": "Of poor quality or a low standard.",
+    "definition_bn": "যা ভালো নয় বা সন্তোষজনক নয়।",
+    "examples_en": [
+      "Sentence using the word 'bad'."
+    ],
+    "examples_bn": [
+      "'bad' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [
+      "poor",
+      "awful"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 7,
+    "word": "badly",
+    "meaning_bn": "...",
+    "definition_en": "English definition for badly",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'badly'."
+    ],
+    "examples_bn": [
+      "'badly' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 8,
+    "word": "bag",
+    "meaning_bn": "ব্যাগ / থলে",
+    "definition_en": "A flexible container with an opening at the top, used for carrying things.",
+    "definition_bn": "জিনিসপত্র বহন করার জন্য ব্যবহৃত পাত্র।",
+    "examples_en": [
+      "Sentence using the word 'bag'."
+    ],
+    "examples_bn": [
+      "'bag' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [
+      "sack",
+      "pouch"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 9,
+    "word": "bake",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bake",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bake'."
+    ],
+    "examples_bn": [
+      "'bake' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 10,
+    "word": "balance",
+    "meaning_bn": "...",
+    "definition_en": "English definition for balance",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'balance'."
+    ],
+    "examples_bn": [
+      "'balance' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 11,
+    "word": "ball",
+    "meaning_bn": "বল / গোলক",
+    "definition_en": "A solid or hollow spherical or egg-shaped object used in a game.",
+    "definition_bn": "খেলার জন্য ব্যবহৃত গোল বস্তু।",
+    "examples_en": [
+      "Sentence using the word 'ball'."
+    ],
+    "examples_bn": [
+      "'ball' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [
+      "sphere",
+      "globe"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 12,
+    "word": "ban",
+    "meaning_bn": "...",
+    "definition_en": "English definition for ban",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'ban'."
+    ],
+    "examples_bn": [
+      "'ban' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 13,
+    "word": "banana",
+    "meaning_bn": "কলা",
+    "definition_en": "A long curved fruit which grows in clusters and has soft pulpy flesh and yellow skin.",
+    "definition_bn": "এক প্রকার দীর্ঘায়িত ভোজ্য ফল।",
+    "examples_en": [
+      "Sentence using the word 'banana'."
+    ],
+    "examples_bn": [
+      "'banana' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 14,
+    "word": "band",
+    "meaning_bn": "...",
+    "definition_en": "English definition for band",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'band'."
+    ],
+    "examples_bn": [
+      "'band' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 15,
+    "word": "bank (money)",
+    "meaning_bn": "ব্যাংক / তট",
+    "definition_en": "A financial establishment or the land alongside a river.",
+    "definition_bn": "টাকা লেনদেনের প্রতিষ্ঠান অথবা নদীর কিনারা।",
+    "examples_en": [
+      "Sentence using the word 'bank (money)'."
+    ],
+    "examples_bn": [
+      "'bank (money)' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [
+      "coast",
+      "shore"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 16,
+    "word": "bank (river)",
+    "meaning_bn": "ব্যাংক / তট",
+    "definition_en": "A financial establishment or the land alongside a river.",
+    "definition_bn": "টাকা লেনদেনের প্রতিষ্ঠান অথবা নদীর কিনারা।",
+    "examples_en": [
+      "Sentence using the word 'bank (river)'."
+    ],
+    "examples_bn": [
+      "'bank (river)' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [
+      "coast",
+      "shore"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 18,
+    "word": "barrier",
+    "meaning_bn": "...",
+    "definition_en": "English definition for barrier",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'barrier'."
+    ],
+    "examples_bn": [
+      "'barrier' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 19,
+    "word": "base",
+    "meaning_bn": "...",
+    "definition_en": "English definition for base",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'base'."
+    ],
+    "examples_bn": [
+      "'base' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 20,
+    "word": "baseball",
+    "meaning_bn": "...",
+    "definition_en": "English definition for baseball",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'baseball'."
+    ],
+    "examples_bn": [
+      "'baseball' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 21,
+    "word": "based",
+    "meaning_bn": "...",
+    "definition_en": "English definition for based",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'based'."
+    ],
+    "examples_bn": [
+      "'based' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 22,
+    "word": "basic",
+    "meaning_bn": "...",
+    "definition_en": "English definition for basic",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'basic'."
+    ],
+    "examples_bn": [
+      "'basic' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 23,
+    "word": "basically",
+    "meaning_bn": "...",
+    "definition_en": "English definition for basically",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'basically'."
+    ],
+    "examples_bn": [
+      "'basically' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 24,
+    "word": "basis",
+    "meaning_bn": "...",
+    "definition_en": "English definition for basis",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'basis'."
+    ],
+    "examples_bn": [
+      "'basis' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 25,
+    "word": "basketball",
+    "meaning_bn": "...",
+    "definition_en": "English definition for basketball",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'basketball'."
+    ],
+    "examples_bn": [
+      "'basketball' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 26,
+    "word": "bath",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bath",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bath'."
+    ],
+    "examples_bn": [
+      "'bath' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 27,
+    "word": "bathroom",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bathroom",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bathroom'."
+    ],
+    "examples_bn": [
+      "'bathroom' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 28,
+    "word": "battery",
+    "meaning_bn": "...",
+    "definition_en": "English definition for battery",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'battery'."
+    ],
+    "examples_bn": [
+      "'battery' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 30,
+    "word": "be",
+    "meaning_bn": "...",
+    "definition_en": "English definition for be",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'be'."
+    ],
+    "examples_bn": [
+      "'be' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., auxiliary v."
+  },
+  {
+    "id": 31,
+    "word": "beach",
+    "meaning_bn": "...",
+    "definition_en": "English definition for beach",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'beach'."
+    ],
+    "examples_bn": [
+      "'beach' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 32,
+    "word": "bean",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bean",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bean'."
+    ],
+    "examples_bn": [
+      "'bean' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 33,
+    "word": "bear (deal with)",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bear (deal with)",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bear (deal with)'."
+    ],
+    "examples_bn": [
+      "'bear (deal with)' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 34,
+    "word": "bear (animal)",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bear (animal)",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bear (animal)'."
+    ],
+    "examples_bn": [
+      "'bear (animal)' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 36,
+    "word": "beautiful",
+    "meaning_bn": "সুন্দর",
+    "definition_en": "Pleasing the senses or mind aesthetically.",
+    "definition_bn": "যা দেখতে খুব চমৎকার।",
+    "examples_en": [
+      "Sentence using the word 'beautiful'."
+    ],
+    "examples_bn": [
+      "'beautiful' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [
+      "pretty",
+      "lovely",
+      "gorgeous"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 37,
+    "word": "beauty",
+    "meaning_bn": "...",
+    "definition_en": "English definition for beauty",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'beauty'."
+    ],
+    "examples_bn": [
+      "'beauty' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 38,
+    "word": "because",
+    "meaning_bn": "...",
+    "definition_en": "English definition for because",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'because'."
+    ],
+    "examples_bn": [
+      "'because' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "conj."
+  },
+  {
+    "id": 39,
+    "word": "become",
+    "meaning_bn": "...",
+    "definition_en": "English definition for become",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'become'."
+    ],
+    "examples_bn": [
+      "'become' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 40,
+    "word": "bed",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bed",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bed'."
+    ],
+    "examples_bn": [
+      "'bed' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 41,
+    "word": "bedroom",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bedroom",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bedroom'."
+    ],
+    "examples_bn": [
+      "'bedroom' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 42,
+    "word": "bee",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bee",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bee'."
+    ],
+    "examples_bn": [
+      "'bee' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 43,
+    "word": "beef",
+    "meaning_bn": "...",
+    "definition_en": "English definition for beef",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'beef'."
+    ],
+    "examples_bn": [
+      "'beef' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 44,
+    "word": "beer",
+    "meaning_bn": "...",
+    "definition_en": "English definition for beer",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'beer'."
+    ],
+    "examples_bn": [
+      "'beer' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 46,
+    "word": "beg",
+    "meaning_bn": "...",
+    "definition_en": "English definition for beg",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'beg'."
+    ],
+    "examples_bn": [
+      "'beg' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 47,
+    "word": "begin",
+    "meaning_bn": "...",
+    "definition_en": "English definition for begin",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'begin'."
+    ],
+    "examples_bn": [
+      "'begin' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 48,
+    "word": "beginning",
+    "meaning_bn": "...",
+    "definition_en": "English definition for beginning",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'beginning'."
+    ],
+    "examples_bn": [
+      "'beginning' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 49,
+    "word": "behave",
+    "meaning_bn": "...",
+    "definition_en": "English definition for behave",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'behave'."
+    ],
+    "examples_bn": [
+      "'behave' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 50,
+    "word": "behavior",
+    "meaning_bn": "...",
+    "definition_en": "English definition for behavior",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'behavior'."
+    ],
+    "examples_bn": [
+      "'behavior' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 51,
+    "word": "behind",
+    "meaning_bn": "...",
+    "definition_en": "English definition for behind",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'behind'."
+    ],
+    "examples_bn": [
+      "'behind' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "prep., adv."
+  },
+  {
+    "id": 52,
+    "word": "being",
+    "meaning_bn": "...",
+    "definition_en": "English definition for being",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'being'."
+    ],
+    "examples_bn": [
+      "'being' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 53,
+    "word": "belief",
+    "meaning_bn": "...",
+    "definition_en": "English definition for belief",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'belief'."
+    ],
+    "examples_bn": [
+      "'belief' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 54,
+    "word": "believe",
+    "meaning_bn": "...",
+    "definition_en": "English definition for believe",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'believe'."
+    ],
+    "examples_bn": [
+      "'believe' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 55,
+    "word": "bell",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bell",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bell'."
+    ],
+    "examples_bn": [
+      "'bell' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 56,
+    "word": "belong",
+    "meaning_bn": "...",
+    "definition_en": "English definition for belong",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'belong'."
+    ],
+    "examples_bn": [
+      "'belong' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 57,
+    "word": "below",
+    "meaning_bn": "...",
+    "definition_en": "English definition for below",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'below'."
+    ],
+    "examples_bn": [
+      "'below' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adv., prep."
+  },
+  {
+    "id": 58,
+    "word": "belt",
+    "meaning_bn": "...",
+    "definition_en": "English definition for belt",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'belt'."
+    ],
+    "examples_bn": [
+      "'belt' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 59,
+    "word": "bend",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bend",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bend'."
+    ],
+    "examples_bn": [
+      "'bend' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 61,
+    "word": "bent",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bent",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bent'."
+    ],
+    "examples_bn": [
+      "'bent' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 63,
+    "word": "bet",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bet",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bet'."
+    ],
+    "examples_bn": [
+      "'bet' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 66,
+    "word": "beyond",
+    "meaning_bn": "...",
+    "definition_en": "English definition for beyond",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'beyond'."
+    ],
+    "examples_bn": [
+      "'beyond' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "prep., adv."
+  },
+  {
+    "id": 67,
+    "word": "bicycle",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bicycle",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bicycle'."
+    ],
+    "examples_bn": [
+      "'bicycle' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 68,
+    "word": "big",
+    "meaning_bn": "...",
+    "definition_en": "English definition for big",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'big'."
+    ],
+    "examples_bn": [
+      "'big' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 69,
+    "word": "bike",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bike",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bike'."
+    ],
+    "examples_bn": [
+      "'bike' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 71,
+    "word": "billion",
+    "meaning_bn": "...",
+    "definition_en": "English definition for billion",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'billion'."
+    ],
+    "examples_bn": [
+      "'billion' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 72,
+    "word": "biology",
+    "meaning_bn": "...",
+    "definition_en": "English definition for biology",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'biology'."
+    ],
+    "examples_bn": [
+      "'biology' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 73,
+    "word": "bird",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bird",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bird'."
+    ],
+    "examples_bn": [
+      "'bird' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 74,
+    "word": "birth",
+    "meaning_bn": "...",
+    "definition_en": "English definition for birth",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'birth'."
+    ],
+    "examples_bn": [
+      "'birth' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 75,
+    "word": "birthday",
+    "meaning_bn": "...",
+    "definition_en": "English definition for birthday",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'birthday'."
+    ],
+    "examples_bn": [
+      "'birthday' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 76,
+    "word": "bit",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bit",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bit'."
+    ],
+    "examples_bn": [
+      "'bit' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 77,
+    "word": "bite",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bite",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bite'."
+    ],
+    "examples_bn": [
+      "'bite' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 78,
+    "word": "bitter",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bitter",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bitter'."
+    ],
+    "examples_bn": [
+      "'bitter' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 79,
+    "word": "black",
+    "meaning_bn": "...",
+    "definition_en": "English definition for black",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'black'."
+    ],
+    "examples_bn": [
+      "'black' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 80,
+    "word": "blame",
+    "meaning_bn": "...",
+    "definition_en": "English definition for blame",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'blame'."
+    ],
+    "examples_bn": [
+      "'blame' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 81,
+    "word": "blank",
+    "meaning_bn": "...",
+    "definition_en": "English definition for blank",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'blank'."
+    ],
+    "examples_bn": [
+      "'blank' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 82,
+    "word": "blind",
+    "meaning_bn": "...",
+    "definition_en": "English definition for blind",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'blind'."
+    ],
+    "examples_bn": [
+      "'blind' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 84,
+    "word": "blog",
+    "meaning_bn": "...",
+    "definition_en": "English definition for blog",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'blog'."
+    ],
+    "examples_bn": [
+      "'blog' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 85,
+    "word": "blond",
+    "meaning_bn": "...",
+    "definition_en": "English definition for blond",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'blond'."
+    ],
+    "examples_bn": [
+      "'blond' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 86,
+    "word": "blood",
+    "meaning_bn": "...",
+    "definition_en": "English definition for blood",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'blood'."
+    ],
+    "examples_bn": [
+      "'blood' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 87,
+    "word": "blow",
+    "meaning_bn": "...",
+    "definition_en": "English definition for blow",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'blow'."
+    ],
+    "examples_bn": [
+      "'blow' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 88,
+    "word": "blue",
+    "meaning_bn": "...",
+    "definition_en": "English definition for blue",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'blue'."
+    ],
+    "examples_bn": [
+      "'blue' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 90,
+    "word": "boat",
+    "meaning_bn": "...",
+    "definition_en": "English definition for boat",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'boat'."
+    ],
+    "examples_bn": [
+      "'boat' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 91,
+    "word": "body",
+    "meaning_bn": "...",
+    "definition_en": "English definition for body",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'body'."
+    ],
+    "examples_bn": [
+      "'body' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 92,
+    "word": "boil",
+    "meaning_bn": "...",
+    "definition_en": "English definition for boil",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'boil'."
+    ],
+    "examples_bn": [
+      "'boil' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 93,
+    "word": "bomb",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bomb",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bomb'."
+    ],
+    "examples_bn": [
+      "'bomb' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 94,
+    "word": "bond",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bond",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bond'."
+    ],
+    "examples_bn": [
+      "'bond' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 95,
+    "word": "bone",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bone",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bone'."
+    ],
+    "examples_bn": [
+      "'bone' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 97,
+    "word": "boot",
+    "meaning_bn": "...",
+    "definition_en": "English definition for boot",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'boot'."
+    ],
+    "examples_bn": [
+      "'boot' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 99,
+    "word": "bored",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bored",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bored'."
+    ],
+    "examples_bn": [
+      "'bored' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 100,
+    "word": "boring",
+    "meaning_bn": "...",
+    "definition_en": "English definition for boring",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'boring'."
+    ],
+    "examples_bn": [
+      "'boring' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 101,
+    "word": "born",
+    "meaning_bn": "...",
+    "definition_en": "English definition for born",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'born'."
+    ],
+    "examples_bn": [
+      "'born' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 102,
+    "word": "borrow",
+    "meaning_bn": "...",
+    "definition_en": "English definition for borrow",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'borrow'."
+    ],
+    "examples_bn": [
+      "'borrow' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 103,
+    "word": "boss",
+    "meaning_bn": "...",
+    "definition_en": "English definition for boss",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'boss'."
+    ],
+    "examples_bn": [
+      "'boss' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 104,
+    "word": "both",
+    "meaning_bn": "...",
+    "definition_en": "English definition for both",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'both'."
+    ],
+    "examples_bn": [
+      "'both' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "det./pron."
+  },
+  {
+    "id": 105,
+    "word": "bother",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bother",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bother'."
+    ],
+    "examples_bn": [
+      "'bother' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 106,
+    "word": "bottle",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bottle",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bottle'."
+    ],
+    "examples_bn": [
+      "'bottle' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 107,
+    "word": "bottom",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bottom",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bottom'."
+    ],
+    "examples_bn": [
+      "'bottom' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n., adj."
+  },
+  {
+    "id": 108,
+    "word": "bowl",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bowl",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bowl'."
+    ],
+    "examples_bn": [
+      "'bowl' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 109,
+    "word": "box",
+    "meaning_bn": "...",
+    "definition_en": "English definition for box",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'box'."
+    ],
+    "examples_bn": [
+      "'box' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 110,
+    "word": "boy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for boy",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'boy'."
+    ],
+    "examples_bn": [
+      "'boy' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 111,
+    "word": "boyfriend",
+    "meaning_bn": "...",
+    "definition_en": "English definition for boyfriend",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'boyfriend'."
+    ],
+    "examples_bn": [
+      "'boyfriend' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 112,
+    "word": "brain",
+    "meaning_bn": "...",
+    "definition_en": "English definition for brain",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'brain'."
+    ],
+    "examples_bn": [
+      "'brain' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 113,
+    "word": "branch",
+    "meaning_bn": "...",
+    "definition_en": "English definition for branch",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'branch'."
+    ],
+    "examples_bn": [
+      "'branch' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 114,
+    "word": "brand",
+    "meaning_bn": "...",
+    "definition_en": "English definition for brand",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'brand'."
+    ],
+    "examples_bn": [
+      "'brand' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 115,
+    "word": "brave",
+    "meaning_bn": "...",
+    "definition_en": "English definition for brave",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'brave'."
+    ],
+    "examples_bn": [
+      "'brave' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 116,
+    "word": "bread",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bread",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bread'."
+    ],
+    "examples_bn": [
+      "'bread' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 117,
+    "word": "break",
+    "meaning_bn": "...",
+    "definition_en": "English definition for break",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'break'."
+    ],
+    "examples_bn": [
+      "'break' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 118,
+    "word": "breakfast",
+    "meaning_bn": "...",
+    "definition_en": "English definition for breakfast",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'breakfast'."
+    ],
+    "examples_bn": [
+      "'breakfast' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 119,
+    "word": "breast",
+    "meaning_bn": "...",
+    "definition_en": "English definition for breast",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'breast'."
+    ],
+    "examples_bn": [
+      "'breast' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 120,
+    "word": "breath",
+    "meaning_bn": "...",
+    "definition_en": "English definition for breath",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'breath'."
+    ],
+    "examples_bn": [
+      "'breath' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 121,
+    "word": "breathe",
+    "meaning_bn": "...",
+    "definition_en": "English definition for breathe",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'breathe'."
+    ],
+    "examples_bn": [
+      "'breathe' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 122,
+    "word": "breathing",
+    "meaning_bn": "...",
+    "definition_en": "English definition for breathing",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'breathing'."
+    ],
+    "examples_bn": [
+      "'breathing' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 123,
+    "word": "bride",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bride",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bride'."
+    ],
+    "examples_bn": [
+      "'bride' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 124,
+    "word": "bridge",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bridge",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bridge'."
+    ],
+    "examples_bn": [
+      "'bridge' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 125,
+    "word": "brief",
+    "meaning_bn": "...",
+    "definition_en": "English definition for brief",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'brief'."
+    ],
+    "examples_bn": [
+      "'brief' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 126,
+    "word": "bright",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bright",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bright'."
+    ],
+    "examples_bn": [
+      "'bright' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 127,
+    "word": "brilliant",
+    "meaning_bn": "...",
+    "definition_en": "English definition for brilliant",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'brilliant'."
+    ],
+    "examples_bn": [
+      "'brilliant' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 128,
+    "word": "bring",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bring",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bring'."
+    ],
+    "examples_bn": [
+      "'bring' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 129,
+    "word": "broad",
+    "meaning_bn": "...",
+    "definition_en": "English definition for broad",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'broad'."
+    ],
+    "examples_bn": [
+      "'broad' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 130,
+    "word": "broadcast",
+    "meaning_bn": "...",
+    "definition_en": "English definition for broadcast",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'broadcast'."
+    ],
+    "examples_bn": [
+      "'broadcast' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 131,
+    "word": "broken",
+    "meaning_bn": "...",
+    "definition_en": "English definition for broken",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'broken'."
+    ],
+    "examples_bn": [
+      "'broken' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 132,
+    "word": "brother",
+    "meaning_bn": "...",
+    "definition_en": "English definition for brother",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'brother'."
+    ],
+    "examples_bn": [
+      "'brother' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 133,
+    "word": "brown",
+    "meaning_bn": "...",
+    "definition_en": "English definition for brown",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'brown'."
+    ],
+    "examples_bn": [
+      "'brown' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 134,
+    "word": "brush",
+    "meaning_bn": "...",
+    "definition_en": "English definition for brush",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'brush'."
+    ],
+    "examples_bn": [
+      "'brush' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 135,
+    "word": "bubble",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bubble",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bubble'."
+    ],
+    "examples_bn": [
+      "'bubble' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 136,
+    "word": "budget",
+    "meaning_bn": "...",
+    "definition_en": "English definition for budget",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'budget'."
+    ],
+    "examples_bn": [
+      "'budget' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 137,
+    "word": "build",
+    "meaning_bn": "...",
+    "definition_en": "English definition for build",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'build'."
+    ],
+    "examples_bn": [
+      "'build' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 138,
+    "word": "building",
+    "meaning_bn": "...",
+    "definition_en": "English definition for building",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'building'."
+    ],
+    "examples_bn": [
+      "'building' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 139,
+    "word": "bullet",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bullet",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bullet'."
+    ],
+    "examples_bn": [
+      "'bullet' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 140,
+    "word": "bunch",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bunch",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bunch'."
+    ],
+    "examples_bn": [
+      "'bunch' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 142,
+    "word": "bury",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bury",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bury'."
+    ],
+    "examples_bn": [
+      "'bury' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 143,
+    "word": "bus",
+    "meaning_bn": "বাস",
+    "definition_en": "A large motor vehicle carrying passengers by road.",
+    "definition_bn": "অনেক যাত্রী বহনকারী বড় যানবাহন।",
+    "examples_en": [
+      "Sentence using the word 'bus'."
+    ],
+    "examples_bn": [
+      "'bus' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [
+      "coach"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 144,
+    "word": "bush",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bush",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bush'."
+    ],
+    "examples_bn": [
+      "'bush' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 145,
+    "word": "business",
+    "meaning_bn": "...",
+    "definition_en": "English definition for business",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'business'."
+    ],
+    "examples_bn": [
+      "'business' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 146,
+    "word": "businessman",
+    "meaning_bn": "...",
+    "definition_en": "English definition for businessman",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'businessman'."
+    ],
+    "examples_bn": [
+      "'businessman' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 147,
+    "word": "busy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for busy",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'busy'."
+    ],
+    "examples_bn": [
+      "'busy' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 149,
+    "word": "butter",
+    "meaning_bn": "...",
+    "definition_en": "English definition for butter",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'butter'."
+    ],
+    "examples_bn": [
+      "'butter' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 150,
+    "word": "button",
+    "meaning_bn": "...",
+    "definition_en": "English definition for button",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'button'."
+    ],
+    "examples_bn": [
+      "'button' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 151,
+    "word": "buy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for buy",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'buy'."
+    ],
+    "examples_bn": [
+      "'buy' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 153,
+    "word": "bye",
+    "meaning_bn": "...",
+    "definition_en": "English definition for bye",
+    "definition_bn": "...",
+    "examples_en": [
+      "Sentence using the word 'bye'."
+    ],
+    "examples_bn": [
+      "'bye' শব্দটি ব্যবহার করে একটি বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "exclam."
+  }
+]

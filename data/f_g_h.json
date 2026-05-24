@@ -1,0 +1,4796 @@
+[
+  {
+    "id": 2,
+    "word": "facility",
+    "meaning_bn": "...",
+    "definition_en": "English definition for facility",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'facility'."
+    ],
+    "examples_bn": [
+      "'facility' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 3,
+    "word": "fact",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fact",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fact'."
+    ],
+    "examples_bn": [
+      "'fact' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 4,
+    "word": "factor",
+    "meaning_bn": "...",
+    "definition_en": "English definition for factor",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'factor'."
+    ],
+    "examples_bn": [
+      "'factor' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 5,
+    "word": "factory",
+    "meaning_bn": "...",
+    "definition_en": "English definition for factory",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'factory'."
+    ],
+    "examples_bn": [
+      "'factory' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 6,
+    "word": "fail",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fail",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fail'."
+    ],
+    "examples_bn": [
+      "'fail' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 7,
+    "word": "failure",
+    "meaning_bn": "...",
+    "definition_en": "English definition for failure",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'failure'."
+    ],
+    "examples_bn": [
+      "'failure' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 8,
+    "word": "fair",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fair",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fair'."
+    ],
+    "examples_bn": [
+      "'fair' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 9,
+    "word": "fairly",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fairly",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fairly'."
+    ],
+    "examples_bn": [
+      "'fairly' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 10,
+    "word": "faith",
+    "meaning_bn": "...",
+    "definition_en": "English definition for faith",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'faith'."
+    ],
+    "examples_bn": [
+      "'faith' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 12,
+    "word": "false",
+    "meaning_bn": "...",
+    "definition_en": "English definition for false",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'false'."
+    ],
+    "examples_bn": [
+      "'false' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 13,
+    "word": "familiar",
+    "meaning_bn": "...",
+    "definition_en": "English definition for familiar",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'familiar'."
+    ],
+    "examples_bn": [
+      "'familiar' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 14,
+    "word": "family",
+    "meaning_bn": "পরিবার",
+    "definition_en": "A group of people related by blood or marriage.",
+    "definition_bn": "একই সাথে বসবাসকারী আত্মীয়স্বজন।",
+    "examples_en": [
+      "Example sentence for 'family'."
+    ],
+    "examples_bn": [
+      "'family' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., adj."
+  },
+  {
+    "id": 15,
+    "word": "famous",
+    "meaning_bn": "...",
+    "definition_en": "English definition for famous",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'famous'."
+    ],
+    "examples_bn": [
+      "'famous' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 16,
+    "word": "fan",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fan",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fan'."
+    ],
+    "examples_bn": [
+      "'fan' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 17,
+    "word": "fantastic",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fantastic",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fantastic'."
+    ],
+    "examples_bn": [
+      "'fantastic' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 18,
+    "word": "far",
+    "meaning_bn": "...",
+    "definition_en": "English definition for far",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'far'."
+    ],
+    "examples_bn": [
+      "'far' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv., adj."
+  },
+  {
+    "id": 20,
+    "word": "farmer",
+    "meaning_bn": "...",
+    "definition_en": "English definition for farmer",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'farmer'."
+    ],
+    "examples_bn": [
+      "'farmer' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 21,
+    "word": "farming",
+    "meaning_bn": "...",
+    "definition_en": "English definition for farming",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'farming'."
+    ],
+    "examples_bn": [
+      "'farming' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 22,
+    "word": "fashion",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fashion",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fashion'."
+    ],
+    "examples_bn": [
+      "'fashion' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 23,
+    "word": "fashionable",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fashionable",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fashionable'."
+    ],
+    "examples_bn": [
+      "'fashionable' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 24,
+    "word": "fast",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fast",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fast'."
+    ],
+    "examples_bn": [
+      "'fast' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., adv."
+  },
+  {
+    "id": 25,
+    "word": "fasten",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fasten",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fasten'."
+    ],
+    "examples_bn": [
+      "'fasten' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 27,
+    "word": "father",
+    "meaning_bn": "...",
+    "definition_en": "English definition for father",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'father'."
+    ],
+    "examples_bn": [
+      "'father' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 28,
+    "word": "fault",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fault",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fault'."
+    ],
+    "examples_bn": [
+      "'fault' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 30,
+    "word": "favorite",
+    "meaning_bn": "...",
+    "definition_en": "English definition for favorite",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'favorite'."
+    ],
+    "examples_bn": [
+      "'favorite' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 32,
+    "word": "feather",
+    "meaning_bn": "...",
+    "definition_en": "English definition for feather",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'feather'."
+    ],
+    "examples_bn": [
+      "'feather' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 34,
+    "word": "February",
+    "meaning_bn": "...",
+    "definition_en": "English definition for February",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'February'."
+    ],
+    "examples_bn": [
+      "'February' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 35,
+    "word": "fee",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fee",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fee'."
+    ],
+    "examples_bn": [
+      "'fee' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 38,
+    "word": "feeling",
+    "meaning_bn": "...",
+    "definition_en": "English definition for feeling",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'feeling'."
+    ],
+    "examples_bn": [
+      "'feeling' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 39,
+    "word": "fellow",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fellow",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fellow'."
+    ],
+    "examples_bn": [
+      "'fellow' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 40,
+    "word": "female",
+    "meaning_bn": "...",
+    "definition_en": "English definition for female",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'female'."
+    ],
+    "examples_bn": [
+      "'female' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 41,
+    "word": "fence",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fence",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fence'."
+    ],
+    "examples_bn": [
+      "'fence' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 42,
+    "word": "festival",
+    "meaning_bn": "...",
+    "definition_en": "English definition for festival",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'festival'."
+    ],
+    "examples_bn": [
+      "'festival' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 43,
+    "word": "few",
+    "meaning_bn": "...",
+    "definition_en": "English definition for few",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'few'."
+    ],
+    "examples_bn": [
+      "'few' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "det./adj., pron."
+  },
+  {
+    "id": 44,
+    "word": "fiction",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fiction",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fiction'."
+    ],
+    "examples_bn": [
+      "'fiction' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 45,
+    "word": "field",
+    "meaning_bn": "...",
+    "definition_en": "English definition for field",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'field'."
+    ],
+    "examples_bn": [
+      "'field' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 46,
+    "word": "fifteen",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fifteen",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fifteen'."
+    ],
+    "examples_bn": [
+      "'fifteen' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 47,
+    "word": "fifth",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fifth",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fifth'."
+    ],
+    "examples_bn": [
+      "'fifth' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 48,
+    "word": "fifty",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fifty",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fifty'."
+    ],
+    "examples_bn": [
+      "'fifty' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 49,
+    "word": "fight",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fight",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fight'."
+    ],
+    "examples_bn": [
+      "'fight' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 50,
+    "word": "fighter",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fighter",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fighter'."
+    ],
+    "examples_bn": [
+      "'fighter' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 51,
+    "word": "fighting",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fighting",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fighting'."
+    ],
+    "examples_bn": [
+      "'fighting' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 54,
+    "word": "fill",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fill",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fill'."
+    ],
+    "examples_bn": [
+      "'fill' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 57,
+    "word": "finally",
+    "meaning_bn": "...",
+    "definition_en": "English definition for finally",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'finally'."
+    ],
+    "examples_bn": [
+      "'finally' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 58,
+    "word": "finance",
+    "meaning_bn": "...",
+    "definition_en": "English definition for finance",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'finance'."
+    ],
+    "examples_bn": [
+      "'finance' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 59,
+    "word": "financial",
+    "meaning_bn": "...",
+    "definition_en": "English definition for financial",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'financial'."
+    ],
+    "examples_bn": [
+      "'financial' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 60,
+    "word": "find",
+    "meaning_bn": "...",
+    "definition_en": "English definition for find",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'find'."
+    ],
+    "examples_bn": [
+      "'find' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 61,
+    "word": "finding",
+    "meaning_bn": "...",
+    "definition_en": "English definition for finding",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'finding'."
+    ],
+    "examples_bn": [
+      "'finding' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 62,
+    "word": "fine",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fine",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fine'."
+    ],
+    "examples_bn": [
+      "'fine' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 63,
+    "word": "finger",
+    "meaning_bn": "...",
+    "definition_en": "English definition for finger",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'finger'."
+    ],
+    "examples_bn": [
+      "'finger' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 66,
+    "word": "firm",
+    "meaning_bn": "...",
+    "definition_en": "English definition for firm",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'firm'."
+    ],
+    "examples_bn": [
+      "'firm' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 69,
+    "word": "fishing",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fishing",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fishing'."
+    ],
+    "examples_bn": [
+      "'fishing' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 70,
+    "word": "fit",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fit",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fit'."
+    ],
+    "examples_bn": [
+      "'fit' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., adj."
+  },
+  {
+    "id": 71,
+    "word": "fitness",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fitness",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fitness'."
+    ],
+    "examples_bn": [
+      "'fitness' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 72,
+    "word": "five",
+    "meaning_bn": "...",
+    "definition_en": "English definition for five",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'five'."
+    ],
+    "examples_bn": [
+      "'five' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 74,
+    "word": "fixed",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fixed",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fixed'."
+    ],
+    "examples_bn": [
+      "'fixed' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 75,
+    "word": "flag",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flag",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flag'."
+    ],
+    "examples_bn": [
+      "'flag' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 76,
+    "word": "flame",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flame",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flame'."
+    ],
+    "examples_bn": [
+      "'flame' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 77,
+    "word": "flash",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flash",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flash'."
+    ],
+    "examples_bn": [
+      "'flash' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 79,
+    "word": "flavor",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flavor",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flavor'."
+    ],
+    "examples_bn": [
+      "'flavor' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 80,
+    "word": "flesh",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flesh",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flesh'."
+    ],
+    "examples_bn": [
+      "'flesh' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 81,
+    "word": "flight",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flight",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flight'."
+    ],
+    "examples_bn": [
+      "'flight' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 82,
+    "word": "float",
+    "meaning_bn": "...",
+    "definition_en": "English definition for float",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'float'."
+    ],
+    "examples_bn": [
+      "'float' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 83,
+    "word": "flood",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flood",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flood'."
+    ],
+    "examples_bn": [
+      "'flood' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 84,
+    "word": "floor",
+    "meaning_bn": "...",
+    "definition_en": "English definition for floor",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'floor'."
+    ],
+    "examples_bn": [
+      "'floor' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 85,
+    "word": "flour",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flour",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flour'."
+    ],
+    "examples_bn": [
+      "'flour' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 86,
+    "word": "flow",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flow",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flow'."
+    ],
+    "examples_bn": [
+      "'flow' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 87,
+    "word": "flower",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flower",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flower'."
+    ],
+    "examples_bn": [
+      "'flower' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 88,
+    "word": "flu",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flu",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flu'."
+    ],
+    "examples_bn": [
+      "'flu' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 90,
+    "word": "flying",
+    "meaning_bn": "...",
+    "definition_en": "English definition for flying",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'flying'."
+    ],
+    "examples_bn": [
+      "'flying' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., adj."
+  },
+  {
+    "id": 91,
+    "word": "focus",
+    "meaning_bn": "...",
+    "definition_en": "English definition for focus",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'focus'."
+    ],
+    "examples_bn": [
+      "'focus' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 93,
+    "word": "folding",
+    "meaning_bn": "...",
+    "definition_en": "English definition for folding",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'folding'."
+    ],
+    "examples_bn": [
+      "'folding' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 94,
+    "word": "folk",
+    "meaning_bn": "...",
+    "definition_en": "English definition for folk",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'folk'."
+    ],
+    "examples_bn": [
+      "'folk' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., adj."
+  },
+  {
+    "id": 95,
+    "word": "follow",
+    "meaning_bn": "...",
+    "definition_en": "English definition for follow",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'follow'."
+    ],
+    "examples_bn": [
+      "'follow' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 97,
+    "word": "food",
+    "meaning_bn": "খাবার",
+    "definition_en": "Nutritious substance that people or animals eat.",
+    "definition_bn": "পুষ্টির জন্য গৃহীত বস্তু।",
+    "examples_en": [
+      "Example sentence for 'food'."
+    ],
+    "examples_bn": [
+      "'food' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 98,
+    "word": "foot",
+    "meaning_bn": "...",
+    "definition_en": "English definition for foot",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'foot'."
+    ],
+    "examples_bn": [
+      "'foot' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 99,
+    "word": "football",
+    "meaning_bn": "...",
+    "definition_en": "English definition for football",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'football'."
+    ],
+    "examples_bn": [
+      "'football' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 100,
+    "word": "for",
+    "meaning_bn": "...",
+    "definition_en": "English definition for for",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'for'."
+    ],
+    "examples_bn": [
+      "'for' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep."
+  },
+  {
+    "id": 101,
+    "word": "force",
+    "meaning_bn": "...",
+    "definition_en": "English definition for force",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'force'."
+    ],
+    "examples_bn": [
+      "'force' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 102,
+    "word": "foreign",
+    "meaning_bn": "...",
+    "definition_en": "English definition for foreign",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'foreign'."
+    ],
+    "examples_bn": [
+      "'foreign' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 103,
+    "word": "forest",
+    "meaning_bn": "...",
+    "definition_en": "English definition for forest",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'forest'."
+    ],
+    "examples_bn": [
+      "'forest' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 104,
+    "word": "forever",
+    "meaning_bn": "...",
+    "definition_en": "English definition for forever",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'forever'."
+    ],
+    "examples_bn": [
+      "'forever' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 105,
+    "word": "forget",
+    "meaning_bn": "...",
+    "definition_en": "English definition for forget",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'forget'."
+    ],
+    "examples_bn": [
+      "'forget' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 106,
+    "word": "forgive",
+    "meaning_bn": "...",
+    "definition_en": "English definition for forgive",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'forgive'."
+    ],
+    "examples_bn": [
+      "'forgive' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 107,
+    "word": "fork",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fork",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fork'."
+    ],
+    "examples_bn": [
+      "'fork' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 109,
+    "word": "formal",
+    "meaning_bn": "...",
+    "definition_en": "English definition for formal",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'formal'."
+    ],
+    "examples_bn": [
+      "'formal' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 110,
+    "word": "former",
+    "meaning_bn": "...",
+    "definition_en": "English definition for former",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'former'."
+    ],
+    "examples_bn": [
+      "'former' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 111,
+    "word": "fortunately",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fortunately",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fortunately'."
+    ],
+    "examples_bn": [
+      "'fortunately' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 112,
+    "word": "fortune",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fortune",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fortune'."
+    ],
+    "examples_bn": [
+      "'fortune' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 113,
+    "word": "forty",
+    "meaning_bn": "...",
+    "definition_en": "English definition for forty",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'forty'."
+    ],
+    "examples_bn": [
+      "'forty' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 115,
+    "word": "found",
+    "meaning_bn": "...",
+    "definition_en": "English definition for found",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'found'."
+    ],
+    "examples_bn": [
+      "'found' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 116,
+    "word": "foundation",
+    "meaning_bn": "...",
+    "definition_en": "English definition for foundation",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'foundation'."
+    ],
+    "examples_bn": [
+      "'foundation' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 117,
+    "word": "four",
+    "meaning_bn": "...",
+    "definition_en": "English definition for four",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'four'."
+    ],
+    "examples_bn": [
+      "'four' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 118,
+    "word": "fourteen",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fourteen",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fourteen'."
+    ],
+    "examples_bn": [
+      "'fourteen' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 119,
+    "word": "fourth",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fourth",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fourth'."
+    ],
+    "examples_bn": [
+      "'fourth' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 120,
+    "word": "frame",
+    "meaning_bn": "...",
+    "definition_en": "English definition for frame",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'frame'."
+    ],
+    "examples_bn": [
+      "'frame' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 122,
+    "word": "freedom",
+    "meaning_bn": "...",
+    "definition_en": "English definition for freedom",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'freedom'."
+    ],
+    "examples_bn": [
+      "'freedom' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 123,
+    "word": "freeze",
+    "meaning_bn": "...",
+    "definition_en": "English definition for freeze",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'freeze'."
+    ],
+    "examples_bn": [
+      "'freeze' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 124,
+    "word": "freezer",
+    "meaning_bn": "...",
+    "definition_en": "English definition for freezer",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'freezer'."
+    ],
+    "examples_bn": [
+      "'freezer' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 125,
+    "word": "french",
+    "meaning_bn": "...",
+    "definition_en": "English definition for french",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'french'."
+    ],
+    "examples_bn": [
+      "'french' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 126,
+    "word": "frequent",
+    "meaning_bn": "...",
+    "definition_en": "English definition for frequent",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'frequent'."
+    ],
+    "examples_bn": [
+      "'frequent' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 127,
+    "word": "frequently",
+    "meaning_bn": "...",
+    "definition_en": "English definition for frequently",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'frequently'."
+    ],
+    "examples_bn": [
+      "'frequently' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 128,
+    "word": "fresh",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fresh",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fresh'."
+    ],
+    "examples_bn": [
+      "'fresh' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 129,
+    "word": "friday",
+    "meaning_bn": "...",
+    "definition_en": "English definition for friday",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'friday'."
+    ],
+    "examples_bn": [
+      "'friday' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 130,
+    "word": "fridge",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fridge",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fridge'."
+    ],
+    "examples_bn": [
+      "'fridge' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 131,
+    "word": "friend",
+    "meaning_bn": "বন্ধু",
+    "definition_en": "A person whom one knows and with whom one has a bond of mutual affection.",
+    "definition_bn": "একই পছন্দের বা ঘনিষ্ঠ পরিচিত ব্যক্তি।",
+    "examples_en": [
+      "Example sentence for 'friend'."
+    ],
+    "examples_bn": [
+      "'friend' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 132,
+    "word": "friendly",
+    "meaning_bn": "...",
+    "definition_en": "English definition for friendly",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'friendly'."
+    ],
+    "examples_bn": [
+      "'friendly' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 133,
+    "word": "friendship",
+    "meaning_bn": "...",
+    "definition_en": "English definition for friendship",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'friendship'."
+    ],
+    "examples_bn": [
+      "'friendship' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 134,
+    "word": "frighten",
+    "meaning_bn": "...",
+    "definition_en": "English definition for frighten",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'frighten'."
+    ],
+    "examples_bn": [
+      "'frighten' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 135,
+    "word": "frightened",
+    "meaning_bn": "...",
+    "definition_en": "English definition for frightened",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'frightened'."
+    ],
+    "examples_bn": [
+      "'frightened' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 136,
+    "word": "frightening",
+    "meaning_bn": "...",
+    "definition_en": "English definition for frightening",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'frightening'."
+    ],
+    "examples_bn": [
+      "'frightening' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 137,
+    "word": "frog",
+    "meaning_bn": "...",
+    "definition_en": "English definition for frog",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'frog'."
+    ],
+    "examples_bn": [
+      "'frog' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 138,
+    "word": "from",
+    "meaning_bn": "...",
+    "definition_en": "English definition for from",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'from'."
+    ],
+    "examples_bn": [
+      "'from' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "prep."
+  },
+  {
+    "id": 139,
+    "word": "front",
+    "meaning_bn": "...",
+    "definition_en": "English definition for front",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'front'."
+    ],
+    "examples_bn": [
+      "'front' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., adj."
+  },
+  {
+    "id": 140,
+    "word": "frozen",
+    "meaning_bn": "...",
+    "definition_en": "English definition for frozen",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'frozen'."
+    ],
+    "examples_bn": [
+      "'frozen' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 141,
+    "word": "fruit",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fruit",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fruit'."
+    ],
+    "examples_bn": [
+      "'fruit' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 142,
+    "word": "fry",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fry",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fry'."
+    ],
+    "examples_bn": [
+      "'fry' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 144,
+    "word": "full",
+    "meaning_bn": "...",
+    "definition_en": "English definition for full",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'full'."
+    ],
+    "examples_bn": [
+      "'full' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 145,
+    "word": "fully",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fully",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fully'."
+    ],
+    "examples_bn": [
+      "'fully' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 149,
+    "word": "fundamental",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fundamental",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fundamental'."
+    ],
+    "examples_bn": [
+      "'fundamental' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 150,
+    "word": "funeral",
+    "meaning_bn": "...",
+    "definition_en": "English definition for funeral",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'funeral'."
+    ],
+    "examples_bn": [
+      "'funeral' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 151,
+    "word": "funny",
+    "meaning_bn": "...",
+    "definition_en": "English definition for funny",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'funny'."
+    ],
+    "examples_bn": [
+      "'funny' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 152,
+    "word": "fur",
+    "meaning_bn": "...",
+    "definition_en": "English definition for fur",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'fur'."
+    ],
+    "examples_bn": [
+      "'fur' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 153,
+    "word": "furniture",
+    "meaning_bn": "...",
+    "definition_en": "English definition for furniture",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'furniture'."
+    ],
+    "examples_bn": [
+      "'furniture' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 154,
+    "word": "further",
+    "meaning_bn": "...",
+    "definition_en": "English definition for further",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'further'."
+    ],
+    "examples_bn": [
+      "'further' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv., adj."
+  },
+  {
+    "id": 155,
+    "word": "furthermore",
+    "meaning_bn": "...",
+    "definition_en": "English definition for furthermore",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'furthermore'."
+    ],
+    "examples_bn": [
+      "'furthermore' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 157,
+    "word": "gain",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gain",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gain'."
+    ],
+    "examples_bn": [
+      "'gain' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 158,
+    "word": "gallery",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gallery",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gallery'."
+    ],
+    "examples_bn": [
+      "'gallery' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 159,
+    "word": "game",
+    "meaning_bn": "...",
+    "definition_en": "English definition for game",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'game'."
+    ],
+    "examples_bn": [
+      "'game' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 160,
+    "word": "gang",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gang",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gang'."
+    ],
+    "examples_bn": [
+      "'gang' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 161,
+    "word": "gap",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gap",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gap'."
+    ],
+    "examples_bn": [
+      "'gap' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 162,
+    "word": "garage",
+    "meaning_bn": "...",
+    "definition_en": "English definition for garage",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'garage'."
+    ],
+    "examples_bn": [
+      "'garage' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 163,
+    "word": "garden",
+    "meaning_bn": "বাগান",
+    "definition_en": "A piece of ground used for growing flowers, fruit, or vegetables.",
+    "definition_bn": "গাছপালা লাগানোর জায়গা।",
+    "examples_en": [
+      "Example sentence for 'garden'."
+    ],
+    "examples_bn": [
+      "'garden' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 164,
+    "word": "gas",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gas",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gas'."
+    ],
+    "examples_bn": [
+      "'gas' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 165,
+    "word": "gate",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gate",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gate'."
+    ],
+    "examples_bn": [
+      "'gate' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 166,
+    "word": "gather",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gather",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gather'."
+    ],
+    "examples_bn": [
+      "'gather' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 167,
+    "word": "general",
+    "meaning_bn": "...",
+    "definition_en": "English definition for general",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'general'."
+    ],
+    "examples_bn": [
+      "'general' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 168,
+    "word": "generally",
+    "meaning_bn": "...",
+    "definition_en": "English definition for generally",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'generally'."
+    ],
+    "examples_bn": [
+      "'generally' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 169,
+    "word": "generation",
+    "meaning_bn": "...",
+    "definition_en": "English definition for generation",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'generation'."
+    ],
+    "examples_bn": [
+      "'generation' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 170,
+    "word": "generous",
+    "meaning_bn": "...",
+    "definition_en": "English definition for generous",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'generous'."
+    ],
+    "examples_bn": [
+      "'generous' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 171,
+    "word": "gentle",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gentle",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gentle'."
+    ],
+    "examples_bn": [
+      "'gentle' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 172,
+    "word": "gentleman",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gentleman",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gentleman'."
+    ],
+    "examples_bn": [
+      "'gentleman' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 173,
+    "word": "geography",
+    "meaning_bn": "...",
+    "definition_en": "English definition for geography",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'geography'."
+    ],
+    "examples_bn": [
+      "'geography' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 174,
+    "word": "get",
+    "meaning_bn": "...",
+    "definition_en": "English definition for get",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'get'."
+    ],
+    "examples_bn": [
+      "'get' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 175,
+    "word": "ghost",
+    "meaning_bn": "...",
+    "definition_en": "English definition for ghost",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'ghost'."
+    ],
+    "examples_bn": [
+      "'ghost' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 176,
+    "word": "giant",
+    "meaning_bn": "...",
+    "definition_en": "English definition for giant",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'giant'."
+    ],
+    "examples_bn": [
+      "'giant' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 177,
+    "word": "gift",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gift",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gift'."
+    ],
+    "examples_bn": [
+      "'gift' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 178,
+    "word": "girl",
+    "meaning_bn": "মেয়ে",
+    "definition_en": "A female child or young woman.",
+    "definition_bn": "অল্পবয়সী মহিলা।",
+    "examples_en": [
+      "Example sentence for 'girl'."
+    ],
+    "examples_bn": [
+      "'girl' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 179,
+    "word": "girlfriend",
+    "meaning_bn": "...",
+    "definition_en": "English definition for girlfriend",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'girlfriend'."
+    ],
+    "examples_bn": [
+      "'girlfriend' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 180,
+    "word": "give",
+    "meaning_bn": "দেওয়া",
+    "definition_en": "Freely transfer the possession of something to someone.",
+    "definition_bn": "কাউকে কোনো কিছু প্রদান করা।",
+    "examples_en": [
+      "Example sentence for 'give'."
+    ],
+    "examples_bn": [
+      "'give' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 181,
+    "word": "glad",
+    "meaning_bn": "...",
+    "definition_en": "English definition for glad",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'glad'."
+    ],
+    "examples_bn": [
+      "'glad' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 182,
+    "word": "glass",
+    "meaning_bn": "...",
+    "definition_en": "English definition for glass",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'glass'."
+    ],
+    "examples_bn": [
+      "'glass' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 183,
+    "word": "global",
+    "meaning_bn": "...",
+    "definition_en": "English definition for global",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'global'."
+    ],
+    "examples_bn": [
+      "'global' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 184,
+    "word": "glove",
+    "meaning_bn": "...",
+    "definition_en": "English definition for glove",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'glove'."
+    ],
+    "examples_bn": [
+      "'glove' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 186,
+    "word": "goal",
+    "meaning_bn": "...",
+    "definition_en": "English definition for goal",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'goal'."
+    ],
+    "examples_bn": [
+      "'goal' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 187,
+    "word": "god",
+    "meaning_bn": "...",
+    "definition_en": "English definition for god",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'god'."
+    ],
+    "examples_bn": [
+      "'god' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 188,
+    "word": "gold",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gold",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gold'."
+    ],
+    "examples_bn": [
+      "'gold' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., adj."
+  },
+  {
+    "id": 189,
+    "word": "golf",
+    "meaning_bn": "...",
+    "definition_en": "English definition for golf",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'golf'."
+    ],
+    "examples_bn": [
+      "'golf' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 191,
+    "word": "goodbye",
+    "meaning_bn": "...",
+    "definition_en": "English definition for goodbye",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'goodbye'."
+    ],
+    "examples_bn": [
+      "'goodbye' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "exclam., n."
+  },
+  {
+    "id": 192,
+    "word": "goods",
+    "meaning_bn": "...",
+    "definition_en": "English definition for goods",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'goods'."
+    ],
+    "examples_bn": [
+      "'goods' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 193,
+    "word": "govern",
+    "meaning_bn": "...",
+    "definition_en": "English definition for govern",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'govern'."
+    ],
+    "examples_bn": [
+      "'govern' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 194,
+    "word": "government",
+    "meaning_bn": "...",
+    "definition_en": "English definition for government",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'government'."
+    ],
+    "examples_bn": [
+      "'government' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 195,
+    "word": "grab",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grab",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grab'."
+    ],
+    "examples_bn": [
+      "'grab' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 197,
+    "word": "gradually",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gradually",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gradually'."
+    ],
+    "examples_bn": [
+      "'gradually' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 198,
+    "word": "graduate",
+    "meaning_bn": "...",
+    "definition_en": "English definition for graduate",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'graduate'."
+    ],
+    "examples_bn": [
+      "'graduate' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 199,
+    "word": "grain",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grain",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grain'."
+    ],
+    "examples_bn": [
+      "'grain' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 200,
+    "word": "grand",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grand",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grand'."
+    ],
+    "examples_bn": [
+      "'grand' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 201,
+    "word": "grandchild",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grandchild",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grandchild'."
+    ],
+    "examples_bn": [
+      "'grandchild' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 202,
+    "word": "granddaughter",
+    "meaning_bn": "...",
+    "definition_en": "English definition for granddaughter",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'granddaughter'."
+    ],
+    "examples_bn": [
+      "'granddaughter' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 203,
+    "word": "grandfather",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grandfather",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grandfather'."
+    ],
+    "examples_bn": [
+      "'grandfather' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 204,
+    "word": "grandmother",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grandmother",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grandmother'."
+    ],
+    "examples_bn": [
+      "'grandmother' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 205,
+    "word": "grandparent",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grandparent",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grandparent'."
+    ],
+    "examples_bn": [
+      "'grandparent' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 206,
+    "word": "grandson",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grandson",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grandson'."
+    ],
+    "examples_bn": [
+      "'grandson' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 207,
+    "word": "grant",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grant",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grant'."
+    ],
+    "examples_bn": [
+      "'grant' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 208,
+    "word": "grape",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grape",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grape'."
+    ],
+    "examples_bn": [
+      "'grape' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 209,
+    "word": "grass",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grass",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grass'."
+    ],
+    "examples_bn": [
+      "'grass' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 210,
+    "word": "grateful",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grateful",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grateful'."
+    ],
+    "examples_bn": [
+      "'grateful' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 211,
+    "word": "gray",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gray",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gray'."
+    ],
+    "examples_bn": [
+      "'gray' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 212,
+    "word": "great",
+    "meaning_bn": "...",
+    "definition_en": "English definition for great",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'great'."
+    ],
+    "examples_bn": [
+      "'great' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 213,
+    "word": "green",
+    "meaning_bn": "...",
+    "definition_en": "English definition for green",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'green'."
+    ],
+    "examples_bn": [
+      "'green' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 214,
+    "word": "greet",
+    "meaning_bn": "...",
+    "definition_en": "English definition for greet",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'greet'."
+    ],
+    "examples_bn": [
+      "'greet' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 215,
+    "word": "grid",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grid",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grid'."
+    ],
+    "examples_bn": [
+      "'grid' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 216,
+    "word": "grocery",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grocery",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grocery'."
+    ],
+    "examples_bn": [
+      "'grocery' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 217,
+    "word": "ground",
+    "meaning_bn": "...",
+    "definition_en": "English definition for ground",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'ground'."
+    ],
+    "examples_bn": [
+      "'ground' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 218,
+    "word": "group",
+    "meaning_bn": "...",
+    "definition_en": "English definition for group",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'group'."
+    ],
+    "examples_bn": [
+      "'group' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 219,
+    "word": "grow",
+    "meaning_bn": "...",
+    "definition_en": "English definition for grow",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'grow'."
+    ],
+    "examples_bn": [
+      "'grow' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 220,
+    "word": "growth",
+    "meaning_bn": "...",
+    "definition_en": "English definition for growth",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'growth'."
+    ],
+    "examples_bn": [
+      "'growth' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 221,
+    "word": "guarantee",
+    "meaning_bn": "...",
+    "definition_en": "English definition for guarantee",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'guarantee'."
+    ],
+    "examples_bn": [
+      "'guarantee' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 222,
+    "word": "guard",
+    "meaning_bn": "...",
+    "definition_en": "English definition for guard",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'guard'."
+    ],
+    "examples_bn": [
+      "'guard' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 223,
+    "word": "guess",
+    "meaning_bn": "...",
+    "definition_en": "English definition for guess",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'guess'."
+    ],
+    "examples_bn": [
+      "'guess' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 224,
+    "word": "guest",
+    "meaning_bn": "...",
+    "definition_en": "English definition for guest",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'guest'."
+    ],
+    "examples_bn": [
+      "'guest' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 225,
+    "word": "guide",
+    "meaning_bn": "...",
+    "definition_en": "English definition for guide",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'guide'."
+    ],
+    "examples_bn": [
+      "'guide' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 226,
+    "word": "guilty",
+    "meaning_bn": "...",
+    "definition_en": "English definition for guilty",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'guilty'."
+    ],
+    "examples_bn": [
+      "'guilty' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 227,
+    "word": "guitar",
+    "meaning_bn": "...",
+    "definition_en": "English definition for guitar",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'guitar'."
+    ],
+    "examples_bn": [
+      "'guitar' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 228,
+    "word": "gun",
+    "meaning_bn": "...",
+    "definition_en": "English definition for gun",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'gun'."
+    ],
+    "examples_bn": [
+      "'gun' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 229,
+    "word": "guy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for guy",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'guy'."
+    ],
+    "examples_bn": [
+      "'guy' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 230,
+    "word": "habit",
+    "meaning_bn": "...",
+    "definition_en": "English definition for habit",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'habit'."
+    ],
+    "examples_bn": [
+      "'habit' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 231,
+    "word": "hair",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hair",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hair'."
+    ],
+    "examples_bn": [
+      "'hair' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 233,
+    "word": "hall",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hall",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hall'."
+    ],
+    "examples_bn": [
+      "'hall' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 235,
+    "word": "handle",
+    "meaning_bn": "...",
+    "definition_en": "English definition for handle",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'handle'."
+    ],
+    "examples_bn": [
+      "'handle' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 236,
+    "word": "hang",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hang",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hang'."
+    ],
+    "examples_bn": [
+      "'hang' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 237,
+    "word": "happen",
+    "meaning_bn": "...",
+    "definition_en": "English definition for happen",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'happen'."
+    ],
+    "examples_bn": [
+      "'happen' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 238,
+    "word": "happiness",
+    "meaning_bn": "...",
+    "definition_en": "English definition for happiness",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'happiness'."
+    ],
+    "examples_bn": [
+      "'happiness' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 239,
+    "word": "happy",
+    "meaning_bn": "সুখী",
+    "definition_en": "Feeling or showing pleasure or contentment.",
+    "definition_bn": "আনন্দে থাকা বা সন্তুষ্ট হওয়া।",
+    "examples_en": [
+      "Example sentence for 'happy'."
+    ],
+    "examples_bn": [
+      "'happy' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 240,
+    "word": "hard",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hard",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hard'."
+    ],
+    "examples_bn": [
+      "'hard' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., adv."
+  },
+  {
+    "id": 241,
+    "word": "hardly",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hardly",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hardly'."
+    ],
+    "examples_bn": [
+      "'hardly' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 242,
+    "word": "harm",
+    "meaning_bn": "...",
+    "definition_en": "English definition for harm",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'harm'."
+    ],
+    "examples_bn": [
+      "'harm' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 243,
+    "word": "harmful",
+    "meaning_bn": "...",
+    "definition_en": "English definition for harmful",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'harmful'."
+    ],
+    "examples_bn": [
+      "'harmful' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 244,
+    "word": "hat",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hat",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hat'."
+    ],
+    "examples_bn": [
+      "'hat' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 247,
+    "word": "have to modal",
+    "meaning_bn": "...",
+    "definition_en": "English definition for have to modal",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'have to modal'."
+    ],
+    "examples_bn": [
+      "'have to modal' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 248,
+    "word": "he",
+    "meaning_bn": "...",
+    "definition_en": "English definition for he",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'he'."
+    ],
+    "examples_bn": [
+      "'he' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 250,
+    "word": "headache",
+    "meaning_bn": "...",
+    "definition_en": "English definition for headache",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'headache'."
+    ],
+    "examples_bn": [
+      "'headache' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 251,
+    "word": "headline",
+    "meaning_bn": "...",
+    "definition_en": "English definition for headline",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'headline'."
+    ],
+    "examples_bn": [
+      "'headline' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 252,
+    "word": "headquarters",
+    "meaning_bn": "...",
+    "definition_en": "English definition for headquarters",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'headquarters'."
+    ],
+    "examples_bn": [
+      "'headquarters' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 253,
+    "word": "health",
+    "meaning_bn": "...",
+    "definition_en": "English definition for health",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'health'."
+    ],
+    "examples_bn": [
+      "'health' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 254,
+    "word": "healthy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for healthy",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'healthy'."
+    ],
+    "examples_bn": [
+      "'healthy' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 255,
+    "word": "hear",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hear",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hear'."
+    ],
+    "examples_bn": [
+      "'hear' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 256,
+    "word": "hearing",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hearing",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hearing'."
+    ],
+    "examples_bn": [
+      "'hearing' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 257,
+    "word": "heart",
+    "meaning_bn": "...",
+    "definition_en": "English definition for heart",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'heart'."
+    ],
+    "examples_bn": [
+      "'heart' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 258,
+    "word": "heat",
+    "meaning_bn": "...",
+    "definition_en": "English definition for heat",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'heat'."
+    ],
+    "examples_bn": [
+      "'heat' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 259,
+    "word": "heating",
+    "meaning_bn": "...",
+    "definition_en": "English definition for heating",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'heating'."
+    ],
+    "examples_bn": [
+      "'heating' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 260,
+    "word": "heaven",
+    "meaning_bn": "...",
+    "definition_en": "English definition for heaven",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'heaven'."
+    ],
+    "examples_bn": [
+      "'heaven' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 261,
+    "word": "heavy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for heavy",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'heavy'."
+    ],
+    "examples_bn": [
+      "'heavy' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 262,
+    "word": "heel",
+    "meaning_bn": "...",
+    "definition_en": "English definition for heel",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'heel'."
+    ],
+    "examples_bn": [
+      "'heel' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 263,
+    "word": "height",
+    "meaning_bn": "...",
+    "definition_en": "English definition for height",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'height'."
+    ],
+    "examples_bn": [
+      "'height' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 264,
+    "word": "helicopter",
+    "meaning_bn": "...",
+    "definition_en": "English definition for helicopter",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'helicopter'."
+    ],
+    "examples_bn": [
+      "'helicopter' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 265,
+    "word": "hell",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hell",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hell'."
+    ],
+    "examples_bn": [
+      "'hell' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 266,
+    "word": "hello",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hello",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hello'."
+    ],
+    "examples_bn": [
+      "'hello' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "exclam., n."
+  },
+  {
+    "id": 267,
+    "word": "help",
+    "meaning_bn": "...",
+    "definition_en": "English definition for help",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'help'."
+    ],
+    "examples_bn": [
+      "'help' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 268,
+    "word": "helpful",
+    "meaning_bn": "...",
+    "definition_en": "English definition for helpful",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'helpful'."
+    ],
+    "examples_bn": [
+      "'helpful' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 269,
+    "word": "her",
+    "meaning_bn": "...",
+    "definition_en": "English definition for her",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'her'."
+    ],
+    "examples_bn": [
+      "'her' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron., det."
+  },
+  {
+    "id": 270,
+    "word": "here",
+    "meaning_bn": "...",
+    "definition_en": "English definition for here",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'here'."
+    ],
+    "examples_bn": [
+      "'here' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 271,
+    "word": "hero",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hero",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hero'."
+    ],
+    "examples_bn": [
+      "'hero' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 272,
+    "word": "hers",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hers",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hers'."
+    ],
+    "examples_bn": [
+      "'hers' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 273,
+    "word": "herself",
+    "meaning_bn": "...",
+    "definition_en": "English definition for herself",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'herself'."
+    ],
+    "examples_bn": [
+      "'herself' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 274,
+    "word": "hesitate",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hesitate",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hesitate'."
+    ],
+    "examples_bn": [
+      "'hesitate' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 275,
+    "word": "hi",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hi",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hi'."
+    ],
+    "examples_bn": [
+      "'hi' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "exclam."
+  },
+  {
+    "id": 276,
+    "word": "hide",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hide",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hide'."
+    ],
+    "examples_bn": [
+      "'hide' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 278,
+    "word": "highlight",
+    "meaning_bn": "...",
+    "definition_en": "English definition for highlight",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'highlight'."
+    ],
+    "examples_bn": [
+      "'highlight' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 279,
+    "word": "highly",
+    "meaning_bn": "...",
+    "definition_en": "English definition for highly",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'highly'."
+    ],
+    "examples_bn": [
+      "'highly' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 280,
+    "word": "highway",
+    "meaning_bn": "...",
+    "definition_en": "English definition for highway",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'highway'."
+    ],
+    "examples_bn": [
+      "'highway' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 281,
+    "word": "hill",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hill",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hill'."
+    ],
+    "examples_bn": [
+      "'hill' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 282,
+    "word": "him",
+    "meaning_bn": "...",
+    "definition_en": "English definition for him",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'him'."
+    ],
+    "examples_bn": [
+      "'him' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 283,
+    "word": "himself",
+    "meaning_bn": "...",
+    "definition_en": "English definition for himself",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'himself'."
+    ],
+    "examples_bn": [
+      "'himself' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "pron."
+  },
+  {
+    "id": 285,
+    "word": "his",
+    "meaning_bn": "...",
+    "definition_en": "English definition for his",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'his'."
+    ],
+    "examples_bn": [
+      "'his' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "det., pron."
+  },
+  {
+    "id": 286,
+    "word": "historical",
+    "meaning_bn": "...",
+    "definition_en": "English definition for historical",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'historical'."
+    ],
+    "examples_bn": [
+      "'historical' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 287,
+    "word": "history",
+    "meaning_bn": "...",
+    "definition_en": "English definition for history",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'history'."
+    ],
+    "examples_bn": [
+      "'history' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 288,
+    "word": "hit",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hit",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hit'."
+    ],
+    "examples_bn": [
+      "'hit' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 289,
+    "word": "hobby",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hobby",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hobby'."
+    ],
+    "examples_bn": [
+      "'hobby' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 290,
+    "word": "hockey",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hockey",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hockey'."
+    ],
+    "examples_bn": [
+      "'hockey' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 292,
+    "word": "hole",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hole",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hole'."
+    ],
+    "examples_bn": [
+      "'hole' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 293,
+    "word": "holiday",
+    "meaning_bn": "...",
+    "definition_en": "English definition for holiday",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'holiday'."
+    ],
+    "examples_bn": [
+      "'holiday' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 294,
+    "word": "hollow",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hollow",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hollow'."
+    ],
+    "examples_bn": [
+      "'hollow' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 295,
+    "word": "holy",
+    "meaning_bn": "...",
+    "definition_en": "English definition for holy",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'holy'."
+    ],
+    "examples_bn": [
+      "'holy' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 297,
+    "word": "homework",
+    "meaning_bn": "...",
+    "definition_en": "English definition for homework",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'homework'."
+    ],
+    "examples_bn": [
+      "'homework' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 298,
+    "word": "honest",
+    "meaning_bn": "...",
+    "definition_en": "English definition for honest",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'honest'."
+    ],
+    "examples_bn": [
+      "'honest' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 299,
+    "word": "honesty",
+    "meaning_bn": "...",
+    "definition_en": "English definition for honesty",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'honesty'."
+    ],
+    "examples_bn": [
+      "'honesty' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 300,
+    "word": "honor",
+    "meaning_bn": "...",
+    "definition_en": "English definition for honor",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'honor'."
+    ],
+    "examples_bn": [
+      "'honor' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 301,
+    "word": "hope",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hope",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hope'."
+    ],
+    "examples_bn": [
+      "'hope' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 302,
+    "word": "horrible",
+    "meaning_bn": "...",
+    "definition_en": "English definition for horrible",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'horrible'."
+    ],
+    "examples_bn": [
+      "'horrible' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 303,
+    "word": "horror",
+    "meaning_bn": "...",
+    "definition_en": "English definition for horror",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'horror'."
+    ],
+    "examples_bn": [
+      "'horror' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 304,
+    "word": "horse",
+    "meaning_bn": "...",
+    "definition_en": "English definition for horse",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'horse'."
+    ],
+    "examples_bn": [
+      "'horse' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 305,
+    "word": "hospital",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hospital",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hospital'."
+    ],
+    "examples_bn": [
+      "'hospital' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 306,
+    "word": "host",
+    "meaning_bn": "...",
+    "definition_en": "English definition for host",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'host'."
+    ],
+    "examples_bn": [
+      "'host' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 307,
+    "word": "hot",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hot",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hot'."
+    ],
+    "examples_bn": [
+      "'hot' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 308,
+    "word": "hotel",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hotel",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hotel'."
+    ],
+    "examples_bn": [
+      "'hotel' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 309,
+    "word": "hour",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hour",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hour'."
+    ],
+    "examples_bn": [
+      "'hour' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 311,
+    "word": "household",
+    "meaning_bn": "...",
+    "definition_en": "English definition for household",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'household'."
+    ],
+    "examples_bn": [
+      "'household' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 312,
+    "word": "housing",
+    "meaning_bn": "...",
+    "definition_en": "English definition for housing",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'housing'."
+    ],
+    "examples_bn": [
+      "'housing' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 313,
+    "word": "how",
+    "meaning_bn": "...",
+    "definition_en": "English definition for how",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'how'."
+    ],
+    "examples_bn": [
+      "'how' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 314,
+    "word": "however",
+    "meaning_bn": "...",
+    "definition_en": "English definition for however",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'however'."
+    ],
+    "examples_bn": [
+      "'however' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 315,
+    "word": "huge",
+    "meaning_bn": "...",
+    "definition_en": "English definition for huge",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'huge'."
+    ],
+    "examples_bn": [
+      "'huge' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 316,
+    "word": "human",
+    "meaning_bn": "...",
+    "definition_en": "English definition for human",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'human'."
+    ],
+    "examples_bn": [
+      "'human' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 317,
+    "word": "humor",
+    "meaning_bn": "...",
+    "definition_en": "English definition for humor",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'humor'."
+    ],
+    "examples_bn": [
+      "'humor' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 318,
+    "word": "humorous",
+    "meaning_bn": "...",
+    "definition_en": "English definition for humorous",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'humorous'."
+    ],
+    "examples_bn": [
+      "'humorous' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 319,
+    "word": "hundred",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hundred",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hundred'."
+    ],
+    "examples_bn": [
+      "'hundred' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 320,
+    "word": "hungry",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hungry",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hungry'."
+    ],
+    "examples_bn": [
+      "'hungry' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 321,
+    "word": "hunt",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hunt",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hunt'."
+    ],
+    "examples_bn": [
+      "'hunt' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 322,
+    "word": "hunting",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hunting",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hunting'."
+    ],
+    "examples_bn": [
+      "'hunting' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 323,
+    "word": "hurry",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hurry",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hurry'."
+    ],
+    "examples_bn": [
+      "'hurry' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 324,
+    "word": "hurt",
+    "meaning_bn": "...",
+    "definition_en": "English definition for hurt",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'hurt'."
+    ],
+    "examples_bn": [
+      "'hurt' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford 3000",
+    "parts_of_speech": "v., adj."
+  },
+  {
+    "id": 325,
+    "word": "husband",
+    "meaning_bn": "...",
+    "definition_en": "English definition for husband",
+    "definition_bn": "...",
+    "examples_en": [
+      "Example sentence for 'husband'."
+    ],
+    "examples_bn": [
+      "'husband' এর জন্য উদাহরণ বাক্য।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford 3000",
+    "parts_of_speech": "n."
+  }
+]
