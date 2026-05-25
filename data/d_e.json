@@ -1566,16 +1566,16 @@
   {
     "id": 101,
     "word": "disappear",
-    "meaning_bn": "...",
-    "definition_en": "English definition for disappear",
-    "definition_bn": "...",
+    "meaning_bn": "অদৃশ্য হওয়া",
+    "definition_en": "To stop being visible; to pass out of sight.",
+    "definition_bn": "দৃষ্টির আড়ালে চলে যাওয়া বা অদৃশ্য হয়ে যাওয়া।",
     "examples_en": [
-      "Sentence using 'disappear'."
+      "The sun began to disappear behind the clouds."
     ],
     "examples_bn": [
-      "'disappear' এর উদাহরণ বাক্য।"
+      "সূর্য মেঘের আড়ালে অদৃশ্য হতে শুরু করল।"
     ],
-    "synonyms": [],
+    "synonyms": ["vanish", "fade"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -1583,16 +1583,16 @@
   {
     "id": 102,
     "word": "disappointed",
-    "meaning_bn": "...",
-    "definition_en": "English definition for disappointed",
-    "definition_bn": "...",
+    "meaning_bn": "হতাশ",
+    "definition_en": "Sad or displeased because someone or something has failed to fulfill one's hopes.",
+    "definition_bn": "আশা পূরণ না হওয়ায় দুঃখিত বা অসন্তুষ্ট।",
     "examples_en": [
-      "Sentence using 'disappointed'."
+      "I was disappointed with the results of the exam."
     ],
     "examples_bn": [
-      "'disappointed' এর উদাহরণ বাক্য।"
+      "পরীক্ষার ফলাফলে আমি হতাশ হয়েছিলাম।"
     ],
-    "synonyms": [],
+    "synonyms": ["upset", "let down"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -1600,16 +1600,16 @@
   {
     "id": 103,
     "word": "disappointing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for disappointing",
-    "definition_bn": "...",
+    "meaning_bn": "হতাশাজনক",
+    "definition_en": "Failing to fulfill someone's hopes or expectations.",
+    "definition_bn": "কারও আশা বা প্রত্যাশা পূরণে ব্যর্থ হওয়া।",
     "examples_en": [
-      "Sentence using 'disappointing'."
+      "The team's performance was quite disappointing."
     ],
     "examples_bn": [
-      "'disappointing' এর উদাহরণ বাক্য।"
+      "দলের পারফরম্যান্স বেশ হতাশাজনক ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["unsatisfactory", "discouraging"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -1617,16 +1617,16 @@
   {
     "id": 104,
     "word": "disaster",
-    "meaning_bn": "...",
-    "definition_en": "English definition for disaster",
-    "definition_bn": "...",
+    "meaning_bn": "বিপর্যয়",
+    "definition_en": "A sudden accident or a natural catastrophe that causes great damage.",
+    "definition_bn": "একটি আকস্মিক দুর্ঘটনা বা প্রাকৃতিক দুর্যোগ যা প্রচুর ক্ষতি করে।",
     "examples_en": [
-      "Sentence using 'disaster'."
+      "The earthquake was a terrible disaster."
     ],
     "examples_bn": [
-      "'disaster' এর উদাহরণ বাক্য।"
+      "ভূমিকম্পটি ছিল এক ভয়াবহ বিপর্যয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["catastrophe", "calamity"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1634,16 +1634,16 @@
   {
     "id": 105,
     "word": "discipline",
-    "meaning_bn": "...",
-    "definition_en": "English definition for discipline",
-    "definition_bn": "...",
+    "meaning_bn": "শৃঙ্খলা",
+    "definition_en": "The practice of training people to obey rules or a code of behavior.",
+    "definition_bn": "নিয়ম বা আচরণবিধি মেনে চলার জন্য প্রশিক্ষণ বা অনুশীলন।",
     "examples_en": [
-      "Sentence using 'discipline'."
+      "Yoga helps to develop mental discipline."
     ],
     "examples_bn": [
-      "'discipline' এর উদাহরণ বাক্য।"
+      "যোগব্যায়াম মানসিক শৃঙ্খলা বিকাশে সহায়তা করে।"
     ],
-    "synonyms": [],
+    "synonyms": ["order", "control"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1651,16 +1651,16 @@
   {
     "id": 107,
     "word": "discover",
-    "meaning_bn": "...",
-    "definition_en": "English definition for discover",
-    "definition_bn": "...",
+    "meaning_bn": "আবিষ্কার করা",
+    "definition_en": "To find unexpectedly or during a search.",
+    "definition_bn": "অপ্রত্যাশিতভাবে বা অনুসন্ধানের মাধ্যমে খুঁজে পাওয়া।",
     "examples_en": [
-      "Sentence using 'discover'."
+      "Scientists hope to discover a cure for the disease."
     ],
     "examples_bn": [
-      "'discover' এর উদাহরণ বাক্য।"
+      "বিজ্ঞানীরা এই রোগের নিরাময় আবিষ্কারের আশা করছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["find", "uncover"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -1668,16 +1668,16 @@
   {
     "id": 108,
     "word": "discovery",
-    "meaning_bn": "...",
-    "definition_en": "English definition for discovery",
-    "definition_bn": "...",
+    "meaning_bn": "আবিষ্কার",
+    "definition_en": "The act of finding or learning something for the first time.",
+    "definition_bn": "প্রথমবারের মতো কোনো কিছু খুঁজে বের করার বা জানার কাজ।",
     "examples_en": [
-      "Sentence using 'discovery'."
+      "The discovery of fire changed human history."
     ],
     "examples_bn": [
-      "'discovery' এর উদাহরণ বাক্য।"
+      "আগুন আবিষ্কার মানব ইতিহাস পরিবর্তন করে দিয়েছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["finding", "revelation"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1685,16 +1685,16 @@
   {
     "id": 109,
     "word": "discuss",
-    "meaning_bn": "...",
-    "definition_en": "English definition for discuss",
-    "definition_bn": "...",
+    "meaning_bn": "আলোচনা করা",
+    "definition_en": "To talk about something with another person or group.",
+    "definition_bn": "অন্য কোনো ব্যক্তি বা দলের সাথে কোনো বিষয়ে কথা বলা।",
     "examples_en": [
-      "Sentence using 'discuss'."
+      "We need to discuss our plans for the weekend."
     ],
     "examples_bn": [
-      "'discuss' এর উদাহরণ বাক্য।"
+      "সপ্তাহান্তের পরিকল্পনা নিয়ে আমাদের আলোচনা করা দরকার।"
     ],
-    "synonyms": [],
+    "synonyms": ["debate", "talk over"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -1702,16 +1702,16 @@
   {
     "id": 110,
     "word": "discussion",
-    "meaning_bn": "...",
-    "definition_en": "English definition for discussion",
-    "definition_bn": "...",
+    "meaning_bn": "আলোচনা",
+    "definition_en": "A conversation or debate about a specific topic.",
+    "definition_bn": "নির্দিষ্ট কোনো বিষয় নিয়ে কথোপকথন বা বিতর্ক।",
     "examples_en": [
-      "Sentence using 'discussion'."
+      "The class had a long discussion about climate change."
     ],
     "examples_bn": [
-      "'discussion' এর উদাহরণ বাক্য।"
+      "জলবায়ু পরিবর্তন নিয়ে ক্লাসে দীর্ঘ আলোচনা হয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["conversation", "dialogue"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1719,16 +1719,16 @@
   {
     "id": 111,
     "word": "disease",
-    "meaning_bn": "...",
-    "definition_en": "English definition for disease",
-    "definition_bn": "...",
+    "meaning_bn": "রোগ",
+    "definition_en": "A disorder of structure or function in a human, animal, or plant.",
+    "definition_bn": "মানুষ, প্রাণী বা উদ্ভিদের গঠন বা কাজের অস্বাভাবিক অবস্থা।",
     "examples_en": [
-      "Sentence using 'disease'."
+      "Smoking increases the risk of heart disease."
     ],
     "examples_bn": [
-      "'disease' এর উদাহরণ বাক্য।"
+      "ধূমপান হৃদরোগের ঝুঁকি বাড়ায়।"
     ],
-    "synonyms": [],
+    "synonyms": ["illness", "sickness"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1736,16 +1736,16 @@
   {
     "id": 112,
     "word": "dish",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dish",
-    "definition_bn": "...",
+    "meaning_bn": "থালা বা খাবার",
+    "definition_en": "A shallow container used for cooking or serving food; or a particular food item.",
+    "definition_bn": "রান্না বা খাবার পরিবেশনের পাত্র; অথবা বিশেষ কোনো খাবার।",
     "examples_en": [
-      "Sentence using 'dish'."
+      "Chicken curry is a very popular dish in Bangladesh."
     ],
     "examples_bn": [
-      "'dish' এর উদাহরণ বাক্য।"
+      "বাংলাদেশে চিকেন কারি একটি জনপ্রিয় খাবার।"
     ],
-    "synonyms": [],
+    "synonyms": ["plate", "meal"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1753,16 +1753,16 @@
   {
     "id": 113,
     "word": "dishonest",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dishonest",
-    "definition_bn": "...",
+    "meaning_bn": "অসৎ",
+    "definition_en": "Behaving in an untrustworthy or deceitful way.",
+    "definition_bn": "অবিশ্বাসযোগ্য বা প্রতারণামূলক আচরণ করা।",
     "examples_en": [
-      "Sentence using 'dishonest'."
+      "It is dishonest to take credit for someone else's work."
     ],
     "examples_bn": [
-      "'dishonest' এর উদাহরণ বাক্য।"
+      "অন্যের কাজের কৃতিত্ব নেওয়া অসততা।"
     ],
-    "synonyms": [],
+    "synonyms": ["deceitful", "corrupt"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -1770,16 +1770,16 @@
   {
     "id": 114,
     "word": "disk",
-    "meaning_bn": "...",
-    "definition_en": "English definition for disk",
-    "definition_bn": "...",
+    "meaning_bn": "ডিস্ক / চাকতি",
+    "definition_en": "A flat, thin, round object of a non-magnetic material.",
+    "definition_bn": "চ্যাপ্টা, পাতলা এবং গোলাকার কোনো বস্তু।",
     "examples_en": [
-      "Sentence using 'disk'."
+      "The computer saves data on the hard disk."
     ],
     "examples_bn": [
-      "'disk' এর উদাহরণ বাক্য।"
+      "কম্পিউটার হার্ড ডিস্কে তথ্য সংরক্ষণ করে।"
     ],
-    "synonyms": [],
+    "synonyms": ["plate", "disc"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1787,16 +1787,16 @@
   {
     "id": 115,
     "word": "dislike",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dislike",
-    "definition_bn": "...",
+    "meaning_bn": "অপছন্দ করা",
+    "definition_en": "A feeling of not liking something or someone.",
+    "definition_bn": "কোনো কিছু বা কাউকে পছন্দ না করার অনুভূতি।",
     "examples_en": [
-      "Sentence using 'dislike'."
+      "I dislike people who are late."
     ],
     "examples_bn": [
-      "'dislike' এর উদাহরণ বাক্য।"
+      "যারা দেরি করে তাদের আমি অপছন্দ করি।"
     ],
-    "synonyms": [],
+    "synonyms": ["hate", "detest"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "v., n."
@@ -1804,16 +1804,16 @@
   {
     "id": 116,
     "word": "dismiss",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dismiss",
-    "definition_bn": "...",
+    "meaning_bn": "বরখাস্ত করা / খারিজ করা",
+    "definition_en": "To send someone away or to treat something as unworthy of consideration.",
+    "definition_bn": "কাউকে বিদায় করা বা কোনো কিছুকে বিবেচনার অযোগ্য মনে করে বাতিল করা।",
     "examples_en": [
-      "Sentence using 'dismiss'."
+      "The boss decided to dismiss him for being late."
     ],
     "examples_bn": [
-      "'dismiss' এর উদাহরণ বাক্য।"
+      "দেরি করার জন্য বস তাকে বরখাস্ত করার সিদ্ধান্ত নেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["fire", "reject"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -1821,16 +1821,16 @@
   {
     "id": 117,
     "word": "display",
-    "meaning_bn": "...",
-    "definition_en": "English definition for display",
-    "definition_bn": "...",
+    "meaning_bn": "প্রদর্শন করা",
+    "definition_en": "To show something in a place where people can see it.",
+    "definition_bn": "এমন কোনো স্থানে কিছু দেখানো যেখানে মানুষ তা দেখতে পায়।",
     "examples_en": [
-      "Sentence using 'display'."
+      "The museum has a display of ancient coins."
     ],
     "examples_bn": [
-      "'display' এর উদাহরণ বাক্য।"
+      "জাদুঘরে প্রাচীন মুদ্রার একটি প্রদর্শনী রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["show", "exhibit"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "v., n."
@@ -1838,16 +1838,16 @@
   {
     "id": 118,
     "word": "distance",
-    "meaning_bn": "...",
-    "definition_en": "English definition for distance",
-    "definition_bn": "...",
+    "meaning_bn": "দূরত্ব",
+    "definition_en": "The amount of space between two places.",
+    "definition_bn": "দুইটি স্থানের মধ্যবর্তী ব্যবধান।",
     "examples_en": [
-      "Sentence using 'distance'."
+      "What is the distance between Dhaka and Chittagong?"
     ],
     "examples_bn": [
-      "'distance' এর উদাহরণ বাক্য।"
+      "ঢাকা ও চট্টগ্রামের মধ্যে দূরত্ব কত?"
     ],
-    "synonyms": [],
+    "synonyms": ["gap", "space"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1855,16 +1855,16 @@
   {
     "id": 119,
     "word": "distribute",
-    "meaning_bn": "...",
-    "definition_en": "English definition for distribute",
-    "definition_bn": "...",
+    "meaning_bn": "বিতরণ করা",
+    "definition_en": "To give shares of something; to deal out.",
+    "definition_bn": "কোনো কিছুর অংশ ভাগ করে দেওয়া বা বিলিয়ে দেওয়া।",
     "examples_en": [
-      "Sentence using 'distribute'."
+      "The charity will distribute food to the poor."
     ],
     "examples_bn": [
-      "'distribute' এর উদাহরণ বাক্য।"
+      "দাতব্য সংস্থাটি গরীবদের মাঝে খাবার বিতরণ করবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["divide", "share"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -1872,16 +1872,16 @@
   {
     "id": 120,
     "word": "distribution",
-    "meaning_bn": "...",
-    "definition_en": "English definition for distribution",
-    "definition_bn": "...",
+    "meaning_bn": "বন্টন / বিতরণ",
+    "definition_en": "The action of sharing something out among a number of recipients.",
+    "definition_bn": "অনেক প্রাপকের মধ্যে কোনো কিছু ভাগ করে দেওয়ার কাজ।",
     "examples_en": [
-      "Sentence using 'distribution'."
+      "The distribution of aid took several days."
     ],
     "examples_bn": [
-      "'distribution' এর উদাহরণ বাক্য।"
+      "সাহায্য সামগ্রী বিতরণে কয়েক দিন সময় লেগেছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["allocation", "delivery"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1889,16 +1889,16 @@
   {
     "id": 121,
     "word": "district",
-    "meaning_bn": "...",
-    "definition_en": "English definition for district",
-    "definition_bn": "...",
+    "meaning_bn": "জেলা",
+    "definition_en": "An area of a country or city.",
+    "definition_bn": "একটি দেশ বা শহরের নির্দিষ্ট এলাকা।",
     "examples_en": [
-      "Sentence using 'district'."
+      "He lives in the business district of the city."
     ],
     "examples_bn": [
-      "'district' এর উদাহরণ বাক্য।"
+      "তিনি শহরের ব্যবসায়িক এলাকায় থাকেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["region", "area"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1906,16 +1906,16 @@
   {
     "id": 123,
     "word": "division",
-    "meaning_bn": "...",
-    "definition_en": "English definition for division",
-    "definition_bn": "...",
+    "meaning_bn": "বিভাগ",
+    "definition_en": "The action of separating something into parts.",
+    "definition_bn": "কোনো কিছুকে অংশে অংশে ভাগ করার কাজ।",
     "examples_en": [
-      "Sentence using 'division'."
+      "The division of labor is essential for efficiency."
     ],
     "examples_bn": [
-      "'division' এর উদাহরণ বাক্য।"
+      "দক্ষতার জন্য শ্রম বিভাগ অপরিহার্য।"
     ],
-    "synonyms": [],
+    "synonyms": ["section", "split"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1923,33 +1923,33 @@
   {
     "id": 124,
     "word": "divorced",
-    "meaning_bn": "...",
-    "definition_en": "English definition for divorced",
-    "definition_bn": "...",
+    "meaning_bn": "তালাকপ্রাপ্ত / বিবাহবিচ্ছিন্ন",
+    "definition_en": "No longer married because the marriage has been legally ended.",
+    "definition_bn": "বিবাহ আইনগতভাবে শেষ হওয়ার কারণে আর বিবাহিত নয় এমন।",
     "examples_en": [
-      "Sentence using 'divorced'."
+      "My parents are divorced but remain good friends."
     ],
     "examples_bn": [
-      "'divorced' এর উদাহরণ বাক্য।"
+      "আমার বাবা-মায়ের বিবাহবিচ্ছেদ হয়েছে কিন্তু তারা ভালো বন্ধু হিসেবে আছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["separated"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
   },
   {
     "id": 125,
-    "word": "do1",
-    "meaning_bn": "...",
-    "definition_en": "English definition for do1",
-    "definition_bn": "...",
+    "word": "do",
+    "meaning_bn": "করা",
+    "definition_en": "To perform an action or activity.",
+    "definition_bn": "কোনো কাজ বা কার্যকলাপ সম্পাদন করা।",
     "examples_en": [
-      "Sentence using 'do1'."
+      "What are you going to do this afternoon?"
     ],
     "examples_bn": [
-      "'do1' এর উদাহরণ বাক্য।"
+      "আজ বিকেলে তুমি কী করতে যাচ্ছ?"
     ],
-    "synonyms": [],
+    "synonyms": ["perform", "act"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "v., auxiliary v."
@@ -1957,16 +1957,16 @@
   {
     "id": 126,
     "word": "doctor",
-    "meaning_bn": "...",
-    "definition_en": "English definition for doctor",
-    "definition_bn": "...",
+    "meaning_bn": "চিকিৎসক",
+    "definition_en": "A person who is qualified to treat people who are ill.",
+    "definition_bn": "অসুস্থ ব্যক্তিদের চিকিৎসা করার যোগ্যতাসম্পন্ন ব্যক্তি।",
     "examples_en": [
-      "Sentence using 'doctor'."
+      "You should see a doctor about that cough."
     ],
     "examples_bn": [
-      "'doctor' এর উদাহরণ বাক্য।"
+      "আপনার সেই কাশির জন্য একজন ডাক্তার দেখানো উচিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["physician", "medical practitioner"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1974,16 +1974,16 @@
   {
     "id": 128,
     "word": "documentary",
-    "meaning_bn": "...",
-    "definition_en": "English definition for documentary",
-    "definition_bn": "...",
+    "meaning_bn": "প্রামাণ্যচিত্র",
+    "definition_en": "A movie or TV program that provides a factual record or report.",
+    "definition_bn": "একটি চলচ্চিত্র বা টিভি প্রোগ্রাম যা বাস্তব ঘটনা বা প্রতিবেদন তুলে ধরে।",
     "examples_en": [
-      "Sentence using 'documentary'."
+      "I watched a documentary about wild animals last night."
     ],
     "examples_bn": [
-      "'documentary' এর উদাহরণ বাক্য।"
+      "গত রাতে আমি বন্য প্রাণীদের নিয়ে একটি প্রামাণ্যচিত্র দেখেছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["factual film"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -1991,16 +1991,16 @@
   {
     "id": 129,
     "word": "dog",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dog",
-    "definition_bn": "...",
+    "meaning_bn": "কুকুর",
+    "definition_en": "A common animal with four legs, often kept as a pet.",
+    "definition_bn": "চার পা বিশিষ্ট একটি সাধারণ প্রাণী যা প্রায়শই পোষা প্রাণী হিসেবে রাখা হয়।",
     "examples_en": [
-      "Sentence using 'dog'."
+      "The dog is barking at the stranger."
     ],
     "examples_bn": [
-      "'dog' এর উদাহরণ বাক্য।"
+      "কুকুরটি অপরিচিত লোকটিকে দেখে ঘেউ ঘেউ করছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["canine", "hound"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2008,16 +2008,16 @@
   {
     "id": 130,
     "word": "dollar",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dollar",
-    "definition_bn": "...",
+    "meaning_bn": "ডলার",
+    "definition_en": "The basic unit of money in the US, Canada, Australia, etc.",
+    "definition_bn": "মার্কিন যুক্তরাষ্ট্র, কানাডা, অস্ট্রেলিয়া ইত্যাদির মুদ্রার একক।",
     "examples_en": [
-      "Sentence using 'dollar'."
+      "The book costs ten dollars."
     ],
     "examples_bn": [
-      "'dollar' এর উদাহরণ বাক্য।"
+      "বইটির দাম দশ ডলার।"
     ],
-    "synonyms": [],
+    "synonyms": ["buck"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2025,16 +2025,16 @@
   {
     "id": 131,
     "word": "domestic",
-    "meaning_bn": "...",
-    "definition_en": "English definition for domestic",
-    "definition_bn": "...",
+    "meaning_bn": "গৃহপালিত / অভ্যন্তরীণ",
+    "definition_en": "Relating to the running of a home or to one's own country.",
+    "definition_bn": "গৃহ পরিচালনা বা নিজের দেশের সাথে সম্পর্কিত।",
     "examples_en": [
-      "Sentence using 'domestic'."
+      "Cows and goats are domestic animals."
     ],
     "examples_bn": [
-      "'domestic' এর উদাহরণ বাক্য।"
+      "গরু ও ছাগল গৃহপালিত প্রাণী।"
     ],
-    "synonyms": [],
+    "synonyms": ["household", "internal"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2042,16 +2042,16 @@
   {
     "id": 132,
     "word": "dominate",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dominate",
-    "definition_bn": "...",
+    "meaning_bn": "শাসন করা / প্রাধান্য বিস্তার করা",
+    "definition_en": "To have a commanding influence on; exercise control over.",
+    "definition_bn": "আদেশ প্রদানকারী প্রভাব থাকা বা নিয়ন্ত্রণ করা।",
     "examples_en": [
-      "Sentence using 'dominate'."
+      "One company continues to dominate the market."
     ],
     "examples_bn": [
-      "'dominate' এর উদাহরণ বাক্য।"
+      "একটি কোম্পানি বাজারে প্রাধান্য বিস্তার করে চলেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["control", "rule"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -2059,16 +2059,16 @@
   {
     "id": 133,
     "word": "donate",
-    "meaning_bn": "...",
-    "definition_en": "English definition for donate",
-    "definition_bn": "...",
+    "meaning_bn": "দান করা",
+    "definition_en": "To give money or goods for a good cause.",
+    "definition_bn": "ভালো কোনো উদ্দেশ্যে অর্থ বা পণ্য প্রদান করা।",
     "examples_en": [
-      "Sentence using 'donate'."
+      "Please donate generously to the flood victims."
     ],
     "examples_bn": [
-      "'donate' এর উদাহরণ বাক্য।"
+      "অনুগ্রহ করে বন্যাদুর্গতদের উদারভাবে দান করুন।"
     ],
-    "synonyms": [],
+    "synonyms": ["give", "contribute"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -2076,16 +2076,16 @@
   {
     "id": 134,
     "word": "door",
-    "meaning_bn": "...",
-    "definition_en": "English definition for door",
-    "definition_bn": "...",
+    "meaning_bn": "দরজা",
+    "definition_en": "A hinged or sliding barrier used to close an opening to a room or building.",
+    "definition_bn": "কক্ষ বা দালানের প্রবেশপথ বন্ধ করার জন্য ব্যবহৃত কব্জা বা স্লাইডিং বাধা।",
     "examples_en": [
-      "Sentence using 'door'."
+      "Please close the door when you leave."
     ],
     "examples_bn": [
-      "'door' এর উদাহরণ বাক্য।"
+      "আপনি যাওয়ার সময় দয়া করে দরজাটি বন্ধ করবেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["entrance", "gate"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2093,16 +2093,16 @@
   {
     "id": 136,
     "word": "doubt",
-    "meaning_bn": "...",
-    "definition_en": "English definition for doubt",
-    "definition_bn": "...",
+    "meaning_bn": "সন্দেহ",
+    "definition_en": "A feeling of uncertainty or lack of conviction.",
+    "definition_bn": "অনিশ্চয়তা বা বিশ্বাসের অভাবের অনুভূতি।",
     "examples_en": [
-      "Sentence using 'doubt'."
+      "There is no doubt that he is the best player."
     ],
     "examples_bn": [
-      "'doubt' এর উদাহরণ বাক্য।"
+      "এতে কোনো সন্দেহ নেই যে তিনি সেরা খেলোয়াড়।"
     ],
-    "synonyms": [],
+    "synonyms": ["uncertainty", "hesitation"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n., v."
@@ -2110,16 +2110,16 @@
   {
     "id": 137,
     "word": "down",
-    "meaning_bn": "...",
-    "definition_en": "English definition for down",
-    "definition_bn": "...",
+    "meaning_bn": "নিচে",
+    "definition_en": "Towards or in a lower place or position.",
+    "definition_bn": "নিচের কোনো স্থান বা অবস্থানের দিকে।",
     "examples_en": [
-      "Sentence using 'down'."
+      "Sit down and relax."
     ],
     "examples_bn": [
-      "'down' এর উদাহরণ বাক্য।"
+      "নিচে বসুন এবং বিশ্রাম নিন।"
     ],
-    "synonyms": [],
+    "synonyms": ["below", "downwards"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "adv., prep."
@@ -2127,16 +2127,16 @@
   {
     "id": 138,
     "word": "download",
-    "meaning_bn": "...",
-    "definition_en": "English definition for download",
-    "definition_bn": "...",
+    "meaning_bn": "ডাউনলোড করা",
+    "definition_en": "To copy data from one computer system to another, typically over the internet.",
+    "definition_bn": "ইন্টারনেটের মাধ্যমে এক কম্পিউটার সিস্টেম থেকে অন্য সিস্টেমে তথ্য কপি করা।",
     "examples_en": [
-      "Sentence using 'download'."
+      "You can download the file for free."
     ],
     "examples_bn": [
-      "'download' এর উদাহরণ বাক্য।"
+      "আপনি ফাইলটি বিনামূল্যে ডাউনলোড করতে পারেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["transfer"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "v., n."
@@ -2144,16 +2144,16 @@
   {
     "id": 140,
     "word": "downtown",
-    "meaning_bn": "...",
-    "definition_en": "English definition for downtown",
-    "definition_bn": "...",
+    "meaning_bn": "শহরের মূল কেন্দ্র",
+    "definition_en": "In or towards the central part of a city.",
+    "definition_bn": "শহরের কেন্দ্রীয় অংশে বা সেই দিকে।",
     "examples_en": [
-      "Sentence using 'downtown'."
+      "I am going downtown to do some shopping."
     ],
     "examples_bn": [
-      "'downtown' এর উদাহরণ বাক্য।"
+      "আমি কিছু কেনাকাটা করতে শহরের মূল কেন্দ্রে যাচ্ছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["city center"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "adv., n., adj."
@@ -2161,16 +2161,16 @@
   {
     "id": 141,
     "word": "downward",
-    "meaning_bn": "...",
-    "definition_en": "English definition for downward",
-    "definition_bn": "...",
+    "meaning_bn": "নিচের দিকে",
+    "definition_en": "Towards a lower place, point, or level.",
+    "definition_bn": "নিচের কোনো স্থান, বিন্দু বা স্তরের দিকে।",
     "examples_en": [
-      "Sentence using 'downward'."
+      "The path slopes downward to the river."
     ],
     "examples_bn": [
-      "'downward' এর উদাহরণ বাক্য।"
+      "পথটি নদীর দিকে নিচের দিকে ঢালু হয়ে গেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["descending"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "adj., adv."
@@ -2178,16 +2178,16 @@
   {
     "id": 142,
     "word": "dozen",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dozen",
-    "definition_bn": "...",
+    "meaning_bn": "ডজন / বারোটি",
+    "definition_en": "A group or set of twelve.",
+    "definition_bn": "বারোটির একটি দল বা সেট।",
     "examples_en": [
-      "Sentence using 'dozen'."
+      "I bought a dozen eggs from the market."
     ],
     "examples_bn": [
-      "'dozen' এর উদাহরণ বাক্য।"
+      "আমি বাজার থেকে এক ডজন ডিম কিনেছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["twelve"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "n., det."
@@ -2195,16 +2195,16 @@
   {
     "id": 143,
     "word": "draft",
-    "meaning_bn": "...",
-    "definition_en": "English definition for draft",
-    "definition_bn": "...",
+    "meaning_bn": "খসড়া",
+    "definition_en": "A preliminary version of a piece of writing.",
+    "definition_bn": "কোনো লেখার একটি প্রাথমিক সংস্করণ।",
     "examples_en": [
-      "Sentence using 'draft'."
+      "I need to write a first draft of my essay."
     ],
     "examples_bn": [
-      "'draft' এর উদাহরণ বাক্য।"
+      "আমার প্রবন্ধের একটি প্রথম খসড়া লিখতে হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["outline", "version"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "n., v."
@@ -2212,16 +2212,16 @@
   {
     "id": 144,
     "word": "drag",
-    "meaning_bn": "...",
-    "definition_en": "English definition for drag",
-    "definition_bn": "...",
+    "meaning_bn": "টেনে নেওয়া",
+    "definition_en": "To pull someone or something along forcefully.",
+    "definition_bn": "কাউকে বা কোনো কিছুকে জোর করে টেনে আনা।",
     "examples_en": [
-      "Sentence using 'drag'."
+      "The child was dragging a heavy toy."
     ],
     "examples_bn": [
-      "'drag' এর উদাহরণ বাক্য।"
+      "শিশুটিকে একটি ভারী খেলনা টেনে নিয়ে যাচ্ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["pull", "haul"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -2229,16 +2229,16 @@
   {
     "id": 145,
     "word": "drama",
-    "meaning_bn": "...",
-    "definition_en": "English definition for drama",
-    "definition_bn": "...",
+    "meaning_bn": "নাটক",
+    "definition_en": "A play for theater, radio, or television.",
+    "definition_bn": "থিয়েটার, রেডিও বা টেলিভিশনের জন্য একটি নাটক।",
     "examples_en": [
-      "Sentence using 'drama'."
+      "She loves watching historical dramas."
     ],
     "examples_bn": [
-      "'drama' এর উদাহরণ বাক্য।"
+      "তিনি ঐতিহাসিক নাটক দেখতে পছন্দ করেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["play", "show"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2246,16 +2246,16 @@
   {
     "id": 146,
     "word": "dramatic",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dramatic",
-    "definition_bn": "...",
+    "meaning_bn": "নাটকীয় / আকস্মিক",
+    "definition_en": "Sudden and striking; or relating to drama.",
+    "definition_bn": "আকস্মিক এবং বিস্ময়কর; অথবা নাটকের সাথে সম্পর্কিত।",
     "examples_en": [
-      "Sentence using 'dramatic'."
+      "There has been a dramatic increase in prices."
     ],
     "examples_bn": [
-      "'dramatic' এর উদাহরণ বাক্য।"
+      "মূল্যবৃদ্ধিতে এক নাটকীয় পরিবর্তন ঘটেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["striking", "theatrical"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2263,16 +2263,16 @@
   {
     "id": 147,
     "word": "draw",
-    "meaning_bn": "...",
-    "definition_en": "English definition for draw",
-    "definition_bn": "...",
+    "meaning_bn": "আঁকা",
+    "definition_en": "To produce a picture or diagram by making lines and marks on paper.",
+    "definition_bn": "কাগজে রেখা ও চিহ্ন তৈরির মাধ্যমে ছবি বা চিত্র তৈরি করা।",
     "examples_en": [
-      "Sentence using 'draw'."
+      "She can draw very well."
     ],
     "examples_bn": [
-      "'draw' এর উদাহরণ বাক্য।"
+      "সে খুব ভালো আঁকতে পারে।"
     ],
-    "synonyms": [],
+    "synonyms": ["sketch", "depict"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -2280,16 +2280,16 @@
   {
     "id": 148,
     "word": "drawing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for drawing",
-    "definition_bn": "...",
+    "meaning_bn": "অঙ্কন / চিত্র",
+    "definition_en": "A picture or diagram made with a pencil, pen, or crayon.",
+    "definition_bn": "পেন্সিল, কলম বা ক্রেয়ন দিয়ে তৈরি একটি ছবি বা চিত্র।",
     "examples_en": [
-      "Sentence using 'drawing'."
+      "The child showed me her drawing of a flower."
     ],
     "examples_bn": [
-      "'drawing' এর উদাহরণ বাক্য।"
+      "শিশুটি আমাকে তার আঁকা একটি ফুলের ছবি দেখাল।"
     ],
-    "synonyms": [],
+    "synonyms": ["picture", "sketch"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2297,16 +2297,16 @@
   {
     "id": 149,
     "word": "dream",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dream",
-    "definition_bn": "...",
+    "meaning_bn": "স্বপ্ন",
+    "definition_en": "A series of thoughts or images occurring in a person's mind during sleep.",
+    "definition_bn": "ঘুমের সময় মানুষের মনে ঘটা চিন্তা বা ছবির ধারাবাহিকতা।",
     "examples_en": [
-      "Sentence using 'dream'."
+      "I had a strange dream last night."
     ],
     "examples_bn": [
-      "'dream' এর উদাহরণ বাক্য।"
+      "গত রাতে আমি একটি অদ্ভুত স্বপ্ন দেখেছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["vision", "fantasy"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n., v."
@@ -2314,16 +2314,16 @@
   {
     "id": 150,
     "word": "dress",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dress",
-    "definition_bn": "...",
+    "meaning_bn": "পোশাক / জামা",
+    "definition_en": "A piece of clothing worn by women or girls; or to put on clothes.",
+    "definition_bn": "মহিলা বা মেয়েদের পরিধানের পোশাক; অথবা জামাকাপড় পরা।",
     "examples_en": [
-      "Sentence using 'dress'."
+      "She wore a beautiful blue dress to the party."
     ],
     "examples_bn": [
-      "'dress' এর উদাহরণ বাক্য।"
+      "তিনি পার্টিতে একটি সুন্দর নীল রঙের পোশাক পরেছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["gown", "clothe"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n., v."
@@ -2331,16 +2331,16 @@
   {
     "id": 151,
     "word": "dressed",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dressed",
-    "definition_bn": "...",
+    "meaning_bn": "পোশাক পরিহিত",
+    "definition_en": "Wearing clothes of a particular type.",
+    "definition_bn": "বিশেষ ধরনের পোশাক পরা অবস্থায় থাকা।",
     "examples_en": [
-      "Sentence using 'dressed'."
+      "He was dressed in a black suit."
     ],
     "examples_bn": [
-      "'dressed' এর উদাহরণ বাক্য।"
+      "তিনি একটি কালো স্যুট পরেছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["clothed", "attired"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2348,16 +2348,18 @@
   {
     "id": 152,
     "word": "drink",
-    "meaning_bn": "...",
-    "definition_en": "English definition for drink",
-    "definition_bn": "...",
+    "meaning_bn": "পানীয় / পান করা",
+    "definition_en": "A liquid for swallowing; to take liquid into the mouth.",
+    "definition_bn": "গেলার জন্য কোনো তরল; মুখ দিয়ে তরল গ্রহণ করা।",
     "examples_en": [
-      "Sentence using 'drink'."
+      "Can I have a drink of water?",
+      "I drink coffee every morning."
     ],
     "examples_bn": [
-      "'drink' এর উদাহরণ বাক্য।"
+      "আমি কি এক গ্লাস পানি পেতে পারি?",
+      "আমি প্রতিদিন সকালে কফি পান করি।"
     ],
-    "synonyms": [],
+    "synonyms": ["beverage", "gulp", "sip"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n., v."
@@ -2365,16 +2367,16 @@
   {
     "id": 154,
     "word": "driver",
-    "meaning_bn": "...",
-    "definition_en": "English definition for driver",
-    "definition_bn": "...",
+    "meaning_bn": "চালক",
+    "definition_en": "A person who drives a vehicle.",
+    "definition_bn": "যিনি কোনো যানবাহন চালান।",
     "examples_en": [
-      "Sentence using 'driver'."
+      "The bus driver was very polite."
     ],
     "examples_bn": [
-      "'driver' এর উদাহরণ বাক্য।"
+      "বাস চালক খুব বিনয়ী ছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["motorist", "chauffeur"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2382,16 +2384,16 @@
   {
     "id": 155,
     "word": "driving",
-    "meaning_bn": "...",
-    "definition_en": "English definition for driving",
-    "definition_bn": "...",
+    "meaning_bn": "চালনা / ড্রাইভিং",
+    "definition_en": "The act of controlling and operating a motor vehicle.",
+    "definition_bn": "একটি মোটর চালিত যানবাহন নিয়ন্ত্রণ এবং পরিচালনা করার কাজ।",
     "examples_en": [
-      "Sentence using 'driving'."
+      "Driving in the rain is difficult."
     ],
     "examples_bn": [
-      "'driving' এর উদাহরণ বাক্য।"
+      "বৃষ্টিতে গাড়ি চালানো কঠিন।"
     ],
-    "synonyms": [],
+    "synonyms": ["steering", "motoring"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2399,16 +2401,16 @@
   {
     "id": 157,
     "word": "drug",
-    "meaning_bn": "...",
-    "definition_en": "English definition for drug",
-    "definition_bn": "...",
+    "meaning_bn": "ওষুধ / মাদক",
+    "definition_en": "A medicine or a substance used for its effects on the body.",
+    "definition_bn": "ওষুধ বা এমন একটি পদার্থ যা শরীরের ওপর প্রভাব ফেলতে ব্যবহৃত হয়।",
     "examples_en": [
-      "Sentence using 'drug'."
+      "The doctor prescribed a new drug for the flu."
     ],
     "examples_bn": [
-      "'drug' এর উদাহরণ বাক্য।"
+      "ডাক্তার ইনফ্লুয়েঞ্জার জন্য একটি নতুন ওষুধ লিখেছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["medicine", "medication", "narcotic"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2416,16 +2418,16 @@
   {
     "id": 158,
     "word": "drum",
-    "meaning_bn": "...",
-    "definition_en": "English definition for drum",
-    "definition_bn": "...",
+    "meaning_bn": "ঢোল / ড্রাম",
+    "definition_en": "A musical instrument played by hitting it with sticks or hands.",
+    "definition_bn": "একটি বাদ্যযন্ত্র যা কাঠি বা হাত দিয়ে আঘাত করে বাজানো হয়।",
     "examples_en": [
-      "Sentence using 'drum'."
+      "He plays the drums in a band."
     ],
     "examples_bn": [
-      "'drum' এর উদাহরণ বাক্য।"
+      "সে একটি ব্যান্ডের ড্রাম বাজায়।"
     ],
-    "synonyms": [],
+    "synonyms": ["percussion", "tambour"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2433,16 +2435,16 @@
   {
     "id": 159,
     "word": "drunk",
-    "meaning_bn": "...",
-    "definition_en": "English definition for drunk",
-    "definition_bn": "...",
+    "meaning_bn": "মাতাল",
+    "definition_en": "Affected by alcohol to the extent of losing control.",
+    "definition_bn": "নিয়ন্ত্রণ হারানোর পর্যায় পর্যন্ত অ্যালকোহল দ্বারা প্রভাবিত হওয়া।",
     "examples_en": [
-      "Sentence using 'drunk'."
+      "He was too drunk to drive home."
     ],
     "examples_bn": [
-      "'drunk' এর উদাহরণ বাক্য।"
+      "তিনি বাড়ি চালানোর মতো যথেষ্ট মাতাল ছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["intoxicated", "tipsy"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2450,16 +2452,16 @@
   {
     "id": 160,
     "word": "dry",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dry",
-    "definition_bn": "...",
+    "meaning_bn": "শুকনো",
+    "definition_en": "Free from moisture or liquid.",
+    "definition_bn": "আর্দ্রতা বা তরল মুক্ত।",
     "examples_en": [
-      "Sentence using 'dry'."
+      "The clothes are finally dry."
     ],
     "examples_bn": [
-      "'dry' এর উদাহরণ বাক্য।"
+      "জামাকাপড় শেষ পর্যন্ত শুকিয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["arid", "parched", "dehydrated"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "adj., v."
@@ -2467,16 +2469,16 @@
   {
     "id": 161,
     "word": "due",
-    "meaning_bn": "...",
-    "definition_en": "English definition for due",
-    "definition_bn": "...",
+    "meaning_bn": "বকেয়া / প্রাপ্য / প্রত্যাশিত",
+    "definition_en": "Expected at or planned for at a certain time.",
+    "definition_bn": "একটি নির্দিষ্ট সময়ে প্রত্যাশিত বা পরিকল্পনা করা।",
     "examples_en": [
-      "Sentence using 'due'."
+      "The baby is due in October."
     ],
     "examples_bn": [
-      "'due' এর উদাহরণ বাক্য।"
+      "অক্টোবরে বাচ্চা হওয়ার কথা রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["expected", "scheduled", "owed"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2484,16 +2486,16 @@
   {
     "id": 162,
     "word": "during",
-    "meaning_bn": "...",
-    "definition_en": "English definition for during",
-    "definition_bn": "...",
+    "meaning_bn": "সময়ে / চলাকালীন",
+    "definition_en": "Throughout the course or duration of a period of time.",
+    "definition_bn": "একটি নির্দিষ্ট সময়ের পুরোটা জুড়ে।",
     "examples_en": [
-      "Sentence using 'during'."
+      "It rained heavily during the night."
     ],
     "examples_bn": [
-      "'during' এর উদাহরণ বাক্য।"
+      "রাতে প্রচুর বৃষ্টি হয়েছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["throughout", "amidst"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "prep."
@@ -2501,16 +2503,16 @@
   {
     "id": 163,
     "word": "dust",
-    "meaning_bn": "...",
-    "definition_en": "English definition for dust",
-    "definition_bn": "...",
+    "meaning_bn": "ধুলো",
+    "definition_en": "Fine, dry powder consisting of tiny particles of earth or waste.",
+    "definition_bn": "মাটি বা বর্জ্যের ক্ষুদ্র কণা দিয়ে গঠিত সূক্ষ্ম, শুকনো গুঁড়ো।",
     "examples_en": [
-      "Sentence using 'dust'."
+      "The table was covered in dust."
     ],
     "examples_bn": [
-      "'dust' এর উদাহরণ বাক্য।"
+      "টেবিলটি ধুলোয় ঢাকা ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["grime", "powder", "dirt"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2518,16 +2520,16 @@
   {
     "id": 164,
     "word": "duty",
-    "meaning_bn": "...",
-    "definition_en": "English definition for duty",
-    "definition_bn": "...",
+    "meaning_bn": "দায়িত্ব / কর্তব্য",
+    "definition_en": "A moral or legal obligation; a responsibility.",
+    "definition_bn": "একটি নৈতিক বা আইনি বাধ্যবাধকতা; একটি দায়িত্ব।",
     "examples_en": [
-      "Sentence using 'duty'."
+      "It is my duty to report the crime."
     ],
     "examples_bn": [
-      "'duty' এর উদাহরণ বাক্য।"
+      "অপরাধের খবর দেওয়া আমার কর্তব্য।"
     ],
-    "synonyms": [],
+    "synonyms": ["responsibility", "obligation", "task"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2535,16 +2537,16 @@
   {
     "id": 165,
     "word": "DVD",
-    "meaning_bn": "...",
-    "definition_en": "English definition for DVD",
-    "definition_bn": "...",
+    "meaning_bn": "ডিভিডি",
+    "definition_en": "A type of compact disc able to store large amounts of data.",
+    "definition_bn": "এক প্রকার কমপ্যাক্ট ডিস্ক যা প্রচুর পরিমাণে ডেটা সংরক্ষণ করতে সক্ষম।",
     "examples_en": [
-      "Sentence using 'DVD'."
+      "I bought a DVD of my favorite movie."
     ],
     "examples_bn": [
-      "'DVD' এর উদাহরণ বাক্য।"
+      "আমি আমার প্রিয় সিনেমার একটি ডিভিডি কিনেছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["digital video disc"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2552,16 +2554,16 @@
   {
     "id": 166,
     "word": "each",
-    "meaning_bn": "...",
-    "definition_en": "English definition for each",
-    "definition_bn": "...",
+    "meaning_bn": "প্রত্যেক / প্রতিটি",
+    "definition_en": "Every one of two or more people or things, regarded and identified separately.",
+    "definition_bn": "দুই বা ততোধিক মানুষ বা জিনিসের মধ্যে প্রত্যেকে, যারা আলাদাভাবে চিহ্নিত।",
     "examples_en": [
-      "Sentence using 'each'."
+      "Each student received a certificate."
     ],
     "examples_bn": [
-      "'each' এর উদাহরণ বাক্য।"
+      "প্রত্যেক শিক্ষার্থী একটি করে সার্টিফিকেট পেয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["every", "individual"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "det./pron./adv."
@@ -2569,14 +2571,14 @@
   {
     "id": 167,
     "word": "ear",
-    "meaning_bn": "...",
-    "definition_en": "English definition for ear",
-    "definition_bn": "...",
+    "meaning_bn": "কান",
+    "definition_en": "The organ of hearing and balance in humans and other vertebrates.",
+    "definition_bn": "মানুষ এবং অন্যান্য মেরুদণ্ডী প্রাণীদের শ্রবণ এবং ভারসাম্যের অঙ্গ।",
     "examples_en": [
-      "Sentence using 'ear'."
+      "She whispered something in his ear."
     ],
     "examples_bn": [
-      "'ear' এর উদাহরণ বাক্য।"
+      "সে তার কানে ফিসফিস করে কিছু বলল।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -2586,16 +2588,16 @@
   {
     "id": 168,
     "word": "early",
-    "meaning_bn": "...",
-    "definition_en": "English definition for early",
-    "definition_bn": "...",
+    "meaning_bn": "তাড়াতাড়ি / আগে",
+    "definition_en": "Happening or done before the usual or expected time.",
+    "definition_bn": "স্বাভাবিক বা প্রত্যাশিত সময়ের আগে ঘটা বা করা।",
     "examples_en": [
-      "Sentence using 'early'."
+      "I woke up early this morning."
     ],
     "examples_bn": [
-      "'early' এর উদাহরণ বাক্য।"
+      "আমি আজ সকালে খুব ভোরে ঘুম থেকে উঠেছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["premature", "beforehand"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "adj., adv."
@@ -2603,16 +2605,16 @@
   {
     "id": 169,
     "word": "earn",
-    "meaning_bn": "...",
-    "definition_en": "English definition for earn",
-    "definition_bn": "...",
+    "meaning_bn": "উপার্জন করা",
+    "definition_en": "To obtain money in return for labor or services.",
+    "definition_bn": "শ্রম বা সেবার বিনিময়ে অর্থ প্রাপ্তি।",
     "examples_en": [
-      "Sentence using 'earn'."
+      "She earns a good salary."
     ],
     "examples_bn": [
-      "'earn' এর উদাহরণ বাক্য।"
+      "তিনি ভালো বেতন উপার্জন করেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["gain", "make", "acquire"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -2620,16 +2622,16 @@
   {
     "id": 170,
     "word": "earth",
-    "meaning_bn": "...",
-    "definition_en": "English definition for earth",
-    "definition_bn": "...",
+    "meaning_bn": "পৃথিবী / মাটি",
+    "definition_en": "The planet on which we live; the soil.",
+    "definition_bn": "আমরা যে গ্রহে বাস করি; মাটি।",
     "examples_en": [
-      "Sentence using 'earth'."
+      "The Earth revolves around the sun."
     ],
     "examples_bn": [
-      "'earth' এর উদাহরণ বাক্য।"
+      "পৃথিবী সূর্যের চারদিকে ঘোরে।"
     ],
-    "synonyms": [],
+    "synonyms": ["world", "globe", "soil"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2637,16 +2639,16 @@
   {
     "id": 171,
     "word": "earthquake",
-    "meaning_bn": "...",
-    "definition_en": "English definition for earthquake",
-    "definition_bn": "...",
+    "meaning_bn": "ভূমিকম্প",
+    "definition_en": "A sudden and violent shaking of the ground.",
+    "definition_bn": "মাটির আকস্মিক এবং প্রচণ্ড কম্পন।",
     "examples_en": [
-      "Sentence using 'earthquake'."
+      "The earthquake caused massive destruction."
     ],
     "examples_bn": [
-      "'earthquake' এর উদাহরণ বাক্য।"
+      "ভূমিকম্পে ব্যাপক ধ্বংসলীলা হয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["tremor", "quake"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2654,16 +2656,16 @@
   {
     "id": 172,
     "word": "easily",
-    "meaning_bn": "...",
-    "definition_en": "English definition for easily",
-    "definition_bn": "...",
+    "meaning_bn": "সহজেই",
+    "definition_en": "Without difficulty or effort.",
+    "definition_bn": "অসুবিধা বা প্রচেষ্টা ছাড়াই।",
     "examples_en": [
-      "Sentence using 'easily'."
+      "I can easily finish this task."
     ],
     "examples_bn": [
-      "'easily' এর উদাহরণ বাক্য।"
+      "আমি সহজেই এই কাজটি শেষ করতে পারি।"
     ],
-    "synonyms": [],
+    "synonyms": ["effortlessly", "simply"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "adv."
@@ -2671,16 +2673,16 @@
   {
     "id": 173,
     "word": "east",
-    "meaning_bn": "...",
-    "definition_en": "English definition for east",
-    "definition_bn": "...",
+    "meaning_bn": "পূর্ব / পূর্ব দিক",
+    "definition_en": "The direction toward the point of the horizon where the sun rises.",
+    "definition_bn": "দিগন্তের সেই বিন্দুর দিকের পথ যেখানে সূর্য উদিত হয়।",
     "examples_en": [
-      "Sentence using 'east'."
+      "The sun rises in the east."
     ],
     "examples_bn": [
-      "'east' এর উদাহরণ বাক্য।"
+      "সূর্য পূর্ব দিকে ওঠে।"
     ],
-    "synonyms": [],
+    "synonyms": ["orient"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n., adj., adv."
@@ -2688,16 +2690,16 @@
   {
     "id": 174,
     "word": "eastern",
-    "meaning_bn": "...",
-    "definition_en": "English definition for eastern",
-    "definition_bn": "...",
+    "meaning_bn": "পূর্বাঞ্চলীয়",
+    "definition_en": "Situated in, or facing the east.",
+    "definition_bn": "পূর্বে অবস্থিত, অথবা পূর্বমুখী।",
     "examples_en": [
-      "Sentence using 'eastern'."
+      "They live in the eastern part of the city."
     ],
     "examples_bn": [
-      "'eastern' এর উদাহরণ বাক্য।"
+      "তারা শহরের পূর্ব অংশে থাকে।"
     ],
-    "synonyms": [],
+    "synonyms": ["oriental"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2705,16 +2707,16 @@
   {
     "id": 175,
     "word": "easy",
-    "meaning_bn": "...",
-    "definition_en": "English definition for easy",
-    "definition_bn": "...",
+    "meaning_bn": "সহজ",
+    "definition_en": "Achieved without great effort; simple.",
+    "definition_bn": "অধিক প্রচেষ্টা ছাড়াই অর্জিত; সরল।",
     "examples_en": [
-      "Sentence using 'easy'."
+      "The exam was very easy."
     ],
     "examples_bn": [
-      "'easy' এর উদাহরণ বাক্য।"
+      "পরীক্ষাটি খুব সহজ ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["simple", "effortless", "straightforward"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2726,12 +2728,12 @@
     "definition_en": "Put food into the mouth and chew and swallow it.",
     "definition_bn": "খাবার গেলা বা গ্রহণ করা।",
     "examples_en": [
-      "Sentence using 'eat'."
+      "I like to eat apples."
     ],
     "examples_bn": [
-      "'eat' এর উদাহরণ বাক্য।"
+      "আমি আপেল খেতে পছন্দ করি।"
     ],
-    "synonyms": [],
+    "synonyms": ["consume", "dine", "devour"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -2739,16 +2741,16 @@
   {
     "id": 177,
     "word": "economic",
-    "meaning_bn": "...",
-    "definition_en": "English definition for economic",
-    "definition_bn": "...",
+    "meaning_bn": "অর্থনৈতিক",
+    "definition_en": "Relating to economics or the economy.",
+    "definition_bn": "অর্থনীতি বা অর্থনীতি সম্পর্কিত।",
     "examples_en": [
-      "Sentence using 'economic'."
+      "The country is facing an economic crisis."
     ],
     "examples_bn": [
-      "'economic' এর উদাহরণ বাক্য।"
+      "দেশটি অর্থনৈতিক সংকটের মুখে পড়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["financial", "monetary", "fiscal"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2756,16 +2758,16 @@
   {
     "id": 178,
     "word": "economy",
-    "meaning_bn": "...",
-    "definition_en": "English definition for economy",
-    "definition_bn": "...",
+    "meaning_bn": "অর্থনীতি",
+    "definition_en": "The wealth and resources of a country or region.",
+    "definition_bn": "একটি দেশ বা অঞ্চলের সম্পদ এবং উৎসসমূহ।",
     "examples_en": [
-      "Sentence using 'economy'."
+      "The global economy is recovering."
     ],
     "examples_bn": [
-      "'economy' এর উদাহরণ বাক্য।"
+      "বিশ্ব অর্থনীতি ঘুরে দাঁড়াচ্ছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["wealth", "financial system"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2773,16 +2775,16 @@
   {
     "id": 179,
     "word": "edge",
-    "meaning_bn": "...",
-    "definition_en": "English definition for edge",
-    "definition_bn": "...",
+    "meaning_bn": "প্রান্ত / ধার",
+    "definition_en": "The outside limit of an object, area, or surface.",
+    "definition_bn": "একটি বস্তু, এলাকা বা পৃষ্ঠের বাইরের সীমা।",
     "examples_en": [
-      "Sentence using 'edge'."
+      "Don't stand near the edge of the cliff."
     ],
     "examples_bn": [
-      "'edge' এর উদাহরণ বাক্য।"
+      "পাহাড়ের প্রান্তের কাছে দাঁড়াবেন না।"
     ],
-    "synonyms": [],
+    "synonyms": ["border", "boundary", "rim"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2790,16 +2792,16 @@
   {
     "id": 180,
     "word": "edit",
-    "meaning_bn": "...",
-    "definition_en": "English definition for edit",
-    "definition_bn": "...",
+    "meaning_bn": "সম্পাদনা করা",
+    "definition_en": "Prepare written or recorded material for publication.",
+    "definition_bn": "প্রকাশের জন্য লিখিত বা রেকর্ড করা বিষয়বস্তু প্রস্তুত করা।",
     "examples_en": [
-      "Sentence using 'edit'."
+      "I need to edit my essay before submitting it."
     ],
     "examples_bn": [
-      "'edit' এর উদাহরণ বাক্য।"
+      "জমা দেওয়ার আগে আমার প্রবন্ধটি সম্পাদনা করতে হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["revise", "correct", "modify"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -2807,16 +2809,16 @@
   {
     "id": 181,
     "word": "edition",
-    "meaning_bn": "...",
-    "definition_en": "English definition for edition",
-    "definition_bn": "...",
+    "meaning_bn": "সংস্করণ",
+    "definition_en": "A particular form or version of a published text.",
+    "definition_bn": "একটি প্রকাশিত পাঠ্যের একটি নির্দিষ্ট রূপ বা সংস্করণ।",
     "examples_en": [
-      "Sentence using 'edition'."
+      "The second edition of the book is out now."
     ],
     "examples_bn": [
-      "'edition' এর উদাহরণ বাক্য।"
+      "বইটির দ্বিতীয় সংস্করণ এখন বাজারে এসেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["version", "issue", "volume"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2824,16 +2826,16 @@
   {
     "id": 182,
     "word": "editor",
-    "meaning_bn": "...",
-    "definition_en": "English definition for editor",
-    "definition_bn": "...",
+    "meaning_bn": "সম্পাদক",
+    "definition_en": "A person who is in charge of and determines the final content of a newspaper or book.",
+    "definition_bn": "যিনি সংবাদপত্রের বা বইয়ের চূড়ান্ত বিষয়বস্তুর দায়িত্বে থাকেন এবং তা নির্ধারণ করেন।",
     "examples_en": [
-      "Sentence using 'editor'."
+      "He works as an editor for a magazine."
     ],
     "examples_bn": [
-      "'editor' এর উদাহরণ বাক্য।"
+      "তিনি একটি ম্যাগাজিনের সম্পাদক হিসেবে কাজ করেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["reviser", "journalist"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2841,16 +2843,16 @@
   {
     "id": 183,
     "word": "educate",
-    "meaning_bn": "...",
-    "definition_en": "English definition for educate",
-    "definition_bn": "...",
+    "meaning_bn": "শিক্ষা দেওয়া",
+    "definition_en": "Give intellectual, moral, and social instruction to someone.",
+    "definition_bn": "কাউকে বৌদ্ধিক, নৈতিক এবং সামাজিক শিক্ষা দেওয়া।",
     "examples_en": [
-      "Sentence using 'educate'."
+      "We need to educate children about the environment."
     ],
     "examples_bn": [
-      "'educate' এর উদাহরণ বাক্য।"
+      "পরিবেশ সম্পর্কে আমাদের শিশুদের শিক্ষিত করতে হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["teach", "train", "instruct"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -2858,16 +2860,16 @@
   {
     "id": 184,
     "word": "educated",
-    "meaning_bn": "...",
-    "definition_en": "English definition for educated",
-    "definition_bn": "...",
+    "meaning_bn": "শিক্ষিত",
+    "definition_en": "Having been educated; knowledgeable.",
+    "definition_bn": "শিক্ষিত বা জ্ঞানসম্পন্ন।",
     "examples_en": [
-      "Sentence using 'educated'."
+      "He is a highly educated man."
     ],
     "examples_bn": [
-      "'educated' এর উদাহরণ বাক্য।"
+      "তিনি একজন উচ্চ শিক্ষিত মানুষ।"
     ],
-    "synonyms": [],
+    "synonyms": ["learned", "literate", "informed"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2879,12 +2881,12 @@
     "definition_en": "The process of receiving or giving systematic instruction.",
     "definition_bn": "পদ্ধতিগত নির্দেশনার প্রক্রিয়া।",
     "examples_en": [
-      "Sentence using 'education'."
+      "Education is the key to success."
     ],
     "examples_bn": [
-      "'education' এর উদাহরণ বাক্য।"
+      "শিক্ষাই সাফল্যের চাবিকাঠি।"
     ],
-    "synonyms": [],
+    "synonyms": ["schooling", "tuition", "pedagogy"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2892,16 +2894,16 @@
   {
     "id": 186,
     "word": "educational",
-    "meaning_bn": "...",
-    "definition_en": "English definition for educational",
-    "definition_bn": "...",
+    "meaning_bn": "শিক্ষামূলক",
+    "definition_en": "Relating to the provision of education.",
+    "definition_bn": "শিক্ষা প্রদানের সাথে সম্পর্কিত।",
     "examples_en": [
-      "Sentence using 'educational'."
+      "The trip was very educational."
     ],
     "examples_bn": [
-      "'educational' এর উদাহরণ বাক্য।"
+      "ভ্রমণটি খুব শিক্ষামূলক ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["instructive", "informative"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2909,16 +2911,16 @@
   {
     "id": 187,
     "word": "effect",
-    "meaning_bn": "...",
-    "definition_en": "English definition for effect",
-    "definition_bn": "...",
+    "meaning_bn": "প্রভাব / ফলাফল",
+    "definition_en": "A change which is a result or consequence of an action.",
+    "definition_bn": "একটি পরিবর্তন যা কোনো কাজের ফল বা পরিণতি।",
     "examples_en": [
-      "Sentence using 'effect'."
+      "The medicine had a positive effect."
     ],
     "examples_bn": [
-      "'effect' এর উদাহরণ বাক্য।"
+      "ওষুধটির ইতিবাচক প্রভাব ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["result", "consequence", "impact"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2926,16 +2928,16 @@
   {
     "id": 188,
     "word": "effective",
-    "meaning_bn": "...",
-    "definition_en": "English definition for effective",
-    "definition_bn": "...",
+    "meaning_bn": "কার্যকর",
+    "definition_en": "Successful in producing a desired or intended result.",
+    "definition_bn": "কাঙ্ক্ষিত বা অভিপ্রেত ফলাফল তৈরিতে সফল।",
     "examples_en": [
-      "Sentence using 'effective'."
+      "This is an effective treatment for the disease."
     ],
     "examples_bn": [
-      "'effective' এর উদাহরণ বাক্য।"
+      "এটি এই রোগের একটি কার্যকর চিকিৎসা।"
     ],
-    "synonyms": [],
+    "synonyms": ["efficient", "productive", "successful"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2943,16 +2945,16 @@
   {
     "id": 189,
     "word": "effectively",
-    "meaning_bn": "...",
-    "definition_en": "English definition for effectively",
-    "definition_bn": "...",
+    "meaning_bn": "কার্যকরভাবে",
+    "definition_en": "In a way that produces a desired result.",
+    "definition_bn": "এমনভাবে যা কাঙ্ক্ষিত ফলাফল তৈরি করে।",
     "examples_en": [
-      "Sentence using 'effectively'."
+      "He communicated his ideas effectively."
     ],
     "examples_bn": [
-      "'effectively' এর উদাহরণ বাক্য।"
+      "তিনি তার ধারণাগুলো কার্যকরভাবে প্রকাশ করেছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["successfully", "efficiently"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "adv."
@@ -2960,16 +2962,16 @@
   {
     "id": 190,
     "word": "efficient",
-    "meaning_bn": "...",
-    "definition_en": "English definition for efficient",
-    "definition_bn": "...",
+    "meaning_bn": "দক্ষ / পারদর্শী",
+    "definition_en": "Achieving maximum productivity with minimum wasted effort.",
+    "definition_bn": "ন্যূনতম প্রচেষ্টায় সর্বাধিক উৎপাদনশীলতা অর্জন করা।",
     "examples_en": [
-      "Sentence using 'efficient'."
+      "The new system is very efficient."
     ],
     "examples_bn": [
-      "'efficient' এর উদাহরণ বাক্য।"
+      "নতুন সিস্টেমটি অত্যন্ত দক্ষ।"
     ],
-    "synonyms": [],
+    "synonyms": ["competent", "organized", "capable"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -2977,16 +2979,16 @@
   {
     "id": 191,
     "word": "effort",
-    "meaning_bn": "...",
-    "definition_en": "English definition for effort",
-    "definition_bn": "...",
+    "meaning_bn": "প্রচেষ্টা",
+    "definition_en": "A vigorous or determined attempt.",
+    "definition_bn": "একটি শক্তিশালী বা সংকল্পবদ্ধ প্রচেষ্টা।",
     "examples_en": [
-      "Sentence using 'effort'."
+      "He put a lot of effort into his project."
     ],
     "examples_bn": [
-      "'effort' এর উদাহরণ বাক্য।"
+      "সে তার প্রকল্পে অনেক প্রচেষ্টা চালিয়েছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["attempt", "endeavor", "exertion"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -2994,16 +2996,16 @@
   {
     "id": 192,
     "word": "egg",
-    "meaning_bn": "...",
-    "definition_en": "English definition for egg",
-    "definition_bn": "...",
+    "meaning_bn": "ডিম",
+    "definition_en": "An oval object laid by a female bird, fish, or insect.",
+    "definition_bn": "স্ত্রী পাখি, মাছ বা পোকামাকড় দ্বারা পাড়া ডিম্বাকৃতি বস্তু।",
     "examples_en": [
-      "Sentence using 'egg'."
+      "I had an egg for breakfast."
     ],
     "examples_bn": [
-      "'egg' এর উদাহরণ বাক্য।"
+      "আমি প্রাতঃরাশে একটি ডিম খেয়েছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["ovum"],
     "level": "A1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -3011,14 +3013,14 @@
   {
     "id": 193,
     "word": "eight",
-    "meaning_bn": "...",
-    "definition_en": "English definition for eight",
-    "definition_bn": "...",
+    "meaning_bn": "আট",
+    "definition_en": "Equivalent to the product of two and four; one more than seven.",
+    "definition_bn": "দুই এবং চারের গুণফলের সমতুল্য; সাতের থেকে এক বেশি।",
     "examples_en": [
-      "Sentence using 'eight'."
+      "She has eight cousins."
     ],
     "examples_bn": [
-      "'eight' এর উদাহরণ বাক্য।"
+      "তার আটজন চাচাতো ভাইবোন আছে।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -3028,14 +3030,14 @@
   {
     "id": 194,
     "word": "eighteen",
-    "meaning_bn": "...",
-    "definition_en": "English definition for eighteen",
-    "definition_bn": "...",
+    "meaning_bn": "আঠারো",
+    "definition_en": "The number equivalent to the sum of eight and ten.",
+    "definition_bn": "আট এবং দশের সমষ্টির সমতুল্য সংখ্যা।",
     "examples_en": [
-      "Sentence using 'eighteen'."
+      "He turned eighteen last week."
     ],
     "examples_bn": [
-      "'eighteen' এর উদাহরণ বাক্য।"
+      "গত সপ্তাহে তার বয়স আঠারো হয়েছে।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -3045,14 +3047,14 @@
   {
     "id": 195,
     "word": "eighty",
-    "meaning_bn": "...",
-    "definition_en": "English definition for eighty",
-    "definition_bn": "...",
+    "meaning_bn": "আশি",
+    "definition_en": "The number equivalent to the product of eight and ten.",
+    "definition_bn": "আট এবং দশের গুণফলের সমতুল্য সংখ্যা।",
     "examples_en": [
-      "Sentence using 'eighty'."
+      "My grandfather is eighty years old."
     ],
     "examples_bn": [
-      "'eighty' এর উদাহরণ বাক্য।"
+      "আমার দাদার বয়স আশি বছর।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -3062,16 +3064,16 @@
   {
     "id": 196,
     "word": "either",
-    "meaning_bn": "...",
-    "definition_en": "English definition for either",
-    "definition_bn": "...",
+    "meaning_bn": "যেকোনো একটি / এটাও / ওটাও",
+    "definition_en": "Used before the first of two (or occasionally more) alternatives.",
+    "definition_bn": "দুটি (বা ক্ষেত্রবিশেষে তার বেশি) বিকল্পের প্রথমটির আগে ব্যবহৃত হয়।",
     "examples_en": [
-      "Sentence using 'either'."
+      "You can choose either tea or coffee."
     ],
     "examples_bn": [
-      "'either' এর উদাহরণ বাক্য।"
+      "আপনি চা বা কফি যেকোনো একটি বেছে নিতে পারেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["whichever", "either one"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "det./pron., adv."
@@ -3079,16 +3081,16 @@
   {
     "id": 197,
     "word": "elderly",
-    "meaning_bn": "...",
-    "definition_en": "English definition for elderly",
-    "definition_bn": "...",
+    "meaning_bn": "বয়স্ক",
+    "definition_en": "A polite word for old.",
+    "definition_bn": "বৃদ্ধ বোঝাতে ব্যবহৃত একটি মার্জিত শব্দ।",
     "examples_en": [
-      "Sentence using 'elderly'."
+      "The elderly man was sitting on the park bench."
     ],
     "examples_bn": [
-      "'elderly' এর উদাহরণ বাক্য।"
+      "বয়স্ক লোকটি পার্কের বেঞ্চে বসে ছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["aged", "old", "senior"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
@@ -3096,16 +3098,16 @@
   {
     "id": 198,
     "word": "elect",
-    "meaning_bn": "...",
-    "definition_en": "English definition for elect",
-    "definition_bn": "...",
+    "meaning_bn": "নির্বাচিত করা",
+    "definition_en": "Choose someone to hold public office or some other position by voting.",
+    "definition_bn": "ভোট দিয়ে কাউকে কোনো পদের জন্য নির্বাচিত করা।",
     "examples_en": [
-      "Sentence using 'elect'."
+      "They will elect a new president next month."
     ],
     "examples_bn": [
-      "'elect' এর উদাহরণ বাক্য।"
+      "আগামী মাসে তারা একজন নতুন রাষ্ট্রপতি নির্বাচিত করবেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["vote", "select", "choose"],
     "level": "B2",
     "category": "Oxford3000",
     "parts_of_speech": "v."
@@ -3113,16 +3115,16 @@
   {
     "id": 199,
     "word": "election",
-    "meaning_bn": "...",
-    "definition_en": "English definition for election",
-    "definition_bn": "...",
+    "meaning_bn": "নির্বাচন",
+    "definition_en": "A formal process of voting to choose a winner of a political office.",
+    "definition_bn": "একটি রাজনৈতিক পদের বিজয়ী নির্বাচনের আনুষ্ঠানিক ভোটদান প্রক্রিয়া।",
     "examples_en": [
-      "Sentence using 'election'."
+      "The election results will be announced tomorrow."
     ],
     "examples_bn": [
-      "'election' এর উদাহরণ বাক্য।"
+      "কাল নির্বাচনের ফলাফল ঘোষণা করা হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["poll", "vote", "ballot"],
     "level": "B1",
     "category": "Oxford3000",
     "parts_of_speech": "n."
@@ -3130,16 +3132,16 @@
   {
     "id": 200,
     "word": "electric",
-    "meaning_bn": "...",
-    "definition_en": "English definition for electric",
-    "definition_bn": "...",
+    "meaning_bn": "বৈদ্যুতিক",
+    "definition_en": "Related to or worked by electricity.",
+    "definition_bn": "বিদ্যুতের সাথে সম্পর্কিত বা বিদ্যুৎ দ্বারা পরিচালিত।",
     "examples_en": [
-      "Sentence using 'electric'."
+      "We bought a new electric car."
     ],
     "examples_bn": [
-      "'electric' এর উদাহরণ বাক্য।"
+      "আমরা একটি নতুন বৈদ্যুতিক গাড়ি কিনেছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["electrical", "electronic"],
     "level": "A2",
     "category": "Oxford3000",
     "parts_of_speech": "adj."
