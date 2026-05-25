@@ -2841,16 +2841,16 @@
   {
     "id": 201,
     "word": "grandchild",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grandchild",
-    "definition_bn": "...",
+    "meaning_bn": "নাতি বা নাতনি",
+    "definition_en": "A child of one's son or daughter.",
+    "definition_bn": "নিজের ছেলে বা মেয়ের সন্তান।",
     "examples_en": [
-      "Example sentence for 'grandchild'."
+      "She loves spending time with her grandchild."
     ],
     "examples_bn": [
-      "'grandchild' এর জন্য উদাহরণ বাক্য।"
+      "তিনি তার নাতি বা নাতনির সাথে সময় কাটাতে ভালোবাসেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["descendant"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2858,14 +2858,14 @@
   {
     "id": 202,
     "word": "granddaughter",
-    "meaning_bn": "...",
-    "definition_en": "English definition for granddaughter",
-    "definition_bn": "...",
+    "meaning_bn": "নাতনি",
+    "definition_en": "A female grandchild.",
+    "definition_bn": "নিজের সন্তান বা মেয়ের কন্যা।",
     "examples_en": [
-      "Example sentence for 'granddaughter'."
+      "His granddaughter is starting school this year."
     ],
     "examples_bn": [
-      "'granddaughter' এর জন্য উদাহরণ বাক্য।"
+      "তার নাতনি এই বছর স্কুলে যাওয়া শুরু করছে।"
     ],
     "synonyms": [],
     "level": "A2",
@@ -2875,16 +2875,16 @@
   {
     "id": 203,
     "word": "grandfather",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grandfather",
-    "definition_bn": "...",
+    "meaning_bn": "দাদা বা নানা",
+    "definition_en": "The father of one's father or mother.",
+    "definition_bn": "নিজের বাবা বা মায়ের বাবা।",
     "examples_en": [
-      "Example sentence for 'grandfather'."
+      "My grandfather tells the best stories."
     ],
     "examples_bn": [
-      "'grandfather' এর জন্য উদাহরণ বাক্য।"
+      "আমার দাদা/নানা খুব সুন্দর গল্প বলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["grandpa"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2892,16 +2892,16 @@
   {
     "id": 204,
     "word": "grandmother",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grandmother",
-    "definition_bn": "...",
+    "meaning_bn": "দাদি বা নানি",
+    "definition_en": "The mother of one's father or mother.",
+    "definition_bn": "নিজের বাবা বা মায়ের মা।",
     "examples_en": [
-      "Example sentence for 'grandmother'."
+      "My grandmother knits beautiful sweaters."
     ],
     "examples_bn": [
-      "'grandmother' এর জন্য উদাহরণ বাক্য।"
+      "আমার দাদি/নানি চমৎকার সোয়েটার বুনেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["grandma"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2909,14 +2909,14 @@
   {
     "id": 205,
     "word": "grandparent",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grandparent",
-    "definition_bn": "...",
+    "meaning_bn": "দাদা-দাদি বা নানা-নানি",
+    "definition_en": "A parent of one's father or mother.",
+    "definition_bn": "নিজের বাবা বা মায়ের বাবা অথবা মা।",
     "examples_en": [
-      "Example sentence for 'grandparent'."
+      "Every child needs the love of a grandparent."
     ],
     "examples_bn": [
-      "'grandparent' এর জন্য উদাহরণ বাক্য।"
+      "প্রত্যেক শিশুর দাদা-দাদি বা নানা-নানির ভালোবাসা প্রয়োজন।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -2926,14 +2926,14 @@
   {
     "id": 206,
     "word": "grandson",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grandson",
-    "definition_bn": "...",
+    "meaning_bn": "নাতি",
+    "definition_en": "A male grandchild.",
+    "definition_bn": "নিজের সন্তান বা মেয়ের পুত্র।",
     "examples_en": [
-      "Example sentence for 'grandson'."
+      "They are very proud of their grandson."
     ],
     "examples_bn": [
-      "'grandson' এর জন্য উদাহরণ বাক্য।"
+      "তারা তাদের নাতিকে নিয়ে খুব গর্বিত।"
     ],
     "synonyms": [],
     "level": "A2",
@@ -2943,16 +2943,16 @@
   {
     "id": 207,
     "word": "grant",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grant",
-    "definition_bn": "...",
+    "meaning_bn": "অনুদানে দেওয়া বা মঞ্জুর করা",
+    "definition_en": "To agree to give or allow something requested.",
+    "definition_bn": "অনুরোধ করা কোনো কিছু দিতে বা করতে সম্মত হওয়া।",
     "examples_en": [
-      "Example sentence for 'grant'."
+      "The government decided to grant a scholarship to the student."
     ],
     "examples_bn": [
-      "'grant' এর জন্য উদাহরণ বাক্য।"
+      "সরকার ছাত্রটিকে একটি বৃত্তি দেওয়ার সিদ্ধান্ত নিয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["allow", "award", "concede"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -2960,14 +2960,14 @@
   {
     "id": 208,
     "word": "grape",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grape",
-    "definition_bn": "...",
+    "meaning_bn": "আঙ্গুর",
+    "definition_en": "A small green or purple fruit that grows in bunches.",
+    "definition_bn": "থোকায় থোকায় জন্মানো ছোট সবুজ বা বেগুনি রঙের ফল।",
     "examples_en": [
-      "Example sentence for 'grape'."
+      "I bought a bunch of red grapes."
     ],
     "examples_bn": [
-      "'grape' এর জন্য উদাহরণ বাক্য।"
+      "আমি এক থোকা লাল আঙ্গুর কিনেছি।"
     ],
     "synonyms": [],
     "level": "A2",
@@ -2977,16 +2977,16 @@
   {
     "id": 209,
     "word": "grass",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grass",
-    "definition_bn": "...",
+    "meaning_bn": "ঘাস",
+    "definition_en": "Vegetation consisting of short plants with long narrow leaves.",
+    "definition_bn": "লম্বা ও সরু পাতাযুক্ত ছোট ছোট উদ্ভিদের আবরণ।",
     "examples_en": [
-      "Example sentence for 'grass'."
+      "The kids are playing on the green grass."
     ],
     "examples_bn": [
-      "'grass' এর জন্য উদাহরণ বাক্য।"
+      "বাচ্চারা সবুজ ঘাসের ওপর খেলা করছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["turf", "lawn"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2994,16 +2994,16 @@
   {
     "id": 210,
     "word": "grateful",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grateful",
-    "definition_bn": "...",
+    "meaning_bn": "কৃতজ্ঞ",
+    "definition_en": "Feeling or showing an appreciation of kindness.",
+    "definition_bn": "দয়া বা উপকারের জন্য প্রশংসা বা কৃতজ্ঞতা প্রকাশ করা।",
     "examples_en": [
-      "Example sentence for 'grateful'."
+      "I am very grateful for your help."
     ],
     "examples_bn": [
-      "'grateful' এর জন্য উদাহরণ বাক্য।"
+      "আপনার সাহায্যের জন্য আমি অত্যন্ত কৃতজ্ঞ।"
     ],
-    "synonyms": [],
+    "synonyms": ["thankful", "obliged"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -3011,16 +3011,16 @@
   {
     "id": 211,
     "word": "gray",
-    "meaning_bn": "...",
-    "definition_en": "English definition for gray",
-    "definition_bn": "...",
+    "meaning_bn": "ধূসর",
+    "definition_en": "A color between black and white.",
+    "definition_bn": "কালো এবং সাদার মধ্যবর্তী একটি রঙ।",
     "examples_en": [
-      "Example sentence for 'gray'."
+      "The sky is gray and it might rain."
     ],
     "examples_bn": [
-      "'gray' এর জন্য উদাহরণ বাক্য।"
+      "আকাশ ধূসর হয়ে আছে এবং বৃষ্টি হতে পারে।"
     ],
-    "synonyms": [],
+    "synonyms": ["grey"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj., n."
@@ -3028,16 +3028,16 @@
   {
     "id": 212,
     "word": "great",
-    "meaning_bn": "...",
-    "definition_en": "English definition for great",
-    "definition_bn": "...",
+    "meaning_bn": "মহান বা চমৎকার",
+    "definition_en": "Of an extent, amount, or intensity considerably above the normal.",
+    "definition_bn": "স্বাভাবিকের চেয়ে অনেক বড়, বেশি বা তীব্র।",
     "examples_en": [
-      "Example sentence for 'great'."
+      "We had a great time at the party."
     ],
     "examples_bn": [
-      "'great' এর জন্য উদাহরণ বাক্য।"
+      "অনুষ্ঠানে আমাদের খুব চমৎকার সময় কেটেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["excellent", "grand", "huge"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -3045,16 +3045,16 @@
   {
     "id": 213,
     "word": "green",
-    "meaning_bn": "...",
-    "definition_en": "English definition for green",
-    "definition_bn": "...",
+    "meaning_bn": "সবুজ",
+    "definition_en": "The color of growing grass or leaves.",
+    "definition_bn": "জ্যান্ত ঘাস বা পাতার রঙ।",
     "examples_en": [
-      "Example sentence for 'green'."
+      "The hills were covered with green trees."
     ],
     "examples_bn": [
-      "'green' এর জন্য উদাহরণ বাক্য।"
+      "পাহাড়গুলো সবুজ গাছে ঢাকা ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["verdant"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj., n."
@@ -3062,16 +3062,16 @@
   {
     "id": 214,
     "word": "greet",
-    "meaning_bn": "...",
-    "definition_en": "English definition for greet",
-    "definition_bn": "...",
+    "meaning_bn": "অভিবাদন জানানো",
+    "definition_en": "To give a polite word or sign of welcome to someone.",
+    "definition_bn": "কাউকে নম্রভাবে স্বাগতম বা সম্ভাষণ জানানো।",
     "examples_en": [
-      "Example sentence for 'greet'."
+      "She greeted us with a warm smile."
     ],
     "examples_bn": [
-      "'greet' এর জন্য উদাহরণ বাক্য।"
+      "তিনি আমাদের উষ্ণ হাসিতে অভিবাদন জানালেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["welcome", "salute"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -3079,16 +3079,16 @@
   {
     "id": 215,
     "word": "grid",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grid",
-    "definition_bn": "...",
+    "meaning_bn": "ছক বা গ্রিড",
+    "definition_en": "A network of lines that cross each other to form squares.",
+    "definition_bn": "একে অপরকে অতিক্রম করা রেখার জাল যা বর্গক্ষেত্র তৈরি করে।",
     "examples_en": [
-      "Example sentence for 'grid'."
+      "The city streets are laid out in a grid."
     ],
     "examples_bn": [
-      "'grid' এর জন্য উদাহরণ বাক্য।"
+      "শহরের রাস্তাগুলো একটি গ্রিড আকারে সাজানো।"
     ],
-    "synonyms": [],
+    "synonyms": ["network", "matrix"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3096,14 +3096,14 @@
   {
     "id": 216,
     "word": "grocery",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grocery",
-    "definition_bn": "...",
+    "meaning_bn": "মুদি সামগ্রী বা দোকান",
+    "definition_en": "Food and other goods sold at a grocer's or a supermarket.",
+    "definition_bn": "মুদি দোকান বা সুপারমার্কেটে বিক্রি হওয়া খাবার এবং অন্যান্য পণ্য।",
     "examples_en": [
-      "Example sentence for 'grocery'."
+      "I need to buy some groceries for the week."
     ],
     "examples_bn": [
-      "'grocery' এর জন্য উদাহরণ বাক্য।"
+      "সপ্তাহের জন্য আমাকে কিছু মুদি পণ্য কিনতে হবে।"
     ],
     "synonyms": [],
     "level": "A2",
@@ -3113,16 +3113,16 @@
   {
     "id": 217,
     "word": "ground",
-    "meaning_bn": "...",
-    "definition_en": "English definition for ground",
-    "definition_bn": "...",
+    "meaning_bn": "ভূমি বা মাটি",
+    "definition_en": "The solid surface of the earth.",
+    "definition_bn": "পৃথিবীর শক্ত উপরিভাগ।",
     "examples_en": [
-      "Example sentence for 'ground'."
+      "We sat on the ground and had our lunch."
     ],
     "examples_bn": [
-      "'ground' এর জন্য উদাহরণ বাক্য।"
+      "আমরা মাটিতে বসে দুপুরের খাবার খেলাম।"
     ],
-    "synonyms": [],
+    "synonyms": ["earth", "floor", "soil"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3130,16 +3130,16 @@
   {
     "id": 218,
     "word": "group",
-    "meaning_bn": "...",
-    "definition_en": "English definition for group",
-    "definition_bn": "...",
+    "meaning_bn": "দল বা গোষ্ঠী",
+    "definition_en": "A number of people or things that are located close together.",
+    "definition_bn": "একত্রে থাকা বেশ কিছু মানুষ বা বস্তু।",
     "examples_en": [
-      "Example sentence for 'group'."
+      "A group of students stood outside the hall."
     ],
     "examples_bn": [
-      "'group' এর জন্য উদাহরণ বাক্য।"
+      "একদল ছাত্র হলের বাইরে দাঁড়িয়ে ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["team", "cluster", "band"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3147,16 +3147,16 @@
   {
     "id": 219,
     "word": "grow",
-    "meaning_bn": "...",
-    "definition_en": "English definition for grow",
-    "definition_bn": "...",
+    "meaning_bn": "বৃদ্ধি পাওয়া বা জন্মানো",
+    "definition_en": "To undergo natural development by increasing in size and changing physically.",
+    "definition_bn": "আকারে বৃদ্ধি পাওয়া এবং শারীরিকভাবে পরিবর্তনের মাধ্যমে স্বাভাবিক বিকাশ লাভ করা।",
     "examples_en": [
-      "Example sentence for 'grow'."
+      "Plants need water and light to grow."
     ],
     "examples_bn": [
-      "'grow' এর জন্য উদাহরণ বাক্য।"
+      "গাছ বড় হওয়ার জন্য পানি ও আলোর প্রয়োজন।"
     ],
-    "synonyms": [],
+    "synonyms": ["increase", "develop", "expand"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -3164,16 +3164,16 @@
   {
     "id": 220,
     "word": "growth",
-    "meaning_bn": "...",
-    "definition_en": "English definition for growth",
-    "definition_bn": "...",
+    "meaning_bn": "বৃদ্ধি বা উন্নয়ন",
+    "definition_en": "The process of increasing in physical size.",
+    "definition_bn": "শারীরিক আকারে বড় হওয়ার প্রক্রিয়া।",
     "examples_en": [
-      "Example sentence for 'growth'."
+      "Economic growth is important for a country."
     ],
     "examples_bn": [
-      "'growth' এর জন্য উদাহরণ বাক্য।"
+      "একটি দেশের জন্য অর্থনৈতিক উন্নয়ন গুরুত্বপূর্ণ।"
     ],
-    "synonyms": [],
+    "synonyms": ["development", "progress"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3181,16 +3181,16 @@
   {
     "id": 221,
     "word": "guarantee",
-    "meaning_bn": "...",
-    "definition_en": "English definition for guarantee",
-    "definition_bn": "...",
+    "meaning_bn": "নিশ্চয়তা বা গ্যারান্টি",
+    "definition_en": "A formal promise or assurance that certain conditions will be fulfilled.",
+    "definition_bn": "একটি আনুষ্ঠানিক প্রতিশ্রুতি যে নির্দিষ্ট শর্তাবলি পূরণ করা হবে।",
     "examples_en": [
-      "Example sentence for 'guarantee'."
+      "This product comes with a two-year guarantee."
     ],
     "examples_bn": [
-      "'guarantee' এর জন্য উদাহরণ বাক্য।"
+      "এই পণ্যটির সাথে দুই বছরের গ্যারান্টি দেওয়া হচ্ছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["warranty", "promise", "pledge"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -3198,16 +3198,16 @@
   {
     "id": 222,
     "word": "guard",
-    "meaning_bn": "...",
-    "definition_en": "English definition for guard",
-    "definition_bn": "...",
+    "meaning_bn": "পাহারাদার বা রক্ষা করা",
+    "definition_en": "A person who keeps watch over something or someone.",
+    "definition_bn": "এমন একজন ব্যক্তি যিনি কোনো কিছু বা কারো ওপর নজর রাখেন।",
     "examples_en": [
-      "Example sentence for 'guard'."
+      "A guard is standing at the gate."
     ],
     "examples_bn": [
-      "'guard' এর জন্য উদাহরণ বাক্য।"
+      "গেটে একজন পাহারাদার দাঁড়িয়ে আছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["protector", "sentry", "shield"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -3215,16 +3215,16 @@
   {
     "id": 223,
     "word": "guess",
-    "meaning_bn": "...",
-    "definition_en": "English definition for guess",
-    "definition_bn": "...",
+    "meaning_bn": "অনুমান করা",
+    "definition_en": "To estimate or suppose something without sufficient information.",
+    "definition_bn": "পর্যাপ্ত তথ্য ছাড়াই কোনো কিছু আন্দাজ বা ধারণা করা।",
     "examples_en": [
-      "Example sentence for 'guess'."
+      "Can you guess how old he is?"
     ],
     "examples_bn": [
-      "'guess' এর জন্য উদাহরণ বাক্য।"
+      "তুমি কি অনুমান করতে পারো তার বয়স কত?"
     ],
-    "synonyms": [],
+    "synonyms": ["estimate", "surmise"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -3232,16 +3232,16 @@
   {
     "id": 224,
     "word": "guest",
-    "meaning_bn": "...",
-    "definition_en": "English definition for guest",
-    "definition_bn": "...",
+    "meaning_bn": "অতিথি",
+    "definition_en": "A person who is invited to visit someone's home or attend a function.",
+    "definition_bn": "এমন একজন ব্যক্তি যাকে কারো বাড়িতে বা কোনো অনুষ্ঠানে দাওয়াত দেওয়া হয়েছে।",
     "examples_en": [
-      "Example sentence for 'guest'."
+      "We are having guests for dinner tonight."
     ],
     "examples_bn": [
-      "'guest' এর জন্য উদাহরণ বাক্য।"
+      "আজ রাতে আমাদের বাড়িতে রাতের খাবারে অতিথি আসছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["visitor"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3249,16 +3249,16 @@
   {
     "id": 225,
     "word": "guide",
-    "meaning_bn": "...",
-    "definition_en": "English definition for guide",
-    "definition_bn": "...",
+    "meaning_bn": "পথপ্রদর্শক বা নির্দেশিকা",
+    "definition_en": "A person who shows the way to others.",
+    "definition_bn": "এমন একজন ব্যক্তি যিনি অন্যদের পথ দেখান।",
     "examples_en": [
-      "Example sentence for 'guide'."
+      "The tour guide was very knowledgeable."
     ],
     "examples_bn": [
-      "'guide' এর জন্য উদাহরণ বাক্য।"
+      "ভ্রমণ নির্দেশক বা গাইডটি খুব জ্ঞানী ছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["advisor", "leader", "manual"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -3266,16 +3266,16 @@
   {
     "id": 226,
     "word": "guilty",
-    "meaning_bn": "...",
-    "definition_en": "English definition for guilty",
-    "definition_bn": "...",
+    "meaning_bn": "দোষী বা অপরাধী",
+    "definition_en": "Responsible for specified wrongdoing.",
+    "definition_bn": "নির্দিষ্ট কোনো অন্যায়ের জন্য দায়ী।",
     "examples_en": [
-      "Example sentence for 'guilty'."
+      "The jury found him guilty of the crime."
     ],
     "examples_bn": [
-      "'guilty' এর জন্য উদাহরণ বাক্য।"
+      "জুরি তাকে অপরাধের জন্য দোষী সাব্যস্ত করেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["culpable", "responsible"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -3283,14 +3283,14 @@
   {
     "id": 227,
     "word": "guitar",
-    "meaning_bn": "...",
-    "definition_en": "English definition for guitar",
-    "definition_bn": "...",
+    "meaning_bn": "গিটার",
+    "definition_en": "A stringed musical instrument played with fingers or a plectrum.",
+    "definition_bn": "আঙ্গুল বা প্লেক্ট্রাম দিয়ে বাজানো এক ধরণের তারযুক্ত বাদ্যযন্ত্র।",
     "examples_en": [
-      "Example sentence for 'guitar'."
+      "He plays the guitar in a band."
     ],
     "examples_bn": [
-      "'guitar' এর জন্য উদাহরণ বাক্য।"
+      "সে একটি ব্যান্ডের হয়ে গিটার বাজায়।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -3300,16 +3300,16 @@
   {
     "id": 228,
     "word": "gun",
-    "meaning_bn": "...",
-    "definition_en": "English definition for gun",
-    "definition_bn": "...",
+    "meaning_bn": "বন্দুক",
+    "definition_en": "A weapon incorporating a metal tube from which bullets are fired.",
+    "definition_bn": "ধাতব নলযুক্ত একটি অস্ত্র যা থেকে গুলি ছোড়া হয়।",
     "examples_en": [
-      "Example sentence for 'gun'."
+      "It is illegal to carry a gun without a permit."
     ],
     "examples_bn": [
-      "'gun' এর জন্য উদাহরণ বাক্য।"
+      "অনুমতিপত্র ছাড়া বন্দুক বহন করা অবৈধ।"
     ],
-    "synonyms": [],
+    "synonyms": ["firearm", "pistol", "rifle"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3317,16 +3317,16 @@
   {
     "id": 229,
     "word": "guy",
-    "meaning_bn": "...",
-    "definition_en": "English definition for guy",
-    "definition_bn": "...",
+    "meaning_bn": "লোক বা ব্যক্তি",
+    "definition_en": "An informal term for a man or person.",
+    "definition_bn": "কোনো পুরুষ বা ব্যক্তির জন্য একটি অনানুষ্ঠানিক শব্দ।",
     "examples_en": [
-      "Example sentence for 'guy'."
+      "He is a really nice guy."
     ],
     "examples_bn": [
-      "'guy' এর জন্য উদাহরণ বাক্য।"
+      "সে সত্যিই খুব ভালো একজন লোক।"
     ],
-    "synonyms": [],
+    "synonyms": ["man", "fellow"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3334,16 +3334,16 @@
   {
     "id": 230,
     "word": "habit",
-    "meaning_bn": "...",
-    "definition_en": "English definition for habit",
-    "definition_bn": "...",
+    "meaning_bn": "অভ্যাস",
+    "definition_en": "A settled or regular tendency or practice.",
+    "definition_bn": "একটি স্থির বা নিয়মিত প্রবণতা বা অনুশীলন।",
     "examples_en": [
-      "Example sentence for 'habit'."
+      "Reading before bed is a good habit."
     ],
     "examples_bn": [
-      "'habit' এর জন্য উদাহরণ বাক্য।"
+      "ঘুমানোর আগে পড়া একটি ভালো অভ্যাস।"
     ],
-    "synonyms": [],
+    "synonyms": ["custom", "routine", "pattern"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3351,16 +3351,16 @@
   {
     "id": 231,
     "word": "hair",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hair",
-    "definition_bn": "...",
+    "meaning_bn": "চুল",
+    "definition_en": "The fine threadlike strands growing from the skin of humans and mammals.",
+    "definition_bn": "মানুষ এবং স্তন্যপায়ী প্রাণীদের ত্বক থেকে গজানো সূক্ষ্ম সুতার মতো তন্তু।",
     "examples_en": [
-      "Example sentence for 'hair'."
+      "She has long, black hair."
     ],
     "examples_bn": [
-      "'hair' এর জন্য উদাহরণ বাক্য।"
+      "তার লম্বা কালো চুল আছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["locks", "fur"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3368,16 +3368,16 @@
   {
     "id": 233,
     "word": "hall",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hall",
-    "definition_bn": "...",
+    "meaning_bn": "হলঘর বা বড় কক্ষ",
+    "definition_en": "A large room or building for public gatherings or events.",
+    "definition_bn": "জনসমাবেশ বা অনুষ্ঠানের জন্য একটি বড় কক্ষ বা ভবন।",
     "examples_en": [
-      "Example sentence for 'hall'."
+      "The meeting will be held in the town hall."
     ],
     "examples_bn": [
-      "'hall' এর জন্য উদাহরণ বাক্য।"
+      "মিটিংটি টাউন হলরুমে অনুষ্ঠিত হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["auditorium", "corridor", "lobby"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3385,16 +3385,16 @@
   {
     "id": 235,
     "word": "handle",
-    "meaning_bn": "...",
-    "definition_en": "English definition for handle",
-    "definition_bn": "...",
+    "meaning_bn": "হাতল বা সামলানো",
+    "definition_en": "Part of an object designed to be held; or to manage a situation.",
+    "definition_bn": "কোনো বস্তুর অংশ যা ধরার জন্য তৈরি করা হয়েছে; অথবা কোনো পরিস্থিতি পরিচালনা করা।",
     "examples_en": [
-      "Example sentence for 'handle'."
+      "The door handle is broken. Can you handle this project?"
     ],
     "examples_bn": [
-      "'handle' এর জন্য উদাহরণ বাক্য।"
+      "দরজার হাতলটি ভাঙা। আপনি কি এই প্রজেক্টটি সামলাতে পারবেন?"
     ],
-    "synonyms": [],
+    "synonyms": ["manage", "grip", "deal with"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -3402,16 +3402,16 @@
   {
     "id": 236,
     "word": "hang",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hang",
-    "definition_bn": "...",
+    "meaning_bn": "ঝোলানো",
+    "definition_en": "To suspend or be suspended from above with no support from below.",
+    "definition_bn": "নিচ থেকে কোনো অবলম্বন ছাড়া উপর থেকে ঝুলিয়ে দেওয়া।",
     "examples_en": [
-      "Example sentence for 'hang'."
+      "Please hang your coat on the hook."
     ],
     "examples_bn": [
-      "'hang' এর জন্য উদাহরণ বাক্য।"
+      "দয়া করে আপনার কোটটি হুকে ঝুলিয়ে দিন।"
     ],
-    "synonyms": [],
+    "synonyms": ["suspend", "dangle"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -3419,16 +3419,16 @@
   {
     "id": 237,
     "word": "happen",
-    "meaning_bn": "...",
-    "definition_en": "English definition for happen",
-    "definition_bn": "...",
+    "meaning_bn": "ঘটা",
+    "definition_en": "To take place; to occur.",
+    "definition_bn": "কোনো কিছু সঙ্ঘটিত হওয়া।",
     "examples_en": [
-      "Example sentence for 'happen'."
+      "What will happen if we are late?"
     ],
     "examples_bn": [
-      "'happen' এর জন্য উদাহরণ বাক্য।"
+      "আমাদের দেরি হলে কী ঘটবে?"
     ],
-    "synonyms": [],
+    "synonyms": ["occur", "take place"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -3436,16 +3436,16 @@
   {
     "id": 238,
     "word": "happiness",
-    "meaning_bn": "...",
-    "definition_en": "English definition for happiness",
-    "definition_bn": "...",
+    "meaning_bn": "সুখ বা আনন্দ",
+    "definition_en": "The state of being happy.",
+    "definition_bn": "সুখী বা আনন্দিত থাকার অবস্থা।",
     "examples_en": [
-      "Example sentence for 'happiness'."
+      "Money cannot buy happiness."
     ],
     "examples_bn": [
-      "'happiness' এর জন্য উদাহরণ বাক্য।"
+      "টাকা দিয়ে সুখ কেনা যায় না।"
     ],
-    "synonyms": [],
+    "synonyms": ["joy", "delight", "contentment"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3457,12 +3457,12 @@
     "definition_en": "Feeling or showing pleasure or contentment.",
     "definition_bn": "আনন্দে থাকা বা সন্তুষ্ট হওয়া।",
     "examples_en": [
-      "Example sentence for 'happy'."
+      "I am so happy to see you."
     ],
     "examples_bn": [
-      "'happy' এর জন্য উদাহরণ বাক্য।"
+      "তোমাকে দেখে আমি খুব খুশি।"
     ],
-    "synonyms": [],
+    "synonyms": ["glad", "cheerful"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -3470,16 +3470,16 @@
   {
     "id": 240,
     "word": "hard",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hard",
-    "definition_bn": "...",
+    "meaning_bn": "কঠিন বা শক্ত",
+    "definition_en": "Solid, firm, and resistant to pressure; or difficult to do.",
+    "definition_bn": "কঠিন, দৃঢ় এবং চাপে নমনীয় নয়; অথবা করা কঠিন।",
     "examples_en": [
-      "Example sentence for 'hard'."
+      "The exam was very hard. This wood is very hard."
     ],
     "examples_bn": [
-      "'hard' এর জন্য উদাহরণ বাক্য।"
+      "পরীক্ষাটি খুব কঠিন ছিল। এই কাঠটি খুব শক্ত।"
     ],
-    "synonyms": [],
+    "synonyms": ["difficult", "solid", "tough"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj., adv."
@@ -3487,16 +3487,16 @@
   {
     "id": 241,
     "word": "hardly",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hardly",
-    "definition_bn": "...",
+    "meaning_bn": "কদাচিৎ বা প্রায় না",
+    "definition_en": "Scarcely; barely; almost not.",
+    "definition_bn": "খুবই কম; বলতে গেলে একেবারেই না।",
     "examples_en": [
-      "Example sentence for 'hardly'."
+      "I hardly know him."
     ],
     "examples_bn": [
-      "'hardly' এর জন্য উদাহরণ বাক্য।"
+      "আমি তাকে চিনি বললেই চলে।"
     ],
-    "synonyms": [],
+    "synonyms": ["scarcely", "barely"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -3504,16 +3504,16 @@
   {
     "id": 242,
     "word": "harm",
-    "meaning_bn": "...",
-    "definition_en": "English definition for harm",
-    "definition_bn": "...",
+    "meaning_bn": "ক্ষতি বা অপকার করা",
+    "definition_en": "Physical injury or damage.",
+    "definition_bn": "শারীরিক আঘাত বা অনিষ্ট।",
     "examples_en": [
-      "Example sentence for 'harm'."
+      "Smoking causes harm to your lungs."
     ],
     "examples_bn": [
-      "'harm' এর জন্য উদাহরণ বাক্য।"
+      "ধূমপান আপনার ফুসফুসের ক্ষতি করে।"
     ],
-    "synonyms": [],
+    "synonyms": ["damage", "injury", "hurt"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -3521,16 +3521,16 @@
   {
     "id": 243,
     "word": "harmful",
-    "meaning_bn": "...",
-    "definition_en": "English definition for harmful",
-    "definition_bn": "...",
+    "meaning_bn": "ক্ষতিকারক",
+    "definition_en": "Causing or likely to cause harm.",
+    "definition_bn": "ক্ষতি করছে এমন বা ক্ষতি করতে পারে এমন।",
     "examples_en": [
-      "Example sentence for 'harmful'."
+      "Pollution is harmful to the environment."
     ],
     "examples_bn": [
-      "'harmful' এর জন্য উদাহরণ বাক্য।"
+      "দূষণ পরিবেশের জন্য ক্ষতিকর।"
     ],
-    "synonyms": [],
+    "synonyms": ["damaging", "toxic", "detrimental"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -3538,33 +3538,33 @@
   {
     "id": 244,
     "word": "hat",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hat",
-    "definition_bn": "...",
+    "meaning_bn": "টুপি",
+    "definition_en": "A shaped covering for the head.",
+    "definition_bn": "মাথার জন্য নির্দিষ্ট আকৃতির একটি আবরণ।",
     "examples_en": [
-      "Example sentence for 'hat'."
+      "He wore a hat to protect himself from the sun."
     ],
     "examples_bn": [
-      "'hat' এর জন্য উদাহরণ বাক্য।"
+      "সূর্য থেকে বাঁচতে সে একটি টুপি পরেছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["cap"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
   },
   {
     "id": 247,
-    "word": "have to modal",
-    "meaning_bn": "...",
-    "definition_en": "English definition for have to modal",
-    "definition_bn": "...",
+    "word": "have to",
+    "meaning_bn": "হবে (বাধ্যবাধকতা)",
+    "definition_en": "Used to express obligation or necessity.",
+    "definition_bn": "বাধ্যবাধকতা বা প্রয়োজনীয়তা প্রকাশ করতে ব্যবহৃত হয়।",
     "examples_en": [
-      "Example sentence for 'have to modal'."
+      "I have to go now."
     ],
     "examples_bn": [
-      "'have to modal' এর জন্য উদাহরণ বাক্য।"
+      "আমাকে এখন যেতে হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["must"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -3572,14 +3572,14 @@
   {
     "id": 248,
     "word": "he",
-    "meaning_bn": "...",
-    "definition_en": "English definition for he",
-    "definition_bn": "...",
+    "meaning_bn": "সে (পুরুষ)",
+    "definition_en": "Used to refer to a man, boy, or male animal.",
+    "definition_bn": "পুরুষ, বালক বা পুরুষ প্রাণীকে বোঝাতে ব্যবহৃত হয়।",
     "examples_en": [
-      "Example sentence for 'he'."
+      "He is my best friend."
     ],
     "examples_bn": [
-      "'he' এর জন্য উদাহরণ বাক্য।"
+      "সে আমার সবচেয়ে ভালো বন্ধু।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -3589,14 +3589,14 @@
   {
     "id": 250,
     "word": "headache",
-    "meaning_bn": "...",
-    "definition_en": "English definition for headache",
-    "definition_bn": "...",
+    "meaning_bn": "মাথাব্যথা",
+    "definition_en": "A continuous pain in the head.",
+    "definition_bn": "মাথায় অনবরত ব্যথা হওয়া।",
     "examples_en": [
-      "Example sentence for 'headache'."
+      "I have a terrible headache."
     ],
     "examples_bn": [
-      "'headache' এর জন্য উদাহরণ বাক্য।"
+      "আমার খুব মাথাব্যথা করছে।"
     ],
     "synonyms": [],
     "level": "A2",
@@ -3606,16 +3606,16 @@
   {
     "id": 251,
     "word": "headline",
-    "meaning_bn": "...",
-    "definition_en": "English definition for headline",
-    "definition_bn": "...",
+    "meaning_bn": "শিরোনাম",
+    "definition_en": "A heading at the top of an article or page in a newspaper.",
+    "definition_bn": "সংবাদপত্রের কোনো নিবন্ধ বা পৃষ্ঠার উপরের শিরোনাম।",
     "examples_en": [
-      "Example sentence for 'headline'."
+      "I only had time to read the headlines."
     ],
     "examples_bn": [
-      "'headline' এর জন্য উদাহরণ বাক্য।"
+      "আমার শুধু শিরোনামগুলো পড়ার সময় ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["heading", "title"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3623,16 +3623,16 @@
   {
     "id": 252,
     "word": "headquarters",
-    "meaning_bn": "...",
-    "definition_en": "English definition for headquarters",
-    "definition_bn": "...",
+    "meaning_bn": "প্রধান কার্যালয়",
+    "definition_en": "The main office or center of operations of an organization.",
+    "definition_bn": "একটি প্রতিষ্ঠানের প্রধান অফিস বা কার্যক্রমের কেন্দ্র।",
     "examples_en": [
-      "Example sentence for 'headquarters'."
+      "The company's headquarters is in Dhaka."
     ],
     "examples_bn": [
-      "'headquarters' এর জন্য উদাহরণ বাক্য।"
+      "কোম্পানিটির প্রধান কার্যালয় ঢাকায় অবস্থিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["main office", "HQ", "base"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3640,16 +3640,16 @@
   {
     "id": 253,
     "word": "health",
-    "meaning_bn": "...",
-    "definition_en": "English definition for health",
-    "definition_bn": "...",
+    "meaning_bn": "স্বাস্থ্য",
+    "definition_en": "The state of being free from illness or injury.",
+    "definition_bn": "অসুস্থতা বা আঘাতমুক্ত থাকার অবস্থা।",
     "examples_en": [
-      "Example sentence for 'health'."
+      "Eating vegetables is good for your health."
     ],
     "examples_bn": [
-      "'health' এর জন্য উদাহরণ বাক্য।"
+      "শাকসবজি খাওয়া আপনার স্বাস্থ্যের জন্য ভালো।"
     ],
-    "synonyms": [],
+    "synonyms": ["well-being", "fitness"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3657,16 +3657,16 @@
   {
     "id": 254,
     "word": "healthy",
-    "meaning_bn": "...",
-    "definition_en": "English definition for healthy",
-    "definition_bn": "...",
+    "meaning_bn": "স্বাস্থ্যকর বা সুস্থ",
+    "definition_en": "In good health; not diseased.",
+    "definition_bn": "সুস্বাস্থ্য বজায় থাকা; রোগমুক্ত থাকা।",
     "examples_en": [
-      "Example sentence for 'healthy'."
+      "He looks very healthy."
     ],
     "examples_bn": [
-      "'healthy' এর জন্য উদাহরণ বাক্য।"
+      "তাকে খুব সুস্থ দেখাচ্ছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["fit", "strong", "well"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -3674,16 +3674,16 @@
   {
     "id": 255,
     "word": "hear",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hear",
-    "definition_bn": "...",
+    "meaning_bn": "শোনা",
+    "definition_en": "To perceive with the ear the sound made by someone or something.",
+    "definition_bn": "কারো বা কোনো কিছুর শব্দ কানে উপলব্ধি করা।",
     "examples_en": [
-      "Example sentence for 'hear'."
+      "I can hear someone knocking."
     ],
     "examples_bn": [
-      "'hear' এর জন্য উদাহরণ বাক্য।"
+      "আমি কারো কড়া নাড়ার শব্দ শুনতে পাচ্ছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["listen", "overhear"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -3691,16 +3691,16 @@
   {
     "id": 256,
     "word": "hearing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hearing",
-    "definition_bn": "...",
+    "meaning_bn": "শ্রবণশক্তি বা শুনানি",
+    "definition_en": "The faculty of perceiving sounds.",
+    "definition_bn": "শব্দ উপলব্ধি করার ক্ষমতা।",
     "examples_en": [
-      "Example sentence for 'hearing'."
+      "The court hearing was delayed. His hearing is very poor."
     ],
     "examples_bn": [
-      "'hearing' এর জন্য উদাহরণ বাক্য।"
+      "আদালতের শুনানি বিলম্বিত হয়েছিল। তার শ্রবণশক্তি খুব দুর্বল।"
     ],
-    "synonyms": [],
+    "synonyms": ["audition"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3708,16 +3708,16 @@
   {
     "id": 257,
     "word": "heart",
-    "meaning_bn": "...",
-    "definition_en": "English definition for heart",
-    "definition_bn": "...",
+    "meaning_bn": "হৃদপিণ্ড বা মন",
+    "definition_en": "The organ that pumps blood; or the center of emotion.",
+    "definition_bn": "রক্ত পাম্প করার অঙ্গ; অথবা আবেগের কেন্দ্র।",
     "examples_en": [
-      "Example sentence for 'heart'."
+      "She has a kind heart."
     ],
     "examples_bn": [
-      "'heart' এর জন্য উদাহরণ বাক্য।"
+      "তার মন খুব দয়ালু।"
     ],
-    "synonyms": [],
+    "synonyms": ["soul", "center", "core"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3725,16 +3725,16 @@
   {
     "id": 258,
     "word": "heat",
-    "meaning_bn": "...",
-    "definition_en": "English definition for heat",
-    "definition_bn": "...",
+    "meaning_bn": "তাপ বা গরম",
+    "definition_en": "High temperature; the quality of being hot.",
+    "definition_bn": "উচ্চ তাপমাত্রা; গরম হওয়ার গুণ।",
     "examples_en": [
-      "Example sentence for 'heat'."
+      "We couldn't play because of the intense heat."
     ],
     "examples_bn": [
-      "'heat' এর জন্য উদাহরণ বাক্য।"
+      "তীব্র তাপের কারণে আমরা খেলতে পারিনি।"
     ],
-    "synonyms": [],
+    "synonyms": ["warmth", "fever"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -3742,14 +3742,14 @@
   {
     "id": 259,
     "word": "heating",
-    "meaning_bn": "...",
-    "definition_en": "English definition for heating",
-    "definition_bn": "...",
+    "meaning_bn": "উষ্ণায়ন বা গরম করার ব্যবস্থা",
+    "definition_en": "A system used to keep a building warm.",
+    "definition_bn": "একটি ভবন গরম রাখার জন্য ব্যবহৃত পদ্ধতি।",
     "examples_en": [
-      "Example sentence for 'heating'."
+      "The central heating is turned off."
     ],
     "examples_bn": [
-      "'heating' এর জন্য উদাহরণ বাক্য।"
+      "সেন্ট্রাল হিটিং (গরম রাখার ব্যবস্থা) বন্ধ করা আছে।"
     ],
     "synonyms": [],
     "level": "B1",
@@ -3759,16 +3759,16 @@
   {
     "id": 260,
     "word": "heaven",
-    "meaning_bn": "...",
-    "definition_en": "English definition for heaven",
-    "definition_bn": "...",
+    "meaning_bn": "স্বর্গ বা বেহেশত",
+    "definition_en": "A place regarded as the abode of God and the angels.",
+    "definition_bn": "ঈশ্বর এবং ফেরেশতাদের আবাসস্থল হিসেবে বিবেচিত স্থান।",
     "examples_en": [
-      "Example sentence for 'heaven'."
+      "May his soul rest in heaven."
     ],
     "examples_bn": [
-      "'heaven' এর জন্য উদাহরণ বাক্য।"
+      "তার আত্মা স্বর্গে শান্তিতে থাকুক।"
     ],
-    "synonyms": [],
+    "synonyms": ["paradise"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3776,16 +3776,16 @@
   {
     "id": 261,
     "word": "heavy",
-    "meaning_bn": "...",
-    "definition_en": "English definition for heavy",
-    "definition_bn": "...",
+    "meaning_bn": "ভারী",
+    "definition_en": "Weighing a lot; difficult to lift or move.",
+    "definition_bn": "প্রচুর ওজন বিশিষ্ট; যা তোলা বা সরানো কঠিন।",
     "examples_en": [
-      "Example sentence for 'heavy'."
+      "This suitcase is far too heavy for me to carry."
     ],
     "examples_bn": [
-      "'heavy' এর জন্য উদাহরণ বাক্য।"
+      "এই স্যুটকেসটি আমার বহন করার জন্য অনেক বেশি ভারী।"
     ],
-    "synonyms": [],
+    "synonyms": ["weighty", "hefty", "massive"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -3793,16 +3793,16 @@
   {
     "id": 262,
     "word": "heel",
-    "meaning_bn": "...",
-    "definition_en": "English definition for heel",
-    "definition_bn": "...",
+    "meaning_bn": "গোড়ালি",
+    "definition_en": "The back part of the human foot below the ankle.",
+    "definition_bn": "গোড়ালি নিচে মানুষের পায়ের পিছনের অংশ।",
     "examples_en": [
-      "Example sentence for 'heel'."
+      "The back of my heel is sore from these new shoes."
     ],
     "examples_bn": [
-      "'heel' এর জন্য উদাহরণ বাক্য।"
+      "এই নতুন জুতোর কারণে আমার গোড়ালির পিছনটা ব্যাথা করছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["back of foot"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3810,16 +3810,16 @@
   {
     "id": 263,
     "word": "height",
-    "meaning_bn": "...",
-    "definition_en": "English definition for height",
-    "definition_bn": "...",
+    "meaning_bn": "উচ্চতা",
+    "definition_en": "The measurement from base to top or (of a person) from head to foot.",
+    "definition_bn": "নিচ থেকে ওপরের মাপ অথবা (ব্যক্তির ক্ষেত্রে) মাথা থেকে পা পর্যন্ত পরিমাপ।",
     "examples_en": [
-      "Example sentence for 'height'."
+      "She is about the same height as her older sister."
     ],
     "examples_bn": [
-      "'height' এর জন্য উদাহরণ বাক্য।"
+      "সে তার বড় বোনের সমান উচ্চতার।"
     ],
-    "synonyms": [],
+    "synonyms": ["tallness", "stature", "elevation"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3827,16 +3827,16 @@
   {
     "id": 264,
     "word": "helicopter",
-    "meaning_bn": "...",
-    "definition_en": "English definition for helicopter",
-    "definition_bn": "...",
+    "meaning_bn": "হেলিকপ্টার",
+    "definition_en": "A type of aircraft which derives both lift and propulsion from one or more sets of horizontal propellers.",
+    "definition_bn": "এক ধরণের বিমান যা এক বা একাধিক অনুভূমিক প্রপেলার থেকে শক্তি পায়।",
     "examples_en": [
-      "Example sentence for 'helicopter'."
+      "The rescue team arrived in a helicopter."
     ],
     "examples_bn": [
-      "'helicopter' এর জন্য উদাহরণ বাক্য।"
+      "উদ্ধারকারী দল একটি হেলিকপ্টারে করে এসেছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["chopper", "whirlybird"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3844,16 +3844,16 @@
   {
     "id": 265,
     "word": "hell",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hell",
-    "definition_bn": "...",
+    "meaning_bn": "নরক",
+    "definition_en": "A place regarded in various religions as a spiritual realm of evil and suffering.",
+    "definition_bn": "বিভিন্ন ধর্মে মন্দ এবং কষ্টের আধ্যাত্মিক জগত হিসেবে বিবেচিত একটি স্থান।",
     "examples_en": [
-      "Example sentence for 'hell'."
+      "He believed that bad people go to hell after they die."
     ],
     "examples_bn": [
-      "'hell' এর জন্য উদাহরণ বাক্য।"
+      "সে বিশ্বাস করত যে খারাপ মানুষ মরার পর নরকে যায়।"
     ],
-    "synonyms": [],
+    "synonyms": ["underworld", "perdition", "purgatory"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3861,16 +3861,16 @@
   {
     "id": 266,
     "word": "hello",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hello",
-    "definition_bn": "...",
+    "meaning_bn": "হ্যালো/ওহে",
+    "definition_en": "Used as a greeting or to begin a telephone conversation.",
+    "definition_bn": "অভিবাদন হিসাবে বা টেলিফোনে কথা শুরু করতে ব্যবহৃত হয়।",
     "examples_en": [
-      "Example sentence for 'hello'."
+      "Hello, how are you today?"
     ],
     "examples_bn": [
-      "'hello' এর জন্য উদাহরণ বাক্য।"
+      "হ্যালো, আপনি আজ কেমন আছেন?"
     ],
-    "synonyms": [],
+    "synonyms": ["hi", "greetings", "salutation"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "exclam., n."
@@ -3878,16 +3878,16 @@
   {
     "id": 267,
     "word": "help",
-    "meaning_bn": "...",
-    "definition_en": "English definition for help",
-    "definition_bn": "...",
+    "meaning_bn": "সাহায্য করা",
+    "definition_en": "To make it easier for someone to do something by offering one's services or resources.",
+    "definition_bn": "কারো সেবামূলক কাজ বা সম্পদ প্রদানের মাধ্যমে কোনো কাজ সহজ করে দেয়া।",
     "examples_en": [
-      "Example sentence for 'help'."
+      "Can you help me with this math problem?"
     ],
     "examples_bn": [
-      "'help' এর জন্য উদাহরণ বাক্য।"
+      "আপনি কি আমাকে এই গণিত সমস্যাটি সমাধানে সাহায্য করতে পারেন?"
     ],
-    "synonyms": [],
+    "synonyms": ["assist", "aid", "support"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -3895,16 +3895,16 @@
   {
     "id": 268,
     "word": "helpful",
-    "meaning_bn": "...",
-    "definition_en": "English definition for helpful",
-    "definition_bn": "...",
+    "meaning_bn": "সহায়ক",
+    "definition_en": "Giving or ready to give help.",
+    "definition_bn": "সাহায্য দিতে প্রস্তুত বা উপকারী।",
     "examples_en": [
-      "Example sentence for 'helpful'."
+      "The staff at the hotel were very helpful."
     ],
     "examples_bn": [
-      "'helpful' এর জন্য উদাহরণ বাক্য।"
+      "হোটেলের কর্মীরা খুব সহায়ক ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["useful", "beneficial", "obliging"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -3912,14 +3912,14 @@
   {
     "id": 269,
     "word": "her",
-    "meaning_bn": "...",
-    "definition_en": "English definition for her",
-    "definition_bn": "...",
+    "meaning_bn": "তাকে/তার",
+    "definition_en": "Used as the object of a verb or preposition to refer to a female person or animal previously mentioned.",
+    "definition_bn": "পূর্বে উল্লিখিত কোনো নারী বা প্রাণীকে নির্দেশ করতে ব্যবহৃত শব্দ।",
     "examples_en": [
-      "Example sentence for 'her'."
+      "I saw her at the supermarket yesterday."
     ],
     "examples_bn": [
-      "'her' এর জন্য উদাহরণ বাক্য।"
+      "আমি তাকে গতকাল সুপারমার্কেটে দেখেছি।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -3929,16 +3929,16 @@
   {
     "id": 270,
     "word": "here",
-    "meaning_bn": "...",
-    "definition_en": "English definition for here",
-    "definition_bn": "...",
+    "meaning_bn": "এখানে",
+    "definition_en": "In, at, or to this place or position.",
+    "definition_bn": "এই স্থানে বা অবস্থানে।",
     "examples_en": [
-      "Example sentence for 'here'."
+      "Please come here and sit down."
     ],
     "examples_bn": [
-      "'here' এর জন্য উদাহরণ বাক্য।"
+      "দয়া করে এখানে এসে বসুন।"
     ],
-    "synonyms": [],
+    "synonyms": ["locally", "nearby"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -3946,16 +3946,16 @@
   {
     "id": 271,
     "word": "hero",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hero",
-    "definition_bn": "...",
+    "meaning_bn": "নায়ক/বীর",
+    "definition_en": "A person who is admired for their courage, outstanding achievements, or noble qualities.",
+    "definition_bn": "এমন একজন ব্যক্তি যিনি তার সাহস, অসামান্য কৃতিত্ব বা মহৎ গুণের জন্য প্রশংসিত হন।",
     "examples_en": [
-      "Example sentence for 'hero'."
+      "The firefighter was hailed as a local hero."
     ],
     "examples_bn": [
-      "'hero' এর জন্য উদাহরণ বাক্য।"
+      "দমকলকর্মীকে স্থানীয় বীর হিসেবে অভিহিত করা হয়েছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["idol", "champion", "protagonist"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3963,14 +3963,14 @@
   {
     "id": 272,
     "word": "hers",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hers",
-    "definition_bn": "...",
+    "meaning_bn": "তার",
+    "definition_en": "Used to refer to a thing or things belonging to or associated with a female person or animal.",
+    "definition_bn": "কোনো নারী বা প্রাণীর অধিকারে থাকা বস্তু নির্দেশ করতে ব্যবহৃত হয়।",
     "examples_en": [
-      "Example sentence for 'hers'."
+      "That book is not mine, it is hers."
     ],
     "examples_bn": [
-      "'hers' এর জন্য উদাহরণ বাক্য।"
+      "ঐ বইটি আমার নয়, এটি তার।"
     ],
     "synonyms": [],
     "level": "A2",
@@ -3980,14 +3980,14 @@
   {
     "id": 273,
     "word": "herself",
-    "meaning_bn": "...",
-    "definition_en": "English definition for herself",
-    "definition_bn": "...",
+    "meaning_bn": "সে নিজেই",
+    "definition_en": "Used as the object of a verb or preposition to refer to a female person or animal previously mentioned as the subject of the clause.",
+    "definition_bn": "কর্তা হিসেবে উল্লিখিত নারী বা প্রাণীকে পুনরায় নির্দেশ করতে ব্যবহৃত হয়।",
     "examples_en": [
-      "Example sentence for 'herself'."
+      "She taught herself how to play the piano."
     ],
     "examples_bn": [
-      "'herself' এর জন্য উদাহরণ বাক্য।"
+      "সে নিজেই নিজেকে পিয়ানো বাজানো শিখিয়েছে।"
     ],
     "synonyms": [],
     "level": "A2",
@@ -3997,16 +3997,16 @@
   {
     "id": 274,
     "word": "hesitate",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hesitate",
-    "definition_bn": "...",
+    "meaning_bn": "দ্বিধা করা",
+    "definition_en": "Pause before saying or doing something, especially through uncertainty.",
+    "definition_bn": "কিছু বলার বা করার আগে বিশেষ করে অনিশ্চয়তার কারণে থেমে যাওয়া।",
     "examples_en": [
-      "Example sentence for 'hesitate'."
+      "Don't hesitate to ask if you have any questions."
     ],
     "examples_bn": [
-      "'hesitate' এর জন্য উদাহরণ বাক্য।"
+      "আপনার কোন প্রশ্ন থাকলে জিজ্ঞাসা করতে দ্বিধা করবেন না।"
     ],
-    "synonyms": [],
+    "synonyms": ["pause", "waver", "dither"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -4014,16 +4014,16 @@
   {
     "id": 275,
     "word": "hi",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hi",
-    "definition_bn": "...",
+    "meaning_bn": "ওহে/হাই",
+    "definition_en": "An informal greeting; hello.",
+    "definition_bn": "একটি অনানুষ্ঠানিক অভিবাদন; হ্যালো।",
     "examples_en": [
-      "Example sentence for 'hi'."
+      "Hi, I didn't see you there!"
     ],
     "examples_bn": [
-      "'hi' এর জন্য উদাহরণ বাক্য।"
+      "হাই, আমি তো তোমাকে সেখানে দেখিনি!"
     ],
-    "synonyms": [],
+    "synonyms": ["hello", "hey"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "exclam."
@@ -4031,16 +4031,16 @@
   {
     "id": 276,
     "word": "hide",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hide",
-    "definition_bn": "...",
+    "meaning_bn": "লুকানো",
+    "definition_en": "Put or keep out of sight.",
+    "definition_bn": "দৃষ্টির আড়ালে রাখা।",
     "examples_en": [
-      "Example sentence for 'hide'."
+      "The children like to play hide and seek."
     ],
     "examples_bn": [
-      "'hide' এর জন্য উদাহরণ বাক্য।"
+      "শিশুরা লুকোচুরি খেলতে পছন্দ করে।"
     ],
-    "synonyms": [],
+    "synonyms": ["conceal", "cover", "disguise"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -4048,16 +4048,16 @@
   {
     "id": 278,
     "word": "highlight",
-    "meaning_bn": "...",
-    "definition_en": "English definition for highlight",
-    "definition_bn": "...",
+    "meaning_bn": "আলোকপাত করা/মুখ্য অংশ",
+    "definition_en": "Pick out and emphasize; the best or most interesting part of something.",
+    "definition_bn": "গুরুত্ব প্রদান করা বা কোনো কিছুর সেরা বা সবচেয়ে আকর্ষণীয় অংশ।",
     "examples_en": [
-      "Example sentence for 'highlight'."
+      "The report highlights the need for better safety measures."
     ],
     "examples_bn": [
-      "'highlight' এর জন্য উদাহরণ বাক্য।"
+      "প্রতিবেদনটি আরও ভালো নিরাপত্তা ব্যবস্থার প্রয়োজনীয়তার ওপর আলোকপাত করে।"
     ],
-    "synonyms": [],
+    "synonyms": ["emphasize", "underline", "best part"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -4065,16 +4065,16 @@
   {
     "id": 279,
     "word": "highly",
-    "meaning_bn": "...",
-    "definition_en": "English definition for highly",
-    "definition_bn": "...",
+    "meaning_bn": "উচ্চমাত্রায়/অত্যন্ত",
+    "definition_en": "At or to a high degree or level; very much.",
+    "definition_bn": "উচ্চ মাত্রায় বা স্তরে; অনেক বেশি।",
     "examples_en": [
-      "Example sentence for 'highly'."
+      "She is a highly skilled professional."
     ],
     "examples_bn": [
-      "'highly' এর জন্য উদাহরণ বাক্য।"
+      "তিনি একজন অত্যন্ত দক্ষ পেশাদার।"
     ],
-    "synonyms": [],
+    "synonyms": ["extremely", "very", "exceedingly"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -4082,16 +4082,16 @@
   {
     "id": 280,
     "word": "highway",
-    "meaning_bn": "...",
-    "definition_en": "English definition for highway",
-    "definition_bn": "...",
+    "meaning_bn": "মহাসড়ক",
+    "definition_en": "A main road, especially one connecting major towns or cities.",
+    "definition_bn": "একটি প্রধান রাস্তা, বিশেষ করে যা বড় শহরগুলোকে সংযুক্ত করে।",
     "examples_en": [
-      "Example sentence for 'highway'."
+      "We drove along the highway for three hours."
     ],
     "examples_bn": [
-      "'highway' এর জন্য উদাহরণ বাক্য।"
+      "আমরা তিন ঘণ্টা মহাসড়ক দিয়ে গাড়ি চালিয়েছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["expressway", "main road", "freeway"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4099,16 +4099,16 @@
   {
     "id": 281,
     "word": "hill",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hill",
-    "definition_bn": "...",
+    "meaning_bn": "পাহাড়",
+    "definition_en": "A naturally raised area of land, not as high or craggy as a mountain.",
+    "definition_bn": "প্রাকৃতিকভাবে উঁচু ভূমি এলাকা, যা পর্বতের মতো উঁচু বা পাথুরে নয়।",
     "examples_en": [
-      "Example sentence for 'hill'."
+      "They built their house on top of a hill."
     ],
     "examples_bn": [
-      "'hill' এর জন্য উদাহরণ বাক্য।"
+      "তারা একটি পাহাড়ের চূড়ায় তাদের বাড়ি তৈরি করেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["mound", "rise", "elevation"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4116,14 +4116,14 @@
   {
     "id": 282,
     "word": "him",
-    "meaning_bn": "...",
-    "definition_en": "English definition for him",
-    "definition_bn": "...",
+    "meaning_bn": "তাকে",
+    "definition_en": "Used as the object of a verb or preposition to refer to a male person or animal previously mentioned.",
+    "definition_bn": "পূর্বে উল্লিখিত কোনো পুরুষ বা প্রাণীকে নির্দেশ করতে ব্যবহৃত শব্দ।",
     "examples_en": [
-      "Example sentence for 'him'."
+      "I gave him the keys this morning."
     ],
     "examples_bn": [
-      "'him' এর জন্য উদাহরণ বাক্য।"
+      "আমি আজ সকালে তাকে চাবিগুলো দিয়েছি।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4133,14 +4133,14 @@
   {
     "id": 283,
     "word": "himself",
-    "meaning_bn": "...",
-    "definition_en": "English definition for himself",
-    "definition_bn": "...",
+    "meaning_bn": "সে নিজেই",
+    "definition_en": "Used as the object of a verb or preposition to refer to a male person or animal previously mentioned as the subject of the clause.",
+    "definition_bn": "কর্তা হিসেবে উল্লিখিত পুরুষ বা প্রাণীকে পুনরায় নির্দেশ করতে ব্যবহৃত হয়।",
     "examples_en": [
-      "Example sentence for 'himself'."
+      "He cut himself while shaving."
     ],
     "examples_bn": [
-      "'himself' এর জন্য উদাহরণ বাক্য।"
+      "দাড়ি কামানোর সময় সে নিজে নিজেকে কেটে ফেলেছে।"
     ],
     "synonyms": [],
     "level": "A2",
@@ -4150,14 +4150,14 @@
   {
     "id": 285,
     "word": "his",
-    "meaning_bn": "...",
-    "definition_en": "English definition for his",
-    "definition_bn": "...",
+    "meaning_bn": "তার",
+    "definition_en": "Belonging to or associated with a male person or animal previously mentioned.",
+    "definition_bn": "পূর্বে উল্লিখিত কোনো পুরুষ বা প্রাণীর অধিকারে থাকা।",
     "examples_en": [
-      "Example sentence for 'his'."
+      "His car is parked outside."
     ],
     "examples_bn": [
-      "'his' এর জন্য উদাহরণ বাক্য।"
+      "তার গাড়ি বাইরে পার্ক করা আছে।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4167,16 +4167,16 @@
   {
     "id": 286,
     "word": "historical",
-    "meaning_bn": "...",
-    "definition_en": "English definition for historical",
-    "definition_bn": "...",
+    "meaning_bn": "ঐতিহাসিক",
+    "definition_en": "Concerning history or past events.",
+    "definition_bn": "ইতিহাস বা অতীতের ঘটনা সংক্রান্ত।",
     "examples_en": [
-      "Example sentence for 'historical'."
+      "The museum contains many historical artifacts."
     ],
     "examples_bn": [
-      "'historical' এর জন্য উদাহরণ বাক্য।"
+      "জাদুঘরটিতে অনেক ঐতিহাসিক নিদর্শন রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["past", "ancient", "chronicled"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4184,16 +4184,16 @@
   {
     "id": 287,
     "word": "history",
-    "meaning_bn": "...",
-    "definition_en": "English definition for history",
-    "definition_bn": "...",
+    "meaning_bn": "ইতিহাস",
+    "definition_en": "The study of past events, particularly in human affairs.",
+    "definition_bn": "অতীতের ঘটনাগুলির অধ্যয়ন, বিশেষ করে মানুষের ঘটনাবলী।",
     "examples_en": [
-      "Example sentence for 'history'."
+      "I am very interested in ancient history."
     ],
     "examples_bn": [
-      "'history' এর জন্য উদাহরণ বাক্য।"
+      "আমি প্রাচীন ইতিহাসের প্রতি খুব আগ্রহী।"
     ],
-    "synonyms": [],
+    "synonyms": ["past", "annals", "record"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4201,16 +4201,16 @@
   {
     "id": 288,
     "word": "hit",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hit",
-    "definition_bn": "...",
+    "meaning_bn": "আঘাত করা",
+    "definition_en": "Bring one's hand or a tool or weapon into contact with (someone or something) quickly and forcefully.",
+    "definition_bn": "দ্রুত এবং জোরপূর্বক হাত বা কোনো অস্ত্র দিয়ে আঘাত করা।",
     "examples_en": [
-      "Example sentence for 'hit'."
+      "He hit the ball with the bat."
     ],
     "examples_bn": [
-      "'hit' এর জন্য উদাহরণ বাক্য।"
+      "সে ব্যাট দিয়ে বলটিকে আঘাত করল।"
     ],
-    "synonyms": [],
+    "synonyms": ["strike", "knock", "punch"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -4218,16 +4218,16 @@
   {
     "id": 289,
     "word": "hobby",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hobby",
-    "definition_bn": "...",
+    "meaning_bn": "শখ",
+    "definition_en": "An activity done regularly in one's leisure time for pleasure.",
+    "definition_bn": "আনন্দের জন্য অবসরে নিয়মিত করা হয় এমন একটি কাজ।",
     "examples_en": [
-      "Example sentence for 'hobby'."
+      "My favorite hobby is stamp collecting."
     ],
     "examples_bn": [
-      "'hobby' এর জন্য উদাহরণ বাক্য।"
+      "আমার প্রিয় শখ ডাকটিকিট সংগ্রহ করা।"
     ],
-    "synonyms": [],
+    "synonyms": ["pastime", "interest", "diversion"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4235,16 +4235,16 @@
   {
     "id": 290,
     "word": "hockey",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hockey",
-    "definition_bn": "...",
+    "meaning_bn": "হকি",
+    "definition_en": "A team game played with curved sticks and a small ball or puck.",
+    "definition_bn": "বাঁকানো স্টিক এবং ছোট বল দিয়ে খেলা একটি দলীয় খেলা।",
     "examples_en": [
-      "Example sentence for 'hockey'."
+      "He plays for the school hockey team."
     ],
     "examples_bn": [
-      "'hockey' এর জন্য উদাহরণ বাক্য।"
+      "সে স্কুলের হকি দলের হয়ে খেলে।"
     ],
-    "synonyms": [],
+    "synonyms": ["field hockey"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4252,16 +4252,16 @@
   {
     "id": 292,
     "word": "hole",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hole",
-    "definition_bn": "...",
+    "meaning_bn": "গর্ত/ছিদ্র",
+    "definition_en": "A hollow place in a solid body or surface.",
+    "definition_bn": "কঠিন বস্তু বা পৃষ্ঠের একটি ফাঁপা জায়গা।",
     "examples_en": [
-      "Example sentence for 'hole'."
+      "There is a hole in my sock."
     ],
     "examples_bn": [
-      "'hole' এর জন্য উদাহরণ বাক্য।"
+      "আমার মোজায় একটা ছিদ্র আছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["opening", "gap", "cavity"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4269,16 +4269,16 @@
   {
     "id": 293,
     "word": "holiday",
-    "meaning_bn": "...",
-    "definition_en": "English definition for holiday",
-    "definition_bn": "...",
+    "meaning_bn": "ছুটি",
+    "definition_en": "A day of festivity or recreation when no work is done.",
+    "definition_bn": "উৎসব বা বিনোদনের একটি দিন যখন কোনো কাজ করা হয় না।",
     "examples_en": [
-      "Example sentence for 'holiday'."
+      "We are going to Spain for our summer holiday."
     ],
     "examples_bn": [
-      "'holiday' এর জন্য উদাহরণ বাক্য।"
+      "আমরা আমাদের গ্রীষ্মের ছুটিতে স্পেন যাচ্ছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["vacation", "break", "day off"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4286,16 +4286,16 @@
   {
     "id": 294,
     "word": "hollow",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hollow",
-    "definition_bn": "...",
+    "meaning_bn": "ফাঁপা",
+    "definition_en": "Having a hole or empty space inside.",
+    "definition_bn": "ভিতরে ছিদ্র বা খালি জায়গা থাকা।",
     "examples_en": [
-      "Example sentence for 'hollow'."
+      "The trunk of the old tree was hollow."
     ],
     "examples_bn": [
-      "'hollow' এর জন্য উদাহরণ বাক্য।"
+      "পুরানো গাছের কাণ্ডটি ফাঁপা ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["empty", "void", "vacant"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4303,16 +4303,16 @@
   {
     "id": 295,
     "word": "holy",
-    "meaning_bn": "...",
-    "definition_en": "English definition for holy",
-    "definition_bn": "...",
+    "meaning_bn": "পবিত্র",
+    "definition_en": "Dedicated or consecrated to God or a religious purpose; sacred.",
+    "definition_bn": "ঈশ্বর বা ধর্মীয় উদ্দেশ্যে উৎসর্গ করা; পবিত্র।",
     "examples_en": [
-      "Example sentence for 'holy'."
+      "Varanasi is a holy city for Hindus."
     ],
     "examples_bn": [
-      "'holy' এর জন্য উদাহরণ বাক্য।"
+      "বারাণসী হিন্দুদের কাছে এক পবিত্র শহর।"
     ],
-    "synonyms": [],
+    "synonyms": ["sacred", "divine", "blessed"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4320,16 +4320,16 @@
   {
     "id": 297,
     "word": "homework",
-    "meaning_bn": "...",
-    "definition_en": "English definition for homework",
-    "definition_bn": "...",
+    "meaning_bn": "বাড়ির কাজ",
+    "definition_en": "Schoolwork that a pupil is required to do at home.",
+    "definition_bn": "স্কুলের কাজ যা একজন শিক্ষার্থীকে বাড়িতে করতে হয়।",
     "examples_en": [
-      "Example sentence for 'homework'."
+      "I have to finish my math homework before dinner."
     ],
     "examples_bn": [
-      "'homework' এর জন্য উদাহরণ বাক্য।"
+      "রাতের খাবারের আগে আমাকে গণিত বাড়ির কাজ শেষ করতে হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["assignments", "schoolwork"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4337,16 +4337,16 @@
   {
     "id": 298,
     "word": "honest",
-    "meaning_bn": "...",
-    "definition_en": "English definition for honest",
-    "definition_bn": "...",
+    "meaning_bn": "সৎ",
+    "definition_en": "Free of deceit; truthful and sincere.",
+    "definition_bn": "প্রতারণা মুক্ত; সত্যবাদী এবং আন্তরিক।",
     "examples_en": [
-      "Example sentence for 'honest'."
+      "Give me your honest opinion about this dress."
     ],
     "examples_bn": [
-      "'honest' এর জন্য উদাহরণ বাক্য।"
+      "এই পোশাকটি সম্পর্কে আমাকে আপনার সৎ মতামত দিন।"
     ],
-    "synonyms": [],
+    "synonyms": ["truthful", "sincere", "frank"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4354,16 +4354,16 @@
   {
     "id": 299,
     "word": "honesty",
-    "meaning_bn": "...",
-    "definition_en": "English definition for honesty",
-    "definition_bn": "...",
+    "meaning_bn": "সততা",
+    "definition_en": "The quality of being honest.",
+    "definition_bn": "সৎ হওয়ার গুণ।",
     "examples_en": [
-      "Example sentence for 'honesty'."
+      "I appreciate your honesty in this matter."
     ],
     "examples_bn": [
-      "'honesty' এর জন্য উদাহরণ বাক্য।"
+      "আমি এই বিষয়ে আপনার সততার প্রশংসা করি।"
     ],
-    "synonyms": [],
+    "synonyms": ["integrity", "truthfulness", "sincerity"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4371,16 +4371,16 @@
   {
     "id": 300,
     "word": "honor",
-    "meaning_bn": "...",
-    "definition_en": "English definition for honor",
-    "definition_bn": "...",
+    "meaning_bn": "সম্মান/শ্রদ্ধা",
+    "definition_en": "High respect; great esteem.",
+    "definition_bn": "উচ্চ শ্রদ্ধা; মহান সম্মান।",
     "examples_en": [
-      "Example sentence for 'honor'."
+      "It is an honor to meet you, sir."
     ],
     "examples_bn": [
-      "'honor' এর জন্য উদাহরণ বাক্য।"
+      "আপনার সাথে দেখা করা একটি সম্মানের বিষয়, স্যার।"
     ],
-    "synonyms": [],
+    "synonyms": ["respect", "glory", "esteem"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -4388,16 +4388,16 @@
   {
     "id": 301,
     "word": "hope",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hope",
-    "definition_bn": "...",
+    "meaning_bn": "আশা করা",
+    "definition_en": "A feeling of expectation and desire for a particular thing to happen.",
+    "definition_bn": "একটি বিশেষ কিছু ঘটার প্রত্যাশা এবং আকাঙ্ক্ষার অনুভূতি।",
     "examples_en": [
-      "Example sentence for 'hope'."
+      "I hope that you have a wonderful birthday."
     ],
     "examples_bn": [
-      "'hope' এর জন্য উদাহরণ বাক্য।"
+      "আমি আশা করি তোমার জন্মদিনটি চমৎকার কাটবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["aspire", "expect", "wish"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -4405,16 +4405,16 @@
   {
     "id": 302,
     "word": "horrible",
-    "meaning_bn": "...",
-    "definition_en": "English definition for horrible",
-    "definition_bn": "...",
+    "meaning_bn": "ভয়াবহ/ভীষণ খারাপ",
+    "definition_en": "Causing or likely to cause a feeling of horror; very unpleasant.",
+    "definition_bn": "ভীতিকর অনুভূতি সৃষ্টি করে এমন; খুব অপ্রীতিকর।",
     "examples_en": [
-      "Example sentence for 'horrible'."
+      "The weather was absolutely horrible all weekend."
     ],
     "examples_bn": [
-      "'horrible' এর জন্য উদাহরণ বাক্য।"
+      "সারা সপ্তাহান্তের আবহাওয়া একেবারেই ভয়াবহ ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["terrible", "awful", "dreadful"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4422,16 +4422,16 @@
   {
     "id": 303,
     "word": "horror",
-    "meaning_bn": "...",
-    "definition_en": "English definition for horror",
-    "definition_bn": "...",
+    "meaning_bn": "আতঙ্ক/ভীতি",
+    "definition_en": "An intense feeling of fear, shock, or disgust.",
+    "definition_bn": "ভয়, ধাক্কা বা ঘৃণার তীব্র অনুভূতি।",
     "examples_en": [
-      "Example sentence for 'horror'."
+      "She cried out in horror when she saw the accident."
     ],
     "examples_bn": [
-      "'horror' এর জন্য উদাহরণ বাক্য।"
+      "দুর্ঘটনা দেখে সে আতঙ্কে চিৎকার করে উঠল।"
     ],
-    "synonyms": [],
+    "synonyms": ["terror", "fear", "dread"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4439,16 +4439,16 @@
   {
     "id": 304,
     "word": "horse",
-    "meaning_bn": "...",
-    "definition_en": "English definition for horse",
-    "definition_bn": "...",
+    "meaning_bn": "ঘোড়া",
+    "definition_en": "A large plant-eating domesticated mammal with solid hooves and a flowing mane and tail.",
+    "definition_bn": "একটি বড় তৃণভোজী গৃহপালিত স্তন্যপায়ী প্রাণী যার শক্ত খুর এবং দীর্ঘ কেশর থাকে।",
     "examples_en": [
-      "Example sentence for 'horse'."
+      "He learned to ride a horse when he was six."
     ],
     "examples_bn": [
-      "'horse' এর জন্য উদাহরণ বাক্য।"
+      "ছয় বছর বয়সে সে ঘোড়ায় চড়া শিখেছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["steed", "stallion", "pony"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4456,16 +4456,16 @@
   {
     "id": 305,
     "word": "hospital",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hospital",
-    "definition_bn": "...",
+    "meaning_bn": "হাসপাতাল",
+    "definition_en": "An institution providing medical and surgical treatment and nursing care for sick or injured people.",
+    "definition_bn": "অসুস্থ বা আহত ব্যক্তিদের চিকিৎসা এবং সেবার জন্য একটি প্রতিষ্ঠান।",
     "examples_en": [
-      "Example sentence for 'hospital'."
+      "He was taken to the hospital after the crash."
     ],
     "examples_bn": [
-      "'hospital' এর জন্য উদাহরণ বাক্য।"
+      "দুর্ঘটনার পর তাকে হাসপাতালে নিয়ে যাওয়া হয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["medical center", "clinic"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4473,16 +4473,16 @@
   {
     "id": 306,
     "word": "host",
-    "meaning_bn": "...",
-    "definition_en": "English definition for host",
-    "definition_bn": "...",
+    "meaning_bn": "স্বাগতিক/আয়োজক",
+    "definition_en": "A person who receives or entertains other people as guests.",
+    "definition_bn": "এমন একজন ব্যক্তি যিনি অন্যান্য ব্যক্তিদের অতিথি হিসেবে গ্রহণ বা আপ্যায়ন করেন।",
     "examples_en": [
-      "Example sentence for 'host'."
+      "Our host made us feel very welcome."
     ],
     "examples_bn": [
-      "'host' এর জন্য উদাহরণ বাক্য।"
+      "আমাদের আয়োজক আমাদের খুব উষ্ণ অভ্যর্থনা জানিয়েছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["master of ceremonies", "presenter"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -4490,16 +4490,16 @@
   {
     "id": 307,
     "word": "hot",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hot",
-    "definition_bn": "...",
+    "meaning_bn": "গরম",
+    "definition_en": "Having a high temperature.",
+    "definition_bn": "উচ্চ তাপমাত্রা বিশিষ্ট।",
     "examples_en": [
-      "Example sentence for 'hot'."
+      "Be careful, the soup is very hot."
     ],
     "examples_bn": [
-      "'hot' এর জন্য উদাহরণ বাক্য।"
+      "সাবধান, স্যুপটা খুব গরম।"
     ],
-    "synonyms": [],
+    "synonyms": ["heated", "burning", "scorching"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4507,16 +4507,16 @@
   {
     "id": 308,
     "word": "hotel",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hotel",
-    "definition_bn": "...",
+    "meaning_bn": "হোটেল",
+    "definition_en": "An establishment providing accommodation, meals, and other services for travelers and tourists.",
+    "definition_bn": "ভ্রমণকারী এবং পর্যটকদের জন্য আবাসন, খাবার এবং অন্যান্য পরিষেবা প্রদানকারী প্রতিষ্ঠান।",
     "examples_en": [
-      "Example sentence for 'hotel'."
+      "We stayed in a five-star hotel during our trip."
     ],
     "examples_bn": [
-      "'hotel' এর জন্য উদাহরণ বাক্য।"
+      "আমাদের ভ্রমণের সময় আমরা একটি পাঁচতারা হোটেলে ছিলাম।"
     ],
-    "synonyms": [],
+    "synonyms": ["inn", "lodging"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4524,14 +4524,14 @@
   {
     "id": 309,
     "word": "hour",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hour",
-    "definition_bn": "...",
+    "meaning_bn": "ঘণ্টা",
+    "definition_en": "A period of time equal to sixty minutes.",
+    "definition_bn": "ষাট মিনিটের সমান সময়ের একটি ব্যাপ্তি।",
     "examples_en": [
-      "Example sentence for 'hour'."
+      "The meeting lasted for more than an hour."
     ],
     "examples_bn": [
-      "'hour' এর জন্য উদাহরণ বাক্য।"
+      "মিটিংটি এক ঘণ্টারও বেশি সময় ধরে চলেছিল।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4541,16 +4541,16 @@
   {
     "id": 311,
     "word": "household",
-    "meaning_bn": "...",
-    "definition_en": "English definition for household",
-    "definition_bn": "...",
+    "meaning_bn": "গৃহস্থালি",
+    "definition_en": "A house and its occupants regarded as a unit.",
+    "definition_bn": "একটি বাড়ি এবং এর বাসিন্দাদের একটি একক ইউনিট হিসাবে বিবেচনা করা হয়।",
     "examples_en": [
-      "Example sentence for 'household'."
+      "The average household spends a lot on groceries."
     ],
     "examples_bn": [
-      "'household' এর জন্য উদাহরণ বাক্য।"
+      "গড় গৃহস্থালিতে মুদি পণ্যের জন্য অনেক খরচ হয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["family", "home", "menage"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4558,16 +4558,16 @@
   {
     "id": 312,
     "word": "housing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for housing",
-    "definition_bn": "...",
+    "meaning_bn": "আবাসন",
+    "definition_en": "Houses and flats considered collectively.",
+    "definition_bn": "বাড়ি এবং ফ্ল্যাটগুলি সম্মিলিতভাবে বিবেচনা করা হয়।",
     "examples_en": [
-      "Example sentence for 'housing'."
+      "The government is building more low-cost housing."
     ],
     "examples_bn": [
-      "'housing' এর জন্য উদাহরণ বাক্য।"
+      "সরকার আরও স্বল্পমূল্যের আবাসন নির্মাণ করছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["accommodation", "shelter", "residence"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4575,14 +4575,14 @@
   {
     "id": 313,
     "word": "how",
-    "meaning_bn": "...",
-    "definition_en": "English definition for how",
-    "definition_bn": "...",
+    "meaning_bn": "কিভাবে/কেমন",
+    "definition_en": "In what way or manner; by what means.",
+    "definition_bn": "কিভাবে বা কোন উপায়ে।",
     "examples_en": [
-      "Example sentence for 'how'."
+      "How do you spell your name?"
     ],
     "examples_bn": [
-      "'how' এর জন্য উদাহরণ বাক্য।"
+      "আপনি আপনার নামের বানান কিভাবে করেন?"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4592,16 +4592,16 @@
   {
     "id": 314,
     "word": "however",
-    "meaning_bn": "...",
-    "definition_en": "English definition for however",
-    "definition_bn": "...",
+    "meaning_bn": "যাইহোক/তবুও",
+    "definition_en": "Used to introduce a statement that contrasts with or seems to contradict something that has been said.",
+    "definition_bn": "পূর্বে বলা কোনো কথার বিপরীতে কিছু বলতে ব্যবহৃত হয়।",
     "examples_en": [
-      "Example sentence for 'however'."
+      "He was feeling ill; however, he went to work."
     ],
     "examples_bn": [
-      "'however' এর জন্য উদাহরণ বাক্য।"
+      "তিনি অসুস্থ বোধ করছিলেন; তবুও, তিনি কাজে গিয়েছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["nevertheless", "yet", "nonetheless"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -4609,16 +4609,16 @@
   {
     "id": 315,
     "word": "huge",
-    "meaning_bn": "...",
-    "definition_en": "English definition for huge",
-    "definition_bn": "...",
+    "meaning_bn": "বিশাল",
+    "definition_en": "Extremely large; enormous.",
+    "definition_bn": "অত্যন্ত বড়; বিশাল।",
     "examples_en": [
-      "Example sentence for 'huge'."
+      "A huge crowd gathered to see the singer."
     ],
     "examples_bn": [
-      "'huge' এর জন্য উদাহরণ বাক্য।"
+      "গায়ককে দেখতে বিশাল ভিড় জমেছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["enormous", "gigantic", "massive"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4626,16 +4626,16 @@
   {
     "id": 316,
     "word": "human",
-    "meaning_bn": "...",
-    "definition_en": "English definition for human",
-    "definition_bn": "...",
+    "meaning_bn": "মানুষ/মানবীয়",
+    "definition_en": "Relating to or characteristic of humankind.",
+    "definition_bn": "মানবজাতি সম্পর্কিত বা তার বৈশিষ্ট্য।",
     "examples_en": [
-      "Example sentence for 'human'."
+      "To err is human, to forgive divine."
     ],
     "examples_bn": [
-      "'human' এর জন্য উদাহরণ বাক্য।"
+      "ভুল করা মানুষের কাজ, ক্ষমা করা স্বর্গীয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["person", "mortal", "mankind"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj., n."
@@ -4643,16 +4643,16 @@
   {
     "id": 317,
     "word": "humor",
-    "meaning_bn": "...",
-    "definition_en": "English definition for humor",
-    "definition_bn": "...",
+    "meaning_bn": "রসবোধ",
+    "definition_en": "The quality of being amusing or comic, especially as expressed in literature or speech.",
+    "definition_bn": "কৌতুকপূর্ণ বা হাসিখুশি হওয়ার গুণ, বিশেষ করে সাহিত্য বা বক্তৃতায় প্রকাশ করা।",
     "examples_en": [
-      "Example sentence for 'humor'."
+      "He has a great sense of humor."
     ],
     "examples_bn": [
-      "'humor' এর জন্য উদাহরণ বাক্য।"
+      "তার দারুণ রসবোধ আছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["wit", "comedy", "jocularity"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4660,16 +4660,16 @@
   {
     "id": 318,
     "word": "humorous",
-    "meaning_bn": "...",
-    "definition_en": "English definition for humorous",
-    "definition_bn": "...",
+    "meaning_bn": "হাস্যরসাত্মক",
+    "definition_en": "Causing lighthearted laughter and amusement; comic.",
+    "definition_bn": "হাসি এবং আনন্দ সৃষ্টি করে এমন; কমিক।",
     "examples_en": [
-      "Example sentence for 'humorous'."
+      "The book is a humorous look at modern life."
     ],
     "examples_bn": [
-      "'humorous' এর জন্য উদাহরণ বাক্য।"
+      "বইটি আধুনিক জীবনের একটি হাস্যরসাত্মক রূপ।"
     ],
-    "synonyms": [],
+    "synonyms": ["funny", "amusing", "witty"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4677,16 +4677,16 @@
   {
     "id": 319,
     "word": "hundred",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hundred",
-    "definition_bn": "...",
+    "meaning_bn": "একশ",
+    "definition_en": "The number equivalent to the product of ten and ten; 100.",
+    "definition_bn": "দশ এবং দশের গুণের সমান সংখ্যা; ১০০।",
     "examples_en": [
-      "Example sentence for 'hundred'."
+      "There were over a hundred people at the party."
     ],
     "examples_bn": [
-      "'hundred' এর জন্য উদাহরণ বাক্য।"
+      "পার্টিতে শতাধিক মানুষ ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["century"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "number"
@@ -4694,16 +4694,16 @@
   {
     "id": 320,
     "word": "hungry",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hungry",
-    "definition_bn": "...",
+    "meaning_bn": "ক্ষুধার্ত",
+    "definition_en": "Feeling or displaying the need for food.",
+    "definition_bn": "খাবারের প্রয়োজন অনুভব করা।",
     "examples_en": [
-      "Example sentence for 'hungry'."
+      "I'm so hungry I could eat anything right now."
     ],
     "examples_bn": [
-      "'hungry' এর জন্য উদাহরণ বাক্য।"
+      "আমি এতই ক্ষুধার্ত যে আমি এখন যা কিছু খেতে পারি।"
     ],
-    "synonyms": [],
+    "synonyms": ["famished", "starving"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4711,16 +4711,16 @@
   {
     "id": 321,
     "word": "hunt",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hunt",
-    "definition_bn": "...",
+    "meaning_bn": "শিকার করা",
+    "definition_en": "Pursue and kill (a wild animal) for sport or food.",
+    "definition_bn": "খেলা বা খাবারের জন্য (বন্য প্রাণী) ধাওয়া করা এবং মারা।",
     "examples_en": [
-      "Example sentence for 'hunt'."
+      "Lions usually hunt at night."
     ],
     "examples_bn": [
-      "'hunt' এর জন্য উদাহরণ বাক্য।"
+      "সিংহ সাধারণত রাতে শিকার করে।"
     ],
-    "synonyms": [],
+    "synonyms": ["chase", "stalk", "pursue"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -4728,16 +4728,16 @@
   {
     "id": 322,
     "word": "hunting",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hunting",
-    "definition_bn": "...",
+    "meaning_bn": "শিকার",
+    "definition_en": "The activity of hunting wild animals or game.",
+    "definition_bn": "বন্য প্রাণী বা শিকার ধরার কাজ।",
     "examples_en": [
-      "Example sentence for 'hunting'."
+      "Hunting is a popular sport in some parts of the world."
     ],
     "examples_bn": [
-      "'hunting' এর জন্য উদাহরণ বাক্য।"
+      "বিশ্বের কিছু অংশে শিকার একটি জনপ্রিয় খেলা।"
     ],
-    "synonyms": [],
+    "synonyms": ["chasing", "stalking"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4745,16 +4745,16 @@
   {
     "id": 323,
     "word": "hurry",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hurry",
-    "definition_bn": "...",
+    "meaning_bn": "তাড়াহুড়ো করা",
+    "definition_en": "Move or act with great haste.",
+    "definition_bn": "খুব দ্রুত চলাফেরা বা কাজ করা।",
     "examples_en": [
-      "Example sentence for 'hurry'."
+      "We need to hurry if we want to catch the train."
     ],
     "examples_bn": [
-      "'hurry' এর জন্য উদাহরণ বাক্য।"
+      "আমরা যদি ট্রেন ধরতে চাই তবে আমাদের তাড়াহুড়ো করতে হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["rush", "hasten", "speed"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -4762,16 +4762,16 @@
   {
     "id": 324,
     "word": "hurt",
-    "meaning_bn": "...",
-    "definition_en": "English definition for hurt",
-    "definition_bn": "...",
+    "meaning_bn": "আঘাত করা/ব্যাথা পাওয়া",
+    "definition_en": "Cause physical pain or injury to; feel pain.",
+    "definition_bn": "শারীরিক ব্যথা বা আঘাতের কারণ হওয়া; ব্যথা অনুভব করা।",
     "examples_en": [
-      "Example sentence for 'hurt'."
+      "Did you hurt yourself when you fell?"
     ],
     "examples_bn": [
-      "'hurt' এর জন্য উদাহরণ বাক্য।"
+      "পড়ে যাওয়ার সময় তুমি কি ব্যাথা পেয়েছিলে?"
     ],
-    "synonyms": [],
+    "synonyms": ["injure", "harm", "damage"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., adj."
@@ -4779,16 +4779,16 @@
   {
     "id": 325,
     "word": "husband",
-    "meaning_bn": "...",
-    "definition_en": "English definition for husband",
-    "definition_bn": "...",
+    "meaning_bn": "স্বামী",
+    "definition_en": "A married man considered in relation to his spouse.",
+    "definition_bn": "একজন বিবাহিত পুরুষ যাকে তার স্ত্রীর পরিপ্রেক্ষিতে বিবেচনা করা হয়।",
     "examples_en": [
-      "Example sentence for 'husband'."
+      "Her husband works as an engineer."
     ],
     "examples_bn": [
-      "'husband' এর জন্য উদাহরণ বাক্য।"
+      "তার স্বামী একজন প্রকৌশলী হিসেবে কাজ করেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["spouse", "partner"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
