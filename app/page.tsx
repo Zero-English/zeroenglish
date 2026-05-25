@@ -42,10 +42,10 @@ export default function Home() {
 
       <div className="animate-fade-up text-center mb-12">
         <h1 className="text-5xl sm:text-6xl font-bold tracking-tight mb-3 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-          Vocabulary
+          Oxford 3000 Word Vocabulary
         </h1>
-        <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
-          Master English words — pick your level and start learning
+        <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-md mx-auto text-centre">
+          Master English word.<br/>pick your level and start learning.
         </p>
       </div>
 
