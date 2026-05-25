@@ -22,15 +22,12 @@ export function Header() {
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Logo */}
         <Link href="/" className="flex-shrink-0">
-          <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+          <span className="text-xl font-bold text-black">
             Vocabulary
           </span>
         </Link>
-
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-1">
+        {/* <div className="hidden md:flex items-center space-x-1">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -41,14 +38,10 @@ export function Header() {
             </Link>
           ))}
         </div>
-
-        {/* Right side buttons */}
         <div className="hidden md:flex items-center space-x-4">
           <Button variant="outline">Sign In</Button>
           <Button>Get Started</Button>
         </div>
-
-        {/* Mobile menu button */}
         <button
           onClick={toggleMenu}
           className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -58,11 +51,11 @@ export function Header() {
           ) : (
             <Menu className="h-6 w-6" />
           )}
-        </button>
+        </button> */}
       </nav>
 
       {/* Mobile Navigation */}
-      {isOpen && (
+      {/* {isOpen && (
         <div className="md:hidden border-t border-gray-200">
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navLinks.map((link) => (
@@ -83,7 +76,7 @@ export function Header() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </header>
   );
 }

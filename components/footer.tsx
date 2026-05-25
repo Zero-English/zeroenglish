@@ -26,7 +26,7 @@ export function Footer() {
   };
 
   const socialLinks = [
-    { icon: Mail, href: "mailto:contact@vocabulary.com", label: "Email" },
+    { icon: Mail, href: "tahmidhasanpro@gmail.com", label: "Email" },
   ];
 
   return (
@@ -37,7 +37,7 @@ export function Footer() {
           {/* Brand Column */}
           <div className="space-y-4">
             <Link href="/" className="inline-block">
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold text-white bg-clip-text text-transparent">
                 Vocabulary
               </span>
             </Link>
@@ -62,7 +62,7 @@ export function Footer() {
           </div>
 
           {/* Links Columns */}
-          {Object.entries(footerLinks).map(([category, links]) => (
+          {/* {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
               <h3 className="text-sm font-semibold text-white mb-4">{category}</h3>
               <ul className="space-y-3">
@@ -78,7 +78,7 @@ export function Footer() {
                 ))}
               </ul>
             </div>
-          ))}
+          ))} */}
         </div>
 
         {/* Divider */}
@@ -87,7 +87,7 @@ export function Footer() {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
           <p>&copy; {currentYear} Vocabulary. All rights reserved.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
+          {/* <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href="#" className="hover:text-white transition-colors">
               Privacy
             </Link>
@@ -97,7 +97,7 @@ export function Footer() {
             <Link href="#" className="hover:text-white transition-colors">
               Cookies
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
