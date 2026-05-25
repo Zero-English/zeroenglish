@@ -216,7 +216,7 @@ export default async function Page({
 
           {totalPages > 1 && (
             <>
-              <p className="mt-8 text-center text-sm text-zinc-400 dark:text-zinc-500">
+              <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
                 Showing {start + 1}&ndash;{Math.min(start + ITEMS_PER_PAGE, allWords.length)} of {allWords.length}
               </p>
               <WordPagination currentPage={pageNum} totalPages={totalPages} />
