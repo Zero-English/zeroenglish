@@ -3765,16 +3765,16 @@
   {
     "id": 251,
     "word": "warn",
-    "meaning_bn": "...",
-    "definition_en": "English definition for warn",
-    "definition_bn": "...",
+    "meaning_bn": "সতর্ক করা",
+    "definition_en": "To inform someone in advance of a possible danger or problem.",
+    "definition_bn": "সম্ভাব্য বিপদ বা সমস্যা সম্পর্কে কাউকে আগে থেকে জানানো।",
     "examples_en": [
-      "This is an example for 'warn'."
+      "The sirens warn people of the approaching storm."
     ],
     "examples_bn": [
-      "এটি 'warn' এর একটি উদাহরণ।"
+      "সাইরেনগুলো মানুষকে আসন্ন ঝড়ের কথা সতর্ক করে দেয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["caution", "alert", "advise"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -3782,16 +3782,16 @@
   {
     "id": 252,
     "word": "warning",
-    "meaning_bn": "...",
-    "definition_en": "English definition for warning",
-    "definition_bn": "...",
+    "meaning_bn": "সতর্কবার্তা",
+    "definition_en": "A statement or event that indicates a possible or impending danger.",
+    "definition_bn": "এমন একটি বিবৃতি বা ঘটনা যা সম্ভাব্য বা আসন্ন বিপদের ইঙ্গিত দেয়।",
     "examples_en": [
-      "This is an example for 'warning'."
+      "The doctor gave him a final warning about his health."
     ],
     "examples_bn": [
-      "এটি 'warning' এর একটি উদাহরণ।"
+      "ডাক্তার তাকে তার স্বাস্থ্যের ব্যাপারে শেষ সতর্কবার্তা দিয়েছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["caution", "alarm", "notice"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3799,16 +3799,16 @@
   {
     "id": 254,
     "word": "washing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for washing",
-    "definition_bn": "...",
+    "meaning_bn": "ধোয়া বা পরিষ্কার করা",
+    "definition_en": "The act of cleaning something with water and typically soap.",
+    "definition_bn": "জল এবং সাধারণত সাবান দিয়ে কিছু পরিষ্কার করার কাজ।",
     "examples_en": [
-      "This is an example for 'washing'."
+      "She hung the washing out to dry."
     ],
     "examples_bn": [
-      "এটি 'washing' এর একটি উদাহরণ।"
+      "সে ধোয়া কাপড়গুলো শুকানোর জন্য বাইরে টাঙিয়ে দিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["cleaning", "laundry", "rinsing"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3816,16 +3816,16 @@
   {
     "id": 255,
     "word": "waste",
-    "meaning_bn": "...",
-    "definition_en": "English definition for waste",
-    "definition_bn": "...",
+    "meaning_bn": "অপচয় বা আবর্জনা",
+    "definition_en": "Use or expend carelessly, extravagantly, or to no purpose.",
+    "definition_bn": "অযত্নে, অতিরিক্তভাবে বা কোনো উদ্দেশ্য ছাড়াই ব্যবহার বা ব্যয় করা।",
     "examples_en": [
-      "This is an example for 'waste'."
+      "Don't waste your time on video games."
     ],
     "examples_bn": [
-      "এটি 'waste' এর একটি উদাহরণ।"
+      "ভিডিও গেমে তোমার সময় অপচয় করো না।"
     ],
-    "synonyms": [],
+    "synonyms": ["squander", "garbage", "trash"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v., adj."
@@ -3833,16 +3833,18 @@
   {
     "id": 256,
     "word": "watch",
-    "meaning_bn": "...",
-    "definition_en": "English definition for watch",
-    "definition_bn": "...",
+    "meaning_bn": "দেখা বা ঘড়ি",
+    "definition_en": "To look at or observe attentively over a period of time; a small timepiece worn on the wrist.",
+    "definition_bn": "সময়ের সাথে সাথে মনোযোগ সহকারে দেখা বা পর্যবেক্ষণ করা; কব্জিতে পরা একটি ছোট ঘড়ি।",
     "examples_en": [
-      "This is an example for 'watch'."
+      "We like to watch movies on weekends.",
+      "He bought a new digital watch."
     ],
     "examples_bn": [
-      "এটি 'watch' এর একটি উদাহরণ।"
+      "আমরা ছুটির দিনে সিনেমা দেখতে পছন্দ করি।",
+      "তিনি একটি নতুন ডিজিটাল ঘড়ি কিনেছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["observe", "monitor", "clock"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -3850,16 +3852,16 @@
   {
     "id": 260,
     "word": "we",
-    "meaning_bn": "...",
-    "definition_en": "English definition for we",
-    "definition_bn": "...",
+    "meaning_bn": "আমরা",
+    "definition_en": "Used by a speaker to refer to himself or herself and one or more other people considered together.",
+    "definition_bn": "বক্তা নিজেকে এবং এক বা একাধিক অন্য ব্যক্তিকে একসাথে বোঝাতে এটি ব্যবহার করেন।",
     "examples_en": [
-      "This is an example for 'we'."
+      "We are going to the zoo tomorrow."
     ],
     "examples_bn": [
-      "এটি 'we' এর একটি উদাহরণ।"
+      "আমরা আগামীকাল চিড়িয়াখানায় যাচ্ছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["us"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "pron."
@@ -3867,16 +3869,16 @@
   {
     "id": 261,
     "word": "weak",
-    "meaning_bn": "...",
-    "definition_en": "English definition for weak",
-    "definition_bn": "...",
+    "meaning_bn": "দুর্বল",
+    "definition_en": "Lacking the power to perform physically demanding tasks; lacking strength.",
+    "definition_bn": "শারীরিকভাবে কঠিন কাজ করার ক্ষমতার অভাব; শক্তির অভাব।",
     "examples_en": [
-      "This is an example for 'weak'."
+      "He felt weak after recovering from the flu."
     ],
     "examples_bn": [
-      "এটি 'weak' এর একটি উদাহরণ।"
+      "ফ্লু থেকে সেরে ওঠার পর সে দুর্বল বোধ করছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["feeble", "frail", "fragile"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -3884,16 +3886,16 @@
   {
     "id": 262,
     "word": "weapon",
-    "meaning_bn": "...",
-    "definition_en": "English definition for weapon",
-    "definition_bn": "...",
+    "meaning_bn": "অস্ত্র",
+    "definition_en": "A thing designed or used for inflicting bodily harm or physical damage.",
+    "definition_bn": "শারীরিক ক্ষতি বা আঘাত করার জন্য ডিজাইন করা বা ব্যবহৃত একটি বস্তু।",
     "examples_en": [
-      "This is an example for 'weapon'."
+      "The police were looking for the murder weapon."
     ],
     "examples_bn": [
-      "এটি 'weapon' এর একটি উদাহরণ।"
+      "পুলিশ খুনের অস্ত্র খুঁজছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["arm", "instrument"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3901,16 +3903,16 @@
   {
     "id": 263,
     "word": "wear",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wear",
-    "definition_bn": "...",
+    "meaning_bn": "পরিধান করা",
+    "definition_en": "To have on one's body or a part of one's body as clothing, decoration, or protection.",
+    "definition_bn": "পোশাক, সজ্জা বা সুরক্ষা হিসাবে নিজের শরীরে বা শরীরের অংশে কিছু রাখা।",
     "examples_en": [
-      "This is an example for 'wear'."
+      "You should wear a coat, it's cold outside."
     ],
     "examples_bn": [
-      "এটি 'wear' এর একটি উদাহরণ।"
+      "তোমার একটি কোট পরা উচিত, বাইরে খুব ঠান্ডা।"
     ],
-    "synonyms": [],
+    "synonyms": ["don", "dress in", "put on"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -3918,16 +3920,16 @@
   {
     "id": 264,
     "word": "weather",
-    "meaning_bn": "...",
-    "definition_en": "English definition for weather",
-    "definition_bn": "...",
+    "meaning_bn": "আবহাওয়া",
+    "definition_en": "The state of the atmosphere at a place and time as regards heat, cloudiness, dryness, sunshine, wind, rain, etc.",
+    "definition_bn": "তাপ, মেঘাচ্ছন্নতা, শুষ্কতা, সূর্যালোক, বাতাস, বৃষ্টি ইত্যাদির সাপেক্ষে কোনো স্থানের বায়ুমণ্ডলের অবস্থা।",
     "examples_en": [
-      "This is an example for 'weather'."
+      "The weather is lovely today."
     ],
     "examples_bn": [
-      "এটি 'weather' এর একটি উদাহরণ।"
+      "আজকের আবহাওয়া খুব সুন্দর।"
     ],
-    "synonyms": [],
+    "synonyms": ["climate", "atmosphere"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3935,16 +3937,18 @@
   {
     "id": 265,
     "word": "web",
-    "meaning_bn": "...",
-    "definition_en": "English definition for web",
-    "definition_bn": "...",
+    "meaning_bn": "জাল",
+    "definition_en": "A network of fine threads constructed by a spider; also refers to the World Wide Web.",
+    "definition_bn": "মাকড়সা দ্বারা নির্মিত সূক্ষ্ম সুতার একটি জাল; ওয়ার্ল্ড ওয়াইড ওয়েবকেও বোঝায়।",
     "examples_en": [
-      "This is an example for 'web'."
+      "A spider was spinning a web in the corner.",
+      "I found the information on the web."
     ],
     "examples_bn": [
-      "এটি 'web' এর একটি উদাহরণ।"
+      "কোণে একটি মাকড়সা জাল বুনছিল।",
+      "আমি ইন্টারনেটে তথ্যটি পেয়েছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["mesh", "network", "cobweb"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3952,16 +3956,16 @@
   {
     "id": 266,
     "word": "website",
-    "meaning_bn": "...",
-    "definition_en": "English definition for website",
-    "definition_bn": "...",
+    "meaning_bn": "ওয়েবসাইট",
+    "definition_en": "A set of related web pages located under a single domain name.",
+    "definition_bn": "একটি একক ডোমেইন নামের অধীনে থাকা সম্পর্কিত ওয়েব পেজগুলোর একটি সেট।",
     "examples_en": [
-      "This is an example for 'website'."
+      "Visit our website for more details."
     ],
     "examples_bn": [
-      "এটি 'website' এর একটি উদাহরণ।"
+      "আরও বিস্তারিত জানতে আমাদের ওয়েবসাইট দেখুন।"
     ],
-    "synonyms": [],
+    "synonyms": ["site", "portal"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3969,16 +3973,16 @@
   {
     "id": 267,
     "word": "wedding",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wedding",
-    "definition_bn": "...",
+    "meaning_bn": "বিয়ে বা বিবাহ",
+    "definition_en": "A marriage ceremony, especially considered as including the associated celebrations.",
+    "definition_bn": "একটি বিবাহ অনুষ্ঠান, বিশেষ করে যা সংশ্লিষ্ট উদযাপনসহ বিবেচিত হয়।",
     "examples_en": [
-      "This is an example for 'wedding'."
+      "They are planning a big wedding in December."
     ],
     "examples_bn": [
-      "এটি 'wedding' এর একটি উদাহরণ।"
+      "তারা ডিসেম্বরে একটি বড় বিয়ের পরিকল্পনা করছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["marriage", "nuptials"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -3986,14 +3990,14 @@
   {
     "id": 268,
     "word": "Wednesday",
-    "meaning_bn": "...",
-    "definition_en": "English definition for Wednesday",
-    "definition_bn": "...",
+    "meaning_bn": "বুধবার",
+    "definition_en": "The day of the week before Thursday and after Tuesday.",
+    "definition_bn": "বৃহস্পতিবারের আগের এবং মঙ্গলবারের পরের দিন।",
     "examples_en": [
-      "This is an example for 'Wednesday'."
+      "We have a meeting every Wednesday."
     ],
     "examples_bn": [
-      "এটি 'Wednesday' এর একটি উদাহরণ।"
+      "প্রতি বুধবার আমাদের একটি সভা থাকে।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4003,14 +4007,14 @@
   {
     "id": 269,
     "word": "week",
-    "meaning_bn": "...",
-    "definition_en": "English definition for week",
-    "definition_bn": "...",
+    "meaning_bn": "সপ্তাহ",
+    "definition_en": "A period of seven days.",
+    "definition_bn": "সাত দিনের একটি সময়কাল।",
     "examples_en": [
-      "This is an example for 'week'."
+      "There are 52 weeks in a year."
     ],
     "examples_bn": [
-      "এটি 'week' এর একটি উদাহরণ।"
+      "এক বছরে ৫২ সপ্তাহ থাকে।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4020,16 +4024,16 @@
   {
     "id": 270,
     "word": "weekend",
-    "meaning_bn": "...",
-    "definition_en": "English definition for weekend",
-    "definition_bn": "...",
+    "meaning_bn": "সাপ্তাহিক ছুটির দিন",
+    "definition_en": "Saturday and Sunday, or the period from Friday evening to Monday morning when most people do not work.",
+    "definition_bn": "শনিবার এবং রবিবার, অথবা শুক্রবার সন্ধ্যা থেকে সোমবার সকাল পর্যন্ত সময় যখন অধিকাংশ মানুষ কাজ করে না।",
     "examples_en": [
-      "This is an example for 'weekend'."
+      "What did you do over the weekend?"
     ],
     "examples_bn": [
-      "এটি 'weekend' এর একটি উদাহরণ।"
+      "সাপ্তাহিক ছুটির দিনে তুমি কি করেছিলে?"
     ],
-    "synonyms": [],
+    "synonyms": ["vacation", "break"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4037,16 +4041,16 @@
   {
     "id": 271,
     "word": "weekly",
-    "meaning_bn": "...",
-    "definition_en": "English definition for weekly",
-    "definition_bn": "...",
+    "meaning_bn": "সাপ্তাহিক",
+    "definition_en": "Done, produced, or occurring once a week.",
+    "definition_bn": "সপ্তাহে একবার করা হয়, তৈরি করা হয় বা ঘটে এমন।",
     "examples_en": [
-      "This is an example for 'weekly'."
+      "I get a weekly allowance from my parents."
     ],
     "examples_bn": [
-      "এটি 'weekly' এর একটি উদাহরণ।"
+      "আমি আমার বাবা-মায়ের কাছ থেকে সাপ্তাহিক ভাতা পাই।"
     ],
-    "synonyms": [],
+    "synonyms": ["once a week"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj., adv."
@@ -4054,16 +4058,16 @@
   {
     "id": 272,
     "word": "weigh",
-    "meaning_bn": "...",
-    "definition_en": "English definition for weigh",
-    "definition_bn": "...",
+    "meaning_bn": "ওজন করা",
+    "definition_en": "To find out how heavy someone or something is, typically using scales.",
+    "definition_bn": "সাধারণত দাঁড়িপাল্লা ব্যবহার করে কেউ বা কিছু কতটা ভারী তা খুঁজে বের করা।",
     "examples_en": [
-      "This is an example for 'weigh'."
+      "The nurse will weigh the baby now."
     ],
     "examples_bn": [
-      "এটি 'weigh' এর একটি উদাহরণ।"
+      "নার্স এখন শিশুটির ওজন করবেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["measure", "evaluate"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -4071,16 +4075,16 @@
   {
     "id": 273,
     "word": "weight",
-    "meaning_bn": "...",
-    "definition_en": "English definition for weight",
-    "definition_bn": "...",
+    "meaning_bn": "ওজন",
+    "definition_en": "A body's relative mass or the quantity of matter contained by it.",
+    "definition_bn": "একটি দেহের আপেক্ষিক ভর বা এতে থাকা পদার্থের পরিমাণ।",
     "examples_en": [
-      "This is an example for 'weight'."
+      "He is trying to lose some weight."
     ],
     "examples_bn": [
-      "এটি 'weight' এর একটি উদাহরণ।"
+      "সে কিছুটা ওজন কমানোর চেষ্টা করছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["mass", "heaviness"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4088,16 +4092,16 @@
   {
     "id": 275,
     "word": "well",
-    "meaning_bn": "...",
-    "definition_en": "English definition for well",
-    "definition_bn": "...",
+    "meaning_bn": "ভালো বা সুগঠিত",
+    "definition_en": "In a good way; in good health.",
+    "definition_bn": "ভালো উপায়ে; সুস্বাস্থ্যের সাথে।",
     "examples_en": [
-      "This is an example for 'well'."
+      "I hope you are doing well."
     ],
     "examples_bn": [
-      "এটি 'well' এর একটি উদাহরণ।"
+      "আমি আশা করি আপনি ভালো আছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["fine", "healthy", "good"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv., adj., exclam."
@@ -4105,16 +4109,16 @@
   {
     "id": 276,
     "word": "west",
-    "meaning_bn": "...",
-    "definition_en": "English definition for west",
-    "definition_bn": "...",
+    "meaning_bn": "পশ্চিম",
+    "definition_en": "The direction toward the point of the horizon where the sun sets at the equinoxes.",
+    "definition_bn": "দিগন্তের সেই বিন্দুর দিকের দিক যেখানে বিষুবকালে সূর্য অস্ত যায়।",
     "examples_en": [
-      "This is an example for 'west'."
+      "The sun sets in the west."
     ],
     "examples_bn": [
-      "এটি 'west' এর একটি উদাহরণ।"
+      "সূর্য পশ্চিমে অস্ত যায়।"
     ],
-    "synonyms": [],
+    "synonyms": ["western"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n., adj., adv."
@@ -4122,16 +4126,16 @@
   {
     "id": 277,
     "word": "western",
-    "meaning_bn": "...",
-    "definition_en": "English definition for western",
-    "definition_bn": "...",
+    "meaning_bn": "পাশ্চাত্য বা পশ্চিমী",
+    "definition_en": "Living in or originating from the west.",
+    "definition_bn": "পশ্চিমে বসবাসকারী বা সেখান থেকে উদ্ভূত।",
     "examples_en": [
-      "This is an example for 'western'."
+      "Western culture is quite different from ours."
     ],
     "examples_bn": [
-      "এটি 'western' এর একটি উদাহরণ।"
+      "পাশ্চাত্য সংস্কৃতি আমাদের সংস্কৃতি থেকে বেশ আলাদা।"
     ],
-    "synonyms": [],
+    "synonyms": ["westward"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4139,16 +4143,16 @@
   {
     "id": 278,
     "word": "wet",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wet",
-    "definition_bn": "...",
+    "meaning_bn": "ভেজা বা সিক্ত",
+    "definition_en": "Covered or saturated with water or another liquid.",
+    "definition_bn": "পানি বা অন্য কোনো তরল দিয়ে আবৃত বা সম্পৃক্ত।",
     "examples_en": [
-      "This is an example for 'wet'."
+      "Don't sit on the wet grass."
     ],
     "examples_bn": [
-      "এটি 'wet' এর একটি উদাহরণ।"
+      "ভেজা ঘাসের ওপর বসো না।"
     ],
-    "synonyms": [],
+    "synonyms": ["damp", "moist", "soaked"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4156,14 +4160,14 @@
   {
     "id": 279,
     "word": "what",
-    "meaning_bn": "...",
-    "definition_en": "English definition for what",
-    "definition_bn": "...",
+    "meaning_bn": "কি",
+    "definition_en": "Used to ask for information specifying something.",
+    "definition_bn": "কোনো কিছু নির্দিষ্ট করে তথ্য জিজ্ঞাসা করতে ব্যবহৃত হয়।",
     "examples_en": [
-      "This is an example for 'what'."
+      "What is your name?"
     ],
     "examples_bn": [
-      "এটি 'what' এর একটি উদাহরণ।"
+      "তোমার নাম কি?"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4173,16 +4177,16 @@
   {
     "id": 280,
     "word": "whatever",
-    "meaning_bn": "...",
-    "definition_en": "English definition for whatever",
-    "definition_bn": "...",
+    "meaning_bn": "যা-ই হোক",
+    "definition_en": "Used to emphasize a lack of restriction in referring to anything or everything.",
+    "definition_bn": "যেকোনো কিছু বা সবকিছু উল্লেখ করার ক্ষেত্রে কোনো সীমাবদ্ধতার অভাব বোঝাতে ব্যবহৃত হয়।",
     "examples_en": [
-      "This is an example for 'whatever'."
+      "Do whatever you think is best."
     ],
     "examples_bn": [
-      "এটি 'whatever' এর একটি উদাহরণ।"
+      "তোমার যা ভালো মনে হয় তা-ই করো।"
     ],
-    "synonyms": [],
+    "synonyms": ["whatsoever", "anything"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "det./pron."
@@ -4190,16 +4194,16 @@
   {
     "id": 281,
     "word": "wheel",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wheel",
-    "definition_bn": "...",
+    "meaning_bn": "চাকা",
+    "definition_en": "A circular object that revolves on an axle and is fixed below a vehicle or other object to enable it to move easily.",
+    "definition_bn": "একটি বৃত্তাকার বস্তু যা একটি অক্ষের ওপর ঘোরে এবং যানবাহন বা অন্য বস্তুর নিচে লাগানো থাকে যাতে এটি সহজে চলতে পারে।",
     "examples_en": [
-      "This is an example for 'wheel'."
+      "The car has four wheels."
     ],
     "examples_bn": [
-      "এটি 'wheel' এর একটি উদাহরণ।"
+      "গাড়িটির চারটি চাকা আছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["circle", "roll"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4207,16 +4211,16 @@
   {
     "id": 282,
     "word": "when",
-    "meaning_bn": "...",
-    "definition_en": "English definition for when",
-    "definition_bn": "...",
+    "meaning_bn": "কখন বা যখন",
+    "definition_en": "At what time; at or during which time.",
+    "definition_bn": "কোন সময়ে; যে সময়ে বা যে সময়ের মধ্যে।",
     "examples_en": [
-      "This is an example for 'when'."
+      "When will you come home?"
     ],
     "examples_bn": [
-      "এটি 'when' এর একটি উদাহরণ।"
+      "তুমি কখন বাড়ি আসবে?"
     ],
-    "synonyms": [],
+    "synonyms": ["at what time"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv., pron., conj."
@@ -4224,16 +4228,16 @@
   {
     "id": 283,
     "word": "whenever",
-    "meaning_bn": "...",
-    "definition_en": "English definition for whenever",
-    "definition_bn": "...",
+    "meaning_bn": "যখনই",
+    "definition_en": "At whatever time; on whatever occasion.",
+    "definition_bn": "যে কোনো সময়ে; যে কোনো উপলক্ষে।",
     "examples_en": [
-      "This is an example for 'whenever'."
+      "You can call me whenever you need help."
     ],
     "examples_bn": [
-      "এটি 'whenever' এর একটি উদাহরণ।"
+      "যখনই তোমার সাহায্যের প্রয়োজন হবে তুমি আমাকে ফোন করতে পারো।"
     ],
-    "synonyms": [],
+    "synonyms": ["anytime", "every time"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "conj."
@@ -4241,16 +4245,16 @@
   {
     "id": 284,
     "word": "where",
-    "meaning_bn": "...",
-    "definition_en": "English definition for where",
-    "definition_bn": "...",
+    "meaning_bn": "কোথায় বা যেখানে",
+    "definition_en": "In or to what place or position.",
+    "definition_bn": "কোন স্থানে বা অবস্থানে বা কোন দিকে।",
     "examples_en": [
-      "This is an example for 'where'."
+      "Where are you going?"
     ],
     "examples_bn": [
-      "এটি 'where' এর একটি উদাহরণ।"
+      "তুমি কোথায় যাচ্ছ?"
     ],
-    "synonyms": [],
+    "synonyms": ["in what place"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv., conj."
@@ -4258,16 +4262,16 @@
   {
     "id": 285,
     "word": "whereas",
-    "meaning_bn": "...",
-    "definition_en": "English definition for whereas",
-    "definition_bn": "...",
+    "meaning_bn": "পক্ষান্তরে বা যেহেতু",
+    "definition_en": "In contrast or comparison with the fact that.",
+    "definition_bn": "কোনো তথ্যের সাথে বৈপরীত্য বা তুলনা প্রকাশ করতে ব্যবহৃত।",
     "examples_en": [
-      "This is an example for 'whereas'."
+      "She loves dancing, whereas her sister prefers singing."
     ],
     "examples_bn": [
-      "এটি 'whereas' এর একটি উদাহরণ।"
+      "সে নাচ ভালোবাসে, পক্ষান্তরে তার বোন গান গাইতে পছন্দ করে।"
     ],
-    "synonyms": [],
+    "synonyms": ["while", "on the other hand"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "conj."
@@ -4275,16 +4279,16 @@
   {
     "id": 286,
     "word": "wherever",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wherever",
-    "definition_bn": "...",
+    "meaning_bn": "যেখানেই",
+    "definition_en": "In or to whatever place.",
+    "definition_bn": "যে কোনো স্থানে বা যে কোনো দিকে।",
     "examples_en": [
-      "This is an example for 'wherever'."
+      "I'll follow you wherever you go."
     ],
     "examples_bn": [
-      "এটি 'wherever' এর একটি উদাহরণ।"
+      "তুমি যেখানেই যাও আমি তোমাকে অনুসরণ করব।"
     ],
-    "synonyms": [],
+    "synonyms": ["everywhere", "anywhere"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "conj."
@@ -4292,16 +4296,16 @@
   {
     "id": 287,
     "word": "whether",
-    "meaning_bn": "...",
-    "definition_en": "English definition for whether",
-    "definition_bn": "...",
+    "meaning_bn": "কি না",
+    "definition_en": "Expressing a doubt or choice between alternatives.",
+    "definition_bn": "বিকল্পগুলোর মধ্যে সন্দেহ বা পছন্দ প্রকাশ করতে ব্যবহৃত।",
     "examples_en": [
-      "This is an example for 'whether'."
+      "I don't know whether he will come or not."
     ],
     "examples_bn": [
-      "এটি 'whether' এর একটি উদাহরণ।"
+      "সে আসবে কি আসবে না তা আমি জানি না।"
     ],
-    "synonyms": [],
+    "synonyms": ["if"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "conj."
@@ -4309,16 +4313,16 @@
   {
     "id": 288,
     "word": "which",
-    "meaning_bn": "...",
-    "definition_en": "English definition for which",
-    "definition_bn": "...",
+    "meaning_bn": "কোনটি বা যা",
+    "definition_en": "Used referring to something previously mentioned when there is a limited set to choose from.",
+    "definition_bn": "সীমিত বিকল্পের মধ্য থেকে পছন্দ করার ক্ষেত্রে পূর্বে উল্লিখিত কিছু বোঝাতে ব্যবহৃত হয়।",
     "examples_en": [
-      "This is an example for 'which'."
+      "Which color do you prefer?"
     ],
     "examples_bn": [
-      "এটি 'which' এর একটি উদাহরণ।"
+      "তুমি কোন রঙটি বেশি পছন্দ করো?"
     ],
-    "synonyms": [],
+    "synonyms": ["that", "what"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "pron./det."
@@ -4326,16 +4330,16 @@
   {
     "id": 290,
     "word": "whisper",
-    "meaning_bn": "...",
-    "definition_en": "English definition for whisper",
-    "definition_bn": "...",
+    "meaning_bn": "ফিসফিস করা",
+    "definition_en": "Speak very softly using one's breath rather than one's vocal cords.",
+    "definition_bn": "কণ্ঠস্বর ব্যবহার না করে নিঃশ্বাস ব্যবহার করে খুব মৃদু স্বরে কথা বলা।",
     "examples_en": [
-      "This is an example for 'whisper'."
+      "She leaned over to whisper something in my ear."
     ],
     "examples_bn": [
-      "এটি 'whisper' এর একটি উদাহরণ।"
+      "সে আমার কানে কিছু ফিসফিস করে বলার জন্য ঝুঁকে পড়ল।"
     ],
-    "synonyms": [],
+    "synonyms": ["murmur", "mutter"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -4343,16 +4347,16 @@
   {
     "id": 291,
     "word": "white",
-    "meaning_bn": "...",
-    "definition_en": "English definition for white",
-    "definition_bn": "...",
+    "meaning_bn": "সাদা",
+    "definition_en": "The color of milk or fresh snow.",
+    "definition_bn": "দুধ বা তাজা তুষারের রঙ।",
     "examples_en": [
-      "This is an example for 'white'."
+      "She was wearing a white dress."
     ],
     "examples_bn": [
-      "এটি 'white' এর একটি উদাহরণ।"
+      "সে একটি সাদা পোশাক পরে ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["snowy", "pale"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj., n."
@@ -4360,14 +4364,14 @@
   {
     "id": 292,
     "word": "who",
-    "meaning_bn": "...",
-    "definition_en": "English definition for who",
-    "definition_bn": "...",
+    "meaning_bn": "কে বা যারা",
+    "definition_en": "Used to introduce a clause giving further information about a person or people previously mentioned.",
+    "definition_bn": "পূর্বে উল্লিখিত কোনো ব্যক্তি বা ব্যক্তিরা সম্পর্কে আরও তথ্য প্রদান করতে ব্যবহৃত।",
     "examples_en": [
-      "This is an example for 'who'."
+      "Who is at the door?"
     ],
     "examples_bn": [
-      "এটি 'who' এর একটি উদাহরণ।"
+      "দরজায় কে?"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4377,14 +4381,14 @@
   {
     "id": 294,
     "word": "whom",
-    "meaning_bn": "...",
-    "definition_en": "English definition for whom",
-    "definition_bn": "...",
+    "meaning_bn": "কাকে বা যাঁকে",
+    "definition_en": "Used instead of 'who' as the object of a verb or preposition.",
+    "definition_bn": "ক্রিয়া বা অব্যয়ের অবজেক্ট হিসেবে 'who' এর পরিবর্তে ব্যবহৃত হয়।",
     "examples_en": [
-      "This is an example for 'whom'."
+      "To whom should I address this letter?"
     ],
     "examples_bn": [
-      "এটি 'whom' এর একটি উদাহরণ।"
+      "এই চিঠিটি কার উদ্দেশ্যে লেখা উচিত?"
     ],
     "synonyms": [],
     "level": "B2",
@@ -4394,14 +4398,14 @@
   {
     "id": 295,
     "word": "whose",
-    "meaning_bn": "...",
-    "definition_en": "English definition for whose",
-    "definition_bn": "...",
+    "meaning_bn": "কার বা যার",
+    "definition_en": "Belonging to or associated with which person.",
+    "definition_bn": "কোন ব্যক্তির মালিকানাধীন বা কোন ব্যক্তির সাথে যুক্ত।",
     "examples_en": [
-      "This is an example for 'whose'."
+      "Whose bag is this?"
     ],
     "examples_bn": [
-      "এটি 'whose' এর একটি উদাহরণ।"
+      "এই ব্যাগটি কার?"
     ],
     "synonyms": [],
     "level": "A2",
@@ -4411,16 +4415,16 @@
   {
     "id": 296,
     "word": "why",
-    "meaning_bn": "...",
-    "definition_en": "English definition for why",
-    "definition_bn": "...",
+    "meaning_bn": "কেন",
+    "definition_en": "For what reason or purpose.",
+    "definition_bn": "কি কারণে বা কি উদ্দেশ্যে।",
     "examples_en": [
-      "This is an example for 'why'."
+      "Why did you leave so early?"
     ],
     "examples_bn": [
-      "এটি 'why' এর একটি উদাহরণ।"
+      "তুমি এত তাড়াতাড়ি কেন চলে গেলে?"
     ],
-    "synonyms": [],
+    "synonyms": ["wherefore"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -4428,16 +4432,16 @@
   {
     "id": 297,
     "word": "wide",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wide",
-    "definition_bn": "...",
+    "meaning_bn": "চওড়া বা প্রশস্ত",
+    "definition_en": "Of great or more than average width.",
+    "definition_bn": "গড় প্রস্থের চেয়ে বড় বা অনেক বেশি প্রশস্ত।",
     "examples_en": [
-      "This is an example for 'wide'."
+      "The river is very wide at this point."
     ],
     "examples_bn": [
-      "এটি 'wide' এর একটি উদাহরণ।"
+      "এই বিন্দুতে নদীটি খুব প্রশস্ত।"
     ],
-    "synonyms": [],
+    "synonyms": ["broad", "extensive"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4445,16 +4449,16 @@
   {
     "id": 298,
     "word": "widely",
-    "meaning_bn": "...",
-    "definition_en": "English definition for widely",
-    "definition_bn": "...",
+    "meaning_bn": "ব্যাপকভাবে",
+    "definition_en": "Over a large area or range; extensively.",
+    "definition_bn": "একটি বিশাল এলাকা বা পরিসীমা জুড়ে; ব্যাপকভাবে।",
     "examples_en": [
-      "This is an example for 'widely'."
+      "This book is widely read all over the world."
     ],
     "examples_bn": [
-      "এটি 'widely' এর একটি উদাহরণ।"
+      "এই বইটি সারা বিশ্বে ব্যাপকভাবে পড়া হয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["broadly", "extensively"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -4462,16 +4466,16 @@
   {
     "id": 299,
     "word": "wife",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wife",
-    "definition_bn": "...",
+    "meaning_bn": "স্ত্রী",
+    "definition_en": "A married woman considered in relation to her spouse.",
+    "definition_bn": "স্বামী বা স্ত্রীর সাপেক্ষে বিবেচিত একজন বিবাহিত মহিলা।",
     "examples_en": [
-      "This is an example for 'wife'."
+      "He lives with his wife and children."
     ],
     "examples_bn": [
-      "এটি 'wife' এর একটি উদাহরণ।"
+      "সে তার স্ত্রী ও সন্তানদের নিয়ে থাকে।"
     ],
-    "synonyms": [],
+    "synonyms": ["spouse", "partner"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4479,16 +4483,16 @@
   {
     "id": 300,
     "word": "wild",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wild",
-    "definition_bn": "...",
+    "meaning_bn": "বন্য",
+    "definition_en": "Living or growing in the natural environment; not domesticated or cultivated.",
+    "definition_bn": "প্রাকৃতিক পরিবেশে বসবাস বা বেড়ে ওঠা; গৃহপালিত বা চাষকৃত নয়।",
     "examples_en": [
-      "This is an example for 'wild'."
+      "We saw some wild animals in the forest."
     ],
     "examples_bn": [
-      "এটি 'wild' এর একটি উদাহরণ।"
+      "আমরা বনে কিছু বন্য প্রাণী দেখেছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["untamed", "feral"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4496,16 +4500,16 @@
   {
     "id": 301,
     "word": "wildlife",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wildlife",
-    "definition_bn": "...",
+    "meaning_bn": "বন্যপ্রাণী",
+    "definition_en": "Animals, birds, and insects that live in a natural state.",
+    "definition_bn": "প্রাণী, পাখি এবং পতঙ্গ যারা প্রাকৃতিক পরিবেশে বসবাস করে।",
     "examples_en": [
-      "This is an example for 'wildlife'."
+      "The park is known for its diverse wildlife."
     ],
     "examples_bn": [
-      "এটি 'wildlife' এর একটি উদাহরণ।"
+      "পার্কটি তার বৈচিত্র্যময় বন্যপ্রাণীর জন্য পরিচিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["fauna", "nature"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4513,50 +4517,50 @@
   {
     "id": 303,
     "word": "willing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for willing",
-    "definition_bn": "...",
+    "meaning_bn": "ইচ্ছুক / রাজি",
+    "definition_en": "Ready, eager, or prepared to do something.",
+    "definition_bn": "কোনো কিছু করতে প্রস্তুত বা আগ্রহী।",
     "examples_en": [
-      "This is an example for 'willing'."
+      "Are you willing to help us with this project?"
     ],
     "examples_bn": [
-      "এটি 'willing' এর একটি উদাহরণ।"
+      "আপনি কি এই প্রকল্পে আমাদের সাহায্য করতে ইচ্ছুক?"
     ],
-    "synonyms": [],
+    "synonyms": ["ready", "prepared", "eager"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
   },
   {
     "id": 305,
-    "word": "wind1",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wind1",
-    "definition_bn": "...",
+    "word": "wind",
+    "meaning_bn": "বাতাস / বায়ু",
+    "definition_en": "A natural movement of the air, especially in the form of a current.",
+    "definition_bn": "বাতাসের প্রাকৃতিক চলাচল, বিশেষ করে স্রোত আকারে।",
     "examples_en": [
-      "This is an example for 'wind1'."
+      "The strong wind blew the leaves away."
     ],
     "examples_bn": [
-      "এটি 'wind1' এর একটি উদাহরণ।"
+      "প্রবল বাতাসে পাতাগুলো উড়ে গেল।"
     ],
-    "synonyms": [],
+    "synonyms": ["breeze", "gust", "air"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
   },
   {
     "id": 306,
-    "word": "wind2",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wind2",
-    "definition_bn": "...",
+    "word": "wind",
+    "meaning_bn": "পেঁচানো / ঘোরানো",
+    "definition_en": "To twist or turn something around a central point.",
+    "definition_bn": "কেন্দ্রীয় কোনো বিন্দুর চারপাশে কোনো কিছু মোড়ানো বা ঘোরানো।",
     "examples_en": [
-      "This is an example for 'wind2'."
+      "You need to wind the clock every morning."
     ],
     "examples_bn": [
-      "এটি 'wind2' এর একটি উদাহরণ।"
+      "আপনার প্রতিদিন সকালে ঘড়িতে দম দেওয়া (ঘোরানো) প্রয়োজন।"
     ],
-    "synonyms": [],
+    "synonyms": ["twist", "coil", "curve"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -4564,16 +4568,16 @@
   {
     "id": 307,
     "word": "window",
-    "meaning_bn": "...",
-    "definition_en": "English definition for window",
-    "definition_bn": "...",
+    "meaning_bn": "জানালা",
+    "definition_en": "An opening in a wall or door that is fitted with glass.",
+    "definition_bn": "দেয়াল বা দরজার একটি খোলা অংশ যাতে কাঁচ লাগানো থাকে।",
     "examples_en": [
-      "This is an example for 'window'."
+      "Please close the window; it's cold outside."
     ],
     "examples_bn": [
-      "এটি 'window' এর একটি উদাহরণ।"
+      "দয়া করে জানালাটি বন্ধ করো; বাইরে বেশ ঠান্ডা।"
     ],
-    "synonyms": [],
+    "synonyms": ["opening", "pane"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4581,14 +4585,14 @@
   {
     "id": 308,
     "word": "wine",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wine",
-    "definition_bn": "...",
+    "meaning_bn": "মদ / আঙ্গুরের রস থেকে তৈরি পানীয়",
+    "definition_en": "An alcoholic drink made from fermented grape juice.",
+    "definition_bn": "গাঁজন করা আঙুরের রস থেকে তৈরি একটি অ্যালকোহলযুক্ত পানীয়।",
     "examples_en": [
-      "This is an example for 'wine'."
+      "They served red wine with the dinner."
     ],
     "examples_bn": [
-      "এটি 'wine' এর একটি উদাহরণ।"
+      "তারা রাতের খাবারের সাথে লাল মদ পরিবেশন করেছিল।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4598,16 +4602,16 @@
   {
     "id": 309,
     "word": "wing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wing",
-    "definition_bn": "...",
+    "meaning_bn": "ডানা / পাখা",
+    "definition_en": "One of the parts of the body of a bird, insect, or bat used for flying.",
+    "definition_bn": "পাখি, পতঙ্গ বা বাদুড়ের শরীরের একটি অংশ যা উড়ার জন্য ব্যবহৃত হয়।",
     "examples_en": [
-      "This is an example for 'wing'."
+      "The bird injured its left wing."
     ],
     "examples_bn": [
-      "এটি 'wing' এর একটি উদাহরণ।"
+      "পাখিটি তার বাম ডানায় আঘাত পেয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["appendage", "flapper"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4615,16 +4619,16 @@
   {
     "id": 310,
     "word": "winner",
-    "meaning_bn": "...",
-    "definition_en": "English definition for winner",
-    "definition_bn": "...",
+    "meaning_bn": "বিজয়ী",
+    "definition_en": "A person or thing that wins something.",
+    "definition_bn": "একজন ব্যক্তি বা বস্তু যে কোনো কিছুতে জয়লাভ করে।",
     "examples_en": [
-      "This is an example for 'winner'."
+      "The winner of the race received a gold medal."
     ],
     "examples_bn": [
-      "এটি 'winner' এর একটি উদাহরণ।"
+      "দৌড় প্রতিযোগিতার বিজয়ী একটি স্বর্ণপদক পেয়েছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["champion", "victor"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4632,14 +4636,14 @@
   {
     "id": 311,
     "word": "winter",
-    "meaning_bn": "...",
-    "definition_en": "English definition for winter",
-    "definition_bn": "...",
+    "meaning_bn": "শীতকাল",
+    "definition_en": "The coldest season of the year, between autumn and spring.",
+    "definition_bn": "বছরের সবচেয়ে শীতল ঋতু, যা শরৎ এবং বসন্তের মধ্যে আসে।",
     "examples_en": [
-      "This is an example for 'winter'."
+      "We go skiing every winter."
     ],
     "examples_bn": [
-      "এটি 'winter' এর একটি উদাহরণ।"
+      "আমরা প্রতি শীতে স্কিইং করতে যাই।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4649,16 +4653,16 @@
   {
     "id": 312,
     "word": "wire",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wire",
-    "definition_bn": "...",
+    "meaning_bn": "তার",
+    "definition_en": "Metal drawn out into the form of a thin flexible thread or rod.",
+    "definition_bn": "পাতলা নমনীয় সুতো বা রড আকারে তৈরি ধাতু।",
     "examples_en": [
-      "This is an example for 'wire'."
+      "The electricity is carried through copper wires."
     ],
     "examples_bn": [
-      "এটি 'wire' এর একটি উদাহরণ।"
+      "তামার তারের মাধ্যমে বিদ্যুৎ প্রবাহিত হয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["cable", "coil", "string"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4666,16 +4670,16 @@
   {
     "id": 313,
     "word": "wise",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wise",
-    "definition_bn": "...",
+    "meaning_bn": "জ্ঞানী / বিচক্ষণ",
+    "definition_en": "Having or showing experience, knowledge, and good judgment.",
+    "definition_bn": "অভিজ্ঞতা, জ্ঞান এবং সঠিক বিচারবুদ্ধি সম্পন্ন।",
     "examples_en": [
-      "This is an example for 'wise'."
+      "It was a wise decision to save money."
     ],
     "examples_bn": [
-      "এটি 'wise' এর একটি উদাহরণ।"
+      "টাকা সঞ্চয় করা একটি বিচক্ষণ সিদ্ধান্ত ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["intelligent", "sage", "sensible"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4683,16 +4687,18 @@
   {
     "id": 314,
     "word": "wish",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wish",
-    "definition_bn": "...",
+    "meaning_bn": "ইচ্ছা করা / আকাঙ্ক্ষা",
+    "definition_en": "To feel or express a strong desire or hope for something.",
+    "definition_bn": "কোনো কিছুর জন্য তীব্র ইচ্ছা বা আশা অনুভব করা বা প্রকাশ করা।",
     "examples_en": [
-      "This is an example for 'wish'."
+      "I wish you a happy birthday.",
+      "She made a wish before blowing out the candles."
     ],
     "examples_bn": [
-      "এটি 'wish' এর একটি উদাহরণ।"
+      "আমি তোমার শুভ জন্মদিন কামনা করি।",
+      "মোমবাতি নেভানোর আগে সে একটি ইচ্ছা পোষণ করেছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["desire", "want", "hope"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -4700,16 +4706,16 @@
   {
     "id": 315,
     "word": "with",
-    "meaning_bn": "...",
-    "definition_en": "English definition for with",
-    "definition_bn": "...",
+    "meaning_bn": "সাথে / দ্বারা",
+    "definition_en": "Accompanied by or possessing something.",
+    "definition_bn": "কারো সাথে থাকা বা কোনো কিছুর অধিকারে থাকা।",
     "examples_en": [
-      "This is an example for 'with'."
+      "I am going to the market with my mother."
     ],
     "examples_bn": [
-      "এটি 'with' এর একটি উদাহরণ।"
+      "আমি আমার মায়ের সাথে বাজারে যাচ্ছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["alongside", "including"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "prep."
@@ -4717,16 +4723,16 @@
   {
     "id": 316,
     "word": "within",
-    "meaning_bn": "...",
-    "definition_en": "English definition for within",
-    "definition_bn": "...",
+    "meaning_bn": "ভিতরে / সীমানার মধ্যে",
+    "definition_en": "Inside the range or boundaries of something.",
+    "definition_bn": "কোনো কিছুর পরিসীমা বা সীমানার মধ্যে।",
     "examples_en": [
-      "This is an example for 'within'."
+      "The results will be published within a week."
     ],
     "examples_bn": [
-      "এটি 'within' এর একটি উদাহরণ।"
+      "ফলাফল এক সপ্তাহের মধ্যে প্রকাশ করা হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["inside", "inward"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "prep."
@@ -4734,16 +4740,16 @@
   {
     "id": 317,
     "word": "without",
-    "meaning_bn": "...",
-    "definition_en": "English definition for without",
-    "definition_bn": "...",
+    "meaning_bn": "ছাড়া / ব্যতীত",
+    "definition_en": "Not having or including something.",
+    "definition_bn": "কোনো কিছু না থাকা বা অন্তর্ভুক্ত না করা।",
     "examples_en": [
-      "This is an example for 'without'."
+      "He went out without an umbrella."
     ],
     "examples_bn": [
-      "এটি 'without' এর একটি উদাহরণ।"
+      "সে ছাতা ছাড়াই বাইরে গেল।"
     ],
-    "synonyms": [],
+    "synonyms": ["excluding", "lacking"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "prep."
@@ -4751,16 +4757,18 @@
   {
     "id": 318,
     "word": "witness",
-    "meaning_bn": "...",
-    "definition_en": "English definition for witness",
-    "definition_bn": "...",
+    "meaning_bn": "সাক্ষী / প্রত্যক্ষদর্শী",
+    "definition_en": "A person who sees an event, typically a crime or accident, take place.",
+    "definition_bn": "এমন একজন ব্যক্তি যিনি কোনো ঘটনা, সাধারণত অপরাধ বা দুর্ঘটনা ঘটতে দেখেন।",
     "examples_en": [
-      "This is an example for 'witness'."
+      "She was a witness to the robbery.",
+      "He witnessed the car crash."
     ],
     "examples_bn": [
-      "এটি 'witness' এর একটি উদাহরণ।"
+      "সে ডাকাতির একজন সাক্ষী ছিল।",
+      "সে গাড়ি দুর্ঘটনাটি প্রত্যক্ষ করেছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["observer", "onlooker", "testify"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -4768,16 +4776,16 @@
   {
     "id": 319,
     "word": "woman",
-    "meaning_bn": "...",
-    "definition_en": "English definition for woman",
-    "definition_bn": "...",
+    "meaning_bn": "নারী / মহিলা",
+    "definition_en": "An adult female human being.",
+    "definition_bn": "একজন প্রাপ্তবয়স্ক নারী মানুষ।",
     "examples_en": [
-      "This is an example for 'woman'."
+      "She is a very successful woman."
     ],
     "examples_bn": [
-      "এটি 'woman' এর একটি উদাহরণ।"
+      "তিনি একজন অত্যন্ত সফল নারী।"
     ],
-    "synonyms": [],
+    "synonyms": ["lady", "female"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4785,16 +4793,18 @@
   {
     "id": 320,
     "word": "wonder",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wonder",
-    "definition_bn": "...",
+    "meaning_bn": "অবাক হওয়া / বিস্ময়",
+    "definition_en": "To feel curiosity or be surprised by something.",
+    "definition_bn": "কোনো কিছু নিয়ে কৌতূহল বোধ করা বা অবাক হওয়া।",
     "examples_en": [
-      "This is an example for 'wonder'."
+      "I wonder why he is late.",
+      "The Taj Mahal is a wonder of the world."
     ],
     "examples_bn": [
-      "এটি 'wonder' এর একটি উদাহরণ।"
+      "আমি ভাবছি তার কেন দেরি হচ্ছে।",
+      "তাজমহল পৃথিবীর এক বিস্ময়।"
     ],
-    "synonyms": [],
+    "synonyms": ["query", "marvel", "think"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -4802,16 +4812,16 @@
   {
     "id": 321,
     "word": "wonderful",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wonderful",
-    "definition_bn": "...",
+    "meaning_bn": "চমৎকার / অপূর্ব",
+    "definition_en": "Inspiring delight, pleasure, or admiration; extremely good.",
+    "definition_bn": "আনন্দ বা প্রশংসা জাগিয়ে তোলে এমন; অত্যন্ত ভালো।",
     "examples_en": [
-      "This is an example for 'wonderful'."
+      "We had a wonderful time at the party."
     ],
     "examples_bn": [
-      "এটি 'wonderful' এর একটি উদাহরণ।"
+      "অনুষ্ঠানে আমাদের চমৎকার সময় কেটেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["excellent", "marvelous", "great"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4819,16 +4829,16 @@
   {
     "id": 322,
     "word": "wood",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wood",
-    "definition_bn": "...",
+    "meaning_bn": "কাঠ / জঙ্গল",
+    "definition_en": "The hard substance that forms the main part of a tree.",
+    "definition_bn": "শক্ত পদার্থ যা গাছের প্রধান অংশ গঠন করে।",
     "examples_en": [
-      "This is an example for 'wood'."
+      "The table is made of solid wood."
     ],
     "examples_bn": [
-      "এটি 'wood' এর একটি উদাহরণ।"
+      "টেবিলটি নিরেট কাঠ দিয়ে তৈরি।"
     ],
-    "synonyms": [],
+    "synonyms": ["timber", "lumber"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4836,16 +4846,16 @@
   {
     "id": 323,
     "word": "wooden",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wooden",
-    "definition_bn": "...",
+    "meaning_bn": "কাঠের তৈরি",
+    "definition_en": "Made of wood.",
+    "definition_bn": "কাঠ দ্বারা নির্মিত।",
     "examples_en": [
-      "This is an example for 'wooden'."
+      "They lived in a small wooden house."
     ],
     "examples_bn": [
-      "এটি 'wooden' এর একটি উদাহরণ।"
+      "তারা একটি ছোট কাঠের বাড়িতে থাকত।"
     ],
-    "synonyms": [],
+    "synonyms": ["timbered"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4853,16 +4863,16 @@
   {
     "id": 324,
     "word": "wool",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wool",
-    "definition_bn": "...",
+    "meaning_bn": "উল / পশম",
+    "definition_en": "The fine, soft curly hair that forms the coat of a sheep.",
+    "definition_bn": "ভেড়ার শরীরের সূক্ষ্ম, নরম কোঁকড়ানো লোম।",
     "examples_en": [
-      "This is an example for 'wool'."
+      "This sweater is made of pure wool."
     ],
     "examples_bn": [
-      "এটি 'wool' এর একটি উদাহরণ।"
+      "এই সোয়েটারটি খাঁটি উল দিয়ে তৈরি।"
     ],
-    "synonyms": [],
+    "synonyms": ["fleece", "yarn"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4870,16 +4880,16 @@
   {
     "id": 325,
     "word": "word",
-    "meaning_bn": "...",
-    "definition_en": "English definition for word",
-    "definition_bn": "...",
+    "meaning_bn": "শব্দ / কথা",
+    "definition_en": "A single distinct meaningful element of speech or writing.",
+    "definition_bn": "কথা বা লেখার একটি একক অর্থবহ উপাদান।",
     "examples_en": [
-      "This is an example for 'word'."
+      "What is the meaning of this word?"
     ],
     "examples_bn": [
-      "এটি 'word' এর একটি উদাহরণ।"
+      "এই শব্দটির অর্থ কী?"
     ],
-    "synonyms": [],
+    "synonyms": ["term", "expression"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4887,16 +4897,18 @@
   {
     "id": 326,
     "word": "work",
-    "meaning_bn": "...",
-    "definition_en": "English definition for work",
-    "definition_bn": "...",
+    "meaning_bn": "কাজ করা / কাজ",
+    "definition_en": "Activity involving mental or physical effort done in order to achieve a purpose.",
+    "definition_bn": "উদ্দেশ্য অর্জনের জন্য মানসিক বা শারীরিক প্রচেষ্টা জড়িত কার্যকলাপ।",
     "examples_en": [
-      "This is an example for 'work'."
+      "He works in a bank.",
+      "I have a lot of work to do today."
     ],
     "examples_bn": [
-      "এটি 'work' এর একটি উদাহরণ।"
+      "সে একটি ব্যাংকে কাজ করে।",
+      "আজ আমার অনেক কাজ আছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["job", "labor", "employment"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -4904,16 +4916,16 @@
   {
     "id": 327,
     "word": "worker",
-    "meaning_bn": "...",
-    "definition_en": "English definition for worker",
-    "definition_bn": "...",
+    "meaning_bn": "কর্মী / শ্রমিক",
+    "definition_en": "A person who does a specified type of work or who is employed.",
+    "definition_bn": "একজন ব্যক্তি যিনি নির্দিষ্ট ধরণের কাজ করেন বা চাকরিতে নিযুক্ত থাকেন।",
     "examples_en": [
-      "This is an example for 'worker'."
+      "The factory has over 500 workers."
     ],
     "examples_bn": [
-      "এটি 'worker' এর একটি উদাহরণ।"
+      "কারখানাটিতে ৫০০-এর বেশি শ্রমিক রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["employee", "laborer"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4921,16 +4933,16 @@
   {
     "id": 328,
     "word": "working",
-    "meaning_bn": "...",
-    "definition_en": "English definition for working",
-    "definition_bn": "...",
+    "meaning_bn": "কর্মরত / কাজের",
+    "definition_en": "Having a job; relating to work.",
+    "definition_bn": "চাকরি থাকা; অথবা কাজ সংক্রান্ত।",
     "examples_en": [
-      "This is an example for 'working'."
+      "She has a busy working life."
     ],
     "examples_bn": [
-      "এটি 'working' এর একটি উদাহরণ।"
+      "তার একটি ব্যস্ত কর্মজীবন রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["employed", "active"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -4942,12 +4954,12 @@
     "definition_en": "The earth, together with all of its countries, peoples, and natural features.",
     "definition_bn": "পৃথিবী, তার সমস্ত দেশ, মানুষ এবং প্রাকৃতিক বৈশিষ্ট্য সহ।",
     "examples_en": [
-      "This is an example for 'world'."
+      "He wants to travel around the world."
     ],
     "examples_bn": [
-      "এটি 'world' এর একটি উদাহরণ।"
+      "সে সারা পৃথিবী ভ্রমণ করতে চায়।"
     ],
-    "synonyms": [],
+    "synonyms": ["earth", "globe", "planet"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -4955,31 +4967,31 @@
   {
     "id": 330,
     "word": "worldwide",
-    "meaning_bn": "...",
-    "definition_en": "English definition for worldwide",
-    "definition_bn": "...",
+    "meaning_bn": "বিশ্বব্যাপী",
+    "definition_en": "Extending or operating throughout the whole world.",
+    "definition_bn": "সারা বিশ্বে বিস্তৃত বা পরিচালিত।",
     "examples_en": [
-      "This is an example for 'worldwide'."
+      "The company has a worldwide reputation."
     ],
     "examples_bn": [
-      "এটি 'worldwide' এর একটি উদাহরণ।"
+      "কোম্পানিটির বিশ্বব্যাপী খ্যাতি রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["global", "international"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj., adv."
   },
   {
     "id": 335,
-    "word": "would modal",
-    "meaning_bn": "...",
-    "definition_en": "English definition for would modal",
-    "definition_bn": "...",
+    "word": "would",
+    "meaning_bn": "করত / হত (অতীত বা কাল্পনিক অর্থে)",
+    "definition_en": "Used to indicate a consequence, a request, or a past habit.",
+    "definition_bn": "ফলাফল, অনুরোধ বা অতীতের অভ্যাস বোঝাতে ব্যবহৃত হয়।",
     "examples_en": [
-      "This is an example for 'would modal'."
+      "I would like some tea, please."
     ],
     "examples_bn": [
-      "এটি 'would modal' এর একটি উদাহরণ।"
+      "আমি কিছুটা চা চাই।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -4989,16 +5001,16 @@
   {
     "id": 336,
     "word": "wound",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wound",
-    "definition_bn": "...",
+    "meaning_bn": "ক্ষত / জখম",
+    "definition_en": "An injury to living tissue caused by a cut, blow, or other impact.",
+    "definition_bn": "কাটা, আঘাত বা অন্য কোনো প্রভাবের কারণে জীবন্ত কলার ক্ষতি।",
     "examples_en": [
-      "This is an example for 'wound'."
+      "The nurse cleaned the wound."
     ],
     "examples_bn": [
-      "এটি 'wound' এর একটি উদাহরণ।"
+      "নার্স ক্ষতটি পরিষ্কার করে দিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["injury", "cut", "bruise"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -5006,16 +5018,16 @@
   {
     "id": 337,
     "word": "wrap",
-    "meaning_bn": "...",
-    "definition_en": "English definition for wrap",
-    "definition_bn": "...",
+    "meaning_bn": "জড়ানো / মোড়ানো",
+    "definition_en": "To cover or enclose something in paper or soft material.",
+    "definition_bn": "কাগজ বা নরম উপাদানে কোনো কিছু ঢাকা বা আবদ্ধ করা।",
     "examples_en": [
-      "This is an example for 'wrap'."
+      "He wrapped the gift in colorful paper."
     ],
     "examples_bn": [
-      "এটি 'wrap' এর একটি উদাহরণ।"
+      "সে উপহারটি রঙিন কাগজে মুড়িয়ে দিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["cover", "enfold", "pack"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -5023,16 +5035,16 @@
   {
     "id": 338,
     "word": "write",
-    "meaning_bn": "...",
-    "definition_en": "English definition for write",
-    "definition_bn": "...",
+    "meaning_bn": "লেখা",
+    "definition_en": "To mark letters or symbols on a surface with a pen or pencil.",
+    "definition_bn": "কলম বা পেন্সিল দিয়ে কোনো পৃষ্ঠে অক্ষর বা চিহ্ন আঁকা।",
     "examples_en": [
-      "This is an example for 'write'."
+      "Please write your name here."
     ],
     "examples_bn": [
-      "এটি 'write' এর একটি উদাহরণ।"
+      "দয়া করে এখানে আপনার নাম লিখুন।"
     ],
-    "synonyms": [],
+    "synonyms": ["compose", "note", "record"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -5040,16 +5052,16 @@
   {
     "id": 339,
     "word": "writer",
-    "meaning_bn": "...",
-    "definition_en": "English definition for writer",
-    "definition_bn": "...",
+    "meaning_bn": "লেখক",
+    "definition_en": "A person who writes books, stories, or articles.",
+    "definition_bn": "এমন একজন ব্যক্তি যিনি বই, গল্প বা প্রবন্ধ লেখেন।",
     "examples_en": [
-      "This is an example for 'writer'."
+      "She is a famous mystery writer."
     ],
     "examples_bn": [
-      "এটি 'writer' এর একটি উদাহরণ।"
+      "তিনি একজন বিখ্যাত রহস্য লেখক।"
     ],
-    "synonyms": [],
+    "synonyms": ["author", "novelist"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -5057,16 +5069,16 @@
   {
     "id": 340,
     "word": "writing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for writing",
-    "definition_bn": "...",
+    "meaning_bn": "লিখন / লেখালেখি",
+    "definition_en": "The activity or skill of marking words on paper; a piece of written work.",
+    "definition_bn": "কাগজে শব্দ লেখার কার্যকলাপ বা দক্ষতা; কোনো লিখিত কাজ।",
     "examples_en": [
-      "This is an example for 'writing'."
+      "I am practice my English writing."
     ],
     "examples_bn": [
-      "এটি 'writing' এর একটি উদাহরণ।"
+      "আমি আমার ইংরেজি লেখা অনুশীলন করছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["script", "text"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -5074,16 +5086,16 @@
   {
     "id": 342,
     "word": "yard",
-    "meaning_bn": "...",
-    "definition_en": "English definition for yard",
-    "definition_bn": "...",
+    "meaning_bn": "উঠান / গজের মাপ",
+    "definition_en": "An area of ground next to a building; a unit of length (3 feet).",
+    "definition_bn": "একটি ভবনের পাশের জমি; দৈর্ঘ্যের একটি একক (৩ ফুট)।",
     "examples_en": [
-      "This is an example for 'yard'."
+      "The children are playing in the yard."
     ],
     "examples_bn": [
-      "এটি 'yard' এর একটি উদাহরণ।"
+      "শিশুরা উঠানে খেলছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["court", "garden", "patio"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -5091,16 +5103,16 @@
   {
     "id": 343,
     "word": "yeah",
-    "meaning_bn": "...",
-    "definition_en": "English definition for yeah",
-    "definition_bn": "...",
+    "meaning_bn": "হ্যাঁ (অনানুষ্ঠানিক)",
+    "definition_en": "Informal way of saying yes.",
+    "definition_bn": "হ্যাঁ বলার অনানুষ্ঠানিক ধরন।",
     "examples_en": [
-      "This is an example for 'yeah'."
+      "Yeah, I'll be there in ten minutes."
     ],
     "examples_bn": [
-      "এটি 'yeah' এর একটি উদাহরণ।"
+      "হ্যাঁ, আমি দশ মিনিটের মধ্যে সেখানে পৌঁছাব।"
     ],
-    "synonyms": [],
+    "synonyms": ["yes", "yep"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "exclam."
@@ -5112,10 +5124,10 @@
     "definition_en": "The time taken by the earth to make one revolution around the sun.",
     "definition_bn": "পৃথিবীর সূর্যের চারদিকে একবার প্রদক্ষিণ করতে যে সময় লাগে।",
     "examples_en": [
-      "This is an example for 'year'."
+      "I lived in Japan for one year."
     ],
     "examples_bn": [
-      "এটি 'year' এর একটি উদাহরণ।"
+      "আমি জাপানে এক বছর ছিলাম।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -5125,14 +5137,14 @@
   {
     "id": 345,
     "word": "yellow",
-    "meaning_bn": "...",
-    "definition_en": "English definition for yellow",
-    "definition_bn": "...",
+    "meaning_bn": "হলুদ",
+    "definition_en": "The color of a lemon or an egg yolk.",
+    "definition_bn": "লেবু বা ডিমের কুসুমের রঙ।",
     "examples_en": [
-      "This is an example for 'yellow'."
+      "She wore a bright yellow dress."
     ],
     "examples_bn": [
-      "এটি 'yellow' এর একটি উদাহরণ।"
+      "সে একটি উজ্জ্বল হলুদ রঙের পোশাক পরেছিল।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -5142,16 +5154,16 @@
   {
     "id": 346,
     "word": "yes",
-    "meaning_bn": "...",
-    "definition_en": "English definition for yes",
-    "definition_bn": "...",
+    "meaning_bn": "হ্যাঁ",
+    "definition_en": "Used to give an affirmative response.",
+    "definition_bn": "ইতিবাচক প্রতিক্রিয়া জানাতে ব্যবহৃত হয়।",
     "examples_en": [
-      "This is an example for 'yes'."
+      "Yes, I can come tomorrow."
     ],
     "examples_bn": [
-      "এটি 'yes' এর একটি উদাহরণ।"
+      "হ্যাঁ, আমি আগামীকাল আসতে পারব।"
     ],
-    "synonyms": [],
+    "synonyms": ["affirmative", "agreed"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "exclam."
@@ -5159,14 +5171,14 @@
   {
     "id": 347,
     "word": "yesterday",
-    "meaning_bn": "...",
-    "definition_en": "English definition for yesterday",
-    "definition_bn": "...",
+    "meaning_bn": "গতকাল",
+    "definition_en": "The day before today.",
+    "definition_bn": "আজকের আগের দিন।",
     "examples_en": [
-      "This is an example for 'yesterday'."
+      "It rained heavily yesterday."
     ],
     "examples_bn": [
-      "এটি 'yesterday' এর একটি উদাহরণ।"
+      "গতকাল প্রচুর বৃষ্টি হয়েছিল।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -5176,14 +5188,14 @@
   {
     "id": 349,
     "word": "you",
-    "meaning_bn": "...",
-    "definition_en": "English definition for you",
-    "definition_bn": "...",
+    "meaning_bn": "তুমি / আপনি / তোমরা",
+    "definition_en": "Used to refer to the person or people that the speaker is addressing.",
+    "definition_bn": "বক্তা যাকে সম্বোধন করছেন সেই ব্যক্তি বা ব্যক্তিদের বোঝাতে ব্যবহৃত হয়।",
     "examples_en": [
-      "This is an example for 'you'."
+      "Can you help me with this?"
     ],
     "examples_bn": [
-      "এটি 'you' এর একটি উদাহরণ।"
+      "আপনি কি আমাকে এটিতে সাহায্য করতে পারেন?"
     ],
     "synonyms": [],
     "level": "A1",
@@ -5193,16 +5205,16 @@
   {
     "id": 350,
     "word": "young",
-    "meaning_bn": "...",
-    "definition_en": "English definition for young",
-    "definition_bn": "...",
+    "meaning_bn": "তরুণ / অল্পবয়সী",
+    "definition_en": "Having lived or existed for only a short time.",
+    "definition_bn": "অল্প সময়ের জন্য বেঁচে থাকা বা অস্তিত্ব থাকা।",
     "examples_en": [
-      "This is an example for 'young'."
+      "The young man is very energetic."
     ],
     "examples_bn": [
-      "এটি 'young' এর একটি উদাহরণ।"
+      "যুবকটি খুব উদ্যমী।"
     ],
-    "synonyms": [],
+    "synonyms": ["youthful", "junior"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -5210,14 +5222,14 @@
   {
     "id": 351,
     "word": "your",
-    "meaning_bn": "...",
-    "definition_en": "English definition for your",
-    "definition_bn": "...",
+    "meaning_bn": "তোমার / আপনার",
+    "definition_en": "Belonging to or associated with the person being addressed.",
+    "definition_bn": "যাকে সম্বোধন করা হচ্ছে সেই ব্যক্তির সাথে সংশ্লিষ্ট বা তাঁর মালিকানাধীন।",
     "examples_en": [
-      "This is an example for 'your'."
+      "Is this your book?"
     ],
     "examples_bn": [
-      "এটি 'your' এর একটি উদাহরণ।"
+      "এটি কি তোমার বই?"
     ],
     "synonyms": [],
     "level": "A1",
@@ -5227,14 +5239,14 @@
   {
     "id": 352,
     "word": "yours",
-    "meaning_bn": "...",
-    "definition_en": "English definition for yours",
-    "definition_bn": "...",
+    "meaning_bn": "তোমার / আপনাদের (অধিকার বুঝাতে)",
+    "definition_en": "That which belongs to you.",
+    "definition_bn": "যা তোমার বা আপনাদের অধিকারভুক্ত।",
     "examples_en": [
-      "This is an example for 'yours'."
+      "The choice is yours."
     ],
     "examples_bn": [
-      "এটি 'yours' এর একটি উদাহরণ।"
+      "পছন্দটি তোমার।"
     ],
     "synonyms": [],
     "level": "A2",
@@ -5244,14 +5256,14 @@
   {
     "id": 353,
     "word": "yourself",
-    "meaning_bn": "...",
-    "definition_en": "English definition for yourself",
-    "definition_bn": "...",
+    "meaning_bn": "তুমি নিজে / আপনি নিজে",
+    "definition_en": "Used to refer to the person being addressed as the object of a verb or preposition.",
+    "definition_bn": "সম্বোধিত ব্যক্তিকে ক্রিয়া বা অব্যয়ের কর্ম হিসেবে বোঝাতে ব্যবহৃত হয়।",
     "examples_en": [
-      "This is an example for 'yourself'."
+      "You should take care of yourself."
     ],
     "examples_bn": [
-      "এটি 'yourself' এর একটি উদাহরণ।"
+      "আপনার নিজের যত্ন নেওয়া উচিত।"
     ],
     "synonyms": [],
     "level": "A1",
@@ -5261,16 +5273,16 @@
   {
     "id": 354,
     "word": "youth",
-    "meaning_bn": "...",
-    "definition_en": "English definition for youth",
-    "definition_bn": "...",
+    "meaning_bn": "যৌবন / তরুণ প্রজন্ম",
+    "definition_en": "The period between childhood and adult age.",
+    "definition_bn": "শৈশব এবং প্রাপ্তবয়স্ক বয়সের মধ্যবর্তী সময়।",
     "examples_en": [
-      "This is an example for 'youth'."
+      "In my youth, I used to play football."
     ],
     "examples_bn": [
-      "এটি 'youth' এর একটি উদাহরণ।"
+      "যৌবনে আমি ফুটবল খেলতাম।"
     ],
-    "synonyms": [],
+    "synonyms": ["adolescence", "youngster"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -5278,16 +5290,16 @@
   {
     "id": 355,
     "word": "zero",
-    "meaning_bn": "...",
-    "definition_en": "English definition for zero",
-    "definition_bn": "...",
+    "meaning_bn": "শূন্য",
+    "definition_en": "The numerical symbol 0; nothing.",
+    "definition_bn": "সংখ্যাসূচক চিহ্ন ০; কিছুই না।",
     "examples_en": [
-      "This is an example for 'zero'."
+      "The temperature dropped below zero last night."
     ],
     "examples_bn": [
-      "এটি 'zero' এর একটি উদাহরণ।"
+      "গত রাতে তাপমাত্রা শূন্যের নিচে নেমে গিয়েছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["nil", "nought"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "number"
@@ -5295,16 +5307,16 @@
   {
     "id": 356,
     "word": "zone",
-    "meaning_bn": "...",
-    "definition_en": "English definition for zone",
-    "definition_bn": "...",
+    "meaning_bn": "অঞ্চল / এলাকা",
+    "definition_en": "An area or stretch of land having a particular characteristic.",
+    "definition_bn": "একটি নির্দিষ্ট বৈশিষ্ট্যযুক্ত ভূমি বা এলাকা।",
     "examples_en": [
-      "This is an example for 'zone'."
+      "This is a no-parking zone."
     ],
     "examples_bn": [
-      "এটি 'zone' এর একটি উদাহরণ।"
+      "এটি নো-পার্কিং জোন (পার্কিং নিষেধ এলাকা)।"
     ],
-    "synonyms": [],
+    "synonyms": ["area", "region", "district"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -5312,16 +5324,16 @@
   {
     "id": 357,
     "word": "zoo",
-    "meaning_bn": "...",
-    "definition_en": "English definition for zoo",
-    "definition_bn": "...",
+    "meaning_bn": "চিড়িয়াখানা",
+    "definition_en": "An establishment which maintains a collection of wild animals for study or display.",
+    "definition_bn": "একটি প্রতিষ্ঠান যা অধ্যয়ন বা প্রদর্শনের জন্য বন্য প্রাণীদের সংগ্রহ করে রাখে।",
     "examples_en": [
-      "This is an example for 'zoo'."
+      "We took the kids to the zoo on Sunday."
     ],
     "examples_bn": [
-      "এটি 'zoo' এর একটি উদাহরণ।"
+      "রবিবার আমরা বাচ্চাদের চিড়িয়াখানায় নিয়ে গিয়েছিলাম।"
     ],
-    "synonyms": [],
+    "synonyms": ["wildlife park"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
