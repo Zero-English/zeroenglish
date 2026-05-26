@@ -2,16 +2,16 @@
   {
     "id": 1,
     "word": "qualify",
-    "meaning_bn": "...",
-    "definition_en": "English definition for qualify",
-    "definition_bn": "...",
+    "meaning_bn": "যোগ্যতা অর্জন করা",
+    "definition_en": "To reach the necessary standard to take part in a competition or to do a job.",
+    "definition_bn": "কোনো প্রতিযোগিতায় অংশ নিতে বা কোনো কাজ করার জন্য প্রয়োজনীয় মান অর্জন করা।",
     "examples_en": [
-      "This is an example for 'qualify'."
+      "She worked hard to qualify as a doctor."
     ],
     "examples_bn": [
-      "এটি 'qualify' এর একটি উদাহরণ।"
+      "তিনি ডাক্তার হিসেবে যোগ্যতা অর্জনের জন্য কঠোর পরিশ্রম করেছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["certify", "enable", "prepare"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -20,15 +20,15 @@
     "id": 2,
     "word": "quality",
     "meaning_bn": "মান / গুণ",
-    "definition_en": "The standard of something as measured against other things.",
-    "definition_bn": "অন্যান্য জিনিসের বিপরীতে পরিমাপ করা কোনো কিছুর মান।",
+    "definition_en": "The standard of something as measured against other things of a similar kind.",
+    "definition_bn": "অনুরূপ অন্যান্য জিনিসের বিপরীতে পরিমাপ করা কোনো কিছুর মান।",
     "examples_en": [
-      "This is an example for 'quality'."
+      "We aim to provide the best quality service to our customers."
     ],
     "examples_bn": [
-      "এটি 'quality' এর একটি উদাহরণ।"
+      "আমরা আমাদের গ্রাহকদের সর্বোত্তম মানের সেবা প্রদানের লক্ষ্য রাখি।"
     ],
-    "synonyms": [],
+    "synonyms": ["standard", "excellence", "grade"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -36,16 +36,16 @@
   {
     "id": 3,
     "word": "quantity",
-    "meaning_bn": "...",
-    "definition_en": "English definition for quantity",
-    "definition_bn": "...",
+    "meaning_bn": "পরিমাণ",
+    "definition_en": "The amount or number of something.",
+    "definition_bn": "কোনো কিছুর পরিমাণ বা সংখ্যা।",
     "examples_en": [
-      "This is an example for 'quantity'."
+      "The police found a large quantity of drugs in the house."
     ],
     "examples_bn": [
-      "এটি 'quantity' এর একটি উদাহরণ।"
+      "পুলিশ ওই বাড়িতে বিপুল পরিমাণ মাদক উদ্ধার করেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["amount", "volume", "mass"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -53,16 +53,16 @@
   {
     "id": 4,
     "word": "quarter",
-    "meaning_bn": "...",
-    "definition_en": "English definition for quarter",
-    "definition_bn": "...",
+    "meaning_bn": "এক-চতুর্থাংশ / পোয়া",
+    "definition_en": "Each of four equal or corresponding parts into which something is or can be divided.",
+    "definition_bn": "কোনো কিছুকে সমান চারটি ভাগে ভাগ করলে তার প্রতিটিকে একটি ভাগ বলা হয়।",
     "examples_en": [
-      "This is an example for 'quarter'."
+      "Cut the apple into quarters."
     ],
     "examples_bn": [
-      "এটি 'quarter' এর একটি উদাহরণ।"
+      "আপেলটিকে চার ভাগে ভাগ করো।"
     ],
-    "synonyms": [],
+    "synonyms": ["fourth", "quadrant"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -70,16 +70,16 @@
   {
     "id": 5,
     "word": "queen",
-    "meaning_bn": "...",
-    "definition_en": "English definition for queen",
-    "definition_bn": "...",
+    "meaning_bn": "রানী",
+    "definition_en": "The female ruler of an independent state, especially one who inherits the position by right of birth.",
+    "definition_bn": "একটি স্বাধীন রাষ্ট্রের মহিলা শাসক, বিশেষ করে যিনি জন্মের অধিকারে এই পদটি উত্তরাধিকার সূত্রে পান।",
     "examples_en": [
-      "This is an example for 'queen'."
+      "The queen reigned for sixty years."
     ],
     "examples_bn": [
-      "এটি 'queen' এর একটি উদাহরণ।"
+      "রানী ষাট বছর রাজত্ব করেছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["monarch", "empress", "her majesty"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -87,16 +87,16 @@
   {
     "id": 7,
     "word": "queue",
-    "meaning_bn": "...",
-    "definition_en": "English definition for queue",
-    "definition_bn": "...",
+    "meaning_bn": "সারি / লাইন",
+    "definition_en": "A line or sequence of people or vehicles awaiting their turn to be attended to or to proceed.",
+    "definition_bn": "মানুষ বা যানবাহনের একটি লাইন যারা তাদের পালার জন্য অপেক্ষা করছে।",
     "examples_en": [
-      "This is an example for 'queue'."
+      "We had to stand in a long queue for the tickets."
     ],
     "examples_bn": [
-      "এটি 'queue' এর একটি উদাহরণ।"
+      "টিকিটের জন্য আমাদের দীর্ঘ লাইনে দাঁড়াতে হয়েছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["line", "row", "file"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -104,16 +104,16 @@
   {
     "id": 8,
     "word": "quick",
-    "meaning_bn": "...",
-    "definition_en": "English definition for quick",
-    "definition_bn": "...",
+    "meaning_bn": "দ্রুত / চটপটে",
+    "definition_en": "Moving fast or doing something in a short time.",
+    "definition_bn": "দ্রুত চলা বা অল্প সময়ের মধ্যে কিছু করা।",
     "examples_en": [
-      "This is an example for 'quick'."
+      "He gave a quick reply to the letter."
     ],
     "examples_bn": [
-      "এটি 'quick' এর একটি উদাহরণ।"
+      "সে চিঠির একটি দ্রুত উত্তর দিয়েছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["fast", "rapid", "swift"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -121,16 +121,16 @@
   {
     "id": 9,
     "word": "quickly",
-    "meaning_bn": "...",
-    "definition_en": "English definition for quickly",
-    "definition_bn": "...",
+    "meaning_bn": "দ্রুততার সাথে",
+    "definition_en": "At a fast speed; rapidly.",
+    "definition_bn": "দ্রুত গতিতে; দ্রুততার সাথে।",
     "examples_en": [
-      "This is an example for 'quickly'."
+      "Please come here quickly!"
     ],
     "examples_bn": [
-      "এটি 'quickly' এর একটি উদাহরণ।"
+      "দয়া করে এখানে দ্রুত এসো!"
     ],
-    "synonyms": [],
+    "synonyms": ["fast", "rapidly", "speedily"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -138,16 +138,16 @@
   {
     "id": 10,
     "word": "quiet",
-    "meaning_bn": "...",
-    "definition_en": "English definition for quiet",
-    "definition_bn": "...",
+    "meaning_bn": "শান্ত / নীরব",
+    "definition_en": "Making little or no noise.",
+    "definition_bn": "খুব কম বা কোনো শব্দ না করা।",
     "examples_en": [
-      "This is an example for 'quiet'."
+      "The library is a very quiet place."
     ],
     "examples_bn": [
-      "এটি 'quiet' এর একটি উদাহরণ।"
+      "লাইব্রেরি খুব শান্ত একটি জায়গা।"
     ],
-    "synonyms": [],
+    "synonyms": ["silent", "still", "calm"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -155,16 +155,16 @@
   {
     "id": 11,
     "word": "quietly",
-    "meaning_bn": "...",
-    "definition_en": "English definition for quietly",
-    "definition_bn": "...",
+    "meaning_bn": "চুপচাপ / নিঃশব্দে",
+    "definition_en": "In a manner that makes little or no noise.",
+    "definition_bn": "এমনভাবে যা খুব কম বা কোনো শব্দ করে না।",
     "examples_en": [
-      "This is an example for 'quietly'."
+      "She closed the door quietly."
     ],
     "examples_bn": [
-      "এটি 'quietly' এর একটি উদাহরণ।"
+      "সে নিঃশব্দে দরজা বন্ধ করল।"
     ],
-    "synonyms": [],
+    "synonyms": ["silently", "softly", "noiselessly"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -172,16 +172,16 @@
   {
     "id": 12,
     "word": "quit",
-    "meaning_bn": "...",
-    "definition_en": "English definition for quit",
-    "definition_bn": "...",
+    "meaning_bn": "ত্যাগ করা / ছেড়ে দেওয়া",
+    "definition_en": "To leave a place, or to stop doing something (like a job or habit).",
+    "definition_bn": "কোনো স্থান ত্যাগ করা, বা কিছু করা বন্ধ করা (যেমন চাকরি বা অভ্যাস)।",
     "examples_en": [
-      "This is an example for 'quit'."
+      "He decided to quit his job and travel the world."
     ],
     "examples_bn": [
-      "এটি 'quit' এর একটি উদাহরণ।"
+      "সে চাকরি ছেড়ে দিয়ে বিশ্বভ্রমণ করার সিদ্ধান্ত নিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["resign", "abandon", "stop"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -189,16 +189,16 @@
   {
     "id": 13,
     "word": "quite",
-    "meaning_bn": "...",
-    "definition_en": "English definition for quite",
-    "definition_bn": "...",
+    "meaning_bn": "বেশ / সম্পূর্ণভাবে",
+    "definition_en": "To a certain or fairly significant extent or degree; very.",
+    "definition_bn": "একটি নির্দিষ্ট বা মোটামুটি উল্লেখযোগ্য মাত্রায়; খুব।",
     "examples_en": [
-      "This is an example for 'quite'."
+      "The movie was quite good."
     ],
     "examples_bn": [
-      "এটি 'quite' এর একটি উদাহরণ।"
+      "সিনেমাটি বেশ ভালো ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["fairly", "rather", "completely"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -206,16 +206,16 @@
   {
     "id": 14,
     "word": "quotation",
-    "meaning_bn": "...",
-    "definition_en": "English definition for quotation",
-    "definition_bn": "...",
+    "meaning_bn": "উদ্ধৃতি",
+    "definition_en": "A group of words taken from a text or speech and repeated by someone other than the original author.",
+    "definition_bn": "একটি পাঠ্য বা বক্তৃতা থেকে নেওয়া শব্দের একটি অংশ যা মূল লেখক ছাড়া অন্য কেউ পুনরাবৃত্তি করেন।",
     "examples_en": [
-      "This is an example for 'quotation'."
+      "The book begins with a quotation from Shakespeare."
     ],
     "examples_bn": [
-      "এটি 'quotation' এর একটি উদাহরণ।"
+      "বইটি শেক্সপিয়ারের একটি উদ্ধৃতি দিয়ে শুরু হয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["cite", "extract", "passage"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -223,16 +223,16 @@
   {
     "id": 15,
     "word": "quote",
-    "meaning_bn": "...",
-    "definition_en": "English definition for quote",
-    "definition_bn": "...",
+    "meaning_bn": "উদ্ধৃত করা",
+    "definition_en": "To repeat or copy out words from a text or speaker.",
+    "definition_bn": "একটি পাঠ্য বা বক্তার কথা পুনরাবৃত্তি করা বা কপি করা।",
     "examples_en": [
-      "This is an example for 'quote'."
+      "Can you quote a line from your favorite poem?"
     ],
     "examples_bn": [
-      "এটি 'quote' এর একটি উদাহরণ।"
+      "তুমি কি তোমার প্রিয় কবিতার একটি লাইন উদ্ধৃত করতে পারো?"
     ],
-    "synonyms": [],
+    "synonyms": ["cite", "repeat", "recite"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -240,16 +240,16 @@
   {
     "id": 16,
     "word": "race",
-    "meaning_bn": "...",
-    "definition_en": "English definition for race",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিযোগিতা / জাতি",
+    "definition_en": "A competition between people, animals, or vehicles to see which is the fastest.",
+    "definition_bn": "মানুষ, প্রাণী বা যানবাহনের মধ্যে কে দ্রুততম তা দেখার একটি প্রতিযোগিতা।",
     "examples_en": [
-      "This is an example for 'race'."
+      "Who won the 100-meter race?"
     ],
     "examples_bn": [
-      "এটি 'race' এর একটি উদাহরণ।"
+      "১০০ মিটার দৌড়ে কে জিতেছে?"
     ],
-    "synonyms": [],
+    "synonyms": ["competition", "contest", "sprint"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -257,16 +257,16 @@
   {
     "id": 17,
     "word": "racing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for racing",
-    "definition_bn": "...",
+    "meaning_bn": "ঘোড়দৌড় বা দ্রুত গতির প্রতিযোগিতা",
+    "definition_en": "The sport or activity of competing in races.",
+    "definition_bn": "দৌড় প্রতিযোগিতায় প্রতিদ্বন্দ্বিতা করার খেলা বা কার্যকলাপ।",
     "examples_en": [
-      "This is an example for 'racing'."
+      "Horse racing is a popular sport in many countries."
     ],
     "examples_bn": [
-      "এটি 'racing' এর একটি উদাহরণ।"
+      "অনেক দেশে ঘোড়দৌড় একটি জনপ্রিয় খেলা।"
     ],
-    "synonyms": [],
+    "synonyms": ["sprinting", "speedway"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -274,16 +274,16 @@
   {
     "id": 18,
     "word": "radio",
-    "meaning_bn": "...",
-    "definition_en": "English definition for radio",
-    "definition_bn": "...",
+    "meaning_bn": "বেতার / রেডিও",
+    "definition_en": "The transmission and reception of electromagnetic waves of radio frequency, especially those carrying sound messages.",
+    "definition_bn": "বেতার তরঙ্গের মাধ্যমে শব্দের বার্তা প্রেরণ এবং গ্রহণ করার ব্যবস্থা।",
     "examples_en": [
-      "This is an example for 'radio'."
+      "I heard the news on the radio this morning."
     ],
     "examples_bn": [
-      "এটি 'radio' এর একটি উদাহরণ।"
+      "আজ সকালে রেডিওতে খবরটি শুনেছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["broadcast", "receiver", "wireless"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -291,16 +291,16 @@
   {
     "id": 19,
     "word": "rail",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rail",
-    "definition_bn": "...",
+    "meaning_bn": "রেল / রেললাইন",
+    "definition_en": "A bar or series of bars forming a guard or barrier or a track for trains.",
+    "definition_bn": "ট্রেনের চলাচলের জন্য তৈরি ধাতব পথ বা কোনো বেষ্টনী তৈরিতে ব্যবহৃত দণ্ড।",
     "examples_en": [
-      "This is an example for 'rail'."
+      "They are traveling by rail across Europe."
     ],
     "examples_bn": [
-      "এটি 'rail' এর একটি উদাহরণ।"
+      "তারা রেলপথে ইউরোপ ভ্রমণ করছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["track", "bar", "railing"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -308,16 +308,16 @@
   {
     "id": 20,
     "word": "railway",
-    "meaning_bn": "...",
-    "definition_en": "English definition for railway",
-    "definition_bn": "...",
+    "meaning_bn": "রেলপথ",
+    "definition_en": "A track made of steel rails along which trains run.",
+    "definition_bn": "ইস্পাত দিয়ে তৈরি একটি পথ যার ওপর দিয়ে ট্রেন চলে।",
     "examples_en": [
-      "This is an example for 'railway'."
+      "The new railway line connects the two cities."
     ],
     "examples_bn": [
-      "এটি 'railway' এর একটি উদাহরণ।"
+      "নতুন রেলপথটি দুটি শহরকে যুক্ত করেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["railroad", "track"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -329,12 +329,12 @@
     "definition_en": "Moisture condensed from the atmosphere that falls in separate drops.",
     "definition_bn": "বায়ুমণ্ডল থেকে ঘনীভূত আর্দ্রতা যা পৃথক ফোঁটায় পড়ে।",
     "examples_en": [
-      "This is an example for 'rain'."
+      "It looks like rain today."
     ],
     "examples_bn": [
-      "এটি 'rain' এর একটি উদাহরণ।"
+      "আজ বৃষ্টির সম্ভাবনা মনে হচ্ছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["shower", "rainfall", "precipitation"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -342,16 +342,16 @@
   {
     "id": 22,
     "word": "raise",
-    "meaning_bn": "...",
-    "definition_en": "English definition for raise",
-    "definition_bn": "...",
+    "meaning_bn": "তোলা / বাড়ানো",
+    "definition_en": "To lift or move something to a higher or upward position.",
+    "definition_bn": "কোনো কিছুকে উচ্চতর বা উপরের অবস্থানে তোলা বা সরানো।",
     "examples_en": [
-      "This is an example for 'raise'."
+      "Please raise your hand if you have a question."
     ],
     "examples_bn": [
-      "এটি 'raise' এর একটি উদাহরণ।"
+      "তোমার কোনো প্রশ্ন থাকলে দয়া করে হাত তোলো।"
     ],
-    "synonyms": [],
+    "synonyms": ["lift", "elevate", "boost"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -359,16 +359,16 @@
   {
     "id": 24,
     "word": "rank",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rank",
-    "definition_bn": "...",
+    "meaning_bn": "পদমর্যাদা / শ্রেণীভুক্ত করা",
+    "definition_en": "A position in the hierarchy of the armed forces or an organization.",
+    "definition_bn": "সশস্ত্র বাহিনী বা কোনো প্রতিষ্ঠানের শ্রেণিবিন্যাসে একটি অবস্থান।",
     "examples_en": [
-      "This is an example for 'rank'."
+      "He rose to the rank of captain."
     ],
     "examples_bn": [
-      "এটি 'rank' এর একটি উদাহরণ।"
+      "তিনি ক্যাপ্টেন পদে উন্নীত হন।"
     ],
-    "synonyms": [],
+    "synonyms": ["status", "grade", "position"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -376,16 +376,16 @@
   {
     "id": 25,
     "word": "rare",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rare",
-    "definition_bn": "...",
+    "meaning_bn": "বিরল / দুর্লভ",
+    "definition_en": "Not occurring very often; uncommon.",
+    "definition_bn": "খুব ঘন ঘন ঘটে না এমন; অস্বাভাবিক।",
     "examples_en": [
-      "This is an example for 'rare'."
+      "It is rare to see snow in this part of the country."
     ],
     "examples_bn": [
-      "এটি 'rare' এর একটি উদাহরণ।"
+      "দেশের এই অংশে তুষারপাত দেখা বিরল।"
     ],
-    "synonyms": [],
+    "synonyms": ["uncommon", "scarce", "unique"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -393,16 +393,16 @@
   {
     "id": 26,
     "word": "rarely",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rarely",
-    "definition_bn": "...",
+    "meaning_bn": "খুব কমই / কদাচিৎ",
+    "definition_en": "Not often; seldom.",
+    "definition_bn": "ঘন ঘন নয়; কদাচিৎ।",
     "examples_en": [
-      "This is an example for 'rarely'."
+      "He rarely goes out after dark."
     ],
     "examples_bn": [
-      "এটি 'rarely' এর একটি উদাহরণ।"
+      "সে অন্ধকার হওয়ার পর খুব কমই বাইরে যায়।"
     ],
-    "synonyms": [],
+    "synonyms": ["seldom", "infrequently", "hardly ever"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -410,16 +410,16 @@
   {
     "id": 28,
     "word": "rather",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rather",
-    "definition_bn": "...",
+    "meaning_bn": "বরং / কিছুটা",
+    "definition_en": "Used to indicate one's preference in a particular matter.",
+    "definition_bn": "একটি নির্দিষ্ট বিষয়ে নিজের পছন্দ নির্দেশ করতে ব্যবহৃত হয়।",
     "examples_en": [
-      "This is an example for 'rather'."
+      "I would rather walk than take the bus."
     ],
     "examples_bn": [
-      "এটি 'rather' এর একটি উদাহরণ।"
+      "আমি বাসে যাওয়ার চেয়ে বরং হাঁটতে পছন্দ করব।"
     ],
-    "synonyms": [],
+    "synonyms": ["preferably", "somewhat", "quite"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -427,16 +427,16 @@
   {
     "id": 29,
     "word": "raw",
-    "meaning_bn": "...",
-    "definition_en": "English definition for raw",
-    "definition_bn": "...",
+    "meaning_bn": "কাঁচা",
+    "definition_en": "Not cooked; in its natural state.",
+    "definition_bn": "রান্না করা নয়; প্রাকৃতিক অবস্থায় থাকা।",
     "examples_en": [
-      "This is an example for 'raw'."
+      "Raw vegetables are very healthy."
     ],
     "examples_bn": [
-      "এটি 'raw' এর একটি উদাহরণ।"
+      "কাঁচা সবজি খুবই স্বাস্থ্যকর।"
     ],
-    "synonyms": [],
+    "synonyms": ["uncooked", "fresh", "unprocessed"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -444,16 +444,16 @@
   {
     "id": 31,
     "word": "react",
-    "meaning_bn": "...",
-    "definition_en": "English definition for react",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিক্রিয়া জানানো",
+    "definition_en": "To act in response to something.",
+    "definition_bn": "কোনো কিছুর জবাবে কাজ করা।",
     "examples_en": [
-      "This is an example for 'react'."
+      "How did he react to the news?"
     ],
     "examples_bn": [
-      "এটি 'react' এর একটি উদাহরণ।"
+      "খবরটিতে সে কেমন প্রতিক্রিয়া জানিয়েছিল?"
     ],
-    "synonyms": [],
+    "synonyms": ["respond", "reply", "answer"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -461,16 +461,16 @@
   {
     "id": 32,
     "word": "reaction",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reaction",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিক্রিয়া",
+    "definition_en": "Something done, felt, or said in response to an event or situation.",
+    "definition_bn": "কোনো ঘটনা বা পরিস্থিতির জবাবে যা করা, অনুভব করা বা বলা হয়।",
     "examples_en": [
-      "This is an example for 'reaction'."
+      "What was her reaction to your proposal?"
     ],
     "examples_bn": [
-      "এটি 'reaction' এর একটি উদাহরণ।"
+      "তোমার প্রস্তাবে তার প্রতিক্রিয়া কী ছিল?"
     ],
-    "synonyms": [],
+    "synonyms": ["response", "feedback", "reply"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -478,16 +478,16 @@
   {
     "id": 34,
     "word": "reader",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reader",
-    "definition_bn": "...",
+    "meaning_bn": "পাঠক",
+    "definition_en": "A person who reads, especially someone who reads for pleasure.",
+    "definition_bn": "যিনি পড়েন, বিশেষ করে যিনি আনন্দের জন্য পড়েন।",
     "examples_en": [
-      "This is an example for 'reader'."
+      "She is an avid reader of mystery novels."
     ],
     "examples_bn": [
-      "এটি 'reader' এর একটি উদাহরণ।"
+      "তিনি রহস্য উপন্যাসের একজন একনিষ্ঠ পাঠক।"
     ],
-    "synonyms": [],
+    "synonyms": ["bookworm", "subscriber"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -495,16 +495,16 @@
   {
     "id": 35,
     "word": "reading",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reading",
-    "definition_bn": "...",
+    "meaning_bn": "পড়া / পাঠ",
+    "definition_en": "The action or skill of reading written or printed matter silently or aloud.",
+    "definition_bn": "লিখিত বা মুদ্রিত বিষয় নিঃশব্দে বা উচ্চৈঃস্বরে পড়ার কাজ বা দক্ষতা।",
     "examples_en": [
-      "This is an example for 'reading'."
+      "Reading is my favorite hobby."
     ],
     "examples_bn": [
-      "এটি 'reading' এর একটি উদাহরণ।"
+      "পড়া আমার প্রিয় শখ।"
     ],
-    "synonyms": [],
+    "synonyms": ["study", "interpretation", "review"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -512,16 +512,16 @@
   {
     "id": 36,
     "word": "ready",
-    "meaning_bn": "...",
-    "definition_en": "English definition for ready",
-    "definition_bn": "...",
+    "meaning_bn": "প্রস্তুত",
+    "definition_en": "In a suitable state for an activity or situation; fully prepared.",
+    "definition_bn": "কোনো কাজ বা পরিস্থিতির জন্য উপযুক্ত অবস্থায় থাকা; সম্পূর্ণ প্রস্তুত।",
     "examples_en": [
-      "This is an example for 'ready'."
+      "Are you ready to go?"
     ],
     "examples_bn": [
-      "এটি 'ready' এর একটি উদাহরণ।"
+      "তুমি কি যাওয়ার জন্য প্রস্তুত?"
     ],
-    "synonyms": [],
+    "synonyms": ["prepared", "set", "equipped"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -529,16 +529,16 @@
   {
     "id": 37,
     "word": "real",
-    "meaning_bn": "...",
-    "definition_en": "English definition for real",
-    "definition_bn": "...",
+    "meaning_bn": "আসল / প্রকৃত",
+    "definition_en": "Actually existing as a thing or occurring in fact; not imagined or supposed.",
+    "definition_bn": "প্রকৃতপক্ষে বিদ্যমান বা বাস্তবে ঘটছে এমন; কাল্পনিক বা অনুমিত নয়।",
     "examples_en": [
-      "This is an example for 'real'."
+      "This is a real diamond, not a fake one."
     ],
     "examples_bn": [
-      "এটি 'real' এর একটি উদাহরণ।"
+      "এটি একটি আসল হীরা, নকল নয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["genuine", "actual", "authentic"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -546,16 +546,16 @@
   {
     "id": 38,
     "word": "realistic",
-    "meaning_bn": "...",
-    "definition_en": "English definition for realistic",
-    "definition_bn": "...",
+    "meaning_bn": "বাস্তবসম্মত",
+    "definition_en": "Having or showing a sensible and practical idea of what can be achieved or expected.",
+    "definition_bn": "কী অর্জন করা বা আশা করা যেতে পারে সে সম্পর্কে একটি বুদ্ধিমান এবং ব্যবহারিক ধারণা থাকা।",
     "examples_en": [
-      "This is an example for 'realistic'."
+      "We need to set a realistic deadline for the project."
     ],
     "examples_bn": [
-      "এটি 'realistic' এর একটি উদাহরণ।"
+      "আমাদের প্রকল্পের জন্য একটি বাস্তবসম্মত সময়সীমা নির্ধারণ করা দরকার।"
     ],
-    "synonyms": [],
+    "synonyms": ["practical", "sensible", "down-to-earth"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -563,16 +563,16 @@
   {
     "id": 39,
     "word": "reality",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reality",
-    "definition_bn": "...",
+    "meaning_bn": "বাস্তবতা",
+    "definition_en": "The world or the state of things as they actually exist.",
+    "definition_bn": "পৃথিবী বা জিনিসের অবস্থা যেমনটি তারা বাস্তবে বিদ্যমান।",
     "examples_en": [
-      "This is an example for 'reality'."
+      "In reality, the situation is much more complex."
     ],
     "examples_bn": [
-      "এটি 'reality' এর একটি উদাহরণ।"
+      "বাস্তবে, পরিস্থিতি অনেক বেশি জটিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["truth", "actuality", "fact"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -580,16 +580,16 @@
   {
     "id": 40,
     "word": "realize",
-    "meaning_bn": "...",
-    "definition_en": "English definition for realize",
-    "definition_bn": "...",
+    "meaning_bn": "উপলব্ধি করা / বুঝতে পারা",
+    "definition_en": "To become fully aware of something as a fact; understand clearly.",
+    "definition_bn": "কোনো কিছু সম্পর্কে সম্পূর্ণ সচেতন হওয়া; স্পষ্টভাবে বুঝতে পারা।",
     "examples_en": [
-      "This is an example for 'realize'."
+      "I didn't realize how late it was."
     ],
     "examples_bn": [
-      "এটি 'realize' এর একটি উদাহরণ।"
+      "আমি বুঝতে পারিনি কতটা দেরি হয়ে গেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["understand", "comprehend", "grasp"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -597,16 +597,16 @@
   {
     "id": 41,
     "word": "really",
-    "meaning_bn": "...",
-    "definition_en": "English definition for really",
-    "definition_bn": "...",
+    "meaning_bn": "সত্যিই / প্রকৃতপক্ষে",
+    "definition_en": "In actual fact, as opposed to what is said or imagined.",
+    "definition_bn": "প্রকৃতপক্ষে, যা বলা হয়েছে বা কল্পনা করা হয়েছে তার বিপরীতে।",
     "examples_en": [
-      "This is an example for 'really'."
+      "Do you really want to go out in the rain?"
     ],
     "examples_bn": [
-      "এটি 'really' এর একটি উদাহরণ।"
+      "তুমি কি সত্যিই বৃষ্টির মধ্যে বাইরে যেতে চাও?"
     ],
-    "synonyms": [],
+    "synonyms": ["actually", "truly", "indeed"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -614,16 +614,16 @@
   {
     "id": 42,
     "word": "rear",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rear",
-    "definition_bn": "...",
+    "meaning_bn": "পেছনের অংশ",
+    "definition_en": "The back part of something.",
+    "definition_bn": "কোনো কিছুর পেছনের অংশ।",
     "examples_en": [
-      "This is an example for 'rear'."
+      "The kitchen is at the rear of the house."
     ],
     "examples_bn": [
-      "এটি 'rear' এর একটি উদাহরণ।"
+      "রান্নাঘরটি বাড়ির পেছনের অংশে অবস্থিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["back", "hind", "posterior"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj., n."
@@ -635,12 +635,12 @@
     "definition_en": "A cause, explanation, or justification for an action or event.",
     "definition_bn": "একটি কাজ বা ঘটনার জন্য একটি কারণ, ব্যাখ্যা বা ন্যায্যতা।",
     "examples_en": [
-      "This is an example for 'reason'."
+      "There is a good reason for his absence."
     ],
     "examples_bn": [
-      "এটি 'reason' এর একটি উদাহরণ।"
+      "তার অনুপস্থিতির পেছনে একটি ভালো কারণ আছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["cause", "motive", "purpose"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -648,16 +648,16 @@
   {
     "id": 44,
     "word": "reasonable",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reasonable",
-    "definition_bn": "...",
+    "meaning_bn": "যুক্তিসঙ্গত",
+    "definition_en": "Having sound judgment; fair and sensible.",
+    "definition_bn": "সঠিক বিচারবোধ সম্পন্ন; ন্যায্য এবং বুদ্ধিমান।",
     "examples_en": [
-      "This is an example for 'reasonable'."
+      "The price of the house was very reasonable."
     ],
     "examples_bn": [
-      "এটি 'reasonable' এর একটি উদাহরণ।"
+      "বাড়িটির দাম বেশ যুক্তিসঙ্গত ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["fair", "sensible", "logical"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -665,16 +665,16 @@
   {
     "id": 45,
     "word": "reasonably",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reasonably",
-    "definition_bn": "...",
+    "meaning_bn": "মোটামুটি / যুক্তিসঙ্গতভাবে",
+    "definition_en": "To a moderate or acceptable degree.",
+    "definition_bn": "একটি সহনীয় বা গ্রহণযোগ্য মাত্রায়।",
     "examples_en": [
-      "This is an example for 'reasonably'."
+      "He speaks English reasonably well."
     ],
     "examples_bn": [
-      "এটি 'reasonably' এর একটি উদাহরণ।"
+      "সে মোটামুটি ভালো ইংরেজি বলে।"
     ],
-    "synonyms": [],
+    "synonyms": ["fairly", "quite", "moderately"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -682,16 +682,16 @@
   {
     "id": 46,
     "word": "rebel",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rebel",
-    "definition_bn": "...",
+    "meaning_bn": "বিদ্রোহী",
+    "definition_en": "A person who rises in opposition or armed resistance against an established government or ruler.",
+    "definition_bn": "একজন ব্যক্তি যিনি প্রতিষ্ঠিত সরকার বা শাসকের বিরুদ্ধে বিরোধিতা বা সশস্ত্র প্রতিরোধের জন্য রুখে দাঁড়ান।",
     "examples_en": [
-      "This is an example for 'rebel'."
+      "The rebels attacked the army base."
     ],
     "examples_bn": [
-      "এটি 'rebel' এর একটি উদাহরণ।"
+      "বিদ্রোহীরা সেনা ঘাঁটিতে হামলা করেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["insurgent", "revolutionary", "mutineer"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -699,16 +699,16 @@
   {
     "id": 47,
     "word": "recall",
-    "meaning_bn": "...",
-    "definition_en": "English definition for recall",
-    "definition_bn": "...",
+    "meaning_bn": "স্মরণ করা / মনে করা",
+    "definition_en": "To bring back into one's mind; remember.",
+    "definition_bn": "নিজের মনে ফিরিয়ে আনা; মনে রাখা বা মনে করা।",
     "examples_en": [
-      "This is an example for 'recall'."
+      "I cannot recall where I met her."
     ],
     "examples_bn": [
-      "এটি 'recall' এর একটি উদাহরণ।"
+      "আমি তার সাথে কোথায় দেখা করেছি তা মনে করতে পারছি না।"
     ],
-    "synonyms": [],
+    "synonyms": ["remember", "recollect"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -716,16 +716,16 @@
   {
     "id": 48,
     "word": "receipt",
-    "meaning_bn": "...",
-    "definition_en": "English definition for receipt",
-    "definition_bn": "...",
+    "meaning_bn": "রশিদ",
+    "definition_en": "A written message that says that money or goods have been received.",
+    "definition_bn": "একটি লিখিত বার্তা যা জানায় যে টাকা বা পণ্য পাওয়া গেছে।",
     "examples_en": [
-      "This is an example for 'receipt'."
+      "Make sure you keep your receipt in case you want to return the item."
     ],
     "examples_bn": [
-      "এটি 'receipt' এর একটি উদাহরণ।"
+      "পণ্যটি ফেরত দেওয়ার প্রয়োজন হতে পারে তাই আপনার রশিদটি গুছিয়ে রাখুন।"
     ],
-    "synonyms": [],
+    "synonyms": ["bill", "invoice", "voucher"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -733,16 +733,16 @@
   {
     "id": 49,
     "word": "receive",
-    "meaning_bn": "...",
-    "definition_en": "English definition for receive",
-    "definition_bn": "...",
+    "meaning_bn": "গ্রহণ করা / পাওয়া",
+    "definition_en": "To be given, presented with, or paid something.",
+    "definition_bn": "কোনো কিছু দেওয়া হওয়া বা কোনো কিছুর জন্য মূল্য পরিশোধ করা হওয়া।",
     "examples_en": [
-      "This is an example for 'receive'."
+      "Did you receive my email?"
     ],
     "examples_bn": [
-      "এটি 'receive' এর একটি উদাহরণ।"
+      "তুমি কি আমার ইমেইলটি পেয়েছো?"
     ],
-    "synonyms": [],
+    "synonyms": ["get", "obtain", "acquire"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -750,16 +750,16 @@
   {
     "id": 50,
     "word": "recent",
-    "meaning_bn": "...",
-    "definition_en": "English definition for recent",
-    "definition_bn": "...",
+    "meaning_bn": "সাম্প্রতিক",
+    "definition_en": "Having happened, begun, or been done only a short time ago.",
+    "definition_bn": "অল্প সময় আগে ঘটেছে, শুরু হয়েছে বা করা হয়েছে এমন।",
     "examples_en": [
-      "This is an example for 'recent'."
+      "His recent work has shown significant improvement."
     ],
     "examples_bn": [
-      "এটি 'recent' এর একটি উদাহরণ।"
+      "তার সাম্প্রতিক কাজে উল্লেখযোগ্য উন্নতি দেখা গেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["latest", "current", "fresh"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -767,16 +767,16 @@
   {
     "id": 51,
     "word": "recently",
-    "meaning_bn": "...",
-    "definition_en": "English definition for recently",
-    "definition_bn": "...",
+    "meaning_bn": "সম্প্রতি / ইদানীং",
+    "definition_en": "Not long ago; in the past few days, weeks, or months.",
+    "definition_bn": "খুব বেশি দিন আগে নয়; গত কয়েক দিন, সপ্তাহ বা মাসের মধ্যে।",
     "examples_en": [
-      "This is an example for 'recently'."
+      "I haven't seen him recently."
     ],
     "examples_bn": [
-      "এটি 'recently' এর একটি উদাহরণ।"
+      "আমি তাকে ইদানীং দেখিনি।"
     ],
-    "synonyms": [],
+    "synonyms": ["lately", "currently", "of late"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -784,16 +784,16 @@
   {
     "id": 52,
     "word": "reception",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reception",
-    "definition_bn": "...",
+    "meaning_bn": "অভ্যর্থনা / গ্রহণ",
+    "definition_en": "The area in a hotel or office where visitors are greeted.",
+    "definition_bn": "একটি হোটেল বা অফিসের সেই এলাকা যেখানে দর্শকদের স্বাগত জানানো হয়।",
     "examples_en": [
-      "This is an example for 'reception'."
+      "Please leave your key at the reception."
     ],
     "examples_bn": [
-      "এটি 'reception' এর একটি উদাহরণ।"
+      "দয়া করে আপনার চাবিটি অভ্যর্থনা ডেস্কে রেখে যান।"
     ],
-    "synonyms": [],
+    "synonyms": ["welcome", "greeting", "front desk"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -801,16 +801,16 @@
   {
     "id": 53,
     "word": "recipe",
-    "meaning_bn": "...",
-    "definition_en": "English definition for recipe",
-    "definition_bn": "...",
+    "meaning_bn": "রান্নার প্রণালী",
+    "definition_en": "A set of instructions for preparing a particular dish.",
+    "definition_bn": "একটি নির্দিষ্ট খাবার তৈরির জন্য নির্দেশাবলীর একটি সেট।",
     "examples_en": [
-      "This is an example for 'recipe'."
+      "She gave me a great recipe for chocolate cake."
     ],
     "examples_bn": [
-      "এটি 'recipe' এর একটি উদাহরণ।"
+      "তিনি আমাকে চকোলেট কেক তৈরির একটি চমৎকার রেসিপি দিয়েছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["formula", "method", "instructions"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -818,16 +818,16 @@
   {
     "id": 54,
     "word": "recognize",
-    "meaning_bn": "...",
-    "definition_en": "English definition for recognize",
-    "definition_bn": "...",
+    "meaning_bn": "চিনতে পারা / স্বীকৃতি দেওয়া",
+    "definition_en": "To identify someone or something from having encountered them before.",
+    "definition_bn": "আগে পরিচিত থাকার কারণে কাউকে বা কোনো কিছুকে শনাক্ত করা।",
     "examples_en": [
-      "This is an example for 'recognize'."
+      "I didn't recognize you with your new haircut."
     ],
     "examples_bn": [
-      "এটি 'recognize' এর একটি উদাহরণ।"
+      "তোমার নতুন হেয়ারকাটের কারণে আমি তোমাকে চিনতে পারিনি।"
     ],
-    "synonyms": [],
+    "synonyms": ["identify", "know", "acknowledge"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -835,16 +835,16 @@
   {
     "id": 55,
     "word": "recommend",
-    "meaning_bn": "...",
-    "definition_en": "English definition for recommend",
-    "definition_bn": "...",
+    "meaning_bn": "সুপারিশ করা",
+    "definition_en": "To advise or suggest that something is good or suitable.",
+    "definition_bn": "কোনো কিছু ভালো বা উপযুক্ত বলে পরামর্শ বা প্রস্তাব দেওয়া।",
     "examples_en": [
-      "This is an example for 'recommend'."
+      "Can you recommend a good restaurant nearby?"
     ],
     "examples_bn": [
-      "এটি 'recommend' এর একটি উদাহরণ।"
+      "আপনি কি কাছেপিঠে একটি ভালো রেস্তোরাঁ সুপারিশ করতে পারেন?"
     ],
-    "synonyms": [],
+    "synonyms": ["suggest", "advise", "propose"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -852,16 +852,16 @@
   {
     "id": 56,
     "word": "recommendation",
-    "meaning_bn": "...",
-    "definition_en": "English definition for recommendation",
-    "definition_bn": "...",
+    "meaning_bn": "সুপারিশ / পরামর্শ",
+    "definition_en": "A suggestion or proposal as to the best course of action.",
+    "definition_bn": "সেরা পদক্ষেপ সম্পর্কে একটি পরামর্শ বা প্রস্তাব।",
     "examples_en": [
-      "This is an example for 'recommendation'."
+      "The doctor's recommendation was to get more rest."
     ],
     "examples_bn": [
-      "এটি 'recommendation' এর একটি উদাহরণ।"
+      "ডাক্তারের পরামর্শ ছিল আরও বিশ্রাম নেওয়া।"
     ],
-    "synonyms": [],
+    "synonyms": ["suggestion", "advice", "tip"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -869,16 +869,16 @@
   {
     "id": 57,
     "word": "record",
-    "meaning_bn": "...",
-    "definition_en": "English definition for record",
-    "definition_bn": "...",
+    "meaning_bn": "নথি / রেকর্ড / লিপিবিদ্ধ করা",
+    "definition_en": "A written or official piece of evidence about the past.",
+    "definition_bn": "অতীত সম্পর্কে একটি লিখিত বা আনুষ্ঠানিক প্রমাণ।",
     "examples_en": [
-      "This is an example for 'record'."
+      "Keep a record of how much money you spend."
     ],
     "examples_bn": [
-      "এটি 'record' এর একটি উদাহরণ।"
+      "আপনি কত টাকা খরচ করছেন তার একটি রেকর্ড রাখুন।"
     ],
-    "synonyms": [],
+    "synonyms": ["document", "file", "register"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -886,16 +886,16 @@
   {
     "id": 58,
     "word": "recording",
-    "meaning_bn": "...",
-    "definition_en": "English definition for recording",
-    "definition_bn": "...",
+    "meaning_bn": "রেকর্ডিং / ধারণকৃত শব্দ বা দৃশ্য",
+    "definition_en": "Sound or pictures that have been stored on a disk or tape.",
+    "definition_bn": "শব্দ বা ছবি যা ডিস্ক বা টেপে জমা রাখা হয়েছে।",
     "examples_en": [
-      "This is an example for 'recording'."
+      "She listened to a recording of her own voice."
     ],
     "examples_bn": [
-      "এটি 'recording' এর একটি উদাহরণ।"
+      "সে তার নিজের কণ্ঠস্বরের একটি রেকর্ডিং শুনেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["audio", "video", "tape"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -903,16 +903,16 @@
   {
     "id": 59,
     "word": "recover",
-    "meaning_bn": "...",
-    "definition_en": "English definition for recover",
-    "definition_bn": "...",
+    "meaning_bn": "আরোগ্য লাভ করা / ফিরে পাওয়া",
+    "definition_en": "To become well again after an illness or injury.",
+    "definition_bn": "অসুস্থতা বা আঘাতের পরে আবার সুস্থ হয়ে ওঠা।",
     "examples_en": [
-      "This is an example for 'recover'."
+      "It took her a long time to recover from the flu."
     ],
     "examples_bn": [
-      "এটি 'recover' এর একটি উদাহরণ।"
+      "ফ্লু থেকে সুস্থ হতে তার অনেক সময় লেগেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["recuperate", "get better", "regain"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -920,16 +920,16 @@
   {
     "id": 60,
     "word": "recycle",
-    "meaning_bn": "...",
-    "definition_en": "English definition for recycle",
-    "definition_bn": "...",
+    "meaning_bn": "পুনরায় ব্যবহারের উপযোগী করা",
+    "definition_en": "To process used materials so they can be used again.",
+    "definition_bn": "ব্যবহৃত উপকরণগুলো প্রক্রিয়াজাত করা যাতে সেগুলো আবার ব্যবহার করা যায়।",
     "examples_en": [
-      "This is an example for 'recycle'."
+      "We should recycle glass and paper."
     ],
     "examples_bn": [
-      "এটি 'recycle' এর একটি উদাহরণ।"
+      "আমাদের কাচ এবং কাগজ রিসাইকেল করা উচিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["reuse", "reprocess", "reclaim"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -937,16 +937,16 @@
   {
     "id": 61,
     "word": "red",
-    "meaning_bn": "...",
-    "definition_en": "English definition for red",
-    "definition_bn": "...",
+    "meaning_bn": "লাল",
+    "definition_en": "The color of blood or a tomato.",
+    "definition_bn": "রক্ত বা টমেটোর রঙ।",
     "examples_en": [
-      "This is an example for 'red'."
+      "She wore a beautiful red dress."
     ],
     "examples_bn": [
-      "এটি 'red' এর একটি উদাহরণ।"
+      "তিনি একটি সুন্দর লাল পোশাক পরেছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["crimson", "scarlet", "ruby"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj., n."
@@ -954,16 +954,16 @@
   {
     "id": 62,
     "word": "reduce",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reduce",
-    "definition_bn": "...",
+    "meaning_bn": "কমানো / হ্রাস করা",
+    "definition_en": "To make something smaller or less in amount or size.",
+    "definition_bn": "কোনো কিছু পরিমাণে বা আকারে ছোট বা কম করা।",
     "examples_en": [
-      "This is an example for 'reduce'."
+      "The shop has reduced its prices."
     ],
     "examples_bn": [
-      "এটি 'reduce' এর একটি উদাহরণ।"
+      "দোকানটি তাদের পণ্যের দাম কমিয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["decrease", "lessen", "diminish"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -971,16 +971,16 @@
   {
     "id": 63,
     "word": "reduction",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reduction",
-    "definition_bn": "...",
+    "meaning_bn": "হ্রাস / কমানো",
+    "definition_en": "An act of making something smaller or less.",
+    "definition_bn": "কোনো কিছু ছোট বা কম করার কাজ।",
     "examples_en": [
-      "This is an example for 'reduction'."
+      "There was a reduction in the number of accidents."
     ],
     "examples_bn": [
-      "এটি 'reduction' এর একটি উদাহরণ।"
+      "দুর্ঘটনার সংখ্যায় একটি হ্রাস লক্ষ্য করা গেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["decrease", "cut", "decline"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -988,16 +988,16 @@
   {
     "id": 64,
     "word": "refer",
-    "meaning_bn": "...",
-    "definition_en": "English definition for refer",
-    "definition_bn": "...",
+    "meaning_bn": "উল্লেখ করা / নির্দেশ করা",
+    "definition_en": "To mention or talk about someone or something.",
+    "definition_bn": "কাউকে বা কোনো কিছু উল্লেখ করা বা সে সম্পর্কে কথা বলা।",
     "examples_en": [
-      "This is an example for 'refer'."
+      "The teacher referred to the notes during the lecture."
     ],
     "examples_bn": [
-      "এটি 'refer' এর একটি উদাহরণ।"
+      "শিক্ষক বক্তৃতার সময় নোটগুলো উল্লেখ করেছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["mention", "cite", "allude"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1005,16 +1005,16 @@
   {
     "id": 65,
     "word": "reference",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reference",
-    "definition_bn": "...",
+    "meaning_bn": "সূত্র / উল্লেখ / তথ্যসূত্র",
+    "definition_en": "A mention of something or a source of information.",
+    "definition_bn": "কোনো কিছুর উল্লেখ বা তথ্যের উৎস।",
     "examples_en": [
-      "This is an example for 'reference'."
+      "The book includes many references to history."
     ],
     "examples_bn": [
-      "এটি 'reference' এর একটি উদাহরণ।"
+      "বইটিতে ইতিহাসের অনেক তথ্যসূত্র অন্তর্ভুক্ত রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["citation", "mention", "source"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1022,16 +1022,16 @@
   {
     "id": 66,
     "word": "reflect",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reflect",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিফলিত করা / চিন্তা করা",
+    "definition_en": "To throw back heat, light, or sound from a surface.",
+    "definition_bn": "একটি পৃষ্ঠ থেকে তাপ, আলো বা শব্দ ফিরিয়ে দেওয়া।",
     "examples_en": [
-      "This is an example for 'reflect'."
+      "The mirror reflects her face."
     ],
     "examples_bn": [
-      "এটি 'reflect' এর একটি উদাহরণ।"
+      "আয়নাটি তার মুখ প্রতিফলিত করছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["mirror", "echo", "reproduce"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1039,16 +1039,16 @@
   {
     "id": 67,
     "word": "reflection",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reflection",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিফলন / চিন্তা",
+    "definition_en": "An image seen in a mirror or shiny surface.",
+    "definition_bn": "আয়না বা চকচকে পৃষ্ঠে দেখা একটি চিত্র।",
     "examples_en": [
-      "This is an example for 'reflection'."
+      "He saw his reflection in the water."
     ],
     "examples_bn": [
-      "এটি 'reflection' এর একটি উদাহরণ।"
+      "সে পানিতে তার নিজের প্রতিফলন দেখল।"
     ],
-    "synonyms": [],
+    "synonyms": ["image", "likeness", "thought"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1056,16 +1056,16 @@
   {
     "id": 68,
     "word": "reform",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reform",
-    "definition_bn": "...",
+    "meaning_bn": "সংস্কার / সংশোধন",
+    "definition_en": "To make changes in something to improve it.",
+    "definition_bn": "উন্নতির জন্য কোনো কিছুতে পরিবর্তন আনা।",
     "examples_en": [
-      "This is an example for 'reform'."
+      "The government is planning to reform the education system."
     ],
     "examples_bn": [
-      "এটি 'reform' এর একটি উদাহরণ।"
+      "সরকার শিক্ষা ব্যবস্থা সংস্কারের পরিকল্পনা করছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["improve", "amend", "change"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -1073,16 +1073,16 @@
   {
     "id": 69,
     "word": "refrigerator",
-    "meaning_bn": "...",
-    "definition_en": "English definition for refrigerator",
-    "definition_bn": "...",
+    "meaning_bn": "রেফ্রিজারেটর / ফ্রিজ",
+    "definition_en": "A piece of electrical equipment in which food is kept cold.",
+    "definition_bn": "একটি বৈদ্যুতিক সরঞ্জাম যেখানে খাবার ঠান্ডা রাখা হয়।",
     "examples_en": [
-      "This is an example for 'refrigerator'."
+      "Put the milk back in the refrigerator."
     ],
     "examples_bn": [
-      "এটি 'refrigerator' এর একটি উদাহরণ।"
+      "দুধ ফ্রিজে রেখে দাও।"
     ],
-    "synonyms": [],
+    "synonyms": ["fridge", "cooler", "icebox"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1090,16 +1090,16 @@
   {
     "id": 70,
     "word": "refusal",
-    "meaning_bn": "...",
-    "definition_en": "English definition for refusal",
-    "definition_bn": "...",
+    "meaning_bn": "প্রত্যাখ্যান / অস্বীকৃতি",
+    "definition_en": "An act of saying 'no' to something.",
+    "definition_bn": "কোনো কিছুতে 'না' বলার কাজ।",
     "examples_en": [
-      "This is an example for 'refusal'."
+      "I was surprised by his refusal to help."
     ],
     "examples_bn": [
-      "এটি 'refusal' এর একটি উদাহরণ।"
+      "সাহায্য করতে তার অস্বীকৃতি দেখে আমি অবাক হয়েছিলাম।"
     ],
-    "synonyms": [],
+    "synonyms": ["rejection", "denial", "declined"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1107,16 +1107,16 @@
   {
     "id": 71,
     "word": "refuse1",
-    "meaning_bn": "...",
-    "definition_en": "English definition for refuse1",
-    "definition_bn": "...",
+    "meaning_bn": "প্রত্যাখ্যান করা / অস্বীকার করা",
+    "definition_en": "To say that you will not do or accept something.",
+    "definition_bn": "আপনি কিছু করবেন না বা গ্রহণ করবেন না তা বলা।",
     "examples_en": [
-      "This is an example for 'refuse1'."
+      "He refused to answer the question."
     ],
     "examples_bn": [
-      "এটি 'refuse1' এর একটি উদাহরণ।"
+      "তিনি প্রশ্নটির উত্তর দিতে অস্বীকার করেছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["decline", "reject", "deny"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1124,16 +1124,16 @@
   {
     "id": 72,
     "word": "regard",
-    "meaning_bn": "...",
-    "definition_en": "English definition for regard",
-    "definition_bn": "...",
+    "meaning_bn": "বিবেচনা করা / শ্রদ্ধা / সম্মান",
+    "definition_en": "To think of someone or something in a particular way.",
+    "definition_bn": "কাউকে বা কোনো কিছুকে একটি বিশেষ উপায়ে চিন্তা করা।",
     "examples_en": [
-      "This is an example for 'regard'."
+      "She is highly regarded by her colleagues."
     ],
     "examples_bn": [
-      "এটি 'regard' এর একটি উদাহরণ।"
+      "তিনি তার সহকর্মীদের কাছে অত্যন্ত শ্রদ্ধেয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["consider", "respect", "esteem"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -1141,16 +1141,16 @@
   {
     "id": 73,
     "word": "region",
-    "meaning_bn": "...",
-    "definition_en": "English definition for region",
-    "definition_bn": "...",
+    "meaning_bn": "অঞ্চল / এলাকা",
+    "definition_en": "A particular area or part of a country or the world.",
+    "definition_bn": "একটি দেশের বা বিশ্বের একটি বিশেষ এলাকা বা অংশ।",
     "examples_en": [
-      "This is an example for 'region'."
+      "It's a beautiful mountainous region."
     ],
     "examples_bn": [
-      "এটি 'region' এর একটি উদাহরণ।"
+      "এটি একটি সুন্দর পার্বত্য অঞ্চল।"
     ],
-    "synonyms": [],
+    "synonyms": ["area", "district", "zone"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1158,16 +1158,16 @@
   {
     "id": 74,
     "word": "regional",
-    "meaning_bn": "...",
-    "definition_en": "English definition for regional",
-    "definition_bn": "...",
+    "meaning_bn": "আঞ্চলিক",
+    "definition_en": "Relating to a particular region or area.",
+    "definition_bn": "একটি নির্দিষ্ট অঞ্চল বা এলাকার সাথে সম্পর্কিত।",
     "examples_en": [
-      "This is an example for 'regional'."
+      "There are many regional differences in food."
     ],
     "examples_bn": [
-      "এটি 'regional' এর একটি উদাহরণ।"
+      "খাবারে অনেক আঞ্চলিক পার্থক্য রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["local", "sectional", "zonal"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -1175,16 +1175,16 @@
   {
     "id": 75,
     "word": "register",
-    "meaning_bn": "...",
-    "definition_en": "English definition for register",
-    "definition_bn": "...",
+    "meaning_bn": "নিবন্ধন করা / তালিকা",
+    "definition_en": "To put your name on an official list.",
+    "definition_bn": "একটি অফিসিয়াল তালিকায় আপনার নাম রাখা।",
     "examples_en": [
-      "This is an example for 'register'."
+      "You need to register if you want to vote."
     ],
     "examples_bn": [
-      "এটি 'register' এর একটি উদাহরণ।"
+      "আপনি ভোট দিতে চাইলে আপনাকে নিবন্ধন করতে হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["enroll", "sign up", "record"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -1192,16 +1192,16 @@
   {
     "id": 76,
     "word": "regret",
-    "meaning_bn": "...",
-    "definition_en": "English definition for regret",
-    "definition_bn": "...",
+    "meaning_bn": "অনুশোচনা করা / দুঃখিত হওয়া",
+    "definition_en": "To feel sorry about something you did or did not do.",
+    "definition_bn": "আপনি যা করেছেন বা করেননি সে সম্পর্কে দুঃখ অনুভব করা।",
     "examples_en": [
-      "This is an example for 'regret'."
+      "I regret not taking that job."
     ],
     "examples_bn": [
-      "এটি 'regret' এর একটি উদাহরণ।"
+      "আমি সেই চাকরিটি না নেওয়ার জন্য অনুশোচনা করি।"
     ],
-    "synonyms": [],
+    "synonyms": ["remorse", "repent", "sorrow"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -1209,16 +1209,16 @@
   {
     "id": 77,
     "word": "regular",
-    "meaning_bn": "...",
-    "definition_en": "English definition for regular",
-    "definition_bn": "...",
+    "meaning_bn": "নিয়মিত / স্বাভাবিক",
+    "definition_en": "Happening or doing something often and at the same time.",
+    "definition_bn": "প্রায়শই এবং একই সময়ে কোনো কিছু ঘটা বা করা।",
     "examples_en": [
-      "This is an example for 'regular'."
+      "I make regular visits to the gym."
     ],
     "examples_bn": [
-      "এটি 'regular' এর একটি উদাহরণ।"
+      "আমি নিয়মিত জিমে যাই।"
     ],
-    "synonyms": [],
+    "synonyms": ["frequent", "habitual", "standard"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -1226,16 +1226,16 @@
   {
     "id": 78,
     "word": "regularly",
-    "meaning_bn": "...",
-    "definition_en": "English definition for regularly",
-    "definition_bn": "...",
+    "meaning_bn": "নিয়মিতভাবে",
+    "definition_en": "At regular intervals or times.",
+    "definition_bn": "নিয়মিত বিরতিতে বা সময়ে।",
     "examples_en": [
-      "This is an example for 'regularly'."
+      "You should exercise regularly."
     ],
     "examples_bn": [
-      "এটি 'regularly' এর একটি উদাহরণ।"
+      "আপনার নিয়মিত ব্যায়াম করা উচিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["frequently", "habitually", "routinely"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adv."
@@ -1243,16 +1243,16 @@
   {
     "id": 79,
     "word": "regulation",
-    "meaning_bn": "...",
-    "definition_en": "English definition for regulation",
-    "definition_bn": "...",
+    "meaning_bn": "নিয়ম / বিধিবিধান",
+    "definition_en": "An official rule made by a government or organization.",
+    "definition_bn": "সরকার বা সংস্থা দ্বারা প্রণীত একটি অফিসিয়াল নিয়ম।",
     "examples_en": [
-      "This is an example for 'regulation'."
+      "The new safety regulations were strictly enforced."
     ],
     "examples_bn": [
-      "এটি 'regulation' এর একটি উদাহরণ।"
+      "নতুন নিরাপত্তা বিধিগুলো কঠোরভাবে কার্যকর করা হয়েছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["rule", "law", "directive"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1260,16 +1260,16 @@
   {
     "id": 80,
     "word": "reject",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reject",
-    "definition_bn": "...",
+    "meaning_bn": "প্রত্যাখ্যান করা / বর্জন করা",
+    "definition_en": "To refuse to accept or believe something.",
+    "definition_bn": "কোনো কিছু গ্রহণ করতে বা বিশ্বাস করতে অস্বীকার করা।",
     "examples_en": [
-      "This is an example for 'reject'."
+      "The company rejected my application."
     ],
     "examples_bn": [
-      "এটি 'reject' এর একটি উদাহরণ।"
+      "কোম্পানিটি আমার আবেদন প্রত্যাখ্যান করেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["refuse", "decline", "discard"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1277,16 +1277,16 @@
   {
     "id": 81,
     "word": "relate",
-    "meaning_bn": "...",
-    "definition_en": "English definition for relate",
-    "definition_bn": "...",
+    "meaning_bn": "সম্পর্কিত হওয়া / বর্ণনা করা",
+    "definition_en": "To show or make a connection between two or more things.",
+    "definition_bn": "দুই বা ততোধিক জিনিসের মধ্যে সংযোগ দেখানো বা তৈরি করা।",
     "examples_en": [
-      "This is an example for 'relate'."
+      "I can't relate these two events."
     ],
     "examples_bn": [
-      "এটি 'relate' এর একটি উদাহরণ।"
+      "আমি এই দুটি ঘটনার মধ্যে সম্পর্ক স্থাপন করতে পারছি না।"
     ],
-    "synonyms": [],
+    "synonyms": ["connect", "link", "associate"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1294,16 +1294,16 @@
   {
     "id": 82,
     "word": "related",
-    "meaning_bn": "...",
-    "definition_en": "English definition for related",
-    "definition_bn": "...",
+    "meaning_bn": "সম্পর্কিত / আত্মীয়",
+    "definition_en": "Belonging to the same family or connected in some way.",
+    "definition_bn": "একই পরিবারের অন্তর্ভুক্ত বা কোনোভাবে সংযুক্ত।",
     "examples_en": [
-      "This is an example for 'related'."
+      "They are closely related to each other."
     ],
     "examples_bn": [
-      "এটি 'related' এর একটি উদাহরণ।"
+      "তারা একে অপরের সাথে ঘনিষ্ঠভাবে সম্পর্কিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["connected", "linked", "akin"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -1311,16 +1311,16 @@
   {
     "id": 83,
     "word": "relation",
-    "meaning_bn": "...",
-    "definition_en": "English definition for relation",
-    "definition_bn": "...",
+    "meaning_bn": "সম্পর্ক / আত্মীয়",
+    "definition_en": "The way in which two or more people or things are connected.",
+    "definition_bn": "দুই বা ততোধিক মানুষ বা জিনিস যেভাবে সংযুক্ত থাকে।",
     "examples_en": [
-      "This is an example for 'relation'."
+      "The relation between price and quality is important."
     ],
     "examples_bn": [
-      "এটি 'relation' এর একটি উদাহরণ।"
+      "দাম এবং মানের মধ্যে সম্পর্ক গুরুত্বপূর্ণ।"
     ],
-    "synonyms": [],
+    "synonyms": ["connection", "relationship", "bond"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1328,16 +1328,16 @@
   {
     "id": 84,
     "word": "relationship",
-    "meaning_bn": "...",
-    "definition_en": "English definition for relationship",
-    "definition_bn": "...",
+    "meaning_bn": "সম্পর্ক / সখ্যতা",
+    "definition_en": "The way in which two or more people or groups feel about each other.",
+    "definition_bn": "দুই বা ততোধিক মানুষ বা গোষ্ঠী একে অপরের সম্পর্কে যেভাবে অনুভব করে।",
     "examples_en": [
-      "This is an example for 'relationship'."
+      "They have a very good working relationship."
     ],
     "examples_bn": [
-      "এটি 'relationship' এর একটি উদাহরণ।"
+      "তাদের কাজের সম্পর্ক খুব ভালো।"
     ],
-    "synonyms": [],
+    "synonyms": ["connection", "bond", "association"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1345,16 +1345,16 @@
   {
     "id": 85,
     "word": "relative",
-    "meaning_bn": "...",
-    "definition_en": "English definition for relative",
-    "definition_bn": "...",
+    "meaning_bn": "আত্মীয় / তুলনামূলক",
+    "definition_en": "A member of your family.",
+    "definition_bn": "আপনার পরিবারের একজন সদস্য।",
     "examples_en": [
-      "This is an example for 'relative'."
+      "Many of my relatives live abroad."
     ],
     "examples_bn": [
-      "এটি 'relative' এর একটি উদাহরণ।"
+      "আমার অনেক আত্মীয় বিদেশে থাকেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["relation", "kin", "family member"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj., n."
@@ -1362,16 +1362,16 @@
   {
     "id": 86,
     "word": "relax",
-    "meaning_bn": "...",
-    "definition_en": "English definition for relax",
-    "definition_bn": "...",
+    "meaning_bn": "বিশ্রাম নেওয়া / শিথিল হওয়া",
+    "definition_en": "To rest or do something enjoyable to stop being worried.",
+    "definition_bn": "চিন্তামুক্ত হওয়ার জন্য বিশ্রাম নেওয়া বা উপভোগ্য কিছু করা।",
     "examples_en": [
-      "This is an example for 'relax'."
+      "I like to relax with a good book."
     ],
     "examples_bn": [
-      "এটি 'relax' এর একটি উদাহরণ।"
+      "আমি একটি ভালো বই নিয়ে বিশ্রাম নিতে পছন্দ করি।"
     ],
-    "synonyms": [],
+    "synonyms": ["rest", "unwind", "ease"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1379,16 +1379,16 @@
   {
     "id": 87,
     "word": "relaxed",
-    "meaning_bn": "...",
-    "definition_en": "English definition for relaxed",
-    "definition_bn": "...",
+    "meaning_bn": "শিথিল / চিন্তামুক্ত",
+    "definition_en": "Feeling calm and not worried.",
+    "definition_bn": "শান্ত অনুভব করা এবং চিন্তিত না হওয়া।",
     "examples_en": [
-      "This is an example for 'relaxed'."
+      "He looked very relaxed after his holiday."
     ],
     "examples_bn": [
-      "এটি 'relaxed' এর একটি উদাহরণ।"
+      "ছুটির পর তাকে খুব শান্ত ও চিন্তামুক্ত দেখাচ্ছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["calm", "easygoing", "carefree"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -1396,16 +1396,16 @@
   {
     "id": 88,
     "word": "relaxing",
-    "meaning_bn": "...",
-    "definition_en": "English definition for relaxing",
-    "definition_bn": "...",
+    "meaning_bn": "আরামদায়ক",
+    "definition_en": "Helping you to rest and become less worried.",
+    "definition_bn": "আপনাকে বিশ্রাম নিতে এবং কম চিন্তিত হতে সাহায্য করা।",
     "examples_en": [
-      "This is an example for 'relaxing'."
+      "Listening to soft music is very relaxing."
     ],
     "examples_bn": [
-      "এটি 'relaxing' এর একটি উদাহরণ।"
+      "মৃদু সঙ্গীত শোনা খুব আরামদায়ক।"
     ],
-    "synonyms": [],
+    "synonyms": ["calming", "soothing", "restful"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -1413,16 +1413,16 @@
   {
     "id": 89,
     "word": "release",
-    "meaning_bn": "...",
-    "definition_en": "English definition for release",
-    "definition_bn": "...",
+    "meaning_bn": "মুক্তি দেওয়া / প্রকাশ করা",
+    "definition_en": "To let someone or something go free.",
+    "definition_bn": "কাউকে বা কোনো কিছুকে মুক্ত হতে দেওয়া।",
     "examples_en": [
-      "This is an example for 'release'."
+      "The prisoners were released yesterday."
     ],
     "examples_bn": [
-      "এটি 'release' এর একটি উদাহরণ।"
+      "বন্দীদের গতকাল মুক্তি দেওয়া হয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["free", "liberate", "issue"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -1430,16 +1430,16 @@
   {
     "id": 90,
     "word": "relevant",
-    "meaning_bn": "...",
-    "definition_en": "English definition for relevant",
-    "definition_bn": "...",
+    "meaning_bn": "প্রাসঙ্গিক",
+    "definition_en": "Closely connected or appropriate to the matter at hand.",
+    "definition_bn": "হাতের কাজের সাথে ঘনিষ্ঠভাবে সংযুক্ত বা উপযুক্ত।",
     "examples_en": [
-      "This is an example for 'relevant'."
+      "Please only include relevant information in your report."
     ],
     "examples_bn": [
-      "এটি 'relevant' এর একটি উদাহরণ।"
+      "আপনার রিপোর্টে শুধুমাত্র প্রাসঙ্গিক তথ্য অন্তর্ভুক্ত করুন।"
     ],
-    "synonyms": [],
+    "synonyms": ["applicable", "pertinent", "related"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -1447,16 +1447,16 @@
   {
     "id": 91,
     "word": "relief",
-    "meaning_bn": "...",
-    "definition_en": "English definition for relief",
-    "definition_bn": "...",
+    "meaning_bn": "স্বস্তি / উপশম",
+    "definition_en": "A feeling of happiness that something unpleasant has ended.",
+    "definition_bn": "অপ্রীতিকর কিছু শেষ হওয়ার কারণে সুখের অনুভূতি।",
     "examples_en": [
-      "This is an example for 'relief'."
+      "It was a relief to hear that everyone was safe."
     ],
     "examples_bn": [
-      "এটি 'relief' এর একটি উদাহরণ।"
+      "সবাই নিরাপদ আছে শুনে স্বস্তি পেলাম।"
     ],
-    "synonyms": [],
+    "synonyms": ["ease", "comfort", "respite"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1464,16 +1464,16 @@
   {
     "id": 92,
     "word": "religion",
-    "meaning_bn": "...",
-    "definition_en": "English definition for religion",
-    "definition_bn": "...",
+    "meaning_bn": "ধর্ম",
+    "definition_en": "The belief in and worship of a god or gods.",
+    "definition_bn": "এক বা একাধিক ঈশ্বরে বিশ্বাস এবং পূজা করা।",
     "examples_en": [
-      "This is an example for 'religion'."
+      "Freedom of religion is a basic human right."
     ],
     "examples_bn": [
-      "এটি 'religion' এর একটি উদাহরণ।"
+      "ধর্ম পালনের স্বাধীনতা একটি মৌলিক মানবাধিকার।"
     ],
-    "synonyms": [],
+    "synonyms": ["faith", "belief", "creed"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1481,16 +1481,16 @@
   {
     "id": 93,
     "word": "religious",
-    "meaning_bn": "...",
-    "definition_en": "English definition for religious",
-    "definition_bn": "...",
+    "meaning_bn": "ধর্মীয় / ধার্মিক",
+    "definition_en": "Relating to religion or believing strongly in a religion.",
+    "definition_bn": "ধর্ম সম্পর্কিত বা কোনো ধর্মে দৃঢ়ভাবে বিশ্বাসী।",
     "examples_en": [
-      "This is an example for 'religious'."
+      "She is a very religious person."
     ],
     "examples_bn": [
-      "এটি 'religious' এর একটি উদাহরণ।"
+      "তিনি অত্যন্ত ধার্মিক একজন মানুষ।"
     ],
-    "synonyms": [],
+    "synonyms": ["spiritual", "devout", "pious"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -1498,16 +1498,16 @@
   {
     "id": 94,
     "word": "rely",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rely",
-    "definition_bn": "...",
+    "meaning_bn": "নির্ভর করা / ভরসা করা",
+    "definition_en": "To depend on someone or something with trust.",
+    "definition_bn": "বিশ্বাসের সাথে কারো বা কোনো কিছুর ওপর নির্ভর করা।",
     "examples_en": [
-      "This is an example for 'rely'."
+      "You can rely on me for help."
     ],
     "examples_bn": [
-      "এটি 'rely' এর একটি উদাহরণ।"
+      "আপনি সাহায্যের জন্য আমার ওপর ভরসা করতে পারেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["depend", "trust", "count on"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1515,16 +1515,16 @@
   {
     "id": 95,
     "word": "remain",
-    "meaning_bn": "...",
-    "definition_en": "English definition for remain",
-    "definition_bn": "...",
+    "meaning_bn": "অবশিষ্ট থাকা / টিকে থাকা",
+    "definition_en": "To stay in the same place or condition.",
+    "definition_bn": "একই স্থানে বা অবস্থায় থাকা।",
     "examples_en": [
-      "This is an example for 'remain'."
+      "The situation remains unchanged."
     ],
     "examples_bn": [
-      "এটি 'remain' এর একটি উদাহরণ।"
+      "পরিস্থিতি অপরিবর্তিত রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["stay", "last", "continue"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1532,16 +1532,16 @@
   {
     "id": 96,
     "word": "remains",
-    "meaning_bn": "...",
-    "definition_en": "English definition for remains",
-    "definition_bn": "...",
+    "meaning_bn": "অবশিষ্টাংশ / ধ্বংসাবশেষ",
+    "definition_en": "The parts of something that are left after the rest has been destroyed.",
+    "definition_bn": "কোনো কিছুর বাকি অংশ যা অন্য অংশগুলো ধ্বংস হওয়ার পরে অবশিষ্ট থাকে।",
     "examples_en": [
-      "This is an example for 'remains'."
+      "They found the remains of an ancient city."
     ],
     "examples_bn": [
-      "এটি 'remains' এর একটি উদাহরণ।"
+      "তারা একটি প্রাচীন শহরের ধ্বংসাবশেষ খুঁজে পেয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["leftovers", "remnants", "ruins"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1549,16 +1549,16 @@
   {
     "id": 97,
     "word": "remark",
-    "meaning_bn": "...",
-    "definition_en": "English definition for remark",
-    "definition_bn": "...",
+    "meaning_bn": "মন্তব্য করা / উক্তি",
+    "definition_en": "To say or write something; a comment.",
+    "definition_bn": "কিছু বলা বা লেখা; একটি মন্তব্য।",
     "examples_en": [
-      "This is an example for 'remark'."
+      "He made a remark about the weather."
     ],
     "examples_bn": [
-      "এটি 'remark' এর একটি উদাহরণ।"
+      "সে আবহাওয়া সম্পর্কে একটি মন্তব্য করেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["comment", "statement", "observation"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -1566,16 +1566,16 @@
   {
     "id": 98,
     "word": "remarkable",
-    "meaning_bn": "...",
-    "definition_en": "English definition for remarkable",
-    "definition_bn": "...",
+    "meaning_bn": "অসাধারণ / উল্লেখযোগ্য",
+    "definition_en": "Unusual or surprising in a way that people notice.",
+    "definition_bn": "অস্বাভাবিক বা আশ্চর্যজনক যা মানুষের নজরে আসে।",
     "examples_en": [
-      "This is an example for 'remarkable'."
+      "She has made a remarkable recovery."
     ],
     "examples_bn": [
-      "এটি 'remarkable' এর একটি উদাহরণ।"
+      "সে এক অসাধারণ আরোগ্য লাভ করেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["extraordinary", "notable", "striking"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -1583,16 +1583,16 @@
   {
     "id": 99,
     "word": "remember",
-    "meaning_bn": "...",
-    "definition_en": "English definition for remember",
-    "definition_bn": "...",
+    "meaning_bn": "মনে করা / স্মরণ করা",
+    "definition_en": "To have an image from the past in your mind.",
+    "definition_bn": "আপনার মনে অতীতের কোনো চিত্র থাকা।",
     "examples_en": [
-      "This is an example for 'remember'."
+      "I don't remember meeting him before."
     ],
     "examples_bn": [
-      "এটি 'remember' এর একটি উদাহরণ।"
+      "আমি তাকে আগে দেখার কথা মনে করতে পারছি না।"
     ],
-    "synonyms": [],
+    "synonyms": ["recall", "recollect"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1600,16 +1600,16 @@
   {
     "id": 100,
     "word": "remind",
-    "meaning_bn": "...",
-    "definition_en": "English definition for remind",
-    "definition_bn": "...",
+    "meaning_bn": "মনে করিয়ে দেওয়া",
+    "definition_en": "To help someone to remember something.",
+    "definition_bn": "কাউকে কোনো কিছু মনে করতে সাহায্য করা।",
     "examples_en": [
-      "This is an example for 'remind'."
+      "Please remind me to call him tomorrow."
     ],
     "examples_bn": [
-      "এটি 'remind' এর একটি উদাহরণ।"
+      "দয়া করে আমাকে আগামীকাল তাকে কল করার কথা মনে করিয়ে দেবেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["prompt", "alert", "caution"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1617,16 +1617,16 @@
   {
     "id": 101,
     "word": "remote",
-    "meaning_bn": "...",
-    "definition_en": "English definition for remote",
-    "definition_bn": "...",
+    "meaning_bn": "দূরবর্তী / নির্জন",
+    "definition_en": "Far away from where other people live.",
+    "definition_bn": "অন্যান্য মানুষ যেখানে বাস করে তা থেকে অনেক দূরে অবস্থিত।",
     "examples_en": [
-      "This is an example for 'remote'."
+      "They live in a remote mountain village."
     ],
     "examples_bn": [
-      "এটি 'remote' এর একটি উদাহরণ।"
+      "তারা একটি দূরবর্তী পাহাড়ি গ্রামে বাস করে।"
     ],
-    "synonyms": [],
+    "synonyms": ["distant", "faraway", "isolated"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -1634,16 +1634,16 @@
   {
     "id": 102,
     "word": "removal",
-    "meaning_bn": "...",
-    "definition_en": "English definition for removal",
-    "definition_bn": "...",
+    "meaning_bn": "অপসারণ / স্থানাান্তর",
+    "definition_en": "The act of taking something or someone away from a place.",
+    "definition_bn": "কোনো স্থান থেকে কোনো কিছু বা কাউকে সরিয়ে নেওয়ার কাজ।",
     "examples_en": [
-      "This is an example for 'removal'."
+      "The removal of the old furniture took all afternoon."
     ],
     "examples_bn": [
-      "এটি 'removal' এর একটি উদাহরণ।"
+      "পুরানো আসবাবপত্র সরাতেই পুরো বিকেল লেগে গেল।"
     ],
-    "synonyms": [],
+    "synonyms": ["extraction", "elimination", "displacement"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1651,16 +1651,16 @@
   {
     "id": 103,
     "word": "remove",
-    "meaning_bn": "...",
-    "definition_en": "English definition for remove",
-    "definition_bn": "...",
+    "meaning_bn": "সরানো / মুছে ফেলা",
+    "definition_en": "To take something away from a place or off a surface.",
+    "definition_bn": "কোনো স্থান বা পৃষ্ঠ থেকে কোনো কিছু সরিয়ে নেওয়া।",
     "examples_en": [
-      "This is an example for 'remove'."
+      "Please remove your shoes before entering."
     ],
     "examples_bn": [
-      "এটি 'remove' এর একটি উদাহরণ।"
+      "প্রবেশ করার আগে দয়া করে আপনার জুতো খুলে ফেলুন।"
     ],
-    "synonyms": [],
+    "synonyms": ["detach", "delete", "discard"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1668,16 +1668,16 @@
   {
     "id": 104,
     "word": "rent",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rent",
-    "definition_bn": "...",
+    "meaning_bn": "ভাড়া / ভাড়া করা",
+    "definition_en": "A regular payment made to use something belonging to someone else.",
+    "definition_bn": "অন্য কারো মালিকানাধীন কিছু ব্যবহারের জন্য নিয়মিত অর্থ প্রদান করা।",
     "examples_en": [
-      "This is an example for 'rent'."
+      "The monthly rent for this apartment is very high."
     ],
     "examples_bn": [
-      "এটি 'rent' এর একটি উদাহরণ।"
+      "এই অ্যাপার্টমেন্টের মাসিক ভাড়া অনেক বেশি।"
     ],
-    "synonyms": [],
+    "synonyms": ["lease", "hire", "rental"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -1685,16 +1685,16 @@
   {
     "id": 105,
     "word": "repair",
-    "meaning_bn": "...",
-    "definition_en": "English definition for repair",
-    "definition_bn": "...",
+    "meaning_bn": "মেরামত করা",
+    "definition_en": "To fix something that is broken, damaged, or not working.",
+    "definition_bn": "ভাঙা বা নষ্ট হয়ে যাওয়া কোনো কিছু ঠিক করা।",
     "examples_en": [
-      "This is an example for 'repair'."
+      "It will cost a lot of money to repair the car."
     ],
     "examples_bn": [
-      "এটি 'repair' এর একটি উদাহরণ।"
+      "গাড়িটি মেরামত করতে অনেক টাকা খরচ হবে।"
     ],
-    "synonyms": [],
+    "synonyms": ["fix", "mend", "restore"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -1702,16 +1702,16 @@
   {
     "id": 107,
     "word": "repeated",
-    "meaning_bn": "...",
-    "definition_en": "English definition for repeated",
-    "definition_bn": "...",
+    "meaning_bn": "বারবার হওয়া / পুনরাবৃত্ত",
+    "definition_en": "Happening or done many times.",
+    "definition_bn": "অনেকবার ঘটে এমন বা করা হয়েছে এমন।",
     "examples_en": [
-      "This is an example for 'repeated'."
+      "Despite repeated warnings, he continued to arrive late."
     ],
     "examples_bn": [
-      "এটি 'repeated' এর একটি উদাহরণ।"
+      "বারবার সতর্ক করা সত্ত্বেও সে দেরি করে আসছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["recurrent", "constant", "frequent"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -1719,16 +1719,16 @@
   {
     "id": 108,
     "word": "replace",
-    "meaning_bn": "...",
-    "definition_en": "English definition for replace",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিস্থাপন করা / বদলে দেওয়া",
+    "definition_en": "To put something new in the place of something old or broken.",
+    "definition_bn": "পুরানো বা নষ্ট জিনিসের জায়গায় নতুন কিছু রাখা।",
     "examples_en": [
-      "This is an example for 'replace'."
+      "We need to replace the batteries in the remote."
     ],
     "examples_bn": [
-      "এটি 'replace' এর একটি উদাহরণ।"
+      "আমাদের রিমোটের ব্যাটারিগুলো পরিবর্তন করা দরকার।"
     ],
-    "synonyms": [],
+    "synonyms": ["substitute", "exchange", "swap"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1736,16 +1736,16 @@
   {
     "id": 109,
     "word": "reply",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reply",
-    "definition_bn": "...",
+    "meaning_bn": "উত্তর দেওয়া / জবাব",
+    "definition_en": "To say or write something as an answer to a question or letter.",
+    "definition_bn": "কোনো প্রশ্ন বা চিঠির উত্তর হিসেবে কিছু বলা বা লেখা।",
     "examples_en": [
-      "This is an example for 'reply'."
+      "I am waiting for a reply to my email."
     ],
     "examples_bn": [
-      "এটি 'reply' এর একটি উদাহরণ।"
+      "আমি আমার ইমেলের উত্তরের জন্য অপেক্ষা করছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["answer", "respond", "retort"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -1753,16 +1753,16 @@
   {
     "id": 110,
     "word": "report",
-    "meaning_bn": "...",
-    "definition_en": "English definition for report",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিবেদন / জানানো",
+    "definition_en": "A written or spoken description of an event or situation.",
+    "definition_bn": "কোনো ঘটনা বা পরিস্থিতির লিখিত বা মৌখিক বর্ণনা।",
     "examples_en": [
-      "This is an example for 'report'."
+      "She has to write a monthly progress report."
     ],
     "examples_bn": [
-      "এটি 'report' এর একটি উদাহরণ।"
+      "তাকে মাসিক উন্নতির প্রতিবেদন লিখতে হয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["account", "statement", "record"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -1770,16 +1770,16 @@
   {
     "id": 111,
     "word": "reporter",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reporter",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিবেদক / সাংবাদিক",
+    "definition_en": "A person whose job is to discover information about news events and describe them.",
+    "definition_bn": "এমন একজন ব্যক্তি যার কাজ সংবাদ সংগ্রহ করা এবং তা বর্ণনা করা।",
     "examples_en": [
-      "This is an example for 'reporter'."
+      "The reporter asked the prime minister a difficult question."
     ],
     "examples_bn": [
-      "এটি 'reporter' এর একটি উদাহরণ।"
+      "সাংবাদিক প্রধানমন্ত্রীকে একটি কঠিন প্রশ্ন করেছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["journalist", "correspondent", "newscaster"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1787,16 +1787,16 @@
   {
     "id": 112,
     "word": "represent",
-    "meaning_bn": "...",
-    "definition_en": "English definition for represent",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিনিধিত্ব করা",
+    "definition_en": "To speak or act on behalf of someone else or a group.",
+    "definition_bn": "অন্য কারো বা কোনো দলের পক্ষ হয়ে কথা বলা বা কাজ করা।",
     "examples_en": [
-      "This is an example for 'represent'."
+      "He was chosen to represent his country at the Olympics."
     ],
     "examples_bn": [
-      "এটি 'represent' এর একটি উদাহরণ।"
+      "অলিম্পিকে নিজ দেশের প্রতিনিধিত্ব করার জন্য তাকে নির্বাচিত করা হয়েছিল।"
     ],
-    "synonyms": [],
+    "synonyms": ["symbolize", "stand for", "exemplify"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1804,16 +1804,16 @@
   {
     "id": 113,
     "word": "representative",
-    "meaning_bn": "...",
-    "definition_en": "English definition for representative",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিনিধি / প্রতিনিধিত্বমূলক",
+    "definition_en": "A person who has been chosen to act or speak for another person or group.",
+    "definition_bn": "এমন একজন ব্যক্তি যাকে অন্য কারো বা দলের হয়ে কাজ বা কথা বলার জন্য মনোনীত করা হয়েছে।",
     "examples_en": [
-      "This is an example for 'representative'."
+      "A representative from the company will meet you at the airport."
     ],
     "examples_bn": [
-      "এটি 'representative' এর একটি উদাহরণ।"
+      "কোম্পানির একজন প্রতিনিধি আপনার সাথে বিমানবন্দরে দেখা করবেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["delegate", "agent", "spokesperson"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., adj."
@@ -1821,16 +1821,16 @@
   {
     "id": 114,
     "word": "reproduction",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reproduction",
-    "definition_bn": "...",
+    "meaning_bn": "প্রজনন / অনুলিপি",
+    "definition_en": "The process of producing babies or young plants/animals; or a copy of a work of art.",
+    "definition_bn": "সন্তান বা নতুন চারাগাছ/প্রাণী তৈরির প্রক্রিয়া; অথবা শিল্পকর্মের একটি অনুলিপি।",
     "examples_en": [
-      "This is an example for 'reproduction'."
+      "The painting is a reproduction, not the original."
     ],
     "examples_bn": [
-      "এটি 'reproduction' এর একটি উদাহরণ।"
+      "চিত্রকর্মটি একটি অনুলিপি, মূলটি নয়।"
     ],
-    "synonyms": [],
+    "synonyms": ["replication", "duplication", "breeding"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1838,16 +1838,16 @@
   {
     "id": 115,
     "word": "reputation",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reputation",
-    "definition_bn": "...",
+    "meaning_bn": "সুনাম / খ্যাতি",
+    "definition_en": "The opinion that people in general have about someone or something.",
+    "definition_bn": "সাধারণত কোনো ব্যক্তি বা বস্তু সম্পর্কে মানুষের যে ধারণা থাকে।",
     "examples_en": [
-      "This is an example for 'reputation'."
+      "The restaurant has a good reputation for fresh seafood."
     ],
     "examples_bn": [
-      "এটি 'reputation' এর একটি উদাহরণ।"
+      "তাজা সামুদ্রিক খাবারের জন্য এই রেস্তোরাঁটির বেশ সুনাম রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["fame", "status", "prestige"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1855,16 +1855,16 @@
   {
     "id": 116,
     "word": "request",
-    "meaning_bn": "...",
-    "definition_en": "English definition for request",
-    "definition_bn": "...",
+    "meaning_bn": "অনুরোধ / আবেদন",
+    "definition_en": "The act of politely or officially asking for something.",
+    "definition_bn": "ভদ্রভাবে বা আনুষ্ঠানিকভাবে কোনো কিছু চাওয়ার কাজ।",
     "examples_en": [
-      "This is an example for 'request'."
+      "I received a request for more information."
     ],
     "examples_bn": [
-      "এটি 'request' এর একটি উদাহরণ।"
+      "আমি আরও তথ্যের জন্য একটি অনুরোধ পেয়েছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["appeal", "application", "petition"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -1872,16 +1872,16 @@
   {
     "id": 117,
     "word": "require",
-    "meaning_bn": "...",
-    "definition_en": "English definition for require",
-    "definition_bn": "...",
+    "meaning_bn": "প্রয়োজন হওয়া / দরকার হওয়া",
+    "definition_en": "To need something or make something necessary.",
+    "definition_bn": "কোনো কিছুর প্রয়োজন হওয়া বা কোনো কিছুকে আবশ্যক করা।",
     "examples_en": [
-      "This is an example for 'require'."
+      "The job requires a high level of concentration."
     ],
     "examples_bn": [
-      "এটি 'require' এর একটি উদাহরণ।"
+      "এই কাজের জন্য উচ্চ পর্যায়ের একাগ্রতা প্রয়োজন।"
     ],
-    "synonyms": [],
+    "synonyms": ["demand", "necessitate", "need"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -1889,16 +1889,16 @@
   {
     "id": 118,
     "word": "requirement",
-    "meaning_bn": "...",
-    "definition_en": "English definition for requirement",
-    "definition_bn": "...",
+    "meaning_bn": "প্রয়োজনীয়তা / শর্ত",
+    "definition_en": "Something that you must do, or something you need.",
+    "definition_bn": "এমন কিছু যা আপনাকে অবশ্যই করতে হবে বা যা আপনার প্রয়োজন।",
     "examples_en": [
-      "This is an example for 'requirement'."
+      "Good vision is a requirement for this job."
     ],
     "examples_bn": [
-      "এটি 'requirement' এর একটি উদাহরণ।"
+      "ভালো দৃষ্টিশক্তি এই চাকরির জন্য একটি অন্যতম শর্ত।"
     ],
-    "synonyms": [],
+    "synonyms": ["necessity", "condition", "prerequisite"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1906,16 +1906,16 @@
   {
     "id": 119,
     "word": "rescue",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rescue",
-    "definition_bn": "...",
+    "meaning_bn": "উদ্ধার করা",
+    "definition_en": "To help someone or something out of a dangerous or unpleasant situation.",
+    "definition_bn": "কাউকে বা কোনো কিছুকে বিপদজনক বা অপ্রীতিকর পরিস্থিতি থেকে বাঁচানো।",
     "examples_en": [
-      "This is an example for 'rescue'."
+      "They managed to rescue the cat from the tree."
     ],
     "examples_bn": [
-      "এটি 'rescue' এর একটি উদাহরণ।"
+      "তারা গাছ থেকে বিড়ালটিকে উদ্ধার করতে সক্ষম হয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["save", "liberate", "recover"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -1923,16 +1923,16 @@
   {
     "id": 120,
     "word": "research",
-    "meaning_bn": "...",
-    "definition_en": "English definition for research",
-    "definition_bn": "...",
+    "meaning_bn": "গবেষণা / অনুসন্ধান",
+    "definition_en": "A detailed study of a subject, especially in order to discover new information.",
+    "definition_bn": "একটি বিষয়ের ওপর বিস্তারিত অধ্যয়ন, বিশেষ করে নতুন তথ্য আবিষ্কারের জন্য।",
     "examples_en": [
-      "This is an example for 'research'."
+      "Scientists are doing research into the causes of cancer."
     ],
     "examples_bn": [
-      "এটি 'research' এর একটি উদাহরণ।"
+      "বিজ্ঞানীরা ক্যান্সারের কারণ নিয়ে গবেষণা করছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["investigation", "study", "analysis"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -1940,16 +1940,16 @@
   {
     "id": 121,
     "word": "researcher",
-    "meaning_bn": "...",
-    "definition_en": "English definition for researcher",
-    "definition_bn": "...",
+    "meaning_bn": "গবেষক",
+    "definition_en": "A person who studies a subject in detail to discover new information.",
+    "definition_bn": "এমন একজন ব্যক্তি যিনি নতুন তথ্য আবিষ্কারের জন্য একটি বিষয় নিয়ে বিস্তারিত পড়াশোনা করেন।",
     "examples_en": [
-      "This is an example for 'researcher'."
+      "She is a medical researcher at the university."
     ],
     "examples_bn": [
-      "এটি 'researcher' এর একটি উদাহরণ।"
+      "তিনি বিশ্ববিদ্যালয়ের একজন চিকিৎসা গবেষক।"
     ],
-    "synonyms": [],
+    "synonyms": ["investigator", "analyst", "scholar"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1957,16 +1957,16 @@
   {
     "id": 122,
     "word": "reservation",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reservation",
-    "definition_bn": "...",
+    "meaning_bn": "সংরক্ষণ / দ্বিধা",
+    "definition_en": "An arrangement to have something kept for you (e.g., a room or seat).",
+    "definition_bn": "নিজের জন্য কোনো কিছু (যেমন রুম বা আসন) নির্দিষ্ট করে রাখার ব্যবস্থা।",
     "examples_en": [
-      "This is an example for 'reservation'."
+      "I'd like to make a dinner reservation for two."
     ],
     "examples_bn": [
-      "এটি 'reservation' এর একটি উদাহরণ।"
+      "আমি দুইজনের জন্য রাতের খাবারের টেবিল সংরক্ষণ করতে চাই।"
     ],
-    "synonyms": [],
+    "synonyms": ["booking", "engagement", "allowance"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -1974,16 +1974,16 @@
   {
     "id": 123,
     "word": "reserve",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reserve",
-    "definition_bn": "...",
+    "meaning_bn": "সংরক্ষণ করা / মজুদ",
+    "definition_en": "To keep something for a particular person or purpose.",
+    "definition_bn": "কোনো বিশেষ ব্যক্তি বা উদ্দেশ্যে কোনো কিছু জমিয়ে রাখা।",
     "examples_en": [
-      "This is an example for 'reserve'."
+      "The seats are reserved for elderly people."
     ],
     "examples_bn": [
-      "এটি 'reserve' এর একটি উদাহরণ।"
+      "আসনগুলো প্রবীণদের জন্য সংরক্ষিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["book", "keep", "save"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -1991,16 +1991,16 @@
   {
     "id": 124,
     "word": "resident",
-    "meaning_bn": "...",
-    "definition_en": "English definition for resident",
-    "definition_bn": "...",
+    "meaning_bn": "বাসিন্দা / আবাসিক",
+    "definition_en": "A person who lives in a particular place.",
+    "definition_bn": "এমন একজন ব্যক্তি যিনি একটি নির্দিষ্ট স্থানে বাস করেন।",
     "examples_en": [
-      "This is an example for 'resident'."
+      "Local residents are complaining about the noise."
     ],
     "examples_bn": [
-      "এটি 'resident' এর একটি উদাহরণ।"
+      "স্থানীয় বাসিন্দারা শব্দ নিয়ে অভিযোগ করছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["inhabitant", "occupant", "citizen"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., adj."
@@ -2008,16 +2008,16 @@
   {
     "id": 125,
     "word": "resign",
-    "meaning_bn": "...",
-    "definition_en": "English definition for resign",
-    "definition_bn": "...",
+    "meaning_bn": "পদত্যাগ করা",
+    "definition_en": "To officially tell your employer that you are leaving your job.",
+    "definition_bn": "আপনার নিয়োগকর্তাকে আনুষ্ঠানিকভাবে জানানো যে আপনি চাকরি ছেড়ে দিচ্ছেন।",
     "examples_en": [
-      "This is an example for 'resign'."
+      "He decided to resign from the company."
     ],
     "examples_bn": [
-      "এটি 'resign' এর একটি উদাহরণ।"
+      "তিনি কোম্পানি থেকে পদত্যাগ করার সিদ্ধান্ত নিয়েছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["quit", "leave", "step down"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -2025,16 +2025,16 @@
   {
     "id": 126,
     "word": "resist",
-    "meaning_bn": "...",
-    "definition_en": "English definition for resist",
-    "definition_bn": "...",
+    "meaning_bn": "প্রতিরোধ করা / বাধা দেওয়া",
+    "definition_en": "To fight against something or refuse to accept it.",
+    "definition_bn": "কোনো কিছুর বিরুদ্ধে লড়াই করা বা তা গ্রহণ করতে অস্বীকার করা।",
     "examples_en": [
-      "This is an example for 'resist'."
+      "It's hard to resist eating chocolate."
     ],
     "examples_bn": [
-      "এটি 'resist' এর একটি উদাহরণ।"
+      "চকোলেট খাওয়ার লোভ সামলানো (প্রতিরোধ করা) কঠিন।"
     ],
-    "synonyms": [],
+    "synonyms": ["oppose", "defy", "withstand"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -2042,16 +2042,16 @@
   {
     "id": 127,
     "word": "resolution",
-    "meaning_bn": "...",
-    "definition_en": "English definition for resolution",
-    "definition_bn": "...",
+    "meaning_bn": "সংকল্প / সমাধান",
+    "definition_en": "A firm decision to do or not to do something.",
+    "definition_bn": "কোনো কিছু করার বা না করার একটি দৃঢ় সিদ্ধান্ত।",
     "examples_en": [
-      "This is an example for 'resolution'."
+      "My New Year's resolution is to exercise every day."
     ],
     "examples_bn": [
-      "এটি 'resolution' এর একটি উদাহরণ।"
+      "আমার নতুন বছরের সংকল্প হলো প্রতিদিন ব্যায়াম করা।"
     ],
-    "synonyms": [],
+    "synonyms": ["determination", "decision", "settlement"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2059,16 +2059,16 @@
   {
     "id": 128,
     "word": "resolve",
-    "meaning_bn": "...",
-    "definition_en": "English definition for resolve",
-    "definition_bn": "...",
+    "meaning_bn": "মীমাংসা করা / সংকল্প করা",
+    "definition_en": "To find a way of dealing with a problem or disagreement.",
+    "definition_bn": "কোনো সমস্যা বা মতবিরোধ সমাধানের উপায় খুঁজে বের করা।",
     "examples_en": [
-      "This is an example for 'resolve'."
+      "They are trying to resolve the conflict peacefully."
     ],
     "examples_bn": [
-      "এটি 'resolve' এর একটি উদাহরণ।"
+      "তারা শান্তিপূর্ণভাবে দ্বন্দ্ব মিমাংসা করার চেষ্টা করছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["solve", "settle", "rectify"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -2076,16 +2076,16 @@
   {
     "id": 129,
     "word": "resort",
-    "meaning_bn": "...",
-    "definition_en": "English definition for resort",
-    "definition_bn": "...",
+    "meaning_bn": "বিশ্রামস্থল / কোনো কিছুর আশ্রয় নেওয়া",
+    "definition_en": "A place where many people go for a holiday.",
+    "definition_bn": "এমন একটি জায়গা যেখানে অনেক মানুষ ছুটির দিনে যায়।",
     "examples_en": [
-      "This is an example for 'resort'."
+      "We stayed at a luxury beach resort."
     ],
     "examples_bn": [
-      "এটি 'resort' এর একটি উদাহরণ।"
+      "আমরা একটি বিলাস বহুল সমুদ্র সৈকত রিসোর্টে থেকেছিলাম।"
     ],
-    "synonyms": [],
+    "synonyms": ["retreat", "vacation spot", "shelter"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2093,16 +2093,16 @@
   {
     "id": 130,
     "word": "resource",
-    "meaning_bn": "...",
-    "definition_en": "English definition for resource",
-    "definition_bn": "...",
+    "meaning_bn": "সম্পদ",
+    "definition_en": "Something that can be used to help achieve an aim.",
+    "definition_bn": "এমন কিছু যা কোনো লক্ষ্য অর্জনে ব্যবহৃত হতে পারে।",
     "examples_en": [
-      "This is an example for 'resource'."
+      "The library is a great resource for students."
     ],
     "examples_bn": [
-      "এটি 'resource' এর একটি উদাহরণ।"
+      "লাইব্রেরি শিক্ষার্থীদের জন্য একটি চমৎকার সম্পদ।"
     ],
-    "synonyms": [],
+    "synonyms": ["asset", "supply", "capital"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2110,16 +2110,16 @@
   {
     "id": 131,
     "word": "respect",
-    "meaning_bn": "...",
-    "definition_en": "English definition for respect",
-    "definition_bn": "...",
+    "meaning_bn": "শ্রদ্ধা করা / সম্মান",
+    "definition_en": "A feeling of admiration for someone because of their qualities.",
+    "definition_bn": "কারো গুণের কারণে তার প্রতি শ্রদ্ধাবোধ অনুভব করা।",
     "examples_en": [
-      "This is an example for 'respect'."
+      "We should show respect to our elders."
     ],
     "examples_bn": [
-      "এটি 'respect' এর একটি উদাহরণ।"
+      "আমাদের বড়দের সম্মান দেখানো উচিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["esteem", "admiration", "honor"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -2127,16 +2127,16 @@
   {
     "id": 132,
     "word": "respond",
-    "meaning_bn": "...",
-    "definition_en": "English definition for respond",
-    "definition_bn": "...",
+    "meaning_bn": "সাড়া দেওয়া / উত্তর দেওয়া",
+    "definition_en": "To say or do something as a reaction to something that has happened.",
+    "definition_bn": "কোনো ঘটনার প্রতিক্রিয়া হিসেবে কিছু বলা বা করা।",
     "examples_en": [
-      "This is an example for 'respond'."
+      "She failed to respond to my messages."
     ],
     "examples_bn": [
-      "এটি 'respond' এর একটি উদাহরণ।"
+      "সে আমার বার্তার উত্তর দিতে ব্যর্থ হয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["reply", "answer", "react"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -2144,16 +2144,16 @@
   {
     "id": 133,
     "word": "response",
-    "meaning_bn": "...",
-    "definition_en": "English definition for response",
-    "definition_bn": "...",
+    "meaning_bn": "সাড়া / উত্তর",
+    "definition_en": "An answer or reaction.",
+    "definition_bn": "একটি উত্তর বা প্রতিক্রিয়া।",
     "examples_en": [
-      "This is an example for 'response'."
+      "The teacher got no response from the class."
     ],
     "examples_bn": [
-      "এটি 'response' এর একটি উদাহরণ।"
+      "শিক্ষক ক্লাসের কাছ থেকে কোনো সাড়া পাননি।"
     ],
-    "synonyms": [],
+    "synonyms": ["reply", "reaction", "feedback"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2161,16 +2161,16 @@
   {
     "id": 134,
     "word": "responsibility",
-    "meaning_bn": "...",
-    "definition_en": "English definition for responsibility",
-    "definition_bn": "...",
+    "meaning_bn": "দায়িত্ব / কর্তব্য",
+    "definition_en": "Something that it is your job or duty to deal with.",
+    "definition_bn": "এমন কিছু যা পালন করা আপনার কাজ বা কর্তব্য।",
     "examples_en": [
-      "This is an example for 'responsibility'."
+      "It is your responsibility to keep the room clean."
     ],
     "examples_bn": [
-      "এটি 'responsibility' এর একটি উদাহরণ।"
+      "ঘর পরিষ্কার রাখা তোমার দায়িত্ব।"
     ],
-    "synonyms": [],
+    "synonyms": ["duty", "obligation", "charge"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2178,16 +2178,16 @@
   {
     "id": 135,
     "word": "responsible",
-    "meaning_bn": "...",
-    "definition_en": "English definition for responsible",
-    "definition_bn": "...",
+    "meaning_bn": "দায়ী / দায়িত্বশীল",
+    "definition_en": "To be the person who caused something to happen.",
+    "definition_bn": "কোনো ঘটনা ঘটার জন্য দায়ী ব্যক্তি হওয়া।",
     "examples_en": [
-      "This is an example for 'responsible'."
+      "Who is responsible for this mess?"
     ],
     "examples_bn": [
-      "এটি 'responsible' এর একটি উদাহরণ।"
+      "এই বিশৃঙ্খলার জন্য কে দায়ী?"
     ],
-    "synonyms": [],
+    "synonyms": ["accountable", "liable", "trustworthy"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -2195,16 +2195,16 @@
   {
     "id": 136,
     "word": "rest",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rest",
-    "definition_bn": "...",
+    "meaning_bn": "বিশ্রাম / অবশিষ্টাংশ",
+    "definition_en": "The period of time when you relax or sleep; or what is left.",
+    "definition_bn": "বিশ্রাম বা ঘুমের সময়; অথবা যা বাকি থাকে।",
     "examples_en": [
-      "This is an example for 'rest'."
+      "You look tired; you should get some rest."
     ],
     "examples_bn": [
-      "এটি 'rest' এর একটি উদাহরণ।"
+      "তোমাকে ক্লান্ত লাগছে; তোমার কিছুক্ষণ বিশ্রাম নেওয়া উচিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["relaxation", "remainder", "break"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -2212,16 +2212,16 @@
   {
     "id": 137,
     "word": "restaurant",
-    "meaning_bn": "...",
-    "definition_en": "English definition for restaurant",
-    "definition_bn": "...",
+    "meaning_bn": "রেস্তোরাঁ / ভোজনালয়",
+    "definition_en": "A place where you can buy and eat a meal.",
+    "definition_bn": "এমন একটি জায়গা যেখানে আপনি খাবার কিনে খেতে পারেন।",
     "examples_en": [
-      "This is an example for 'restaurant'."
+      "We ate at a Chinese restaurant last night."
     ],
     "examples_bn": [
-      "এটি 'restaurant' এর একটি উদাহরণ।"
+      "আমরা গত রাতে একটি চাইনিজ রেস্তোরাঁয় খেয়েছি।"
     ],
-    "synonyms": [],
+    "synonyms": ["eatery", "cafe", "diner"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2229,16 +2229,16 @@
   {
     "id": 139,
     "word": "retain",
-    "meaning_bn": "...",
-    "definition_en": "English definition for retain",
-    "definition_bn": "...",
+    "meaning_bn": "বজায় রাখা / ধরে রাখা",
+    "definition_en": "To keep or continue to have something.",
+    "definition_bn": "কোনো কিছু রাখা বা তা পাওয়া অব্যাহত রাখা।",
     "examples_en": [
-      "This is an example for 'retain'."
+      "She managed to retain her composure during the crisis."
     ],
     "examples_bn": [
-      "এটি 'retain' এর একটি উদাহরণ।"
+      "তিনি সংকটের সময় তার মানসিক প্রশান্তি বজায় রাখতে সক্ষম হয়েছিলেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["keep", "maintain", "preserve"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -2246,16 +2246,16 @@
   {
     "id": 140,
     "word": "retire",
-    "meaning_bn": "...",
-    "definition_en": "English definition for retire",
-    "definition_bn": "...",
+    "meaning_bn": "অবসর নেওয়া",
+    "definition_en": "To stop working because you have reached a certain age.",
+    "definition_bn": "একটি নির্দিষ্ট বয়সে পৌঁছানোর কারণে কাজ বন্ধ করে দেওয়া।",
     "examples_en": [
-      "This is an example for 'retire'."
+      "He plans to retire at the age of sixty."
     ],
     "examples_bn": [
-      "এটি 'retire' এর একটি উদাহরণ।"
+      "তিনি ষাট বছর বয়সে অবসর নেওয়ার পরিকল্পনা করছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["pension off", "withdraw", "stop working"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -2263,16 +2263,16 @@
   {
     "id": 141,
     "word": "retired",
-    "meaning_bn": "...",
-    "definition_en": "English definition for retired",
-    "definition_bn": "...",
+    "meaning_bn": "অবসরপ্রাপ্ত",
+    "definition_en": "Having stopped working, often because of age.",
+    "definition_bn": "প্রায়ই বয়সের কারণে কাজ করা বন্ধ করে দিয়েছেন এমন।",
     "examples_en": [
-      "This is an example for 'retired'."
+      "My grandfather is a retired teacher."
     ],
     "examples_bn": [
-      "এটি 'retired' এর একটি উদাহরণ।"
+      "আমার দাদা একজন অবসরপ্রাপ্ত শিক্ষক।"
     ],
-    "synonyms": [],
+    "synonyms": ["pensioned", "superannuated"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "adj."
@@ -2280,16 +2280,16 @@
   {
     "id": 142,
     "word": "retirement",
-    "meaning_bn": "...",
-    "definition_en": "English definition for retirement",
-    "definition_bn": "...",
+    "meaning_bn": "অবসরগ্রহণ",
+    "definition_en": "The period of your life after you have stopped working.",
+    "definition_bn": "কাজ বন্ধ করার পর আপনার জীবনের সময়কাল।",
     "examples_en": [
-      "This is an example for 'retirement'."
+      "He is looking forward to his retirement."
     ],
     "examples_bn": [
-      "এটি 'retirement' এর একটি উদাহরণ।"
+      "তিনি তার অবসরজীবনের জন্য অধীর আগ্রহে অপেক্ষা করছেন।"
     ],
-    "synonyms": [],
+    "synonyms": ["pension", "withdrawal"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2297,16 +2297,16 @@
   {
     "id": 143,
     "word": "return",
-    "meaning_bn": "...",
-    "definition_en": "English definition for return",
-    "definition_bn": "...",
+    "meaning_bn": "ফেরা / ফিরিয়ে দেওয়া",
+    "definition_en": "To come or go back to a previous place or condition.",
+    "definition_bn": "আগের কোনো স্থান বা অবস্থায় ফিরে আসা বা যাওয়া।",
     "examples_en": [
-      "This is an example for 'return'."
+      "When will you return from your trip?"
     ],
     "examples_bn": [
-      "এটি 'return' এর একটি উদাহরণ।"
+      "তুমি তোমার সফর থেকে কবে ফিরবে?"
     ],
-    "synonyms": [],
+    "synonyms": ["come back", "revert", "restore"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "v., n."
@@ -2314,16 +2314,16 @@
   {
     "id": 144,
     "word": "reveal",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reveal",
-    "definition_bn": "...",
+    "meaning_bn": "প্রকাশ করা / উম্মোচন করা",
+    "definition_en": "To make known or show something that was previously secret.",
+    "definition_bn": "আগে গোপন ছিল এমন কিছু জানানো বা দেখানো।",
     "examples_en": [
-      "This is an example for 'reveal'."
+      "The investigation revealed some shocking facts."
     ],
     "examples_bn": [
-      "এটি 'reveal' এর একটি উদাহরণ।"
+      "তদন্তে কিছু চাঞ্চল্যকর তথ্য উঠে এসেছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["disclose", "unveil", "expose"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -2331,16 +2331,16 @@
   {
     "id": 145,
     "word": "review",
-    "meaning_bn": "...",
-    "definition_en": "English definition for review",
-    "definition_bn": "...",
+    "meaning_bn": "পর্যালোচনা / পুর্নবিবেচনা",
+    "definition_en": "The act of considering something again in order to make changes.",
+    "definition_bn": "পরিবর্তন করার জন্য কোনো কিছু আবার বিবেচনা করার কাজ।",
     "examples_en": [
-      "This is an example for 'review'."
+      "The movie received positive reviews from critics."
     ],
     "examples_bn": [
-      "এটি 'review' এর একটি উদাহরণ।"
+      "সিনেমাটি সমালোচকদের কাছ থেকে ইতিবাচক পর্যালোচনা পেয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["assessment", "evaluation", "critique"],
     "level": "A2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -2348,16 +2348,16 @@
   {
     "id": 146,
     "word": "revise",
-    "meaning_bn": "...",
-    "definition_en": "English definition for revise",
-    "definition_bn": "...",
+    "meaning_bn": "সংশোধন করা / পুনরায় পড়া",
+    "definition_en": "To look at or consider again an idea or piece of writing to improve it.",
+    "definition_bn": "কোনো ধারণা বা লেখা উন্নত করার জন্য তা আবার দেখা বা বিবেচনা করা।",
     "examples_en": [
-      "This is an example for 'revise'."
+      "You should revise your notes before the exam."
     ],
     "examples_bn": [
-      "এটি 'revise' এর একটি উদাহরণ।"
+      "পরীক্ষার আগে তোমার নোটগুলো পুনরায় পড়া (রিভাইস করা) উচিত।"
     ],
-    "synonyms": [],
+    "synonyms": ["amend", "edit", "study"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "v."
@@ -2365,16 +2365,16 @@
   {
     "id": 147,
     "word": "revolution",
-    "meaning_bn": "...",
-    "definition_en": "English definition for revolution",
-    "definition_bn": "...",
+    "meaning_bn": "বিপ্লব",
+    "definition_en": "A very important change in the way that people do things.",
+    "definition_bn": "মানুষের কাজ করার পদ্ধতিতে একটি অত্যন্ত গুরুত্বপূর্ণ পরিবর্তন।",
     "examples_en": [
-      "This is an example for 'revolution'."
+      "The industrial revolution changed the world."
     ],
     "examples_bn": [
-      "এটি 'revolution' এর একটি উদাহরণ।"
+      "শিল্প বিপ্লব পৃথিবীকে বদলে দিয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["rebellion", "uprising", "transformation"],
     "level": "B1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2382,16 +2382,16 @@
   {
     "id": 148,
     "word": "reward",
-    "meaning_bn": "...",
-    "definition_en": "English definition for reward",
-    "definition_bn": "...",
+    "meaning_bn": "পুরস্কার / বকশিশ",
+    "definition_en": "Something given in exchange for good behavior or work.",
+    "definition_bn": "ভালো ব্যবহার বা কাজের বিনিময়ে দেওয়া কিছু।",
     "examples_en": [
-      "This is an example for 'reward'."
+      "There is a reward for the return of the lost dog."
     ],
     "examples_bn": [
-      "এটি 'reward' এর একটি উদাহরণ।"
+      "হারিয়ে যাওয়া কুকুরটি ফিরিয়ে দেওয়ার জন্য একটি পুরস্কার রয়েছে।"
     ],
-    "synonyms": [],
+    "synonyms": ["prize", "bonus", "incentive"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n., v."
@@ -2399,16 +2399,16 @@
   {
     "id": 149,
     "word": "rhythm",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rhythm",
-    "definition_bn": "...",
+    "meaning_bn": "ছন্দ / তাল",
+    "definition_en": "A strong pattern of sounds, words, or musical notes.",
+    "definition_bn": "শব্দ, কথা বা সুরের একটি শক্তিশালী ধরন।",
     "examples_en": [
-      "This is an example for 'rhythm'."
+      "I love the rhythm of this song."
     ],
     "examples_bn": [
-      "এটি 'rhythm' এর একটি উদাহরণ।"
+      "আমি এই গানের ছন্দ ভালোবাসি।"
     ],
-    "synonyms": [],
+    "synonyms": ["beat", "tempo", "pattern"],
     "level": "B2",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
@@ -2416,16 +2416,16 @@
   {
     "id": 150,
     "word": "rice",
-    "meaning_bn": "...",
-    "definition_en": "English definition for rice",
-    "definition_bn": "...",
+    "meaning_bn": "চাল / ভাত",
+    "definition_en": "A type of grain used as food.",
+    "definition_bn": "খাবার হিসেবে ব্যবহৃত এক প্রকার শস্য।",
     "examples_en": [
-      "This is an example for 'rice'."
+      "Rice is the staple food in Bangladesh."
     ],
     "examples_bn": [
-      "এটি 'rice' এর একটি উদাহরণ।"
+      "ভাত বাংলাদেশের প্রধান খাদ্য।"
     ],
-    "synonyms": [],
+    "synonyms": ["grain", "paddy"],
     "level": "A1",
     "category": "Oxford 3000",
     "parts_of_speech": "n."
