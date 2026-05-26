@@ -45,19 +45,7 @@ export default function FFooter() {
               Master English vocabulary at your own pace with our comprehensive learning platform.
             </p>
             <div className="flex space-x-4">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <Link
-                    key={social.label}
-                    href={social.href}
-                    aria-label={social.label}
-                    className="text-gray-400 hover:text-blue-400 transition-colors"
-                  >
-                    <Icon className="h-5 w-5" />
-                  </Link>
-                );
-              })}
+              
             </div>
           </div>
 
