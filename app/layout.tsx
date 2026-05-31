@@ -19,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vocabulary",
-  description: "Learn English vocabulary by level",
+  title: "Learn English Vocabulary in Bangla | Oxford 3000 Word List",
+  description: "Master 3000 essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to B2 levels covered.",
 };
 
 export default function RootLayout({
