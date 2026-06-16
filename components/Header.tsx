@@ -1,18 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Bell, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Bell, Menu } from "lucide-react";
 import Image from "next/image";
+import { useSidebar } from "@/components/sidebar-provider";
 import logo from "../public/assets/logo.png";
 
 export function Header() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+  const { toggle } = useSidebar();
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -22,17 +17,13 @@ export function Header() {
   ];
 
   return (
-    <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
+    <header className="border-b border-gray-200 bg-white sticky top-0 z-30">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <button
-          onClick={toggleMenu}
+          onClick={toggle}
           className="md:hidden inline-flex items-center justify-center p-2 rounded-md"
         >
-          {isOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
+          <Menu className="h-6 w-6" />
         </button>
         <Link href="/" className="flex items-center space-x-2">
           <Image src={logo} alt="Logo" className="h-7 w-auto" />
@@ -48,35 +39,11 @@ export function Header() {
             </Link>
           ))}
         </div>
-         
+
         <button>
           <Bell className="h-6 w-6" />
         </button>
       </nav>
-
-      {/* Mobile Navigation */}
-      {isOpen && (
-        <div className="md:hidden border-t border-gray-200">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div className="pt-2 space-y-2">
-              <Button variant="outline" className="w-full">
-                Sign In
-              </Button>
-              <Button className="w-full">Get Started</Button>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }

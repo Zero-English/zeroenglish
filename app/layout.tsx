@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/Header";
+import { Sidebar } from "@/components/Sidebar";
+import { SidebarProvider } from "@/components/sidebar-provider";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import FFooter from "@/components/FFooter";
 
@@ -33,10 +35,19 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
-      <body className="min-h-full flex flex-col">
-        <Header />
-        {children}
-        <FFooter />
+      <body className="min-h-full">
+        <SidebarProvider>
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="w-full flex flex-col md:flex-row flex-1">
+                <Sidebar />
+                <div className="flex-1 min-w-0">
+                  {children}
+                </div>
+              </main>
+              <FFooter />
+          </div>
+        </SidebarProvider>
       </body>
     </html>
   );
