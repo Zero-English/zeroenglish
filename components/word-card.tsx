@@ -2,9 +2,10 @@
 
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
+import { useSpeak } from "@/lib/use-speak";
 import { Word } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { CheckCircle2, Circle, Bookmark, BookmarkCheck } from "lucide-react";
+import { CheckCircle2, Circle, Bookmark, BookmarkCheck, Volume2 } from "lucide-react";
 
 interface WordCardProps {
   word: Word;
@@ -12,6 +13,7 @@ interface WordCardProps {
 }
 
 export function WordCard({ word, gradient }: WordCardProps) {
+  const speak = useSpeak();
   const { isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
   const { isBookmarked, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const learned = isLearned(word.id, word.word);
@@ -41,6 +43,13 @@ export function WordCard({ word, gradient }: WordCardProps) {
           <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
             {word.word}
           </h2>
+          <button
+            onClick={() => speak(word.word)}
+            className="p-1 rounded-md text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            title="Listen to pronunciation"
+          >
+            <Volume2 className="h-4 w-4" />
+          </button>
           <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
             {word.parts_of_speech}
           </span>
@@ -81,7 +90,7 @@ export function WordCard({ word, gradient }: WordCardProps) {
               "absolute top-3 right-3 p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
               bookmarked
                 ? "text-amber-500 hover:text-amber-600"
-                : "text-zinc-300 dark:text-zinc-600 opacity-0 group-hover:opacity-100 hover:text-zinc-400 dark:hover:text-zinc-500"
+                : "text-zinc-300 dark:text-zinc-600 sm:opacity-0 sm:group-hover:opacity-100 hover:text-zinc-400 dark:hover:text-zinc-500"
             )}
             title={bookmarked ? "Remove bookmark" : "Bookmark"}
           >
@@ -97,7 +106,7 @@ export function WordCard({ word, gradient }: WordCardProps) {
               "absolute top-12 right-3 p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
               learned
                 ? "text-emerald-500 hover:text-emerald-600"
-                : "text-zinc-300 dark:text-zinc-600 opacity-0 group-hover:opacity-100 hover:text-zinc-400 dark:hover:text-zinc-500"
+                : "text-zinc-300 dark:text-zinc-600 sm:opacity-0 sm:group-hover:opacity-100 hover:text-zinc-400 dark:hover:text-zinc-500"
             )}
             title={learned ? "Mark as unlearned" : "Mark as learned"}
           >

@@ -3,6 +3,8 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useSpeak } from "@/lib/use-speak";
+import { Volume2 } from "lucide-react";
 import { Word } from "@/lib/data";
 import Link from "next/link";
 
@@ -513,17 +515,18 @@ function QuizView({
   onOptionClick,
   onNext,
 }: {
-  question: Question;
-  currentIndex: number;
-  totalQuestions: number;
-  score: number;
-  timeLeft: number;
-  noTimeLimit: boolean;
-  selectedAnswer: string | null;
-  isAnswered: boolean;
-  onOptionClick: (option: { text: string; correct: boolean }) => void;
-  onNext: () => void;
+  readonly question: Question;
+  readonly currentIndex: number;
+  readonly totalQuestions: number;
+  readonly score: number;
+  readonly timeLeft: number;
+  readonly noTimeLimit: boolean;
+  readonly selectedAnswer: string | null;
+  readonly isAnswered: boolean;
+  readonly onOptionClick: (option: { text: string; correct: boolean }) => void;
+  readonly onNext: () => void;
 }) {
+  const speak = useSpeak();
   const progress = ((currentIndex + 1) / totalQuestions) * 100;
 
   return (
@@ -588,12 +591,19 @@ function QuizView({
 
         {/* Word card */}
         <div className="animate-fade-up">
-          <div className="text-center mb-8">
+            <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs text-zinc-500 dark:text-zinc-400 mb-4">
               {question.word.parts_of_speech}
             </div>
-            <h2 className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">
+            <h2 className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight inline-flex items-center gap-3 justify-center">
               {question.word.word}
+              <button
+                onClick={() => speak(question.word.word)}
+                className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                title="Listen to pronunciation"
+              >
+                <Volume2 className="h-6 w-6 sm:h-7 sm:w-7" />
+              </button>
             </h2>
           </div>
 

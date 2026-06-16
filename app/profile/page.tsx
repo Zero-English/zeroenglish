@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 import { getAllWords } from "@/lib/data";
-import { ProfileWords } from "@/components/profile-words";
+import { ProfileTabs } from "@/components/profile-words";
 
 export const metadata: Metadata = {
-  title: "My Bookmarked Words",
-  description: "Your bookmarked vocabulary words for quick review.",
+  title: "My Profile",
+  description: "Track your vocabulary learning progress.",
 };
 
 export default function ProfilePage() {
@@ -17,16 +17,16 @@ export default function ProfilePage() {
 
       <div className="relative px-4 py-10 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-10">
+          <div className="mb-8">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-              My Bookmarked Words
+              My Profile
             </h1>
             <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-              Words you&apos;ve bookmarked for quick review.
+              Track your learning progress and manage your words.
             </p>
           </div>
 
-          <ProfileWords words={words} />
+          <ProfileTabs words={words} />
         </div>
       </div>
     </div>
