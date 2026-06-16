@@ -11,6 +11,7 @@ import logo from "@/public/assets/logo.png";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/beginner", label: "Beginner" },
+  { href: "/quiz", label: "Quiz" },
   { href: "/intermediate", label: "Intermediate" },
   { href: "/advanced", label: "Advanced" },
 ];
@@ -30,9 +31,9 @@ export function Sidebar() {
 
       <aside
         className={`
-          fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200
+          fixed top-0 inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200
           flex flex-col transition-transform duration-300 ease-in-out
-          md:sticky md:top-0 md:z-auto md:translate-x-0 md:max-h-screen
+          md:sticky md:z-auto md:translate-x-0 md:max-h-[calc(100vh-65px)] md:top-[65px]
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
@@ -46,7 +47,7 @@ export function Sidebar() {
           </button>
         </div>
 
-        <div className="md:hidden px-4 pb-2 pt-0 text-sm text-gray-500">
+        <div className="md:hidden px-4 pb-2 pt-2 text-sm text-gray-500">
           Navigation
         </div>
 

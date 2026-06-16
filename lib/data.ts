@@ -30,7 +30,7 @@ function loadAllWords(): Word[] {
 
 let cached: Word[] | null = null;
 
-function getAllWords(): Word[] {
+export function getAllWords(): Word[] {
   if (!cached) {
     cached = loadAllWords();
   }
