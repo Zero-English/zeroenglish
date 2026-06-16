@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getWordsByLevel } from "@/lib/data";
 import { WordPagination } from "@/components/word-pagination";
+import { WordCard } from "@/components/word-card";
 
 interface LevelConfig {
   readonly bg: string;
@@ -168,49 +169,7 @@ export default async function Page({
 
           <div className="space-y-4">
             {words.map((word) => (
-              <div
-                key={word.id}
-                className="group relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-zinc-200/60 dark:hover:shadow-black/40 hover:-translate-y-0.5"
-              >
-                <div className={`absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b ${config.gradient} opacity-60 transition-all duration-300 group-hover:opacity-100 group-hover:w-1.5`} />
-                <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br from-white/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-white/5" />
-                <div className="pl-4 sm:pl-5">
-                  <div className="flex items-baseline gap-2.5 mb-1.5">
-                    <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                      {word.word}
-                    </h2>
-                    <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
-                      {word.parts_of_speech}
-                    </span>
-                  </div>
-                  {word.meaning_bn !== "..." && (
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">
-                      {word.meaning_bn}
-                    </p>
-                  )}
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                    {`${word.definition_en} (${word.definition_bn})`}
-                  </p>
-                  {word.examples_en.length > 0 && (
-                    <div className="mt-3 space-y-1.5 border-t border-zinc-100 dark:border-zinc-800 pt-3">
-                      {word.examples_en.map((ex, i) => (
-                        <p key={i} className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
-                          &ldquo;{ex}&rdquo;
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                  {word.examples_bn.length > 0 && (
-                    <div className="mt-1 space-y-1.5 dark:border-zinc-800 pt-1">
-                      {word.examples_bn.map((ex, i) => (
-                        <p key={i} className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
-                          &ldquo;{ex}&rdquo;
-                        </p>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
+              <WordCard key={word.id} word={word} gradient={config.gradient} />
             ))}
           </div>
 

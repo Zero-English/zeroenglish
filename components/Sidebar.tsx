@@ -10,10 +10,8 @@ import logo from "@/public/assets/logo.png";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/beginner", label: "Beginner" },
   { href: "/quiz", label: "Quiz" },
-  { href: "/intermediate", label: "Intermediate" },
-  { href: "/advanced", label: "Advanced" },
+  { href: "/profile", label: "Profile" }
 ];
 
 export function Sidebar() {
@@ -74,14 +72,14 @@ export function Sidebar() {
           })}
         </nav>
 
-        <div className="p-4 border-t border-gray-200 space-y-2">
+        {/* <div className="p-4 border-t border-gray-200 space-y-2">
           <Button variant="outline" className="w-full" onClick={close}>
             Sign In
           </Button>
           <Button className="w-full" onClick={close}>
             Get Started
           </Button>
-        </div>
+        </div> */}
       </aside>
     </>
   );
