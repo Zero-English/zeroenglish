@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, BookOpen, User, Settings, ShoppingBag, Book, Calendar } from 'lucide-react'
+import { Home, BookOpen, User, Settings, ShoppingBag, Book, Calendar, BadgeQuestionMark } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
