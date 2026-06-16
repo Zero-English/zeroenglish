@@ -45,6 +45,7 @@ export default function RootLayout({
                   {children}
                 </div>
               </main>
+              <MobileBottomNav/>
               <FFooter />
           </div>
         </SidebarProvider>
