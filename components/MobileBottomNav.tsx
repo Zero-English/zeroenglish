@@ -18,23 +18,13 @@ const navItems: NavItem[] = [
     icon: Home,
   },
   {
-    label: 'Courses',
-    href: '/courses',
-    icon: BookOpen,
-  },
-  {
-    label: 'Shop',
-    href: '/shop',
-    icon: ShoppingBag,
-  },
-  {
-    label: 'Events',
-    href: '/events',
-    icon: Calendar,
+    label: 'Quiz',
+    href: '/quiz',
+    icon: BadgeQuestionMark,
   },
   {
     label: 'Profile',
-    href: '/account',
+    href: '/profile',
     icon: User,
   },
 ]
