@@ -184,40 +184,42 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   };
 
   return (
-    <Tabs defaultValue="overview">
-      <TabsList>
-        <TabsTrigger value="overview" className="flex items-center gap-1.5">
-          <BarChart3 className="h-4 w-4" />
-          Overview
-        </TabsTrigger>
-        <TabsTrigger value="bookmarked" className="flex items-center gap-1.5">
-          <BookmarkCheck className="h-4 w-4" />
-          Bookmarked
-          {bookmarked.length > 0 && (
-            <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
-              {bookmarked.length}
-            </span>
-          )}
-        </TabsTrigger>
-        <TabsTrigger value="still-learning" className="flex items-center gap-1.5">
-          <RefreshCw className="h-4 w-4" />
-          Still Learning
-          {stillLearning.length > 0 && (
-            <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300">
-              {stillLearning.length}
-            </span>
-          )}
-        </TabsTrigger>
-        <TabsTrigger value="learned" className="flex items-center gap-1.5">
-          <Award className="h-4 w-4" />
-          Learned
-          {learned.length > 0 && (
-            <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
-              {learned.length}
-            </span>
-          )}
-        </TabsTrigger>
-      </TabsList>
+    <Tabs defaultValue="overview" >
+      <div className="overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden">
+        <TabsList>
+          <TabsTrigger value="overview" className="flex items-center gap-1.5">
+            <BarChart3 className="h-4 w-4" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="bookmarked" className="flex items-center gap-1.5">
+            <BookmarkCheck className="h-4 w-4" />
+            Bookmarked
+            {bookmarked.length > 0 && (
+              <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                {bookmarked.length}
+              </span>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="still-learning" className="flex items-center gap-1.5">
+            <RefreshCw className="h-4 w-4" />
+            Still Learning
+            {stillLearning.length > 0 && (
+              <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300">
+                {stillLearning.length}
+              </span>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="learned" className="flex items-center gap-1.5">
+            <Award className="h-4 w-4" />
+            Learned
+            {learned.length > 0 && (
+              <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                {learned.length}
+              </span>
+            )}
+          </TabsTrigger>
+        </TabsList>
+      </div>
 
       <TabsContent value="overview">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -359,6 +361,30 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                     </p>
                   </div>
                   <div className="absolute top-3 right-3 flex gap-1">
+                    <button
+                      onClick={() => toggleBookmark(word.id, word.word)}
+                      className={cn(
+                        "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                        bookmarkedIds.has(wordKey(word))
+                          ? "text-amber-500 hover:text-amber-600"
+                          : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
+                      )}
+                      title={bookmarkedIds.has(wordKey(word)) ? "Remove bookmark" : "Bookmark"}
+                    >
+                      {bookmarkedIds.has(wordKey(word)) ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
+                    </button>
+                    <button
+                      onClick={() => toggleLearned(word.id, word.word)}
+                      className={cn(
+                        "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                        learnedIds.has(wordKey(word))
+                          ? "text-emerald-500 hover:text-emerald-600"
+                          : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
+                      )}
+                      title={learnedIds.has(wordKey(word)) ? "Mark as unlearned" : "Mark as learned"}
+                    >
+                      {learnedIds.has(wordKey(word)) ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
+                    </button>
                     <button
                       onClick={() => removeStillLearning(word.id, word.word)}
                       className="p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"

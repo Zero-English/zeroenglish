@@ -3,7 +3,6 @@
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -19,33 +18,10 @@ interface PaginationProps {
 export function WordPagination({ currentPage, totalPages, level }: PaginationProps) {
 
   const getPageItems = () => {
-    const items: (number | string)[] = [];
-
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) {
-        items.push(i);
-      }
-    } else {
-      items.push(1);
-
-      if (currentPage > 3) {
-        items.push("ellipsis-start");
-      }
-
-      const startPage = Math.max(2, currentPage - 1);
-      const endPage = Math.min(totalPages - 1, currentPage + 1);
-
-      for (let i = startPage; i <= endPage; i++) {
-        items.push(i);
-      }
-
-      if (currentPage < totalPages - 2) {
-        items.push("ellipsis-end");
-      }
-
-      items.push(totalPages);
+    const items: number[] = [];
+    for (let i = 1; i <= totalPages; i++) {
+      items.push(i);
     }
-
     return items;
   };
 
@@ -66,7 +42,7 @@ export function WordPagination({ currentPage, totalPages, level }: PaginationPro
 
   return (
     <Pagination>
-      <PaginationContent>
+      <div className="flex items-center gap-0.5 max-w-full">
         <PaginationItem>
           <PaginationPrevious
             href={hasPrevious ? createPageUrl(currentPage - 1) : "#"}
@@ -75,29 +51,20 @@ export function WordPagination({ currentPage, totalPages, level }: PaginationPro
           />
         </PaginationItem>
 
-        {pageItems.map((item) => {
-          if (typeof item === "string") {
-            return (
-              <PaginationItem key={item}>
-                <PaginationEllipsis />
+        <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          <PaginationContent>
+            {pageItems.map((pageNum) => (
+              <PaginationItem key={pageNum}>
+                <PaginationLink
+                  href={createPageUrl(pageNum)}
+                  isActive={pageNum === currentPage}
+                >
+                  {pageNum}
+                </PaginationLink>
               </PaginationItem>
-            );
-          }
-
-          const pageNum = item as number;
-          const isActive = pageNum === currentPage;
-
-          return (
-            <PaginationItem key={pageNum}>
-              <PaginationLink
-                href={createPageUrl(pageNum)}
-                isActive={isActive}
-              >
-                {pageNum}
-              </PaginationLink>
-            </PaginationItem>
-          );
-        })}
+            ))}
+          </PaginationContent>
+        </div>
 
         <PaginationItem>
           <PaginationNext
@@ -106,7 +73,7 @@ export function WordPagination({ currentPage, totalPages, level }: PaginationPro
             className={!hasNext ? "pointer-events-none opacity-50" : ""}
           />
         </PaginationItem>
-      </PaginationContent>
+      </div>
     </Pagination>
   );
 }
