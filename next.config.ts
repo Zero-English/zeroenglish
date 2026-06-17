@@ -1,13 +1,56 @@
 import type { NextConfig } from "next";
+import fs from "fs";
+import path from "path";
 
 // @ts-expect-error - next-pwa has no types
 import withPWAInit from "next-pwa";
+
+const ITEMS_PER_PAGE = 10;
+
+function getLevelWordCounts(): Record<string, number> {
+  const dataDir = path.join(process.cwd(), "data");
+  const files = fs.readdirSync(dataDir).filter((f) => f.endsWith(".json"));
+  const counts: Record<string, number> = { A1: 0, A2: 0, B1: 0, B2: 0 };
+  for (const file of files) {
+    const content = fs.readFileSync(path.join(dataDir, file), "utf-8");
+    const words = JSON.parse(content) as { level: string }[];
+    for (const w of words) {
+      if (counts[w.level] !== undefined) counts[w.level]++;
+    }
+  }
+  return counts;
+}
+
+function getAllPageUrls(): string[] {
+  const urls: string[] = ["/", "/quiz", "/profile", "/offline"];
+  const wordCounts = getLevelWordCounts();
+  for (const [level, count] of Object.entries(wordCounts)) {
+    const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
+    const lower = level.toLowerCase();
+    urls.push(`/${lower}`);
+    for (let page = 2; page <= totalPages; page++) {
+      urls.push(`/${lower}/${page}`);
+    }
+  }
+  return urls;
+}
+
+// Stable revision for all static page precache entries
+// Changes when this file or the data changes, forcing SW re-cache
+const PAGE_REVISION = JSON.stringify({
+  v: 1,
+  t: Date.now(),
+  counts: getLevelWordCounts(),
+});
 
 const withPWA = withPWAInit({
   dest: "public",
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === "development",
+  dynamicStartUrl: false,
+  cacheStartUrl: false,
+  reloadOnOnline: true,
   fallbacks: {
     document: "/offline",
   },
@@ -152,6 +195,16 @@ const withPWA = withPWAInit({
         expiration: { maxEntries: 32, maxAgeSeconds: 60 * 60 },
         networkTimeoutSeconds: 10,
       },
+    },
+  ],
+  manifestTransforms: [
+    async (existingEntries: { url: string; revision: string | null }[]) => {
+      const pageUrls = getAllPageUrls();
+      const pageEntries = pageUrls.map((url) => ({
+        url,
+        revision: PAGE_REVISION,
+      }));
+      return { manifest: [...existingEntries, ...pageEntries], warnings: [] };
     },
   ],
 });

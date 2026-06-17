@@ -163,3 +163,8 @@
     @apply font-sans;
   }
 }
+@media (display-mode: standalone){
+  .bottom-spaces{
+    display: block !important;
+  }
+}

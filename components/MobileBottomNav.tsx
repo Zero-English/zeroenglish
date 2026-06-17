@@ -62,7 +62,7 @@ export function MobileBottomNav() {
           )
         })}
       </div>
-      {/* <div className="h-7 bottom-spaces"></div> */}
+      <div className="h-7 bottom-spaces"></div>
     </nav>
   )
 }
