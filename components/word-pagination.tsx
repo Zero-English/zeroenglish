@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import {
   Pagination,
   PaginationContent,
@@ -14,43 +13,36 @@ import {
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  level?: string;
 }
 
-export function WordPagination({ currentPage, totalPages }: PaginationProps) {
-  const searchParams = useSearchParams();
+export function WordPagination({ currentPage, totalPages, level }: PaginationProps) {
 
-  // Generate page items to display
   const getPageItems = () => {
     const items: (number | string)[] = [];
 
     if (totalPages <= 7) {
-      // Show all pages if 7 or fewer
       for (let i = 1; i <= totalPages; i++) {
         items.push(i);
       }
     } else {
-      // Show first page
       items.push(1);
 
-      // Add ellipsis if needed before current page range
       if (currentPage > 3) {
         items.push("ellipsis-start");
       }
 
-      // Show pages around current page
       const startPage = Math.max(2, currentPage - 1);
       const endPage = Math.min(totalPages - 1, currentPage + 1);
-      
+
       for (let i = startPage; i <= endPage; i++) {
         items.push(i);
       }
 
-      // Add ellipsis if needed after current page range
       if (currentPage < totalPages - 2) {
         items.push("ellipsis-end");
       }
 
-      // Show last page
       items.push(totalPages);
     }
 
@@ -58,9 +50,10 @@ export function WordPagination({ currentPage, totalPages }: PaginationProps) {
   };
 
   const createPageUrl = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
-    return `?${params.toString()}`;
+    if (page === 1) {
+      return `/${level ?? ""}`;
+    }
+    return `/${level ?? ""}/${page}`;
   };
 
   const pageItems = getPageItems();
@@ -74,7 +67,6 @@ export function WordPagination({ currentPage, totalPages }: PaginationProps) {
   return (
     <Pagination>
       <PaginationContent>
-        {/* Previous Button */}
         <PaginationItem>
           <PaginationPrevious
             href={hasPrevious ? createPageUrl(currentPage - 1) : "#"}
@@ -83,10 +75,8 @@ export function WordPagination({ currentPage, totalPages }: PaginationProps) {
           />
         </PaginationItem>
 
-        {/* Page Numbers */}
-        {pageItems.map((item, index) => {
+        {pageItems.map((item) => {
           if (typeof item === "string") {
-            // Render ellipsis
             return (
               <PaginationItem key={item}>
                 <PaginationEllipsis />
@@ -109,7 +99,6 @@ export function WordPagination({ currentPage, totalPages }: PaginationProps) {
           );
         })}
 
-        {/* Next Button */}
         <PaginationItem>
           <PaginationNext
             href={hasNext ? createPageUrl(currentPage + 1) : "#"}

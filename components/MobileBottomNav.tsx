@@ -35,7 +35,7 @@ export function MobileBottomNav() {
   return (
     <nav
       className={cn(
-        'fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80',
+        'sticky bottom-0 left-0 right-0 z-30 border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80',
         'md:hidden', // 👈 hide on desktop
       )}
     >

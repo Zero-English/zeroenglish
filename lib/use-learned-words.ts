@@ -1,11 +1,17 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { db } from "./db";
 
+const TYPE = "learned";
 const STORAGE_KEY = "learned-words";
 
 function key(id: number, word: string) {
   return `${id}|${word}`;
+}
+
+function dbKey(k: string) {
+  return `${TYPE}|${k}`;
 }
 
 export function useLearnedWords() {
@@ -13,15 +19,26 @@ export function useLearnedWords() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setLearnedIds(new Set(JSON.parse(stored)));
+    (async () => {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const oldData = JSON.parse(stored) as string[];
+          await db.words.bulkPut(
+            oldData.map((k) => ({ id: dbKey(k), type: TYPE }))
+          );
+          localStorage.removeItem(STORAGE_KEY);
+        }
+
+        const records = await db.words.where("type").equals(TYPE).toArray();
+        setLearnedIds(
+          new Set(records.map((r) => r.id.slice(TYPE.length + 1)))
+        );
+      } catch {
+        // ignore
       }
-    } catch {
-      // ignore
-    }
-    setLoaded(true);
+      setLoaded(true);
+    })();
   }, []);
 
   const toggleLearned = useCallback((id: number, word: string) => {
@@ -30,13 +47,10 @@ export function useLearnedWords() {
       const next = new Set(prev);
       if (next.has(k)) {
         next.delete(k);
+        db.words.delete(dbKey(k));
       } else {
         next.add(k);
-      }
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
-      } catch {
-        // ignore
+        db.words.put({ id: dbKey(k), type: TYPE });
       }
       return next;
     });

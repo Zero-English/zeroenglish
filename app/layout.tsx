@@ -23,6 +23,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Learn English Vocabulary in Bangla | Oxford 3000 Word List",
   description: "Master 3000 essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to B2 levels covered.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    title: "Vocab 3000",
+    statusBarStyle: "black-translucent",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
 };
 
 export default function RootLayout({
