@@ -29,13 +29,13 @@ export function Sidebar() {
 
       <aside
         className={`
-          fixed top-0 inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200
+          fixed top-0 inset-y-0 left-0 z-50 w-64 bg-white border-r dark:bg-black
           flex flex-col transition-transform duration-300 ease-in-out
           md:sticky md:z-auto md:translate-x-0 md:max-h-[calc(100vh-65px)] md:top-[65px]
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 md:border-b-0">
+        <div className="flex items-center justify-between p-4 border-b md:border-b-0">
           
           <button
             onClick={close}
@@ -45,7 +45,7 @@ export function Sidebar() {
           </button>
         </div>
 
-        <div className="md:hidden px-4 pb-2 pt-2 text-sm text-gray-500">
+        <div className="md:hidden px-4 pb-2 pt-2 text-sm">
           Navigation
         </div>
 
@@ -62,7 +62,7 @@ export function Sidebar() {
                   ${
                     isActive
                       ? "bg-primary/10 text-primary"
-                      : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                      : "text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300 dark:hover:text-white"
                   }
                 `}
               >

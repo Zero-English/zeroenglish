@@ -18,7 +18,7 @@ export function Header() {
   ];
 
   return (
-    <header className="border-b border-gray-200 bg-white sticky top-0 z-30">
+    <header className="border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 sticky top-0 z-30">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <button
           onClick={toggle}
@@ -26,10 +26,10 @@ export function Header() {
         >
           <Menu className="h-6 w-6" />
         </button>
-        <Link href="/" className="flex items-center space-x-2">
-          <Image src={logo} alt="Logo" className="h-7 w-auto" />
+        <Link href="/" className="flex items-center space-x-2 dark:bg-white dark:p-2 dark:rounded-md">
+          <Image src={logo} alt="Logo" className="h-5 w-auto" />
         </Link>
-        <div className="hidden md:flex items-center space-x-1">
+        {/* <div className="hidden md:flex items-center space-x-1">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -39,7 +39,7 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-        </div>
+        </div> */}
 
         <button>
           <Bell className="h-6 w-6" />

@@ -22,12 +22,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Learn English Vocabulary in Bangla | Oxford 3000 Word List",
+  title: "Learn English Oxford 3000 Word Vocabulary in Bangla | Zero English",
   description: "Master 3000 essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to B2 levels covered.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    title: "Vocab 3000",
+    title: "Zero English",
     statusBarStyle: "black-translucent",
   },
   other: {
@@ -46,6 +46,11 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
       <body className="min-h-full">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `!function(){const e=matchMedia("(prefers-color-scheme: dark)");e.matches&&document.documentElement.classList.add("dark"),e.addEventListener("change",function(){document.documentElement.classList.toggle("dark",e.matches)})}()`,
+          }}
+        />
         <Script
           id="register-sw"
           strategy="beforeInteractive"

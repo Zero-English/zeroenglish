@@ -78,11 +78,11 @@ export function LevelPageContent({ level, pageNum = 1 }: LevelPageContentProps) 
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-white/80 via-transparent to-transparent dark:from-white/5" />
-      <div className="fixed -top-32 right-[-8rem] h-[28rem] w-[28rem] -z-10 rounded-full bg-gradient-to-br from-white/70 via-white/40 to-transparent blur-3xl dark:from-white/10" />
-      <div className="fixed -bottom-40 left-[-10rem] h-[30rem] w-[30rem] -z-10 rounded-full bg-gradient-to-br from-zinc-100 via-white to-transparent blur-3xl dark:from-zinc-900/60 dark:via-zinc-950/60" />
-      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
+      {/* <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" /> */}
+      {/* <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-white/80 via-transparent to-transparent dark:from-white/5" /> */}
+      {/* <div className="fixed -top-32 right-[-8rem] h-[28rem] w-[28rem] -z-10 rounded-full bg-gradient-to-br from-white/70 via-white/40 to-transparent blur-3xl dark:from-white/10" /> */}
+      {/* <div className="fixed -bottom-40 left-[-10rem] h-[30rem] w-[30rem] -z-10 rounded-full bg-gradient-to-br from-zinc-100 via-white to-transparent blur-3xl dark:from-zinc-900/60 dark:via-zinc-950/60" /> */}
+      {/* <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" /> */}
 
       <div className="relative px-4 py-10 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
