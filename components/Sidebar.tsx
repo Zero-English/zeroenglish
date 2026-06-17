@@ -31,7 +31,7 @@ export function Sidebar() {
 
       <aside
         className={`
-          fixed top-0 inset-y-0 left-0 z-50 hover:w-64 group transform bg-white border-r dark:bg-black
+          fixed top-0 inset-y-0 left-0 z-50 md:hover:w-64 group transform bg-white border-r dark:bg-black w-64 md:w-fit
           flex flex-col transition-all duration-300 delay-150 ease-in-out
           md:sticky md:z-auto md:translate-x-0 md:max-h-[calc(100vh-65px)] md:top-[65px]
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
