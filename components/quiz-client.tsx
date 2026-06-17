@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
 import { Volume2 } from "lucide-react";
 import { Word } from "@/lib/data";
+import { useStillLearningWords } from "@/lib/use-still-learning-words";
 import Link from "next/link";
 
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
@@ -87,6 +88,24 @@ export function QuizClient({ words }: { words: Word[] }) {
   const [incorrectAnswers, setIncorrectAnswers] = useState<
     { word: Word; correctMeaning: string; userAnswer: string }[]
   >([]);
+
+  const { addStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
+
+  const savedRef = useRef(false);
+  useEffect(() => {
+    if (step === "results" && stillLearningLoaded && !savedRef.current) {
+      savedRef.current = true;
+      const entries = incorrectAnswers.map((ia) => ({
+        id: ia.word.id,
+        word: ia.word.word,
+      }));
+      if (entries.length > 0) addStillLearning(entries);
+    }
+  }, [step, stillLearningLoaded, incorrectAnswers, addStillLearning]);
+
+  useEffect(() => {
+    if (step !== "results") savedRef.current = false;
+  }, [step]);
 
   const isAnsweredRef = useRef(false);
   const questionsRef = useRef<Question[]>([]);

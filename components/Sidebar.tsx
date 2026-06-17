@@ -10,6 +10,7 @@ import logo from "@/public/assets/logo.png";
 
 const navLinks = [
   { href: "/", label: "Home" },
+  { href: "/search", label: "Search" },
   { href: "/quiz", label: "Quiz" },
   { href: "/profile", label: "Profile" }
 ];

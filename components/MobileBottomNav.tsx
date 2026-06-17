@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, BookOpen, User, Settings, ShoppingBag, Book, Calendar, BadgeQuestionMark } from 'lucide-react'
+import { Home, Search, User, BadgeQuestionMark } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -16,6 +16,11 @@ const navItems: NavItem[] = [
     label: 'Home',
     href: '/',
     icon: Home,
+  },
+  {
+    label: 'Search',
+    href: '/search',
+    icon: Search,
   },
   {
     label: 'Quiz',
@@ -39,7 +44,7 @@ export function MobileBottomNav() {
         'md:hidden', // 👈 hide on desktop
       )}
     >
-      <div className="grid grid-cols-3">
+      <div className="grid grid-cols-4">
         {navItems.map((item) => {
           const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
 

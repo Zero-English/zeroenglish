@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
 import Script from "next/script";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/Header";
@@ -24,14 +24,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Learn English Oxford 3000 Word Vocabulary in Bangla | Zero English",
   description: "Master 3000 essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to B2 levels covered.",
-  manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    title: "Zero English",
-    statusBarStyle: "black-translucent",
-  },
+  manifest: "/manifest.webmanifest",
   other: {
-    "mobile-web-app-capable": "yes",
+    "theme-color": "#f97316",
   },
 };
 
@@ -47,15 +42,9 @@ export default function RootLayout({
     >
       <body className="min-h-full">
         <script
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `!function(){const e=matchMedia("(prefers-color-scheme: dark)");e.matches&&document.documentElement.classList.add("dark"),e.addEventListener("change",function(){document.documentElement.classList.toggle("dark",e.matches)})}()`,
-          }}
-        />
-        <Script
-          id="register-sw"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js',{scope:'/'})}`,
           }}
         />
         <SidebarProvider>
@@ -71,6 +60,13 @@ export default function RootLayout({
               <FFooter />
           </div>
         </SidebarProvider>
+        <Script
+          id="sw-register"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `"serviceWorker" in navigator&&navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"})`,
+          }}
+        />
       </body>
     </html>
   );
