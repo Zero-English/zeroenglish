@@ -5,6 +5,7 @@ import { Search, Menu } from "lucide-react";
 import Image from "next/image";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 import logo from "../public/assets/logo.png";
 
 export function Header() {
@@ -48,7 +49,12 @@ export function Header() {
   }, []);
 
   return (
-    <header className={` bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 sticky top-0 z-30 ${isScrolled ? "border-b" : ""}
+    <motion.header
+      initial={false}
+      animate={{y: isHidden ? "-100%" : "0%",}}
+      transition={{type: "spring",stiffness: 250,damping: 30,mass: 1,}}
+
+    className={` bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 sticky top-0 z-30 ${isScrolled ? "border-b" : ""}
 
         ${isHidden ? "-translate-y-full" : "translate-y-0"}`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -68,6 +74,6 @@ export function Header() {
           <Search className="h-5 w-5" />
         </Link>
       </nav>
-    </header>
+    </motion.header>
   );
 }
