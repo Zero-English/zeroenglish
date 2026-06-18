@@ -13,7 +13,11 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Search, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -149,24 +153,29 @@ export function SearchClient({ words }: { words: Word[] }) {
             </p>
           </div>
 
-          <div className="relative mb-8">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" />
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={(e) => handleChange(e.target.value)}
-              placeholder="Search words, meanings, or definitions..."
-              className="w-full h-14 pl-12 pr-12 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm text-base text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-700 transition-all"
-            />
-            {query && (
-              <button
-                onClick={handleClear}
-                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-md text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            )}
+          <div className="mb-8">
+            <Field>
+              {/* <FieldLabel htmlFor="search-input">Search</FieldLabel> */}
+              <ButtonGroup className="border-none">
+                <Input
+                  id="search-input"
+                  className="rounded-r-none focus:ring-0 focus-visible:ring-0"
+                  ref={inputRef}
+                  value={query}
+                  onChange={(e) => handleChange(e.target.value)}
+                  placeholder="Type to search..."
+                />
+                <Button
+                  variant="outline"
+                  className="rounded-l-none h-9 border-l-0" 
+                  onClick={() => {
+                    inputRef.current?.focus();
+                  }}
+                >
+                  Search
+                </Button>
+              </ButtonGroup>
+            </Field>
           </div>
 
           {isSearching && (

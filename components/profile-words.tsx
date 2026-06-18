@@ -6,6 +6,7 @@ import { useStillLearningWords } from "@/lib/use-still-learning-words";
 import { Word } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { DailyGoalCard } from "@/components/daily-goal";
 import {
   BookmarkCheck, CheckCircle2, Bookmark, Circle,
   BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X,
@@ -250,6 +251,10 @@ export function ProfileTabs({ words }: { words: Word[] }) {
             sub={`${overallProgress}% of total`}
             color="bg-emerald-100 dark:bg-emerald-900/30"
           />
+        </div>
+
+        <div className="mb-8">
+          <DailyGoalCard />
         </div>
 
         {/* Progress by level */}

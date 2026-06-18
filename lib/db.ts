@@ -5,19 +5,33 @@ import Dexie, { type EntityTable } from "dexie";
 export interface WordEntry {
   id: string;
   type: "bookmarked" | "learned" | "still-learning";
+  timestamp?: number;
+}
+
+export interface ActivityEntry {
+  date: string;
+  quizzesDone: number;
 }
 
 const LS_PREFIX = "voc_";
 
-let db: Dexie & { words: EntityTable<WordEntry, "id"> };
+let db: Dexie & {
+  words: EntityTable<WordEntry, "id">;
+  activity: EntityTable<ActivityEntry, "date">;
+};
 
 try {
   db = new Dexie("VocabularyDB") as Dexie & {
     words: EntityTable<WordEntry, "id">;
+    activity: EntityTable<ActivityEntry, "date">;
   };
   db.version(1).stores({ words: "id, type" });
+  db.version(2).stores({ words: "id, type", activity: "date" });
 } catch {
-  db = null as unknown as Dexie & { words: EntityTable<WordEntry, "id"> };
+  db = null as unknown as Dexie & {
+    words: EntityTable<WordEntry, "id">;
+    activity: EntityTable<ActivityEntry, "date">;
+  };
 }
 
 function readLocalStorage(type: string): WordEntry[] {
@@ -40,14 +54,15 @@ function readLocalStorage(type: string): WordEntry[] {
 }
 
 export async function putWord(entry: WordEntry): Promise<void> {
+  const enriched = { ...entry, timestamp: entry.timestamp ?? Date.now() };
   if (db) {
     try {
-      await db.words.put(entry);
+      await db.words.put(enriched);
     } catch (err) {
       console.error("Dexie put failed:", err);
     }
   }
-  localStorage.setItem(LS_PREFIX + entry.id, JSON.stringify(entry));
+  localStorage.setItem(LS_PREFIX + entry.id, JSON.stringify(enriched));
 }
 
 export async function deleteWord(id: string): Promise<void> {
@@ -62,14 +77,15 @@ export async function deleteWord(id: string): Promise<void> {
 }
 
 export async function bulkPutWords(entries: WordEntry[]): Promise<void> {
+  const enriched = entries.map((e) => ({ ...e, timestamp: e.timestamp ?? Date.now() }));
   if (db) {
     try {
-      await db.words.bulkPut(entries);
+      await db.words.bulkPut(enriched);
     } catch (err) {
       console.error("Dexie bulkPut failed:", err);
     }
   }
-  for (const entry of entries) {
+  for (const entry of enriched) {
     localStorage.setItem(LS_PREFIX + entry.id, JSON.stringify(entry));
   }
 }
@@ -83,4 +99,37 @@ export async function getWordsByType(type: string): Promise<WordEntry[]> {
     }
   }
   return readLocalStorage(type);
+}
+
+export async function getActivity(date: string): Promise<ActivityEntry | undefined> {
+  if (!db) return undefined;
+  try {
+    return await db.activity.get(date);
+  } catch (err) {
+    console.error("Dexie getActivity failed:", err);
+    return undefined;
+  }
+}
+
+export async function getAllActivity(): Promise<ActivityEntry[]> {
+  if (!db) return [];
+  try {
+    return await db.activity.toArray();
+  } catch (err) {
+    console.error("Dexie getAllActivity failed:", err);
+    return [];
+  }
+}
+
+export async function incrementQuizzesDone(date: string): Promise<void> {
+  if (!db) return;
+  try {
+    const existing = await db.activity.get(date);
+    await db.activity.put({
+      date,
+      quizzesDone: (existing?.quizzesDone ?? 0) + 1,
+    });
+  } catch (err) {
+    console.error("Dexie incrementQuizzesDone failed:", err);
+  }
 }
