@@ -8,6 +8,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { SidebarProvider } from "@/components/sidebar-provider";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import FFooter from "@/components/FFooter";
+import { IndexedDBMigration } from "@/components/indexed-db-migrate";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -84,6 +85,7 @@ gtag('config', 'G-6BF3FVESN8');`}
             __html: `"serviceWorker" in navigator&&navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"})`,
           }}
         />
+        <IndexedDBMigration />
       </body>
     </html>
   );
