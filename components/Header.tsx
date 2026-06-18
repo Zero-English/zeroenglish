@@ -48,7 +48,9 @@ export function Header() {
   }, []);
 
   return (
-    <header className="border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 sticky top-0 z-30">
+    <header className={` bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 sticky top-0 z-30 ${isScrolled ? "border-b" : ""}
+
+        ${isHidden ? "-translate-y-full" : "translate-y-0"}`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <button
           onClick={toggle}
