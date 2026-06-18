@@ -4,10 +4,48 @@ import Link from "next/link";
 import { Search, Menu } from "lucide-react";
 import Image from "next/image";
 import { useSidebar } from "@/components/sidebar-provider";
+import { useEffect, useRef, useState } from "react";
 import logo from "../public/assets/logo.png";
 
 export function Header() {
   const { toggle } = useSidebar();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Border after 1px scroll
+      setIsScrolled(currentScrollY > 0);
+
+      // Always show near top
+      if (currentScrollY < 300) {
+        setIsHidden(false);
+      } else {
+        // Hide when scrolling down
+        if (currentScrollY > lastScrollY.current) {
+          setIsHidden(true);
+        }
+        // Show when scrolling up
+        else if (currentScrollY < lastScrollY.current) {
+          setIsHidden(false);
+        }
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 sticky top-0 z-30">
