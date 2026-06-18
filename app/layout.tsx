@@ -29,6 +29,10 @@ export const metadata: Metadata = {
   other: {
     "theme-color": "#f97316",
   },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -43,14 +47,14 @@ export default function RootLayout({
     >
       <head>
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-QYD6X9WTL4"
+          src="https://www.googletagmanager.com/gtag/js?id=G-6BF3FVESN8"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
           {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-QYD6X9WTL4');`}
+gtag('config', 'G-6BF3FVESN8');`}
         </Script>
       </head>
       <body className="min-h-full">
