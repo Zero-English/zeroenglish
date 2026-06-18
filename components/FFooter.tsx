@@ -38,7 +38,7 @@ export default function FFooter() {
           <div className="space-y-4">
             <Link href="/" className="inline-block">
               <span className="text-2xl font-bold text-white bg-clip-text text-transparent">
-                Vocabulary
+                Zero English
               </span>
             </Link>
             <p className="text-sm text-gray-400">
@@ -74,7 +74,7 @@ export default function FFooter() {
 
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-          <p>&copy; {currentYear} Vocabulary. All rights reserved.</p>
+          <p>&copy; {currentYear} Zero English. All rights reserved.</p>
           {/* <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href="#" className="hover:text-white transition-colors">
               Privacy
