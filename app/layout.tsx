@@ -41,6 +41,18 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-QYD6X9WTL4"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-QYD6X9WTL4');`}
+        </Script>
+      </head>
       <body className="min-h-full">
         <script
           suppressHydrationWarning
