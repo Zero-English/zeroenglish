@@ -52,7 +52,7 @@ export function LevelFilterBar({
 }: LevelFilterBarProps) {
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 py-3">
-      <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
+      <div className="overflow-x-auto w-full ">
         <div className="flex items-center gap-1 pb-1 sm:pb-0 flex-1">
           {filters.map((f) => {
             const Icon = f.icon;
