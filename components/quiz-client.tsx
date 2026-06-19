@@ -8,6 +8,7 @@ import { Volume2 } from "lucide-react";
 import { Word } from "@/lib/data";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
 import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
+import { incrementQuizzesDone } from "@/lib/db";
 import Link from "next/link";
 
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
@@ -693,6 +694,12 @@ function ResultsView({
   onRestart: () => void;
 }) {
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+
+  useEffect(() => {
+    const today = new Date();
+    const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    incrementQuizzesDone(dateStr);
+  }, []);
 
   let resultColor: string;
   let resultLabel: string;

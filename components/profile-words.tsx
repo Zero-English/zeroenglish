@@ -17,11 +17,12 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { DailyGoalCard } from "@/components/daily-goal";
 import { useActiveTab, setActiveTab } from "@/lib/profile-tab-store";
+import { useQuizActivity } from "@/lib/use-quiz-activity";
 
 const ITEMS_PER_PAGE = 10;
 import {
   BookmarkCheck, CheckCircle2, Bookmark, Circle,
-  BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X,
+  BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Zap,
 } from "lucide-react";
 
 
@@ -157,6 +158,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const { bookmarkedIds, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const { learnedIds, isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
   const { stillLearningIds, removeStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
+  const { totalQuizzes, todayQuizzes, quizzesThisWeek, loaded: quizLoaded } = useQuizActivity();
   const loaded = bookmarkLoaded && learnedLoaded && stillLearningLoaded;
 
   const bookmarked = words.filter((w) => bookmarkedIds.has(wordKey(w)));
@@ -273,6 +275,51 @@ export function ProfileTabs({ words }: { words: Word[] }) {
 
         <div className="mb-8">
           <DailyGoalCard />
+        </div>
+
+        {/* Quiz Progress */}
+        <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6 mb-8">
+          <div className="flex items-center gap-2 mb-5">
+            <GraduationCap className="h-5 w-5 text-zinc-500" />
+            <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+              Quiz Progress
+            </h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
+              <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
+                <GraduationCap className="h-5 w-5 text-indigo-600" />
+              </div>
+              <div>
+                <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                  {quizLoaded ? totalQuizzes : "—"}
+                </div>
+                <div className="text-xs text-zinc-400">Total Quizzes</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
+              <div className="p-2 rounded-lg bg-violet-100 dark:bg-violet-900/30">
+                <Zap className="h-5 w-5 text-violet-600" />
+              </div>
+              <div>
+                <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                  {quizLoaded ? todayQuizzes : "—"}
+                </div>
+                <div className="text-xs text-zinc-400">Today</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
+              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                <BarChart3 className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                  {quizLoaded ? quizzesThisWeek : "—"}
+                </div>
+                <div className="text-xs text-zinc-400">This Week</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Progress by level */}
