@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getWordsByLevel } from "@/lib/data";
-import { WordPagination } from "@/components/word-pagination";
-import { WordCard } from "@/components/word-card";
+import { LevelWordsClient } from "@/components/level-words-client";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2"] as const;
 
@@ -45,14 +44,11 @@ const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
   },
 };
 
-const ITEMS_PER_PAGE = 10;
-
 export interface LevelPageContentProps {
   level: string;
-  pageNum?: number;
 }
 
-export function LevelPageContent({ level, pageNum = 1 }: LevelPageContentProps) {
+export function LevelPageContent({ level }: LevelPageContentProps) {
   const upper = level.toUpperCase();
 
   if (!VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number])) {
@@ -65,16 +61,6 @@ export function LevelPageContent({ level, pageNum = 1 }: LevelPageContentProps) 
   if (allWords.length === 0) {
     notFound();
   }
-
-  const totalPages = Math.ceil(allWords.length / ITEMS_PER_PAGE);
-  const currentPage = Math.max(1, Math.min(pageNum, totalPages));
-
-  if (pageNum < 1 || pageNum > totalPages || Number.isNaN(pageNum)) {
-    notFound();
-  }
-
-  const start = (currentPage - 1) * ITEMS_PER_PAGE;
-  const words = allWords.slice(start, start + ITEMS_PER_PAGE);
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
@@ -111,12 +97,6 @@ export function LevelPageContent({ level, pageNum = 1 }: LevelPageContentProps) 
                     <span className="font-medium">{allWords.length} words</span>
                     <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-600" />
                     <span>Oxford 3000</span>
-                    {totalPages > 1 && (
-                      <>
-                        <span className="w-1 h-1 rounded-full bg-zinc-300 dark:bg-zinc-600" />
-                        <span>{currentPage} of {totalPages} pages</span>
-                      </>
-                    )}
                   </div>
                 </div>
                 <div className="hidden sm:flex items-center gap-2 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/70 bg-white/80 dark:bg-zinc-900/50 px-3 py-2 text-xs text-zinc-400">
@@ -127,20 +107,7 @@ export function LevelPageContent({ level, pageNum = 1 }: LevelPageContentProps) 
             </div>
           </div>
 
-          <div className="space-y-4">
-            {words.map((word) => (
-              <WordCard key={word.id} word={word} gradient={config.gradient} />
-            ))}
-          </div>
-
-          {totalPages > 1 && (
-            <>
-              <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
-                Showing {start + 1}&ndash;{Math.min(start + ITEMS_PER_PAGE, allWords.length)} of {allWords.length}
-              </p>
-              <WordPagination currentPage={currentPage} totalPages={totalPages} level={level} />
-            </>
-          )}
+          <LevelWordsClient words={allWords} gradient={config.gradient} />
         </div>
       </div>
     </div>

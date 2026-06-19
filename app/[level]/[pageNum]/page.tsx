@@ -52,5 +52,5 @@ export default async function Page({
     notFound();
   }
 
-  return <LevelPageContent level={level} pageNum={page} />;
+  return <LevelPageContent level={level} />;
 }
