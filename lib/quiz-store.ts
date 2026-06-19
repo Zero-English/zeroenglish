@@ -33,6 +33,7 @@ export interface QuizState {
   isAnswered: boolean;
   timeLeft: number;
   incorrectAnswers: IncorrectAnswer[];
+  resultsRecorded: boolean;
 }
 
 const initialState: QuizState = {
@@ -49,6 +50,7 @@ const initialState: QuizState = {
   isAnswered: false,
   timeLeft: 0,
   incorrectAnswers: [],
+  resultsRecorded: false,
 };
 
 export const useQuizStore = create<QuizState>()(

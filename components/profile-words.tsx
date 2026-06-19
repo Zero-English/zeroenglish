@@ -22,7 +22,7 @@ import { useQuizActivity } from "@/lib/use-quiz-activity";
 const ITEMS_PER_PAGE = 10;
 import {
   BookmarkCheck, CheckCircle2, Bookmark, Circle,
-  BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Zap,
+  BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap,
 } from "lucide-react";
 
 
@@ -158,7 +158,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const { bookmarkedIds, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const { learnedIds, isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
   const { stillLearningIds, removeStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
-  const { totalQuizzes, todayQuizzes, quizzesThisWeek, loaded: quizLoaded } = useQuizActivity();
+  const { totalCorrectAnswers, loaded: quizLoaded } = useQuizActivity();
   const loaded = bookmarkLoaded && learnedLoaded && stillLearningLoaded;
 
   const bookmarked = words.filter((w) => bookmarkedIds.has(wordKey(w)));
@@ -287,25 +287,25 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
-              <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
-                <GraduationCap className="h-5 w-5 text-indigo-600" />
+              <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
+                <Award className="h-5 w-5 text-emerald-600" />
               </div>
               <div>
                 <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                  {quizLoaded ? totalQuizzes : "—"}
+                  {quizLoaded ? totalCorrectAnswers : "—"}
                 </div>
-                <div className="text-xs text-zinc-400">Total Quizzes</div>
+                <div className="text-xs text-zinc-400">Correct Answers</div>
               </div>
             </div>
             <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
-              <div className="p-2 rounded-lg bg-violet-100 dark:bg-violet-900/30">
-                <Zap className="h-5 w-5 text-violet-600" />
+              <div className="p-2 rounded-lg bg-rose-100 dark:bg-rose-900/30">
+                <X className="h-5 w-5 text-rose-600" />
               </div>
               <div>
                 <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                  {quizLoaded ? todayQuizzes : "—"}
+                  {stillLearning.length}
                 </div>
-                <div className="text-xs text-zinc-400">Today</div>
+                <div className="text-xs text-zinc-400">Wrong Words</div>
               </div>
             </div>
             <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
@@ -314,9 +314,9 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               </div>
               <div>
                 <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                  {quizLoaded ? quizzesThisWeek : "—"}
+                  {quizLoaded ? totalCorrectAnswers + stillLearning.length : "—"}
                 </div>
-                <div className="text-xs text-zinc-400">This Week</div>
+                <div className="text-xs text-zinc-400">Total Quiz</div>
               </div>
             </div>
           </div>

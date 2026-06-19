@@ -11,6 +11,7 @@ export interface WordEntry {
 export interface ActivityEntry {
   date: string;
   quizzesDone: number;
+  correctAnswers: number;
 }
 
 export interface StateEntry {
@@ -134,8 +135,23 @@ export async function incrementQuizzesDone(date: string): Promise<void> {
     await db.activity.put({
       date,
       quizzesDone: (existing?.quizzesDone ?? 0) + 1,
+      correctAnswers: existing?.correctAnswers ?? 0,
     });
   } catch (err) {
     console.error("Dexie incrementQuizzesDone failed:", err);
+  }
+}
+
+export async function addCorrectAnswers(date: string, correctCount: number): Promise<void> {
+  if (!db) return;
+  try {
+    const existing = await db.activity.get(date);
+    await db.activity.put({
+      date,
+      quizzesDone: existing?.quizzesDone ?? 0,
+      correctAnswers: (existing?.correctAnswers ?? 0) + correctCount,
+    });
+  } catch (err) {
+    console.error("Dexie addCorrectAnswers failed:", err);
   }
 }

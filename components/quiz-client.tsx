@@ -8,7 +8,7 @@ import { Volume2 } from "lucide-react";
 import { Word } from "@/lib/data";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
 import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
-import { incrementQuizzesDone } from "@/lib/db";
+import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
 import Link from "next/link";
 
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
@@ -467,6 +467,21 @@ function SettingsView({
                 >
                   All ({maxCount})
                 </button>
+                <input
+                  type="number"
+                  min={1}
+                  max={maxCount}
+                  placeholder="Custom"
+                  value={quantity}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value);
+                    if (!isNaN(val) && val > 0) {
+                      onQuantityChange(val);
+                      onUseAllChange(false);
+                    }
+                  }}
+                  className="w-20 px-3 py-2 rounded-xl text-sm font-medium border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                />
               </div>
             </div>
 
@@ -501,6 +516,20 @@ function SettingsView({
                 >
                   No limit
                 </button>
+                <input
+                  type="number"
+                  min={1}
+                  placeholder="Custom"
+                  value={timePerQuestion}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value);
+                    if (!isNaN(val) && val > 0) {
+                      onTimeChange(val);
+                      onNoTimeLimitChange(false);
+                    }
+                  }}
+                  className="w-20 px-3 py-2 rounded-xl text-sm font-medium border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                />
               </div>
             </div>
 
@@ -696,9 +725,13 @@ function ResultsView({
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
 
   useEffect(() => {
+    if (useQuizStore.getState().resultsRecorded) return;
     const today = new Date();
     const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
     incrementQuizzesDone(dateStr);
+    addCorrectAnswers(dateStr, score);
+    useQuizStore.setState({ resultsRecorded: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let resultColor: string;
