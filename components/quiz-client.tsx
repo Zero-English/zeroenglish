@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
 import { Volume2 } from "lucide-react";
 import { Word } from "@/lib/data";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
+import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
 import Link from "next/link";
 
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
@@ -73,21 +74,19 @@ function shuffleArray<T>(arr: T[]): T[] {
 }
 
 export function QuizClient({ words }: { words: Word[] }) {
-  const [step, setStep] = useState<Step>("select");
-  const [selectedLevel, setSelectedLevel] = useState<LevelOption | null>(null);
-  const [quantity, setQuantity] = useState(10);
-  const [useAllQuestions, setUseAllQuestions] = useState(false);
-  const [timePerQuestion, setTimePerQuestion] = useState(15);
-  const [noTimeLimit, setNoTimeLimit] = useState(false);
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [isAnswered, setIsAnswered] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(0);
-  const [incorrectAnswers, setIncorrectAnswers] = useState<
-    { word: Word; correctMeaning: string; userAnswer: string }[]
-  >([]);
+  const step = useQuizStore((s) => s.step);
+  const selectedLevel = useQuizStore((s) => s.selectedLevel);
+  const quantity = useQuizStore((s) => s.quantity);
+  const useAllQuestions = useQuizStore((s) => s.useAllQuestions);
+  const timePerQuestion = useQuizStore((s) => s.timePerQuestion);
+  const noTimeLimit = useQuizStore((s) => s.noTimeLimit);
+  const questions = useQuizStore((s) => s.questions);
+  const currentIndex = useQuizStore((s) => s.currentIndex);
+  const score = useQuizStore((s) => s.score);
+  const selectedAnswer = useQuizStore((s) => s.selectedAnswer);
+  const isAnswered = useQuizStore((s) => s.isAnswered);
+  const timeLeft = useQuizStore((s) => s.timeLeft);
+  const incorrectAnswers = useQuizStore((s) => s.incorrectAnswers);
 
   const { addStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
 
@@ -162,8 +161,7 @@ export function QuizClient({ words }: { words: Word[] }) {
   );
 
   const handleLevelSelect = (level: LevelOption) => {
-    setSelectedLevel(level);
-    setStep("settings");
+    useQuizStore.setState({ selectedLevel: level, step: "settings" });
   };
 
   const handleStartQuiz = () => {
@@ -173,77 +171,71 @@ export function QuizClient({ words }: { words: Word[] }) {
       quantity,
       useAllQuestions
     );
-    setQuestions(generated);
-    setCurrentIndex(0);
-    setScore(0);
-    setIncorrectAnswers([]);
-    setSelectedAnswer(null);
-    setIsAnswered(false);
-    setTimeLeft(noTimeLimit ? -1 : timePerQuestion);
-    setStep("quiz");
+    useQuizStore.setState({
+      questions: generated,
+      currentIndex: 0,
+      score: 0,
+      incorrectAnswers: [],
+      selectedAnswer: null,
+      isAnswered: false,
+      timeLeft: noTimeLimit ? -1 : timePerQuestion,
+      step: "quiz",
+    });
   };
 
   const handleOptionClick = (option: { text: string; correct: boolean }) => {
     if (isAnsweredRef.current) return;
 
-    setIsAnswered(true);
-    setSelectedAnswer(option.text);
+    useQuizStore.setState({ isAnswered: true, selectedAnswer: option.text });
 
     if (option.correct) {
-      setScore((prev) => prev + 1);
+      useQuizStore.setState((prev) => ({ score: prev.score + 1 }));
     } else {
       const idx = currentIndexRef.current;
       const q = questionsRef.current[idx];
       if (q) {
-        setIncorrectAnswers((prev) => [
-          ...prev,
-          {
-            word: q.word,
-            correctMeaning: q.word.meaning_bn,
-            userAnswer: option.text,
-          },
-        ]);
+        useQuizStore.setState((prev) => ({
+          incorrectAnswers: [
+            ...prev.incorrectAnswers,
+            {
+              word: q.word,
+              correctMeaning: q.word.meaning_bn,
+              userAnswer: option.text,
+            },
+          ],
+        }));
       }
     }
   };
 
   const handleNext = () => {
     if (currentIndex >= questions.length - 1) {
-      setStep("results");
+      useQuizStore.setState({ step: "results" });
     } else {
-      setCurrentIndex((prev) => prev + 1);
-      setSelectedAnswer(null);
-      setIsAnswered(false);
-      setTimeLeft(noTimeLimit ? -1 : timePerQuestion);
+      useQuizStore.setState({
+        currentIndex: currentIndex + 1,
+        selectedAnswer: null,
+        isAnswered: false,
+        timeLeft: noTimeLimit ? -1 : timePerQuestion,
+      });
     }
   };
 
   const handleRestart = () => {
-    setStep("select");
-    setSelectedLevel(null);
-    setQuantity(10);
-    setUseAllQuestions(false);
-    setTimePerQuestion(15);
-    setNoTimeLimit(false);
-    setQuestions([]);
-    setCurrentIndex(0);
-    setScore(0);
-    setIncorrectAnswers([]);
-    setSelectedAnswer(null);
-    setIsAnswered(false);
+    resetQuizState();
   };
 
   useEffect(() => {
     if (step !== "quiz" || isAnswered || noTimeLimit || timeLeft < 0) return;
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
+      const current = useQuizStore.getState().timeLeft;
+      if (current <= 1) {
+        clearInterval(timer);
+        useQuizStore.setState({ timeLeft: 0 });
+      } else {
+        useQuizStore.setState({ timeLeft: current - 1 });
+      }
     }, 1000);
 
     return () => clearInterval(timer);
@@ -257,19 +249,23 @@ export function QuizClient({ words }: { words: Word[] }) {
       !noTimeLimit &&
       timeLeft === 0
     ) {
-      setIsAnswered(true);
-      setSelectedAnswer(null);
       const idx = currentIndexRef.current;
       const q = questionsRef.current[idx];
       if (q) {
-        setIncorrectAnswers((prev) => [
-          ...prev,
-          {
-            word: q.word,
-            correctMeaning: q.word.meaning_bn,
-            userAnswer: "Time's up!",
-          },
-        ]);
+        useQuizStore.setState((prev) => ({
+          isAnswered: true,
+          selectedAnswer: null,
+          incorrectAnswers: [
+            ...prev.incorrectAnswers,
+            {
+              word: q.word,
+              correctMeaning: q.word.meaning_bn,
+              userAnswer: "Time's up!",
+            },
+          ],
+        }));
+      } else {
+        useQuizStore.setState({ isAnswered: true, selectedAnswer: null });
       }
     }
   }, [timeLeft, noTimeLimit, step]);
@@ -287,12 +283,12 @@ export function QuizClient({ words }: { words: Word[] }) {
         timePerQuestion={timePerQuestion}
         noTimeLimit={noTimeLimit}
         maxCount={getMaxCount(selectedLevel!)}
-        onQuantityChange={setQuantity}
-        onUseAllChange={setUseAllQuestions}
-        onTimeChange={setTimePerQuestion}
-        onNoTimeLimitChange={setNoTimeLimit}
+        onQuantityChange={(q) => useQuizStore.setState({ quantity: q })}
+        onUseAllChange={(v) => useQuizStore.setState({ useAllQuestions: v })}
+        onTimeChange={(t) => useQuizStore.setState({ timePerQuestion: t })}
+        onNoTimeLimitChange={(v) => useQuizStore.setState({ noTimeLimit: v })}
         onStart={handleStartQuiz}
-        onBack={() => setStep("select")}
+        onBack={() => useQuizStore.setState({ step: "select" })}
       />
     );
   }

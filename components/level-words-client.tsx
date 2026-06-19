@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import type { Word } from "@/lib/data";
 import { getDuplicateWordIds } from "@/lib/words";
 import { useLearnedWords } from "@/lib/use-learned-words";
@@ -16,22 +16,24 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
+import { useLevelPage, useLevelFilter, useLevelSort, setLevelState } from "@/lib/level-pagination-store";
 
 const ITEMS_PER_PAGE = 10;
 
 interface LevelWordsClientProps {
   words: Word[];
   gradient: string;
+  level: string;
 }
 
-export function LevelWordsClient({ words, gradient }: LevelWordsClientProps) {
+export function LevelWordsClient({ words, gradient, level }: LevelWordsClientProps) {
   const { isLearned, loaded: learnedLoaded } = useLearnedWords();
   const { isBookmarked, loaded: bookmarkLoaded } = useBookmarkedWords();
   const loaded = learnedLoaded && bookmarkLoaded;
 
-  const [filter, setFilter] = useState<FilterType>("all");
-  const [sort, setSort] = useState<SortType>("default");
-  const [page, setPage] = useState(1);
+  const page = useLevelPage(level);
+  const filter = useLevelFilter(level);
+  const sort = useLevelSort(level);
 
   const duplicateIds = useMemo(() => getDuplicateWordIds(words), [words]);
 
@@ -76,13 +78,15 @@ export function LevelWordsClient({ words, gradient }: LevelWordsClientProps) {
   const pageWords = filtered.slice(start, start + ITEMS_PER_PAGE);
 
   const handleFilterChange = (f: FilterType) => {
-    setFilter(f);
-    setPage(1);
+    setLevelState(level, { filter: f, page: 1 });
   };
 
   const handleSortChange = (s: SortType) => {
-    setSort(s);
-    setPage(1);
+    setLevelState(level, { sort: s, page: 1 });
+  };
+
+  const handlePageChange = (p: number) => {
+    setLevelState(level, { page: p });
   };
 
   const getPageItems = () => {
@@ -134,11 +138,11 @@ export function LevelWordsClient({ words, gradient }: LevelWordsClientProps) {
             <Pagination>
               <div className="flex items-center gap-0.5 max-w-full">
                 <PaginationItem>
-                  <PaginationPrevious
+                    <PaginationPrevious
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      if (currentPage > 1) setPage(currentPage - 1);
+                      if (currentPage > 1) handlePageChange(currentPage - 1);
                     }}
                     className={cn(
                       currentPage <= 1 ? "pointer-events-none opacity-50" : ""
@@ -154,7 +158,7 @@ export function LevelWordsClient({ words, gradient }: LevelWordsClientProps) {
                           href="#"
                           onClick={(e) => {
                             e.preventDefault();
-                            setPage(pageNum);
+                            handlePageChange(pageNum);
                           }}
                           isActive={pageNum === currentPage}
                         >
@@ -170,7 +174,7 @@ export function LevelWordsClient({ words, gradient }: LevelWordsClientProps) {
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      if (currentPage < totalPages) setPage(currentPage + 1);
+                      if (currentPage < totalPages) handlePageChange(currentPage + 1);
                     }}
                     className={cn(
                       currentPage >= totalPages

@@ -22,6 +22,7 @@ export function WordCard({ word, gradient }: WordCardProps) {
 
   return (
     <div
+      onDoubleClick={() => loaded && toggleLearned(word.id, word.word)}
       className={cn(
         "group relative overflow-hidden rounded-2xl border backdrop-blur-sm p-5 sm:p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-zinc-200/60 dark:hover:shadow-black/40 hover:-translate-y-0.5",
         learned

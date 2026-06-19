@@ -13,25 +13,31 @@ export interface ActivityEntry {
   quizzesDone: number;
 }
 
+export interface StateEntry {
+  key: string;
+  value: string;
+  timestamp: number;
+}
+
 const LS_PREFIX = "voc_";
 
-let db: Dexie & {
+export let db: Dexie & {
   words: EntityTable<WordEntry, "id">;
   activity: EntityTable<ActivityEntry, "date">;
-};
+  state: EntityTable<StateEntry, "key">;
+} | null;
 
 try {
   db = new Dexie("VocabularyDB") as Dexie & {
     words: EntityTable<WordEntry, "id">;
     activity: EntityTable<ActivityEntry, "date">;
+    state: EntityTable<StateEntry, "key">;
   };
   db.version(1).stores({ words: "id, type" });
   db.version(2).stores({ words: "id, type", activity: "date" });
+  db.version(3).stores({ words: "id, type", activity: "date", state: "key" });
 } catch {
-  db = null as unknown as Dexie & {
-    words: EntityTable<WordEntry, "id">;
-    activity: EntityTable<ActivityEntry, "date">;
-  };
+  db = null;
 }
 
 function readLocalStorage(type: string): WordEntry[] {

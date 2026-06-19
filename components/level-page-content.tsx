@@ -107,7 +107,7 @@ export function LevelPageContent({ level }: LevelPageContentProps) {
             </div>
           </div>
 
-          <LevelWordsClient words={allWords} gradient={config.gradient} />
+          <LevelWordsClient words={allWords} gradient={config.gradient} level={upper} />
         </div>
       </div>
     </div>

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/pagination";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { DailyGoalCard } from "@/components/daily-goal";
+import { useActiveTab, setActiveTab } from "@/lib/profile-tab-store";
 
 const ITEMS_PER_PAGE = 10;
 import {
@@ -83,6 +84,7 @@ function WordItem({
 
   return (
     <div
+      onDoubleClick={onToggleLearned}
       className={cn(
         "relative overflow-hidden rounded-2xl border backdrop-blur-sm p-5 sm:p-6 transition-all duration-300",
         isLearned
@@ -151,6 +153,7 @@ function WordItem({
 }
 
 export function ProfileTabs({ words }: { words: Word[] }) {
+  const activeTab = useActiveTab();
   const { bookmarkedIds, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const { learnedIds, isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
   const { stillLearningIds, removeStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
@@ -200,7 +203,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   };
 
   return (
-    <Tabs defaultValue="overview" >
+    <Tabs value={activeTab} onValueChange={setActiveTab}>
       <div className="overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden">
         <TabsList>
           <TabsTrigger value="overview" className="flex items-center gap-1.5">
@@ -405,6 +408,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                 {pageWordsS.map((word) => (
                   <div
                     key={wordKey(word)}
+                    onDoubleClick={() => toggleLearned(word.id, word.word)}
                     className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300"
                   >
                     <div className="absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b from-orange-400 to-amber-500 opacity-60" />
