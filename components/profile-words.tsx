@@ -4,9 +4,20 @@ import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
 import { Word } from "@/lib/data";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { DailyGoalCard } from "@/components/daily-goal";
+
+const ITEMS_PER_PAGE = 10;
 import {
   BookmarkCheck, CheckCircle2, Bookmark, Circle,
   BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X,
@@ -149,6 +160,10 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const learned = words.filter((w) => learnedIds.has(wordKey(w)));
   const stillLearning = words.filter((w) => stillLearningIds.has(wordKey(w)));
   const total = words.length;
+
+  const [bookmarkedPage, setBookmarkedPage] = useState(1);
+  const [stillLearningPage, setStillLearningPage] = useState(1);
+  const [learnedPage, setLearnedPage] = useState(1);
 
   if (!loaded) {
     return (
@@ -308,125 +323,257 @@ export function ProfileTabs({ words }: { words: Word[] }) {
       </TabsContent>
 
       <TabsContent value="bookmarked">
-        {bookmarked.length > 0 ? (
-          <>
-            <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-              {bookmarked.length} bookmarked word{bookmarked.length !== 1 ? "s" : ""}
-            </p>
-            <div className="space-y-4">
-              {bookmarked.map((word) => (
-                <WordItem
-                  key={wordKey(word)}
-                  word={word}
-                  isLearned={isLearned(word.id, word.word)}
-                  isBookmarked={true}
-                  onToggleBookmark={() => toggleBookmark(word.id, word.word)}
-                  onToggleLearned={() => toggleLearned(word.id, word.word)}
-                />
-              ))}
-            </div>
-          </>
-        ) : (
+        {bookmarked.length > 0 ? (() => {
+          const totalPagesB = Math.max(1, Math.ceil(bookmarked.length / ITEMS_PER_PAGE));
+          const currentPageB = Math.min(bookmarkedPage, totalPagesB);
+          const startB = (currentPageB - 1) * ITEMS_PER_PAGE;
+          const pageWordsB = bookmarked.slice(startB, startB + ITEMS_PER_PAGE);
+          return (
+            <>
+              <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
+                {bookmarked.length} bookmarked word{bookmarked.length !== 1 ? "s" : ""}
+              </p>
+              <div className="space-y-4">
+                {pageWordsB.map((word) => (
+                  <WordItem
+                    key={wordKey(word)}
+                    word={word}
+                    isLearned={isLearned(word.id, word.word)}
+                    isBookmarked={true}
+                    onToggleBookmark={() => toggleBookmark(word.id, word.word)}
+                    onToggleLearned={() => toggleLearned(word.id, word.word)}
+                  />
+                ))}
+              </div>
+              <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
+                Showing {startB + 1}&ndash;{Math.min(startB + ITEMS_PER_PAGE, bookmarked.length)} of {bookmarked.length}
+              </p>
+              {totalPagesB > 1 && (
+                <Pagination>
+                  <div className="flex items-center gap-0.5 max-w-full">
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); if (currentPageB > 1) setBookmarkedPage(currentPageB - 1); }}
+                        className={cn(currentPageB <= 1 ? "pointer-events-none opacity-50" : "")}
+                      />
+                    </PaginationItem>
+                    <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                      <PaginationContent>
+                        {Array.from({ length: totalPagesB }, (_, i) => i + 1).map((p) => (
+                          <PaginationItem key={p}>
+                            <PaginationLink
+                              href="#"
+                              onClick={(e) => { e.preventDefault(); setBookmarkedPage(p); }}
+                              isActive={p === currentPageB}
+                            >
+                              {p}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+                      </PaginationContent>
+                    </div>
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); if (currentPageB < totalPagesB) setBookmarkedPage(currentPageB + 1); }}
+                        className={cn(currentPageB >= totalPagesB ? "pointer-events-none opacity-50" : "")}
+                      />
+                    </PaginationItem>
+                  </div>
+                </Pagination>
+              )}
+            </>
+          );
+        })() : (
           emptyState("bookmark")
         )}
       </TabsContent>
 
       <TabsContent value="still-learning">
-        {stillLearning.length > 0 ? (
-          <>
-            <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-              {stillLearning.length} word{stillLearning.length !== 1 ? "s" : ""} to review
-            </p>
-            <div className="space-y-4">
-              {stillLearning.map((word) => (
-                <div
-                  key={wordKey(word)}
-                  className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300"
-                >
-                  <div className="absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b from-orange-400 to-amber-500 opacity-60" />
-                  <div className="pl-4 sm:pl-5 pr-16">
-                    <div className="flex items-baseline gap-2.5 mb-1.5">
-                      <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                        {word.word}
-                      </h2>
-                      <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
-                        {word.parts_of_speech}
-                      </span>
-                      <span className={cn("text-xs font-medium px-2 py-0.5 rounded-md", levelColors[word.level]?.bg, levelColors[word.level]?.text)}>
-                        {word.level}
-                      </span>
-                    </div>
-                    {word.meaning_bn !== "..." && (
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">
-                        {word.meaning_bn}
+        {stillLearning.length > 0 ? (() => {
+          const totalPagesS = Math.max(1, Math.ceil(stillLearning.length / ITEMS_PER_PAGE));
+          const currentPageS = Math.min(stillLearningPage, totalPagesS);
+          const startS = (currentPageS - 1) * ITEMS_PER_PAGE;
+          const pageWordsS = stillLearning.slice(startS, startS + ITEMS_PER_PAGE);
+          return (
+            <>
+              <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
+                {stillLearning.length} word{stillLearning.length !== 1 ? "s" : ""} to review
+              </p>
+              <div className="space-y-4">
+                {pageWordsS.map((word) => (
+                  <div
+                    key={wordKey(word)}
+                    className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300"
+                  >
+                    <div className="absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b from-orange-400 to-amber-500 opacity-60" />
+                    <div className="pl-4 sm:pl-5 pr-16">
+                      <div className="flex items-baseline gap-2.5 mb-1.5">
+                        <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                          {word.word}
+                        </h2>
+                        <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
+                          {word.parts_of_speech}
+                        </span>
+                        <span className={cn("text-xs font-medium px-2 py-0.5 rounded-md", levelColors[word.level]?.bg, levelColors[word.level]?.text)}>
+                          {word.level}
+                        </span>
+                      </div>
+                      {word.meaning_bn !== "..." && (
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">
+                          {word.meaning_bn}
+                        </p>
+                      )}
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                        {word.definition_en}
                       </p>
-                    )}
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                      {word.definition_en}
-                    </p>
+                    </div>
+                    <div className="absolute top-3 right-3 flex gap-1">
+                      <button
+                        onClick={() => toggleBookmark(word.id, word.word)}
+                        className={cn(
+                          "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                          bookmarkedIds.has(wordKey(word))
+                            ? "text-amber-500 hover:text-amber-600"
+                            : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
+                        )}
+                        title={bookmarkedIds.has(wordKey(word)) ? "Remove bookmark" : "Bookmark"}
+                      >
+                        {bookmarkedIds.has(wordKey(word)) ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
+                      </button>
+                      <button
+                        onClick={() => toggleLearned(word.id, word.word)}
+                        className={cn(
+                          "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                          learnedIds.has(wordKey(word))
+                            ? "text-emerald-500 hover:text-emerald-600"
+                            : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
+                        )}
+                        title={learnedIds.has(wordKey(word)) ? "Mark as unlearned" : "Mark as learned"}
+                      >
+                        {learnedIds.has(wordKey(word)) ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
+                      </button>
+                      <button
+                        onClick={() => removeStillLearning(word.id, word.word)}
+                        className="p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
+                        title="Remove from still learning"
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="absolute top-3 right-3 flex gap-1">
-                    <button
-                      onClick={() => toggleBookmark(word.id, word.word)}
-                      className={cn(
-                        "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
-                        bookmarkedIds.has(wordKey(word))
-                          ? "text-amber-500 hover:text-amber-600"
-                          : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
-                      )}
-                      title={bookmarkedIds.has(wordKey(word)) ? "Remove bookmark" : "Bookmark"}
-                    >
-                      {bookmarkedIds.has(wordKey(word)) ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
-                    </button>
-                    <button
-                      onClick={() => toggleLearned(word.id, word.word)}
-                      className={cn(
-                        "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
-                        learnedIds.has(wordKey(word))
-                          ? "text-emerald-500 hover:text-emerald-600"
-                          : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
-                      )}
-                      title={learnedIds.has(wordKey(word)) ? "Mark as unlearned" : "Mark as learned"}
-                    >
-                      {learnedIds.has(wordKey(word)) ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
-                    </button>
-                    <button
-                      onClick={() => removeStillLearning(word.id, word.word)}
-                      className="p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
-                      title="Remove from still learning"
-                    >
-                      <X className="h-5 w-5" />
-                    </button>
+                ))}
+              </div>
+              <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
+                Showing {startS + 1}&ndash;{Math.min(startS + ITEMS_PER_PAGE, stillLearning.length)} of {stillLearning.length}
+              </p>
+              {totalPagesS > 1 && (
+                <Pagination>
+                  <div className="flex items-center gap-0.5 max-w-full">
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); if (currentPageS > 1) setStillLearningPage(currentPageS - 1); }}
+                        className={cn(currentPageS <= 1 ? "pointer-events-none opacity-50" : "")}
+                      />
+                    </PaginationItem>
+                    <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                      <PaginationContent>
+                        {Array.from({ length: totalPagesS }, (_, i) => i + 1).map((p) => (
+                          <PaginationItem key={p}>
+                            <PaginationLink
+                              href="#"
+                              onClick={(e) => { e.preventDefault(); setStillLearningPage(p); }}
+                              isActive={p === currentPageS}
+                            >
+                              {p}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+                      </PaginationContent>
+                    </div>
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); if (currentPageS < totalPagesS) setStillLearningPage(currentPageS + 1); }}
+                        className={cn(currentPageS >= totalPagesS ? "pointer-events-none opacity-50" : "")}
+                      />
+                    </PaginationItem>
                   </div>
-                </div>
-              ))}
-            </div>
-          </>
-        ) : (
+                </Pagination>
+              )}
+            </>
+          );
+        })() : (
           emptyState("still-learning")
         )}
       </TabsContent>
 
       <TabsContent value="learned">
-        {learned.length > 0 ? (
-          <>
-            <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-              {learned.length} learned word{learned.length !== 1 ? "s" : ""}
-            </p>
-            <div className="space-y-4">
-              {learned.map((word) => (
-                <WordItem
-                  key={wordKey(word)}
-                  word={word}
-                  isLearned={true}
-                  isBookmarked={bookmarkedIds.has(wordKey(word))}
-                  onToggleBookmark={() => toggleBookmark(word.id, word.word)}
-                  onToggleLearned={() => toggleLearned(word.id, word.word)}
-                />
-              ))}
-            </div>
-          </>
-        ) : (
+        {learned.length > 0 ? (() => {
+          const totalPagesL = Math.max(1, Math.ceil(learned.length / ITEMS_PER_PAGE));
+          const currentPageL = Math.min(learnedPage, totalPagesL);
+          const startL = (currentPageL - 1) * ITEMS_PER_PAGE;
+          const pageWordsL = learned.slice(startL, startL + ITEMS_PER_PAGE);
+          return (
+            <>
+              <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
+                {learned.length} learned word{learned.length !== 1 ? "s" : ""}
+              </p>
+              <div className="space-y-4">
+                {pageWordsL.map((word) => (
+                  <WordItem
+                    key={wordKey(word)}
+                    word={word}
+                    isLearned={true}
+                    isBookmarked={bookmarkedIds.has(wordKey(word))}
+                    onToggleBookmark={() => toggleBookmark(word.id, word.word)}
+                    onToggleLearned={() => toggleLearned(word.id, word.word)}
+                  />
+                ))}
+              </div>
+              <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
+                Showing {startL + 1}&ndash;{Math.min(startL + ITEMS_PER_PAGE, learned.length)} of {learned.length}
+              </p>
+              {totalPagesL > 1 && (
+                <Pagination>
+                  <div className="flex items-center gap-0.5 max-w-full">
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); if (currentPageL > 1) setLearnedPage(currentPageL - 1); }}
+                        className={cn(currentPageL <= 1 ? "pointer-events-none opacity-50" : "")}
+                      />
+                    </PaginationItem>
+                    <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                      <PaginationContent>
+                        {Array.from({ length: totalPagesL }, (_, i) => i + 1).map((p) => (
+                          <PaginationItem key={p}>
+                            <PaginationLink
+                              href="#"
+                              onClick={(e) => { e.preventDefault(); setLearnedPage(p); }}
+                              isActive={p === currentPageL}
+                            >
+                              {p}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+                      </PaginationContent>
+                    </div>
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); if (currentPageL < totalPagesL) setLearnedPage(currentPageL + 1); }}
+                        className={cn(currentPageL >= totalPagesL ? "pointer-events-none opacity-50" : "")}
+                      />
+                    </PaginationItem>
+                  </div>
+                </Pagination>
+              )}
+            </>
+          );
+        })() : (
           emptyState("learned")
         )}
       </TabsContent>

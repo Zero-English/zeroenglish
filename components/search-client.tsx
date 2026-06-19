@@ -200,7 +200,7 @@ export function SearchClient({ words }: { words: Word[] }) {
               <div className="space-y-4">
                 {results.map((word) => (
                   <WordCard
-                    key={word.id}
+                    key={`${word.id}-${word.word}`}
                     word={word}
                     gradient={LEVEL_GRADIENT[word.level] || "from-zinc-500 to-zinc-400"}
                   />

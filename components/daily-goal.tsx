@@ -167,7 +167,7 @@ export function DailyGoalCard() {
                 const nextCol = monthLabels[idx + 1]?.col ?? weeks.length;
                 return (
                   <div
-                    key={m.label}
+                    key={`${m.label}-${m.col}`}
                     className="absolute text-[10px] text-zinc-400 top-0"
                     style={{
                       left: `${m.col * 14}px`,

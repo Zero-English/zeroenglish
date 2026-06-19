@@ -121,7 +121,7 @@ export function LevelWordsClient({ words, gradient }: LevelWordsClientProps) {
         <>
           <div className="space-y-4">
             {pageWords.map((word) => (
-              <WordCard key={word.id} word={word} gradient={gradient} />
+              <WordCard key={`${word.id}-${word.word}`} word={word} gradient={gradient} />
             ))}
           </div>
 

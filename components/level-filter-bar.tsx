@@ -52,26 +52,28 @@ export function LevelFilterBar({
 }: LevelFilterBarProps) {
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 py-3">
-      <div className="flex items-center gap-1 overflow-x-auto [&::-webkit-scrollbar]:hidden pb-1 sm:pb-0 flex-1">
-        {filters.map((f) => {
-          const Icon = f.icon;
-          const isActive = filter === f.value;
-          return (
-            <button
-              key={f.value}
-              onClick={() => onFilterChange(f.value)}
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-all border",
-                isActive
-                  ? "border-zinc-400 bg-zinc-100 text-zinc-900 dark:border-zinc-500 dark:bg-zinc-800 dark:text-zinc-100"
-                  : "border-transparent text-zinc-500 hover:text-zinc-700 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-zinc-200 dark:hover:bg-zinc-800/60"
-              )}
-            >
-              <Icon className="size-3.5" />
-              {f.label}
-            </button>
-          );
-        })}
+      <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
+        <div className="flex items-center gap-1 pb-1 sm:pb-0 flex-1">
+          {filters.map((f) => {
+            const Icon = f.icon;
+            const isActive = filter === f.value;
+            return (
+              <button
+                key={f.value}
+                onClick={() => onFilterChange(f.value)}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-all border",
+                  isActive
+                    ? "border-zinc-400 bg-zinc-100 text-zinc-900 dark:border-zinc-500 dark:bg-zinc-800 dark:text-zinc-100"
+                    : "border-transparent text-zinc-500 hover:text-zinc-700 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-zinc-200 dark:hover:bg-zinc-800/60"
+                )}
+              >
+                <Icon className="size-3.5" />
+                {f.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
       <div className="flex items-center gap-2 shrink-0">
         <ArrowUpDown className="size-3.5 text-zinc-400" />
