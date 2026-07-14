@@ -6,7 +6,7 @@
 
 **A completely free and open-source platform to learn English from zero.**
 
-Built for Bengali speakers with a full bilingual learning experience.
+Built for Bangla(Bengali) speakers with a full bilingual learning experience.
 
 [Features](#features) •
 [Getting Started](#getting-started) •
