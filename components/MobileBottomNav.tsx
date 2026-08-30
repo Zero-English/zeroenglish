@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
-import { Home, Search, User, BadgeQuestionMark, LogIn } from 'lucide-react'
+import { Home, Search, User, BadgeQuestionMark, LibraryBig, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -17,6 +17,7 @@ export function MobileBottomNav() {
   const isLoggedIn = status === 'guest' || status === 'authenticated'
   const links = [
     { href: '/', label: 'Home', icon: Home },
+    { href: '/vocabulary', label: 'Vocabulary', icon: LibraryBig },
     { href: '/search', label: 'Search', icon: Search },
     { href: '/quiz', label: 'Quiz', icon: BadgeQuestionMark },
     isLoggedIn

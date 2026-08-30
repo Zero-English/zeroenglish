@@ -74,8 +74,8 @@ export function Header() {
             <Menu className="h-6 w-6" />
           </button>
         </div>
-        <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center space-x-2 dark:bg-white dark:p-2 dark:rounded-md">
-          <Image src={logo} alt="Logo" className="h-5 w-auto" />
+        <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center space-x-2">
+          <Image src={logo} alt="Logo" className="h-5 w-auto dark:brightness-0 dark:invert" />
         </Link>
         <div className="flex items-center gap-1">
           <button
