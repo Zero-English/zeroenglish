@@ -1,73 +1,75 @@
 'use client'
 
-import { Home, Search, User, BadgeQuestionMark } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { motion } from 'motion/react'
+import { Home, Search, User, BadgeQuestionMark, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { useAuthStatus } from '@/lib/auth-store'
 
-type NavItem = {
-  label: string
-  href: string
-  icon: React.ElementType
-}
-
-const navItems: NavItem[] = [
-  {
-    label: 'Home',
-    href: '/',
-    icon: Home,
-  },
-  {
-    label: 'Search',
-    href: '/search',
-    icon: Search,
-  },
-  {
-    label: 'Quiz',
-    href: '/quiz',
-    icon: BadgeQuestionMark,
-  },
-  {
-    label: 'Profile',
-    href: '/profile',
-    icon: User,
-  },
-]
+const itemClass =
+  'flex flex-1 flex-col items-center gap-0.5 rounded-lg px-1 py-1.5 transition-colors'
 
 export function MobileBottomNav() {
   const pathname = usePathname()
+  const { status } = useAuthStatus()
+  const isLoggedIn = status === 'guest' || status === 'authenticated'
+  const links = [
+    { href: '/', label: 'Home', icon: Home },
+    { href: '/search', label: 'Search', icon: Search },
+    { href: '/quiz', label: 'Quiz', icon: BadgeQuestionMark },
+    isLoggedIn
+      ? { href: '/profile', label: 'Profile', icon: User }
+      : { href: '/login', label: 'Login', icon: LogIn },
+  ]
+  const [isHidden, setIsHidden] = useState(false)
+  const lastScrollY = useRef(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      if (currentScrollY > lastScrollY.current && currentScrollY > 300) {
+        setIsHidden(true)
+      } else {
+        setIsHidden(false)
+      }
+      lastScrollY.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <nav
-      className={cn(
-        'sticky bottom-0 left-0 right-0 z-30 border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80',
-        'md:hidden', // 👈 hide on desktop
-      )}
+    <motion.nav
+      animate={{ y: isHidden ? '100%' : '0%' }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 md:hidden"
     >
-      <div className="grid grid-cols-4">
-        {navItems.map((item) => {
-          const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
-
-          const Icon = item.icon
-
+      <div className="flex items-center justify-between p-1">
+        {links.map(({ href, label, icon: Icon }) => {
+          const active =
+            href === '/' ? pathname === '/' : pathname.startsWith(href)
           return (
             <Link
-              key={item.href}
-              href={item.href}
+              key={href}
+              href={href}
               className={cn(
-                'flex flex-col items-center justify-center py-2 text-xs transition-colors relative',
-                isActive
-                  ? 'text-primary before:absolute before:z-[-1] before:rounded-md before:bg-primary/10 before:p-1 before:max-w-[80px] before:w-[80%] before:h-[90%] before:animate-pulse'
-                  : 'text-muted-foreground hover:text-foreground',
+                itemClass,
+                active
+                  ? 'bg-foreground/10 text-foreground'
+                  : 'text-muted-foreground',
               )}
             >
-              <Icon className="h-5 w-5 mb-1" />
-              <span>{item.label}</span>
+              <Icon className="size-5" strokeWidth={active ? 2.5 : 2} />
+              <span className="text-[10px] font-medium leading-none">
+                {label}
+              </span>
             </Link>
           )
         })}
       </div>
-      <div className="h-7 bottom-spaces hidden"></div>
-    </nav>
+    </motion.nav>
   )
 }
