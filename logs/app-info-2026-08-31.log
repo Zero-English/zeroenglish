@@ -46,3 +46,99 @@ Invalid `prisma.$queryRaw()` invocation:
 
 
 Raw query failed. Code: `N/A`. Message: `Can't reach database server at base` 
+2026-08-31 15:33:46 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 15:33:46 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 15:43:39 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 15:43:39 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 16:03:19 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 16:03:19 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 17:21:06 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 17:21:06 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 17:46:25 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 17:46:25 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 17:53:06 [info]: Checking Prisma connection to DB at postgresql://postgres.mrdeeltxygstlftuburd:ZERO%400english%3F%26@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true 
+2026-08-31 17:53:06 [info]: Checking Prisma connection to DB at postgresql://postgres.mrdeeltxygstlftuburd:ZERO%400english%3F%26@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true 
+2026-08-31 17:53:08 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 17:53:08 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `XX000`. Message: `(ENOTFOUND) tenant/user postgres.mrdeeltxygstlftuburd not found` 
+2026-08-31 17:57:29 [info]: Checking Prisma connection to DB at postgresql://postgres.amyjoaejlpeggollsile:ZERO%400english%3F%26@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true 
+2026-08-31 17:57:29 [info]: Checking Prisma connection to DB at postgresql://postgres.amyjoaejlpeggollsile:ZERO%400english%3F%26@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true 
+2026-08-31 17:57:32 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `28P01`. Message: `password authentication failed for user "postgres"` 
+2026-08-31 17:57:32 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `28P01`. Message: `password authentication failed for user "postgres"` 
+2026-08-31 18:02:22 [info]: Checking Prisma connection to DB at postgresql://postgres.mrdeeltxygstlftuburd:ZERO%400english%3F%26@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true 
+2026-08-31 18:02:22 [info]: Checking Prisma connection to DB at postgresql://postgres.mrdeeltxygstlftuburd:ZERO%400english%3F%26@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true 
+2026-08-31 18:02:23 [info]: Database size is 10 MB 
+2026-08-31 18:02:23 [info]: Database size is 10 MB 
+2026-08-31 18:02:23 [info]: Database name is postgres 
+2026-08-31 18:02:23 [info]: Prisma is connected to DB: postgres at postgresql://postgres.mrdeeltxygstlftuburd:ZERO%400english%3F%26@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true. Database size: 10 MB 
+2026-08-31 18:02:23 [info]: Database name is postgres 
+2026-08-31 18:02:23 [info]: Prisma is connected to DB: postgres at postgresql://postgres.mrdeeltxygstlftuburd:ZERO%400english%3F%26@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true. Database size: 10 MB 
