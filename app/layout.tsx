@@ -3,12 +3,7 @@ import Script from "next/script";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Header } from "@/components/Header";
-import { Sidebar } from "@/components/Sidebar";
-import { SidebarProvider } from "@/components/sidebar-provider";
-import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { ThemeProvider } from "@/components/theme-provider";
-import Footer from "@/components/Footer";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -66,19 +61,7 @@ gtag('config', 'G-6BF3FVESN8');`}
           enableSystem
           disableTransitionOnChange
         >
-        <SidebarProvider>
-          <div className="flex flex-col min-h-screen md:flex-row">
-            <Sidebar />
-            <div className="flex flex-col flex-1 min-w-0">
-              <Header />
-              <main className="flex-1 min-w-0 w-full">
-                {children}
-              </main>
-              <MobileBottomNav/>
-              <Footer />
-            </div>
-          </div>
-        </SidebarProvider>
+          {children}
         </ThemeProvider>
         <Script
           id="sw-register"
