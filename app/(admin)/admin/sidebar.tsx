@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { PanelLeft, Users } from "lucide-react";
+import { PanelLeft, Users, LogOut } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -59,6 +59,27 @@ function NavLinks({
   );
 }
 
+function LogoutButton({
+  isOpen: showLabel,
+  onNavigate,
+}: {
+  isOpen: boolean;
+  onNavigate?: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onNavigate}
+      className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors gap-3 whitespace-nowrap ${
+        showLabel ? "" : "justify-center"
+      } text-gray-600 hover:text-rose-600 hover:bg-rose-50 dark:text-gray-400 dark:hover:text-rose-400 dark:hover:bg-rose-900/20`}
+    >
+      <LogOut className="h-5 w-5 shrink-0" />
+      {showLabel && <span className="truncate">Log out</span>}
+    </button>
+  );
+}
+
 export default function AdminSidebar({
   isOpen,
   isDesktopOpen,
@@ -101,6 +122,9 @@ export default function AdminSidebar({
           </button>
         </div>
         <NavLinks isOpen={isDesktopOpen} />
+        <div className="p-3">
+          <LogoutButton isOpen={isDesktopOpen} />
+        </div>
       </motion.aside>
 
       {/* Mobile drawer (shadcn Sheet) */}
@@ -117,6 +141,9 @@ export default function AdminSidebar({
             <span className="text-xs font-medium text-primary">Admin</span>
           </div>
           <NavLinks isOpen onNavigate={close} />
+          <div className="mt-auto border-t border-gray-200 p-3 dark:border-gray-800">
+            <LogoutButton isOpen onNavigate={close} />
+          </div>
         </SheetContent>
       </Sheet>
     </>

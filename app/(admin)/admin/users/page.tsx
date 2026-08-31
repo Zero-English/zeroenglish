@@ -8,6 +8,7 @@ import {
   Trash2,
   Ban,
   Mail,
+  Pencil,
 } from "lucide-react";
 import { dummyUsers, type AdminUser } from "../_data/users";
 
@@ -18,6 +19,7 @@ export default function AdminUsersPage() {
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
+  const [message, setMessage] = useState<string | null>(null);
 
   const totalPages = pageSize === 0 ? 1 : Math.ceil(dummyUsers.length / pageSize);
   const currentUsers = useMemo(() => {
@@ -63,6 +65,46 @@ export default function AdminUsersPage() {
     setSelected(new Set());
   }
 
+  function editUser(user: AdminUser) {
+    setMessage(`Edit user opened for ${user.name} (id: ${user.id})`);
+    setTimeout(() => setMessage(null), 2500);
+  }
+
+  function suspendUser(user: AdminUser) {
+    setMessage(
+      `${user.name} (id: ${user.id}) is now ${
+        user.status === "Active" ? "suspended" : "reactivated"
+      }`
+    );
+    setTimeout(() => setMessage(null), 2500);
+  }
+
+  function emailUser(user: AdminUser) {
+    setMessage(`Email draft opened for ${user.name} (${user.email})`);
+    setTimeout(() => setMessage(null), 2500);
+  }
+
+  function deleteUser(user: AdminUser) {
+    setMessage(`Deleted user ${user.name} (id: ${user.id})`);
+    setTimeout(() => setMessage(null), 2500);
+  }
+
+  function bulkEmail() {
+    setMessage(`Email draft opened for ${selectedList.length} selected user(s)`);
+    setTimeout(() => setMessage(null), 2500);
+  }
+
+  function bulkSuspend() {
+    setMessage(`Suspend action applied to ${selectedList.length} selected user(s)`);
+    setTimeout(() => setMessage(null), 2500);
+  }
+
+  function bulkDelete() {
+    setMessage(`Deleted ${selectedList.length} selected user(s)`);
+    setSelected(new Set());
+    setTimeout(() => setMessage(null), 2500);
+  }
+
   const selectedList: AdminUser[] = dummyUsers.filter((u) => selected.has(u.id));
 
   return (
@@ -71,6 +113,11 @@ export default function AdminUsersPage() {
         <p className="text-sm text-gray-500 dark:text-gray-400">
           All registered users ({dummyUsers.length})
         </p>
+        {message && (
+          <div className="mt-3 inline-flex rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300">
+            {message}
+          </div>
+        )}
       </header>
 
       {selectedList.length > 0 && (
@@ -96,6 +143,7 @@ export default function AdminUsersPage() {
             </button>
             <button
               type="button"
+              onClick={bulkEmail}
               className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
             >
               <Mail className="h-3.5 w-3.5" />
@@ -103,6 +151,7 @@ export default function AdminUsersPage() {
             </button>
             <button
               type="button"
+              onClick={bulkSuspend}
               className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
             >
               <Ban className="h-3.5 w-3.5" />
@@ -110,6 +159,7 @@ export default function AdminUsersPage() {
             </button>
             <button
               type="button"
+              onClick={bulkDelete}
               className="inline-flex items-center gap-1.5 rounded-md border border-rose-200 px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 dark:border-rose-800 dark:text-rose-400 dark:hover:bg-rose-900/30 transition-colors"
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -149,6 +199,7 @@ export default function AdminUsersPage() {
                 <th className="px-4 py-2.5 font-medium">Quiz Result</th>
                 <th className="px-4 py-2.5 font-medium">Role</th>
                 <th className="px-4 py-2.5 font-medium">Status</th>
+                <th className="px-4 py-2.5 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -188,13 +239,13 @@ export default function AdminUsersPage() {
                     {user.email}
                   </td>
                   <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
-                    {user.bookmarked}
+                    {user.bookmarked.length}
                   </td>
                   <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
-                    {user.stillLearning}
+                    {user.stillLearning.length}
                   </td>
                   <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
-                    {user.learned}
+                    {user.learned.length}
                   </td>
                   <td className="px-4 py-2.5">
                     <span
@@ -230,6 +281,49 @@ export default function AdminUsersPage() {
                     >
                       {user.status}
                     </span>
+                  </td>
+                  <td className="px-4 py-2.5">
+                    <div
+                      className="flex items-center gap-1"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => editUser(user)}
+                        title="Edit"
+                        aria-label={`Edit ${user.name}`}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => suspendUser(user)}
+                        title={user.status === "Active" ? "Suspend" : "Reactivate"}
+                        aria-label={`${user.status === "Active" ? "Suspend" : "Reactivate"} ${user.name}`}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        <Ban className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => emailUser(user)}
+                        title="Email"
+                        aria-label={`Email ${user.name}`}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        <Mail className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteUser(user)}
+                        title="Delete"
+                        aria-label={`Delete ${user.name}`}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-rose-200 text-rose-600 hover:bg-rose-50 dark:border-rose-800 dark:text-rose-400 dark:hover:bg-rose-900/30 transition-colors"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
