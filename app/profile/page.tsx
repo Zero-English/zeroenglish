@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { getAllWords } from "@/lib/data";
 import { ProfileTabs } from "@/components/profile-words";
+import { ProfileGuard } from "@/components/profile-guard";
+import { ProfileAuthBanner } from "@/components/profile-auth-banner";
 
 export const metadata: Metadata = {
   title: "My Profile",
@@ -26,7 +28,10 @@ export default function ProfilePage() {
             </p>
           </div>
 
-          <ProfileTabs words={words} />
+          <ProfileGuard>
+            <ProfileAuthBanner />
+            <ProfileTabs words={words} />
+          </ProfileGuard>
         </div>
       </div>
     </div>

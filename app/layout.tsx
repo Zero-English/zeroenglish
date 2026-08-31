@@ -7,6 +7,7 @@ import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
 import { SidebarProvider } from "@/components/sidebar-provider";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { ThemeProvider } from "@/components/theme-provider";
 import FFooter from "@/components/FFooter";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
@@ -59,25 +60,26 @@ gtag('config', 'G-6BF3FVESN8');`}
         </Script>
       </head>
       <body className="min-h-full">
-        <script
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html: `!function(){const e=matchMedia("(prefers-color-scheme: dark)");e.matches&&document.documentElement.classList.add("dark"),e.addEventListener("change",function(){document.documentElement.classList.toggle("dark",e.matches)})}()`,
-          }}
-        />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
         <SidebarProvider>
-            <div className="flex flex-col min-h-screen">
+          <div className="flex flex-col min-h-screen md:flex-row">
+            <Sidebar />
+            <div className="flex flex-col flex-1 min-w-0">
               <Header />
-              <main className="w-full flex flex-col md:flex-row flex-1">
-                <Sidebar />
-                <div className="flex-1 min-w-0">
-                  {children}
-                </div>
+              <main className="flex-1 min-w-0 w-full">
+                {children}
               </main>
               <MobileBottomNav/>
               <FFooter />
+            </div>
           </div>
         </SidebarProvider>
+        </ThemeProvider>
         <Script
           id="sw-register"
           strategy="lazyOnload"
