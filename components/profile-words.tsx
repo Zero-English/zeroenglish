@@ -18,6 +18,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { DailyGoalCard } from "@/components/daily-goal";
 import { useActiveTab, setActiveTab } from "@/lib/profile-tab-store";
 import { useQuizActivity } from "@/lib/use-quiz-activity";
+import { Classic } from "@/components/classic";
 
 const ITEMS_PER_PAGE = 10;
 import {
@@ -172,8 +173,8 @@ export function ProfileTabs({ words }: { words: Word[] }) {
 
   if (!loaded) {
     return (
-      <div className="text-center py-20 text-zinc-400 text-sm">
-        Loading...
+      <div className="flex items-center justify-center py-20 text-zinc-400">
+        <Classic className="size-6" />
       </div>
     );
   }

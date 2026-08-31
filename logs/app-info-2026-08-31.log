@@ -1,0 +1,48 @@
+2026-08-31 06:16:30 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `N/A`. Message: `Can't reach database server at base` 
+2026-08-31 06:16:30 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `N/A`. Message: `Can't reach database server at base` 
+2026-08-31 06:31:20 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `N/A`. Message: `Can't reach database server at base` 
+2026-08-31 06:31:20 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `N/A`. Message: `Can't reach database server at base` 
+2026-08-31 06:31:57 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `N/A`. Message: `Can't reach database server at base` 
+2026-08-31 06:31:57 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `N/A`. Message: `Can't reach database server at base` 
+2026-08-31 06:34:12 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `N/A`. Message: `Can't reach database server at base` 
+2026-08-31 06:34:12 [warn]: ERROR ON PRISMA INITIAL CONNECTION AND INITIAL HEALTH CHECK.
+Can't connect to DB. PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `N/A`. Message: `Can't reach database server at base` 

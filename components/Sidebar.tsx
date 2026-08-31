@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { PanelLeft, Home, Search, User, BookOpenCheck, LogIn } from "lucide-react";
+import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, LogIn } from "lucide-react";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus } from "@/lib/auth-store";
 import {
@@ -26,6 +26,7 @@ function NavLinks({
   const isLoggedIn = status === "guest" || status === "authenticated";
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
+    { href: "/vocabulary", label: "Vocabulary", icon: LibraryBig },
     { href: "/search", label: "Search", icon: Search },
     { href: "/quiz", label: "Quiz", icon: BookOpenCheck },
     isLoggedIn
@@ -106,9 +107,9 @@ export function Sidebar() {
             <Link
               href="/"
               onClick={close}
-              className="flex items-center space-x-2 dark:bg-white dark:p-2 dark:rounded-md"
+              className="flex items-center space-x-2"
             >
-              <Image src={logo} alt="Logo" className="h-5 w-auto" />
+              <Image src={logo} alt="Logo" className="h-5 w-auto dark:brightness-0 dark:invert" />
             </Link>
           </div>
           <NavLinks isOpen onNavigate={close} />

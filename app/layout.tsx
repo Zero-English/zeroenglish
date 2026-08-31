@@ -8,7 +8,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { SidebarProvider } from "@/components/sidebar-provider";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { ThemeProvider } from "@/components/theme-provider";
-import FFooter from "@/components/FFooter";
+import Footer from "@/components/Footer";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -75,7 +75,7 @@ gtag('config', 'G-6BF3FVESN8');`}
                 {children}
               </main>
               <MobileBottomNav/>
-              <FFooter />
+              <Footer />
             </div>
           </div>
         </SidebarProvider>

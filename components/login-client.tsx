@@ -6,6 +6,7 @@ import { useAuthStore, useAuthHydrated } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { UserRound, GraduationCap } from "lucide-react";
+import { Classic } from "@/components/classic";
 
 function GoogleIcon() {
   return (
@@ -45,8 +46,8 @@ export function LoginClient() {
 
   if (!hydrated) {
     return (
-      <div className="flex min-h-dvh items-center justify-center text-sm text-zinc-400">
-        Loading...
+      <div className="flex min-h-dvh items-center justify-center text-zinc-400">
+        <Classic className="size-6" />
       </div>
     );
   }
