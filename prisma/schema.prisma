@@ -12,16 +12,60 @@ datasource db {
   provider = "postgresql"
 }
 
-model user {
-  id         Int      @id @unique @default(autoincrement())
+model User {
+  id         Int      @id @default(autoincrement())
   user_name  String
   email      String   @unique
-  password   String
+  emailVerified DateTime?
   role       Roles    @default(user)
+
+   accounts      Account[]
+  sessions      Session[]
   
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
+
+model Account {
+  id                Int     @id @default(autoincrement())
+
+  userId            Int
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type              String
+  provider          String
+  providerAccountId String
+
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+
+  sessionToken String   @unique
+
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  expires      DateTime
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
 
 enum Roles {
   user
