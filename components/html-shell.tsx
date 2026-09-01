@@ -1,11 +1,10 @@
-import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
-import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import "@/app/globals.css";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,21 +16,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Learn English Oxford 3000 Word Vocabulary in Bangla | Zero English",
-  description: "Master 3000 essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to B2 levels covered.",
-  manifest: "/manifest.webmanifest",
-  icons: "/assets/icon.jpeg",
-  other: {
-    "theme-color": "#f97316",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
-
-export default function RootLayout({
+export default function HtmlShell({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -39,7 +24,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
+      className={cn(
+        "h-full",
+        "antialiased",
+        geistSans.variable,
+        geistMono.variable,
+        "font-sans",
+        inter.variable
+      )}
       suppressHydrationWarning
     >
       <head>
