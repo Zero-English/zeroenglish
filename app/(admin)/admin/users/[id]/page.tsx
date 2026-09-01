@@ -1,8 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Bookmark, BookOpen, GraduationCap, ClipboardCheck, CalendarDays, Flame } from "lucide-react";
+import { ArrowLeft, Bookmark, BookOpen, GraduationCap, ClipboardCheck, Hash } from "lucide-react";
 import { dummyUsers, getUserById } from "../../_data/users";
+import UserActions from "./user-actions";
 
 export const metadata: Metadata = {
   title: "User Detail | Admin — Zero English",
@@ -18,9 +19,9 @@ export default async function SingleUserPage({ params }: { params: Promise<{ id:
   if (!user) notFound();
 
   const stats = [
-    { label: "Bookmarked", value: user.bookmarked, icon: Bookmark },
-    { label: "Still Learning", value: user.stillLearning, icon: BookOpen },
-    { label: "Learned", value: user.learned, icon: GraduationCap },
+    { label: "Bookmarked", value: user.bookmarked.length, icon: Bookmark },
+    { label: "Still Learning", value: user.stillLearning.length, icon: BookOpen },
+    { label: "Learned", value: user.learned.length, icon: GraduationCap },
     { label: "Quiz Result", value: `${user.quizResult}%`, icon: ClipboardCheck },
   ];
 
@@ -66,20 +67,11 @@ export default async function SingleUserPage({ params }: { params: Promise<{ id:
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              {user.email} · Level {user.level}
+              {user.email}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-          <span className="inline-flex items-center gap-1.5">
-            <CalendarDays className="h-4 w-4" />
-            Joined {user.joinedAt}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Flame className="h-4 w-4 text-orange-500" />
-            {user.studyStreak}-day streak
-          </span>
-        </div>
+        <UserActions user={user} />
       </header>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -101,6 +93,32 @@ export default async function SingleUserPage({ params }: { params: Promise<{ id:
         ))}
       </section>
 
+      <section className="mt-8 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
+        <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 px-5 py-4">
+          <Hash className="h-4 w-4 text-primary" />
+          <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+            Vocabulary IDs
+          </h2>
+        </div>
+        <div className="grid gap-6 p-5 lg:grid-cols-3">
+          <VocabGroup
+            title="Learned"
+            badgeColor="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+            ids={user.learned}
+          />
+          <VocabGroup
+            title="Still Learning"
+            badgeColor="bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+            ids={user.stillLearning}
+          />
+          <VocabGroup
+            title="Bookmarked"
+            badgeColor="bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-400"
+            ids={user.bookmarked}
+          />
+        </div>
+      </section>
+
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
           <div className="border-b border-gray-200 dark:border-gray-800 px-5 py-4">
@@ -113,7 +131,6 @@ export default async function SingleUserPage({ params }: { params: Promise<{ id:
               ["Name", user.name],
               ["Email", user.email],
               ["Role", user.role],
-              ["Level", user.level],
               ["Status", user.status],
               ["Total Words Studied", String(user.totalWordsStudied)],
               ["Joined", user.joinedAt],
@@ -225,6 +242,41 @@ export default async function SingleUserPage({ params }: { params: Promise<{ id:
             ))}
           </ul>
         </section>
+      </div>
+    </div>
+  );
+}
+
+function VocabGroup({
+  title,
+  badgeColor,
+  ids,
+}: {
+  title: string;
+  badgeColor: string;
+  ids: number[];
+}) {
+  return (
+    <div>
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+          {title}
+        </h3>
+        <span
+          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${badgeColor}`}
+        >
+          {ids.length} words
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {ids.map((id) => (
+          <span
+            key={id}
+            className="inline-flex h-7 min-w-7 items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-2 text-xs font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
+          >
+            {id}
+          </span>
+        ))}
       </div>
     </div>
   );
