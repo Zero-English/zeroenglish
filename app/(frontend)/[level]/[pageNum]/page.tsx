@@ -8,6 +8,8 @@ const ITEMS_PER_PAGE = 10;
 
 export const revalidate = 3600;
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   const params: { level: string; pageNum: string }[] = [];
   for (const level of VALID_LEVELS) {
