@@ -4,6 +4,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import SessionProvider from "@/components/session-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -69,7 +70,7 @@ gtag('config', 'G-6BF3FVESN8');`}
                     enableSystem
                     disableTransitionOnChange
                 >
-                    {children}
+                    <SessionProvider>{children}</SessionProvider>
                 </ThemeProvider>
                 <Script
                     id="sw-register"
