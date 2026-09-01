@@ -15,6 +15,7 @@ const prisma = new PrismaClient({ adapter });
 
 export const connectionCheck = async () => {
     try {
+        logger.info(`Checking Prisma connection to DB at ${connectionString}`);
         const [sizeResult] = await prisma.$queryRaw<
             { size: string }[]
         >`SELECT pg_size_pretty(pg_database_size(current_database())) as size`;
