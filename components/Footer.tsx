@@ -22,7 +22,7 @@ export default function FFooter() {
     Company: [
       { label: "About", href: "#" },
       { label: "Contact", href: "#" },
-      { label: "Privacy Policy", href: "#" },
+      { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "#" },
     ],
   };
@@ -95,7 +95,7 @@ export default function FFooter() {
             &copy; {currentYear} Zero English. All rights reserved.
           </p>
           <div className="flex space-x-6">
-            <Link href="#" className="hover:text-foreground transition-colors">
+            <Link href="/privacy" className="hover:text-foreground transition-colors">
               Privacy
             </Link>
             <Link href="#" className="hover:text-foreground transition-colors">
