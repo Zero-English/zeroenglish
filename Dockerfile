@@ -35,10 +35,11 @@ RUN npx prisma generate
 # Build the Next.js application (produces .next/standalone)
 RUN npm run build
 
-# Prepare the standalone runtime: copy static assets and the generated Prisma client
-# into the standalone folder so the traced server can serve them.
+# Prepare the standalone runtime: copy static assets, word data and the generated
+# Prisma client into the standalone folder so the traced server can serve them.
 RUN cp -r public .next/standalone/public \
     && cp -r .next/static .next/standalone/.next/static \
+    && cp -r data .next/standalone/data \
     && cp -r generated .next/standalone/generated \
     && cp -r prisma .next/standalone/prisma \
     && mkdir -p .next/standalone/logs
@@ -62,6 +63,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssl libssl-
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/data ./data
 COPY --from=builder --chown=nextjs:nodejs /app/generated ./generated
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
