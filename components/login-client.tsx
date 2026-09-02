@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useAuthStore, useAuthHydrated } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -38,16 +36,8 @@ function GoogleIcon() {
 }
 
 export function LoginClient() {
-    const router = useRouter();
-    const continueAsGuest = useAuthStore((s) => s.continueAsGuest);
-    const status = useAuthStore((s) => s.status);
-    const hydrated = useAuthHydrated();
-
-    useEffect(() => {
-        if (hydrated && status !== "none") {
-            router.replace("/profile");
-        }
-    }, [hydrated, status, router]);
+  const continueAsGuest = useAuthStore((s) => s.continueAsGuest);
+  const hydrated = useAuthHydrated();
 
     if (!hydrated) {
         return (
@@ -57,18 +47,12 @@ export function LoginClient() {
         );
     }
 
-    if (status !== "none") {
-        return null;
-    }
+  // TODO: wire Google OAuth once the backend exposes it.
+  const handleGoogle = () => {};
 
-    const handleGoogle = () => {
-        void signInGoogle("/profile");
-    };
-
-    const handleGuest = () => {
-        continueAsGuest();
-        router.push("/profile");
-    };
+  const handleGuest = () => {
+    continueAsGuest();
+  };
 
     return (
         <div className="relative min-h-dvh overflow-hidden">

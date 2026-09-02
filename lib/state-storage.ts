@@ -1,19 +1,10 @@
 "use client";
 
 import type { PersistStorage, StorageValue } from "zustand/middleware";
-import { db } from "./db";
 
-export function createDexieStorage<T>(): PersistStorage<T> {
+export function createLocalStorage<T>(): PersistStorage<T> {
   return {
-    getItem: async (name) => {
-      if (db) {
-        try {
-          const entry = await db.state.get(name);
-          if (entry) return JSON.parse(entry.value) as StorageValue<T>;
-        } catch {
-          // fall through to localStorage
-        }
-      }
+    getItem: (name) => {
       const raw = localStorage.getItem(name);
       if (!raw) return null;
       try {
@@ -23,26 +14,11 @@ export function createDexieStorage<T>(): PersistStorage<T> {
       }
     },
 
-    setItem: async (name, value) => {
-      const serialized = JSON.stringify(value);
-      if (db) {
-        try {
-          await db.state.put({ key: name, value: serialized, timestamp: Date.now() });
-        } catch {
-          // fall through to localStorage
-        }
-      }
-      localStorage.setItem(name, serialized);
+    setItem: (name, value) => {
+      localStorage.setItem(name, JSON.stringify(value));
     },
 
-    removeItem: async (name) => {
-      if (db) {
-        try {
-          await db.state.delete(name);
-        } catch {
-          // fall through to localStorage
-        }
-      }
+    removeItem: (name) => {
       localStorage.removeItem(name);
     },
   };
