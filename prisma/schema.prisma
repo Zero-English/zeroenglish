@@ -13,13 +13,15 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  user_name  String
-  email      String   @unique
+  id            Int      @id @default(autoincrement())
+  name          String?
+  user_name     String
+  email         String   @unique
   emailVerified DateTime?
-  role       Roles    @default(user)
+  image         String?
+  role          Roles    @default(user)
 
-   accounts      Account[]
+  accounts      Account[]
   sessions      Session[]
   
   created_at DateTime @default(now())
