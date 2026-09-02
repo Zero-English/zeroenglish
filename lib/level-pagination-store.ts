@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { createDexieStorage } from "./state-storage";
+import { createLocalStorage } from "./state-storage";
 import type { FilterType, SortType } from "@/components/level-filter-bar";
 
 export type { FilterType, SortType };
@@ -20,7 +20,7 @@ const useLevelPaginationStore = create<LevelPaginationState>()(
     () => ({}),
     {
       name: "level-pagination",
-      storage: createDexieStorage<LevelPaginationState>(),
+      storage: createLocalStorage<LevelPaginationState>(),
       partialize: (state) => state,
     }
   )
