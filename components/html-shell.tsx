@@ -1,10 +1,10 @@
+import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionProvider from "@/components/session-provider";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({

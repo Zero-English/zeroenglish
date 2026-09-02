@@ -6,8 +6,8 @@ import "dotenv/config";
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
-    secret: process.env.AUTH_SECRET,
-    session: { strategy: "database" },
+    secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+    session: { strategy: "jwt" },
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID || "",
@@ -15,9 +15,9 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        session({ session, user }) {
-            if (session.user && user?.id) {
-                session.user.id = user.id as unknown as number;
+        session({ session, token }) {
+            if (session.user && token?.sub) {
+                session.user.id = Number(token.sub);
             }
             return session;
         },
