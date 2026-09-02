@@ -4,9 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, LogIn } from "lucide-react";
+import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, LogIn, LogOut } from "lucide-react";
 import { useSidebar } from "@/components/sidebar-provider";
-import { useAuthStatus } from "@/lib/auth-store";
+import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
 import {
   Sheet,
   SheetContent,
@@ -70,8 +70,37 @@ function NavLinks({
   );
 }
 
+function LogoutButton({
+  showLabels,
+  onLogout,
+}: {
+  showLabels: boolean;
+  onLogout: () => void;
+}) {
+  return (
+    <div className="border-t border-gray-200 dark:border-gray-800 p-3">
+      <button
+        type="button"
+        onClick={onLogout}
+        className="flex items-center w-full px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors gap-3 whitespace-nowrap"
+      >
+        <LogOut className="h-5 w-5 shrink-0" />
+        {showLabels && <span className="truncate">Log out</span>}
+      </button>
+    </div>
+  );
+}
+
 export function Sidebar() {
   const { isOpen, isDesktopOpen, close, toggleDesktop } = useSidebar();
+  const { status } = useAuthStatus();
+  const logout = useAuthStore((s) => s.logout);
+  const isLoggedIn = status !== "none";
+
+  const handleLogout = () => {
+    logout();
+    close();
+  };
 
   return (
     <>
@@ -93,6 +122,9 @@ export function Sidebar() {
         </div>
         <div className="flex flex-col flex-1 overflow-hidden">
           <NavLinks isOpen={isDesktopOpen} />
+          {isLoggedIn && (
+            <LogoutButton showLabels={isDesktopOpen} onLogout={handleLogout} />
+          )}
         </div>
       </motion.aside>
 
@@ -112,7 +144,12 @@ export function Sidebar() {
               <Image src={logo} alt="Logo" className="h-5 w-auto dark:brightness-0 dark:invert" />
             </Link>
           </div>
-          <NavLinks isOpen onNavigate={close} />
+          <div className="flex flex-col flex-1 overflow-hidden">
+            <NavLinks isOpen onNavigate={close} />
+            {isLoggedIn && (
+              <LogoutButton showLabels onLogout={handleLogout} />
+            )}
+          </div>
         </SheetContent>
       </Sheet>
     </>
