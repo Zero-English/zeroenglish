@@ -23,7 +23,7 @@ function NavLinks({
 }) {
   const pathname = usePathname();
   const { status } = useAuthStatus();
-  const isLoggedIn = status === "guest" || status === "authenticated";
+  const isLoggedIn = status !== "none";
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
     { href: "/vocabulary", label: "Vocabulary", icon: LibraryBig },

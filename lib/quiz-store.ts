@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { createDexieStorage } from "./state-storage";
+import { createLocalStorage } from "./state-storage";
 import type { Word } from "@/lib/data";
 
 export type Step = "select" | "settings" | "quiz" | "results";
@@ -58,7 +58,7 @@ export const useQuizStore = create<QuizState>()(
     () => initialState,
     {
       name: "quiz-state",
-      storage: createDexieStorage<QuizState>(),
+      storage: createLocalStorage<QuizState>(),
       partialize: (state) => state,
     }
   )

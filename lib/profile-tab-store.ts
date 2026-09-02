@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { createDexieStorage } from "./state-storage";
+import { createLocalStorage } from "./state-storage";
 
 interface ProfileTabState {
   activeTab: string;
@@ -13,7 +13,7 @@ export const useProfileTabStore = create<ProfileTabState>()(
     () => ({ activeTab: "overview" }),
     {
       name: "profile-tab",
-      storage: createDexieStorage<ProfileTabState>(),
+      storage: createLocalStorage<ProfileTabState>(),
       partialize: (state) => ({ activeTab: state.activeTab }),
     }
   )

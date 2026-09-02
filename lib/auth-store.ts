@@ -3,52 +3,57 @@
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { createDexieStorage } from "./state-storage";
+import { createLocalStorage } from "./state-storage";
 
-export type AuthStatus = "none" | "guest" | "authenticated";
-export type AuthMethod = "google" | "guest" | null;
+export type AuthStatus = "none" | "guest";
+
+export interface AuthPersistedProfile {
+  status?: "guest";
+  userName?: string;
+  userEmail?: string | null;
+}
 
 interface AuthState {
   status: AuthStatus;
-  method: AuthMethod;
   userName: string | null;
   userEmail: string | null;
   continueAsGuest: () => void;
-  continueWithGoogle: () => void;
-  bindAccount: () => void;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
-  persist(
+  persist<AuthState, [], [], AuthPersistedProfile>(
     (set) => ({
       status: "none",
-      method: null,
       userName: null,
       userEmail: null,
       continueAsGuest: () =>
-        set({ status: "guest", method: "guest", userName: "Guest", userEmail: null }),
-      continueWithGoogle: () =>
-        set({
-          status: "authenticated",
-          method: "google",
-          userName: "Google User",
-          userEmail: "user@gmail.com",
-        }),
-      bindAccount: () =>
-        set({
-          status: "authenticated",
-          method: "google",
-          userName: "Google User",
-          userEmail: "user@gmail.com",
-        }),
+        set({ status: "guest", userName: "Guest", userEmail: null }),
       logout: () =>
-        set({ status: "none", method: null, userName: null, userEmail: null }),
+        set({ status: "none", userName: null, userEmail: null }),
     }),
     {
       name: "auth-state",
-      storage: createDexieStorage<AuthState>(),
+      storage: createLocalStorage<AuthPersistedProfile>(),
       skipHydration: true,
+      partialize: (state) => {
+        if (state.status !== "guest") return {};
+        return {
+          status: "guest",
+          userName: state.userName ?? "Guest",
+          userEmail: state.userEmail,
+        };
+      },
+      merge: (persisted, current) => {
+        const saved = persisted as AuthPersistedProfile | undefined;
+        if (!saved || saved.status !== "guest") return current;
+        return {
+          ...current,
+          status: "guest",
+          userName: saved.userName ?? "Guest",
+          userEmail: saved.userEmail ?? null,
+        };
+      },
     }
   )
 );

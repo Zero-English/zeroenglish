@@ -28,8 +28,10 @@ function GoogleIcon() {
 }
 
 export function BindAccount() {
-  const bindAccount = useAuthStore((s) => s.bindAccount);
   const logout = useAuthStore((s) => s.logout);
+
+  // TODO: wire to the backend OAuth flow once it's available.
+  const handleBindGoogle = () => {};
 
   return (
     <div className="rounded-2xl border border-orange-200/70 dark:border-orange-800/50 bg-gradient-to-br from-orange-50/90 to-amber-50/60 dark:from-orange-950/30 dark:to-amber-950/20 backdrop-blur-sm p-5 sm:p-6 mb-6">
@@ -52,7 +54,7 @@ export function BindAccount() {
           <Button
             variant="default"
             className="h-10 gap-2 bg-orange-600 hover:bg-orange-700 text-white"
-            onClick={bindAccount}
+            onClick={handleBindGoogle}
           >
             <GoogleIcon />
             Continue with Google

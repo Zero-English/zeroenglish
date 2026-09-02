@@ -14,7 +14,7 @@ const itemClass =
 export function MobileBottomNav() {
   const pathname = usePathname()
   const { status } = useAuthStatus()
-  const isLoggedIn = status === 'guest' || status === 'authenticated'
+  const isLoggedIn = status !== 'none'
   const links = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/vocabulary', label: 'Vocabulary', icon: LibraryBig },
