@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { UserRound, GraduationCap } from "lucide-react";
 import { Classic } from "@/components/classic";
-import "dotenv/config";
 
 async function signInGoogle(callbackUrl: string = "/profile") {
     const { signIn } = await import("next-auth/react");
@@ -47,8 +46,9 @@ export function LoginClient() {
         );
     }
 
-  // TODO: wire Google OAuth once the backend exposes it.
-  const handleGoogle = () => {};
+  const handleGoogle = () => {
+    void signInGoogle("/profile");
+  };
 
   const handleGuest = () => {
     continueAsGuest();
