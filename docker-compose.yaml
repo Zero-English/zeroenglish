@@ -16,3 +16,23 @@ services:
             # Persist winston daily-rotate logs written to /app/logs
             - ./logs:/app/logs
         restart: unless-stopped
+
+    dev:
+        image: node:24-bookworm
+        container_name: zeroenglish-dev
+        working_dir: /app
+        command: sh -c "npm ci && npm run dev"
+        volumes:
+            - .:/app
+            - /app/node_modules
+            - /app/.next
+        ports:
+            - "3000:3000"
+        env_file:
+            - .env
+        environment:
+            - NODE_ENV=development
+            - PORT=3000
+            - HOSTNAME=0.0.0.0
+        stdin_open: true
+        tty: true
