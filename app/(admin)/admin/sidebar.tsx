@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { PanelLeft, Users, LogOut } from "lucide-react";
+import { PanelLeft, Users, BookOpen, LogOut } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -12,6 +12,7 @@ import {
 
 const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
+  { href: "/admin/vocabulary", label: "Vocabulary", icon: BookOpen },
 ];
 
 function NavLinks({
