@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Search,
   Plus,
@@ -33,7 +33,6 @@ import { Badge } from "@/components/ui/badge";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  dummyVocabulary,
   levelOptions,
   partsOfSpeechOptions,
   type VocabularyWord,
@@ -50,8 +49,43 @@ const levelVariant: Record<VocabularyWord["level"], "level"> = {
   C2: "level",
 };
 
+function mapApiWordToVocabulary(w: ApiWord): VocabularyWord {
+  return {
+    id: w.id,
+    word: w.word,
+    meaningBn: w.meaningBn,
+    definitionEn: w.definitionEn,
+    definitionBn: w.definitionBn,
+    examplesEn: w.examplesEn,
+    examplesBn: w.examplesBn,
+    synonyms: w.synonyms,
+    antonyms: w.antonyms,
+    level: w.level,
+    category: w.category,
+    partsOfSpeech: w.wordType[0] ?? "noun",
+  };
+}
+
+type ApiWord = {
+  id: number;
+  word: string;
+  meaningBn: string[];
+  definitionEn: string;
+  definitionBn: string;
+  examplesEn: string[];
+  examplesBn: string[];
+  synonyms: string[];
+  antonyms: string[];
+  level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+  category: string;
+  wordType: string[];
+  createdAt: string;
+  updatedAt: string;
+};
+
 export default function AdminVocabularyPage() {
-  const [words, setWords] = useState<VocabularyWord[]>(dummyVocabulary);
+  const [words, setWords] = useState<VocabularyWord[]>([]);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [search, setSearch] = useState("");
@@ -69,6 +103,25 @@ export default function AdminVocabularyPage() {
   const [importError, setImportError] = useState<string | null>(null);
 
   const messageTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    fetchWords();
+  }, []);
+
+  async function fetchWords() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/v1/words");
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        setWords(json.data.map(mapApiWordToVocabulary));
+      }
+    } catch {
+      notify("Failed to load words");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function notify(msg: string) {
     setMessage(msg);
@@ -125,29 +178,73 @@ export default function AdminVocabularyPage() {
     setPage(1);
   }
 
-  function handleDelete(w: VocabularyWord) {
-    setWords((prev) => prev.filter((x) => x.id !== w.id));
-    notify(`Deleted "${w.word}"`);
-  }
-
-  function handleSave(data: Omit<VocabularyWord, "id">) {
-    if (editing) {
-      setWords((prev) =>
-        prev.map((x) =>
-          x.id === editing.id ? { ...data, id: editing.id } : x
-        )
-      );
-      notify(`Updated "${data.word}"`);
-    } else {
-      const newId = words.length > 0 ? Math.max(...words.map((x) => x.id)) + 1 : 1;
-      setWords((prev) => [...prev, { ...data, id: newId }]);
-      notify(`Added "${data.word}"`);
+  async function handleDelete(w: VocabularyWord) {
+    try {
+      const res = await fetch(`/api/v1/words/${w.id}`, { method: "DELETE" });
+      const json = await res.json();
+      if (json.success) {
+        setWords((prev) => prev.filter((x) => x.id !== w.id));
+        notify(`Deleted "${w.word}"`);
+      } else {
+        notify(json.message || "Failed to delete word");
+      }
+    } catch {
+      notify("Failed to delete word");
     }
-    setFormOpen(false);
-    setEditing(null);
   }
 
-  function handleImport() {
+  async function handleSave(data: Omit<VocabularyWord, "id">) {
+    const body = {
+      word: data.word,
+      meaningBn: data.meaningBn,
+      definitionEn: data.definitionEn,
+      definitionBn: data.definitionBn,
+      examplesEn: data.examplesEn,
+      examplesBn: data.examplesBn,
+      synonyms: data.synonyms,
+      antonyms: data.antonyms,
+      level: data.level,
+      category: data.category,
+      wordType: [data.partsOfSpeech],
+    };
+
+    try {
+      let res: Response;
+      if (editing) {
+        res = await fetch(`/api/v1/words/${editing.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      } else {
+        res = await fetch("/api/v1/words", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+      }
+      const json = await res.json();
+      if (json.success) {
+        if (editing) {
+          setWords((prev) =>
+            prev.map((x) => (x.id === editing.id ? mapApiWordToVocabulary(json.data) : x))
+          );
+          notify(`Updated "${data.word}"`);
+        } else {
+          setWords((prev) => [mapApiWordToVocabulary(json.data), ...prev]);
+          notify(`Added "${data.word}"`);
+        }
+        setFormOpen(false);
+        setEditing(null);
+      } else {
+        notify(json.message || "Failed to save word");
+      }
+    } catch {
+      notify("Failed to save word");
+    }
+  }
+
+  async function handleImport() {
     let parsed: unknown;
     try {
       parsed = JSON.parse(importText);
@@ -159,8 +256,7 @@ export default function AdminVocabularyPage() {
       setImportError("JSON must be an array of word objects.");
       return;
     }
-    const valid: VocabularyWord[] = [];
-    let nextId = words.length > 0 ? Math.max(...words.map((x) => x.id)) + 1 : 1;
+    const valid: Omit<VocabularyWord, "id">[] = [];
     for (const item of parsed) {
       if (typeof item !== "object" || item === null) continue;
       const rec = item as Record<string, unknown>;
@@ -176,7 +272,6 @@ export default function AdminVocabularyPage() {
           ? [String(rec.meaningBn)]
           : [];
       valid.push({
-        id: nextId++,
         word: String(rec.word),
         meaningBn,
         definitionEn: rec.definitionEn ? String(rec.definitionEn) : "",
@@ -204,11 +299,30 @@ export default function AdminVocabularyPage() {
       setImportError("No valid word entries found in the JSON.");
       return;
     }
-    setWords((prev) => [...prev, ...valid]);
+    let imported = 0;
+    for (const word of valid) {
+      try {
+        const res = await fetch("/api/v1/words", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...word,
+            wordType: [word.partsOfSpeech],
+          }),
+        });
+        const json = await res.json();
+        if (json.success) {
+          setWords((prev) => [mapApiWordToVocabulary(json.data), ...prev]);
+          imported++;
+        }
+      } catch {
+        // skip failed imports
+      }
+    }
     setImportText("");
     setImportError(null);
     setImportOpen(false);
-    notify(`Imported ${valid.length} word(s)`);
+    notify(`Imported ${imported} word(s)`);
   }
 
   return (
@@ -219,7 +333,7 @@ export default function AdminVocabularyPage() {
             Vocabulary
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Manage vocabulary entries ({words.length} words)
+            {loading ? "Loading..." : `Manage vocabulary entries (${words.length} words)`}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -344,7 +458,14 @@ export default function AdminVocabularyPage() {
               </tr>
             </thead>
             <tbody>
-              {pageItems.length === 0 && (
+              {loading && (
+                <tr>
+                  <td colSpan={11} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
+                    Loading words...
+                  </td>
+                </tr>
+              )}
+              {!loading && pageItems.length === 0 && (
                 <tr>
                   <td colSpan={11} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
                     No vocabulary found.
