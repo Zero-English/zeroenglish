@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   RotateCcw,
+  Check,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,9 +31,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { BackButton } from "@/components/back-button";
 import {
   levelOptions,
   partsOfSpeechOptions,
@@ -63,7 +66,7 @@ function mapApiWordToVocabulary(w: ApiWord): VocabularyWord {
     antonyms: w.antonyms,
     level: w.level,
     category: w.category,
-    partsOfSpeech: w.wordType[0] ?? "noun",
+    wordType: w.wordType,
   };
 }
 
@@ -139,6 +142,12 @@ export default function AdminVocabularyPage() {
     return Array.from(set).sort();
   }, [words]);
 
+  const wordTypes = useMemo(() => {
+    const set = new Set<string>();
+    words.forEach((w) => w.wordType.forEach((t) => set.add(t)));
+    return Array.from(set).sort();
+  }, [words]);
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return words.filter((w) => {
@@ -151,7 +160,7 @@ export default function AdminVocabularyPage() {
           w.synonyms.join(" "),
           w.antonyms.join(" "),
           w.category,
-          w.partsOfSpeech,
+          w.wordType.join(" "),
         ]
           .join(" ")
           .toLowerCase();
@@ -159,7 +168,7 @@ export default function AdminVocabularyPage() {
       }
       if (levelFilter !== "all" && w.level !== levelFilter) return false;
       if (categoryFilter !== "all" && w.category !== categoryFilter) return false;
-      if (posFilter !== "all" && w.partsOfSpeech !== posFilter) return false;
+      if (posFilter !== "all" && !w.wordType.includes(posFilter)) return false;
       return true;
     });
   }, [words, search, levelFilter, categoryFilter, posFilter]);
@@ -215,7 +224,7 @@ export default function AdminVocabularyPage() {
       antonyms: data.antonyms,
       level: data.level,
       category: data.category,
-      wordType: [data.partsOfSpeech],
+      wordType: data.wordType,
     };
 
     try {
@@ -300,9 +309,13 @@ export default function AdminVocabularyPage() {
           : [],
         level,
         category: rec.category ? String(rec.category) : "Oxford3000",
-        partsOfSpeech: rec.partsOfSpeech
-          ? String(rec.partsOfSpeech)
-          : "noun",
+        wordType: Array.isArray(rec.wordType)
+          ? (rec.wordType as string[]).map(String)
+          : rec.wordType
+            ? [String(rec.wordType)]
+            : rec.partsOfSpeech
+              ? [String(rec.partsOfSpeech)]
+              : [],
       });
     }
     if (valid.length === 0) {
@@ -315,10 +328,7 @@ export default function AdminVocabularyPage() {
         const res = await fetch("/api/v1/words", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...word,
-            wordType: [word.partsOfSpeech],
-          }),
+          body: JSON.stringify(word),
         });
         const json = await res.json();
         if (json.success) {
@@ -337,6 +347,7 @@ export default function AdminVocabularyPage() {
 
   return (
     <div className="p-4 lg:p-8">
+      <BackButton />
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -433,14 +444,14 @@ export default function AdminVocabularyPage() {
                 value={posFilter}
                 onValueChange={(v) => { setPosFilter(v); setPage(1); }}
               >
-                <SelectTrigger className="w-44" aria-label="Filter by part of speech">
-                  <SelectValue placeholder="Part of speech" />
+                <SelectTrigger className="w-44" aria-label="Filter by word type">
+                  <SelectValue placeholder="Word type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All parts of speech</SelectItem>
-                  {partsOfSpeechOptions.map((p) => (
-                    <SelectItem key={p} value={p}>
-                      {p}
+                  <SelectItem value="all">All word types</SelectItem>
+                  {wordTypes.map((t) => (
+                    <SelectItem key={t} value={t}>
+                      {t}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -463,18 +474,67 @@ export default function AdminVocabularyPage() {
                 <th className="px-4 py-2.5 font-medium">Antonyms</th>
                 <th className="px-4 py-2.5 font-medium">Level</th>
                 <th className="px-4 py-2.5 font-medium">Category</th>
-                <th className="px-4 py-2.5 font-medium">POS</th>
+                <th className="px-4 py-2.5 font-medium">Word Type</th>
                 <th className="px-4 py-2.5 font-medium text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {loading && (
-                <tr>
-                  <td colSpan={11} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
-                    Loading words...
-                  </td>
-                </tr>
-              )}
+              {loading &&
+                Array.from({ length: 6 }).map((_, i) => (
+                  <tr
+                    key={i}
+                    className="border-b border-gray-100 last:border-0 dark:border-gray-800"
+                  >
+                    <td className="px-4 py-2.5">
+                      <Skeleton className="h-3.5 w-6" />
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <Skeleton className="h-4 w-24" />
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <div className="flex flex-wrap gap-1">
+                        <Skeleton className="h-5 w-16 rounded-full" />
+                        <Skeleton className="h-5 w-12 rounded-full" />
+                      </div>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <Skeleton className="h-3.5 w-40" />
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <Skeleton className="h-5 w-20 rounded-full" />
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <div className="flex flex-wrap gap-1">
+                        <Skeleton className="h-5 w-14 rounded-full" />
+                        <Skeleton className="h-5 w-10 rounded-full" />
+                      </div>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <div className="flex flex-wrap gap-1">
+                        <Skeleton className="h-5 w-12 rounded-full" />
+                        <Skeleton className="h-5 w-9 rounded-full" />
+                      </div>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <Skeleton className="h-5 w-9 rounded-full" />
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <Skeleton className="h-5 w-24 rounded-full" />
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <div className="flex flex-wrap gap-1">
+                        <Skeleton className="h-5 w-12 rounded-full" />
+                        <Skeleton className="h-5 w-12 rounded-full" />
+                      </div>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <div className="flex items-center justify-end gap-1">
+                        <Skeleton className="h-7 w-7 rounded-md" />
+                        <Skeleton className="h-7 w-7 rounded-md" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               {!loading && pageItems.length === 0 && (
                 <tr>
                   <td colSpan={11} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
@@ -561,8 +621,17 @@ export default function AdminVocabularyPage() {
                   <td className="px-4 py-2.5">
                     <Badge variant="category">{w.category}</Badge>
                   </td>
-                  <td className="px-4 py-2.5">
-                    <Badge variant="pos">{w.partsOfSpeech}</Badge>
+                  <td className="px-4 py-2.5 max-w-40">
+                    <div className="flex flex-wrap gap-1">
+                      {w.wordType.length === 0 && (
+                        <span className="text-gray-400">—</span>
+                      )}
+                      {w.wordType.map((t, i) => (
+                        <Badge key={i} variant="pos">
+                          {t}
+                        </Badge>
+                      ))}
+                    </div>
                   </td>
                   <td className="px-4 py-2.5">
                     <div className="flex items-center justify-end gap-1">
@@ -614,7 +683,9 @@ export default function AdminVocabularyPage() {
               ))}
             </select>
             <span>
-              {filtered.length === 0 ? (
+              {loading ? (
+                <Skeleton className="inline-block h-3.5 w-32 align-middle" />
+              ) : filtered.length === 0 ? (
                 "No results"
               ) : (
                 <>
@@ -630,40 +701,39 @@ export default function AdminVocabularyPage() {
               )}
             </span>
           </div>
-          {totalPages > 1 && (
-            <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={safePage === 1}
+              aria-label="Previous page"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
               <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={safePage === 1}
-                aria-label="Previous page"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                key={p}
+                onClick={() => setPage(p)}
+                disabled={totalPages === 1}
+                aria-current={p === safePage ? "page" : undefined}
+                className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
+                  p === safePage
+                    ? "bg-primary text-white"
+                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                }`}
               >
-                <ChevronLeft className="h-4 w-4" />
+                {p}
               </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setPage(p)}
-                  aria-current={p === safePage ? "page" : undefined}
-                  className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
-                    p === safePage
-                      ? "bg-primary text-white"
-                      : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={safePage === totalPages}
-                aria-label="Next page"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
-          )}
+            ))}
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safePage === totalPages}
+              aria-label="Next page"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -684,7 +754,7 @@ export default function AdminVocabularyPage() {
             <DialogDescription>
               Paste an array of word objects. Fields: word, meaningBn,
               definitionEn, definitionBn, examplesEn, examplesBn, synonyms,
-              antonyms, level, category, partsOfSpeech.
+              antonyms, level, category, wordType.
             </DialogDescription>
           </DialogHeader>
           <Textarea
@@ -886,22 +956,11 @@ function WordFormDialog({
               />
             </Field>
             <Field>
-              <FieldLabel>Parts of Speech</FieldLabel>
-              <Select
-                value={form.partsOfSpeech}
-                onValueChange={(v) => setForm({ ...form, partsOfSpeech: v })}
-              >
-                <SelectTrigger className="w-full" aria-label="Parts of speech">
-                  <SelectValue placeholder="Part of speech" />
-                </SelectTrigger>
-                <SelectContent>
-                  {partsOfSpeechOptions.map((p) => (
-                    <SelectItem key={p} value={p}>
-                      {p}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FieldLabel>Word Type</FieldLabel>
+              <WordTypeInput
+                values={form.wordType}
+                onChange={(v) => setForm({ ...form, wordType: v })}
+              />
             </Field>
           </div>
 
@@ -935,7 +994,7 @@ function emptyForm(): Omit<VocabularyWord, "id"> {
     antonyms: [],
     level: "A1",
     category: "Oxford3000",
-    partsOfSpeech: "noun",
+    wordType: [],
   };
 }
 
@@ -1070,6 +1129,117 @@ function CategoryInput({
           >
             <Plus className="h-3.5 w-3.5" />
           </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------------- Word Type input (select + pencil custom list) ---------------- */
+
+function WordTypeInput({
+  values,
+  onChange,
+}: {
+  values: string[];
+  onChange: (v: string[]) => void;
+}) {
+  const [mode, setMode] = useState<"select" | "custom">("select");
+
+  function addPreset(pos: string) {
+    if (!pos || values.includes(pos)) return;
+    onChange([...values, pos]);
+  }
+
+  function done() {
+    setMode("select");
+    onChange(values.map((v) => v.trim()).filter(Boolean));
+  }
+
+  return (
+    <div className="space-y-1.5">
+      {mode === "select" ? (
+        <div className="flex gap-1.5">
+          <Select value="" onValueChange={addPreset}>
+            <SelectTrigger className="w-full" aria-label="Add word type">
+              <SelectValue placeholder="Add a word type..." />
+            </SelectTrigger>
+            <SelectContent>
+              {partsOfSpeechOptions.map((p) => (
+                <SelectItem key={p} value={p}>
+                  {p}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <button
+            type="button"
+            onClick={() => setMode("custom")}
+            title="Edit word types"
+            aria-label="Edit word types"
+            className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          <div className="flex gap-1.5">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-7"
+              onClick={() => onChange([...values, ""])}
+            >
+              <Plus className="h-3 w-3" />
+              Add
+            </Button>
+            <button
+              type="button"
+              onClick={done}
+              title="Done"
+              aria-label="Done editing word types"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+            >
+              <Check className="h-3.5 w-3.5" />
+            </button>
+          </div>
+          {values.length === 0 && (
+            <p className="text-xs text-muted-foreground/70">No word types yet.</p>
+          )}
+          {values.map((v, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <Input
+                value={v}
+                onChange={(e) => {
+                  const next = [...values];
+                  next[i] = e.target.value;
+                  onChange(next);
+                }}
+                placeholder="word type"
+                className="h-7"
+              />
+              <button
+                type="button"
+                onClick={() => onChange(values.filter((_, idx) => idx !== i))}
+                title="Remove"
+                aria-label="Remove word type"
+                className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      {values.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {values.map((v, i) => (
+            <Badge key={i} variant="pos">
+              {v || "·"}
+            </Badge>
+          ))}
         </div>
       )}
     </div>

@@ -10,7 +10,7 @@ export type VocabularyWord = {
   antonyms: string[];
   level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
   category: string;
-  partsOfSpeech: string;
+  wordType: string[];
 };
 
 export const levelOptions = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -46,7 +46,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["keep", "maintain"],
     level: "B2",
     category: "Academic",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 2,
@@ -60,7 +60,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: [],
     level: "B2",
     category: "Business",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 3,
@@ -74,7 +74,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: [],
     level: "A1",
     category: "Oxford3000",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 4,
@@ -88,7 +88,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: [],
     level: "B1",
     category: "Oxford3000",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 5,
@@ -106,7 +106,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["disadvantage", "drawback"],
     level: "B1",
     category: "Business",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 6,
@@ -120,7 +120,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["dim", "foolish"],
     level: "B2",
     category: "Academic",
-    partsOfSpeech: "adjective",
+    wordType: ["adjective"],
   },
   {
     id: 7,
@@ -134,7 +134,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: [],
     level: "A1",
     category: "Travel",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 8,
@@ -148,7 +148,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["inability"],
     level: "B2",
     category: "Academic",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 9,
@@ -162,7 +162,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["mourn"],
     level: "A2",
     category: "Oxford3000",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 10,
@@ -176,7 +176,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["fear", "cowardice"],
     level: "B1",
     category: "Oxford3000",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 11,
@@ -190,7 +190,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["neglect"],
     level: "C1",
     category: "Academic",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 12,
@@ -204,7 +204,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["reluctant", "apathetic"],
     level: "B1",
     category: "Oxford3000",
-    partsOfSpeech: "adjective",
+    wordType: ["adjective"],
   },
   {
     id: 13,
@@ -218,7 +218,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: [],
     level: "A2",
     category: "Academic",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 14,
@@ -232,7 +232,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["rigid", "inflexible"],
     level: "B2",
     category: "Business",
-    partsOfSpeech: "adjective",
+    wordType: ["adjective"],
   },
   {
     id: 15,
@@ -246,7 +246,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["consume", "destroy"],
     level: "B2",
     category: "Business",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 16,
@@ -260,7 +260,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["fake", "counterfeit"],
     level: "C1",
     category: "Academic",
-    partsOfSpeech: "adjective",
+    wordType: ["adjective"],
   },
   {
     id: 17,
@@ -274,7 +274,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: [],
     level: "B1",
     category: "Travel",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 18,
@@ -288,7 +288,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["worsen", "decline"],
     level: "A2",
     category: "Oxford3000",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 19,
@@ -302,7 +302,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: [],
     level: "B2",
     category: "Academic",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 20,
@@ -316,7 +316,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: [],
     level: "B1",
     category: "Travel",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 21,
@@ -330,7 +330,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["ignorance"],
     level: "A2",
     category: "Academic",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 22,
@@ -344,7 +344,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["unprofitable", "unrewarding"],
     level: "C1",
     category: "Business",
-    partsOfSpeech: "adjective",
+    wordType: ["adjective"],
   },
   {
     id: 23,
@@ -358,7 +358,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["neglect", "abandon"],
     level: "B2",
     category: "Academic",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 24,
@@ -372,7 +372,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["starve"],
     level: "C1",
     category: "Oxford3000",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 25,
@@ -386,7 +386,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["miss"],
     level: "B1",
     category: "Business",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 26,
@@ -400,7 +400,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["dissuade"],
     level: "B2",
     category: "Academic",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 27,
@@ -414,7 +414,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["poor", "destitute"],
     level: "C1",
     category: "Business",
-    partsOfSpeech: "adjective",
+    wordType: ["adjective"],
   },
   {
     id: 28,
@@ -429,7 +429,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["fragile", "weak"],
     level: "C1",
     category: "Academic",
-    partsOfSpeech: "adjective",
+    wordType: ["adjective"],
   },
   {
     id: 29,
@@ -443,7 +443,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: [],
     level: "A2",
     category: "Business",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
   {
     id: 30,
@@ -457,7 +457,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["unsustainable"],
     level: "C1",
     category: "Academic",
-    partsOfSpeech: "adjective",
+    wordType: ["adjective"],
   },
   {
     id: 31,
@@ -471,7 +471,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["permanent", "lasting"],
     level: "B2",
     category: "Business",
-    partsOfSpeech: "adjective",
+    wordType: ["adjective"],
   },
   {
     id: 32,
@@ -485,7 +485,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["decline", "struggle"],
     level: "C1",
     category: "Business",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 33,
@@ -499,7 +499,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["decline"],
     level: "C1",
     category: "Academic",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 34,
@@ -513,7 +513,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["dull", "vague"],
     level: "C1",
     category: "Oxford3000",
-    partsOfSpeech: "adjective",
+    wordType: ["adjective"],
   },
   {
     id: 35,
@@ -527,7 +527,7 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["stay"],
     level: "B1",
     category: "Travel",
-    partsOfSpeech: "verb",
+    wordType: ["verb"],
   },
   {
     id: 36,
@@ -541,6 +541,6 @@ export const dummyVocabulary: VocabularyWord[] = [
     antonyms: ["apathy"],
     level: "C2",
     category: "Idioms",
-    partsOfSpeech: "noun",
+    wordType: ["noun"],
   },
 ];
