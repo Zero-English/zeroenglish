@@ -146,9 +146,22 @@ export const authOptions: NextAuthOptions = {
             logger.info("Logged in Successfully", { user });
             return true;
         },
+        async jwt({ token, user }) {
+            if (user) {
+                const dbUser = await prisma.user.findUnique({
+                    where: { id: Number(user.id) },
+                    select: { role: true },
+                });
+                token.role = dbUser?.role ?? "user";
+            }
+            return token;
+        },
         session({ session, token }) {
             if (session.user && token?.sub) {
                 session.user.id = Number(token.sub);
+            }
+            if (session.user && token?.role) {
+                session.user.role = token.role as "user" | "admin";
             }
             return session;
         },
