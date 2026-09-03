@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuthStore, useAuthHydrated } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -36,7 +38,15 @@ function GoogleIcon() {
 
 export function LoginClient() {
   const continueAsGuest = useAuthStore((s) => s.continueAsGuest);
+  const status = useAuthStore((s) => s.status);
   const hydrated = useAuthHydrated();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (hydrated && status !== "none") {
+      router.replace("/profile");
+    }
+  }, [hydrated, status, router]);
 
     if (!hydrated) {
         return (
