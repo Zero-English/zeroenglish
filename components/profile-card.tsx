@@ -16,7 +16,7 @@ export function ProfileCard() {
   const isAdmin = user.role === "admin";
 
   return (
-    <div className="mb-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/60 backdrop-blur-sm p-5 sm:p-6">
+    <div className="mb-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300 dark:hover:border-zinc-700 active:scale-[1.01] active:shadow-lg active:border-zinc-300 dark:active:border-zinc-700">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-4">
           <UserAvatar
