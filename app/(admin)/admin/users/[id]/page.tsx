@@ -5,29 +5,13 @@ import { headers } from "next/headers";
 import { ArrowLeft, AtSign, Hash, Mail } from "lucide-react";
 import type { ApiUser, UserDetailResponse } from "../types";
 import UserActions from "./user-actions";
+import { UserAvatar } from "@/components/UserAvatar";
 
 export const metadata: Metadata = {
   title: "User Detail | Admin — Zero English",
 };
 
 export const dynamic = "force-dynamic";
-
-const AVATAR_COLORS = [
-  "bg-blue-500",
-  "bg-purple-500",
-  "bg-amber-500",
-  "bg-rose-500",
-  "bg-emerald-500",
-  "bg-indigo-500",
-  "bg-teal-500",
-  "bg-pink-500",
-  "bg-cyan-500",
-  "bg-orange-500",
-];
-
-function avatarColor(id: number) {
-  return AVATAR_COLORS[id % AVATAR_COLORS.length];
-}
 
 function formatDate(value?: string | Date | null) {
   if (!value) return "—";
@@ -73,11 +57,13 @@ export default async function SingleUserPage({
 
       <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <span
-            className={`flex h-14 w-14 items-center justify-center rounded-full text-xl font-bold text-white ${avatarColor(user.id)}`}
-          >
-            {(user.name || user.user_name).charAt(0)}
-          </span>
+          <UserAvatar
+            id={user.id}
+            name={user.name}
+            userName={user.user_name}
+            image={user.image}
+            size="lg"
+          />
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

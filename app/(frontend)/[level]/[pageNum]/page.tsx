@@ -4,23 +4,8 @@ import { getWordsByLevel } from "@/lib/data";
 import { LevelPageContent } from "@/components/level-page-content";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2"] as const;
-const ITEMS_PER_PAGE = 10;
 
-export const revalidate = 3600;
-
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  const params: { level: string; pageNum: string }[] = [];
-  for (const level of VALID_LEVELS) {
-    const words = getWordsByLevel(level);
-    const totalPages = Math.ceil(words.length / ITEMS_PER_PAGE);
-    for (let page = 1; page <= totalPages; page++) {
-      params.push({ level: level.toLowerCase(), pageNum: String(page) });
-    }
-  }
-  return params;
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,

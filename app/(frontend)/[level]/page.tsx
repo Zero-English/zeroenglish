@@ -4,13 +4,7 @@ import { LevelPageContent } from "@/components/level-page-content";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2"] as const;
 
-export const revalidate = 3600;
-
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return VALID_LEVELS.map((level) => ({ level: level.toLowerCase() }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,

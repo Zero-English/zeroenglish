@@ -72,13 +72,6 @@ gtag('config', 'G-6BF3FVESN8');`}
                 >
                     <SessionProvider>{children}</SessionProvider>
                 </ThemeProvider>
-                <Script
-                    id="sw-register"
-                    strategy="lazyOnload"
-                    dangerouslySetInnerHTML={{
-                        __html: `"serviceWorker" in navigator&&navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"})`,
-                    }}
-                />
             </body>
         </html>
     );

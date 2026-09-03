@@ -43,12 +43,13 @@ export function LoginClient() {
   const status = useAuthStore((s) => s.status);
   const setGoogleAuth = useAuthStore((s) => s.setGoogleAuth);
   const hydrated = useAuthHydrated();
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
   const greeted = useRef(false);
+  const sessionLoading = sessionStatus === "loading";
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || sessionLoading) return;
     if (session?.user && !greeted.current) {
       greeted.current = true;
       setGoogleAuth(session.user.name ?? null, session.user.email ?? null);
@@ -58,9 +59,9 @@ export function LoginClient() {
     if (status !== "none") {
       router.replace("/profile");
     }
-  }, [hydrated, session, status, router, setGoogleAuth]);
+  }, [hydrated, sessionLoading, session, status, router, setGoogleAuth]);
 
-    if (!hydrated) {
+    if (!hydrated || sessionLoading) {
         return (
             <div className="flex min-h-dvh items-center justify-center text-zinc-400">
                 <Classic className="size-6" />

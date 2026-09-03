@@ -28,13 +28,8 @@ function loadAllWords(): Word[] {
   return words;
 }
 
-let cached: Word[] | null = null;
-
 export function getAllWords(): Word[] {
-  if (!cached) {
-    cached = loadAllWords();
-  }
-  return cached;
+  return loadAllWords();
 }
 
 export function getWordsByLevel(level: string): Word[] {
