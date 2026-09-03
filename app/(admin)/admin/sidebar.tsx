@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { AnimatePresence, motion } from "motion/react";
 import { PanelLeft, Users, BookOpen, LogOut } from "lucide-react";
 import {
@@ -62,15 +63,15 @@ function NavLinks({
 
 function LogoutButton({
   isOpen: showLabel,
-  onNavigate,
+  onLogout,
 }: {
   isOpen: boolean;
-  onNavigate?: () => void;
+  onLogout: () => void;
 }) {
   return (
     <button
       type="button"
-      onClick={onNavigate}
+      onClick={onLogout}
       className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors gap-3 whitespace-nowrap ${
         showLabel ? "" : "justify-center"
       } text-gray-600 hover:text-rose-600 hover:bg-rose-50 dark:text-gray-400 dark:hover:text-rose-400 dark:hover:bg-rose-900/20`}
@@ -92,6 +93,11 @@ export default function AdminSidebar({
   close: () => void;
   toggleDesktop: () => void;
 }) {
+  const handleLogout = () => {
+    close();
+    void signOut({ callbackUrl: "/admin" });
+  };
+
   return (
     <>
       {/* Desktop sidebar */}
@@ -124,7 +130,7 @@ export default function AdminSidebar({
         </div>
         <NavLinks isOpen={isDesktopOpen} />
         <div className="p-3">
-          <LogoutButton isOpen={isDesktopOpen} />
+          <LogoutButton isOpen={isDesktopOpen} onLogout={handleLogout} />
         </div>
       </motion.aside>
 
@@ -143,7 +149,7 @@ export default function AdminSidebar({
           </div>
           <NavLinks isOpen onNavigate={close} />
           <div className="mt-auto border-t border-gray-200 p-3 dark:border-gray-800">
-            <LogoutButton isOpen onNavigate={close} />
+            <LogoutButton isOpen onLogout={handleLogout} />
           </div>
         </SheetContent>
       </Sheet>
