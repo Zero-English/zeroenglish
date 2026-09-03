@@ -5,7 +5,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { createLocalStorage } from "./state-storage";
 
-export type AuthStatus = "none" | "guest";
+export type AuthStatus = "none" | "guest" | "google";
 
 export interface AuthPersistedProfile {
   status?: "guest";
@@ -18,6 +18,7 @@ interface AuthState {
   userName: string | null;
   userEmail: string | null;
   continueAsGuest: () => void;
+  setGoogleAuth: (name: string | null, email: string | null) => void;
   logout: () => void;
 }
 
@@ -29,6 +30,8 @@ export const useAuthStore = create<AuthState>()(
       userEmail: null,
       continueAsGuest: () =>
         set({ status: "guest", userName: "Guest", userEmail: null }),
+      setGoogleAuth: (name, email) =>
+        set({ status: "google", userName: name, userEmail: email }),
       logout: () =>
         set({ status: "none", userName: null, userEmail: null }),
     }),

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useAuthStore, useAuthHydrated } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -39,14 +40,21 @@ function GoogleIcon() {
 export function LoginClient() {
   const continueAsGuest = useAuthStore((s) => s.continueAsGuest);
   const status = useAuthStore((s) => s.status);
+  const setGoogleAuth = useAuthStore((s) => s.setGoogleAuth);
   const hydrated = useAuthHydrated();
+  const { data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (hydrated && status !== "none") {
+    if (!hydrated) return;
+    if (session?.user) {
+      setGoogleAuth(session.user.name ?? null, session.user.email ?? null);
+      return;
+    }
+    if (status !== "none") {
       router.replace("/profile");
     }
-  }, [hydrated, status, router]);
+  }, [hydrated, session, status, router, setGoogleAuth]);
 
     if (!hydrated) {
         return (
