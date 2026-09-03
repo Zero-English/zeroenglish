@@ -12,12 +12,38 @@ datasource db {
   provider = "postgresql"
 }
 
+model Word {
+  id           Int      @id @default(autoincrement())
+  word         String   @unique
+
+  meaningBn    String[]
+  synonyms     String[]
+  antonyms     String[]
+
+  definitionEn String
+  definitionBn String
+
+  examplesEn   String[]
+  examplesBn   String[]
+
+  level        Levels
+  category     WordCategory
+  wordType     String[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([level])
+  @@index([category])
+}
+
 model User {
   id            Int      @id @default(autoincrement())
   name          String?
   user_name     String
   email         String   @unique
   emailVerified DateTime?
+  password      String?
   image         String?
   role          Roles    @default(user)
 
@@ -72,4 +98,17 @@ model VerificationToken {
 enum Roles {
   user
   admin
+}
+
+enum Levels {
+  A1
+  A2
+  B1
+  B2 
+  C1
+  C2
+}
+
+enum WordCategory {
+  Oxford3000
 }
