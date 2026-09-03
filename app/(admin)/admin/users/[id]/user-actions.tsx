@@ -4,13 +4,21 @@ import { useState } from "react";
 import { Pencil, Ban, Mail, Trash2 } from "lucide-react";
 import type { ApiUser } from "../types";
 
-export default function UserActions({ user }: { user: ApiUser }) {
+export default function UserActions({
+  user,
+  status = "Active",
+}: {
+  user: ApiUser;
+  status?: "Active" | "Inactive";
+}) {
   const [message, setMessage] = useState<string | null>(null);
 
   function notify(text: string) {
     setMessage(text);
     setTimeout(() => setMessage(null), 2500);
   }
+
+  const isActive = status === "Active";
 
   return (
     <div className="flex flex-col items-end gap-2">
@@ -33,12 +41,16 @@ export default function UserActions({ user }: { user: ApiUser }) {
         <button
           type="button"
           onClick={() =>
-            notify(`${user.user_name} (id: ${user.id}) is now suspended`)
+            notify(
+              `${user.user_name} (id: ${user.id}) is now ${
+                isActive ? "suspended" : "reactivated"
+              }`
+            )
           }
           className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
         >
           <Ban className="h-3.5 w-3.5" />
-          Suspend
+          {isActive ? "Suspend" : "Reactivate"}
         </button>
         <button
           type="button"

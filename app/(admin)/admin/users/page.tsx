@@ -8,12 +8,23 @@ import {
   Mail,
   Pencil,
   Trash2,
+  Ban,
 } from "lucide-react";
 import type { ApiUser, UserListResponse } from "./types";
 import { UserAvatar } from "@/components/UserAvatar";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { BackButton } from "@/components/back-button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const PAGE_SIZES = [10, 20, 50];
+
+const RICH = {
+  bookmarked: [1, 3, 8, 12, 19, 25, 31, 44, 56, 67],
+  stillLearning: [2, 5, 9, 14, 20, 28, 35, 41, 50, 58, 63, 72, 80, 91, 100],
+  learned: [4, 6, 10, 15, 22, 30, 38, 46, 53, 60, 68, 75, 82, 90, 98],
+  quizResult: 78,
+  status: "Active" as const,
+};
 
 function formatDate(value?: string | Date | null) {
   if (!value) return "—";
@@ -110,6 +121,13 @@ export default function AdminUsersPage() {
     showMessage(`Email draft opened for ${user.user_name} (${user.email})`);
   }
 
+  function suspendUser(user: ApiUser) {
+    const isActive = RICH.status === "Active";
+    showMessage(
+      `${user.user_name} (id: ${user.id}) is now ${isActive ? "suspended" : "reactivated"}`
+    );
+  }
+
   function deleteUser(user: ApiUser) {
     setUserToDelete(user);
     setDeleteDialogOpen(true);
@@ -123,6 +141,10 @@ export default function AdminUsersPage() {
 
   function bulkEmail() {
     showMessage(`Email draft opened for ${selectedList.length} selected user(s)`);
+  }
+
+  function bulkSuspend() {
+    showMessage(`Suspend action applied to ${selectedList.length} selected user(s)`);
   }
 
   function bulkDelete() {
@@ -139,6 +161,7 @@ export default function AdminUsersPage() {
 
   return (
     <div className="p-4 lg:p-8">
+      <BackButton />
       <header className="mb-6">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           All registered users ({total})
@@ -170,6 +193,14 @@ export default function AdminUsersPage() {
             >
               <Mail className="h-3.5 w-3.5" />
               Email
+            </button>
+            <button
+              type="button"
+              onClick={bulkSuspend}
+              className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+            >
+              <Ban className="h-3.5 w-3.5" />
+              Suspend
             </button>
             <button
               type="button"
@@ -207,123 +238,197 @@ export default function AdminUsersPage() {
                 </th>
                 <th className="px-4 py-2.5 font-medium">Name</th>
                 <th className="px-4 py-2.5 font-medium">Email</th>
+                <th className="px-4 py-2.5 font-medium">Bookmarked</th>
+                <th className="px-4 py-2.5 font-medium">Still Learning</th>
+                <th className="px-4 py-2.5 font-medium">Learned</th>
+                <th className="px-4 py-2.5 font-medium">Quiz Result</th>
                 <th className="px-4 py-2.5 font-medium">Role</th>
+                <th className="px-4 py-2.5 font-medium">Status</th>
                 <th className="px-4 py-2.5 font-medium">Joined</th>
                 <th className="px-4 py-2.5 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan={6} className="px-4 py-10 text-center text-gray-500 dark:text-gray-400">
-                    Loading users...
-                  </td>
-                </tr>
+                <>
+                  {Array.from({ length: 8 }).map((_, r) => (
+                    <tr
+                      key={r}
+                      className="border-b border-gray-100 dark:border-gray-800/60"
+                    >
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-4" />
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2.5">
+                          <Skeleton className="h-8 w-8 rounded-full" />
+                          <Skeleton className="h-4 w-28" />
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-40" />
+                      </td>
+                      {Array.from({ length: 6 }).map((_, c) => (
+                        <td key={c} className="px-4 py-3">
+                          <Skeleton className="h-4 w-12" />
+                        </td>
+                      ))}
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-6" />
+                      </td>
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-6" />
+                      </td>
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-8 w-6" />
+                      </td>
+                    </tr>
+                  ))}
+                </>
               ) : error ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-10 text-center text-rose-600 dark:text-rose-400">
+                  <td colSpan={11} className="px-4 py-10 text-center text-rose-600 dark:text-rose-400">
                     {error}
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-10 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan={11} className="px-4 py-10 text-center text-gray-500 dark:text-gray-400">
                     No users found.
                   </td>
                 </tr>
               ) : (
-                users.map((user) => (
-                  <tr
-                    key={user.id}
-                    onClick={() => router.push(`/admin/users/${user.id}`)}
-                    className={`cursor-pointer border-b border-gray-100 last:border-0 transition-colors dark:border-gray-800 ${
-                      selected.has(user.id)
-                        ? "bg-primary/5"
-                        : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
-                    }`}
-                  >
-                    <td className="px-4 py-2.5">
-                      <input
-                        type="checkbox"
-                        checked={selected.has(user.id)}
-                        onChange={() => toggleOne(user.id)}
-                        onClick={(e) => e.stopPropagation()}
-                        aria-label={`Select ${user.user_name}`}
-                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      />
-                    </td>
-                    <td className="px-4 py-2.5">
-                      <div className="flex items-center gap-2.5 whitespace-nowrap">
-                        <UserAvatar
-                          id={user.id}
-                          name={user.name}
-                          userName={user.user_name}
-                          image={user.image}
-                          size="sm"
+                users.map((user) => {
+                  return (
+                    <tr
+                      key={user.id}
+                      onClick={() => router.push(`/admin/users/${user.id}`)}
+                      className={`cursor-pointer border-b border-gray-100 last:border-0 transition-colors dark:border-gray-800 ${
+                        selected.has(user.id)
+                          ? "bg-primary/5"
+                          : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                      }`}
+                    >
+                      <td className="px-4 py-2.5">
+                        <input
+                          type="checkbox"
+                          checked={selected.has(user.id)}
+                          onChange={() => toggleOne(user.id)}
+                          onClick={(e) => e.stopPropagation()}
+                          aria-label={`Select ${user.user_name}`}
+                          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                         />
-                        <span className="font-medium text-gray-900 dark:text-white">
-                          {user.name || user.user_name}
-                        </span>
-                        {user.user_name && user.user_name !== user.name && (
-                          <span className="text-xs text-gray-400">
-                            @{user.user_name}
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <div className="flex items-center gap-2.5 whitespace-nowrap">
+                          <UserAvatar
+                            id={user.id}
+                            name={user.name}
+                            userName={user.user_name}
+                            image={user.image}
+                            size="sm"
+                          />
+                          <span className="font-medium text-gray-900 dark:text-white">
+                            {user.name || user.user_name}
                           </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-4 py-2.5 text-gray-500 dark:text-gray-400">
-                      {user.email}
-                    </td>
-                    <td className="px-4 py-2.5">
-                      <span
-                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
-                          user.role === "admin"
-                            ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-400"
-                            : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
-                        }`}
-                      >
-                        {user.role}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
-                      {formatDate(user.created_at)}
-                    </td>
-                    <td className="px-4 py-2.5">
-                      <div
-                        className="flex items-center gap-1"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <button
-                          type="button"
-                          onClick={() => editUser(user)}
-                          title="Edit"
-                          aria-label={`Edit ${user.user_name}`}
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                        </div>
+                      </td>
+                      <td className="px-4 py-2.5 text-gray-500 dark:text-gray-400">
+                        {user.email.toLowerCase()}
+                      </td>
+                      <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
+                        {RICH.bookmarked.length}
+                      </td>
+                      <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
+                        {RICH.stillLearning.length}
+                      </td>
+                      <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
+                        {RICH.learned.length}
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <span
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                            RICH.quizResult >= 80
+                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+                              : RICH.quizResult >= 60
+                                ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+                                : "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400"
+                          }`}
                         >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => emailUser(user)}
-                          title="Email"
-                          aria-label={`Email ${user.user_name}`}
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                          {RICH.quizResult}%
+                        </span>
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <span
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                            user.role === "admin"
+                              ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-400"
+                              : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                          }`}
                         >
-                          <Mail className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => deleteUser(user)}
-                          title="Delete"
-                          aria-label={`Delete ${user.user_name}`}
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-rose-200 text-rose-600 hover:bg-rose-50 dark:border-rose-800 dark:text-rose-400 dark:hover:bg-rose-900/30 transition-colors"
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <span
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                            RICH.status === "Active"
+                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+                              : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
+                          }`}
                         >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                          {RICH.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
+                        {formatDate(user.created_at)}
+                      </td>
+                      <td className="px-4 py-2.5">
+                        <div
+                          className="flex items-center gap-1"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => editUser(user)}
+                            title="Edit"
+                            aria-label={`Edit ${user.user_name}`}
+                            className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => suspendUser(user)}
+                            title={RICH.status === "Active" ? "Suspend" : "Reactivate"}
+                            aria-label={`${RICH.status === "Active" ? "Suspend" : "Reactivate"} ${user.user_name}`}
+                            className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                          >
+                            <Ban className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => emailUser(user)}
+                            title="Email"
+                            aria-label={`Email ${user.user_name}`}
+                            className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                          >
+                            <Mail className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => deleteUser(user)}
+                            title="Delete"
+                            aria-label={`Delete ${user.user_name}`}
+                            className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-rose-200 text-rose-600 hover:bg-rose-50 dark:border-rose-800 dark:text-rose-400 dark:hover:bg-rose-900/30 transition-colors"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

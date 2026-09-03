@@ -349,14 +349,9 @@ export default function AdminVocabularyPage() {
     <div className="p-4 lg:p-8">
       <BackButton />
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-            Vocabulary
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {loading ? "Loading..." : `Manage vocabulary entries (${words.length} words)`}
-          </p>
-        </div>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          {loading ? "Loading..." : `Manage vocabulary entries (${words.length} words)`}
+        </p>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => setImportOpen(true)}>
             <Upload />
