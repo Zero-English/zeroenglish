@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useAuthStore, useAuthHydrated } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { UserRound, GraduationCap } from "lucide-react";
+import { toast } from "sonner";
 import { Classic } from "@/components/classic";
 
 async function signInGoogle(callbackUrl: string = "/profile") {
@@ -44,11 +45,14 @@ export function LoginClient() {
   const hydrated = useAuthHydrated();
   const { data: session } = useSession();
   const router = useRouter();
+  const greeted = useRef(false);
 
   useEffect(() => {
     if (!hydrated) return;
-    if (session?.user) {
+    if (session?.user && !greeted.current) {
+      greeted.current = true;
       setGoogleAuth(session.user.name ?? null, session.user.email ?? null);
+      toast.success(`Welcome back, ${session.user.name ?? "there"}!`);
       return;
     }
     if (status !== "none") {
@@ -70,6 +74,7 @@ export function LoginClient() {
 
   const handleGuest = () => {
     continueAsGuest();
+    toast.success("Continuing as Guest");
   };
 
     return (

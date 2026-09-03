@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { SidebarProvider } from "@/components/sidebar-provider";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Learn English Oxford 3000 Word Vocabulary in Bangla | Zero English",
@@ -39,6 +40,7 @@ export default function FrontendLayout({
           </div>
         </div>
       </SidebarProvider>
+      <Toaster />
     </HtmlShell>
   );
 }
