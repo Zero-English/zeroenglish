@@ -1,6 +1,4 @@
 import { createLogger, format, transports } from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
-
 const colorizer = format.colorize();
 
 const logFormat = format.combine(
@@ -31,26 +29,7 @@ const logger = createLogger({
         new transports.Console({
             format: consoleLogFormat,
         }),
-        new DailyRotateFile({
-            dirname: "logs",
-            filename: "app-info-%DATE%.log",
-            datePattern: "YYYY-MM-DD",
-            zippedArchive: true,
-            maxSize: "10m",
-            maxFiles: "15d",
-            level: "info",
-            auditFile: "../../logs/.audit.json",
-        }),
-        new DailyRotateFile({
-            dirname: "logs",
-            filename: "app-error-%DATE%.log",
-            datePattern: "YYYY-MM-DD",
-            zippedArchive: true,
-            maxSize: "10m",
-            maxFiles: "30d",
-            level: "error",
-            auditFile: "../../logs/.audit.json",
-        }),
+
     ],
     exitOnError: false,
 });
