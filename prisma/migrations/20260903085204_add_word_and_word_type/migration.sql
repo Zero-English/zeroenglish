@@ -1,12 +1,3 @@
--- CreateEnum
-CREATE TYPE "Levels" AS ENUM ('A1', 'A2', 'B1', 'B2', 'C1', 'C2');
-
--- CreateEnum
-CREATE TYPE "WordCategory" AS ENUM ('Oxford3000');
-
--- AlterTable
-ALTER TABLE "User" ADD COLUMN     "password" TEXT;
-
 -- CreateTable
 CREATE TABLE "Word" (
     "id" SERIAL NOT NULL,
