@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, LogIn, LogOut } from "lucide-react";
+import { toast } from "sonner";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
 import {
@@ -101,7 +102,13 @@ export function Sidebar() {
   const handleLogout = async () => {
     logout();
     close();
+    try {
+      await fetch("/api/v1/auth/logout", { method: "POST" });
+    } catch {
+      // Ignore API errors; NextAuth signOut below still clears the session.
+    }
     await signOut({ callbackUrl: "/login" });
+    toast.success("Logged out successfully");
   };
 
   return (
