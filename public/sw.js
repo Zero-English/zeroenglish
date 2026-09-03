@@ -1,26 +1,52 @@
-const CACHE_NAME = "vocabulary-cache-v1";
-const STATIC_ASSETS = [
-  "/",
-  "/offline",
-];
+const CACHE_NAME = "vocabulary-cache-v2";
+const STATIC_ASSETS = ["/", "/offline"];
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
+async function precacheStaticAssets() {
+  const assets = new Set(STATIC_ASSETS);
+  const pagesToScan = ["/offline", "/"];
+
+  await Promise.all(
+    pagesToScan.map(async (page) => {
+      try {
+        const res = await fetch(page, { cache: "no-store" });
+        if (!res.ok) return;
+        const html = await res.text();
+        const urls = html.match(
+          /(?:\/_next\/static\/[^\s"'`>]+\.(?:css|js))+/g
+        ) || [];
+        urls.forEach((url) => assets.add(url.split("?")[0].replace(/^\/\//, "/")));
+      } catch {
+        // ignore failures; assets may be cached at runtime instead
+      }
     })
   );
+
+  return caches.open(CACHE_NAME).then((cache) =>
+    Promise.all(
+      [...assets].map((url) =>
+        cache.add(url).catch(() => {})
+      )
+    )
+  );
+}
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(precacheStaticAssets());
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
-      );
-    })
+    caches
+      .keys()
+      .then((cacheNames) =>
+        Promise.all(
+          cacheNames
+            .filter((name) => name !== CACHE_NAME)
+            .map((name) => caches.delete(name))
+        )
+      )
+      .then(() => self.clients.claim())
   );
 });
 
