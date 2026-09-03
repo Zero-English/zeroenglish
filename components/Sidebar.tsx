@@ -1,5 +1,6 @@
 "use client";
 
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -97,9 +98,10 @@ export function Sidebar() {
   const logout = useAuthStore((s) => s.logout);
   const isLoggedIn = status !== "none";
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     logout();
     close();
+    await signOut({ callbackUrl: "/login" });
   };
 
   return (
