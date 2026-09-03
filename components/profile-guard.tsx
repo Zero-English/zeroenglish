@@ -8,22 +8,24 @@ import { useAuthStore, useAuthHydrated } from "@/lib/auth-store";
 
 export function ProfileGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const status = useAuthStore((s) => s.status);
   const setGoogleAuth = useAuthStore((s) => s.setGoogleAuth);
   const hydrated = useAuthHydrated();
+  const sessionLoading = sessionStatus === "loading";
 
   useEffect(() => {
-    if (hydrated && status === "none" && session?.user) {
+    if (!hydrated || sessionLoading) return;
+    if (status === "none" && session?.user) {
       setGoogleAuth(session.user.name ?? null, session.user.email ?? null);
       return;
     }
-    if (hydrated && status === "none" && !session?.user) {
+    if (status === "none" && !session?.user) {
       router.replace("/login");
     }
-  }, [hydrated, status, session, router, setGoogleAuth]);
+  }, [hydrated, sessionLoading, status, session, router, setGoogleAuth]);
 
-  if (!hydrated) {
+  if (!hydrated || sessionLoading) {
     return (
       <div className="space-y-6">
         <Skeleton className="h-9 w-48" />
