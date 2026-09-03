@@ -3,6 +3,7 @@ import { getAllWords } from "@/lib/data";
 import { ProfileTabs } from "@/components/profile-words";
 import { ProfileGuard } from "@/components/profile-guard";
 import { ProfileAuthBanner } from "@/components/profile-auth-banner";
+import { ProfileCard } from "@/components/profile-card";
 
 export const metadata: Metadata = {
     title: "My Profile",
@@ -30,6 +31,7 @@ export default function ProfilePage() {
 
                     <ProfileGuard>
                         <ProfileAuthBanner />
+                        <ProfileCard />
                         <ProfileTabs words={words} />
                     </ProfileGuard>
                 </div>

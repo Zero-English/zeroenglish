@@ -1,9 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import { ExternalLink, LogOut, Menu, UserRound } from "lucide-react";
 import { motion } from "motion/react";
+import { UserAvatar } from "@/components/UserAvatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const TITLES: Record<string, string> = {
   "/admin/users": "Users",
@@ -17,6 +28,8 @@ function resolveTitle(pathname: string): string {
 
 export default function AdminHeader({ onMenu }: { onMenu: () => void }) {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const user = session?.user;
   const title = resolveTitle(pathname);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -69,23 +82,55 @@ export default function AdminHeader({ onMenu }: { onMenu: () => void }) {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2.5">
-          <div className="hidden items-center gap-2.5 rounded-full border border-gray-200 py-1.5 pl-1.5 pr-4 sm:flex dark:border-gray-700">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-semibold text-white">
-              A
-            </span>
-            <div className="leading-tight">
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
-                Admin
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                admin@zeroenglish.com
-              </p>
-            </div>
-          </div>
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white sm:hidden">
-            A
-          </span>
+        <div className="flex items-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                aria-label="Account menu"
+                className="inline-flex items-center gap-1.5 rounded-full p-0.5 transition-colors hover:ring-2 hover:ring-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/50"
+              >
+                <UserAvatar
+                  id={user?.id ?? 0}
+                  name={user?.name}
+                  userName={user?.name}
+                  image={user?.image}
+                  size="md"
+                />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="font-normal">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  {user?.name || "Admin"}
+                </p>
+                <p className="truncate text-xs font-normal text-gray-500 dark:text-gray-400">
+                  {user?.email || "admin@zeroenglish.com"}
+                </p>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href={`/admin/users/${user?.id ?? ""}`}>
+                  <UserRound className="h-4 w-4" />
+                  My Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/profile">
+                  <ExternalLink className="h-4 w-4" />
+                  View Site
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                variant="destructive"
+                onSelect={() => void signOut({ callbackUrl: "/admin" })}
+              >
+                <LogOut className="h-4 w-4" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </motion.header>

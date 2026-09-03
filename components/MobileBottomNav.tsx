@@ -5,8 +5,10 @@ import { motion } from 'motion/react'
 import { Home, Search, User, BadgeQuestionMark, LibraryBig, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { useAuthStatus } from '@/lib/auth-store'
+import { UserAvatar } from '@/components/UserAvatar'
 
 const itemClass =
   'flex flex-1 flex-col items-center gap-0.5 rounded-lg px-1 py-1.5 transition-colors'
@@ -14,14 +16,16 @@ const itemClass =
 export function MobileBottomNav() {
   const pathname = usePathname()
   const { status } = useAuthStatus()
+  const { data: session } = useSession()
   const isLoggedIn = status !== 'none'
+  const isGoogle = status === 'google'
   const links = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/vocabulary', label: 'Vocabulary', icon: LibraryBig },
     { href: '/search', label: 'Search', icon: Search },
     { href: '/quiz', label: 'Quiz', icon: BadgeQuestionMark },
     isLoggedIn
-      ? { href: '/profile', label: 'Profile', icon: User }
+      ? { href: '/profile', label: 'Profile', icon: User, avatar: isGoogle ? session?.user : null }
       : { href: '/login', label: 'Login', icon: LogIn },
   ]
   const [isHidden, setIsHidden] = useState(false)
@@ -49,9 +53,10 @@ export function MobileBottomNav() {
       className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 md:hidden"
     >
       <div className="flex items-center justify-between p-1">
-        {links.map(({ href, label, icon: Icon }) => {
+        {links.map(({ href, label, icon: Icon, avatar }) => {
           const active =
             href === '/' ? pathname === '/' : pathname.startsWith(href)
+          const showAvatar = !!avatar?.image
           return (
             <Link
               key={href}
@@ -63,10 +68,22 @@ export function MobileBottomNav() {
                   : 'text-muted-foreground',
               )}
             >
-              <Icon className="size-5" strokeWidth={active ? 2.5 : 2} />
-              <span className="text-[10px] font-medium leading-none">
-                {label}
-              </span>
+              {showAvatar ? (
+                <UserAvatar
+                  id={avatar.id ?? 0}
+                  name={avatar.name}
+                  userName={avatar.name}
+                  image={avatar.image}
+                  size="sm"
+                />
+              ) : (
+                <Icon className="size-5" strokeWidth={active ? 2.5 : 2} />
+              )}
+              {!showAvatar && (
+                <span className="text-[10px] font-medium leading-none">
+                  {label}
+                </span>
+              )}
             </Link>
           )
         })}

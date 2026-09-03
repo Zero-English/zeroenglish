@@ -1,4 +1,4 @@
-const CACHE_NAME = "vocabulary-cache-v2";
+const CACHE_NAME = "vocabulary-cache-v3";
 const STATIC_ASSETS = ["/", "/offline"];
 
 async function precacheStaticAssets() {
@@ -94,8 +94,7 @@ self.addEventListener("fetch", (event) => {
   if (
     request.destination === "style" ||
     request.destination === "script" ||
-    request.destination === "font" ||
-    request.destination === "image"
+    request.destination === "font"
   ) {
     event.respondWith(cacheFirst(request));
     return;
