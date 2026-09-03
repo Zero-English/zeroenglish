@@ -2,19 +2,26 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthStore, useAuthHydrated } from "@/lib/auth-store";
 
 export function ProfileGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const { data: session } = useSession();
   const status = useAuthStore((s) => s.status);
+  const setGoogleAuth = useAuthStore((s) => s.setGoogleAuth);
   const hydrated = useAuthHydrated();
 
   useEffect(() => {
-    if (hydrated && status === "none") {
+    if (hydrated && status === "none" && session?.user) {
+      setGoogleAuth(session.user.name ?? null, session.user.email ?? null);
+      return;
+    }
+    if (hydrated && status === "none" && !session?.user) {
       router.replace("/login");
     }
-  }, [hydrated, status, router]);
+  }, [hydrated, status, session, router, setGoogleAuth]);
 
   if (!hydrated) {
     return (
