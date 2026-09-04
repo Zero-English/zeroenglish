@@ -115,6 +115,56 @@ export const createWord = async (wordData: {
     }
 };
 
+export const createWordsBulk = async (
+    wordDataArray: {
+        word: string;
+        meaningBn?: string[];
+        synonyms?: string[];
+        antonyms?: string[];
+        definitionEn?: string;
+        definitionBn?: string;
+        examplesEn?: string[];
+        examplesBn?: string[];
+        level?: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+        category?: string;
+        wordType?: string[];
+    }[]
+) => {
+    try {
+        const data = wordDataArray.map((w) => ({
+            word: w.word,
+            meaningBn: w.meaningBn ?? [],
+            synonyms: w.synonyms ?? [],
+            antonyms: w.antonyms ?? [],
+            definitionEn: w.definitionEn ?? "",
+            definitionBn: w.definitionBn ?? "",
+            examplesEn: w.examplesEn ?? [],
+            examplesBn: w.examplesBn ?? [],
+            level: w.level ?? "A1",
+            category: w.category ?? "Oxford3000",
+            wordType: w.wordType ?? [],
+        }));
+
+        const result = await prisma.word.createMany({
+            data,
+            skipDuplicates: true,
+        });
+
+        return {
+            data: { count: result.count },
+            message: `${result.count} word(s) created successfully`,
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to bulk create words: ${error}`);
+        return {
+            data: null,
+            message: "Failed to bulk create words",
+            success: false,
+        };
+    }
+};
+
 export const updateWordById = async (
     id: number,
     wordData: Partial<{
