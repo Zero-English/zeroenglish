@@ -102,9 +102,8 @@ export default function AdminVocabularyPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<VocabularyWord | null>(null);
 
-  const [importOpen, setImportOpen] = useState(false);
-  const [importText, setImportText] = useState("");
-  const [importError, setImportError] = useState<string | null>(null);
+  const [importing, setImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [wordToDelete, setWordToDelete] = useState<VocabularyWord | null>(null);
 
@@ -263,86 +262,40 @@ export default function AdminVocabularyPage() {
     }
   }
 
-  async function handleImport() {
-    let parsed: unknown;
+  async function handleImportFile(file: File) {
+    setImporting(true);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
     try {
-      parsed = JSON.parse(importText);
-    } catch {
-      setImportError("Invalid JSON. Please check the syntax.");
-      return;
-    }
-    if (!Array.isArray(parsed)) {
-      setImportError("JSON must be an array of word objects.");
-      return;
-    }
-    const valid: Omit<VocabularyWord, "id">[] = [];
-    for (const item of parsed) {
-      if (typeof item !== "object" || item === null) continue;
-      const rec = item as Record<string, unknown>;
-      if (!rec.word) continue;
-      const level = (["A1", "A2", "B1", "B2", "C1", "C2"] as const).includes(
-        rec.level as VocabularyWord["level"]
-      )
-        ? (rec.level as VocabularyWord["level"])
-        : "A1";
-      const meaningBn = Array.isArray(rec.meaningBn)
-        ? (rec.meaningBn as string[]).map(String)
-        : typeof rec.meaningBn === "string"
-          ? [String(rec.meaningBn)]
-          : [];
-      valid.push({
-        word: String(rec.word),
-        meaningBn,
-        definitionEn: rec.definitionEn ? String(rec.definitionEn) : "",
-        definitionBn: rec.definitionBn ? String(rec.definitionBn) : "",
-        examplesEn: Array.isArray(rec.examplesEn)
-          ? (rec.examplesEn as string[]).map(String)
-          : [],
-        examplesBn: Array.isArray(rec.examplesBn)
-          ? (rec.examplesBn as string[]).map(String)
-          : [],
-        synonyms: Array.isArray(rec.synonyms)
-          ? (rec.synonyms as string[]).map(String)
-          : [],
-        antonyms: Array.isArray(rec.antonyms)
-          ? (rec.antonyms as string[]).map(String)
-          : [],
-        level,
-        category: rec.category ? String(rec.category) : "Oxford3000",
-        wordType: Array.isArray(rec.wordType)
-          ? (rec.wordType as string[]).map(String)
-          : rec.wordType
-            ? [String(rec.wordType)]
-            : rec.partsOfSpeech
-              ? [String(rec.partsOfSpeech)]
-              : [],
+      const res = await fetch("/api/v1/words?bulk=true", {
+        method: "POST",
+        body: formData,
       });
+      const json = await res.json();
+      if (json.success) {
+        notify(json.message || "Words imported");
+        fetchWords();
+      } else {
+        notify(json.message || "Failed to import words");
+      }
+    } catch {
+      notify("Failed to upload the file. Please try again.");
+    } finally {
+      setImporting(false);
     }
-    if (valid.length === 0) {
-      setImportError("No valid word entries found in the JSON.");
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+    e.target.value = "";
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith(".json")) {
+      notify("Only .json files are allowed.");
       return;
     }
-    let imported = 0;
-    for (const word of valid) {
-      try {
-        const res = await fetch("/api/v1/words", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(word),
-        });
-        const json = await res.json();
-        if (json.success) {
-          setWords((prev) => [mapApiWordToVocabulary(json.data), ...prev]);
-          imported++;
-        }
-      } catch {
-        // skip failed imports
-      }
-    }
-    setImportText("");
-    setImportError(null);
-    setImportOpen(false);
-    notify(`Imported ${imported} word(s)`);
+    handleImportFile(file);
   }
 
   return (
@@ -353,9 +306,20 @@ export default function AdminVocabularyPage() {
           {loading ? "Loading..." : `Manage vocabulary entries (${words.length} words)`}
         </p>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => setImportOpen(true)}>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json,application/json"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <Button
+            variant="outline"
+            disabled={importing}
+            onClick={() => fileInputRef.current?.click()}
+          >
             <Upload />
-            Import JSON
+            {importing ? "Importing..." : "Import JSON"}
           </Button>
           <Button onClick={() => { setEditing(null); setFormOpen(true); }}>
             <Plus />
@@ -740,35 +704,6 @@ export default function AdminVocabularyPage() {
         onSave={handleSave}
         categories={categories}
       />
-
-      {/* Import dialog */}
-      <Dialog open={importOpen} onOpenChange={setImportOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Import JSON</DialogTitle>
-            <DialogDescription>
-              Paste an array of word objects. Fields: word, meaningBn,
-              definitionEn, definitionBn, examplesEn, examplesBn, synonyms,
-              antonyms, level, category, wordType.
-            </DialogDescription>
-          </DialogHeader>
-          <Textarea
-            value={importText}
-            onChange={(e) => setImportText(e.target.value)}
-            placeholder='[{"word":"hello","meaningBn":["হ্যালো"],"level":"A1"}, ...]'
-            className="min-h-44 font-mono text-xs"
-          />
-          {importError && (
-            <p className="text-xs text-rose-600 dark:text-rose-400">{importError}</p>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setImportOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleImport}>Import</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Delete confirmation dialog */}
       <ConfirmDialog
@@ -1235,6 +1170,7 @@ function WordTypeInput({
               {v || "·"}
             </Badge>
           ))}
+
         </div>
       )}
     </div>
