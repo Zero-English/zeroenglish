@@ -15,6 +15,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { DailyGoalCard } from "@/components/daily-goal";
 import { useActiveTab, setActiveTab } from "@/lib/profile-tab-store";
 import { useQuizActivity } from "@/lib/use-quiz-activity";
@@ -54,7 +55,7 @@ function StatCard({
   color: string;
 }) {
   return (
-    <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5">
+    <StaggerItem className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.02] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
       <div className="flex items-center gap-3 mb-3">
         <div className={cn("p-2 rounded-xl", color)}>
           {icon}
@@ -65,7 +66,7 @@ function StatCard({
       {sub && (
         <div className="text-xs text-zinc-400 dark:text-zinc-500 mt-1">{sub}</div>
       )}
-    </div>
+    </StaggerItem>
   );
 }
 
@@ -85,13 +86,13 @@ function WordItem({
   const colorCfg = levelColors[word.level];
 
   return (
-    <div
+    <StaggerItem
       onDoubleClick={onToggleLearned}
       className={cn(
-        "relative overflow-hidden rounded-2xl border backdrop-blur-sm p-5 sm:p-6 transition-all duration-300",
+        "relative overflow-hidden rounded-2xl border backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg active:scale-[1.01] active:shadow-lg cursor-pointer",
         isLearned
-          ? "border-emerald-300 dark:border-emerald-700 bg-emerald-50/80 dark:bg-emerald-950/30"
-          : "border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60"
+          ? "border-emerald-300 dark:border-emerald-700 bg-emerald-50/80 dark:bg-emerald-950/30 hover:border-emerald-400 dark:hover:border-emerald-600 active:border-emerald-400 dark:active:border-emerald-600"
+          : "border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:border-zinc-300/80 dark:active:border-zinc-700/80"
       )}
     >
       <div
@@ -150,7 +151,7 @@ function WordItem({
           {isLearned ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
         </button>
       </div>
-    </div>
+    </StaggerItem>
   );
 }
 
@@ -244,7 +245,8 @@ export function ProfileTabs({ words }: { words: Word[] }) {
       </div>
 
       <TabsContent value="overview">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+          <StaggerContainer className="contents">
           <StatCard
             icon={<BookOpen className="h-5 w-5 text-sky-600" />}
             label="Total Words"
@@ -272,104 +274,111 @@ export function ProfileTabs({ words }: { words: Word[] }) {
             sub={`${overallProgress}% of total`}
             color="bg-emerald-100 dark:bg-emerald-900/30"
           />
+          </StaggerContainer>
         </div>
 
-        <div className="mb-8">
-          <DailyGoalCard />
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <StaggerContainer className="contents">
+          <StaggerItem className="lg:col-span-1">
+            <DailyGoalCard />
+          </StaggerItem>
 
-        {/* Quiz Progress */}
-        <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6 mb-8">
-          <div className="flex items-center gap-2 mb-5">
-            <GraduationCap className="h-5 w-5 text-zinc-500" />
-            <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-              Quiz Progress
-            </h3>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
-              <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
-                <Award className="h-5 w-5 text-emerald-600" />
+          <StaggerItem className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Quiz Progress */}
+            <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.02] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
+              <div className="flex items-center gap-2 mb-5">
+                <GraduationCap className="h-5 w-5 text-zinc-500" />
+                <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                  Quiz Progress
+                </h3>
               </div>
-              <div>
-                <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                  {quizLoaded ? totalCorrectAnswers : "—"}
-                </div>
-                <div className="text-xs text-zinc-400">Correct Answers</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
-              <div className="p-2 rounded-lg bg-rose-100 dark:bg-rose-900/30">
-                <X className="h-5 w-5 text-rose-600" />
-              </div>
-              <div>
-                <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                  {stillLearning.length}
-                </div>
-                <div className="text-xs text-zinc-400">Wrong Words</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
-              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
-                <BarChart3 className="h-5 w-5 text-blue-600" />
-              </div>
-              <div>
-                <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                  {quizLoaded ? totalCorrectAnswers + stillLearning.length : "—"}
-                </div>
-                <div className="text-xs text-zinc-400">Total Quiz</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Progress by level */}
-        <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6">
-          <div className="flex items-center gap-2 mb-5">
-            <TrendingUp className="h-5 w-5 text-zinc-500" />
-            <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-              Progress by Level
-            </h3>
-          </div>
-          <div className="space-y-4">
-            {levelStats.map(({ level, total: t, learned: l }) => {
-              const pct = t > 0 ? Math.round((l / t) * 100) : 0;
-              const c = levelColors[level];
-              return (
-                <div key={level}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className={cn("text-sm font-bold", c.text)}>{level}</span>
-                      <span className="text-xs text-zinc-400">{c.label}</span>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
+                  <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
+                    <Award className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                      {quizLoaded ? totalCorrectAnswers : "—"}
                     </div>
-                    <span className="text-xs text-zinc-500">
-                      {l}/{t} ({pct}%)
-                    </span>
-                  </div>
-                  <div className="h-2 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
-                    <div
-                      className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-500", c.gradient)}
-                      style={{ width: `${pct}%` }}
-                    />
+                    <div className="text-xs text-zinc-400">Correct Answers</div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
+                  <div className="p-2 rounded-lg bg-rose-100 dark:bg-rose-900/30">
+                    <X className="h-5 w-5 text-rose-600" />
+                  </div>
+                  <div>
+                    <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                      {stillLearning.length}
+                    </div>
+                    <div className="text-xs text-zinc-400">Wrong Words</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
+                  <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                    <BarChart3 className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                      {quizLoaded ? totalCorrectAnswers + stillLearning.length : "—"}
+                    </div>
+                    <div className="text-xs text-zinc-400">Total Quiz</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          {/* Overall progress bar */}
-          <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800">
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Overall</span>
-              <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{overallProgress}%</span>
+            {/* Progress by level */}
+            <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.02] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
+              <div className="flex items-center gap-2 mb-5">
+                <TrendingUp className="h-5 w-5 text-zinc-500" />
+                <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                  Progress by Level
+                </h3>
+              </div>
+              <div className="space-y-4">
+                {levelStats.map(({ level, total: t, learned: l }) => {
+                  const pct = t > 0 ? Math.round((l / t) * 100) : 0;
+                  const c = levelColors[level];
+                  return (
+                    <div key={level}>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className={cn("text-sm font-bold", c.text)}>{level}</span>
+                          <span className="text-xs text-zinc-400">{c.label}</span>
+                        </div>
+                        <span className="text-xs text-zinc-500">
+                          {l}/{t} ({pct}%)
+                        </span>
+                      </div>
+                      <div className="h-2 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+                        <div
+                          className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-500", c.gradient)}
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Overall progress bar */}
+              <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Overall</span>
+                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{overallProgress}%</span>
+                </div>
+                <div className="h-2.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-zinc-500 to-zinc-700 dark:from-zinc-400 dark:to-zinc-200 transition-all duration-500"
+                    style={{ width: `${overallProgress}%` }}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="h-2.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-zinc-500 to-zinc-700 dark:from-zinc-400 dark:to-zinc-200 transition-all duration-500"
-                style={{ width: `${overallProgress}%` }}
-              />
-            </div>
-          </div>
+          </StaggerItem>
+          </StaggerContainer>
         </div>
       </TabsContent>
 
@@ -384,17 +393,19 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
                 {bookmarked.length} bookmarked word{bookmarked.length !== 1 ? "s" : ""}
               </p>
-              <div className="space-y-4">
-                {pageWordsB.map((word) => (
-                  <WordItem
-                    key={wordKey(word)}
-                    word={word}
-                    isLearned={isLearned(word.id, word.word)}
-                    isBookmarked={true}
-                    onToggleBookmark={() => toggleBookmark(word.id, word.word)}
-                    onToggleLearned={() => toggleLearned(word.id, word.word)}
-                  />
-                ))}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <StaggerContainer className="contents">
+                  {pageWordsB.map((word) => (
+                    <WordItem
+                      key={wordKey(word)}
+                      word={word}
+                      isLearned={isLearned(word.id, word.word)}
+                      isBookmarked={true}
+                      onToggleBookmark={() => toggleBookmark(word.id, word.word)}
+                      onToggleLearned={() => toggleLearned(word.id, word.word)}
+                    />
+                  ))}
+                </StaggerContainer>
               </div>
               <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
                 Showing {startB + 1}&ndash;{Math.min(startB + ITEMS_PER_PAGE, bookmarked.length)} of {bookmarked.length}
@@ -452,70 +463,72 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
                 {stillLearning.length} word{stillLearning.length !== 1 ? "s" : ""} to review
               </p>
-              <div className="space-y-4">
-                {pageWordsS.map((word) => (
-                  <div
-                    key={wordKey(word)}
-                    onDoubleClick={() => toggleLearned(word.id, word.word)}
-                    className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300"
-                  >
-                    <div className="absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b from-orange-400 to-amber-500 opacity-60" />
-                    <div className="pl-4 sm:pl-5 pr-16">
-                      <div className="flex items-baseline gap-2.5 mb-1.5">
-                        <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                          {word.word}
-                        </h2>
-                        <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
-                          {word.parts_of_speech}
-                        </span>
-                        <span className={cn("text-xs font-medium px-2 py-0.5 rounded-md", levelColors[word.level]?.bg, levelColors[word.level]?.text)}>
-                          {word.level}
-                        </span>
-                      </div>
-                      {word.meaning_bn !== "..." && (
-                        <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">
-                          {word.meaning_bn}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <StaggerContainer className="contents">
+                  {pageWordsS.map((word) => (
+                    <StaggerItem
+                      key={wordKey(word)}
+                      onDoubleClick={() => toggleLearned(word.id, word.word)}
+                      className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80 cursor-pointer"
+                    >
+                      <div className="absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b from-orange-400 to-amber-500 opacity-60" />
+                      <div className="pl-4 sm:pl-5 pr-16">
+                        <div className="flex items-baseline gap-2.5 mb-1.5">
+                          <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                            {word.word}
+                          </h2>
+                          <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
+                            {word.parts_of_speech}
+                          </span>
+                          <span className={cn("text-xs font-medium px-2 py-0.5 rounded-md", levelColors[word.level]?.bg, levelColors[word.level]?.text)}>
+                            {word.level}
+                          </span>
+                        </div>
+                        {word.meaning_bn !== "..." && (
+                          <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">
+                            {word.meaning_bn}
+                          </p>
+                        )}
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                          {word.definition_en}
                         </p>
-                      )}
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                        {word.definition_en}
-                      </p>
-                    </div>
-                    <div className="absolute top-3 right-3 flex gap-1">
-                      <button
-                        onClick={() => toggleBookmark(word.id, word.word)}
-                        className={cn(
-                          "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
-                          bookmarkedIds.has(wordKey(word))
-                            ? "text-amber-500 hover:text-amber-600"
-                            : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
-                        )}
-                        title={bookmarkedIds.has(wordKey(word)) ? "Remove bookmark" : "Bookmark"}
-                      >
-                        {bookmarkedIds.has(wordKey(word)) ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
-                      </button>
-                      <button
-                        onClick={() => toggleLearned(word.id, word.word)}
-                        className={cn(
-                          "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
-                          learnedIds.has(wordKey(word))
-                            ? "text-emerald-500 hover:text-emerald-600"
-                            : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
-                        )}
-                        title={learnedIds.has(wordKey(word)) ? "Mark as unlearned" : "Mark as learned"}
-                      >
-                        {learnedIds.has(wordKey(word)) ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
-                      </button>
-                      <button
-                        onClick={() => removeStillLearning(word.id, word.word)}
-                        className="p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
-                        title="Remove from still learning"
-                      >
-                        <X className="h-5 w-5" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                      </div>
+                      <div className="absolute top-3 right-3 flex gap-1">
+                        <button
+                          onClick={() => toggleBookmark(word.id, word.word)}
+                          className={cn(
+                            "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                            bookmarkedIds.has(wordKey(word))
+                              ? "text-amber-500 hover:text-amber-600"
+                              : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
+                          )}
+                          title={bookmarkedIds.has(wordKey(word)) ? "Remove bookmark" : "Bookmark"}
+                        >
+                          {bookmarkedIds.has(wordKey(word)) ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
+                        </button>
+                        <button
+                          onClick={() => toggleLearned(word.id, word.word)}
+                          className={cn(
+                            "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                            learnedIds.has(wordKey(word))
+                              ? "text-emerald-500 hover:text-emerald-600"
+                              : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
+                          )}
+                          title={learnedIds.has(wordKey(word)) ? "Mark as unlearned" : "Mark as learned"}
+                        >
+                          {learnedIds.has(wordKey(word)) ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
+                        </button>
+                        <button
+                          onClick={() => removeStillLearning(word.id, word.word)}
+                          className="p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
+                          title="Remove from still learning"
+                        >
+                          <X className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </StaggerItem>
+                  ))}
+                </StaggerContainer>
               </div>
               <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
                 Showing {startS + 1}&ndash;{Math.min(startS + ITEMS_PER_PAGE, stillLearning.length)} of {stillLearning.length}
@@ -573,17 +586,19 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
                 {learned.length} learned word{learned.length !== 1 ? "s" : ""}
               </p>
-              <div className="space-y-4">
-                {pageWordsL.map((word) => (
-                  <WordItem
-                    key={wordKey(word)}
-                    word={word}
-                    isLearned={true}
-                    isBookmarked={bookmarkedIds.has(wordKey(word))}
-                    onToggleBookmark={() => toggleBookmark(word.id, word.word)}
-                    onToggleLearned={() => toggleLearned(word.id, word.word)}
-                  />
-                ))}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <StaggerContainer className="contents">
+                  {pageWordsL.map((word) => (
+                    <WordItem
+                      key={wordKey(word)}
+                      word={word}
+                      isLearned={true}
+                      isBookmarked={bookmarkedIds.has(wordKey(word))}
+                      onToggleBookmark={() => toggleBookmark(word.id, word.word)}
+                      onToggleLearned={() => toggleLearned(word.id, word.word)}
+                    />
+                  ))}
+                </StaggerContainer>
               </div>
               <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
                 Showing {startL + 1}&ndash;{Math.min(startL + ITEMS_PER_PAGE, learned.length)} of {learned.length}

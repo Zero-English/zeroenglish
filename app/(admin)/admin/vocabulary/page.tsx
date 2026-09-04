@@ -32,6 +32,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import {
   levelOptions,
   partsOfSpeechOptions,
@@ -101,6 +102,8 @@ export default function AdminVocabularyPage() {
   const [importOpen, setImportOpen] = useState(false);
   const [importText, setImportText] = useState("");
   const [importError, setImportError] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [wordToDelete, setWordToDelete] = useState<VocabularyWord | null>(null);
 
   const messageTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -178,19 +181,26 @@ export default function AdminVocabularyPage() {
     setPage(1);
   }
 
-  async function handleDelete(w: VocabularyWord) {
+  function handleDelete(w: VocabularyWord) {
+    setWordToDelete(w);
+    setDeleteDialogOpen(true);
+  }
+
+  async function confirmDeleteWord() {
+    if (!wordToDelete) return;
     try {
-      const res = await fetch(`/api/v1/words/${w.id}`, { method: "DELETE" });
+      const res = await fetch(`/api/v1/words/${wordToDelete.id}`, { method: "DELETE" });
       const json = await res.json();
       if (json.success) {
-        setWords((prev) => prev.filter((x) => x.id !== w.id));
-        notify(`Deleted "${w.word}"`);
+        setWords((prev) => prev.filter((x) => x.id !== wordToDelete.id));
+        notify(`Deleted "${wordToDelete.word}"`);
       } else {
         notify(json.message || "Failed to delete word");
       }
     } catch {
       notify("Failed to delete word");
     }
+    setWordToDelete(null);
   }
 
   async function handleSave(data: Omit<VocabularyWord, "id">) {
@@ -694,6 +704,20 @@ export default function AdminVocabularyPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Delete confirmation dialog */}
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="Delete word"
+        description={
+          wordToDelete
+            ? `Are you sure you want to delete "${wordToDelete.word}"? This action cannot be undone.`
+            : "Are you sure you want to delete this word? This action cannot be undone."
+        }
+        confirmText="Delete"
+        onConfirm={confirmDeleteWord}
+      />
     </div>
   );
 }

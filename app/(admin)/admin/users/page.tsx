@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import type { ApiUser, UserListResponse } from "./types";
 import { UserAvatar } from "@/components/UserAvatar";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 
 const PAGE_SIZES = [10, 20, 50];
 
@@ -30,6 +31,9 @@ export default function AdminUsersPage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [message, setMessage] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<ApiUser | null>(null);
+  const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -107,7 +111,14 @@ export default function AdminUsersPage() {
   }
 
   function deleteUser(user: ApiUser) {
-    showMessage(`Deleted user ${user.user_name} (id: ${user.id})`);
+    setUserToDelete(user);
+    setDeleteDialogOpen(true);
+  }
+
+  function confirmDeleteUser() {
+    if (!userToDelete) return;
+    showMessage(`Deleted user ${userToDelete.user_name} (id: ${userToDelete.id})`);
+    setUserToDelete(null);
   }
 
   function bulkEmail() {
@@ -115,6 +126,10 @@ export default function AdminUsersPage() {
   }
 
   function bulkDelete() {
+    setBulkDeleteDialogOpen(true);
+  }
+
+  function confirmBulkDelete() {
     showMessage(`Deleted ${selectedList.length} selected user(s)`);
     setSelected(new Set());
   }
@@ -378,6 +393,24 @@ export default function AdminUsersPage() {
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="Delete User"
+        description={`Are you sure you want to delete ${userToDelete?.user_name}? This action cannot be undone.`}
+        confirmText="Delete User"
+        onConfirm={confirmDeleteUser}
+      />
+
+      <ConfirmDialog
+        open={bulkDeleteDialogOpen}
+        onOpenChange={setBulkDeleteDialogOpen}
+        title="Delete Selected Users"
+        description={`Are you sure you want to delete ${selectedList.length} selected user(s)? This action cannot be undone.`}
+        confirmText="Delete All"
+        onConfirm={confirmBulkDelete}
+      />
     </div>
   );
 }

@@ -41,7 +41,7 @@ export function BindAccount() {
     };
 
     return (
-        <div className="rounded-2xl border border-orange-200/70 dark:border-orange-800/50 bg-gradient-to-br from-orange-50/90 to-amber-50/60 dark:from-orange-950/30 dark:to-amber-950/20 backdrop-blur-sm p-5 sm:p-6 mb-6">
+        <div className="rounded-2xl border border-orange-200/70 dark:border-orange-800/50 bg-gradient-to-br from-orange-50/90 to-amber-50/60 dark:from-orange-950/30 dark:to-amber-950/20 backdrop-blur-sm p-5 sm:p-6 mb-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-orange-300/80 dark:hover:border-orange-700/80 active:scale-[1.01] active:shadow-lg active:border-orange-300/80 dark:active:border-orange-700/80">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-start gap-3">
                     <div className="p-2 rounded-xl bg-orange-100 dark:bg-orange-900/40">
