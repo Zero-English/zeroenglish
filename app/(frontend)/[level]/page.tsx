@@ -18,7 +18,7 @@ export async function generateMetadata({
     return { title: "Level Not Found" };
   }
 
-  const words = getWordsByLevel(upper);
+  const words = await getWordsByLevel(upper);
   return {
     title: `English Vocabulary - Level ${upper}`,
     description: `Learn ${words.length} essential English words at ${upper} level. Oxford 3000 vocabulary list.`,

@@ -17,7 +17,7 @@ export function ProfileGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!hydrated || sessionLoading) return;
     if (status === "none" && session?.user) {
-      setGoogleAuth(session.user.name ?? null, session.user.email ?? null);
+      setGoogleAuth(session.user.name ?? null, session.user.email ?? null, session.user.id ?? null);
       return;
     }
     if (status === "none" && !session?.user) {

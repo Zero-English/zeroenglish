@@ -6,6 +6,7 @@ import { useStillLearningWords } from "@/lib/use-still-learning-words";
 import { Word } from "@/lib/data";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useSpeak } from "@/lib/use-speak";
 import {
   Pagination,
   PaginationContent,
@@ -24,7 +25,7 @@ import { Classic } from "@/components/classic";
 const ITEMS_PER_PAGE = 10;
 import {
   BookmarkCheck, CheckCircle2, Bookmark, Circle,
-  BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap,
+  BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Volume2,
 } from "lucide-react";
 
 
@@ -36,7 +37,7 @@ const levelColors: Record<string, { bg: string; border: string; text: string; gr
 };
 
 function wordKey(w: Word) {
-  return `${w.id}|${w.word}`;
+  return String(w.id);
 }
 
 const levelOrder = ["A1", "A2", "B1", "B2"];
@@ -67,6 +68,112 @@ function StatCard({
         <div className="text-xs text-zinc-400 dark:text-zinc-500 mt-1">{sub}</div>
       )}
     </StaggerItem>
+  );
+}
+
+function WordCardDetails({ word }: { word: Word }) {
+  const speak = useSpeak();
+  const colorCfg = levelColors[word.level];
+
+  return (
+    <div className="pl-4 sm:pl-5 pr-16">
+      <div className="flex items-baseline gap-2.5 mb-1.5">
+        <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          {word.word}
+        </h2>
+        <button
+          onClick={() => speak(word.word)}
+          className="p-1 rounded-md text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+          title="Listen to pronunciation"
+        >
+          <Volume2 className="h-4 w-4" />
+        </button>
+        <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
+          {word.parts_of_speech}
+        </span>
+        <span className={cn("text-xs font-medium px-2 py-0.5 rounded-md", colorCfg?.bg, colorCfg?.text)}>
+          {word.level}
+        </span>
+      </div>
+      {word.meaning_bn !== "..." && (
+        <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">
+          {word.meaning_bn}
+        </p>
+      )}
+      <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+        {`${word.definition_en} (${word.definition_bn})`}
+      </p>
+      {(word.synonyms.length > 0 || word.antonyms.length > 0) && (
+        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 border-t border-zinc-100 dark:border-zinc-800 pt-3">
+          {word.synonyms.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+                Synonyms
+              </span>
+              {word.synonyms.map((syn, i) => (
+                <span
+                  key={i}
+                  className="rounded-md bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 text-xs text-emerald-700 dark:text-emerald-300"
+                >
+                  {syn}
+                </span>
+              ))}
+            </div>
+          )}
+          {word.antonyms.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+                Antonyms
+              </span>
+              {word.antonyms.map((ant, i) => (
+                <span
+                  key={i}
+                  className="rounded-md bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 text-xs text-rose-700 dark:text-rose-300"
+                >
+                  {ant}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      {word.examples_en.length > 0 && word.examples_bn.length > 0 ? (
+        <div className="mt-3 space-y-3 border-t border-zinc-100 dark:border-zinc-800 pt-3">
+          {Array.from({
+            length: Math.max(word.examples_en.length, word.examples_bn.length),
+          }).map((_, i) => (
+            <div key={i} className="space-y-1.5">
+              {word.examples_en[i] && (
+                <p className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
+                  &ldquo;{word.examples_en[i]}&rdquo;
+                </p>
+              )}
+              {word.examples_bn[i] && (
+                <p className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
+                  &ldquo;{word.examples_bn[i]}&rdquo;
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : word.examples_en.length > 0 ? (
+        <div className="mt-3 space-y-1.5 border-t border-zinc-100 dark:border-zinc-800 pt-3">
+          {word.examples_en.map((ex, i) => (
+            <p key={i} className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
+              &ldquo;{ex}&rdquo;
+            </p>
+          ))}
+        </div>
+      ) : word.examples_bn.length > 0 ? (
+        <div className="mt-3 space-y-1.5 border-t border-zinc-100 dark:border-zinc-800 pt-3">
+          {word.examples_bn.map((ex, i) => (
+            <p key={i} className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
+              &ldquo;{ex}&rdquo;
+            </p>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -103,27 +210,7 @@ function WordItem({
             : `${colorCfg?.gradient} opacity-60`
         )}
       />
-      <div className="pl-4 sm:pl-5 pr-16">
-        <div className="flex items-baseline gap-2.5 mb-1.5">
-          <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-            {word.word}
-          </h2>
-          <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
-            {word.parts_of_speech}
-          </span>
-          <span className={cn("text-xs font-medium px-2 py-0.5 rounded-md", colorCfg?.bg, colorCfg?.text)}>
-            {word.level}
-          </span>
-        </div>
-        {word.meaning_bn !== "..." && (
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">
-            {word.meaning_bn}
-          </p>
-        )}
-        <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-          {word.definition_en}
-        </p>
-      </div>
+      <WordCardDetails word={word} />
 
       <div className="absolute top-3 right-3 flex gap-1">
         <button
@@ -399,10 +486,10 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                     <WordItem
                       key={wordKey(word)}
                       word={word}
-                      isLearned={isLearned(word.id, word.word)}
+                      isLearned={isLearned(word.id)}
                       isBookmarked={true}
-                      onToggleBookmark={() => toggleBookmark(word.id, word.word)}
-                      onToggleLearned={() => toggleLearned(word.id, word.word)}
+                      onToggleBookmark={() => toggleBookmark(word.id)}
+                      onToggleLearned={() => toggleLearned(word.id)}
                     />
                   ))}
                 </StaggerContainer>
@@ -468,34 +555,14 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                   {pageWordsS.map((word) => (
                     <StaggerItem
                       key={wordKey(word)}
-                      onDoubleClick={() => toggleLearned(word.id, word.word)}
+                      onDoubleClick={() => toggleLearned(word.id)}
                       className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80 cursor-pointer"
                     >
                       <div className="absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b from-orange-400 to-amber-500 opacity-60" />
-                      <div className="pl-4 sm:pl-5 pr-16">
-                        <div className="flex items-baseline gap-2.5 mb-1.5">
-                          <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                            {word.word}
-                          </h2>
-                          <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
-                            {word.parts_of_speech}
-                          </span>
-                          <span className={cn("text-xs font-medium px-2 py-0.5 rounded-md", levelColors[word.level]?.bg, levelColors[word.level]?.text)}>
-                            {word.level}
-                          </span>
-                        </div>
-                        {word.meaning_bn !== "..." && (
-                          <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">
-                            {word.meaning_bn}
-                          </p>
-                        )}
-                        <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                          {word.definition_en}
-                        </p>
-                      </div>
+                      <WordCardDetails word={word} />
                       <div className="absolute top-3 right-3 flex gap-1">
                         <button
-                          onClick={() => toggleBookmark(word.id, word.word)}
+                          onClick={() => toggleBookmark(word.id)}
                           className={cn(
                             "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
                             bookmarkedIds.has(wordKey(word))
@@ -507,7 +574,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                           {bookmarkedIds.has(wordKey(word)) ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
                         </button>
                         <button
-                          onClick={() => toggleLearned(word.id, word.word)}
+                          onClick={() => toggleLearned(word.id)}
                           className={cn(
                             "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
                             learnedIds.has(wordKey(word))
@@ -519,7 +586,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                           {learnedIds.has(wordKey(word)) ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
                         </button>
                         <button
-                          onClick={() => removeStillLearning(word.id, word.word)}
+                          onClick={() => removeStillLearning(word.id)}
                           className="p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
                           title="Remove from still learning"
                         >
@@ -594,8 +661,8 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                       word={word}
                       isLearned={true}
                       isBookmarked={bookmarkedIds.has(wordKey(word))}
-                      onToggleBookmark={() => toggleBookmark(word.id, word.word)}
-                      onToggleLearned={() => toggleLearned(word.id, word.word)}
+                      onToggleBookmark={() => toggleBookmark(word.id)}
+                      onToggleLearned={() => toggleLearned(word.id)}
                     />
                   ))}
                 </StaggerContainer>

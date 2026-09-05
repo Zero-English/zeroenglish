@@ -1,5 +1,6 @@
-import fs from "fs";
-import path from "path";
+import { cache } from "react";
+import prisma from "@/utils/prisma";
+import type { Levels } from "@/generated/prisma/enums";
 
 export type Word = {
   id: number;
@@ -10,69 +11,66 @@ export type Word = {
   examples_en: string[];
   examples_bn: string[];
   synonyms: string[];
+  antonyms: string[];
   level: "A1" | "A2" | "B1" | "B2";
   category: string;
   parts_of_speech: string;
 };
 
-const dataDir = path.join(process.cwd(), "data");
+const VALID_LEVELS = ["A1", "A2", "B1", "B2"] as const;
 
-function loadAllWords(): Word[] {
-  const files = fs.readdirSync(dataDir).filter((f) => f.endsWith(".json"));
-  const words: Word[] = [];
-  for (const file of files) {
-    const content = fs.readFileSync(path.join(dataDir, file), "utf-8");
-    const parsed = JSON.parse(content) as Word[];
-    words.push(...parsed);
+interface DbWordRecord {
+  id: number;
+  word: string;
+  meaningBn: string[];
+  synonyms: string[];
+  antonyms: string[];
+  definitionEn: string;
+  definitionBn: string;
+  examplesEn: string[];
+  examplesBn: string[];
+  level: string;
+  category: string;
+  wordType: string[];
+}
+
+function toPublicWord(w: DbWordRecord): Word {
+  return {
+    id: w.id,
+    word: w.word,
+    meaning_bn: w.meaningBn.join("; "),
+    definition_en: w.definitionEn,
+    definition_bn: w.definitionBn,
+    examples_en: w.examplesEn,
+    examples_bn: w.examplesBn,
+    synonyms: w.synonyms,
+    antonyms: w.antonyms,
+    level: w.level as Word["level"],
+    category: w.category,
+    parts_of_speech: w.wordType.join(", "),
+  };
+}
+
+export const getAllWords = cache(async (): Promise<Word[]> => {
+  const words = await prisma.word.findMany({ orderBy: { id: "asc" } });
+  return words.map(toPublicWord);
+});
+
+export const getWordsByLevel = cache(
+  async (level: string): Promise<Word[]> => {
+    const upper = level.toUpperCase() as Levels;
+    const words = await prisma.word.findMany({
+      where: { level: upper },
+      orderBy: { id: "asc" },
+    });
+    return words.map(toPublicWord);
   }
-  return words;
-}
+);
 
-export function getAllWords(): Word[] {
-  return loadAllWords();
-}
-
-export function getWordsByLevel(level: string): Word[] {
-  return getAllWords().filter((w) => w.level === level);
-}
-
-export function getLevelStats() {
-  const levels = ["A1", "A2", "B1", "B2"];
-  return levels.map((level) => ({
+export const getLevelStats = cache(async () => {
+  const all = await getAllWords();
+  return VALID_LEVELS.map((level) => ({
     level,
-    count: getAllWords().filter((w) => w.level === level).length,
+    count: all.filter((w) => w.level === level).length,
   }));
-}
-
-export function searchWords(query: string): Word[] {
-  if (!query.trim()) return [];
-  const q = query.toLowerCase().trim();
-  const all = getAllWords();
-
-  const scored = all
-    .map((word) => {
-      let score = 0;
-      const wordLower = word.word.toLowerCase();
-      const meaningLower = word.meaning_bn.toLowerCase();
-      const defEnLower = word.definition_en.toLowerCase();
-      const defBnLower = word.definition_bn.toLowerCase();
-
-      if (wordLower === q) score += 100;
-      else if (wordLower.startsWith(q)) score += 50;
-      else if (wordLower.includes(q)) score += 20;
-
-      if (meaningLower === q) score += 80;
-      else if (meaningLower.startsWith(q)) score += 40;
-      else if (meaningLower.includes(q)) score += 15;
-
-      if (defEnLower.includes(q)) score += 5;
-      if (defBnLower.includes(q)) score += 5;
-
-      return { word, score };
-    })
-    .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score)
-    .map(({ word }) => word);
-
-  return scored;
-}
+});

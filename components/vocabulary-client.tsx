@@ -168,7 +168,7 @@ export function VocabularyClient() {
   const levelStats = LEVELS.map((lv) => {
     const total = stats[lv] ?? 0;
     const learned = wordRefs.filter(
-      (ref) => ref.level === lv && learnedIds.has(`${ref.id}|${ref.word}`)
+      (ref) => ref.level === lv && learnedIds.has(String(ref.id))
     ).length;
     return { level: lv, total, learned };
   });

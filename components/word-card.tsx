@@ -16,13 +16,13 @@ export function WordCard({ word, gradient }: WordCardProps) {
   const speak = useSpeak();
   const { isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
   const { isBookmarked, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
-  const learned = isLearned(word.id, word.word);
-  const bookmarked = isBookmarked(word.id, word.word);
+  const learned = isLearned(word.id);
+  const bookmarked = isBookmarked(word.id);
   const loaded = learnedLoaded && bookmarkLoaded;
 
   return (
     <div
-      onDoubleClick={() => loaded && toggleLearned(word.id, word.word)}
+      onDoubleClick={() => loaded && toggleLearned(word.id)}
       className={cn(
         "group relative overflow-hidden rounded-2xl border backdrop-blur-sm p-5 sm:p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-zinc-200/60 dark:hover:shadow-black/40 hover:-translate-y-0.5",
         learned
@@ -63,7 +63,60 @@ export function WordCard({ word, gradient }: WordCardProps) {
         <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
           {`${word.definition_en} (${word.definition_bn})`}
         </p>
-        {word.examples_en.length > 0 && (
+        {(word.synonyms.length > 0 || word.antonyms.length > 0) && (
+          <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 border-t border-zinc-100 dark:border-zinc-800 pt-3">
+            {word.synonyms.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-xs font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+                  Synonyms
+                </span>
+                {word.synonyms.map((syn, i) => (
+                  <span
+                    key={i}
+                    className="rounded-md bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 text-xs text-emerald-700 dark:text-emerald-300"
+                  >
+                    {syn}
+                  </span>
+                ))}
+              </div>
+            )}
+            {word.antonyms.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-xs font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+                  Antonyms
+                </span>
+                {word.antonyms.map((ant, i) => (
+                  <span
+                    key={i}
+                    className="rounded-md bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 text-xs text-rose-700 dark:text-rose-300"
+                  >
+                    {ant}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        {word.examples_en.length > 0 && word.examples_bn.length > 0 ? (
+          <div className="mt-3 space-y-3 border-t border-zinc-100 dark:border-zinc-800 pt-3">
+            {Array.from({
+              length: Math.max(word.examples_en.length, word.examples_bn.length),
+            }).map((_, i) => (
+              <div key={i} className="space-y-1.5">
+                {word.examples_en[i] && (
+                  <p className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
+                    &ldquo;{word.examples_en[i]}&rdquo;
+                  </p>
+                )}
+                {word.examples_bn[i] && (
+                  <p className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
+                    &ldquo;{word.examples_bn[i]}&rdquo;
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : word.examples_en.length > 0 ? (
           <div className="mt-3 space-y-1.5 border-t border-zinc-100 dark:border-zinc-800 pt-3">
             {word.examples_en.map((ex, i) => (
               <p key={i} className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
@@ -71,22 +124,21 @@ export function WordCard({ word, gradient }: WordCardProps) {
               </p>
             ))}
           </div>
-        )}
-        {word.examples_bn.length > 0 && (
-          <div className="mt-1 space-y-1.5 dark:border-zinc-800 pt-1">
+        ) : word.examples_bn.length > 0 ? (
+          <div className="mt-3 space-y-1.5 border-t border-zinc-100 dark:border-zinc-800 pt-3">
             {word.examples_bn.map((ex, i) => (
               <p key={i} className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
                 &ldquo;{ex}&rdquo;
               </p>
             ))}
           </div>
-        )}
+        ) : null}
       </div>
 
       {loaded && (
         <>
           <button
-            onClick={() => toggleBookmark(word.id, word.word)}
+            onClick={() => toggleBookmark(word.id)}
             className={cn(
               "absolute top-3 right-3 p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
               bookmarked
@@ -102,7 +154,7 @@ export function WordCard({ word, gradient }: WordCardProps) {
             )}
           </button>
           <button
-            onClick={() => toggleLearned(word.id, word.word)}
+            onClick={() => toggleLearned(word.id)}
             className={cn(
               "absolute top-12 right-3 p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
               learned

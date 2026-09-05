@@ -43,16 +43,16 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
     if (loaded) {
       switch (filter) {
         case "learned":
-          result = result.filter((w) => isLearned(w.id, w.word));
+          result = result.filter((w) => isLearned(w.id));
           break;
         case "not-learned":
-          result = result.filter((w) => !isLearned(w.id, w.word));
+          result = result.filter((w) => !isLearned(w.id));
           break;
         case "bookmarked":
-          result = result.filter((w) => isBookmarked(w.id, w.word));
+          result = result.filter((w) => isBookmarked(w.id));
           break;
         case "not-bookmarked":
-          result = result.filter((w) => !isBookmarked(w.id, w.word));
+          result = result.filter((w) => !isBookmarked(w.id));
           break;
         case "duplicates":
           result = result.filter((w) => duplicateIds.has(w.id));

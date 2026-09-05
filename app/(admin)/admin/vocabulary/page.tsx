@@ -7,8 +7,6 @@ import {
   Upload,
   Pencil,
   Trash2,
-  ChevronLeft,
-  ChevronRight,
   RotateCcw,
   Check,
   X,
@@ -36,6 +34,7 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { BackButton } from "@/components/back-button";
+import { PaginationNav } from "@/components/pagination-nav";
 import {
   levelOptions,
   partsOfSpeechOptions,
@@ -660,39 +659,11 @@ export default function AdminVocabularyPage() {
               )}
             </span>
           </div>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={safePage === 1}
-              aria-label="Previous page"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-              <button
-                key={p}
-                onClick={() => setPage(p)}
-                disabled={totalPages === 1}
-                aria-current={p === safePage ? "page" : undefined}
-                className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
-                  p === safePage
-                    ? "bg-primary text-white"
-                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                }`}
-              >
-                {p}
-              </button>
-            ))}
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={safePage === totalPages}
-              aria-label="Next page"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
+          <PaginationNav
+            page={safePage}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       </div>
 

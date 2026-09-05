@@ -33,6 +33,7 @@ const toPublicWord = (w: DbWordRecord): Word => ({
     examples_en: w.examplesEn,
     examples_bn: w.examplesBn,
     synonyms: w.synonyms,
+    antonyms: w.antonyms,
     level: w.level as Word["level"],
     category: w.category,
     parts_of_speech: w.wordType.join(", "),
