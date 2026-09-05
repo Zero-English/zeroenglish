@@ -7,39 +7,81 @@ datasource db {
   provider = "postgresql"
 }
 
+model UserBookmark {
+  userId       Int
+  wordId       Int
+  bookmarkedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  word Word @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  @@id([userId, wordId])
+  @@index([userId, bookmarkedAt])
+}
+
+model WordLearningEvent {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  wordId    Int
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  word Word @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model UserWord {
+  userId    Int
+  wordId    Int
+  isLearned IsLearned @default(UNLEARNED)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  word Word @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  @@id([userId, wordId])
+  @@index([userId, isLearned])
+}
+
 model Word {
-  id           Int          @id @default(autoincrement())
-  word         String       @unique
-  meaningBn    String[]
-  synonyms     String[]
-  antonyms     String[]
-  definitionEn String
-  definitionBn String
-  examplesEn   String[]
-  examplesBn   String[]
-  level        Levels
-  category     String
-  wordType     String[]
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id                 Int                 @id @default(autoincrement())
+  word               String              @unique
+  meaningBn          String[]
+  synonyms           String[]
+  antonyms           String[]
+  definitionEn       String
+  definitionBn       String
+  examplesEn         String[]
+  examplesBn         String[]
+  level              Levels
+  category           String
+  wordType           String[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  learnedBy          UserWord[]
+  userBookmarks      UserBookmark[]
+  wordLearningEvents WordLearningEvent[]
 
   @@index([level])
   @@index([category])
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  name          String?
-  user_name     String
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  role          Roles     @default(user)
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
-  password      String?
-  accounts      Account[]
-  sessions      Session[]
+  id                 Int                 @id @default(autoincrement())
+  name               String?
+  user_name          String
+  email              String              @unique
+  emailVerified      DateTime?
+  image              String?
+  role               Roles               @default(user)
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @updatedAt
+  password           String?
+  accounts           Account[]
+  sessions           Session[]
+  learnedWords       UserWord[]
+  userBookmarks      UserBookmark[]
+  wordLearningEvents WordLearningEvent[]
 }
 
 model Account {
@@ -88,4 +130,9 @@ enum Levels {
   B2
   C1
   C2
+}
+
+enum IsLearned {
+  LEARNED
+  UNLEARNED
 }
