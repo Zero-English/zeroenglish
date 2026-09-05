@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Word } from "@/lib/data";
+import type { Word } from "@/lib/data";
 import { WordCard } from "@/components/word-card";
+import type { BrowseWordsResponse, PaginationInfo } from "@/types/api";
 import {
   Pagination,
   PaginationContent,
@@ -15,11 +16,12 @@ import {
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
 const ITEMS_PER_PAGE = 10;
+const DEBOUNCE_MS = 350;
 
 const LEVEL_GRADIENT: Record<string, string> = {
   A1: "from-emerald-500 to-teal-500",
@@ -28,67 +30,27 @@ const LEVEL_GRADIENT: Record<string, string> = {
   B2: "from-rose-500 to-pink-500",
 };
 
-function toStr(val: unknown): string {
-  return typeof val === "string" ? val : "";
-}
-
-function searchWords(words: Word[], query: string): Word[] {
-  if (!query.trim()) return [];
-  const q = query.toLowerCase().trim();
-
-  const scored: { word: Word; score: number }[] = [];
-
-  for (let i = 0; i < words.length; i++) {
-    const word = words[i];
-    if (!word || typeof word !== "object") continue;
-
-    let score = 0;
-    const wordLower = toStr(word.word).toLowerCase();
-    const meaningLower = toStr(word.meaning_bn).toLowerCase();
-    const defEnLower = toStr(word.definition_en).toLowerCase();
-    const defBnLower = toStr(word.definition_bn).toLowerCase();
-
-    if (wordLower === q) score += 100;
-    else if (wordLower.startsWith(q)) score += 50;
-    else if (wordLower.includes(q)) score += 20;
-
-    if (meaningLower === q) score += 80;
-    else if (meaningLower.startsWith(q)) score += 40;
-    else if (meaningLower.includes(q)) score += 15;
-
-    if (defEnLower.includes(q)) score += 5;
-    if (defBnLower.includes(q)) score += 5;
-
-    if (score > 0) scored.push({ word, score });
-  }
-
-  scored.sort((a, b) => b.score - a.score);
-  return scored.map(({ word }) => word);
-}
-
-export function SearchClient({ words }: { words: Word[] }) {
+export function SearchClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
-  const initialPage = parseInt(searchParams.get("page") || "1", 10);
+  const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
+
   const [query, setQuery] = useState(initialQuery);
+  const [debouncedQuery, setDebouncedQuery] = useState(initialQuery);
   const [currentPage, setCurrentPage] = useState(initialPage);
+
+  const [results, setResults] = useState<Word[]>([]);
+  const [pagination, setPagination] = useState<PaginationInfo | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [query]);
-
-  const allResults = useMemo(() => searchWords(words, query), [words, query]);
-  const totalPages = Math.max(1, Math.ceil(allResults.length / ITEMS_PER_PAGE));
-  const safePage = Math.min(currentPage, totalPages);
-  const start = (safePage - 1) * ITEMS_PER_PAGE;
-  const results = allResults.slice(start, start + ITEMS_PER_PAGE);
 
   const updateUrl = useCallback(
     (q: string, page: number) => {
@@ -100,24 +62,85 @@ export function SearchClient({ words }: { words: Word[] }) {
     [router]
   );
 
-  const handleChange = (value: string) => {
-    setQuery(value);
+  const fetchResults = useCallback(async (q: string, page: number) => {
+    const trimmed = q.trim();
+    if (!trimmed) {
+      setResults([]);
+      setPagination(null);
+      setError(null);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(ITEMS_PER_PAGE),
+        search: trimmed,
+      });
+      const res = await fetch(`/api/v1/words/browse?${params.toString()}`);
+      const json = (await res.json()) as BrowseWordsResponse;
+      if (json.success && json.data) {
+        setResults(json.data);
+        setPagination(json.pagination ?? null);
+      } else {
+        setError(json.message || "Search failed");
+        setResults([]);
+        setPagination(null);
+      }
+    } catch {
+      setError("Failed to search words");
+      setResults([]);
+      setPagination(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchResults(debouncedQuery, currentPage);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [debouncedQuery, currentPage, fetchResults]);
+
+  useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      updateUrl(value, 1);
-    }, 300);
+      if (query !== debouncedQuery) {
+        setDebouncedQuery(query);
+        setCurrentPage(1);
+        updateUrl(query, 1);
+      }
+    }, DEBOUNCE_MS);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [query, debouncedQuery, updateUrl]);
+
+  const handleChange = (value: string) => {
+    setQuery(value);
   };
 
   const handleClear = () => {
     setQuery("");
-    inputRef.current?.focus();
+    setDebouncedQuery("");
+    setCurrentPage(1);
     updateUrl("", 1);
+    inputRef.current?.focus();
   };
 
   const goToPage = (page: number) => {
     setCurrentPage(page);
     updateUrl(query, page);
   };
+
+  const totalPages = pagination ? Math.max(1, pagination.totalPages) : 1;
+  const safePage = Math.min(currentPage, totalPages);
+  const start = results.length === 0 ? 0 : (safePage - 1) * ITEMS_PER_PAGE + 1;
+  const end = start + results.length - 1;
+  const total = pagination?.total ?? 0;
 
   const getPageItems = () => {
     const items: (number | string)[] = [];
@@ -155,7 +178,6 @@ export function SearchClient({ words }: { words: Word[] }) {
 
           <div className="mb-8">
             <Field>
-              {/* <FieldLabel htmlFor="search-input">Search</FieldLabel> */}
               <ButtonGroup className="border-none">
                 <Input
                   id="search-input"
@@ -167,22 +189,42 @@ export function SearchClient({ words }: { words: Word[] }) {
                 />
                 <Button
                   variant="outline"
-                  className="rounded-l-none h-9 border-l-0" 
+                  className="rounded-l-none h-9 border-l-0"
                   onClick={() => {
-                    inputRef.current?.focus();
+                    if (debounceRef.current) clearTimeout(debounceRef.current);
+                    if (query.trim()) {
+                      setDebouncedQuery(query);
+                      setCurrentPage(1);
+                      updateUrl(query, 1);
+                    } else {
+                      inputRef.current?.focus();
+                    }
                   }}
                 >
                   Search
                 </Button>
               </ButtonGroup>
+              {query.trim() && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="mt-2 text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+                >
+                  Clear search
+                </button>
+              )}
             </Field>
           </div>
 
           {isSearching && (
             <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
-              {results.length === 0
+              {loading
+                ? "Searching..."
+                : error
+                ? error
+                : total === 0
                 ? "No words found"
-                : `Found ${results.length} word${results.length === 1 ? "" : "s"}`}
+                : `Found ${total} word${total === 1 ? "" : "s"}`}
             </p>
           )}
 
@@ -195,66 +237,87 @@ export function SearchClient({ words }: { words: Word[] }) {
             </div>
           )}
 
-          {isSearching && results.length > 0 && (
+          {isSearching && (
             <>
-              <div className="space-y-4">
-                {results.map((word) => (
-                  <WordCard
-                    key={`${word.id}-${word.word}`}
-                    word={word}
-                    gradient={LEVEL_GRADIENT[word.level] || "from-zinc-500 to-zinc-400"}
-                  />
-                ))}
-              </div>
-              {totalPages > 1 && (
+              {loading ? (
+                <div className="space-y-4">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-32 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 animate-pulse"
+                    />
+                  ))}
+                </div>
+              ) : error ? (
+                <div className="text-center py-16">
+                  <p className="text-zinc-400 dark:text-zinc-500 text-sm">{error}</p>
+                </div>
+              ) : results.length === 0 ? (
+                <div className="text-center py-16">
+                  <p className="text-zinc-400 dark:text-zinc-500 text-sm">No words found</p>
+                </div>
+              ) : (
                 <>
-                  <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
-                    Showing {start + 1}&ndash;{Math.min(start + ITEMS_PER_PAGE, allResults.length)} of {allResults.length}
-                  </p>
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (safePage > 1) goToPage(safePage - 1);
-                          }}
-                          className={safePage <= 1 ? "pointer-events-none opacity-50" : ""}
-                        />
-                      </PaginationItem>
-                      {getPageItems().map((item) =>
-                        typeof item === "string" ? (
-                          <PaginationItem key={item}>
-                            <PaginationEllipsis />
-                          </PaginationItem>
-                        ) : (
-                          <PaginationItem key={item}>
-                            <PaginationLink
+                  <div className="space-y-4">
+                    {results.map((word) => (
+                      <WordCard
+                        key={`${word.id}-${word.word}`}
+                        word={word}
+                        gradient={LEVEL_GRADIENT[word.level] || "from-zinc-500 to-zinc-400"}
+                      />
+                    ))}
+                  </div>
+                  {totalPages > 1 && (
+                    <>
+                      <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
+                        Showing {start}&ndash;{end} of {total}
+                      </p>
+                      <Pagination>
+                        <PaginationContent>
+                          <PaginationItem>
+                            <PaginationPrevious
                               href="#"
                               onClick={(e) => {
                                 e.preventDefault();
-                                goToPage(item);
+                                if (safePage > 1) goToPage(safePage - 1);
                               }}
-                              isActive={item === safePage}
-                            >
-                              {item}
-                            </PaginationLink>
+                              className={safePage <= 1 ? "pointer-events-none opacity-50" : ""}
+                            />
                           </PaginationItem>
-                        )
-                      )}
-                      <PaginationItem>
-                        <PaginationNext
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (safePage < totalPages) goToPage(safePage + 1);
-                          }}
-                          className={safePage >= totalPages ? "pointer-events-none opacity-50" : ""}
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
+                          {getPageItems().map((item) =>
+                            typeof item === "string" ? (
+                              <PaginationItem key={item}>
+                                <PaginationEllipsis />
+                              </PaginationItem>
+                            ) : (
+                              <PaginationItem key={item}>
+                                <PaginationLink
+                                  href="#"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    goToPage(item);
+                                  }}
+                                  isActive={item === safePage}
+                                >
+                                  {item}
+                                </PaginationLink>
+                              </PaginationItem>
+                            )
+                          )}
+                          <PaginationItem>
+                            <PaginationNext
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                if (safePage < totalPages) goToPage(safePage + 1);
+                              }}
+                              className={safePage >= totalPages ? "pointer-events-none opacity-50" : ""}
+                            />
+                          </PaginationItem>
+                        </PaginationContent>
+                      </Pagination>
+                    </>
+                  )}
                 </>
               )}
             </>

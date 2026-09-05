@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { AnimatePresence, motion } from "motion/react";
-import { PanelLeft, Users, BookOpen, LogOut } from "lucide-react";
+import { PanelLeft, Users, BookOpen, Activity, LogOut } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -14,6 +14,7 @@ import {
 const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/vocabulary", label: "Vocabulary", icon: BookOpen },
+  { href: "/admin/learning-events", label: "Learning Events", icon: Activity },
 ];
 
 function NavLinks({
