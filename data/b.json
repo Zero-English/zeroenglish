@@ -1,0 +1,2653 @@
+[
+  {
+    "id": 1,
+    "word": "baby",
+    "meaning_bn": "শিশু",
+    "definition_en": "A very young child.",
+    "definition_bn": "খুব ছোট বাচ্চা।",
+    "examples_en": [
+      "The baby is sleeping peacefully in the crib."
+    ],
+    "examples_bn": [
+      "শিশুটি দোলনায় শান্তভাবে ঘুমাচ্ছে।"
+    ],
+    "synonyms": [
+      "infant",
+      "newborn"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 3,
+    "word": "background",
+    "meaning_bn": "পটভূমি",
+    "definition_en": "The area or scenery behind the main object of contemplation.",
+    "definition_bn": "প্রধান বিষয়ের পেছনের অংশ বা দৃশ্যপট।",
+    "examples_en": [
+      "The mountains in the background were covered with snow."
+    ],
+    "examples_bn": [
+      "পটভূমির পাহাড়গুলো বরফে ঢাকা ছিল।"
+    ],
+    "synonyms": [
+      "backdrop",
+      "setting"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 4,
+    "word": "backward",
+    "meaning_bn": "পেছনের দিকে",
+    "definition_en": "Directed or moving toward the back.",
+    "definition_bn": "পেছনের দিকে পরিচালিত বা অগ্রসরমান।",
+    "examples_en": [
+      "He took a step backward in surprise."
+    ],
+    "examples_bn": [
+      "সে অবাক হয়ে এক ধাপ পিছিয়ে গেল।"
+    ],
+    "synonyms": [
+      "rearward",
+      "behind"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 5,
+    "word": "bacteria",
+    "meaning_bn": "ব্যাকটেরিয়া / জীবাণু",
+    "definition_en": "Microscopic living organisms that can be found everywhere.",
+    "definition_bn": "অণুবীক্ষণিক জীব যা সর্বত্র পাওয়া যায়।",
+    "examples_en": [
+      "Some bacteria are helpful to the human body."
+    ],
+    "examples_bn": [
+      "কিছু ব্যাকটেরিয়া মানবদেহের জন্য সহায়ক।"
+    ],
+    "synonyms": [
+      "microbes",
+      "germs"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 6,
+    "word": "bad",
+    "meaning_bn": "খারাপ",
+    "definition_en": "Of poor quality or a low standard.",
+    "definition_bn": "যা ভালো নয় বা সন্তোষজনক নয়।",
+    "examples_en": [
+      "It is a bad habit to stay up late at night."
+    ],
+    "examples_bn": [
+      "রাত জাগা একটি খারাপ অভ্যাস।"
+    ],
+    "synonyms": [
+      "poor",
+      "awful"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 7,
+    "word": "badly",
+    "meaning_bn": "খারাপভাবে / মারাত্মকভাবে",
+    "definition_en": "In an unsatisfactory or unsuccessful way.",
+    "definition_bn": "সন্তোষজনক নয় এমন উপায়ে।",
+    "examples_en": [
+      "The building was badly damaged by the fire."
+    ],
+    "examples_bn": [
+      "আগুনে ভবনটি মারাত্মকভাবে ক্ষতিগ্রস্ত হয়েছে।"
+    ],
+    "synonyms": [
+      "poorly",
+      "severely"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 8,
+    "word": "bag",
+    "meaning_bn": "ব্যাগ / থলে",
+    "definition_en": "A flexible container with an opening at the top, used for carrying things.",
+    "definition_bn": "জিনিসপত্র বহন করার জন্য ব্যবহৃত পাত্র।",
+    "examples_en": [
+      "She put the groceries in a large bag."
+    ],
+    "examples_bn": [
+      "সে সওদাগুলো একটি বড় ব্যাগে রাখল।"
+    ],
+    "synonyms": [
+      "sack",
+      "pouch"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 9,
+    "word": "bake",
+    "meaning_bn": "সেঁকা / বেক করা",
+    "definition_en": "To cook food using dry heat, typically in an oven.",
+    "definition_bn": "শুষ্ক তাপে খাবার রান্না করা, সাধারণত ওভেনে।",
+    "examples_en": [
+      "I love to bake chocolate cakes on weekends."
+    ],
+    "examples_bn": [
+      "আমি ছুটির দিনে চকলেট কেক বেক করতে ভালোবাসি।"
+    ],
+    "synonyms": [
+      "roast",
+      "cook"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 10,
+    "word": "balance",
+    "meaning_bn": "ভারসাম্য",
+    "definition_en": "A state in which different things are in the correct proportions.",
+    "definition_bn": "এমন একটি অবস্থা যেখানে বিভিন্ন জিনিস সঠিক অনুপাতে থাকে।",
+    "examples_en": [
+      "It is important to maintain a balance between work and life."
+    ],
+    "examples_bn": [
+      "কাজ এবং জীবনের মধ্যে ভারসাম্য বজায় রাখা গুরুত্বপূর্ণ।"
+    ],
+    "synonyms": [
+      "stability",
+      "equilibrium"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 11,
+    "word": "ball",
+    "meaning_bn": "বল / গোলক",
+    "definition_en": "A solid or hollow spherical or egg-shaped object used in a game.",
+    "definition_bn": "খেলার জন্য ব্যবহৃত গোল বস্তু।",
+    "examples_en": [
+      "The children are playing with a ball in the park."
+    ],
+    "examples_bn": [
+      "শিশুরা পার্কে বল দিয়ে খেলছে।"
+    ],
+    "synonyms": [
+      "sphere",
+      "globe"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 12,
+    "word": "ban",
+    "meaning_bn": "নিষেধাজ্ঞা / নিষিদ্ধ করা",
+    "definition_en": "To officially or legally prohibit something.",
+    "definition_bn": "আনুষ্ঠানিকভাবে বা আইনত কিছু নিষিদ্ধ করা।",
+    "examples_en": [
+      "The government decided to ban single-use plastics."
+    ],
+    "examples_bn": [
+      "সরকার একবার ব্যবহারযোগ্য প্লাস্টিক নিষিদ্ধ করার সিদ্ধান্ত নিয়েছে।"
+    ],
+    "synonyms": [
+      "prohibit",
+      "forbid"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 13,
+    "word": "banana",
+    "meaning_bn": "কলা",
+    "definition_en": "A long curved fruit which grows in clusters and has yellow skin.",
+    "definition_bn": "এক প্রকার দীর্ঘায়িত ভোজ্য হলুদ ফল।",
+    "examples_en": [
+      "I ate a banana for breakfast this morning."
+    ],
+    "examples_bn": [
+      "আজ সকালে নাস্তায় আমি একটি কলা খেয়েছি।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 14,
+    "word": "band",
+    "meaning_bn": "সঙ্গীত দল / দল",
+    "definition_en": "A small group of musicians who play popular music together.",
+    "definition_bn": "সঙ্গীতশিল্পীদের একটি ছোট দল যারা একসাথে গান বাজায়।",
+    "examples_en": [
+      "My brother plays guitar in a local rock band."
+    ],
+    "examples_bn": [
+      "আমার ভাই একটি স্থানীয় রক ব্যান্ডে গিটার বাজায়।"
+    ],
+    "synonyms": [
+      "group",
+      "orchestra"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 15,
+    "word": "bank (money)",
+    "meaning_bn": "ব্যাংক",
+    "definition_en": "A financial institution where people deposit or borrow money.",
+    "definition_bn": "একটি আর্থিক প্রতিষ্ঠান যেখানে মানুষ টাকা জমা রাখে বা ধার নেয়।",
+    "examples_en": [
+      "I need to go to the bank to withdraw some cash."
+    ],
+    "examples_bn": [
+      "কিছু নগদ টাকা তোলার জন্য আমার ব্যাংকে যাওয়া দরকার।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 16,
+    "word": "bank (river)",
+    "meaning_bn": "নদীর তীর / তট",
+    "definition_en": "The land alongside or sloping down to a river.",
+    "definition_bn": "নদীর পাশের জমি বা কিনারা।",
+    "examples_en": [
+      "We sat on the river bank and watched the sunset."
+    ],
+    "examples_bn": [
+      "আমরা নদীর তীরে বসে সূর্যাস্ত দেখছিলাম।"
+    ],
+    "synonyms": [
+      "shore",
+      "edge"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 18,
+    "word": "barrier",
+    "meaning_bn": "প্রতিবন্ধকতা / বাধা",
+    "definition_en": "A fence or other obstacle that prevents movement or access.",
+    "definition_bn": "একটি বেড়া বা অন্য বাধা যা চলাচল বা প্রবেশে বাধা দেয়।",
+    "examples_en": [
+      "Language can sometimes be a barrier to communication."
+    ],
+    "examples_bn": [
+      "ভাষা অনেক সময় যোগাযোগের ক্ষেত্রে বাধা হতে পারে।"
+    ],
+    "synonyms": [
+      "obstacle",
+      "hurdle"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 19,
+    "word": "base",
+    "meaning_bn": "ভিত্তি / তলা",
+    "definition_en": "The lowest part or edge of something.",
+    "definition_bn": "কোনো কিছুর সর্বনিম্ন অংশ বা কিনারা।",
+    "examples_en": [
+      "The lamp has a heavy metal base."
+    ],
+    "examples_bn": [
+      "ল্যাম্পটির একটি ভারী ধাতব ভিত্তি রয়েছে।"
+    ],
+    "synonyms": [
+      "foundation",
+      "bottom"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 20,
+    "word": "baseball",
+    "meaning_bn": "বেসবল",
+    "definition_en": "A ball game played with a bat, ball, and gloves between two teams.",
+    "definition_bn": "ব্যাট, বল এবং গ্লাভস দিয়ে খেলা দুই দলের একটি খেলা।",
+    "examples_en": [
+      "Baseball is a very popular sport in the United States."
+    ],
+    "examples_bn": [
+      "বেসবল মার্কিন যুক্তরাষ্ট্রে একটি খুব জনপ্রিয় খেলা।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 21,
+    "word": "based",
+    "meaning_bn": "ভিত্তি করে গঠিত / অবস্থিত",
+    "definition_en": "Using something as a foundation or being located in a specific place.",
+    "definition_bn": "কোনো কিছুকে ভিত্তি হিসেবে ব্যবহার করা বা নির্দিষ্ট স্থানে অবস্থিত হওয়া।",
+    "examples_en": [
+      "The movie is based on a true story."
+    ],
+    "examples_bn": [
+      "সিনেমাটি একটি সত্য গল্পের উপর ভিত্তি করে তৈরি।"
+    ],
+    "synonyms": [
+      "founded",
+      "established"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 22,
+    "word": "basic",
+    "meaning_bn": "মৌলিক / সাধারণ",
+    "definition_en": "Forming an essential foundation or starting point; fundamental.",
+    "definition_bn": "একটি অপরিহার্য ভিত্তি বা শুরুর বিন্দু গঠন করা; মৌলিক।",
+    "examples_en": [
+      "Food and water are basic human needs."
+    ],
+    "examples_bn": [
+      "খাদ্য ও পানি মানুষের মৌলিক চাহিদা।"
+    ],
+    "synonyms": [
+      "fundamental",
+      "essential"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 23,
+    "word": "basically",
+    "meaning_bn": "মূলত / প্রধানত",
+    "definition_en": "In the most essential respects; fundamentally.",
+    "definition_bn": "সবচেয়ে অপরিহার্য দিক থেকে; মূলত।",
+    "examples_en": [
+      "The two machines are basically the same."
+    ],
+    "examples_bn": [
+      "মেশিন দুটি মূলত একই রকম।"
+    ],
+    "synonyms": [
+      "fundamentally",
+      "essentially"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adv."
+  },
+  {
+    "id": 24,
+    "word": "basis",
+    "meaning_bn": "ভিত্তি / মূলনীতি",
+    "definition_en": "The underlying support or foundation for an idea or process.",
+    "definition_bn": "কোনো ধারণা বা প্রক্রিয়ার অন্তর্নিহিত সমর্থন বা ভিত্তি।",
+    "examples_en": [
+      "We meet on a regular basis to discuss the project."
+    ],
+    "examples_bn": [
+      "আমরা প্রকল্পটি আলোচনার জন্য নিয়মিতভাবে মিলিত হই।"
+    ],
+    "synonyms": [
+      "foundation",
+      "base"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 25,
+    "word": "basketball",
+    "meaning_bn": "বেসবল / বাস্কেটবল খেলা",
+    "definition_en": "A game played between two teams of five players in which goals are scored by throwing a ball through a netted hoop.",
+    "definition_bn": "পাঁচজন খেলোয়াড়ের দুটি দলের মধ্যে খেলা যেখানে একটি নেটের হুপের মধ্য দিয়ে বল ছুড়ে গোল করা হয়।",
+    "examples_en": [
+      "He loves playing basketball with his friends after school."
+    ],
+    "examples_bn": [
+      "সে স্কুল ছুটির পর বন্ধুদের সাথে বাস্কেটবল খেলতে পছন্দ করে।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 26,
+    "word": "bath",
+    "meaning_bn": "গোসল",
+    "definition_en": "The act of washing the body in a large container of water.",
+    "definition_bn": "পানির একটি বড় পাত্রে শরীর ধোয়ার কাজ।",
+    "examples_en": [
+      "I feel very relaxed after taking a warm bath."
+    ],
+    "examples_bn": [
+      "গরম পানিতে গোসল করার পর আমি খুব আরামবোধ করছি।"
+    ],
+    "synonyms": [
+      "soak",
+      "shower"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 27,
+    "word": "bathroom",
+    "meaning_bn": "গোসলখানা / শৌচাগার",
+    "definition_en": "A room containing a toilet and a sink, and typically a bathtub or shower.",
+    "definition_bn": "একটি কক্ষ যেখানে টয়লেট, বেসিন এবং সাধারণত বাথটাব বা ঝরনা থাকে।",
+    "examples_en": [
+      "The master bedroom has its own private bathroom."
+    ],
+    "examples_bn": [
+      "মাস্টার বেডরুমের নিজস্ব ব্যক্তিগত বাথরুম আছে।"
+    ],
+    "synonyms": [
+      "restroom",
+      "washroom"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 28,
+    "word": "battery",
+    "meaning_bn": "ব্যাটারি / কোষ",
+    "definition_en": "A container consisting of one or more cells used as a source of electrical power.",
+    "definition_bn": "এক বা একাধিক কোষ বিশিষ্ট পাত্র যা বৈদ্যুতিক শক্তির উৎস হিসেবে ব্যবহৃত হয়।",
+    "examples_en": [
+      "My phone's battery is almost dead."
+    ],
+    "examples_bn": [
+      "আমার ফোনের ব্যাটারি প্রায় শেষ।"
+    ],
+    "synonyms": [
+      "cell",
+      "accumulator"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 30,
+    "word": "be",
+    "meaning_bn": "হওয়া / থাকা",
+    "definition_en": "To exist or live; used to describe the state or identity of someone or something.",
+    "definition_bn": "অস্তিত্ব থাকা; কারো বা কোনো কিছুর অবস্থা বা পরিচয় বর্ণনা করতে ব্যবহৃত হয়।",
+    "examples_en": [
+      "I want to be a doctor when I grow up."
+    ],
+    "examples_bn": [
+      "আমি বড় হয়ে ডাক্তার হতে চাই।"
+    ],
+    "synonyms": [
+      "exist",
+      "remain"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., auxiliary v."
+  },
+  {
+    "id": 31,
+    "word": "beach",
+    "meaning_bn": "সমুদ্র সৈকত",
+    "definition_en": "A pebbly or sandy shore, especially by the ocean between high- and low-water marks.",
+    "definition_bn": "একটি পাথুরে বা বালুকাময় তীর, বিশেষ করে সমুদ্রের পাশে।",
+    "examples_en": [
+      "We spent the whole day walking along the beach."
+    ],
+    "examples_bn": [
+      "আমরা সারা দিন সমুদ্র সৈকতে হেঁটে কাটিয়েছি।"
+    ],
+    "synonyms": [
+      "shore",
+      "seaside"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 32,
+    "word": "bean",
+    "meaning_bn": "শিম / বীজ",
+    "definition_en": "An edible seed, typically kidney-shaped, growing in long pods.",
+    "definition_bn": "একটি ভোজ্য বীজ, সাধারণত শিমের মতো আকৃতির, যা লম্বা খোসার ভেতরে জন্মে।",
+    "examples_en": [
+      "She added some green beans to the vegetable soup."
+    ],
+    "examples_bn": [
+      "সে সবজি স্যুপে কিছু সবুজ শিম যোগ করল।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 33,
+    "word": "bear (deal with)",
+    "meaning_bn": "সহ্য করা",
+    "definition_en": "To endure or tolerate a difficult situation or pain.",
+    "definition_bn": "একটি কঠিন পরিস্থিতি বা ব্যথা সহ্য করা।",
+    "examples_en": [
+      "I can't bear the heat in this room."
+    ],
+    "examples_bn": [
+      "আমি এই ঘরের গরম সহ্য করতে পারছি না।"
+    ],
+    "synonyms": [
+      "tolerate",
+      "endure"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 34,
+    "word": "bear (animal)",
+    "meaning_bn": "ভল্লুক",
+    "definition_en": "A large, heavy, wild animal with thick fur and sharp claws.",
+    "definition_bn": "ঘন লোম এবং ধারালো নখরযুক্ত একটি বড়, ভারী, বন্য প্রাণী।",
+    "examples_en": [
+      "A grizzly bear was spotted near the river."
+    ],
+    "examples_bn": [
+      "নদীর কাছে একটি গ্রিজলি ভল্লুক দেখা গেছে।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 37,
+    "word": "beauty",
+    "meaning_bn": "সৌন্দর্য",
+    "definition_en": "A combination of qualities that pleases the aesthetic senses.",
+    "definition_bn": "গুণের সমন্বয় যা নান্দনিক বোধকে সন্তুষ্ট করে।",
+    "examples_en": [
+      "The beauty of the sunrise was breathtaking."
+    ],
+    "examples_bn": [
+      "সূর্যোদয়ের সৌন্দর্য ছিল শ্বাসরুদ্ধকর।"
+    ],
+    "synonyms": [
+      "attractiveness",
+      "elegance"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 38,
+    "word": "because",
+    "meaning_bn": "কারণ",
+    "definition_en": "For the reason that; since.",
+    "definition_bn": "যে কারণে; যেহেতু।",
+    "examples_en": [
+      "I stayed home because it was raining."
+    ],
+    "examples_bn": [
+      "আমি বাড়িতে ছিলাম কারণ বৃষ্টি হচ্ছিল।"
+    ],
+    "synonyms": [
+      "since",
+      "as"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "conj."
+  },
+  {
+    "id": 39,
+    "word": "become",
+    "meaning_bn": "হওয়া / পরিণত হওয়া",
+    "definition_en": "To begin to be something or enter a certain state.",
+    "definition_bn": "কিছু হতে শুরু করা বা একটি নির্দিষ্ট অবস্থায় প্রবেশ করা।",
+    "examples_en": [
+      "It has become very cold outside."
+    ],
+    "examples_bn": [
+      "বাইরে খুব ঠান্ডা হয়ে গেছে।"
+    ],
+    "synonyms": [
+      "turn into",
+      "grow"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 40,
+    "word": "bed",
+    "meaning_bn": "বিছানা",
+    "definition_en": "A piece of furniture for sleep or rest.",
+    "definition_bn": "ঘুমানোর বা বিশ্রামের আসবাবপত্র।",
+    "examples_en": [
+      "I was so tired that I went straight to bed."
+    ],
+    "examples_bn": [
+      "আমি এত ক্লান্ত ছিলাম যে সরাসরি বিছানায় চলে গেলাম।"
+    ],
+    "synonyms": [
+      "couch",
+      "cot"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 41,
+    "word": "bedroom",
+    "meaning_bn": "শোবার ঘর",
+    "definition_en": "A room used for sleeping in.",
+    "definition_bn": "ঘুমানোর জন্য ব্যবহৃত একটি কক্ষ।",
+    "examples_en": [
+      "Our new apartment has three bedrooms."
+    ],
+    "examples_bn": [
+      "আমাদের নতুন অ্যাপার্টমেন্টে তিনটি শোবার ঘর আছে।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 42,
+    "word": "bee",
+    "meaning_bn": "মৌমাছি",
+    "definition_en": "A stinging winged insect which collects nectar and pollen and produces wax and honey.",
+    "definition_bn": "একটি হুল ফোটানো ডানাওয়ালা পোকা যা নেক্টার সংগ্রহ করে এবং মধু ও মোম তৈরি করে।",
+    "examples_en": [
+      "A honey bee was buzzing around the flowers."
+    ],
+    "examples_bn": [
+      "একটি মৌমাছি ফুলের চারপাশে গুনগুন করছিল।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 43,
+    "word": "beef",
+    "meaning_bn": "গরুর মাংস",
+    "definition_en": "The flesh of a cow, bull, or ox, used as food.",
+    "definition_bn": "গরু বা ষাঁড়ের মাংস, যা খাদ্য হিসেবে ব্যবহৃত হয়।",
+    "examples_en": [
+      "We are having roast beef for dinner tonight."
+    ],
+    "examples_bn": [
+      "আজ রাতে রাতের খাবারের জন্য আমাদের রোস্ট করা গরুর মাংস আছে।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 44,
+    "word": "beer",
+    "meaning_bn": "বিয়ার (এক প্রকার পানীয়)",
+    "definition_en": "An alcoholic drink made from yeast-fermented malt flavored with hops.",
+    "definition_bn": "গাঁজন প্রক্রিয়ায় তৈরি এক ধরণের অ্যালকোহলযুক্ত পানীয়।",
+    "examples_en": [
+      "He ordered a glass of cold beer."
+    ],
+    "examples_bn": [
+      "সে এক গ্লাস ঠান্ডা বিয়ার অর্ডার করল।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 46,
+    "word": "beg",
+    "meaning_bn": "অনুনয় করা / ভিক্ষা করা",
+    "definition_en": "To ask for something, typically money or food, as a gift or charity.",
+    "definition_bn": "উপহার বা দান হিসেবে কিছু (সাধারণত টাকা বা খাবার) চাওয়া।",
+    "examples_en": [
+      "The child started to beg for a new toy."
+    ],
+    "examples_bn": [
+      "শিশুটি একটি নতুন খেলনার জন্য অনুনয় করতে লাগল।"
+    ],
+    "synonyms": [
+      "plead",
+      "request"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 47,
+    "word": "begin",
+    "meaning_bn": "শুরু করা",
+    "definition_en": "To start doing something or to happen from a particular point in time.",
+    "definition_bn": "কিছু করতে শুরু করা বা একটি নির্দিষ্ট সময় থেকে শুরু হওয়া।",
+    "examples_en": [
+      "The show will begin in ten minutes."
+    ],
+    "examples_bn": [
+      "দশ মিনিটের মধ্যে অনুষ্ঠানটি শুরু হবে।"
+    ],
+    "synonyms": [
+      "start",
+      "commence"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 48,
+    "word": "beginning",
+    "meaning_bn": "শুরু / আরম্ভ",
+    "definition_en": "The first part or the point at which something starts.",
+    "definition_bn": "প্রথম অংশ বা যে বিন্দু থেকে কিছু শুরু হয়।",
+    "examples_en": [
+      "The beginning of the story was very interesting."
+    ],
+    "examples_bn": [
+      "গল্পের শুরুটা খুব আকর্ষণীয় ছিল।"
+    ],
+    "synonyms": [
+      "start",
+      "outset"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 49,
+    "word": "behave",
+    "meaning_bn": "আচরণ করা",
+    "definition_en": "To act or conduct oneself in a specified way.",
+    "definition_bn": "একটি নির্দিষ্ট উপায়ে কাজ করা বা নিজেকে পরিচালিত করা।",
+    "examples_en": [
+      "Please behave yourself at the party."
+    ],
+    "examples_bn": [
+      "অনুগ্রহ করে পার্টিতে মার্জিত আচরণ কোরো।"
+    ],
+    "synonyms": [
+      "act",
+      "function"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 50,
+    "word": "behavior",
+    "meaning_bn": "আচরণ / ব্যবহার",
+    "definition_en": "The way in which one acts or conducts oneself.",
+    "definition_bn": "যে উপায়ে কেউ কাজ করে বা নিজেকে পরিচালনা করে।",
+    "examples_en": [
+      "The teacher praised the student for his good behavior."
+    ],
+    "examples_bn": [
+      "শিক্ষক ছাত্রটির ভালো আচরণের জন্য প্রশংসা করলেন।"
+    ],
+    "synonyms": [
+      "conduct",
+      "manner"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 51,
+    "word": "behind",
+    "meaning_bn": "পেছনে / পেছনে থাকা",
+    "definition_en": "At or to the far side or the back of something.",
+    "definition_bn": "কোনো কিছুর পেছনে বা পেছনের দিকে থাকা।",
+    "examples_en": [
+      "The sun disappeared behind the clouds."
+    ],
+    "examples_bn": [
+      "সূর্য মেঘের আড়ালে (পেছনে) ঢাকা পড়ে গেল।"
+    ],
+    "synonyms": [
+      "rear",
+      "back"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "prep., adv."
+  },
+  {
+    "id": 52,
+    "word": "being",
+    "meaning_bn": "অস্তিত্ব / সত্তা",
+    "definition_en": "The nature or essence of a person; existence.",
+    "definition_bn": "একজন ব্যক্তির প্রকৃতি বা অস্তিত্ব।",
+    "examples_en": [
+      "A human being needs food and shelter."
+    ],
+    "examples_bn": [
+      "একজন মানুষের খাদ্য ও আশ্রয়ের প্রয়োজন।"
+    ],
+    "synonyms": [
+      "existence",
+      "entity"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 53,
+    "word": "belief",
+    "meaning_bn": "বিশ্বাস",
+    "definition_en": "An acceptance that a statement is true or that something exists.",
+    "definition_bn": "কোনো উক্তি সত্য বা কোনো কিছুর অস্তিত্ব আছে বলে মেনে নেওয়া।",
+    "examples_en": [
+      "It is my belief that honesty is the best policy."
+    ],
+    "examples_bn": [
+      "আমার বিশ্বাস যে সততাই সর্বোত্তম পন্থা।"
+    ],
+    "synonyms": [
+      "faith",
+      "trust",
+      "conviction"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 54,
+    "word": "believe",
+    "meaning_bn": "বিশ্বাস করা",
+    "definition_en": "To accept something as true; feel sure of the truth of.",
+    "definition_bn": "কোনো কিছু সত্য বলে গ্রহণ করা; সত্যতা সম্পর্কে নিশ্চিত হওয়া।",
+    "examples_en": [
+      "I believe everything you told me."
+    ],
+    "examples_bn": [
+      "তুমি আমাকে যা বলেছ আমি সব বিশ্বাস করি।"
+    ],
+    "synonyms": [
+      "trust",
+      "accept"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 55,
+    "word": "bell",
+    "meaning_bn": "ঘন্টা",
+    "definition_en": "A hollow metal object that makes a ringing sound when struck.",
+    "definition_bn": "একটি ফাঁপা ধাতব বস্তু যা আঘাত করলে বাজার শব্দ হয়।",
+    "examples_en": [
+      "The school bell rings at 4 PM."
+    ],
+    "examples_bn": [
+      "স্কুলের ঘন্টা বিকেল ৪টায় বাজে।"
+    ],
+    "synonyms": [
+      "chime",
+      "gong"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 56,
+    "word": "belong",
+    "meaning_bn": "অন্তর্ভুক্ত হওয়া / অধিকারে থাকা",
+    "definition_en": "To be the property of; be a member of a particular group.",
+    "definition_bn": "কারো সম্পত্তি হওয়া; কোনো বিশেষ দলের সদস্য হওয়া।",
+    "examples_en": [
+      "Does this book belong to you?"
+    ],
+    "examples_bn": [
+      "এই বইটি কি তোমার?"
+    ],
+    "synonyms": [
+      "pertain",
+      "relate"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 57,
+    "word": "below",
+    "meaning_bn": "নিচে / নিচতলায়",
+    "definition_en": "At a lower level or layer than something else.",
+    "definition_bn": "অন্য কোনো কিছুর চেয়ে নিচু স্তরে বা লেভেলে থাকা।",
+    "examples_en": [
+      "Please read the instructions given below."
+    ],
+    "examples_bn": [
+      "অনুগ্রহ করে নিচে দেওয়া নির্দেশনাগুলো পড়ুন।"
+    ],
+    "synonyms": [
+      "under",
+      "beneath"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adv., prep."
+  },
+  {
+    "id": 58,
+    "word": "belt",
+    "meaning_bn": "বেল্ট / কোমরবন্ধ",
+    "definition_en": "A strip of leather or cloth worn around the waist to support clothes.",
+    "definition_bn": "কাপড় ধরে রাখার জন্য কোমরে পরা চামড়া বা কাপড়ের ফিতা।",
+    "examples_en": [
+      "He tightened his belt after losing weight."
+    ],
+    "examples_bn": [
+      "ওজন কমার পর সে তার বেল্টটি টাইট করে বাঁধল।"
+    ],
+    "synonyms": [
+      "strap",
+      "girdle"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 59,
+    "word": "bend",
+    "meaning_bn": "বাঁকানো / নোয়ানো",
+    "definition_en": "To shape or force something straight into a curve or angle.",
+    "definition_bn": "সোজা কিছুকে বাঁকানো বা কোণাকৃতির রূপ দেওয়া।",
+    "examples_en": [
+      "Be careful not to bend the wire too much."
+    ],
+    "examples_bn": [
+      "সাবধান থাকুন যেন তারটি খুব বেশি বাঁকিয়ে না ফেলেন।"
+    ],
+    "synonyms": [
+      "curve",
+      "twist"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 61,
+    "word": "bent",
+    "meaning_bn": "বাঁকা",
+    "definition_en": "Not straight; curved or having an angle.",
+    "definition_bn": "সোজা নয়; বাঁকানো বা কোণ বিশিষ্ট।",
+    "examples_en": [
+      "The old man used a bent walking stick."
+    ],
+    "examples_bn": [
+      "বৃদ্ধ লোকটি একটি বাঁকা লাঠি ব্যবহার করতেন।"
+    ],
+    "synonyms": [
+      "crooked",
+      "curved"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 63,
+    "word": "bet",
+    "meaning_bn": "বাজি ধরা",
+    "definition_en": "To risk a sum of money on the outcome of a race or game.",
+    "definition_bn": "কোনো রেস বা খেলার ফলাফলের ওপর অর্থ বাজি রাখা।",
+    "examples_en": [
+      "I bet he will arrive late again."
+    ],
+    "examples_bn": [
+      "আমি বাজি ধরে বলতে পারি সে আবারও দেরিতে আসবে।"
+    ],
+    "synonyms": [
+      "wager",
+      "gamble"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 66,
+    "word": "beyond",
+    "meaning_bn": "সাধ্যের বাইরে / দূরে",
+    "definition_en": "At or to the further side of; outside the range or limits of.",
+    "definition_bn": "অন্য প্রান্ত বা পাশে; পাল্লা বা সীমার বাইরে।",
+    "examples_en": [
+      "The view beyond the mountains was amazing."
+    ],
+    "examples_bn": [
+      "পাহাড়ের ওপারের দৃশ্যটি ছিল চমৎকার।"
+    ],
+    "synonyms": [
+      "past",
+      "farther"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "prep., adv."
+  },
+  {
+    "id": 67,
+    "word": "bicycle",
+    "meaning_bn": "সাইকেল / দ্বিচক্রযান",
+    "definition_en": "A vehicle with two wheels that you sit on and move by turning pedals.",
+    "definition_bn": "দুটি চাকা বিশিষ্ট একটি যান যাতে বসে প্যাডেল ঘুরিয়ে চালানো হয়।",
+    "examples_en": [
+      "She rides her bicycle to work every morning."
+    ],
+    "examples_bn": [
+      "সে প্রতিদিন সকালে সাইকেলে চড়ে কাজে যায়।"
+    ],
+    "synonyms": [
+      "bike",
+      "cycle"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 68,
+    "word": "big",
+    "meaning_bn": "বড়",
+    "definition_en": "Large in size, degree, or importance.",
+    "definition_bn": "আকারে, মাত্রায় বা গুরুত্বে অনেক বড়।",
+    "examples_en": [
+      "They live in a big house near the city center."
+    ],
+    "examples_bn": [
+      "তারা শহরের কেন্দ্রের কাছে একটি বড় বাড়িতে থাকে।"
+    ],
+    "synonyms": [
+      "large",
+      "huge"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 69,
+    "word": "bike",
+    "meaning_bn": "বাইক / সাইকেল",
+    "definition_en": "A common informal term for a bicycle or motorcycle.",
+    "definition_bn": "সাইকেল বা মোটরসাইকেলের একটি প্রচলিত অনানুষ্ঠানিক নাম।",
+    "examples_en": [
+      "He park his bike in front of the shop."
+    ],
+    "examples_bn": [
+      "সে দোকানের সামনে তার বাইকটি পার্ক করল।"
+    ],
+    "synonyms": [
+      "bicycle",
+      "cycle"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 71,
+    "word": "billion",
+    "meaning_bn": "শতকোটি / বিলিয়ন",
+    "definition_en": "The number equivalent to a thousand million.",
+    "definition_bn": "এক হাজার মিলিয়নের সমান সংখ্যা।",
+    "examples_en": [
+      "The world population is over 8 billion."
+    ],
+    "examples_bn": [
+      "বিশ্বের জনসংখ্যা ৮০০ কোটিরও বেশি।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "number"
+  },
+  {
+    "id": 72,
+    "word": "biology",
+    "meaning_bn": "জীববিজ্ঞান",
+    "definition_en": "The scientific study of life and living organisms.",
+    "definition_bn": "জীবন এবং জীবন্ত প্রাণীর বৈজ্ঞানিক অধ্যয়ন।",
+    "examples_en": [
+      "She is studying biology at the university."
+    ],
+    "examples_bn": [
+      "সে বিশ্ববিদ্যালয়ে জীববিজ্ঞান পড়ছে।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 73,
+    "word": "bird",
+    "meaning_bn": "পাখি",
+    "definition_en": "An animal with feathers and wings that can usually fly.",
+    "definition_bn": "পালক ও ডানা বিশিষ্ট একটি প্রাণী যা সাধারণত উড়তে পারে।",
+    "examples_en": [
+      "There is a small bird singing on the tree branch."
+    ],
+    "examples_bn": [
+      "গাছের ডালে একটি ছোট পাখি গান গাইছে।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 74,
+    "word": "birth",
+    "meaning_bn": "জন্ম",
+    "definition_en": "The emergence of a baby from the body of its mother.",
+    "definition_bn": "মায়ের শরীর থেকে শিশুর জন্ম হওয়া।",
+    "examples_en": [
+      "She gave birth to a healthy baby girl."
+    ],
+    "examples_bn": [
+      "তিনি একটি সুস্থ কন্যাসন্তানের জন্ম দিয়েছেন।"
+    ],
+    "synonyms": [
+      "delivery",
+      "origin"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 75,
+    "word": "birthday",
+    "meaning_bn": "জন্মদিন",
+    "definition_en": "The anniversary of the day on which a person was born.",
+    "definition_bn": "যে দিনে একজন ব্যক্তি জন্মগ্রহণ করেছিলেন তার বার্ষিকী।",
+    "examples_en": [
+      "What would you like for your birthday?"
+    ],
+    "examples_bn": [
+      "তোমার জন্মদিনের জন্য তুমি কী চাও?"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 76,
+    "word": "bit",
+    "meaning_bn": "একটু / সামান্য অংশ",
+    "definition_en": "A small piece, part, or quantity of something.",
+    "definition_bn": "কোনো কিছুর ছোট টুকরো, অংশ বা পরিমাণ।",
+    "examples_en": [
+      "Can you move a bit to the left?"
+    ],
+    "examples_bn": [
+      "আপনি কি বাম দিকে একটু সরতে পারেন?"
+    ],
+    "synonyms": [
+      "piece",
+      "fraction"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 77,
+    "word": "bite",
+    "meaning_bn": "কামড়ানো / কামড়",
+    "definition_en": "To use teeth to cut into or through something.",
+    "definition_bn": "দাঁত ব্যবহার করে কোনো কিছু কাটা বা কামড় দেওয়া।",
+    "examples_en": [
+      "Don't let the dog bite you."
+    ],
+    "examples_bn": [
+      "কুকুরটিকে তোমাকে কামড়াতে দিও না।"
+    ],
+    "synonyms": [
+      "chew",
+      "nip"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 78,
+    "word": "bitter",
+    "meaning_bn": "তেতো / কটু",
+    "definition_en": "Having a sharp, pungent taste or smell; not sweet.",
+    "definition_bn": "তীব্র স্বাদ বা গন্ধযুক্ত; মিষ্টি নয়।",
+    "examples_en": [
+      "This coffee has a very bitter taste."
+    ],
+    "examples_bn": [
+      "এই কফিটির স্বাদ খুব তেতো।"
+    ],
+    "synonyms": [
+      "sour",
+      "harsh"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 79,
+    "word": "black",
+    "meaning_bn": "কালো",
+    "definition_en": "The darkest color, like coal or night.",
+    "definition_bn": "সবচেয়ে অন্ধকার রঙ, যেমন কয়লা বা রাত।",
+    "examples_en": [
+      "She wore a elegant black dress to the party."
+    ],
+    "examples_bn": [
+      "সে পার্টিতে একটি মার্জিত কালো পোশাক পরেছিল।"
+    ],
+    "synonyms": [
+      "dark",
+      "ebony"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 80,
+    "word": "blame",
+    "meaning_bn": "দোষ দেওয়া / নিন্দা করা",
+    "definition_en": "To assign responsibility for a fault or wrong.",
+    "definition_bn": "কোনো ত্রুটি বা অন্যায়ের জন্য দায়িত্ব চাপানো।",
+    "examples_en": [
+      "Don't blame me for your mistakes."
+    ],
+    "examples_bn": [
+      "তোমার ভুলের জন্য আমাকে দোষ দিও না।"
+    ],
+    "synonyms": [
+      "accuse",
+      "reproach"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 81,
+    "word": "blank",
+    "meaning_bn": "খালি / শূন্য",
+    "definition_en": "Bare; empty; without any writing or decoration.",
+    "definition_bn": "কোনো লেখা বা সাজসজ্জা ছাড়া খালি জায়গা।",
+    "examples_en": [
+      "Please fill in the blank spaces with your name."
+    ],
+    "examples_bn": [
+      "অনুগ্রহ করে শূন্যস্থানে আপনার নাম লিখুন।"
+    ],
+    "synonyms": [
+      "empty",
+      "void"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 82,
+    "word": "blind",
+    "meaning_bn": "অন্ধ / দৃষ্টিহীন",
+    "definition_en": "Unable to see because of injury, disease, or a congenital condition.",
+    "definition_bn": "আঘাত, রোগ বা জন্মগত সমস্যার কারণে দেখতে অক্ষম।",
+    "examples_en": [
+      "He has been blind since birth."
+    ],
+    "examples_bn": [
+      "সে জন্ম থেকেই অন্ধ।"
+    ],
+    "synonyms": [
+      "sightless",
+      "visionless"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 84,
+    "word": "blog",
+    "meaning_bn": "ব্লগ / অনলাইন ডায়েরি",
+    "definition_en": "A regularly updated website or web page written in an informal style.",
+    "definition_bn": "একটি নিয়মিত আপডেট করা ওয়েবসাইট যা অনানুষ্ঠানিক শৈলীতে লেখা হয়।",
+    "examples_en": [
+      "I read a very interesting blog post about traveling."
+    ],
+    "examples_bn": [
+      "আমি ভ্রমণ নিয়ে খুব আকর্ষণীয় একটি ব্লগ পোস্ট পড়েছি।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 85,
+    "word": "blond",
+    "meaning_bn": "সোনালী (চুল)",
+    "definition_en": "A person with fair or pale yellow hair.",
+    "definition_bn": "সোনালী বা হালকা হলুদ চুলের অধিকারী ব্যক্তি।",
+    "examples_en": [
+      "She has long blond hair."
+    ],
+    "examples_bn": [
+      "তার লম্বা সোনালী চুল আছে।"
+    ],
+    "synonyms": [
+      "fair",
+      "golden"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 86,
+    "word": "blood",
+    "meaning_bn": "রক্ত",
+    "definition_en": "The red liquid that circulates in the arteries and veins of humans.",
+    "definition_bn": "মানুষের ধমনী ও শিরায় প্রবাহিত লাল তরল।",
+    "examples_en": [
+      "The wound was covered in blood."
+    ],
+    "examples_bn": [
+      "ক্ষতটি রক্তে ঢেকে গিয়েছিল।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 87,
+    "word": "blow",
+    "meaning_bn": "ফুঁ দেওয়া / প্রবাহিত হওয়া",
+    "definition_en": "To move create a current of air, typically with the mouth.",
+    "definition_bn": "মুখ দিয়ে বাতাস নির্গত করা বা বাতাসের স্রোত তৈরি করা।",
+    "examples_en": [
+      "Blow the candles out and make a wish."
+    ],
+    "examples_bn": [
+      "মোমবাতিগুলো ফুঁ দিয়ে নিভিয়ে দাও এবং একটি প্রার্থনা করো।"
+    ],
+    "synonyms": [
+      "puff",
+      "blast"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 88,
+    "word": "blue",
+    "meaning_bn": "নীল",
+    "definition_en": "The color of the clear sky or the deep sea.",
+    "definition_bn": "পরিষ্কার আকাশ বা গভীর সমুদ্রের রঙ।",
+    "examples_en": [
+      "The sky is bright blue today."
+    ],
+    "examples_bn": [
+      "আজ আকাশ উজ্জ্বল নীল।"
+    ],
+    "synonyms": [
+      "azure",
+      "navy"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 90,
+    "word": "boat",
+    "meaning_bn": "নৌকা",
+    "definition_en": "A small vessel for traveling over water.",
+    "definition_bn": "পানির ওপর ভ্রমণের জন্য একটি ছোট জলযান।",
+    "examples_en": [
+      "We took a small boat across the lake."
+    ],
+    "examples_bn": [
+      "আমরা একটি ছোট নৌকায় করে হ্রদ পার হলাম।"
+    ],
+    "synonyms": [
+      "vessel",
+      "ship",
+      "canoe"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 91,
+    "word": "body",
+    "meaning_bn": "শরীর / দেহ",
+    "definition_en": "The physical structure of a person or animal.",
+    "definition_bn": "মানুষ বা প্রাণীর শারীরিক কাঠামো।",
+    "examples_en": [
+      "Exercise is good for your body and mind."
+    ],
+    "examples_bn": [
+      "ব্যায়াম আপনার শরীর ও মনের জন্য ভালো।"
+    ],
+    "synonyms": [
+      "physique",
+      "torso"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 92,
+    "word": "boil",
+    "meaning_bn": "সিদ্ধ করা / ফোটানো",
+    "definition_en": "To heat a liquid until it bubbles and turns into vapor.",
+    "definition_bn": "একটি তরল পদার্থকে গরম করা যতক্ষণ না সেটি বুদবুদ করে বাষ্পে পরিণত হয়।",
+    "examples_en": [
+      "Boil some water to make tea."
+    ],
+    "examples_bn": [
+      "চা বানানোর জন্য কিছু পানি ফুটিয়ে নাও।"
+    ],
+    "synonyms": [
+      "simmer",
+      "seethe"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 93,
+    "word": "bomb",
+    "meaning_bn": "বোমা",
+    "definition_en": "A container filled with explosive material designed to cause damage.",
+    "definition_bn": "ক্ষতি করার জন্য বিস্ফোরক পদার্থে ভরা একটি পাত্র।",
+    "examples_en": [
+      "The bomb exploded in the middle of the street."
+    ],
+    "examples_bn": [
+      "রাস্তার মাঝখানে বোমাটি বিস্ফোরিত হয়েছে।"
+    ],
+    "synonyms": [
+      "explosive",
+      "missile"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 94,
+    "word": "bond",
+    "meaning_bn": "বন্ধন / সম্পর্ক",
+    "definition_en": "A force or feeling that unites people; a shared interest.",
+    "definition_bn": "একটি শক্তি বা অনুভূতি যা মানুষকে ঐক্যবদ্ধ করে; একটি অভিন্ন স্বার্থ।",
+    "examples_en": [
+      "There is a strong bond between the two sisters."
+    ],
+    "examples_bn": [
+      "দুই বোনের মধ্যে এক দৃঢ় বন্ধন রয়েছে।"
+    ],
+    "synonyms": [
+      "connection",
+      "tie",
+      "link"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 95,
+    "word": "bone",
+    "meaning_bn": "হাড় / অস্থি",
+    "definition_en": "Any of the pieces of hard whitish tissue making up the skeleton.",
+    "definition_bn": "কঙ্কাল তৈরি করা শক্ত সাদাটে কলার যেকোনো অংশ।",
+    "examples_en": [
+      "He broke a bone in his leg during the match."
+    ],
+    "examples_bn": [
+      "ম্যাচ চলাকালীন সে তার পায়ের একটি হাড় ভেঙে ফেলেছে।"
+    ],
+    "synonyms": [],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 97,
+    "word": "boot",
+    "meaning_bn": "বুট জুতো / গাড়ির পেছনের অংশ",
+    "definition_en": "A sturdy item of footwear covering the foot and ankle; the luggage space of a car.",
+    "definition_bn": "পা এবং গোড়ালি ঢেকে রাখার মতো শক্ত জুতো; গাড়ির মালপত্র রাখার জায়গা।",
+    "examples_en": [
+      "She put her hiking boots on and went out."
+    ],
+    "examples_bn": [
+      "সে তার হাইকিং বুট পরে বাইরে চলে গেল।"
+    ],
+    "synonyms": [
+      "footwear",
+      "trunk"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 99,
+    "word": "bored",
+    "meaning_bn": "বিরক্ত / একঘেয়েমি অনুভব করা",
+    "definition_en": "Feeling weary and restless through lack of interest.",
+    "definition_bn": "আগ্রহের অভাবে ক্লান্ত ও অস্থির বোধ করা।",
+    "examples_en": [
+      "I’m bored; let's go for a walk."
+    ],
+    "examples_bn": [
+      "আমি একঘেয়েমি অনুভব করছি; চলো একটু হেঁটে আসি।"
+    ],
+    "synonyms": [
+      "weary",
+      "tired"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 100,
+    "word": "boring",
+    "meaning_bn": "একঘেয়ে / বিরক্তিকর",
+    "definition_en": "Not interesting; tedious.",
+    "definition_bn": "আকর্ষণীয় নয়; বিরক্তিকর।",
+    "examples_en": [
+      "The lecture was so boring that I almost fell asleep."
+    ],
+    "examples_bn": [
+      "বক্তৃতাটি এতই একঘেয়ে ছিল যে আমি প্রায় ঘুমিয়ে পড়েছিলাম।"
+    ],
+    "synonyms": [
+      "dull",
+      "tedious",
+      "uninteresting"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 101,
+    "word": "born",
+    "meaning_bn": "জন্মগ্রহণ করা",
+    "definition_en": "Existing as a result of birth.",
+    "definition_bn": "জন্মের ফলে অস্তিত্ব লাভ করা বা ভূমিষ্ঠ হওয়া।",
+    "examples_en": [
+      "I was born in 1995."
+    ],
+    "examples_bn": [
+      "আমি ১৯৯৫ সালে জন্মগ্রহণ করেছি।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 102,
+    "word": "borrow",
+    "meaning_bn": "ধার করা",
+    "definition_en": "To take and use something that belongs to someone else with the intention of returning it.",
+    "definition_bn": "ফেরত দেওয়ার উদ্দেশ্যে অন্যের কোনো জিনিস নেওয়া এবং ব্যবহার করা।",
+    "examples_en": [
+      "Can I borrow your pen for a moment?"
+    ],
+    "examples_bn": [
+      "আমি কি তোমার কলমটা এক মুহূর্তের জন্য ধার পেতে পারি?"
+    ],
+    "synonyms": [
+      "take on loan",
+      "hire"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 103,
+    "word": "boss",
+    "meaning_bn": "মনিব / কর্মকর্তা",
+    "definition_en": "A person who is in charge of a worker or organization.",
+    "definition_bn": "একজন ব্যক্তি যিনি কোনো কর্মী বা প্রতিষ্ঠানের দায়িত্বে থাকেন।",
+    "examples_en": [
+      "I need to ask my boss for a day off."
+    ],
+    "examples_bn": [
+      "ছুটির জন্য আমাকে আমার বসকে (কর্মকর্তাকে) বলতে হবে।"
+    ],
+    "synonyms": [
+      "manager",
+      "employer",
+      "leader"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 104,
+    "word": "both",
+    "meaning_bn": "উভয়",
+    "definition_en": "Used for emphasizing two people or things together.",
+    "definition_bn": "দুটি ব্যক্তি বা বস্তুকে একত্রে জোর দেওয়ার জন্য ব্যবহৃত হয়।",
+    "examples_en": [
+      "Both of my parents are teachers."
+    ],
+    "examples_bn": [
+      "আমার বাবা-মা দুজনেই শিক্ষক।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "det./pron."
+  },
+  {
+    "id": 105,
+    "word": "bother",
+    "meaning_bn": "বিরক্ত করা",
+    "definition_en": "To take the trouble to do something; to annoy someone.",
+    "definition_bn": "কোনো কিছু করার জন্য কষ্ট করা বা কাউকে বিরক্ত করা।",
+    "examples_en": [
+      "I'm sorry to bother you, but can you help me?"
+    ],
+    "examples_bn": [
+      "আপনাকে বিরক্ত করার জন্য দুঃখিত, তবে আপনি কি আমাকে সাহায্য করতে পারেন?"
+    ],
+    "synonyms": [
+      "annoy",
+      "disturb",
+      "trouble"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 106,
+    "word": "bottle",
+    "meaning_bn": "বোতল",
+    "definition_en": "A glass or plastic container with a narrow neck, used for storing liquids.",
+    "definition_bn": "তরল রাখার জন্য সরু ঘাড় বিশিষ্ট কাঁচ বা প্লাস্টিকের পাত্র।",
+    "examples_en": [
+      "Pass me the water bottle, please."
+    ],
+    "examples_bn": [
+      "দয়া করে পানির বোতলটি আমাকে দাও।"
+    ],
+    "synonyms": [
+      "flask",
+      "container"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 107,
+    "word": "bottom",
+    "meaning_bn": "তলদেশ / নিচের অংশ",
+    "definition_en": "The lowest point or part of something.",
+    "definition_bn": "কোনো কিছুর সর্বনিম্ন বিন্দু বা অংশ।",
+    "examples_en": [
+      "The answers are at the bottom of the page."
+    ],
+    "examples_bn": [
+      "উত্তরগুলো পৃষ্ঠার নিচের অংশে রয়েছে।"
+    ],
+    "synonyms": [
+      "base",
+      "foot",
+      "lowest part"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n., adj."
+  },
+  {
+    "id": 108,
+    "word": "bowl",
+    "meaning_bn": "বাটি",
+    "definition_en": "A round, deep dish used for food or liquid.",
+    "definition_bn": "খাবার বা তরল রাখার জন্য একটি গোল ও গভীর পাত্র।",
+    "examples_en": [
+      "I ate a bowl of soup for lunch."
+    ],
+    "examples_bn": [
+      "আমি দুপুরে এক বাটি স্যুপ খেয়েছি।"
+    ],
+    "synonyms": [
+      "basin",
+      "dish"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 109,
+    "word": "box",
+    "meaning_bn": "বাক্স",
+    "definition_en": "A square or rectangular container with stiff sides and sometimes a lid.",
+    "definition_bn": "শক্ত দেওয়াল বিশিষ্ট বর্গাকার বা আয়তাকার পাত্র যাতে কখনও কখনও ঢাকনা থাকে।",
+    "examples_en": [
+      "He put all his old toys in a cardboard box."
+    ],
+    "examples_bn": [
+      "সে তার সব পুরনো খেলনা একটি কাগজের বাক্সে রাখল।"
+    ],
+    "synonyms": [
+      "case",
+      "carton",
+      "chest"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 110,
+    "word": "boy",
+    "meaning_bn": "বালক / ছেলে",
+    "definition_en": "A male child or young man.",
+    "definition_bn": "একজন পুরুষ শিশু বা যুবক।",
+    "examples_en": [
+      "The little boy is playing in the park."
+    ],
+    "examples_bn": [
+      "ছোট ছেলেটি পার্কে খেলছে।"
+    ],
+    "synonyms": [
+      "lad",
+      "youth"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 111,
+    "word": "boyfriend",
+    "meaning_bn": "প্রেমিক",
+    "definition_en": "A regular male companion in a romantic relationship.",
+    "definition_bn": "একটি রোমান্টিক সম্পর্কের নিয়মিত পুরুষ সঙ্গী।",
+    "examples_en": [
+      "She went to the cinema with her boyfriend."
+    ],
+    "examples_bn": [
+      "সে তার প্রেমিকের সঙ্গে সিনেমা দেখতে গিয়েছিল।"
+    ],
+    "synonyms": [
+      "partner",
+      "companion"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 112,
+    "word": "brain",
+    "meaning_bn": "মস্তিষ্ক",
+    "definition_en": "The organ inside the head that controls thought and feeling.",
+    "definition_bn": "মাথার ভিতরের অঙ্গ যা চিন্তা ও অনুভূতি নিয়ন্ত্রণ করে।",
+    "examples_en": [
+      "Reading helps stimulate the brain."
+    ],
+    "examples_bn": [
+      "পড়া মস্তিষ্ককে উদ্দীপিত করতে সাহায্য করে।"
+    ],
+    "synonyms": [
+      "mind",
+      "intellect"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 113,
+    "word": "branch",
+    "meaning_bn": "শাখা / ডাল",
+    "definition_en": "A part of a tree that grows out from the trunk; a local office of a large organization.",
+    "definition_bn": "গাছের একটি অংশ যা কাণ্ড থেকে জন্মায়; কোনো বড় প্রতিষ্ঠানের স্থানীয় অফিস।",
+    "examples_en": [
+      "The bird sat on a high branch."
+    ],
+    "examples_bn": [
+      "পাখিটি একটি উঁচু ডালে বসে ছিল।"
+    ],
+    "synonyms": [
+      "bough",
+      "limb",
+      "office"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 114,
+    "word": "brand",
+    "meaning_bn": "পণ্যমার্ক / ব্র্যান্ড",
+    "definition_en": "A type of product manufactured by a particular company under a particular name.",
+    "definition_bn": "একটি নির্দিষ্ট নাম দিয়ে নির্দিষ্ট কোম্পানির তৈরি পণ্য।",
+    "examples_en": [
+      "Which brand of soap do you use?"
+    ],
+    "examples_bn": [
+      "আপনি কোন ব্র্যান্ডের সাবান ব্যবহার করেন?"
+    ],
+    "synonyms": [
+      "label",
+      "make",
+      "trademark"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n., v."
+  },
+  {
+    "id": 115,
+    "word": "brave",
+    "meaning_bn": "সাহসী",
+    "definition_en": "Ready to face and endure danger or pain; showing courage.",
+    "definition_bn": "বিপদ বা কষ্টের মোকাবিলা করতে প্রস্তুত; সাহস প্রদর্শন করা।",
+    "examples_en": [
+      "The brave firefighter saved the child."
+    ],
+    "examples_bn": [
+      "সাহসী অগ্নিনির্বাপক কর্মী শিশুটিকে বাঁচিয়েছেন।"
+    ],
+    "synonyms": [
+      "courageous",
+      "fearless",
+      "bold"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 116,
+    "word": "bread",
+    "meaning_bn": "রুটি",
+    "definition_en": "Food made of flour, water, and yeast mixed together and baked.",
+    "definition_bn": "ময়দা, পানি এবং খামির মিশিয়ে তৈরি এবং সেঁকা খাবার।",
+    "examples_en": [
+      "I'll have some bread and butter for breakfast."
+    ],
+    "examples_bn": [
+      "আমি প্রাতঃরাশে কিছু রুটি এবং মাখন খাব।"
+    ],
+    "synonyms": [
+      "loaf"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 117,
+    "word": "break",
+    "meaning_bn": "ভাঙা / বিরতি",
+    "definition_en": "To separate into pieces as a result of a blow or shock; a short period of rest.",
+    "definition_bn": "আঘাতের ফলে টুকরো টুকরো হওয়া; অল্প সময়ের বিশ্রাম।",
+    "examples_en": [
+      "Be careful not to break the glass."
+    ],
+    "examples_bn": [
+      "সাবধান হও যেন গ্লাসটি ভেঙে না যায়।"
+    ],
+    "synonyms": [
+      "fracture",
+      "pause",
+      "rest"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 118,
+    "word": "breakfast",
+    "meaning_bn": "প্রাতঃরাশ / নাস্তা",
+    "definition_en": "The first meal of the day, typically eaten in the morning.",
+    "definition_bn": "দিনের প্রথম খাবার যা সাধারণত সকালে খাওয়া হয়।",
+    "examples_en": [
+      "What did you have for breakfast?"
+    ],
+    "examples_bn": [
+      "তুমি নাস্তায় কী খেয়েছ?"
+    ],
+    "synonyms": [
+      "morning meal"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 119,
+    "word": "breast",
+    "meaning_bn": "বুক / স্তন",
+    "definition_en": "The upper front part of a person's body.",
+    "definition_bn": "একজন ব্যক্তির শরীরের সামনের উপরিভাগ।",
+    "examples_en": [
+      "She held the baby to her breast."
+    ],
+    "examples_bn": [
+      "তিনি শিশুটিকে তার বুকে জাপটে ধরলেন।"
+    ],
+    "synonyms": [
+      "chest",
+      "bosom"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 120,
+    "word": "breath",
+    "meaning_bn": "শ্বাস",
+    "definition_en": "The air taken into or expelled from the lungs.",
+    "definition_bn": "ফুসফুস থেকে নেওয়া বা বের করে দেওয়া বাতাস।",
+    "examples_en": [
+      "Take a deep breath and relax."
+    ],
+    "examples_bn": [
+      "একটি গভীর শ্বাস নিন এবং শান্ত হোন।"
+    ],
+    "synonyms": [
+      "respiration",
+      "puff"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 121,
+    "word": "breathe",
+    "meaning_bn": "নিঃশ্বাস নেওয়া",
+    "definition_en": "To take air into the lungs and then let it out.",
+    "definition_bn": "ফুসফুসে বাতাস নেওয়া এবং তা বের করে দেওয়া।",
+    "examples_en": [
+      "It feels good to breathe fresh air."
+    ],
+    "examples_bn": [
+      "বিশুদ্ধ বাতাসে নিঃশ্বাস নিতে ভালো লাগে।"
+    ],
+    "synonyms": [
+      "inhale and exhale"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 122,
+    "word": "breathing",
+    "meaning_bn": "শ্বসন প্রক্রিয়া",
+    "definition_en": "The process of taking air into and out of the lungs.",
+    "definition_bn": "ফুসফুসে বাতাস নেওয়া এবং বের করার প্রক্রিয়া।",
+    "examples_en": [
+      "His breathing became slow and heavy."
+    ],
+    "examples_bn": [
+      "তার শ্বাস-প্রশ্বাস ধীর এবং ভারী হয়ে উঠল।"
+    ],
+    "synonyms": [
+      "respiration"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 123,
+    "word": "bride",
+    "meaning_bn": "কনে",
+    "definition_en": "A woman on her wedding day or just before it.",
+    "definition_bn": "একজন মহিলা তার বিয়ের দিন বা ঠিক তার আগে।",
+    "examples_en": [
+      "The bride looked beautiful in her white dress."
+    ],
+    "examples_bn": [
+      "সাদা পোশাকে কনেকে দেখতে খুব সুন্দর লাগছিল।"
+    ],
+    "synonyms": [],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 124,
+    "word": "bridge",
+    "meaning_bn": "সেতু / পুল",
+    "definition_en": "A structure carrying a road or path across a river, railway, etc.",
+    "definition_bn": "নদী বা রেললাইনের ওপর রাস্তা বা পথ পার করার জন্য নির্মিত কাঠামো।",
+    "examples_en": [
+      "They are building a new bridge over the river."
+    ],
+    "examples_bn": [
+      "তারা নদীর ওপর একটি নতুন সেতু নির্মাণ করছে।"
+    ],
+    "synonyms": [
+      "overpass",
+      "viaduct"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 125,
+    "word": "brief",
+    "meaning_bn": "সংক্ষিপ্ত",
+    "definition_en": "Lasting for only a short time; using few words.",
+    "definition_bn": "অল্প সময়ের জন্য স্থায়ী; কম শব্দ ব্যবহার করা।",
+    "examples_en": [
+      "Please give a brief description of the event."
+    ],
+    "examples_bn": [
+      "অনুগ্রহ করে ঘটনাটির একটি সংক্ষিপ্ত বর্ণনা দিন।"
+    ],
+    "synonyms": [
+      "short",
+      "concise"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 126,
+    "word": "bright",
+    "meaning_bn": "উজ্জ্বল",
+    "definition_en": "Giving out or reflecting a lot of light; intelligent.",
+    "definition_bn": "প্রচুর আলো দেয় বা প্রতিফলন করে এমন; বুদ্ধিমান।",
+    "examples_en": [
+      "The sun is very bright today."
+    ],
+    "examples_bn": [
+      "আজ সূর্য খুব উজ্জ্বল।"
+    ],
+    "synonyms": [
+      "shining",
+      "luminous",
+      "smart"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 127,
+    "word": "brilliant",
+    "meaning_bn": "মেধাবী / অত্যন্ত চমৎকার",
+    "definition_en": "Exceptionally clever or talented; very bright.",
+    "definition_bn": "অসাধারণ বুদ্ধিমান বা প্রতিভাবান; অত্যন্ত উজ্জ্বল।",
+    "examples_en": [
+      "That is a brilliant idea!"
+    ],
+    "examples_bn": [
+      "ওটা একটা চমৎকার বুদ্ধি!"
+    ],
+    "synonyms": [
+      "intelligent",
+      "magnificent",
+      "superb"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 128,
+    "word": "bring",
+    "meaning_bn": "আনা",
+    "definition_en": "To take or carry someone or something to a place.",
+    "definition_bn": "কাউকে বা কোনো কিছুকে কোনো স্থানে নিয়ে আসা।",
+    "examples_en": [
+      "Don't forget to bring your umbrella."
+    ],
+    "examples_bn": [
+      "তোমার ছাতা আনতে ভুলো না।"
+    ],
+    "synonyms": [
+      "fetch",
+      "carry",
+      "deliver"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 129,
+    "word": "broad",
+    "meaning_bn": "প্রশস্ত / চওড়া",
+    "definition_en": "Having a distance from side to side that is wider than usual; general.",
+    "definition_bn": "এক পাশ থেকে অন্য পাশের দূরত্ব যা স্বাভাবিকের চেয়ে বেশি; সাধারণ।",
+    "examples_en": [
+      "He has very broad shoulders."
+    ],
+    "examples_bn": [
+      "তার কাঁধ অনেক প্রশস্ত।"
+    ],
+    "synonyms": [
+      "wide",
+      "extensive",
+      "vast"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 130,
+    "word": "broadcast",
+    "meaning_bn": "সম্প্রচার করা",
+    "definition_en": "To transmit by radio or television.",
+    "definition_bn": "রেডিও বা টেলিভিশনের মাধ্যমে প্রচার করা।",
+    "examples_en": [
+      "The news is broadcast live every evening."
+    ],
+    "examples_bn": [
+      "প্রতিদিন সন্ধ্যায় সংবাদ সরাসরি সম্প্রচার করা হয়।"
+    ],
+    "synonyms": [
+      "transmit",
+      "telecast",
+      "air"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 131,
+    "word": "broken",
+    "meaning_bn": "ভাঙা",
+    "definition_en": "Damaged or no longer in one piece or in working order.",
+    "definition_bn": "ক্ষতিগ্রস্ত বা এক খণ্ডে নেই অথবা কাজ করছে না এমন।",
+    "examples_en": [
+      "I need to fix my broken phone."
+    ],
+    "examples_bn": [
+      "আমার ভাঙা ফোনটি মেরামত করা দরকার।"
+    ],
+    "synonyms": [
+      "damaged",
+      "fractured",
+      "out of order"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 132,
+    "word": "brother",
+    "meaning_bn": "ভাই",
+    "definition_en": "A boy or man who has the same parents as another person.",
+    "definition_bn": "একই পিতা-মাতার সন্তান এমন কোনো বালক বা পুরুষ।",
+    "examples_en": [
+      "My older brother is a doctor."
+    ],
+    "examples_bn": [
+      "আমার বড় ভাই একজন ডাক্তার।"
+    ],
+    "synonyms": [
+      "sibling"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 133,
+    "word": "brown",
+    "meaning_bn": "বাদামী",
+    "definition_en": "A dark color like wood or soil.",
+    "definition_bn": "কাঠ বা মাটির মতো একটি গাঢ় রঙ।",
+    "examples_en": [
+      "She has beautiful brown eyes."
+    ],
+    "examples_bn": [
+      "তার সুন্দর বাদামী চোখ রয়েছে।"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj., n."
+  },
+  {
+    "id": 134,
+    "word": "brush",
+    "meaning_bn": "ব্রাশ / মাজা",
+    "definition_en": "An object with bristles used for cleaning or painting; the act of cleaning with a brush.",
+    "definition_bn": "পরিষ্কার বা রঙ করার জন্য ব্যবহৃত লোমযুক্ত বস্তু; ব্রাশ দিয়ে পরিষ্কার করার কাজ।",
+    "examples_en": [
+      "Don't forget to brush your teeth."
+    ],
+    "examples_bn": [
+      "দাঁত মাজতে ভুলো না।"
+    ],
+    "synonyms": [
+      "clean",
+      "sweep",
+      "scrub"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "v., n."
+  },
+  {
+    "id": 135,
+    "word": "bubble",
+    "meaning_bn": "বুদবুদ",
+    "definition_en": "A small ball of air or gas in a liquid.",
+    "definition_bn": "তরল পদার্থের ভেতরে থাকা বাতাস বা গ্যাসের ছোট বল।",
+    "examples_en": [
+      "Children love blowing soap bubbles."
+    ],
+    "examples_bn": [
+      "শিশুরা সাবানের বুদবুদ উড়াতে ভালোবাসে।"
+    ],
+    "synonyms": [
+      "globule",
+      "bead"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 136,
+    "word": "budget",
+    "meaning_bn": "বাজেট / আয়-ব্যয়ের হিসাব",
+    "definition_en": "An estimate of income and expenditure for a set period of time.",
+    "definition_bn": "একটি নির্দিষ্ট সময়ের জন্য আয় এবং ব্যয়ের হিসাব।",
+    "examples_en": [
+      "We need to stay within our budget."
+    ],
+    "examples_bn": [
+      "আমাদের বাজেটের মধ্যেই থাকা দরকার।"
+    ],
+    "synonyms": [
+      "financial plan",
+      "allocation"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 137,
+    "word": "build",
+    "meaning_bn": "তৈরি করা / নির্মাণ করা",
+    "definition_en": "To construct by putting parts or materials together.",
+    "definition_bn": "বিভিন্ন অংশ বা উপকরণ একত্রিত করে তৈরি করা।",
+    "examples_en": [
+      "They are planning to build a new house."
+    ],
+    "examples_bn": [
+      "তারা একটি নতুন বাড়ি তৈরির পরিকল্পনা করছে।"
+    ],
+    "synonyms": [
+      "construct",
+      "erect",
+      "create"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 138,
+    "word": "building",
+    "meaning_bn": "দালান / ভবন",
+    "definition_en": "A structure with a roof and walls, such as a house or school.",
+    "definition_bn": "ছাদ এবং দেওয়াল বিশিষ্ট একটি কাঠামো, যেমন বাড়ি বা স্কুল।",
+    "examples_en": [
+      "This is the tallest building in the city."
+    ],
+    "examples_bn": [
+      "এটি শহরের সবচেয়ে উঁচু ভবন।"
+    ],
+    "synonyms": [
+      "structure",
+      "edifice"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 139,
+    "word": "bullet",
+    "meaning_bn": "বুলেট / গুলি",
+    "definition_en": "A small metal object that is shot from a gun.",
+    "definition_bn": "একটি ছোট ধাতব বস্তু যা বন্দুক থেকে ছোড়া হয়।",
+    "examples_en": [
+      "The bullet hit the target."
+    ],
+    "examples_bn": [
+      "গুলিটি লক্ষ্যবস্তুতে আঘাত করেছে।"
+    ],
+    "synonyms": [
+      "projectile",
+      "shot"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 140,
+    "word": "bunch",
+    "meaning_bn": "গুচ্ছ / থোকা",
+    "definition_en": "A number of things of the same kind, growing or fastened together.",
+    "definition_bn": "একই ধরণের বেশ কিছু জিনিস যা একত্রে বা থোকায় থাকে।",
+    "examples_en": [
+      "He bought a bunch of flowers for her."
+    ],
+    "examples_bn": [
+      "সে তার জন্য এক তোড়া (গুচ্ছ) ফুল কিনেছে।"
+    ],
+    "synonyms": [
+      "cluster",
+      "bouquet",
+      "collection"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 142,
+    "word": "bury",
+    "meaning_bn": "কবর দেওয়া / সমাহিত করা",
+    "definition_en": "To put a dead body into the ground.",
+    "definition_bn": "মৃতদেহ মাটির নিচে রাখা।",
+    "examples_en": [
+      "They buried him in the local cemetery."
+    ],
+    "examples_bn": [
+      "তারা তাকে স্থানীয় কবরস্থানে সমাহিত করল।"
+    ],
+    "synonyms": [
+      "inter",
+      "entomb"
+    ],
+    "level": "B1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 143,
+    "word": "bus",
+    "meaning_bn": "বাস",
+    "definition_en": "A large motor vehicle carrying passengers by road.",
+    "definition_bn": "অনেক যাত্রী বহনকারী বড় যানবাহন।",
+    "examples_en": [
+      "I go to school by bus every day."
+    ],
+    "examples_bn": [
+      "আমি প্রতিদিন বাসে করে স্কুলে যাই।"
+    ],
+    "synonyms": [
+      "coach"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 144,
+    "word": "bush",
+    "meaning_bn": "ঝোপঝাড়",
+    "definition_en": "A plant which is smaller than a tree and has a lot of branches.",
+    "definition_bn": "একটি উদ্ভিদ যা গাছের চেয়ে ছোট এবং যার অনেক শাখা থাকে।",
+    "examples_en": [
+      "The rabbit disappeared behind a bush."
+    ],
+    "examples_bn": [
+      "খরগোশটি একটি ঝোপের আড়ালে অদৃশ্য হয়ে গেল।"
+    ],
+    "synonyms": [
+      "shrub",
+      "thicket"
+    ],
+    "level": "B2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 145,
+    "word": "business",
+    "meaning_bn": "ব্যবসা / কাজ",
+    "definition_en": "The activity of making, buying, and selling goods or services for money.",
+    "definition_bn": "টাকার বিনিময়ে পণ্য বা সেবা তৈরি, কেনা এবং বিক্রির কাজ।",
+    "examples_en": [
+      "He runs his own business."
+    ],
+    "examples_bn": [
+      "সে তার নিজস্ব ব্যবসা পরিচালনা করে।"
+    ],
+    "synonyms": [
+      "commerce",
+      "trade",
+      "enterprise"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 146,
+    "word": "businessman",
+    "meaning_bn": "ব্যবসায়ী",
+    "definition_en": "A man who works in business.",
+    "definition_bn": "একজন পুরুষ যিনি ব্যবসার কাজে নিয়োজিত।",
+    "examples_en": [
+      "He is a successful businessman."
+    ],
+    "examples_bn": [
+      "তিনি একজন সফল ব্যবসায়ী।"
+    ],
+    "synonyms": [
+      "entrepreneur",
+      "merchant"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 147,
+    "word": "busy",
+    "meaning_bn": "ব্যস্ত",
+    "definition_en": "Having a lot of things to do.",
+    "definition_bn": "প্রচুর কাজ হাতে থাকা।",
+    "examples_en": [
+      "I'm too busy to go out today."
+    ],
+    "examples_bn": [
+      "আমি আজ বাইরে যাওয়ার জন্য খুব ব্যস্ত।"
+    ],
+    "synonyms": [
+      "occupied",
+      "active",
+      "engaged"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "adj."
+  },
+  {
+    "id": 149,
+    "word": "butter",
+    "meaning_bn": "মাখন",
+    "definition_en": "A pale yellow edible fatty substance made by churning cream.",
+    "definition_bn": "দুধের সর থেকে তৈরি হালকা হলুদ রঙের ভোজ্য চর্বিযুক্ত পদার্থ।",
+    "examples_en": [
+      "Would you like some butter on your bread?"
+    ],
+    "examples_bn": [
+      "তুমি কি তোমার রুটিতে কিছু মাখন নেবে?"
+    ],
+    "synonyms": [],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 150,
+    "word": "button",
+    "meaning_bn": "বোতাম / বোতাম টেপা",
+    "definition_en": "A small disk sewn onto a garment; a knob on an electronic device.",
+    "definition_bn": "পোশাকে সেলাই করা ছোট চাকতি; ইলেকট্রনিক ডিভাইসের টিপ দেওয়া অংশ।",
+    "examples_en": [
+      "Push the red button to start the machine."
+    ],
+    "examples_bn": [
+      "মেশিনটি চালু করতে লাল বোতামটি চাপুন।"
+    ],
+    "synonyms": [
+      "knob",
+      "switch"
+    ],
+    "level": "A2",
+    "category": "Oxford3000",
+    "parts_of_speech": "n."
+  },
+  {
+    "id": 151,
+    "word": "buy",
+    "meaning_bn": "কেনা / ক্রয় করা",
+    "definition_en": "To obtain in exchange for payment.",
+    "definition_bn": "অর্থ প্রদানের বিনিময়ে কোনো কিছু লাভ করা।",
+    "examples_en": [
+      "I want to buy a new car."
+    ],
+    "examples_bn": [
+      "আমি একটি নতুন গাড়ি কিনতে চাই।"
+    ],
+    "synonyms": [
+      "purchase",
+      "acquire"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "v."
+  },
+  {
+    "id": 153,
+    "word": "bye",
+    "meaning_bn": "বিদায়",
+    "definition_en": "Used to say goodbye.",
+    "definition_bn": "বিদায় জানানোর জন্য ব্যবহৃত শব্দ।",
+    "examples_en": [
+      "Bye! See you tomorrow."
+    ],
+    "examples_bn": [
+      "বিদায়! আগামীকাল দেখা হবে।"
+    ],
+    "synonyms": [
+      "goodbye",
+      "farewell"
+    ],
+    "level": "A1",
+    "category": "Oxford3000",
+    "parts_of_speech": "exclam."
+  }
+]
