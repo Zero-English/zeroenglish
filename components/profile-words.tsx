@@ -21,6 +21,9 @@ import { DailyGoalCard } from "@/components/daily-goal";
 import { useActiveTab, setActiveTab } from "@/lib/profile-tab-store";
 import { useQuizActivity } from "@/lib/use-quiz-activity";
 import { Classic } from "@/components/classic";
+import { ProfileActivityChart } from "@/components/profile-activity-chart";
+import { QuizHistoryPanel } from "@/components/profile-quiz-history";
+import { useQuizHistoryStore } from "@/lib/quiz-history-store";
 
 const ITEMS_PER_PAGE = 10;
 import {
@@ -244,6 +247,7 @@ function WordItem({
 
 export function ProfileTabs({ words }: { words: Word[] }) {
   const activeTab = useActiveTab();
+  const quizCount = useQuizHistoryStore((s) => s.entries.length);
   const { bookmarkedIds, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const { learnedIds, isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
   const { stillLearningIds, removeStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
@@ -328,12 +332,20 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               </span>
             )}
           </TabsTrigger>
+          <TabsTrigger value="quiz" className="flex items-center gap-1.5">
+            <GraduationCap className="h-4 w-4" />
+            Quiz
+            {quizCount > 0 && (
+              <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
+                {quizCount}
+              </span>
+            )}
+          </TabsTrigger>
         </TabsList>
       </div>
 
       <TabsContent value="overview">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-          <StaggerContainer className="contents">
+        <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
           <StatCard
             icon={<BookOpen className="h-5 w-5 text-sky-600" />}
             label="Total Words"
@@ -361,8 +373,10 @@ export function ProfileTabs({ words }: { words: Word[] }) {
             sub={`${overallProgress}% of total`}
             color="bg-emerald-100 dark:bg-emerald-900/30"
           />
-          </StaggerContainer>
-        </div>
+          <StaggerItem className="col-span-2 lg:col-span-4">
+            <ProfileActivityChart />
+          </StaggerItem>
+        </StaggerContainer>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <StaggerContainer className="contents">
@@ -710,6 +724,10 @@ export function ProfileTabs({ words }: { words: Word[] }) {
         })() : (
           emptyState("learned")
         )}
+      </TabsContent>
+
+      <TabsContent value="quiz">
+        <QuizHistoryPanel />
       </TabsContent>
     </Tabs>
   );
