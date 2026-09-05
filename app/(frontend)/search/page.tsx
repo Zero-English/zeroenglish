@@ -1,4 +1,3 @@
-import { getAllWords } from "@/lib/data";
 import { SearchClient } from "@/components/search-client";
 
 export const metadata = {
@@ -7,6 +6,5 @@ export const metadata = {
 };
 
 export default function SearchPage() {
-  const words = getAllWords();
-  return <SearchClient words={words} />;
+  return <SearchClient />;
 }

@@ -1,5 +1,178 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
+import type { Word } from "@/lib/data";
+
+export type WordLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+
+const WORD_LEVELS: readonly WordLevel[] = ["A1", "A2", "B1", "B2", "C1", "C2"];
+
+export const isWordLevel = (value: string): value is WordLevel =>
+    (WORD_LEVELS as readonly string[]).includes(value);
+
+interface DbWordRecord {
+    id: number;
+    word: string;
+    meaningBn: string[];
+    synonyms: string[];
+    antonyms: string[];
+    definitionEn: string;
+    definitionBn: string;
+    examplesEn: string[];
+    examplesBn: string[];
+    level: string;
+    category: string;
+    wordType: string[];
+}
+
+const toPublicWord = (w: DbWordRecord): Word => ({
+    id: w.id,
+    word: w.word,
+    meaning_bn: w.meaningBn.join("; "),
+    definition_en: w.definitionEn,
+    definition_bn: w.definitionBn,
+    examples_en: w.examplesEn,
+    examples_bn: w.examplesBn,
+    synonyms: w.synonyms,
+    level: w.level as Word["level"],
+    category: w.category,
+    parts_of_speech: w.wordType.join(", "),
+});
+
+interface BrowseWordsParams {
+    page?: number;
+    limit?: number;
+    level?: string;
+    search?: string;
+}
+
+export const browseWords = async ({
+    page = 1,
+    limit = 10,
+    level,
+    search,
+}: BrowseWordsParams = {}) => {
+    try {
+        const skip = (page - 1) * limit;
+        const where: { level?: WordLevel } = {};
+        if (level && isWordLevel(level)) where.level = level;
+
+        const q = search?.trim();
+
+        if (q) {
+            const query = q.toLowerCase();
+            const rows = await prisma.word.findMany({
+                where,
+                orderBy: { id: "asc" },
+            });
+
+            const scored = rows
+                .map((row) => {
+                    let score = 0;
+                    const word = row.word.toLowerCase();
+                    const meaning = row.meaningBn.join(" ").toLowerCase();
+                    const definitionEn = row.definitionEn.toLowerCase();
+                    const definitionBn = row.definitionBn.toLowerCase();
+
+                    if (word === query) score += 100;
+                    else if (word.startsWith(query)) score += 50;
+                    else if (word.includes(query)) score += 20;
+
+                    if (meaning === query) score += 80;
+                    else if (meaning.startsWith(query)) score += 40;
+                    else if (meaning.includes(query)) score += 15;
+
+                    if (definitionEn.includes(query)) score += 5;
+                    if (definitionBn.includes(query)) score += 5;
+
+                    return { row, score };
+                })
+                .filter(({ score }) => score > 0)
+                .sort((a, b) => b.score - a.score);
+
+            const total = scored.length;
+            const totalPages = Math.max(1, Math.ceil(total / limit));
+
+            return {
+                data: scored
+                    .slice(skip, skip + limit)
+                    .map(({ row }) => toPublicWord(row)),
+                pagination: {
+                    total,
+                    page,
+                    limit,
+                    totalPages,
+                },
+                message: "Words fetched successfully",
+                success: true,
+            };
+        }
+
+        const [words, total] = await Promise.all([
+            prisma.word.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { id: "asc" },
+            }),
+            prisma.word.count({ where }),
+        ]);
+
+        const totalPages = Math.max(1, Math.ceil(total / limit));
+
+        return {
+            data: words.map(toPublicWord),
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages,
+            },
+            message: "Words fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to browse words: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch words",
+            success: false,
+        };
+    }
+};
+
+export const getWordStats = async () => {
+    try {
+        const [grouped, wordRefs] = await Promise.all([
+            prisma.word.groupBy({
+                by: ["level"],
+                _count: { _all: true },
+            }),
+            prisma.word.findMany({
+                select: { id: true, word: true, level: true },
+                orderBy: { id: "asc" },
+            }),
+        ]);
+
+        const levelMap = new Map(grouped.map((g) => [g.level, g._count._all]));
+        const levels = WORD_LEVELS.map((level) => ({
+            level,
+            count: levelMap.get(level) ?? 0,
+        }));
+
+        return {
+            data: { levels, wordRefs },
+            message: "Word stats fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch word stats: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch word stats",
+            success: false,
+        };
+    }
+};
 
 export const getAllWords = async () => {
     try {
@@ -121,6 +294,7 @@ export const createWordsBulk = async (
         meaningBn?: string[];
         synonyms?: string[];
         antonyms?: string[];
+        antonoyms?: string[];
         definitionEn?: string;
         definitionBn?: string;
         examplesEn?: string[];
@@ -128,14 +302,20 @@ export const createWordsBulk = async (
         level?: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
         category?: string;
         wordType?: string[];
-    }[]
+    }[],
 ) => {
     try {
+        logger.info("Raw data: " + JSON.stringify(wordDataArray[0]));
+        logger.info("Hitted createWordsBulk function");
+        logger.info(
+            `Bulk word import started with ${wordDataArray.length} words`,
+        );
+        logger.info(`Received ${wordDataArray.length} words for bulk creation`);
         const data = wordDataArray.map((w) => ({
             word: w.word,
             meaningBn: w.meaningBn ?? [],
             synonyms: w.synonyms ?? [],
-            antonyms: w.antonyms ?? [],
+            antonyms: w.antonyms ?? w.antonoyms ?? [],
             definitionEn: w.definitionEn ?? "",
             definitionBn: w.definitionBn ?? "",
             examplesEn: w.examplesEn ?? [],
@@ -145,10 +325,15 @@ export const createWordsBulk = async (
             wordType: w.wordType ?? [],
         }));
 
+        logger.info(`Creating ${data.length} words in bulk`);
+        logger.info(`Word data: ${JSON.stringify(data[0])}`);
+
         const result = await prisma.word.createMany({
             data,
             skipDuplicates: true,
         });
+
+        logger.info(`Bulk create result: ${JSON.stringify(result)}`);
 
         return {
             data: { count: result.count },
@@ -179,7 +364,7 @@ export const updateWordById = async (
         level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
         category: string;
         wordType: string[];
-    }>
+    }>,
 ) => {
     try {
         const existingWord = await prisma.word.findUnique({
@@ -261,125 +446,117 @@ export const deleteWordById = async (id: number) => {
     }
 };
 
-export const markWordAsLearned = async (
-    userId: number,
-    wordId: number
-) => {
+export const markWordAsLearned = async (userId: number, wordId: number) => {
     try {
-    return prisma.$transaction(async (tx) => {
-        const existing = await tx.userWord.findUnique({
-            where: {
-                userId_wordId: {
+        return prisma.$transaction(async (tx) => {
+            const existing = await tx.userWord.findUnique({
+                where: {
+                    userId_wordId: {
+                        userId,
+                        wordId,
+                    },
+                },
+            });
+
+            // Already learned → don't create another learning event
+            if (existing?.isLearned === "LEARNED") {
+                return existing;
+            }
+
+            // Update current state
+            const userWord = await tx.userWord.upsert({
+                where: {
+                    userId_wordId: {
+                        userId,
+                        wordId,
+                    },
+                },
+                create: {
+                    userId,
+                    wordId,
+                    isLearned: "LEARNED",
+                },
+                update: {
+                    isLearned: "LEARNED",
+                },
+            });
+
+            // Record learning activity
+            await tx.wordLearningEvent.create({
+                data: {
                     userId,
                     wordId,
                 },
-            },
+            });
+
+            return userWord;
         });
-
-        // Already learned → don't create another learning event
-        if (existing?.isLearned === "LEARNED") {
-            return existing;
-        }
-
-        // Update current state
-        const userWord = await tx.userWord.upsert({
-            where: {
-                userId_wordId: {
-                    userId,
-                    wordId,
-                },
-            },
-            create: {
-                userId,
-                wordId,
-                isLearned: "LEARNED",
-            },
-            update: {
-                isLearned: "LEARNED",
-            },
-        });
-
-        // Record learning activity
-        await tx.wordLearningEvent.create({
-            data: {
-                userId,
-                wordId,
-            },
-        });
-
-        return userWord;
-    });
     } catch (error) {
-    logger.error(`Failed to mark word as learned: ${error}`);
-    return {
-        data: null,
-        message: "Failed to mark word as learned",
-        success: false,
-    };
-}
-}
+        logger.error(`Failed to mark word as learned: ${error}`);
+        return {
+            data: null,
+            message: "Failed to mark word as learned",
+            success: false,
+        };
+    }
+};
 
-export const markWordAsUnLearned = async (
-    userId: number,
-    wordId: number
-) => {
-    try{
-    return prisma.$transaction(async (tx) => {
-        const existing = await tx.userWord.findUnique({
-            where: {
-                userId_wordId: {
+export const markWordAsUnLearned = async (userId: number, wordId: number) => {
+    try {
+        return prisma.$transaction(async (tx) => {
+            const existing = await tx.userWord.findUnique({
+                where: {
+                    userId_wordId: {
+                        userId,
+                        wordId,
+                    },
+                },
+            });
+
+            // Already unlearned → don't create another unlearning event
+            if (existing?.isLearned === "UNLEARNED") {
+                return existing;
+            }
+
+            // Update current state
+            const userWord = await tx.userWord.upsert({
+                where: {
+                    userId_wordId: {
+                        userId,
+                        wordId,
+                    },
+                },
+                create: {
+                    userId,
+                    wordId,
+                    isLearned: "UNLEARNED",
+                },
+                update: {
+                    isLearned: "UNLEARNED",
+                },
+            });
+
+            // Record learning activity
+            await tx.wordLearningEvent.create({
+                data: {
                     userId,
                     wordId,
                 },
-            },
+            });
+
+            return userWord;
         });
+    } catch (error) {
+        logger.error(`Failed to mark word as unlearned: ${error}`);
+        return {
+            data: null,
+            message: "Failed to mark word as unlearned",
+            success: false,
+        };
+    }
+};
 
-        // Already unlearned → don't create another unlearning event
-        if (existing?.isLearned === "UNLEARNED") {
-            return existing;
-        }
-
-        // Update current state
-        const userWord = await tx.userWord.upsert({
-            where: {
-                userId_wordId: {
-                    userId,
-                    wordId,
-                },
-            },
-            create: {
-                userId,
-                wordId,
-                isLearned: "UNLEARNED",
-            },
-            update: {
-                isLearned: "UNLEARNED",
-            },
-        });
-
-        // Record learning activity
-        await tx.wordLearningEvent.create({
-            data: {
-                userId,
-                wordId,
-            },
-        });
-
-        return userWord;
-    });
-}catch (error) {
-    logger.error(`Failed to mark word as unlearned: ${error}`);
-    return {
-        data: null,
-        message: "Failed to mark word as unlearned",
-        success: false,
-    };}
-}
-
-export const markBookmark = async (
-    userId: number,
-    wordId: number
-) => {
+export const markBookmark = async (userId: number, wordId: number) => {
     try {
         const existing = await prisma.userBookmark.findUnique({
             where: {
@@ -420,10 +597,7 @@ export const markBookmark = async (
     }
 };
 
-export const removeBookmark = async (
-    userId: number,
-    wordId: number
-) => {
+export const removeBookmark = async (userId: number, wordId: number) => {
     try {
         const existing = await prisma.userBookmark.findUnique({
             where: {
@@ -468,7 +642,7 @@ export const removeBookmark = async (
 
 export const getWordLearningEvents = async (
     page: number = 1,
-    limit: number = 10
+    limit: number = 10,
 ) => {
     try {
         const skip = (page - 1) * limit;

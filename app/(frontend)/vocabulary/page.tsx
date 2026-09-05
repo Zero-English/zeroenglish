@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { getAllWords } from "@/lib/data";
 import { VocabularyClient } from "@/components/vocabulary-client";
 
 export const metadata: Metadata = {
@@ -9,6 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function VocabularyPage() {
-  const words = getAllWords();
-  return <VocabularyClient words={words} />;
+  return <VocabularyClient />;
 }
