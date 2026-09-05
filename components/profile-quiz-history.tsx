@@ -17,59 +17,11 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
-
-export const quizHistory = [
-  {
-    quizType: "english_to_bangla",
-    date: "2026-09-05",
-    win: "85%",
-    levels: ["A1", "B1", "B2", "C1", "C2"],
-    numberOfQuestions: 20,
-    timePerQuestion: 10,
-  },
-  {
-    quizType: "bangla_to_english",
-    date: "2026-09-04",
-    win: "72%",
-    levels: ["A1", "A2", "B1", "B2"],
-    numberOfQuestions: 15,
-    timePerQuestion: 12,
-  },
-  {
-    quizType: "synonym",
-    date: "2026-09-03",
-    win: "90%",
-    levels: ["A1", "A2", "B1", "B2", "C2"],
-    numberOfQuestions: 25,
-    timePerQuestion: 8,
-  },
-  {
-    quizType: "antonym",
-    date: "2026-09-02",
-    win: "68%",
-    levels: [ "A2", "B1", "B2", "C1", "C2"],
-    numberOfQuestions: 20,
-    timePerQuestion: 10,
-  },
-  {
-    quizType: "english_to_bangla",
-    date: "2026-09-01",
-    win: "94%",
-    levels: ["A1", "A2", "B1", "C1", "C2"],
-    numberOfQuestions: 30,
-    timePerQuestion: 7,
-  },
-  {
-    quizType: "synonym",
-    date: "2026-08-31",
-    win: "80%",
-    levels: ["A1", "A2", "B1", "C2"],
-    numberOfQuestions: 10,
-    timePerQuestion: 15,
-  },
-];
-
-type QuizType = (typeof quizHistory)[number]["quizType"];
+import {
+  useQuizHistoryStore,
+  type QuizHistoryEntry,
+  type QuizType,
+} from "@/lib/quiz-history-store";
 
 const QUIZ_META: Record<
   QuizType,
@@ -114,7 +66,7 @@ const LEVEL_COLORS: Record<string, string> = {
   C2: "bg-fuchsia-50 text-fuchsia-700 dark:bg-fuchsia-950/40 dark:text-fuchsia-300",
 };
 
-function winToNumber(entry: (typeof quizHistory)[number]) {
+function winToNumber(entry: QuizHistoryEntry) {
   return parseInt(entry.win);
 }
 
@@ -170,7 +122,7 @@ function WinRing({ win }: { win: number }) {
   );
 }
 
-function QuizHistoryItem({ entry }: { entry: (typeof quizHistory)[number] }) {
+function QuizHistoryItem({ entry }: { entry: QuizHistoryEntry }) {
   const meta = QUIZ_META[entry.quizType];
   const Icon = meta.icon;
   const win = winToNumber(entry);
@@ -230,13 +182,16 @@ function QuizHistoryItem({ entry }: { entry: (typeof quizHistory)[number] }) {
 }
 
 export function QuizHistoryPanel() {
+  const entries = useQuizHistoryStore((s) => s.entries);
+
   const stats = useMemo(() => {
-    const total = quizHistory.length;
-    const totalQuestions = quizHistory.reduce((acc, e) => acc + e.numberOfQuestions, 0);
-    const avg = total > 0 ? Math.round(quizHistory.reduce((acc, e) => acc + winToNumber(e), 0) / total) : 0;
-    const best = total > 0 ? Math.max(...quizHistory.map(winToNumber)) : 0;
+    const total = entries.length;
+    const totalQuestions = entries.reduce((acc, e) => acc + e.numberOfQuestions, 0);
+    const avg =
+      total > 0 ? Math.round(entries.reduce((acc, e) => acc + winToNumber(e), 0) / total) : 0;
+    const best = total > 0 ? Math.max(...entries.map(winToNumber)) : 0;
     return { total, totalQuestions, avg, best };
-  }, []);
+  }, [entries]);
 
   const summary = [
     { icon: GraduationCap, label: "Quizzes Taken", value: String(stats.total), tint: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-100 dark:bg-indigo-900/30" },
@@ -272,13 +227,26 @@ export function QuizHistoryPanel() {
         </StaggerContainer>
       </div>
 
-      <div className="grid grid-cols-1 gap-4">
-        <StaggerContainer className="contents">
-          {quizHistory.map((entry) => (
-            <QuizHistoryItem key={`${entry.quizType}-${entry.date}`} entry={entry} />
-          ))}
-        </StaggerContainer>
-      </div>
+      {entries.length > 0 ? (
+        <div className="grid grid-cols-1 gap-4">
+          <StaggerContainer className="contents">
+            {entries.map((entry, idx) => (
+              <QuizHistoryItem
+                key={entry.id ?? `${entry.quizType}-${entry.date}-${entry.numberOfQuestions}-${idx}`}
+                entry={entry}
+              />
+            ))}
+          </StaggerContainer>
+        </div>
+      ) : (
+        <div className="text-center py-20">
+          <Trophy className="h-12 w-12 mx-auto text-zinc-300 dark:text-zinc-600 mb-4" />
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-1">No quiz history yet.</p>
+          <p className="text-zinc-400 dark:text-zinc-500 text-xs">
+            Take a quiz from the Quiz page and your results will appear here.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

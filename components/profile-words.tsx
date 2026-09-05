@@ -22,7 +22,8 @@ import { useActiveTab, setActiveTab } from "@/lib/profile-tab-store";
 import { useQuizActivity } from "@/lib/use-quiz-activity";
 import { Classic } from "@/components/classic";
 import { ProfileActivityChart } from "@/components/profile-activity-chart";
-import { QuizHistoryPanel, quizHistory } from "@/components/profile-quiz-history";
+import { QuizHistoryPanel } from "@/components/profile-quiz-history";
+import { useQuizHistoryStore } from "@/lib/quiz-history-store";
 
 const ITEMS_PER_PAGE = 10;
 import {
@@ -246,6 +247,7 @@ function WordItem({
 
 export function ProfileTabs({ words }: { words: Word[] }) {
   const activeTab = useActiveTab();
+  const quizCount = useQuizHistoryStore((s) => s.entries.length);
   const { bookmarkedIds, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const { learnedIds, isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
   const { stillLearningIds, removeStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
@@ -333,9 +335,9 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           <TabsTrigger value="quiz" className="flex items-center gap-1.5">
             <GraduationCap className="h-4 w-4" />
             Quiz
-            {quizHistory.length > 0 && (
+            {quizCount > 0 && (
               <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
-                {quizHistory.length}
+                {quizCount}
               </span>
             )}
           </TabsTrigger>
