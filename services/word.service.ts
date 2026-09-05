@@ -641,6 +641,29 @@ export const removeBookmark = async (userId: number, wordId: number) => {
     }
 };
 
+export const getUserBookmarkIds = async (userId: number) => {
+    try {
+        const bookmarks = await prisma.userBookmark.findMany({
+            where: { userId },
+            select: { wordId: true },
+            orderBy: { bookmarkedAt: "desc" },
+        });
+
+        return {
+            data: bookmarks.map((b) => b.wordId),
+            message: "Bookmarks fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch bookmarks: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch bookmarks",
+            success: false,
+        };
+    }
+};
+
 export const getWordLearningEvents = async (
     page: number = 1,
     limit: number = 10,

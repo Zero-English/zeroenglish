@@ -18,7 +18,6 @@ import { PaginationNav } from "@/components/pagination-nav";
 const PAGE_SIZES = [10, 20, 50];
 
 const RICH = {
-  bookmarked: [1, 3, 8, 12, 19, 25, 31, 44, 56, 67],
   stillLearning: [2, 5, 9, 14, 20, 28, 35, 41, 50, 58, 63, 72, 80, 91, 100],
   learned: [4, 6, 10, 15, 22, 30, 38, 46, 53, 60, 68, 75, 82, 90, 98],
   quizResult: 78,
@@ -336,7 +335,7 @@ export default function AdminUsersPage() {
                         {user.email.toLowerCase()}
                       </td>
                       <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
-                        {RICH.bookmarked.length}
+                        {user.bookmarkedCount}
                       </td>
                       <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
                         {RICH.stillLearning.length}

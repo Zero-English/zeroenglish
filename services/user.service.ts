@@ -5,7 +5,7 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
     try {
         const skip = (page - 1) * limit;
 
-        const [users, total] = await Promise.all([
+        const [rawUsers, total] = await Promise.all([
             prisma.user.findMany({
                 skip,
                 take: limit,
@@ -19,12 +19,20 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
                     role: true,
                     created_at: true,
                     updated_at: true,
+                    _count: {
+                        select: { userBookmarks: true },
+                    },
                 },
             }),
             prisma.user.count(),
         ]);
 
         const totalPages = Math.ceil(total / limit);
+
+        const users = rawUsers.map(({ _count, ...user }) => ({
+            ...user,
+            bookmarkedCount: _count.userBookmarks,
+        }));
 
         return {
             data: users,
@@ -49,7 +57,7 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
 
 export const getUserById = async (id: number) => {
     try {
-        const user = await prisma.user.findUnique({
+        const raw = await prisma.user.findUnique({
             where: { id },
             select: {
                 id: true,
@@ -61,10 +69,13 @@ export const getUserById = async (id: number) => {
                 role: true,
                 created_at: true,
                 updated_at: true,
+                _count: {
+                    select: { userBookmarks: true },
+                },
             },
         });
 
-        if (!user) {
+        if (!raw) {
             return {
                 data: null,
                 message: "User not found",
@@ -72,8 +83,10 @@ export const getUserById = async (id: number) => {
             };
         }
 
+        const { _count, ...user } = raw;
+
         return {
-            data: user,
+            data: { ...user, bookmarkedCount: _count.userBookmarks },
             message: "User fetched successfully",
             success: true,
         };
