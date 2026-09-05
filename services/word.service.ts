@@ -33,6 +33,7 @@ const toPublicWord = (w: DbWordRecord): Word => ({
     examples_en: w.examplesEn,
     examples_bn: w.examplesBn,
     synonyms: w.synonyms,
+    antonyms: w.antonyms,
     level: w.level as Word["level"],
     category: w.category,
     parts_of_speech: w.wordType.join(", "),
@@ -635,6 +636,29 @@ export const removeBookmark = async (userId: number, wordId: number) => {
         return {
             data: null,
             message: "Failed to remove bookmark",
+            success: false,
+        };
+    }
+};
+
+export const getUserBookmarkIds = async (userId: number) => {
+    try {
+        const bookmarks = await prisma.userBookmark.findMany({
+            where: { userId },
+            select: { wordId: true },
+            orderBy: { bookmarkedAt: "desc" },
+        });
+
+        return {
+            data: bookmarks.map((b) => b.wordId),
+            message: "Bookmarks fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch bookmarks: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch bookmarks",
             success: false,
         };
     }

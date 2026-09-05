@@ -7,7 +7,7 @@ export const metadata = {
     "Test your English vocabulary knowledge with interactive quizzes. Choose from A1 to B2 levels or random questions.",
 };
 
-export default function QuizPage() {
-  const words = getAllWords();
+export default async function QuizPage() {
+  const words = await getAllWords();
   return <QuizClient words={words} />;
 }

@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     description: "Track your vocabulary learning progress.",
 };
 
-export default function ProfilePage() {
-    const words = getAllWords();
+export default async function ProfilePage() {
+    const words = await getAllWords();
 
     return (
         <div className="relative min-h-dvh overflow-hidden">

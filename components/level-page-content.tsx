@@ -48,7 +48,7 @@ export interface LevelPageContentProps {
   level: string;
 }
 
-export function LevelPageContent({ level }: LevelPageContentProps) {
+export async function LevelPageContent({ level }: LevelPageContentProps) {
   const upper = level.toUpperCase();
 
   if (!VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number])) {
@@ -56,7 +56,7 @@ export function LevelPageContent({ level }: LevelPageContentProps) {
   }
 
   const config = levelConfig[upper as (typeof VALID_LEVELS)[number]];
-  const allWords = getWordsByLevel(upper);
+  const allWords = await getWordsByLevel(upper);
 
   if (allWords.length === 0) {
     notFound();

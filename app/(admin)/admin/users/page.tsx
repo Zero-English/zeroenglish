@@ -3,8 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import {
-  ChevronLeft,
-  ChevronRight,
   Mail,
   Pencil,
   Trash2,
@@ -15,11 +13,11 @@ import { UserAvatar } from "@/components/UserAvatar";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { BackButton } from "@/components/back-button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PaginationNav } from "@/components/pagination-nav";
 
 const PAGE_SIZES = [10, 20, 50];
 
 const RICH = {
-  bookmarked: [1, 3, 8, 12, 19, 25, 31, 44, 56, 67],
   stillLearning: [2, 5, 9, 14, 20, 28, 35, 41, 50, 58, 63, 72, 80, 91, 100],
   learned: [4, 6, 10, 15, 22, 30, 38, 46, 53, 60, 68, 75, 82, 90, 98],
   quizResult: 78,
@@ -337,7 +335,7 @@ export default function AdminUsersPage() {
                         {user.email.toLowerCase()}
                       </td>
                       <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
-                        {RICH.bookmarked.length}
+                        {user.bookmarkedCount}
                       </td>
                       <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
                         {RICH.stillLearning.length}
@@ -464,38 +462,11 @@ export default function AdminUsersPage() {
               </span>
             </span>
           </div>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              aria-label="Previous page"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-              <button
-                key={p}
-                onClick={() => setPage(p)}
-                aria-current={p === page ? "page" : undefined}
-                className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium transition-colors ${
-                  p === page
-                    ? "bg-primary text-white"
-                    : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                }`}
-              >
-                {p}
-              </button>
-            ))}
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              aria-label="Next page"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
+          <PaginationNav
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       </div>
 

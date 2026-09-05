@@ -76,7 +76,7 @@ export function HomeContent({ words }: { words: Word[] }) {
 
   const levelStats = LEVELS.map((level) => {
     const items = words.filter((w) => w.level === level);
-    const learned = items.filter((w) => learnedIds.has(`${w.id}|${w.word}`)).length;
+    const learned = items.filter((w) => learnedIds.has(String(w.id))).length;
     return { level, label: LEVEL_CONFIG[level].label, total: items.length, learned };
   });
 

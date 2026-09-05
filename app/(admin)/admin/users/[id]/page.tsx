@@ -8,7 +8,6 @@ import {
   BookOpen,
   ClipboardCheck,
   GraduationCap,
-  Hash,
 } from "lucide-react";
 import type { ApiUser, UserDetailResponse } from "../types";
 import UserActions from "./user-actions";
@@ -16,7 +15,6 @@ import DailyProgress from "./daily-progress";
 import { UserAvatar } from "@/components/UserAvatar";
 
 const RICH = {
-  bookmarked: [1, 3, 8, 12, 19, 25, 31, 44, 56, 67],
   stillLearning: [2, 5, 9, 14, 20, 28, 35, 41, 50, 58, 63, 72, 80, 91, 100],
   learned: [4, 6, 10, 15, 22, 30, 38, 46, 53, 60, 68, 75, 82, 90, 98],
   quizResult: 78,
@@ -94,7 +92,7 @@ export default async function SingleUserPage({
   const rich = RICH;
 
   const stats = [
-    { label: "Bookmarked", value: rich.bookmarked.length, icon: Bookmark },
+    { label: "Bookmarked", value: user.bookmarkedCount, icon: Bookmark },
     { label: "Still Learning", value: rich.stillLearning.length, icon: BookOpen },
     { label: "Learned", value: rich.learned.length, icon: GraduationCap },
     { label: "Quiz Result", value: `${rich.quizResult}%`, icon: ClipboardCheck },
@@ -173,32 +171,6 @@ export default async function SingleUserPage({
       <div className="mt-8">
         <DailyProgress year={2026} />
       </div>
-
-      <section className="mt-8 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-        <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 px-5 py-4">
-          <Hash className="h-4 w-4 text-primary" />
-          <h2 className="text-base font-semibold text-gray-900 dark:text-white">
-            Vocabulary IDs
-          </h2>
-        </div>
-        <div className="grid gap-6 p-5 lg:grid-cols-3">
-          <VocabGroup
-            title="Learned"
-            badgeColor="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
-            ids={rich.learned}
-          />
-          <VocabGroup
-            title="Still Learning"
-            badgeColor="bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
-            ids={rich.stillLearning}
-          />
-          <VocabGroup
-            title="Bookmarked"
-            badgeColor="bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-400"
-            ids={rich.bookmarked}
-          />
-        </div>
-      </section>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
@@ -345,41 +317,6 @@ export default async function SingleUserPage({
             ))}
           </ul>
         </section>
-      </div>
-    </div>
-  );
-}
-
-function VocabGroup({
-  title,
-  badgeColor,
-  ids,
-}: {
-  title: string;
-  badgeColor: string;
-  ids: number[];
-}) {
-  return (
-    <div>
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-          {title}
-        </h3>
-        <span
-          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${badgeColor}`}
-        >
-          {ids.length} words
-        </span>
-      </div>
-      <div className="flex flex-wrap gap-1.5">
-        {ids.map((id) => (
-          <span
-            key={id}
-            className="inline-flex h-7 min-w-7 items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-2 text-xs font-medium text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
-          >
-            {id}
-          </span>
-        ))}
       </div>
     </div>
   );

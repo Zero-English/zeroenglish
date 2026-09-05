@@ -52,7 +52,7 @@ export function LoginClient() {
     if (!hydrated || sessionLoading) return;
     if (session?.user && !greeted.current) {
       greeted.current = true;
-      setGoogleAuth(session.user.name ?? null, session.user.email ?? null);
+      setGoogleAuth(session.user.name ?? null, session.user.email ?? null, session.user.id ?? null);
       toast.success(`Welcome back, ${session.user.name ?? "there"}!`);
       return;
     }

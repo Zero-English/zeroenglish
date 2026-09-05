@@ -9,6 +9,7 @@ import { Word } from "@/lib/data";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
 import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
 import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
+import { useAuthPath } from "@/lib/auth-store";
 import Link from "next/link";
 
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
@@ -97,7 +98,6 @@ export function QuizClient({ words }: { words: Word[] }) {
       savedRef.current = true;
       const entries = incorrectAnswers.map((ia) => ({
         id: ia.word.id,
-        word: ia.word.word,
       }));
       if (entries.length > 0) addStillLearning(entries);
     }
@@ -723,13 +723,14 @@ function ResultsView({
   onRestart: () => void;
 }) {
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+  const { path, hydrated } = useAuthPath();
 
   useEffect(() => {
-    if (useQuizStore.getState().resultsRecorded) return;
+    if (!hydrated || useQuizStore.getState().resultsRecorded) return;
     const today = new Date();
     const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-    incrementQuizzesDone(dateStr);
-    addCorrectAnswers(dateStr, score);
+    incrementQuizzesDone(dateStr, path);
+    addCorrectAnswers(dateStr, score, path);
     useQuizStore.setState({ resultsRecorded: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

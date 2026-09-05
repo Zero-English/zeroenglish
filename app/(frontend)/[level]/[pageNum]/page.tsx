@@ -20,7 +20,7 @@ export async function generateMetadata({
     return { title: "Level Not Found" };
   }
 
-  const words = getWordsByLevel(upper);
+  const words = await getWordsByLevel(upper);
   return {
     title: `English Vocabulary - Level ${upper} (Page ${page})`,
     description: `Learn ${words.length} essential English words at ${upper} level. Page ${page}.`,

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { getWordsByType, getAllActivity } from "./db";
+import { getWordsByType } from "./db";
+import { useAuthPath } from "./auth-store";
 
 const DAILY_GOAL_KEY = "voc_daily_goal";
 
@@ -16,6 +17,7 @@ function getDaysAgo(n: number): string {
 }
 
 export function useDailyGoal() {
+  const { path, hydrated } = useAuthPath();
   const [dailyGoal, setDailyGoalState] = useState(10);
   const [todayLearned, setTodayLearned] = useState(0);
   const [streak, setStreak] = useState(0);
@@ -24,17 +26,23 @@ export function useDailyGoal() {
   >([]);
   const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
-    const stored = localStorage.getItem(DAILY_GOAL_KEY);
-    if (stored) setDailyGoalState(parseInt(stored, 10) || 10);
-  }, []);
+  const goalKey = hydrated ? `${DAILY_GOAL_KEY}_${path}` : "";
 
   useEffect(() => {
+    if (!hydrated) return;
     (async () => {
-      const [records, activityRecords] = await Promise.all([
-        getWordsByType("learned"),
-        getAllActivity(),
-      ]);
+      setLoaded(false);
+      let goalStored = localStorage.getItem(goalKey);
+      if (!goalStored) {
+        const legacy = localStorage.getItem(DAILY_GOAL_KEY);
+        if (legacy) {
+          localStorage.setItem(goalKey, legacy);
+          localStorage.removeItem(DAILY_GOAL_KEY);
+          goalStored = legacy;
+        }
+      }
+      if (goalStored) setDailyGoalState(parseInt(goalStored, 10) || 10);
+      const records = await getWordsByType("learned", path);
 
       const dayCounts: Record<string, number> = {};
       for (const r of records) {
@@ -64,17 +72,20 @@ export function useDailyGoal() {
 
       setLoaded(true);
     })();
-  }, []);
+  }, [path, hydrated, goalKey]);
 
-  const setDailyGoal = useCallback((n: number) => {
-    setDailyGoalState(n);
-    localStorage.setItem(DAILY_GOAL_KEY, String(n));
-  }, []);
+  const setDailyGoal = useCallback(
+    (n: number) => {
+      setDailyGoalState(n);
+      localStorage.setItem(`${DAILY_GOAL_KEY}_${path}`, String(n));
+    },
+    [path]
+  );
 
   const refresh = useCallback(() => {
     setLoaded(false);
     (async () => {
-      const records = await getWordsByType("learned");
+      const records = await getWordsByType("learned", path);
       const dayCounts: Record<string, number> = {};
       for (const r of records) {
         if (!r.timestamp) continue;
@@ -95,7 +106,7 @@ export function useDailyGoal() {
       setStreak(s);
       setLoaded(true);
     })();
-  }, []);
+  }, [path]);
 
   return {
     dailyGoal,
@@ -103,7 +114,7 @@ export function useDailyGoal() {
     todayLearned,
     streak,
     contributionData,
-    loaded,
+    loaded: loaded && hydrated,
     refresh,
   };
 }

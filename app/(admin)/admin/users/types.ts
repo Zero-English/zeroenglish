@@ -8,6 +8,7 @@ export type ApiUser = {
   role: "user" | "admin";
   created_at: string;
   updated_at: string;
+  bookmarkedCount: number;
 };
 
 export type UserListResponse = {

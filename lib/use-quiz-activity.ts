@@ -2,15 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { getAllActivity } from "./db";
+import { useAuthPath } from "./auth-store";
 
 export function useQuizActivity() {
+  const { path, hydrated } = useAuthPath();
   const [totalCorrectAnswers, setTotalCorrectAnswers] = useState(0);
   const [quizzesThisWeek, setQuizzesThisWeek] = useState(0);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    if (!hydrated) return;
     (async () => {
-      const activityRecords = await getAllActivity();
+      const activityRecords = await getAllActivity(path);
       let correct = 0;
       let week = 0;
       const weekAgo = new Date();
@@ -28,7 +31,7 @@ export function useQuizActivity() {
       setQuizzesThisWeek(week);
       setLoaded(true);
     })();
-  }, []);
+  }, [path, hydrated]);
 
-  return { totalCorrectAnswers, quizzesThisWeek, loaded };
+  return { totalCorrectAnswers, quizzesThisWeek, loaded: loaded && hydrated };
 }
