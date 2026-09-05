@@ -260,3 +260,266 @@ export const deleteWordById = async (id: number) => {
         };
     }
 };
+
+export const markWordAsLearned = async (
+    userId: number,
+    wordId: number
+) => {
+    try {
+    return prisma.$transaction(async (tx) => {
+        const existing = await tx.userWord.findUnique({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+        });
+
+        // Already learned → don't create another learning event
+        if (existing?.isLearned === "LEARNED") {
+            return existing;
+        }
+
+        // Update current state
+        const userWord = await tx.userWord.upsert({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+            create: {
+                userId,
+                wordId,
+                isLearned: "LEARNED",
+            },
+            update: {
+                isLearned: "LEARNED",
+            },
+        });
+
+        // Record learning activity
+        await tx.wordLearningEvent.create({
+            data: {
+                userId,
+                wordId,
+            },
+        });
+
+        return userWord;
+    });
+    } catch (error) {
+    logger.error(`Failed to mark word as learned: ${error}`);
+    return {
+        data: null,
+        message: "Failed to mark word as learned",
+        success: false,
+    };
+}
+}
+
+export const markWordAsUnLearned = async (
+    userId: number,
+    wordId: number
+) => {
+    try{
+    return prisma.$transaction(async (tx) => {
+        const existing = await tx.userWord.findUnique({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+        });
+
+        // Already unlearned → don't create another unlearning event
+        if (existing?.isLearned === "UNLEARNED") {
+            return existing;
+        }
+
+        // Update current state
+        const userWord = await tx.userWord.upsert({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+            create: {
+                userId,
+                wordId,
+                isLearned: "UNLEARNED",
+            },
+            update: {
+                isLearned: "UNLEARNED",
+            },
+        });
+
+        // Record learning activity
+        await tx.wordLearningEvent.create({
+            data: {
+                userId,
+                wordId,
+            },
+        });
+
+        return userWord;
+    });
+}catch (error) {
+    logger.error(`Failed to mark word as unlearned: ${error}`);
+    return {
+        data: null,
+        message: "Failed to mark word as unlearned",
+        success: false,
+    };}
+}
+
+export const markBookmark = async (
+    userId: number,
+    wordId: number
+) => {
+    try {
+        const existing = await prisma.userBookmark.findUnique({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+        });
+
+        if (existing) {
+            return {
+                data: existing,
+                message: "Word already bookmarked",
+                success: false,
+            };
+        }
+
+        const bookmark = await prisma.userBookmark.create({
+            data: {
+                userId,
+                wordId,
+            },
+        });
+
+        return {
+            data: bookmark,
+            message: "Word bookmarked successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to mark word as bookmarked: ${error}`);
+        return {
+            data: null,
+            message: "Failed to mark word as bookmarked",
+            success: false,
+        };
+    }
+};
+
+export const removeBookmark = async (
+    userId: number,
+    wordId: number
+) => {
+    try {
+        const existing = await prisma.userBookmark.findUnique({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+        });
+
+        if (!existing) {
+            return {
+                data: null,
+                message: "Bookmark not found",
+                success: false,
+            };
+        }
+
+        await prisma.userBookmark.delete({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+        });
+
+        return {
+            data: null,
+            message: "Bookmark removed successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to remove bookmark: ${error}`);
+        return {
+            data: null,
+            message: "Failed to remove bookmark",
+            success: false,
+        };
+    }
+};
+
+export const getWordLearningEvents = async (
+    page: number = 1,
+    limit: number = 10
+) => {
+    try {
+        const skip = (page - 1) * limit;
+
+        const [events, total] = await Promise.all([
+            prisma.wordLearningEvent.findMany({
+                skip,
+                take: limit,
+                orderBy: { createdAt: "desc" },
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            user_name: true,
+                            email: true,
+                            image: true,
+                        },
+                    },
+                    word: {
+                        select: {
+                            id: true,
+                            word: true,
+                            meaningBn: true,
+                            level: true,
+                        },
+                    },
+                },
+            }),
+            prisma.wordLearningEvent.count(),
+        ]);
+
+        const totalPages = Math.ceil(total / limit);
+
+        return {
+            data: events,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages,
+            },
+            message: "Learning events fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch learning events: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch learning events",
+            success: false,
+        };
+    }
+};
