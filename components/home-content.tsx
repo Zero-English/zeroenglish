@@ -6,10 +6,11 @@ import { useLearnedWords } from "@/lib/use-learned-words";
 import { Button } from "@/components/ui/button";
 import { LibraryBig, BookOpenCheck, Search, ArrowRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useT, useNum } from "@/components/language-provider";
 
 const LEVEL_CONFIG: Record<
   string,
-  { bg: string; border: string; text: string; gradient: string; label: string; solid: string }
+  { bg: string; border: string; text: string; gradient: string; label: string; labelBn: string; solid: string }
 > = {
   A1: {
     bg: "bg-emerald-50 dark:bg-emerald-950/40",
@@ -17,6 +18,7 @@ const LEVEL_CONFIG: Record<
     text: "text-emerald-700 dark:text-emerald-300",
     gradient: "from-emerald-500 to-teal-500",
     label: "Beginner",
+    labelBn: "শিক্ষানবিস",
     solid: "bg-emerald-500",
   },
   A2: {
@@ -25,6 +27,7 @@ const LEVEL_CONFIG: Record<
     text: "text-sky-700 dark:text-sky-300",
     gradient: "from-sky-500 to-blue-500",
     label: "Elementary",
+    labelBn: "প্রাথমিক",
     solid: "bg-sky-500",
   },
   B1: {
@@ -33,6 +36,7 @@ const LEVEL_CONFIG: Record<
     text: "text-amber-700 dark:text-amber-300",
     gradient: "from-amber-500 to-orange-500",
     label: "Intermediate",
+    labelBn: "মাঝারি",
     solid: "bg-amber-500",
   },
   B2: {
@@ -41,6 +45,7 @@ const LEVEL_CONFIG: Record<
     text: "text-rose-700 dark:text-rose-300",
     gradient: "from-rose-500 to-pink-500",
     label: "Upper Intermediate",
+    labelBn: "উচ্চ-মাঝারি",
     solid: "bg-rose-500",
   },
 };
@@ -51,28 +56,36 @@ const FEATURES = [
   {
     href: "/vocabulary",
     icon: LibraryBig,
-    title: "Vocabulary",
-    description: "Browse all 3000 words, filter by level, and track what you've learned.",
+    titleEn: "Vocabulary",
+    titleBn: "শব্দভাণ্ডার",
+    descriptionEn: "Browse all 3000 words, filter by level, and track what you've learned.",
+    descriptionBn: "সব ৩০০০ শব্দ ব্রাউজ করুন, লেভেল অনুযায়ী ফিল্টার করুন এবং যা শিখেছেন তা ট্র্যাক করুন।",
     iconClass: "text-orange-500 bg-orange-100 dark:bg-orange-950/60",
   },
   {
     href: "/quiz",
     icon: BookOpenCheck,
-    title: "Daily Quiz",
-    description: "Test yourself with quick quizzes and build a daily learning streak.",
+    titleEn: "Daily Quiz",
+    titleBn: "দৈনিক কুইজ",
+    descriptionEn: "Test yourself with quick quizzes and build a daily learning streak.",
+    descriptionBn: "দ্রুত কুইজ দিয়ে নিজেকে পরীক্ষা করুন এবং প্রতিদিনের ধারা গড়ে তুলুন।",
     iconClass: "text-sky-500 bg-sky-100 dark:bg-sky-950/60",
   },
   {
     href: "/search",
     icon: Search,
-    title: "Search",
-    description: "Look up any word instantly — meaning, definition, and examples in one place.",
+    titleEn: "Search",
+    titleBn: "অনুসন্ধান",
+    descriptionEn: "Look up any word instantly — meaning, definition, and examples in one place.",
+    descriptionBn: "যেকোনো শব্দ তাৎক্ষণিক খুঁজুন — অর্থ, সংজ্ঞা ও উদাহরণ এক জায়গায়।",
     iconClass: "text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60",
   },
 ];
 
 export function HomeContent({ words }: { words: Word[] }) {
   const { learnedIds, loaded } = useLearnedWords();
+  const t = useT();
+  const num = useNum();
 
   const levelStats = LEVELS.map((level) => {
     const items = words.filter((w) => w.level === level);
@@ -93,22 +106,24 @@ export function HomeContent({ words }: { words: Word[] }) {
           <section className="text-center mb-14 animate-fade-up">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5">
               <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-              Oxford 3000 &middot; English &harr; Bangla
+              {t("অক্সফোর্ড ৩০০০ · ইংরেজি ↔ বাংলা", "Oxford 3000 · English ↔ Bangla")}
             </div>
 
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
               <span className="bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-                Master English,
+                {t("ইংরেজি আয়ত্ত করুন,", "Master English,")}
               </span>
               <br />
               <span className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 bg-clip-text text-transparent">
-                word by word.
+                {t("শব্দে শব্দে।", "word by word.")}
               </span>
             </h1>
 
             <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto mb-8">
-              The complete Oxford 3000 word list with Bangla meanings. Pick your level,
-              learn new words, and track your progress every day.
+              {t(
+                "অক্সফোর্ড ৩০০০ শব্দের সম্পূর্ণ তালিকা বাংলা অর্থসহ। আপনার লেভেল বেছে নিন, নতুন শব্দ শিখুন এবং প্রতিদিন আপনার অগ্রগতি ট্র্যাক করুন।",
+                "The complete Oxford 3000 word list with Bangla meanings. Pick your level, learn new words, and track your progress every day."
+              )}
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-3 mb-10">
@@ -117,7 +132,7 @@ export function HomeContent({ words }: { words: Word[] }) {
                 className="h-11 gap-2.5 rounded-xl px-6 text-sm font-medium bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/20"
               >
                 <Link href="/vocabulary">
-                  Start Learning
+                  {t("শেখা শুরু করুন", "Start Learning")}
                   <ArrowRight className="size-4" />
                 </Link>
               </Button>
@@ -126,28 +141,28 @@ export function HomeContent({ words }: { words: Word[] }) {
                 variant="outline"
                 className="h-11 gap-2.5 rounded-xl px-6 text-sm font-medium"
               >
-                <Link href="/quiz">Take a Quiz</Link>
+                <Link href="/quiz">{t("কুইজ দিন", "Take a Quiz")}</Link>
               </Button>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-2.5">
               <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
                 <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                  {words.length}
+                  {num(words.length)}
                 </p>
-                <p className="text-xs text-zinc-400">Words</p>
+                <p className="text-xs text-zinc-400">{t("শব্দ", "Words")}</p>
               </div>
               <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
                 <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                  {LEVELS.length}
+                  {num(LEVELS.length)}
                 </p>
-                <p className="text-xs text-zinc-400">Levels</p>
+                <p className="text-xs text-zinc-400">{t("লেভেল", "Levels")}</p>
               </div>
               <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
                 <p className="text-2xl font-bold text-orange-500 tabular-nums">
-                  {loaded ? `${overallPct}%` : "· · ·"}
+                  {loaded ? `${num(overallPct)}%` : "· · ·"}
                 </p>
-                <p className="text-xs text-zinc-400">Learned</p>
+                <p className="text-xs text-zinc-400">{t("শেখা হয়েছে", "Learned")}</p>
               </div>
             </div>
           </section>
@@ -156,10 +171,10 @@ export function HomeContent({ words }: { words: Word[] }) {
             <div className="flex items-end justify-between mb-5">
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                  Pick your level
+                  {t("আপনার লেভেল বেছে নিন", "Pick your level")}
                 </h2>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  Each level covers the words you need to move forward.
+                  {t("প্রতিটি লেভেল আপনার এগিয়ে যাওয়ার জন্য প্রয়োজনীয় শব্দ কভার করে।", "Each level covers the words you need to move forward.")}
                 </p>
               </div>
             </div>
@@ -194,16 +209,16 @@ export function HomeContent({ words }: { words: Word[] }) {
                         >
                           {level}
                         </span>
-                        <span className={cn("text-xs font-medium", c.text)}>{label}</span>
+                        <span className={cn("text-xs font-medium", c.text)}>{t(c.labelBn, c.label)}</span>
                       </div>
 
                       <div className="space-y-1.5">
                         <div className="flex items-baseline justify-between text-sm">
                           <span className="text-zinc-500 dark:text-zinc-400 font-medium">
-                            {total} words
+                            {t(`${num(total)}টি শব্দ`, `${total} words`)}
                           </span>
                           <span className="text-zinc-400 dark:text-zinc-500 tabular-nums">
-                            {loaded ? `${learned} learned` : `\u00A0`}
+                            {loaded ? t(`${num(learned)}টি শেখা`, `${learned} learned`) : `\u00A0`}
                           </span>
                         </div>
                         <div className="h-1.5 w-full rounded-full bg-zinc-200/70 dark:bg-zinc-800 overflow-hidden">
@@ -227,15 +242,15 @@ export function HomeContent({ words }: { words: Word[] }) {
           <section>
             <div className="mb-5">
               <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                Everything you need
+                {t("আপনার জন্য যা যা দরকার", "Everything you need")}
               </h2>
               <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                Three simple tools to keep you learning.
+                {t("তিনটি সহজ টুল আপনাকে শেখা চালিয়ে যেতে সাহায্য করবে।", "Three simple tools to keep you learning.")}
               </p>
             </div>
 
             <div className="grid grid-cols-1 gap-3 sm:gap-4">
-              {FEATURES.map(({ href, icon: Icon, title, description, iconClass }) => (
+              {FEATURES.map(({ href, icon: Icon, titleEn, titleBn, descriptionEn, descriptionBn, iconClass }) => (
                 <Link
                   key={href}
                   href={href}
@@ -251,9 +266,11 @@ export function HomeContent({ words }: { words: Word[] }) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                      {title}
+                      {t(titleBn, titleEn)}
                     </h3>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{description}</p>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
+                      {t(descriptionBn, descriptionEn)}
+                    </p>
                   </div>
                   <ArrowRight className="h-4 w-4 shrink-0 text-zinc-300 dark:text-zinc-600 transition-all group-hover:translate-x-1 group-hover:text-orange-500" />
                 </Link>

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 import { useLevelPage, useLevelFilter, useLevelSort, setLevelState } from "@/lib/level-pagination-store";
+import { useT, useNum } from "@/components/language-provider";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -40,6 +41,8 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
   const { isLearned, loaded: learnedLoaded } = useLearnedWords();
   const { isBookmarked, loaded: bookmarkLoaded } = useBookmarkedWords();
   const loaded = learnedLoaded && bookmarkLoaded;
+  const t = useT();
+  const num = useNum();
 
   const page = useLevelPage(level);
   const filter = useLevelFilter(level);
@@ -123,7 +126,7 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
       ) : pageWords.length === 0 ? (
         <div className="text-center py-16">
           <p className="text-zinc-400 dark:text-zinc-500 text-sm">
-            No words match this filter.
+            {t("এই ফিল্টারের সাথে কোনো শব্দ মেলে না।", "No words match this filter.")}
           </p>
         </div>
       ) : (
@@ -143,8 +146,10 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
           </motion.div>
 
           <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
-            Showing {start + 1}&ndash;{Math.min(start + ITEMS_PER_PAGE, filtered.length)} of{" "}
-            {filtered.length}
+            {t(
+              `মোট ${num(filtered.length)}টির মধ্যে ${num(start + 1)}–${num(Math.min(start + ITEMS_PER_PAGE, filtered.length))} দেখানো হচ্ছে`,
+              `Showing ${start + 1}–${Math.min(start + ITEMS_PER_PAGE, filtered.length)} of ${filtered.length}`
+            )}
           </p>
 
           {totalPages > 1 && (
@@ -175,7 +180,7 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
                           }}
                           isActive={pageNum === currentPage}
                         >
-                          {pageNum}
+{num(pageNum)}
                         </PaginationLink>
                       </PaginationItem>
                     ))}

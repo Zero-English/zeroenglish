@@ -16,6 +16,7 @@ import {
   type QuizHistoryEntry,
 } from "@/lib/quiz-history-store";
 import Link from "next/link";
+import { useT, useNum } from "@/components/language-provider";
 
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
 
@@ -30,7 +31,7 @@ const LEVEL_SCOPE_OPTIONS: LevelOption[] = ["A1", "A2", "B1", "B2", "Random"];
 
 const LEVEL_CONFIG: Record<
   QuizLevel,
-  { bg: string; border: string; text: string; gradient: string; label: string }
+  { bg: string; border: string; text: string; gradient: string; label: string; labelBn: string }
 > = {
   A1: {
     bg: "bg-emerald-50 dark:bg-emerald-950/40",
@@ -38,6 +39,7 @@ const LEVEL_CONFIG: Record<
     text: "text-emerald-700 dark:text-emerald-300",
     gradient: "from-emerald-500 to-teal-500",
     label: "Beginner",
+    labelBn: "শিক্ষানবিস",
   },
   A2: {
     bg: "bg-sky-50 dark:bg-sky-950/40",
@@ -45,6 +47,7 @@ const LEVEL_CONFIG: Record<
     text: "text-sky-700 dark:text-sky-300",
     gradient: "from-sky-500 to-blue-500",
     label: "Elementary",
+    labelBn: "প্রাথমিক",
   },
   B1: {
     bg: "bg-amber-50 dark:bg-amber-950/40",
@@ -52,6 +55,7 @@ const LEVEL_CONFIG: Record<
     text: "text-amber-700 dark:text-amber-300",
     gradient: "from-amber-500 to-orange-500",
     label: "Intermediate",
+    labelBn: "মাঝারি",
   },
   B2: {
     bg: "bg-rose-50 dark:bg-rose-950/40",
@@ -59,6 +63,7 @@ const LEVEL_CONFIG: Record<
     text: "text-rose-700 dark:text-rose-300",
     gradient: "from-rose-500 to-pink-500",
     label: "Upper Intermediate",
+    labelBn: "উচ্চ-মাঝারি",
   },
   Random: {
     bg: "bg-purple-50 dark:bg-purple-950/40",
@@ -66,6 +71,7 @@ const LEVEL_CONFIG: Record<
     text: "text-purple-700 dark:text-purple-300",
     gradient: "from-purple-500 to-violet-500",
     label: "Mixed Levels",
+    labelBn: "মিশ্র লেভেল",
   },
   C1: {
     bg: "bg-violet-50 dark:bg-violet-950/40",
@@ -73,6 +79,7 @@ const LEVEL_CONFIG: Record<
     text: "text-violet-700 dark:text-violet-300",
     gradient: "from-violet-500 to-purple-500",
     label: "Advanced",
+    labelBn: "উন্নত",
   },
   C2: {
     bg: "bg-fuchsia-50 dark:bg-fuchsia-950/40",
@@ -80,6 +87,7 @@ const LEVEL_CONFIG: Record<
     text: "text-fuchsia-700 dark:text-fuchsia-300",
     gradient: "from-fuchsia-500 to-pink-500",
     label: "Mastery",
+    labelBn: "পারদর্শী",
   },
 };
 
@@ -88,11 +96,13 @@ const TIME_OPTIONS = [10, 15, 20, 30, 60] as const;
 
 const QUIZ_TYPE_CONFIG: Record<
   QuizType,
-  { label: string; desc: string; icon: LucideIcon; gradient: string; bg: string; border: string; text: string }
+  { label: string; labelBn: string; desc: string; descBn: string; icon: LucideIcon; gradient: string; bg: string; border: string; text: string }
 > = {
   english_to_bangla: {
     label: "English → Bangla",
+    labelBn: "ইংরেজি → বাংলা",
     desc: "Pick the correct Bangla meaning",
+    descBn: "সঠিক বাংলা অর্থটি বেছে নিন",
     icon: Languages,
     gradient: "from-sky-500 to-blue-500",
     bg: "bg-sky-50 dark:bg-sky-950/40",
@@ -101,7 +111,9 @@ const QUIZ_TYPE_CONFIG: Record<
   },
   bangla_to_english: {
     label: "Bangla → English",
+    labelBn: "বাংলা → ইংরেজি",
     desc: "Pick the correct English word",
+    descBn: "সঠিক ইংরেজি শব্দটি বেছে নিন",
     icon: ArrowLeftRight,
     gradient: "from-indigo-500 to-violet-500",
     bg: "bg-indigo-50 dark:bg-indigo-950/40",
@@ -110,7 +122,9 @@ const QUIZ_TYPE_CONFIG: Record<
   },
   synonym: {
     label: "Synonyms",
+    labelBn: "সমার্থক শব্দ",
     desc: "Find the word with the same meaning",
+    descBn: "একই অর্থের শব্দটি খুঁজুন",
     icon: Shuffle,
     gradient: "from-emerald-500 to-teal-500",
     bg: "bg-emerald-50 dark:bg-emerald-950/40",
@@ -119,7 +133,9 @@ const QUIZ_TYPE_CONFIG: Record<
   },
   antonym: {
     label: "Antonyms",
+    labelBn: "বিপরীত শব্দ",
     desc: "Find the word with the opposite meaning",
+    descBn: "বিপরীত অর্থের শব্দটি খুঁজুন",
     icon: Layers,
     gradient: "from-rose-500 to-pink-500",
     bg: "bg-rose-50 dark:bg-rose-950/40",
@@ -478,6 +494,7 @@ export function QuizClient({ words }: { words: Word[] }) {
 }
 
 function QuizTypeSelect({ onSelect }: { onSelect: (type: QuizType) => void }) {
+  const t = useT();
   return (
     <div className="relative min-h-dvh flex flex-col items-center justify-center overflow-hidden px-6 py-16">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
@@ -487,13 +504,13 @@ function QuizTypeSelect({ onSelect }: { onSelect: (type: QuizType) => void }) {
         <div className="animate-fade-up text-center mb-12">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-4">
             <Sparkles className="h-3.5 w-3.5" />
-            Vocabulary Quiz
+            {t("শব্দভাণ্ডার কুইজ", "Vocabulary Quiz")}
           </span>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-3 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-            Choose a Quiz Type
+            {t("কুইজের ধরন বেছে নিন", "Choose a Quiz Type")}
           </h1>
           <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
-            Pick how you want to practice. Every mode builds your vocabulary differently.
+            {t("আপনি যেভাবে অনুশীলন করতে চান সেটি বেছে নিন। প্রতিটি মোডে আপনার শব্দভাণ্ডার ভিন্নভাবে গড়ে ওঠে।", "Pick how you want to practice. Every mode builds your vocabulary differently.")}
           </p>
         </div>
 
@@ -523,40 +540,40 @@ function QuizTypeSelect({ onSelect }: { onSelect: (type: QuizType) => void }) {
                   {featured && (
                     <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-700 px-3 py-1 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
                       <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
-                      Most Popular
+                      {t("সবচেয়ে জনপ্রিয়", "Most Popular")}
                     </span>
                   )}
                 </div>
 
                 <div className={`relative flex-1 px-6 pb-6 ${featured ? "sm:pt-0" : "pt-1"}`}>
                   <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-                    {c.label}
+                    {t(c.labelBn, c.label)}
                   </h3>
-                  <p className={`text-sm font-medium mt-1 ${c.text}`}>{c.desc}</p>
+                  <p className={`text-sm font-medium mt-1 ${c.text}`}>{t(c.descBn, c.desc)}</p>
 
                   <div className={`flex flex-wrap items-center gap-2 mt-4 ${featured ? "" : ""}`}>
                     {type === "english_to_bangla" && (
                       <span className="text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-                        Word → Meaning
+                        {t("শব্দ → অর্থ", "Word → Meaning")}
                       </span>
                     )}
                     {type === "bangla_to_english" && (
                       <span className="text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-                        Meaning → Word
+                        {t("অর্থ → শব্দ", "Meaning → Word")}
                       </span>
                     )}
                     {type === "synonym" && (
                       <span className="text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-                        Same meaning
+                        {t("একই অর্থ", "Same meaning")}
                       </span>
                     )}
                     {type === "antonym" && (
                       <span className="text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-                        Opposite meaning
+                        {t("বিপরীত অর্থ", "Opposite meaning")}
                       </span>
                     )}
                     <span className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-                      Start
+                      {t("শুরু", "Start")}
                       <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
                         →
                       </span>
@@ -608,6 +625,8 @@ function SettingsView({
   const qt = QUIZ_TYPE_CONFIG[quizType];
   const c = LEVEL_CONFIG[levels.includes("Random") ? "Random" : (levels[0] ?? "A1")];
   const QuizIcon = qt.icon;
+  const t = useT();
+  const num = useNum();
 
   return (
     <div className="relative min-h-dvh overflow-hidden px-4 py-10 sm:px-6 sm:py-14">
@@ -622,7 +641,7 @@ function SettingsView({
           <span className="inline-block transition-transform group-hover:-translate-x-0.5">
             &larr;
           </span>
-          Back to quiz types
+          {t("কুইজের ধরনে ফিরে যান", "Back to quiz types")}
         </button>
 
         <div className="animate-fade-up">
@@ -636,10 +655,11 @@ function SettingsView({
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                  {qt.label}
+                  {t(qt.labelBn, qt.label)}
                 </h2>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                  {qt.desc} · {maxCount} words available
+                  {t(qt.descBn, qt.desc)} ·{" "}
+                  {t(`${num(maxCount)}টি শব্দ পাওয়া যায়`, `${maxCount} words available`)}
                 </p>
               </div>
             </div>
@@ -651,7 +671,7 @@ function SettingsView({
                 <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${qt.bg}`}>
                   <Layers className={`h-3.5 w-3.5 ${qt.text}`} />
                 </span>
-                Level Scope
+                {t("লেভেলের পরিধি", "Level Scope")}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {LEVEL_SCOPE_OPTIONS.map((lv) => {
@@ -667,15 +687,15 @@ function SettingsView({
                       className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer flex items-center gap-1.5 ${lcStyle}`}
                     >
                       {active && <span className="font-bold">✓</span>}
-                      {lv === "Random" ? "All Levels" : `Level ${lv}`}
+                      {lv === "Random" ? t("সব লেভেল", "All Levels") : `${t("লেভেল", "Level")} ${lv}`}
                     </button>
                   );
                 })}
               </div>
               <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-3">
                 {levels.length === 0 || levels.includes("Random")
-                  ? "All levels selected — questions from every level"
-                  : `${levels.length} level${levels.length > 1 ? "s" : ""} selected`}
+                  ? t("সব লেভেল বেছে নেওয়া হয়েছে — প্রতিটি লেভেল থেকে প্রশ্ন আসবে", "All levels selected — questions from every level")
+                  : t(`${levels.length}টি লেভেল বেছে নেওয়া হয়েছে`, `${levels.length} level${levels.length > 1 ? "s" : ""} selected`)}
               </p>
             </div>
 
@@ -684,7 +704,7 @@ function SettingsView({
                 <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${qt.bg}`}>
                   <ListOrdered className={`h-3.5 w-3.5 ${qt.text}`} />
                 </span>
-                Number of Questions
+                {t("প্রশ্নের সংখ্যা", "Number of Questions")}
               </h3>
               <div className="flex flex-wrap items-center gap-2">
                 {QUANTITY_OPTIONS.map((q) => (
@@ -711,13 +731,13 @@ function SettingsView({
                       : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
                   }`}
                 >
-                  All ({maxCount})
+                  {t(`সব (${maxCount})`, `All (${maxCount})`)}
                 </button>
                 <input
                   type="number"
                   min={1}
                   max={maxCount}
-                  placeholder="Custom"
+                  placeholder={t("কাস্টম", "Custom")}
                   value={quantity}
                   onChange={(e) => {
                     const val = parseInt(e.target.value);
@@ -736,7 +756,7 @@ function SettingsView({
                 <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${qt.bg}`}>
                   <Gauge className={`h-3.5 w-3.5 ${qt.text}`} />
                 </span>
-                Time per Question
+                {t("প্রতি প্রশ্নে সময়", "Time per Question")}
               </h3>
               <div className="flex flex-wrap items-center gap-2">
                 {TIME_OPTIONS.map((t) => (
@@ -763,12 +783,12 @@ function SettingsView({
                       : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
                   }`}
                 >
-                  No limit
+                  {t("সময়সীমা নেই", "No limit")}
                 </button>
                 <input
                   type="number"
                   min={1}
-                  placeholder="Custom"
+                  placeholder={t("কাস্টম", "Custom")}
                   value={timePerQuestion}
                   onChange={(e) => {
                     const val = parseInt(e.target.value);
@@ -787,12 +807,15 @@ function SettingsView({
                 onClick={onStart}
                 className={`w-full h-12 text-base font-semibold bg-gradient-to-r ${qt.gradient} hover:opacity-90`}
               >
-                Start Quiz
+                {t("কুইজ শুরু করুন", "Start Quiz")}
               </Button>
               <p className="text-center text-xs text-zinc-400 dark:text-zinc-500 mt-3">
                 {useAllQuestions
-                  ? `${maxCount} question${maxCount !== 1 ? "s" : ""} · all levels`
-                  : `${quantity} question${quantity !== 1 ? "s" : ""} · ${levels.length === 0 || levels.includes("Random") ? "all levels" : levels.join(", ")}`}
+                  ? t(`${num(maxCount)}টি প্রশ্ন · সব লেভেল`, `${maxCount} question${maxCount !== 1 ? "s" : ""} · all levels`)
+                  : t(
+                      `${num(quantity)}টি প্রশ্ন · ${levels.length === 0 || levels.includes("Random") ? "সব লেভেল" : levels.join(", ")}`,
+                      `${quantity} question${quantity !== 1 ? "s" : ""} · ${levels.length === 0 || levels.includes("Random") ? "all levels" : levels.join(", ")}`
+                    )}
               </p>
             </div>
           </div>
@@ -828,6 +851,8 @@ function QuizView({
   readonly onNext: () => void;
 }) {
   const speak = useSpeak();
+  const t = useT();
+  const num = useNum();
   const progress = ((currentIndex + 1) / totalQuestions) * 100;
   const prompt = quizType === "bangla_to_english" ? firstMeaning(question.word.meaning_bn) : question.word.word;
   const qt = QUIZ_TYPE_CONFIG[quizType];
@@ -842,9 +867,9 @@ function QuizView({
         {/* Top bar */}
         <div className="flex items-center justify-between mb-4">
           <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            <span className="font-semibold text-zinc-700 dark:text-zinc-300">{currentIndex + 1}</span>
+            <span className="font-semibold text-zinc-700 dark:text-zinc-300">{num(currentIndex + 1)}</span>
             <span className="mx-1 text-zinc-300 dark:text-zinc-600">/</span>
-            {totalQuestions}
+            {num(totalQuestions)}
           </div>
 
           <div className="flex items-center gap-4 text-sm">
@@ -863,8 +888,8 @@ function QuizView({
               </span>
             )}
             <span className="text-zinc-500 dark:text-zinc-400">
-              Score{" "}
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400">{score}</span>
+              {t("স্কোর", "Score")}{" "}
+              <span className="font-semibold text-emerald-600 dark:text-emerald-400">{num(score)}</span>
             </span>
           </div>
         </div>
@@ -891,7 +916,7 @@ function QuizView({
               <button
                 onClick={() => speak(question.word.word)}
                 className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
-                title="Listen to pronunciation"
+                title={t("উচ্চারণ শুনুন", "Listen to pronunciation")}
               >
                 <Volume2 className="h-6 w-6 sm:h-7 sm:w-7" />
               </button>
@@ -972,7 +997,7 @@ function QuizView({
         {isAnswered && (
           <div className="mt-7 flex justify-center animate-fade-up">
             <Button onClick={onNext} size="lg" className="px-10">
-              {currentIndex >= totalQuestions - 1 ? "See Results" : "Next Question"}
+              {currentIndex >= totalQuestions - 1 ? t("ফলাফল দেখুন", "See Results") : t("পরের প্রশ্ন", "Next Question")}
             </Button>
           </div>
         )}
@@ -997,6 +1022,8 @@ function ResultsView({
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const { path, hydrated } = useAuthPath();
   const addHistoryEntry = useQuizHistoryStore((s) => s.addEntry);
+  const t = useT();
+  const num = useNum();
 
   useEffect(() => {
     if (!hydrated || useQuizStore.getState().resultsRecorded) return;
@@ -1031,16 +1058,16 @@ function ResultsView({
   let resultLabel: string;
   if (percentage >= 90) {
     resultColor = "text-emerald-500";
-    resultLabel = "Excellent!";
+    resultLabel = t("চমৎকার!", "Excellent!");
   } else if (percentage >= 70) {
     resultColor = "text-sky-500";
-    resultLabel = "Great Job!";
+    resultLabel = t("দারুণ হয়েছে!", "Great Job!");
   } else if (percentage >= 50) {
     resultColor = "text-amber-500";
-    resultLabel = "Good Effort!";
+    resultLabel = t("ভালো চেষ্টা!", "Good Effort!");
   } else {
     resultColor = "text-rose-500";
-    resultLabel = "Keep Practicing!";
+    resultLabel = t("অনুশীলন চালিয়ে যান!", "Keep Practicing!");
   }
 
   return (
@@ -1051,7 +1078,7 @@ function ResultsView({
       <div className="max-w-2xl mx-auto">
         <div className="animate-fade-up text-center mb-12">
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-2 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-            Quiz Complete!
+            {t("কুইজ শেষ!", "Quiz Complete!")}
           </h1>
           <p className={`text-2xl font-bold mt-2 ${resultColor}`}>
             {resultLabel}
@@ -1061,17 +1088,17 @@ function ResultsView({
         <div className="animate-fade-up-1 mb-10">
           <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-8 text-center">
             <div className="text-6xl sm:text-7xl font-black bg-gradient-to-br from-zinc-700 to-zinc-400 dark:from-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent mb-2">
-              {percentage}%
+              {num(percentage)}%
             </div>
             <p className="text-lg text-zinc-500 dark:text-zinc-400">
               <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                {score}
+                {num(score)}
               </span>{" "}
-              correct out of{" "}
+              {t("টির মধ্যে সঠিক", "correct out of")}{" "}
               <span className="font-semibold text-zinc-700 dark:text-zinc-300">
-                {total}
+                {num(total)}
               </span>{" "}
-              questions
+              {t("প্রশ্ন", "questions")}
             </p>
           </div>
         </div>
@@ -1079,7 +1106,7 @@ function ResultsView({
         {incorrectAnswers.length > 0 && (
           <div className="animate-fade-up-2 mb-10">
             <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4 flex items-center gap-2">
-              <span>Words to Review ({incorrectAnswers.length})</span>
+              <span>{t(`পুনরায় দেখার শব্দ (${num(incorrectAnswers.length)})`, `Words to Review (${incorrectAnswers.length})`)}</span>
             </h3>
             <div className="space-y-3">
               {incorrectAnswers.map((item, i) => (
@@ -1097,16 +1124,16 @@ function ResultsView({
                   </div>
                   <div className="mt-2 text-sm space-y-1">
                     <p className="text-emerald-600 dark:text-emerald-400">
-                      Correct: {item.correctMeaning}
+                      {t("সঠিক:", "Correct:")} {item.correctMeaning}
                     </p>
                     {item.userAnswer !== "Time's up!" && (
                       <p className="text-red-500 dark:text-red-400">
-                        Your answer: {item.userAnswer}
+                        {t("আপনার উত্তর:", "Your answer:")} {item.userAnswer}
                       </p>
                     )}
                     {item.userAnswer === "Time's up!" && (
                       <p className="text-amber-500 dark:text-amber-400">
-                        Time ran out
+                        {t("সময় শেষ হয়ে গেছে", "Time ran out")}
                       </p>
                     )}
                   </div>
@@ -1118,11 +1145,11 @@ function ResultsView({
 
         <div className="animate-fade-up-3 flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={onRestart} size="lg" className="px-8">
-            Try Again
+            {t("আবার চেষ্টা করুন", "Try Again")}
           </Button>
           <Link href="/">
             <Button variant="outline" size="lg" className="w-full sm:w-auto px-8">
-              Back to Home
+              {t("হোমে ফিরে যান", "Back to Home")}
             </Button>
           </Link>
         </div>

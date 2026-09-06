@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { useLearnedWords } from "@/lib/use-learned-words";
+import { useT, useNum } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import type { WordRef, WordStatsResponse } from "@/types/api";
 
@@ -17,6 +18,7 @@ interface LevelConfig {
   text: string;
   gradient: string;
   label: string;
+  labelBn: string;
   stroke: string;
 }
 
@@ -27,6 +29,7 @@ const LEVEL_CARD_CONFIG: Record<string, LevelConfig> = {
     text: "text-emerald-700 dark:text-emerald-300",
     gradient: "from-emerald-500 to-teal-500",
     label: "Beginner",
+    labelBn: "শিক্ষানবিস",
     stroke: "stroke-emerald-500",
   },
   A2: {
@@ -35,6 +38,7 @@ const LEVEL_CARD_CONFIG: Record<string, LevelConfig> = {
     text: "text-sky-700 dark:text-sky-300",
     gradient: "from-sky-500 to-blue-500",
     label: "Elementary",
+    labelBn: "প্রাথমিক",
     stroke: "stroke-sky-500",
   },
   B1: {
@@ -43,6 +47,7 @@ const LEVEL_CARD_CONFIG: Record<string, LevelConfig> = {
     text: "text-amber-700 dark:text-amber-300",
     gradient: "from-amber-500 to-orange-500",
     label: "Intermediate",
+    labelBn: "মাঝারি",
     stroke: "stroke-amber-500",
   },
   B2: {
@@ -51,6 +56,7 @@ const LEVEL_CARD_CONFIG: Record<string, LevelConfig> = {
     text: "text-rose-700 dark:text-rose-300",
     gradient: "from-rose-500 to-pink-500",
     label: "Upper Intermediate",
+    labelBn: "উচ্চ-মাঝারি",
     stroke: "stroke-rose-500",
   },
   C1: {
@@ -59,6 +65,7 @@ const LEVEL_CARD_CONFIG: Record<string, LevelConfig> = {
     text: "text-violet-700 dark:text-violet-300",
     gradient: "from-violet-500 to-purple-500",
     label: "Advanced",
+    labelBn: "উন্নত",
     stroke: "stroke-violet-500",
   },
   C2: {
@@ -67,6 +74,7 @@ const LEVEL_CARD_CONFIG: Record<string, LevelConfig> = {
     text: "text-fuchsia-700 dark:text-fuchsia-300",
     gradient: "from-fuchsia-500 to-pink-500",
     label: "Mastery",
+    labelBn: "পারদর্শী",
     stroke: "stroke-fuchsia-500",
   },
 };
@@ -75,6 +83,8 @@ const LEVELS = Object.keys(LEVEL_CARD_CONFIG);
 
 export function VocabularyClient() {
   const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
+  const t = useT();
+  const num = useNum();
 
   const [stats, setStats] = useState<Record<string, number>>({});
   const [wordRefs, setWordRefs] = useState<WordRef[]>([]);
@@ -124,36 +134,38 @@ export function VocabularyClient() {
           <div className="animate-fade-up">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-              Oxford 3000 &middot; English &harr; Bangla
+              {t("অক্সফোর্ড ৩০০০ · ইংরেজি ↔ বাংলা", "Oxford 3000 · English ↔ Bangla")}
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-bold tracking-tight mb-3 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-              Vocabulary
+              {t("শব্দভাণ্ডার", "Vocabulary")}
             </h1>
             <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 max-w-xl">
-              Pick a level to start browsing its words and track what you&rsquo;ve learned on the
-              way to fluency.
+              {t(
+                "একটি লেভেল বেছে নিন এর শব্দগুলো দেখা শুরু করতে এবং ফ্লুয়েন্সির পথে যা শিখেছেন তা ট্র্যাক করুন।",
+                "Pick a level to start browsing its words and track what you've learned on the way to fluency."
+              )}
             </p>
           </div>
 
           <div className="mt-6 grid grid-cols-3 gap-2.5 max-w-md animate-fade-up-1">
             <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-3 text-center">
               <p className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                {statsLoading ? "· · ·" : totalWords}
+                {statsLoading ? "· · ·" : num(totalWords)}
               </p>
-              <p className="text-[11px] text-zinc-400 mt-0.5">Words</p>
+              <p className="text-[11px] text-zinc-400 mt-0.5">{t("শব্দ", "Words")}</p>
             </div>
             <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-3 text-center">
               <p className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                {LEVELS.length}
+                {num(LEVELS.length)}
               </p>
-              <p className="text-[11px] text-zinc-400 mt-0.5">Levels</p>
+              <p className="text-[11px] text-zinc-400 mt-0.5">{t("লেভেল", "Levels")}</p>
             </div>
             <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-3 text-center">
               <p className="text-xl sm:text-2xl font-bold text-orange-500 tabular-nums">
-                {statsLoading || !learnedLoaded ? "· · ·" : `${overallPct}%`}
+                {statsLoading || !learnedLoaded ? "· · ·" : `${num(overallPct)}%`}
               </p>
-              <p className="text-[11px] text-zinc-400 mt-0.5">Learned</p>
+              <p className="text-[11px] text-zinc-400 mt-0.5">{t("শেখা হয়েছে", "Learned")}</p>
             </div>
           </div>
         </div>
@@ -163,10 +175,10 @@ export function VocabularyClient() {
         <div className="max-w-4xl mx-auto">
           <div className="mb-5">
             <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-              Pick your level
+              {t("আপনার লেভেল বেছে নিন", "Pick your level")}
             </h2>
             <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Tap a level to explore its words.
+              {t("একটি লেভেলে চাপ দিন এর শব্দগুলো দেখতে।", "Tap a level to explore its words.")}
             </p>
           </div>
 
@@ -215,15 +227,15 @@ export function VocabularyClient() {
                               c.bg
                             )}
                           >
-                            {c.label}
+                            {t(c.labelBn, c.label)}
                           </span>
                         </div>
                         <div className="mt-2 space-y-0.5">
                           <p className="text-sm font-medium text-zinc-600 dark:text-zinc-300">
-                            {statsLoading ? "\u00A0" : `${total} words`}
+                            {statsLoading ? "\u00A0" : t(`${num(total)}টি শব্দ`, `${total} words`)}
                           </p>
                           <p className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
-                            {ready ? `${learned} learned` : "\u00A0"}
+                            {ready ? t(`${num(learned)}টি শেখা`, `${learned} learned`) : "\u00A0"}
                           </p>
                         </div>
                       </div>
@@ -252,7 +264,7 @@ export function VocabularyClient() {
                           />
                         </svg>
                         <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-xs font-bold text-zinc-700 dark:text-zinc-200 tabular-nums">
-                          {ready ? pct : "–"}
+                          {ready ? num(pct) : "–"}
                         </span>
                       </div>
                     </div>
@@ -262,7 +274,7 @@ export function VocabularyClient() {
                         c.text
                       )}
                     >
-                      Explore {lv}
+                      {t(`${lv} লেভেল দেখুন`, `Explore ${lv}`)}
                       <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
                     </div>
                   </Link>

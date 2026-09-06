@@ -9,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { UserRound, GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import { Classic } from "@/components/classic";
+import { useT } from "@/components/language-provider";
 
 async function signInGoogle(callbackUrl: string = "/profile") {
     const { signIn } = await import("next-auth/react");
@@ -47,19 +48,20 @@ export function LoginClient() {
   const router = useRouter();
   const greeted = useRef(false);
   const sessionLoading = sessionStatus === "loading";
+  const t = useT();
 
   useEffect(() => {
     if (!hydrated || sessionLoading) return;
     if (session?.user && !greeted.current) {
       greeted.current = true;
       setGoogleAuth(session.user.name ?? null, session.user.email ?? null, session.user.id ?? null);
-      toast.success(`Welcome back, ${session.user.name ?? "there"}!`);
+      toast.success(t(`ফিরে এসে স্বাগতম, ${session.user.name ?? "আপনি"}!`, `Welcome back, ${session.user.name ?? "there"}!`));
       return;
     }
     if (status !== "none") {
       router.replace("/profile");
     }
-  }, [hydrated, sessionLoading, session, status, router, setGoogleAuth]);
+  }, [hydrated, sessionLoading, session, status, router, setGoogleAuth, t, greeted]);
 
     if (!hydrated || sessionLoading) {
         return (
@@ -75,7 +77,7 @@ export function LoginClient() {
 
   const handleGuest = () => {
     continueAsGuest();
-    toast.success("Continuing as Guest");
+    toast.success(t("অতিথি হিসেবে চলছে", "Continuing as Guest"));
   };
 
     return (
@@ -94,15 +96,15 @@ export function LoginClient() {
                                 Zero English
                             </h1>
                             <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
-                                Sign in to track your learning progress.
+                                {t("আপনার শেখার অগ্রগতি ট্র্যাক করতে সাইন ইন করুন।", "Sign in to track your learning progress.")}
                             </p>
                         </div>
 
                         <Tabs defaultValue="login">
                             <TabsList className="grid w-full grid-cols-2">
-                                <TabsTrigger value="login">Login</TabsTrigger>
+                                <TabsTrigger value="login">{t("লগইন", "Login")}</TabsTrigger>
                                 <TabsTrigger value="register">
-                                    Register
+                                    {t("রেজিস্টার", "Register")}
                                 </TabsTrigger>
                             </TabsList>
 
@@ -113,7 +115,7 @@ export function LoginClient() {
                                     onClick={handleGoogle}
                                 >
                                     <GoogleIcon />
-                                    Continue with Google
+                                    {t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
                                 </Button>
                             </TabsContent>
 
@@ -126,7 +128,7 @@ export function LoginClient() {
                                     }
                                 >
                                     <GoogleIcon />
-                                    Sign up with Google
+                                    {t("Google দিয়ে সাইন আপ করুন", "Sign up with Google")}
                                 </Button>
                             </TabsContent>
                         </Tabs>
@@ -137,7 +139,7 @@ export function LoginClient() {
                             </div>
                             <div className="relative flex justify-center text-xs">
                                 <span className="bg-white/90 px-3 text-zinc-400 dark:bg-zinc-950/80">
-                                    or
+                                    {t("বা", "or")}
                                 </span>
                             </div>
                         </div>
@@ -148,13 +150,13 @@ export function LoginClient() {
                             onClick={handleGuest}
                         >
                             <UserRound className="h-4 w-4" />
-                            Continue as Guest
+                            {t("অতিথি হিসেবে চালিয়ে যান", "Continue as Guest")}
                         </Button>
 
                         <p className="mt-4 text-center text-xs leading-relaxed text-zinc-400 dark:text-zinc-500">
-                            Continue as guest to explore the app.
+                            {t("অ্যাপটি এক্সপ্লোর করতে অতিথি হিসেবে চালিয়ে যান।", "Continue as guest to explore the app.")}
                             <br />
-                            You can bind a Google account later.
+                            {t("আপনি পরে Google অ্যাকাউন্ট যুক্ত করতে পারবেন।", "You can bind a Google account later.")}
                         </p>
                     </div>
                 </div>

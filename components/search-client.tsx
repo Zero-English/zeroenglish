@@ -16,6 +16,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
+import { useT, useNum } from "@/components/language-provider";
 import { Search, Sparkles, X, ArrowDown } from "lucide-react";
 
 const ITEMS_PER_PAGE = 10;
@@ -57,6 +58,8 @@ const PICK_COUNT = 6;
 
 export function SearchClient() {
   const router = useRouter();
+  const t = useT();
+  const num = useNum();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
@@ -231,15 +234,17 @@ export function SearchClient() {
           <div className="animate-fade-up">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5 backdrop-blur-sm">
               <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-              Find words across all levels
+              {t("সব লেভেলের শব্দ খুঁজুন", "Find words across all levels")}
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-bold tracking-tight mb-3 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-              Search
+              {t("অনুসন্ধান", "Search")}
             </h1>
             <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 max-w-xl">
-              Look up any English word and jump straight to its Bangla meaning, examples,
-              synonyms and antonyms.
+              {t(
+                "যেকোনো ইংরেজি শব্দ খুঁজুন এবং সরাসরি এর বাংলা অর্থ, উদাহরণ, সমার্থক ও বিপরীত শব্দ দেখুন।",
+                "Look up any English word and jump straight to its Bangla meaning, examples, synonyms and antonyms."
+              )}
             </p>
           </div>
         </div>
@@ -257,7 +262,7 @@ export function SearchClient() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") searchNow(query);
               }}
-              placeholder="Search any word..."
+              placeholder={t("যেকোনো শব্দ খুঁজুন…", "Search any word...")}
               className="h-12 w-full rounded-xl border-zinc-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 pl-11 pr-11 text-base backdrop-blur-sm transition-shadow focus-visible:ring-2 focus-visible:ring-zinc-400/60"
             />
             {query && (
@@ -273,7 +278,7 @@ export function SearchClient() {
 
           {!isSearching && (
             <div className="mt-5 flex items-center gap-2 flex-wrap animate-fade-up-2">
-              <span className="text-xs font-medium text-zinc-400">Suggestions:</span>
+              <span className="text-xs font-medium text-zinc-400">{t("পরামর্শ:", "Suggestions:")}</span>
               {suggestions.map((s) => (
                 <button
                   key={s}
@@ -303,10 +308,12 @@ export function SearchClient() {
                   <Search className="h-7 w-7 text-zinc-300 dark:text-zinc-600" />
                 </div>
                 <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">
-                  Start typing to search the dictionary
+                  {t("অভিধান খোঁজতে টাইপ করা শুরু করুন", "Start typing to search the dictionary")}
                 </p>
                 <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
-                  Press <kbd className="rounded-md border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/70 px-1.5 py-0.5 font-sans text-[11px] text-zinc-500 dark:text-zinc-400">/</kbd> to focus the search box
+                  {t("অনুসন্ধান বক্সে ফোকাস করতে", "Press")}{" "}
+                  <kbd className="rounded-md border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/70 px-1.5 py-0.5 font-sans text-[11px] text-zinc-500 dark:text-zinc-400">/</kbd>{" "}
+                  {t("চাপুন", "to focus the search box")}
                 </p>
               </motion.div>
             ) : loading ? (
@@ -340,7 +347,7 @@ export function SearchClient() {
                   onClick={() => searchNow(debouncedQuery)}
                   className="mt-3 text-sm text-zinc-400 underline-offset-2 hover:text-zinc-600 dark:hover:text-zinc-300 hover:underline transition-colors"
                 >
-                  Try again
+                  {t("আবার চেষ্টা করুন", "Try again")}
                 </button>
               </motion.div>
             ) : results.length === 0 ? (
@@ -352,10 +359,10 @@ export function SearchClient() {
                 className="py-16 text-center"
               >
                 <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">
-                  No words found for &ldquo;{debouncedQuery}&rdquo;
+                  {t(`"${debouncedQuery}" এর জন্য কোনো শব্দ পাওয়া যায়নি`, `No words found for “${debouncedQuery}”`)}
                 </p>
                 <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
-                  Try a different spelling or a simpler word.
+                  {t("আলাদা বানান বা একটি সহজ শব্দ দিয়ে চেষ্টা করুন।", "Try a different spelling or a simpler word.")}
                 </p>
               </motion.div>
             ) : (
@@ -368,13 +375,13 @@ export function SearchClient() {
                 <div className="mb-5 flex items-center justify-between animate-fade-up">
                   <p className="text-sm text-zinc-500 dark:text-zinc-400">
                     {total === 1 ? (
-                      "1 word found"
+                      t("১টি শব্দ পাওয়া গেছে", "1 word found")
                     ) : (
                       <>
                         <span className="font-semibold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                          {total}
+                          {num(total)}
                         </span>{" "}
-                        words found
+                        {t("টি শব্দ পাওয়া গেছে", "words found")}
                       </>
                     )}
                   </p>
@@ -383,7 +390,7 @@ export function SearchClient() {
                       onClick={() => searchNow(query)}
                       className="text-xs font-medium text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
                     >
-                      Search for &ldquo;{query}&rdquo;&nbsp;now
+                      {t(`"${query}" এখন খুঁজুন`, `Search for “${query}” now`)}
                     </button>
                   )}
                 </div>
@@ -408,7 +415,10 @@ export function SearchClient() {
                   <>
                     <p className="mt-8 mb-5 flex items-center justify-center gap-1.5 text-center text-sm text-zinc-400 dark:text-zinc-500">
                       <ArrowDown className="h-3.5 w-3.5" />
-                      Showing {start}&ndash;{end} of {total}
+                      {t(
+                        `মোট ${num(total)}টির মধ্যে ${num(start)}–${num(end)} দেখানো হচ্ছে`,
+                        `Showing ${start}–${end} of ${total}`
+                      )}
                     </p>
                     <Pagination>
                       <PaginationContent>
@@ -437,7 +447,7 @@ export function SearchClient() {
                                 }}
                                 isActive={item === safePage}
                               >
-                                {item}
+                                {num(item)}
                               </PaginationLink>
                             </PaginationItem>
                           )

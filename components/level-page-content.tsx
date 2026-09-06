@@ -11,6 +11,7 @@ interface LevelConfig {
   readonly text: string;
   readonly gradient: string;
   readonly label: string;
+  readonly labelBn: string;
   readonly solid: string;
   readonly stroke: string;
 }
@@ -22,6 +23,7 @@ const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
     text: "text-emerald-700 dark:text-emerald-300",
     gradient: "from-emerald-500 to-teal-500",
     label: "Beginner",
+    labelBn: "শিক্ষানবিস",
     solid: "bg-emerald-500",
     stroke: "stroke-emerald-500",
   },
@@ -31,6 +33,7 @@ const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
     text: "text-sky-700 dark:text-sky-300",
     gradient: "from-sky-500 to-blue-500",
     label: "Elementary",
+    labelBn: "প্রাথমিক",
     solid: "bg-sky-500",
     stroke: "stroke-sky-500",
   },
@@ -40,6 +43,7 @@ const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
     text: "text-amber-700 dark:text-amber-300",
     gradient: "from-amber-500 to-orange-500",
     label: "Intermediate",
+    labelBn: "মাঝারি",
     solid: "bg-amber-500",
     stroke: "stroke-amber-500",
   },
@@ -49,6 +53,7 @@ const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
     text: "text-rose-700 dark:text-rose-300",
     gradient: "from-rose-500 to-pink-500",
     label: "Upper Intermediate",
+    labelBn: "উচ্চ-মাঝারি",
     solid: "bg-rose-500",
     stroke: "stroke-rose-500",
   },
@@ -58,6 +63,7 @@ const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
     text: "text-violet-700 dark:text-violet-300",
     gradient: "from-violet-500 to-purple-500",
     label: "Advanced",
+    labelBn: "উন্নত",
     solid: "bg-violet-500",
     stroke: "stroke-violet-500",
   },
@@ -67,6 +73,7 @@ const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
     text: "text-fuchsia-700 dark:text-fuchsia-300",
     gradient: "from-fuchsia-500 to-pink-500",
     label: "Mastery",
+    labelBn: "পারদর্শী",
     solid: "bg-fuchsia-500",
     stroke: "stroke-fuchsia-500",
   },
@@ -98,6 +105,7 @@ export async function LevelPageContent({ level }: LevelPageContentProps) {
       <LevelHero
         level={upper}
         label={config.label}
+        labelBn={config.labelBn}
         gradient={config.gradient}
         text={config.text}
         bg={config.bg}

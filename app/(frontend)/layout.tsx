@@ -3,6 +3,7 @@ import HtmlShell from "@/components/html-shell";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
 import { SidebarProvider } from "@/components/sidebar-provider";
+import { LanguageProvider } from "@/components/language-provider";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import Footer from "@/components/Footer";
 import { TopLoader } from "@/components/top-loader";
@@ -32,15 +33,17 @@ export default function FrontendLayout({
     <HtmlShell>
       <TopLoader />
       <SidebarProvider>
-        <div className="flex flex-col min-h-screen md:flex-row">
-          <Sidebar />
-          <div className="flex flex-col flex-1 min-w-0">
-            <Header />
-            <main className="flex-1 min-w-0 w-full">{children}</main>
-            <MobileBottomNav />
-            <Footer />
+        <LanguageProvider>
+          <div className="flex flex-col min-h-screen md:flex-row">
+            <Sidebar />
+            <div className="flex flex-col flex-1 min-w-0">
+              <Header />
+              <main className="flex-1 min-w-0 w-full">{children}</main>
+              <MobileBottomNav />
+              <Footer />
+            </div>
           </div>
-        </div>
+        </LanguageProvider>
       </SidebarProvider>
       <Toaster />
     </HtmlShell>

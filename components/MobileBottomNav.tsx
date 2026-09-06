@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { useAuthStatus } from '@/lib/auth-store'
+import { useT } from '@/components/language-provider'
 import { UserAvatar } from '@/components/UserAvatar'
 
 const spring = { type: 'spring', stiffness: 420, damping: 32, mass: 0.9 } as const
@@ -21,14 +22,15 @@ export function MobileBottomNav() {
   const { data: session } = useSession()
   const isLoggedIn = status !== 'none'
   const isGoogle = status === 'google'
+  const t = useT()
   const links = [
-    { href: '/', label: 'Home', icon: Home },
-    { href: '/vocabulary', label: 'Vocabulary', icon: LibraryBig },
-    { href: '/search', label: 'Search', icon: Search },
-    { href: '/quiz', label: 'Quiz', icon: BadgeQuestionMark },
+    { href: '/', label: t('হোম', 'Home'), icon: Home },
+    { href: '/vocabulary', label: t('শব্দভাণ্ডার', 'Vocabulary'), icon: LibraryBig },
+    { href: '/search', label: t('অনুসন্ধান', 'Search'), icon: Search },
+    { href: '/quiz', label: t('কুইজ', 'Quiz'), icon: BadgeQuestionMark },
     isLoggedIn
-      ? { href: '/profile', label: 'Profile', icon: User, avatar: isGoogle ? session?.user : null }
-      : { href: '/login', label: 'Login', icon: LogIn },
+      ? { href: '/profile', label: t('প্রোফাইল', 'Profile'), icon: User, avatar: isGoogle ? session?.user : null }
+      : { href: '/login', label: t('লগইন', 'Login'), icon: LogIn },
   ]
   const [isHidden, setIsHidden] = useState(false)
   const lastScrollY = useRef(0)

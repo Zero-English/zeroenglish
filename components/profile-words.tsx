@@ -24,6 +24,7 @@ import { Classic } from "@/components/classic";
 import { ProfileActivityChart } from "@/components/profile-activity-chart";
 import { QuizHistoryPanel } from "@/components/profile-quiz-history";
 import { useQuizHistoryStore } from "@/lib/quiz-history-store";
+import { useT, useNum } from "@/components/language-provider";
 
 const ITEMS_PER_PAGE = 10;
 import {
@@ -32,11 +33,11 @@ import {
 } from "lucide-react";
 
 
-const levelColors: Record<string, { bg: string; border: string; text: string; gradient: string; label: string }> = {
-  A1: { bg: "bg-emerald-50 dark:bg-emerald-950/40", border: "border-emerald-200 dark:border-emerald-800", text: "text-emerald-700 dark:text-emerald-300", gradient: "from-emerald-500 to-teal-500", label: "Beginner" },
-  A2: { bg: "bg-sky-50 dark:bg-sky-950/40", border: "border-sky-200 dark:border-sky-800", text: "text-sky-700 dark:text-sky-300", gradient: "from-sky-500 to-blue-500", label: "Elementary" },
-  B1: { bg: "bg-amber-50 dark:bg-amber-950/40", border: "border-amber-200 dark:border-amber-800", text: "text-amber-700 dark:text-amber-300", gradient: "from-amber-500 to-orange-500", label: "Intermediate" },
-  B2: { bg: "bg-rose-50 dark:bg-rose-950/40", border: "border-rose-200 dark:border-rose-800", text: "text-rose-700 dark:text-rose-300", gradient: "from-rose-500 to-pink-500", label: "Upper Intermediate" },
+const levelColors: Record<string, { bg: string; border: string; text: string; gradient: string; label: string; labelBn: string }> = {
+  A1: { bg: "bg-emerald-50 dark:bg-emerald-950/40", border: "border-emerald-200 dark:border-emerald-800", text: "text-emerald-700 dark:text-emerald-300", gradient: "from-emerald-500 to-teal-500", label: "Beginner", labelBn: "শিক্ষানবিস" },
+  A2: { bg: "bg-sky-50 dark:bg-sky-950/40", border: "border-sky-200 dark:border-sky-800", text: "text-sky-700 dark:text-sky-300", gradient: "from-sky-500 to-blue-500", label: "Elementary", labelBn: "প্রাথমিক" },
+  B1: { bg: "bg-amber-50 dark:bg-amber-950/40", border: "border-amber-200 dark:border-amber-800", text: "text-amber-700 dark:text-amber-300", gradient: "from-amber-500 to-orange-500", label: "Intermediate", labelBn: "মাঝারি" },
+  B2: { bg: "bg-rose-50 dark:bg-rose-950/40", border: "border-rose-200 dark:border-rose-800", text: "text-rose-700 dark:text-rose-300", gradient: "from-rose-500 to-pink-500", label: "Upper Intermediate", labelBn: "উচ্চ-মাঝারি" },
 };
 
 function wordKey(w: Word) {
@@ -76,6 +77,7 @@ function StatCard({
 
 function WordCardDetails({ word }: { word: Word }) {
   const speak = useSpeak();
+  const t = useT();
   const colorCfg = levelColors[word.level];
 
   return (
@@ -87,7 +89,7 @@ function WordCardDetails({ word }: { word: Word }) {
         <button
           onClick={() => speak(word.word)}
           className="p-1 rounded-md text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
-          title="Listen to pronunciation"
+          title={t("উচ্চারণ শুনুন", "Listen to pronunciation")}
         >
           <Volume2 className="h-4 w-4" />
         </button>
@@ -111,7 +113,7 @@ function WordCardDetails({ word }: { word: Word }) {
           {word.synonyms.length > 0 && (
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-xs font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-                Synonyms
+                {t("সমার্থক শব্দ", "Synonyms")}
               </span>
               {word.synonyms.map((syn, i) => (
                 <span
@@ -126,7 +128,7 @@ function WordCardDetails({ word }: { word: Word }) {
           {word.antonyms.length > 0 && (
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-xs font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-                Antonyms
+                {t("বিপরীত শব্দ", "Antonyms")}
               </span>
               {word.antonyms.map((ant, i) => (
                 <span
@@ -194,6 +196,7 @@ function WordItem({
   onToggleLearned: () => void;
 }) {
   const colorCfg = levelColors[word.level];
+  const t = useT();
 
   return (
     <StaggerItem
@@ -224,7 +227,7 @@ function WordItem({
               ? "text-amber-500 hover:text-amber-600"
               : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
           )}
-          title={isBookmarked ? "Remove bookmark" : "Bookmark"}
+          title={isBookmarked ? t("বুকমার্ক সরান", "Remove bookmark") : t("বুকমার্ক করুন", "Bookmark")}
         >
           {isBookmarked ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
         </button>
@@ -236,7 +239,7 @@ function WordItem({
               ? "text-emerald-500 hover:text-emerald-600"
               : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
           )}
-          title={isLearned ? "Mark as unlearned" : "Mark as learned"}
+          title={isLearned ? t("শেখা থেকে সরান", "Mark as unlearned") : t("শেখা হিসেবে চিহ্নিত করুন", "Mark as learned")}
         >
           {isLearned ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
         </button>
@@ -253,6 +256,8 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const { stillLearningIds, removeStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
   const { totalCorrectAnswers, loaded: quizLoaded } = useQuizActivity();
   const loaded = bookmarkLoaded && learnedLoaded && stillLearningLoaded;
+  const t = useT();
+  const num = useNum();
 
   const bookmarked = words.filter((w) => bookmarkedIds.has(wordKey(w)));
   const learned = words.filter((w) => learnedIds.has(wordKey(w)));
@@ -283,9 +288,9 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const emptyState = (type: "bookmark" | "learned" | "still-learning") => {
     const Icon = type === "bookmark" ? Bookmark : type === "learned" ? Circle : RefreshCw;
     const messages: Record<string, { title: string; desc: string }> = {
-      bookmark: { title: "No bookmarked words yet.", desc: "Bookmark words while browsing to save them here." },
-      learned: { title: "No learned words yet.", desc: "Mark words as learned to track your progress." },
-      "still-learning": { title: "No words to review.", desc: "Quiz incorrect answers will appear here for extra practice." },
+      bookmark: { title: t("এখনো কোনো বুকমার্ক করা শব্দ নেই।", "No bookmarked words yet."), desc: t("ব্রাউজ করার সময় শব্দ বুকমার্ক করলে সেগুলো এখানে দেখা যাবে।", "Bookmark words while browsing to save them here.") },
+      learned: { title: t("এখনো কোনো শেখা শব্দ নেই।", "No learned words yet."), desc: t("অগ্রগতি ট্র্যাক করতে শব্দগুলোকে শেখা হিসেবে চিহ্নিত করুন।", "Mark words as learned to track your progress.") },
+      "still-learning": { title: t("পর্যালোচনা করার কোনো শব্দ নেই।", "No words to review."), desc: t("কুইজে ভুল উত্তর দেওয়া শব্দগুলো অতিরিক্ত অনুশীলনের জন্য এখানে দেখা যাবে।", "Quiz incorrect answers will appear here for extra practice.") },
     };
     const msg = messages[type];
     return (
@@ -303,41 +308,41 @@ export function ProfileTabs({ words }: { words: Word[] }) {
         <TabsList>
           <TabsTrigger value="overview" className="flex items-center gap-1.5">
             <BarChart3 className="h-4 w-4" />
-            Overview
+            {t("সারসংক্ষেপ", "Overview")}
           </TabsTrigger>
           <TabsTrigger value="bookmarked" className="flex items-center gap-1.5">
             <BookmarkCheck className="h-4 w-4" />
-            Bookmarked
+            {t("বুকমার্ক করা", "Bookmarked")}
             {bookmarked.length > 0 && (
               <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
-                {bookmarked.length}
+                {num(bookmarked.length)}
               </span>
             )}
           </TabsTrigger>
           <TabsTrigger value="still-learning" className="flex items-center gap-1.5">
             <RefreshCw className="h-4 w-4" />
-            Still Learning
+            {t("শিখছে", "Still Learning")}
             {stillLearning.length > 0 && (
               <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300">
-                {stillLearning.length}
+                {num(stillLearning.length)}
               </span>
             )}
           </TabsTrigger>
           <TabsTrigger value="learned" className="flex items-center gap-1.5">
             <Award className="h-4 w-4" />
-            Learned
+            {t("শেখা হয়েছে", "Learned")}
             {learned.length > 0 && (
               <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
-                {learned.length}
+                {num(learned.length)}
               </span>
             )}
           </TabsTrigger>
           <TabsTrigger value="quiz" className="flex items-center gap-1.5">
             <GraduationCap className="h-4 w-4" />
-            Quiz
+            {t("কুইজ", "Quiz")}
             {quizCount > 0 && (
               <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
-                {quizCount}
+                {num(quizCount)}
               </span>
             )}
           </TabsTrigger>
@@ -348,29 +353,29 @@ export function ProfileTabs({ words }: { words: Word[] }) {
         <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
           <StatCard
             icon={<BookOpen className="h-5 w-5 text-sky-600" />}
-            label="Total Words"
-            value={total}
+            label={t("মোট শব্দ", "Total Words")}
+            value={num(total)}
             color="bg-sky-100 dark:bg-sky-900/30"
           />
           <StatCard
             icon={<BookmarkCheck className="h-5 w-5 text-amber-600" />}
-            label="Bookmarked"
-            value={bookmarked.length}
-            sub={total > 0 ? `${Math.round((bookmarked.length / total) * 100)}% of total` : undefined}
+            label={t("বুকমার্ক করা", "Bookmarked")}
+            value={num(bookmarked.length)}
+            sub={total > 0 ? t(`মোটের ${num(Math.round((bookmarked.length / total) * 100))}%`, `${Math.round((bookmarked.length / total) * 100)}% of total`) : undefined}
             color="bg-amber-100 dark:bg-amber-900/30"
           />
           <StatCard
             icon={<RefreshCw className="h-5 w-5 text-orange-600" />}
-            label="Still Learning"
-            value={stillLearning.length}
-            sub={total > 0 ? `${Math.round((stillLearning.length / total) * 100)}% of total` : undefined}
+            label={t("শিখছে", "Still Learning")}
+            value={num(stillLearning.length)}
+            sub={total > 0 ? t(`মোটের ${num(Math.round((stillLearning.length / total) * 100))}%`, `${Math.round((stillLearning.length / total) * 100)}% of total`) : undefined}
             color="bg-orange-100 dark:bg-orange-900/30"
           />
           <StatCard
             icon={<Award className="h-5 w-5 text-emerald-600" />}
-            label="Learned"
-            value={learned.length}
-            sub={`${overallProgress}% of total`}
+            label={t("শেখা হয়েছে", "Learned")}
+            value={num(learned.length)}
+            sub={t(`মোটের ${num(overallProgress)}%`, `${overallProgress}% of total`)}
             color="bg-emerald-100 dark:bg-emerald-900/30"
           />
           <StaggerItem className="col-span-2 lg:col-span-4">
@@ -390,7 +395,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               <div className="flex items-center gap-2 mb-5">
                 <GraduationCap className="h-5 w-5 text-zinc-500" />
                 <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                  Quiz Progress
+{t("কুইজের অগ্রগতি", "Quiz Progress")}
                 </h3>
               </div>
               <div className="flex flex-col gap-4">
@@ -400,9 +405,9 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                   </div>
                   <div>
                     <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {quizLoaded ? totalCorrectAnswers : "—"}
+                      {quizLoaded ? num(totalCorrectAnswers) : "—"}
                     </div>
-                    <div className="text-xs text-zinc-400">Correct Answers</div>
+                    <div className="text-xs text-zinc-400">{t("সঠিক উত্তর", "Correct Answers")}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
@@ -411,9 +416,9 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                   </div>
                   <div>
                     <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {stillLearning.length}
+                      {num(stillLearning.length)}
                     </div>
-                    <div className="text-xs text-zinc-400">Wrong Words</div>
+                    <div className="text-xs text-zinc-400">{t("ভুল শব্দ", "Wrong Words")}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
@@ -422,9 +427,9 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                   </div>
                   <div>
                     <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {quizLoaded ? totalCorrectAnswers + stillLearning.length : "—"}
+                      {quizLoaded ? num(totalCorrectAnswers + stillLearning.length) : "—"}
                     </div>
-                    <div className="text-xs text-zinc-400">Total Quiz</div>
+                    <div className="text-xs text-zinc-400">{t("মোট কুইজ", "Total Quiz")}</div>
                   </div>
                 </div>
               </div>
@@ -435,22 +440,22 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               <div className="flex items-center gap-2 mb-5">
                 <TrendingUp className="h-5 w-5 text-zinc-500" />
                 <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                  Progress by Level
+                  {t("লেভেল অনুযায়ী অগ্রগতি", "Progress by Level")}
                 </h3>
               </div>
               <div className="space-y-4">
-                {levelStats.map(({ level, total: t, learned: l }) => {
-                  const pct = t > 0 ? Math.round((l / t) * 100) : 0;
+                {levelStats.map(({ level, total: totalInLevel, learned: l }) => {
+                  const pct = totalInLevel > 0 ? Math.round((l / totalInLevel) * 100) : 0;
                   const c = levelColors[level];
                   return (
                     <div key={level}>
                       <div className="flex items-center justify-between mb-1.5">
                         <div className="flex items-center gap-2">
                           <span className={cn("text-sm font-bold", c.text)}>{level}</span>
-                          <span className="text-xs text-zinc-400">{c.label}</span>
+                          <span className="text-xs text-zinc-400">{t(c.labelBn, c.label)}</span>
                         </div>
                         <span className="text-xs text-zinc-500">
-                          {l}/{t} ({pct}%)
+                          {num(l)}/{num(totalInLevel)} ({num(pct)}%)
                         </span>
                       </div>
                       <div className="h-2 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
@@ -467,8 +472,8 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               {/* Overall progress bar */}
               <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800">
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Overall</span>
-                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{overallProgress}%</span>
+                  <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">{t("সব মিলিয়ে", "Overall")}</span>
+                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{num(overallProgress)}%</span>
                 </div>
                 <div className="h-2.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
                   <div
@@ -492,7 +497,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           return (
             <>
               <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-                {bookmarked.length} bookmarked word{bookmarked.length !== 1 ? "s" : ""}
+                {t(`${num(bookmarked.length)}টি বুকমার্ক করা শব্দ`, `${bookmarked.length} bookmarked word${bookmarked.length !== 1 ? "s" : ""}`)}
               </p>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <StaggerContainer className="contents">
@@ -509,7 +514,10 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                 </StaggerContainer>
               </div>
               <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
-                Showing {startB + 1}&ndash;{Math.min(startB + ITEMS_PER_PAGE, bookmarked.length)} of {bookmarked.length}
+                {t(
+                  `মোট ${num(bookmarked.length)}টির মধ্যে ${num(startB + 1)}–${num(Math.min(startB + ITEMS_PER_PAGE, bookmarked.length))} দেখানো হচ্ছে`,
+                  `Showing ${startB + 1}–${Math.min(startB + ITEMS_PER_PAGE, bookmarked.length)} of ${bookmarked.length}`
+                )}
               </p>
               {totalPagesB > 1 && (
                 <Pagination>
@@ -530,7 +538,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                               onClick={(e) => { e.preventDefault(); setBookmarkedPage(p); }}
                               isActive={p === currentPageB}
                             >
-                              {p}
+                              {num(p)}
                             </PaginationLink>
                           </PaginationItem>
                         ))}
@@ -562,7 +570,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           return (
             <>
               <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-                {stillLearning.length} word{stillLearning.length !== 1 ? "s" : ""} to review
+                {t(`${num(stillLearning.length)}টি শব্দ পর্যালোচনা করতে হবে`, `${stillLearning.length} word${stillLearning.length !== 1 ? "s" : ""} to review`)}
               </p>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <StaggerContainer className="contents">
@@ -583,7 +591,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                               ? "text-amber-500 hover:text-amber-600"
                               : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
                           )}
-                          title={bookmarkedIds.has(wordKey(word)) ? "Remove bookmark" : "Bookmark"}
+                          title={bookmarkedIds.has(wordKey(word)) ? t("বুকমার্ক সরান", "Remove bookmark") : t("বুকমার্ক করুন", "Bookmark")}
                         >
                           {bookmarkedIds.has(wordKey(word)) ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
                         </button>
@@ -595,14 +603,14 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                               ? "text-emerald-500 hover:text-emerald-600"
                               : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
                           )}
-                          title={learnedIds.has(wordKey(word)) ? "Mark as unlearned" : "Mark as learned"}
+                          title={learnedIds.has(wordKey(word)) ? t("শেখা থেকে সরান", "Mark as unlearned") : t("শেখা হিসেবে চিহ্নিত করুন", "Mark as learned")}
                         >
                           {learnedIds.has(wordKey(word)) ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
                         </button>
                         <button
                           onClick={() => removeStillLearning(word.id)}
                           className="p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
-                          title="Remove from still learning"
+                          title={t("শিখছি থেকে সরান", "Remove from still learning")}
                         >
                           <X className="h-5 w-5" />
                         </button>
@@ -612,9 +620,12 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                 </StaggerContainer>
               </div>
               <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
-                Showing {startS + 1}&ndash;{Math.min(startS + ITEMS_PER_PAGE, stillLearning.length)} of {stillLearning.length}
-              </p>
-              {totalPagesS > 1 && (
+        {t(
+          `মোট ${num(stillLearning.length)}টির মধ্যে ${num(startS + 1)}–${num(Math.min(startS + ITEMS_PER_PAGE, stillLearning.length))} দেখানো হচ্ছে`,
+          `Showing ${startS + 1}–${Math.min(startS + ITEMS_PER_PAGE, stillLearning.length)} of ${stillLearning.length}`
+        )}
+      </p>
+      {totalPagesS > 1 && (
                 <Pagination>
                   <div className="flex items-center gap-0.5 max-w-full">
                     <PaginationItem>
@@ -633,7 +644,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                               onClick={(e) => { e.preventDefault(); setStillLearningPage(p); }}
                               isActive={p === currentPageS}
                             >
-                              {p}
+                              {num(p)}
                             </PaginationLink>
                           </PaginationItem>
                         ))}
@@ -665,7 +676,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           return (
             <>
               <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-                {learned.length} learned word{learned.length !== 1 ? "s" : ""}
+                {t(`${num(learned.length)}টি শেখা শব্দ`, `${learned.length} learned word${learned.length !== 1 ? "s" : ""}`)}
               </p>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <StaggerContainer className="contents">
@@ -682,7 +693,10 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                 </StaggerContainer>
               </div>
               <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
-                Showing {startL + 1}&ndash;{Math.min(startL + ITEMS_PER_PAGE, learned.length)} of {learned.length}
+                {t(
+                  `মোট ${num(learned.length)}টির মধ্যে ${num(startL + 1)}–${num(Math.min(startL + ITEMS_PER_PAGE, learned.length))} দেখানো হচ্ছে`,
+                  `Showing ${startL + 1}–${Math.min(startL + ITEMS_PER_PAGE, learned.length)} of ${learned.length}`
+                )}
               </p>
               {totalPagesL > 1 && (
                 <Pagination>
@@ -703,7 +717,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                               onClick={(e) => { e.preventDefault(); setLearnedPage(p); }}
                               isActive={p === currentPageL}
                             >
-                              {p}
+                              {num(p)}
                             </PaginationLink>
                           </PaginationItem>
                         ))}

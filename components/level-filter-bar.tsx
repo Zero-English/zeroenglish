@@ -29,6 +29,7 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 
 export type FilterType =
@@ -42,18 +43,18 @@ export type SortType = "default" | "az" | "za";
 
 const spring = { type: "spring", stiffness: 420, damping: 32, mass: 0.9 } as const;
 
-const filters: { value: FilterType; label: string; icon: typeof SlidersHorizontal }[] = [
-  { value: "all", label: "All", icon: LayoutGrid },
-  { value: "learned", label: "Learned", icon: CheckCircle2 },
-  { value: "not-learned", label: "Not Learned", icon: Circle },
-  { value: "bookmarked", label: "Bookmarked", icon: BookmarkCheck },
-  { value: "not-bookmarked", label: "Not Bookmarked", icon: Bookmark },
+const filters: { value: FilterType; label: string; labelBn: string; icon: typeof SlidersHorizontal }[] = [
+  { value: "all", label: "All", labelBn: "সব", icon: LayoutGrid },
+  { value: "learned", label: "Learned", labelBn: "শেখা হয়েছে", icon: CheckCircle2 },
+  { value: "not-learned", label: "Not Learned", labelBn: "শেখা হয়নি", icon: Circle },
+  { value: "bookmarked", label: "Bookmarked", labelBn: "বুকমার্ক করা", icon: BookmarkCheck },
+  { value: "not-bookmarked", label: "Not Bookmarked", labelBn: "বুকমার্ক করা হয়নি", icon: Bookmark },
 ];
 
-const sorts: { value: SortType; label: string; icon: typeof SlidersHorizontal }[] = [
-  { value: "default", label: "Default order", icon: LayoutGrid },
-  { value: "az", label: "A – Z", icon: ArrowDownAZ },
-  { value: "za", label: "Z – A", icon: ArrowUpZA },
+const sorts: { value: SortType; label: string; labelBn: string; icon: typeof SlidersHorizontal }[] = [
+  { value: "default", label: "Default order", labelBn: "ডিফল্ট ক্রম", icon: LayoutGrid },
+  { value: "az", label: "A – Z", labelBn: "A – Z", icon: ArrowDownAZ },
+  { value: "za", label: "Z – A", labelBn: "Z – A", icon: ArrowUpZA },
 ];
 
 interface LevelFilterBarProps {
@@ -70,6 +71,7 @@ export function LevelFilterBar({
   onSortChange,
 }: LevelFilterBarProps) {
   const [open, setOpen] = useState(false);
+  const t = useT();
   const activeFilter = filters.find((f) => f.value === filter) ?? filters[0];
   const activeSort = sorts.find((s) => s.value === sort) ?? sorts[0];
 
@@ -100,7 +102,7 @@ export function LevelFilterBar({
                     />
                   )}
                   <Icon className="relative z-10 size-3.5" />
-                  <span className="relative z-10">{f.label}</span>
+                  <span className="relative z-10">{t(f.labelBn, f.label)}</span>
                 </button>
               );
             })}
@@ -113,7 +115,7 @@ export function LevelFilterBar({
               <SelectValue placeholder="Sort" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="default">Default</SelectItem>
+              <SelectItem value="default">{t("ডিফল্ট", "Default")}</SelectItem>
               <SelectItem value="az">A-Z</SelectItem>
               <SelectItem value="za">Z-A</SelectItem>
             </SelectContent>
@@ -128,14 +130,14 @@ export function LevelFilterBar({
           className="h-10 gap-2 rounded-xl px-3.5 text-sm font-medium"
         >
           <SlidersHorizontal className="size-4" />
-          Filters
+          {t("ফিল্টার", "Filters")}
           <span className="rounded-full bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
             {activeFilter.label}
           </span>
         </Button>
 
         <span className="text-xs text-zinc-400 dark:text-zinc-500">
-          Sorted:{" "}
+          {t("সাজানো:", "Sorted:")}{" "}
           <span className="font-medium text-zinc-600 dark:text-zinc-300">
             {activeSort.label}
           </span>
@@ -145,14 +147,17 @@ export function LevelFilterBar({
       <Drawer open={open} onOpenChange={setOpen} noBodyStyles>
         <DrawerContent className="mx-auto max-w-lg rounded-t-3xl">
           <div className="overflow-y-auto px-4 pb-6 pt-2">
-            <DrawerTitle className="text-base">Filter words</DrawerTitle>
+            <DrawerTitle className="text-base">{t("শব্দ ফিল্টার করুন", "Filter words")}</DrawerTitle>
             <DrawerDescription className="mt-1">
-              Show only the words that match what you want to review.
+              {t(
+                "আপনি যেসব শব্দ রিভিউ করতে চান তার সাথে মিলে যাওয়া শব্দগুলোই দেখান।",
+                "Show only the words that match what you want to review."
+              )}
             </DrawerDescription>
 
             <div className="mt-5 space-y-1">
               <p className="px-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
-                Status
+                {t("স্ট্যাটাস", "Status")}
               </p>
               {filters.map((f) => {
                 const Icon = f.icon;
@@ -176,7 +181,7 @@ export function LevelFilterBar({
                       />
                     )}
                     <Icon className="relative z-10 size-4" />
-                    <span className="relative z-10 flex-1 text-left">{f.label}</span>
+                    <span className="relative z-10 flex-1 text-left">{t(f.labelBn, f.label)}</span>
                     {isActive && <Check className="relative z-10 size-4" />}
                   </button>
                 );
@@ -185,7 +190,7 @@ export function LevelFilterBar({
 
             <div className="mt-6 space-y-1">
               <p className="px-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
-                Sort by
+                {t("সাজান", "Sort by")}
               </p>
               {sorts.map((s) => {
                 const Icon = s.icon;
@@ -209,7 +214,7 @@ export function LevelFilterBar({
                       />
                     )}
                     <Icon className="relative z-10 size-4" />
-                    <span className="relative z-10 flex-1 text-left">{s.label}</span>
+                    <span className="relative z-10 flex-1 text-left">{t(s.labelBn, s.label)}</span>
                     {isActive && <Check className="relative z-10 size-4" />}
                   </button>
                 );
@@ -218,7 +223,7 @@ export function LevelFilterBar({
 
             <DrawerClose asChild>
               <Button className="mt-6 h-11 w-full rounded-xl gap-2 text-sm font-semibold">
-                Done
+                {t("সম্পন্ন", "Done")}
               </Button>
             </DrawerClose>
           </div>

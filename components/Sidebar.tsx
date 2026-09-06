@@ -9,6 +9,7 @@ import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, LogIn, LogOut
 import { toast } from "sonner";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
+import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import {
   Sheet,
@@ -30,15 +31,16 @@ function NavLinks({
 }) {
   const pathname = usePathname();
   const { status } = useAuthStatus();
+  const t = useT();
   const isLoggedIn = status !== "none";
   const navLinks = [
-    { href: "/", label: "Home", icon: Home },
-    { href: "/vocabulary", label: "Vocabulary", icon: LibraryBig },
-    { href: "/search", label: "Search", icon: Search },
-    { href: "/quiz", label: "Quiz", icon: BookOpenCheck },
+    { href: "/", label: t("হোম", "Home"), icon: Home },
+    { href: "/vocabulary", label: t("শব্দভাণ্ডার", "Vocabulary"), icon: LibraryBig },
+    { href: "/search", label: t("অনুসন্ধান", "Search"), icon: Search },
+    { href: "/quiz", label: t("কুইজ", "Quiz"), icon: BookOpenCheck },
     isLoggedIn
-      ? { href: "/profile", label: "Profile", icon: User }
-      : { href: "/login", label: "Login", icon: LogIn },
+      ? { href: "/profile", label: t("প্রোফাইল", "Profile"), icon: User }
+      : { href: "/login", label: t("লগইন", "Login"), icon: LogIn },
   ];
 
   return (
@@ -87,6 +89,7 @@ function LogoutButton({
   showLabels: boolean;
   onLogout: () => void;
 }) {
+  const t = useT();
   return (
     <div className="border-t border-gray-200 dark:border-gray-800 p-3">
       <button
@@ -95,7 +98,7 @@ function LogoutButton({
         className="flex items-center w-full px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors gap-3 whitespace-nowrap"
       >
         <LogOut className="h-5 w-5 shrink-0" />
-        {showLabels && <span className="truncate">Log out</span>}
+        {showLabels && <span className="truncate">{t("লগ আউট", "Log out")}</span>}
       </button>
     </div>
   );
@@ -104,6 +107,7 @@ function LogoutButton({
 export function Sidebar() {
   const { isOpen, isDesktopOpen, close, toggleDesktop } = useSidebar();
   const { status } = useAuthStatus();
+  const t = useT();
   const logout = useAuthStore((s) => s.logout);
   const isLoggedIn = status !== "none";
 
@@ -116,7 +120,7 @@ export function Sidebar() {
       // Ignore API errors; NextAuth signOut below still clears the session.
     }
     await signOut({ callbackUrl: "/login" });
-    toast.success("Logged out successfully");
+    toast.success(t("সফলভাবে লগ আউট হয়েছে", "Logged out successfully"));
   };
 
   return (
@@ -151,7 +155,7 @@ export function Sidebar() {
           side="left"
           className="w-64 gap-0 p-0 bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800"
         >
-          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+          <SheetTitle className="sr-only">{t("নেভিগেশন মেনু", "Navigation Menu")}</SheetTitle>
           <div className="flex items-center p-4 border-b">
             <Link
               href="/"
