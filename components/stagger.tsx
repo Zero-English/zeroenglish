@@ -14,17 +14,18 @@ const container: Variants = {
 };
 
 export const staggerItem: Variants = {
-  hidden: { opacity: 0, y: 24, scale: 0.98, filter: "blur(4px)" },
+  // hidden: { opacity: 0, y: 24, scale: 0.98, filter: "blur(4px)" },
+  hidden: { opacity: 0,  scale: 0.98, filter: "blur(4px)" },
   visible: {
     opacity: 1,
-    y: 0,
+    // y: 0,
     scale: 1,
     filter: "blur(0px)",
-    transition: {
-      type: "spring",
-      stiffness: 260,
-      damping: 24,
-    },
+    // transition: {
+    //   type: "spring",
+    //   stiffness: 260,
+    //   damping: 24,
+    // },
   },
 };
 

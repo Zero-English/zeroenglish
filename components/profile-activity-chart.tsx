@@ -19,25 +19,26 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Activity, CalendarDays, TrendingDown, TrendingUp } from "lucide-react";
+import { useT, useNum } from "@/components/language-provider";
 
 type ActivityPoint = { label: string; learned: number; quiz: number };
 
 const RANGE_OPTIONS = [
-  { value: "today", label: "Today" },
-  { value: "yesterday", label: "Yesterday" },
-  { value: "7d", label: "Last 7 days" },
-  { value: "14d", label: "Last 14 days" },
-  { value: "30d", label: "Last 30 days" },
-  { value: "90d", label: "Last 90 days" },
-  { value: "1y", label: "Last 1 year" },
+  { value: "today", label: "Today", labelBn: "আজ" },
+  { value: "yesterday", label: "Yesterday", labelBn: "গতকাল" },
+  { value: "7d", label: "Last 7 days", labelBn: "শেষ ৭ দিন" },
+  { value: "14d", label: "Last 14 days", labelBn: "শেষ ১৪ দিন" },
+  { value: "30d", label: "Last 30 days", labelBn: "শেষ ৩০ দিন" },
+  { value: "90d", label: "Last 90 days", labelBn: "শেষ ৯০ দিন" },
+  { value: "1y", label: "Last 1 year", labelBn: "শেষ ১ বছর" },
 ] as const;
 
 type RangeKey = (typeof RANGE_OPTIONS)[number]["value"];
 
 const METRICS = [
-  { value: "all", label: "All" },
-  { value: "learned", label: "Learned" },
-  { value: "quiz", label: "Quiz" },
+  { value: "all", label: "All", labelBn: "সব" },
+  { value: "learned", label: "Learned", labelBn: "শেখা হয়েছে" },
+  { value: "quiz", label: "Quiz", labelBn: "কুইজ" },
 ] as const;
 
 type Metric = (typeof METRICS)[number]["value"];
@@ -86,14 +87,14 @@ function dailySeries(days: number, endOffset: number): ActivityPoint[] {
 }
 
 const dummyGraphData = {
-  today: { title: "Today", data: hourlySeries(0), previous: hourlySeries(1) },
-  yesterday: { title: "Yesterday", data: hourlySeries(1), previous: hourlySeries(2) },
-  "7d": { title: "Last 7 days", data: dailySeries(7, 0), previous: dailySeries(7, 7) },
-  "14d": { title: "Last 14 days", data: dailySeries(14, 0), previous: dailySeries(14, 14) },
-  "30d": { title: "Last 30 days", data: dailySeries(30, 0), previous: dailySeries(30, 30) },
-  "90d": { title: "Last 90 days", data: dailySeries(90, 0), previous: dailySeries(90, 90) },
-  "1y": { title: "Last 1 year", data: dailySeries(365, 0), previous: dailySeries(365, 365) },
-} satisfies Record<RangeKey, { title: string; data: ActivityPoint[]; previous: ActivityPoint[] }>;
+  today: { title: "today", titleBn: "আজ", data: hourlySeries(0), previous: hourlySeries(1) },
+  yesterday: { title: "yesterday", titleBn: "গতকাল", data: hourlySeries(1), previous: hourlySeries(2) },
+  "7d": { title: "the last 7 days", titleBn: "শেষ ৭ দিনে", data: dailySeries(7, 0), previous: dailySeries(7, 7) },
+  "14d": { title: "the last 14 days", titleBn: "শেষ ১৪ দিনে", data: dailySeries(14, 0), previous: dailySeries(14, 14) },
+  "30d": { title: "the last 30 days", titleBn: "শেষ ৩০ দিনে", data: dailySeries(30, 0), previous: dailySeries(30, 30) },
+  "90d": { title: "the last 90 days", titleBn: "শেষ ৯০ দিনে", data: dailySeries(90, 0), previous: dailySeries(90, 90) },
+  "1y": { title: "the last 1 year", titleBn: "শেষ ১ বছরে", data: dailySeries(365, 0), previous: dailySeries(365, 365) },
+} satisfies Record<RangeKey, { title: string; titleBn: string; data: ActivityPoint[]; previous: ActivityPoint[] }>;
 
 const chartConfig = {
   learned: { label: "Learned", color: "#10b981" },
@@ -103,6 +104,8 @@ const chartConfig = {
 export function ProfileActivityChart() {
   const [range, setRange] = useState<RangeKey>("7d");
   const [metric, setMetric] = useState<Metric>("all");
+  const t = useT();
+  const num = useNum();
 
   const active = dummyGraphData[range];
 
@@ -125,7 +128,8 @@ export function ProfileActivityChart() {
   }, [active]);
 
   const change = metric === "quiz" ? stats.quizChange : stats.learnedChange;
-  const headline = metric === "quiz" ? `${stats.quizAvg.toFixed(0)}%` : stats.learned.toLocaleString();
+  const headline =
+    metric === "quiz" ? `${num(stats.quizAvg.toFixed(0))}%` : num(stats.learned.toLocaleString());
   const showLearned = metric !== "quiz";
   const showQuiz = metric !== "learned";
   const granularity = range === "today" || range === "yesterday" ? "hr" : "day";
@@ -138,8 +142,8 @@ export function ProfileActivityChart() {
           <Activity className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Activity</h3>
-          <p className="text-xs text-zinc-400 dark:text-zinc-500">Based on dummy data</p>
+          <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">{t("কার্যকলাপ", "Activity")}</h3>
+          <p className="text-xs text-zinc-400 dark:text-zinc-500">{t("ডেমো তথ্যের ভিত্তিতে", "Based on dummy data")}</p>
         </div>
       </div>
 
@@ -156,7 +160,7 @@ export function ProfileActivityChart() {
                   : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300"
               )}
             >
-              {m.label}
+              {t(m.labelBn, m.label)}
             </button>
           ))}
         </div>
@@ -169,7 +173,7 @@ export function ProfileActivityChart() {
           <SelectContent align="end">
             {RANGE_OPTIONS.map((o) => (
               <SelectItem key={o.value} value={o.value}>
-                {o.label}
+                {t(o.labelBn, o.label)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -179,14 +183,16 @@ export function ProfileActivityChart() {
       <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            {metric === "quiz" ? "Quiz win rate in the" : "Words learned in the"}{" "}
-            {active.title.toLowerCase()}
+            {metric === "quiz"
+              ? t("এই সময়ে কুইজে জয়ের হার", "Quiz win rate in the")
+              : t("এই সময়ে শেখা শব্দ", "Words learned in the")}{" "}
+            {t(active.titleBn, active.title)}
           </p>
           <p className="mt-1 flex items-baseline gap-2 text-3xl font-bold tabular-nums tracking-tight text-zinc-900 dark:text-zinc-100">
             {headline}
             {metric === "all" && (
               <span className="text-sm font-semibold text-zinc-400 dark:text-zinc-500">
-                · Quiz win {stats.quizAvg.toFixed(0)}%
+                {t("· কুইজে জয়ের হার", "· Quiz win")} {num(stats.quizAvg.toFixed(0))}%
               </span>
             )}
           </p>
@@ -203,7 +209,7 @@ export function ProfileActivityChart() {
             )}
           >
             {change === null ? (
-              "New"
+              t("নতুন", "New")
             ) : (
               <>
                 {change >= 0 ? (
@@ -211,14 +217,19 @@ export function ProfileActivityChart() {
                 ) : (
                   <TrendingDown className="size-3" />
                 )}
-                {Math.abs(change).toFixed(1)}%
+                {num(Math.abs(change).toFixed(1))}%
               </>
             )}
           </span>
           <span className="text-xs text-zinc-400 dark:text-zinc-500">
             {metric === "quiz"
-              ? `best ${stats.bestQuiz}% · worst ${stats.worstQuiz}%`
-              : `vs previous · avg ${stats.avgLearned.toFixed(1)}/${granularity}`}
+              ? t(`সেরা ${num(stats.bestQuiz)}% · খারাপ ${num(stats.worstQuiz)}%`, `best ${stats.bestQuiz}% · worst ${stats.worstQuiz}%`)
+              : t(
+                  `আগের তুলনায় · গড় ${num(stats.avgLearned.toFixed(1))}/${
+                    granularity === "hr" ? "ঘণ্টা" : "দিন"
+                  }`,
+                  `vs previous · avg ${stats.avgLearned.toFixed(1)}/${granularity}`
+                )}
           </span>
         </div>
       </div>

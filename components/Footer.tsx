@@ -3,29 +3,55 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, ArrowRight } from "lucide-react";
+import { useT } from "@/components/language-provider";
 import logo from "../public/assets/logo.png";
+
+interface FooterLink {
+  labelBn: string;
+  labelEn: string;
+  href: string;
+}
+
+interface FooterColumn {
+  categoryBn: string;
+  categoryEn: string;
+  links: FooterLink[];
+}
 
 export default function FFooter() {
   const currentYear = new Date().getFullYear();
+  const t = useT();
 
-  const footerLinks = {
-    Product: [
-      { label: "Features", href: "#" },
-      { label: "Pricing", href: "#" },
-      { label: "Blog", href: "#" },
-    ],
-    Learning: [
-      { label: "Beginner", href: "/beginner" },
-      { label: "Intermediate", href: "/intermediate" },
-      { label: "Advanced", href: "/advanced" },
-    ],
-    Company: [
-      { label: "About", href: "#" },
-      { label: "Contact", href: "#" },
-      { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Service", href: "#" },
-    ],
-  };
+  const footerColumns: FooterColumn[] = [
+    {
+      categoryBn: "পণ্য",
+      categoryEn: "Product",
+      links: [
+        { labelBn: "বৈশিষ্ট্য", labelEn: "Features", href: "#" },
+        { labelBn: "মূল্য", labelEn: "Pricing", href: "#" },
+        { labelBn: "ব্লগ", labelEn: "Blog", href: "#" },
+      ],
+    },
+    {
+      categoryBn: "শেখা",
+      categoryEn: "Learning",
+      links: [
+        { labelBn: "শিক্ষানবিস", labelEn: "Beginner", href: "/beginner" },
+        { labelBn: "মাঝারি", labelEn: "Intermediate", href: "/intermediate" },
+        { labelBn: "উন্নত", labelEn: "Advanced", href: "/advanced" },
+      ],
+    },
+    {
+      categoryBn: "প্রতিষ্ঠান",
+      categoryEn: "Company",
+      links: [
+        { labelBn: "আমাদের সম্পর্কে", labelEn: "About", href: "#" },
+        { labelBn: "যোগাযোগ", labelEn: "Contact", href: "#" },
+        { labelBn: "গোপনীয়তা নীতি", labelEn: "Privacy Policy", href: "/privacy" },
+        { labelBn: "পরিষেবার শর্তাবলী", labelEn: "Terms of Service", href: "#" },
+      ],
+    },
+  ];
 
   const socialLinks = [
     { icon: Mail, href: "zeroenglishweb@gmail.com", label: "Email" },
@@ -46,8 +72,10 @@ export default function FFooter() {
               />
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Master English vocabulary at your own pace with our comprehensive
-              learning platform.
+              {t(
+                "আপনার নিজের গতিতে আমাদের সম্পূর্ণ লার্নিং প্ল্যাটফর্ম দিয়ে ইংরেজি শব্দভাণ্ডার আয়ত্ত করুন।",
+                "Master English vocabulary at your own pace with our comprehensive learning platform."
+              )}
             </p>
             <div className="flex space-x-3">
               {socialLinks.map(({ icon: Icon, href, label }) => (
@@ -64,20 +92,20 @@ export default function FFooter() {
           </div>
 
           {/* Links Columns */}
-          {Object.entries(footerLinks).map(([category, links]) => (
-            <div key={category} className="lg:col-span-1">
+          {footerColumns.map((column) => (
+            <div key={column.categoryEn} className="lg:col-span-1">
               <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground mb-5">
-                {category}
+                {t(column.categoryBn, column.categoryEn)}
               </h3>
               <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={`${category}-${link.label}`}>
+                {column.links.map((link) => (
+                  <li key={`${column.categoryEn}-${link.labelEn}`}>
                     <Link
                       href={link.href}
                       className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                     >
                       <ArrowRight className="size-3.5 shrink-0 text-muted-foreground/50 transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
-                      {link.label}
+                      {t(link.labelBn, link.labelEn)}
                     </Link>
                   </li>
                 ))}
@@ -92,17 +120,20 @@ export default function FFooter() {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-muted-foreground">
           <p>
-            &copy; {currentYear} Zero English. All rights reserved.
+            {t(
+              `© ${currentYear} জিরো ইংলিশ। সর্বস্বত্ব সংরক্ষিত।`,
+              `© ${currentYear} Zero English. All rights reserved.`
+            )}
           </p>
           <div className="flex space-x-6">
             <Link href="/privacy" className="hover:text-foreground transition-colors">
-              Privacy
+              {t("গোপনীয়তা", "Privacy")}
             </Link>
             <Link href="#" className="hover:text-foreground transition-colors">
-              Terms
+              {t("শর্তাবলী", "Terms")}
             </Link>
             <Link href="#" className="hover:text-foreground transition-colors">
-              Cookies
+              {t("কুকিজ", "Cookies")}
             </Link>
           </div>
         </div>

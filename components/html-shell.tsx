@@ -1,12 +1,18 @@
 import "@/app/globals.css";
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Hind_Siliguri, Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionProvider from "@/components/session-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+
+const hindSiliguri = Hind_Siliguri({
+  subsets: ["bengali"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-bangla",
+});
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -48,6 +54,7 @@ export default function RootLayout({
                 geistMono.variable,
                 "font-sans",
                 inter.variable,
+                hindSiliguri.variable,
             )}
             suppressHydrationWarning
         >

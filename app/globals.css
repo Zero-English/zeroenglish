@@ -48,6 +48,10 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+html[data-lang="bn"] {
+  --font-sans: var(--font-bangla);
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;

@@ -5,10 +5,12 @@ import { useSession } from "next-auth/react";
 import { ShieldCheck } from "lucide-react";
 import { UserAvatar } from "@/components/UserAvatar";
 import { useAuthStore } from "@/lib/auth-store";
+import { useT } from "@/components/language-provider";
 
 export function ProfileCard() {
   const status = useAuthStore((s) => s.status);
   const { data: session } = useSession();
+  const t = useT();
 
   if (status !== "google" || !session?.user) return null;
 
@@ -37,11 +39,11 @@ export function ProfileCard() {
                   className="inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-400 dark:hover:bg-indigo-900/60 transition-colors"
                 >
                   <ShieldCheck className="h-3 w-3" />
-                  Admin
+                  {t("অ্যাডমিন", "Admin")}
                 </Link>
               ) : (
                 <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                  User
+                  {t("ব্যবহারকারী", "User")}
                 </span>
               )}
             </div>

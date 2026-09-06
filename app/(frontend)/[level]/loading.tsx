@@ -1,1 +1,1 @@
-export { default } from "@/components/PageLoader";
+export { LevelSkeleton as default } from "@/components/skeletons";

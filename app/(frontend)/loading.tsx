@@ -1,1 +1,1 @@
-export { default } from "@/components/PageLoader";
+export { default } from "@/components/skeletons";

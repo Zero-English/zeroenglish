@@ -1,1 +1,1 @@
-export { default } from "@/components/PageLoader";
+export { QuizSkeleton as default } from "@/components/skeletons";

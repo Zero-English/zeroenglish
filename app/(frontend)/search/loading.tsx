@@ -1,1 +1,1 @@
-export { default } from "@/components/PageLoader";
+export { SearchSkeleton as default } from "@/components/skeletons";

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getWordsByLevel } from "@/lib/data";
 import { LevelPageContent } from "@/components/level-page-content";
 
-const VALID_LEVELS = ["A1", "A2", "B1", "B2"] as const;
+const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 
 export const dynamic = "force-dynamic";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 
 const AVATAR_COLORS = [
@@ -30,7 +30,7 @@ interface UserAvatarProps {
 }
 
 const sizeClasses = {
-  sm: "h-7 w-7 text-xs",
+  sm: "h-8 w-8 text-xs",
   md: "h-9 w-9 text-sm",
   lg: "h-14 w-14 text-xl",
 };
@@ -43,14 +43,10 @@ export function UserAvatar({
   size = "sm",
   className = "",
 }: UserAvatarProps) {
-  const [imgError, setImgError] = useState(false);
-
-  useEffect(() => {
-    setImgError(false);
-  }, [image]);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
 
   const initial = (name || userName || "?").charAt(0).toUpperCase();
-  const showImage = image && !imgError;
+  const showImage = image && failedSrc !== image;
 
   return (
     <span
@@ -64,7 +60,7 @@ export function UserAvatar({
           sizes="56px"
           unoptimized
           className="rounded-full object-cover"
-          onError={() => setImgError(true)}
+          onError={() => setFailedSrc(image)}
         />
       ) : (
         initial

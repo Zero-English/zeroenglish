@@ -4,6 +4,7 @@ import { ProfileTabs } from "@/components/profile-words";
 import { ProfileGuard } from "@/components/profile-guard";
 import { ProfileAuthBanner } from "@/components/profile-auth-banner";
 import { ProfileCard } from "@/components/profile-card";
+import { ProfileHeader } from "@/components/profile-header";
 import { StaggerContainer } from "@/components/stagger";
 import { BackButton } from "@/components/back-button";
 
@@ -23,14 +24,7 @@ export default async function ProfilePage() {
             <div className="relative px-4 py-8 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     <BackButton />
-                    <div className="mb-6">
-                        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
-                            My Profile
-                        </h1>
-                        <p className="mt-1 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-                            Track your learning progress and manage your words.
-                        </p>
-                    </div>
+                    <ProfileHeader />
 
                     <ProfileGuard>
                       <StaggerContainer>

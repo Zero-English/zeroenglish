@@ -22,13 +22,15 @@ import {
   type QuizHistoryEntry,
   type QuizType,
 } from "@/lib/quiz-history-store";
+import { useT, useNum } from "@/components/language-provider";
 
 const QUIZ_META: Record<
   QuizType,
-  { label: string; icon: LucideIcon; iconColor: string; bg: string; gradient: string }
+  { label: string; labelBn: string; icon: LucideIcon; iconColor: string; bg: string; gradient: string }
 > = {
   english_to_bangla: {
     label: "English → Bangla",
+    labelBn: "ইংরেজি → বাংলা",
     icon: Languages,
     iconColor: "text-sky-600 dark:text-sky-400",
     bg: "bg-sky-100 dark:bg-sky-900/30",
@@ -36,6 +38,7 @@ const QUIZ_META: Record<
   },
   bangla_to_english: {
     label: "Bangla → English",
+    labelBn: "বাংলা → ইংরেজি",
     icon: ArrowLeftRight,
     iconColor: "text-indigo-600 dark:text-indigo-400",
     bg: "bg-indigo-100 dark:bg-indigo-900/30",
@@ -43,6 +46,7 @@ const QUIZ_META: Record<
   },
   synonym: {
     label: "Synonyms",
+    labelBn: "সমার্থক শব্দ",
     icon: Shuffle,
     iconColor: "text-emerald-600 dark:text-emerald-400",
     bg: "bg-emerald-100 dark:bg-emerald-900/30",
@@ -50,6 +54,7 @@ const QUIZ_META: Record<
   },
   antonym: {
     label: "Antonyms",
+    labelBn: "বিপরীত শব্দ",
     icon: Layers,
     iconColor: "text-rose-600 dark:text-rose-400",
     bg: "bg-rose-100 dark:bg-rose-900/30",
@@ -89,6 +94,7 @@ function WinRing({ win }: { win: number }) {
   const r = 22;
   const circumference = 2 * Math.PI * r;
   const offset = circumference * (1 - win / 100);
+  const num = useNum();
 
   return (
     <div className="relative h-16 w-16 flex-shrink-0">
@@ -116,7 +122,7 @@ function WinRing({ win }: { win: number }) {
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center text-sm font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
-        {win}%
+        {num(win)}%
       </div>
     </div>
   );
@@ -126,6 +132,8 @@ function QuizHistoryItem({ entry }: { entry: QuizHistoryEntry }) {
   const meta = QUIZ_META[entry.quizType];
   const Icon = meta.icon;
   const win = winToNumber(entry);
+  const t = useT();
+  const num = useNum();
 
   return (
     <StaggerItem className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
@@ -142,7 +150,7 @@ function QuizHistoryItem({ entry }: { entry: QuizHistoryEntry }) {
           </div>
           <div>
             <h4 className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100">
-              {meta.label}
+              {t(meta.labelBn, meta.label)}
             </h4>
             <p className="mt-0.5 flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500">
               <CalendarDays className="h-3.5 w-3.5" />
@@ -157,13 +165,14 @@ function QuizHistoryItem({ entry }: { entry: QuizHistoryEntry }) {
         <div className="flex items-center gap-2">
           <ListChecks className="h-4 w-4 text-zinc-400" />
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            {entry.numberOfQuestions} Questions
+            {t(`${num(entry.numberOfQuestions)}টি প্রশ্ন`, `${entry.numberOfQuestions} Questions`)}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <Clock3 className="h-4 w-4 text-zinc-400" />
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            {entry.timePerQuestion}s / question
+            {num(entry.timePerQuestion)}
+            {t(" সেকেন্ড / প্রশ্ন", "s / question")}
           </span>
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
@@ -183,6 +192,8 @@ function QuizHistoryItem({ entry }: { entry: QuizHistoryEntry }) {
 
 export function QuizHistoryPanel() {
   const entries = useQuizHistoryStore((s) => s.entries);
+  const t = useT();
+  const num = useNum();
 
   const stats = useMemo(() => {
     const total = entries.length;
@@ -194,15 +205,18 @@ export function QuizHistoryPanel() {
   }, [entries]);
 
   const summary = [
-    { icon: GraduationCap, label: "Quizzes Taken", value: String(stats.total), tint: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-100 dark:bg-indigo-900/30" },
-    { icon: BarChart3, label: "Avg. Win Rate", value: `${stats.avg}%`, tint: "text-sky-600 dark:text-sky-400", bg: "bg-sky-100 dark:bg-sky-900/30" },
-    { icon: Award, label: "Best Score", value: `${stats.best}%`, tint: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-100 dark:bg-emerald-900/30" },
+    { icon: GraduationCap, label: t("নেওয়া কুইজ", "Quizzes Taken"), value: num(stats.total), tint: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-100 dark:bg-indigo-900/30" },
+    { icon: BarChart3, label: t("গড় জয়ের হার", "Avg. Win Rate"), value: `${num(stats.avg)}%`, tint: "text-sky-600 dark:text-sky-400", bg: "bg-sky-100 dark:bg-sky-900/30" },
+    { icon: Award, label: t("সেরা স্কোর", "Best Score"), value: `${num(stats.best)}%`, tint: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-100 dark:bg-emerald-900/30" },
   ];
 
   return (
     <div>
       <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-        {stats.total} quiz{stats.total !== 1 ? "zes" : ""} · {stats.totalQuestions} questions answered
+        {t(
+          `${num(stats.total)}টি কুইজ · ${num(stats.totalQuestions)}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
+          `${stats.total} quiz${stats.total !== 1 ? "zes" : ""} · ${stats.totalQuestions} questions answered`
+        )}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
@@ -241,9 +255,9 @@ export function QuizHistoryPanel() {
       ) : (
         <div className="text-center py-20">
           <Trophy className="h-12 w-12 mx-auto text-zinc-300 dark:text-zinc-600 mb-4" />
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-1">No quiz history yet.</p>
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-1">{t("এখনো কোনো কুইজ ইতিহাস নেই।", "No quiz history yet.")}</p>
           <p className="text-zinc-400 dark:text-zinc-500 text-xs">
-            Take a quiz from the Quiz page and your results will appear here.
+            {t("কুইজ পেজ থেকে একটি কুইজ নিন, আপনার ফলাফল এখানে দেখা যাবে।", "Take a quiz from the Quiz page and your results will appear here.")}
           </p>
         </div>
       )}

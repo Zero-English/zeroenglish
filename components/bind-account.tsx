@@ -4,6 +4,7 @@ import { signIn, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/lib/auth-store";
 import { ShieldCheck, LogOut } from "lucide-react";
+import { useT } from "@/components/language-provider";
 
 function GoogleIcon() {
     return (
@@ -30,6 +31,7 @@ function GoogleIcon() {
 
 export function BindAccount() {
     const logout = useAuthStore((s) => s.logout);
+    const t = useT();
 
     const handleBind = async () => {
         await signIn("google", { callbackUrl: "/profile" });
@@ -49,12 +51,13 @@ export function BindAccount() {
                     </div>
                     <div>
                         <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                            Bind Your Account
+                            {t("আপনার অ্যাকাউন্ট যুক্ত করুন", "Bind Your Account")}
                         </h2>
                         <p className="mt-1 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
-                            You&apos;re currently using a guest account. Bind it
-                            with Google to keep your progress safe and sync it
-                            across devices.
+                            {t(
+                                "আপনি বর্তমানে একটি অতিথি অ্যাকাউন্ট ব্যবহার করছেন। আপনার অগ্রগতি নিরাপদ রাখতে এবং ডিভাইস জুড়ে সিঙ্ক করতে Google-এর সাথে যুক্ত করুন।",
+                                "You're currently using a guest account. Bind it with Google to keep your progress safe and sync it across devices."
+                            )}
                         </p>
                     </div>
                 </div>
@@ -65,13 +68,13 @@ export function BindAccount() {
                         onClick={() => void handleBind()}
                     >
                         <GoogleIcon />
-                        Continue with Google
+                        {t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
                     </Button>
                     <Button
                         variant="ghost"
                         size="icon"
                         className="h-10 w-10"
-                        title="Sign out"
+                        title={t("সাইন আউট", "Sign out")}
                         onClick={() => void handleLogout()}
                     >
                         <LogOut className="h-4 w-4" />

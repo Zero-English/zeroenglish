@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
+import { motion } from "motion/react";
 import type { Word } from "@/lib/data";
-import { getDuplicateWordIds } from "@/lib/words";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
 import { WordCard } from "@/components/word-card";
@@ -17,8 +17,19 @@ import {
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 import { useLevelPage, useLevelFilter, useLevelSort, setLevelState } from "@/lib/level-pagination-store";
+import { useT, useNum } from "@/components/language-provider";
 
 const ITEMS_PER_PAGE = 10;
+
+const listVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.05 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 14 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" as const } },
+};
 
 interface LevelWordsClientProps {
   words: Word[];
@@ -30,12 +41,12 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
   const { isLearned, loaded: learnedLoaded } = useLearnedWords();
   const { isBookmarked, loaded: bookmarkLoaded } = useBookmarkedWords();
   const loaded = learnedLoaded && bookmarkLoaded;
+  const t = useT();
+  const num = useNum();
 
   const page = useLevelPage(level);
   const filter = useLevelFilter(level);
   const sort = useLevelSort(level);
-
-  const duplicateIds = useMemo(() => getDuplicateWordIds(words), [words]);
 
   const filtered = useMemo(() => {
     let result = [...words];
@@ -54,9 +65,6 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
         case "not-bookmarked":
           result = result.filter((w) => !isBookmarked(w.id));
           break;
-        case "duplicates":
-          result = result.filter((w) => duplicateIds.has(w.id));
-          break;
       }
     }
 
@@ -70,7 +78,7 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
     }
 
     return result;
-  }, [words, filter, sort, loaded, isLearned, isBookmarked, duplicateIds]);
+  }, [words, filter, sort, loaded, isLearned, isBookmarked]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
   const currentPage = Math.min(page, totalPages);
@@ -118,20 +126,30 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
       ) : pageWords.length === 0 ? (
         <div className="text-center py-16">
           <p className="text-zinc-400 dark:text-zinc-500 text-sm">
-            No words match this filter.
+            {t("এই ফিল্টারের সাথে কোনো শব্দ মেলে না।", "No words match this filter.")}
           </p>
         </div>
       ) : (
         <>
-          <div className="space-y-4">
+          <motion.div
+            key={`${filter}-${sort}-${currentPage}`}
+            variants={listVariants}
+            initial="hidden"
+            animate="show"
+            className="space-y-4"
+          >
             {pageWords.map((word) => (
-              <WordCard key={`${word.id}-${word.word}`} word={word} gradient={gradient} />
+              <motion.div key={`${word.id}-${word.word}`} variants={itemVariants}>
+                <WordCard word={word} gradient={gradient} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
-            Showing {start + 1}&ndash;{Math.min(start + ITEMS_PER_PAGE, filtered.length)} of{" "}
-            {filtered.length}
+            {t(
+              `মোট ${num(filtered.length)}টির মধ্যে ${num(start + 1)}–${num(Math.min(start + ITEMS_PER_PAGE, filtered.length))} দেখানো হচ্ছে`,
+              `Showing ${start + 1}–${Math.min(start + ITEMS_PER_PAGE, filtered.length)} of ${filtered.length}`
+            )}
           </p>
 
           {totalPages > 1 && (
@@ -162,7 +180,7 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
                           }}
                           isActive={pageNum === currentPage}
                         >
-                          {pageNum}
+{num(pageNum)}
                         </PaginationLink>
                       </PaginationItem>
                     ))}
