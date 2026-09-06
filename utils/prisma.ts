@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
 import logger from "./logger";
@@ -10,8 +11,48 @@ import logger from "./logger";
 // const adapter = new PrismaPg({ connectionString: dbUrl });
 
 const connectionString = `${process.env?.["DATABASE_URL"]}`;
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
+
+const pool = new Pool({
+    connectionString,
+    max: 10,
+    idleTimeoutMillis: 25_000,
+    connectionTimeoutMillis: 15_000,
+});
+
+pool.on("error", (error) => {
+    logger.warn(`Unexpected error on idle Prisma DB client: ${error.message}`);
+});
+
+const adapter = new PrismaPg(pool);
+
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
+
+const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter });
+
+if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.prisma = prisma;
+}
+
+const TRANSIENT_CONNECTION_ERROR =
+    /Connection terminated unexpectedly|Connection pool timeout|ECONNRESET|EPIPE|connect ETIMEDOUT|connection (?:closed|reset|terminated)|server closed the connection/i;
+
+export const withPrismaRetry = async <T>(
+    operation: () => Promise<T>,
+    retries = 2,
+): Promise<T> => {
+    let lastError: unknown;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+        try {
+            return await operation();
+        } catch (error) {
+            lastError = error;
+            const message = error instanceof Error ? error.message : String(error);
+            if (!TRANSIENT_CONNECTION_ERROR.test(message) || attempt === retries) break;
+            await new Promise((resolve) => setTimeout(resolve, 250 * (attempt + 1)));
+        }
+    }
+    throw lastError;
+};
 
 export const connectionCheck = async () => {
     try {

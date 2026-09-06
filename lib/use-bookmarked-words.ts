@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 import { putWord, deleteWord, bulkPutWords, getWordsByType } from "./db";
 import { useAuthPath, useAuthStatus } from "./auth-store";
 
@@ -9,6 +9,23 @@ const STORAGE_KEY = "bookmarked-words";
 
 function key(id: number) {
   return String(id);
+}
+
+interface BookmarkSnapshot {
+  ids: Set<string>;
+  loaded: boolean;
+}
+
+const EMPTY_SNAPSHOT: BookmarkSnapshot = { ids: new Set(), loaded: false };
+
+let snapshot: BookmarkSnapshot = EMPTY_SNAPSHOT;
+const listeners = new Set<() => void>();
+let currentLoad: Promise<void> | null = null;
+let currentLoadKey: string | null = null;
+let loadedKey: string | null = null;
+
+function emitChange() {
+  for (const listener of listeners) listener();
 }
 
 async function listDbBookmarks(): Promise<number[] | null> {
@@ -42,85 +59,105 @@ async function syncDbBookmark(id: number, bookmarked: boolean): Promise<void> {
   }
 }
 
+async function doLoad(path: string, status: string): Promise<void> {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const oldData = JSON.parse(stored) as string[];
+      await bulkPutWords(
+        oldData
+          .map((k) => ({ id: String(Number(k.split("|")[0])), type: TYPE }))
+          .filter((e) => Number.isFinite(Number(e.id))),
+        path
+      );
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    const records = await getWordsByType(TYPE, path);
+    const local = new Map(records.map((r) => [r.id, r]));
+
+    const db = status === "google" ? await listDbBookmarks() : null;
+    if (db) {
+      const dbSet = new Set(db.map(String));
+      const dbOnly = db.filter((n) => !local.has(String(n)));
+      const localOnly = Array.from(local.keys()).filter((k) => !dbSet.has(k));
+
+      if (dbOnly.length > 0) {
+        await bulkPutWords(
+          dbOnly.map((n) => ({ id: String(n), type: TYPE })),
+          path
+        );
+        for (const n of dbOnly) {
+          local.set(String(n), { id: String(n), type: TYPE });
+        }
+      }
+      for (const n of localOnly) {
+        void syncDbBookmark(Number(n), true);
+      }
+    }
+
+    snapshot = { ids: new Set(Array.from(local.keys())), loaded: true };
+  } catch (err) {
+    console.error("Failed to load bookmarks:", err);
+    snapshot = { ...snapshot, loaded: true };
+  }
+}
+
+function loadBookmarks(path: string, status: string): Promise<void> {
+  const loadKey = `${status}|${path}`;
+  if (currentLoad && currentLoadKey === loadKey) return currentLoad;
+  if (loadedKey === loadKey && snapshot.loaded) return Promise.resolve();
+  currentLoadKey = loadKey;
+  currentLoad = doLoad(path, status).finally(() => {
+    loadedKey = currentLoadKey;
+    currentLoad = null;
+    currentLoadKey = null;
+    emitChange();
+  });
+  return currentLoad;
+}
+
 export function useBookmarkedWords() {
   const { path, hydrated } = useAuthPath();
   const { status } = useAuthStatus();
-  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
-  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (!hydrated) return;
-    (async () => {
-      setLoaded(false);
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          const oldData = JSON.parse(stored) as string[];
-          await bulkPutWords(
-            oldData.map((k) => ({ id: String(Number(k.split("|")[0])), type: TYPE }))
-              .filter((e) => Number.isFinite(Number(e.id))),
-            path
-          );
-          localStorage.removeItem(STORAGE_KEY);
-        }
+    if (hydrated) void loadBookmarks(path, status);
+  }, [path, status, hydrated]);
 
-        const records = await getWordsByType(TYPE, path);
-        const local = new Map(records.map((r) => [r.id, r]));
-
-        const db = status === "google" ? await listDbBookmarks() : null;
-        if (db) {
-          const dbSet = new Set(db.map(String));
-          const dbOnly = db.filter((n) => !local.has(String(n)));
-          const localOnly = Array.from(local.keys()).filter((k) => !dbSet.has(k));
-
-          if (dbOnly.length > 0) {
-            await bulkPutWords(
-              dbOnly.map((n) => ({ id: String(n), type: TYPE })),
-              path
-            );
-            for (const n of dbOnly) {
-              local.set(String(n), { id: String(n), type: TYPE });
-            }
-          }
-          for (const n of localOnly) {
-            void syncDbBookmark(Number(n), true);
-          }
-        }
-
-        setBookmarkedIds(new Set(Array.from(local.keys())));
-      } catch (err) {
-        console.error("Failed to load bookmarks:", err);
-      }
-      setLoaded(true);
-    })();
-  }, [path, hydrated, status]);
+  const snap = useSyncExternalStore(
+    (onStoreChange) => {
+      listeners.add(onStoreChange);
+      return () => {
+        listeners.delete(onStoreChange);
+      };
+    },
+    () => snapshot,
+    () => EMPTY_SNAPSHOT
+  );
 
   const toggleBookmark = useCallback(
     (id: number) => {
       const k = key(id);
-      const adding = !bookmarkedIds.has(k);
-      setBookmarkedIds((prev) => {
-        const next = new Set(prev);
-        if (next.has(k)) next.delete(k);
-        else next.add(k);
-        return next;
-      });
-      if (bookmarkedIds.has(k)) {
-        void deleteWord(path, TYPE, k);
-      } else {
-        void putWord({ id: k, type: TYPE }, path);
-      }
-      if (status === "google") {
-        void syncDbBookmark(id, adding);
-      }
+      const adding = !snap.ids.has(k);
+      const next = new Set(snap.ids);
+      if (adding) next.add(k);
+      else next.delete(k);
+      snapshot = { ...snap, ids: next };
+      emitChange();
+      if (adding) void putWord({ id: k, type: TYPE }, path);
+      else void deleteWord(path, TYPE, k);
+      if (status === "google") void syncDbBookmark(id, adding);
     },
-    [path, status, bookmarkedIds]
+    [snap, path, status]
   );
 
-  const isBookmarked = useCallback(
-    (id: number) => bookmarkedIds.has(key(id)),
-    [bookmarkedIds]
-  );
+  const isBookmarked = useCallback((id: number) => snap.ids.has(key(id)), [snap]);
 
-  return { bookmarkedIds, toggleBookmark, isBookmarked, loaded: loaded && hydrated };
+  return {
+    bookmarkedIds: snap.ids,
+    toggleBookmark,
+    isBookmarked,
+    loaded: snap.loaded && hydrated,
+  };
 }

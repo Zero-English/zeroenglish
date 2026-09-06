@@ -449,48 +449,18 @@ export const deleteWordById = async (id: number) => {
 
 export const markWordAsLearned = async (userId: number, wordId: number) => {
     try {
-        return prisma.$transaction(async (tx) => {
-            const existing = await tx.userWord.findUnique({
-                where: {
-                    userId_wordId: {
-                        userId,
-                        wordId,
-                    },
-                },
-            });
-
-            // Already learned → don't create another learning event
-            if (existing?.isLearned === "LEARNED") {
-                return existing;
-            }
-
-            // Update current state
-            const userWord = await tx.userWord.upsert({
-                where: {
-                    userId_wordId: {
-                        userId,
-                        wordId,
-                    },
-                },
-                create: {
-                    userId,
-                    wordId,
-                    isLearned: "LEARNED",
-                },
-                update: {
-                    isLearned: "LEARNED",
-                },
-            });
-
-            // Record learning activity
-            await tx.wordLearningEvent.create({
-                data: {
+        return prisma.userWord.upsert({
+            where: {
+                userId_wordId: {
                     userId,
                     wordId,
                 },
-            });
-
-            return userWord;
+            },
+            create: {
+                userId,
+                wordId,
+            },
+            update: {},
         });
     } catch (error) {
         logger.error(`Failed to mark word as learned: ${error}`);
@@ -504,49 +474,29 @@ export const markWordAsLearned = async (userId: number, wordId: number) => {
 
 export const markWordAsUnLearned = async (userId: number, wordId: number) => {
     try {
-        return prisma.$transaction(async (tx) => {
-            const existing = await tx.userWord.findUnique({
-                where: {
-                    userId_wordId: {
-                        userId,
-                        wordId,
-                    },
-                },
-            });
-
-            // Already unlearned → don't create another unlearning event
-            if (existing?.isLearned === "UNLEARNED") {
-                return existing;
-            }
-
-            // Update current state
-            const userWord = await tx.userWord.upsert({
-                where: {
-                    userId_wordId: {
-                        userId,
-                        wordId,
-                    },
-                },
-                create: {
-                    userId,
-                    wordId,
-                    isLearned: "UNLEARNED",
-                },
-                update: {
-                    isLearned: "UNLEARNED",
-                },
-            });
-
-            // Record learning activity
-            await tx.wordLearningEvent.create({
-                data: {
+        const existing = await prisma.userWord.findUnique({
+            where: {
+                userId_wordId: {
                     userId,
                     wordId,
                 },
-            });
-
-            return userWord;
+            },
         });
+
+        if (!existing) {
+            return null;
+        }
+
+        await prisma.userWord.delete({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+        });
+
+        return existing;
     } catch (error) {
         logger.error(`Failed to mark word as unlearned: ${error}`);
         return {
@@ -664,59 +614,24 @@ export const getUserBookmarkIds = async (userId: number) => {
     }
 };
 
-export const getWordLearningEvents = async (
-    page: number = 1,
-    limit: number = 10,
-) => {
+export const getLearnedWordIds = async (userId: number) => {
     try {
-        const skip = (page - 1) * limit;
-
-        const [events, total] = await Promise.all([
-            prisma.wordLearningEvent.findMany({
-                skip,
-                take: limit,
-                orderBy: { createdAt: "desc" },
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            name: true,
-                            user_name: true,
-                            email: true,
-                            image: true,
-                        },
-                    },
-                    word: {
-                        select: {
-                            id: true,
-                            word: true,
-                            meaningBn: true,
-                            level: true,
-                        },
-                    },
-                },
-            }),
-            prisma.wordLearningEvent.count(),
-        ]);
-
-        const totalPages = Math.ceil(total / limit);
+        const learned = await prisma.userWord.findMany({
+            where: { userId },
+            select: { wordId: true },
+            orderBy: { learnedAt: "desc" },
+        });
 
         return {
-            data: events,
-            pagination: {
-                total,
-                page,
-                limit,
-                totalPages,
-            },
-            message: "Learning events fetched successfully",
+            data: learned.map((w) => w.wordId),
+            message: "Learned words fetched successfully",
             success: true,
         };
     } catch (error) {
-        logger.error(`Failed to fetch learning events: ${error}`);
+        logger.error(`Failed to fetch learned words: ${error}`);
         return {
             data: null,
-            message: "Failed to fetch learning events",
+            message: "Failed to fetch learned words",
             success: false,
         };
     }
