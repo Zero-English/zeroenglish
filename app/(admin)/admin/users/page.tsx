@@ -341,7 +341,7 @@ export default function AdminUsersPage() {
                         {RICH.stillLearning.length}
                       </td>
                       <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
-                        {RICH.learned.length}
+                        {user.learnedWordCount}
                       </td>
                       <td className="px-4 py-2.5">
                         <span
