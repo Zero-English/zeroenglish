@@ -19,28 +19,16 @@ model UserBookmark {
   @@index([userId, bookmarkedAt])
 }
 
-model WordLearningEvent {
-  id        Int       @id @default(autoincrement())
-  userId    Int
-  wordId    Int
-  createdAt DateTime  @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  word Word @relation(fields: [wordId], references: [id], onDelete: Cascade)
-
-  @@index([userId, createdAt])
-}
-
 model UserWord {
   userId    Int
   wordId    Int
-  isLearned IsLearned @default(UNLEARNED)
+  learnedAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   word Word @relation(fields: [wordId], references: [id], onDelete: Cascade)
 
   @@id([userId, wordId])
-  @@index([userId, isLearned])
+  @@index([userId])
 }
 
 model Word {
@@ -60,7 +48,6 @@ model Word {
   updatedAt          DateTime            @updatedAt
   learnedBy          UserWord[]
   userBookmarks      UserBookmark[]
-  wordLearningEvents WordLearningEvent[]
 
   @@index([level])
   @@index([category])
@@ -81,7 +68,6 @@ model User {
   sessions           Session[]
   learnedWords       UserWord[]
   userBookmarks      UserBookmark[]
-  wordLearningEvents WordLearningEvent[]
 }
 
 model Account {
@@ -130,9 +116,4 @@ enum Levels {
   B2
   C1
   C2
-}
-
-enum IsLearned {
-  LEARNED
-  UNLEARNED
 }

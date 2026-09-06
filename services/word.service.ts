@@ -482,14 +482,6 @@ export const markWordAsLearned = async (userId: number, wordId: number) => {
                 },
             });
 
-            // Record learning activity
-            await tx.wordLearningEvent.create({
-                data: {
-                    userId,
-                    wordId,
-                },
-            });
-
             return userWord;
         });
     } catch (error) {
@@ -534,14 +526,6 @@ export const markWordAsUnLearned = async (userId: number, wordId: number) => {
                 },
                 update: {
                     isLearned: "UNLEARNED",
-                },
-            });
-
-            // Record learning activity
-            await tx.wordLearningEvent.create({
-                data: {
-                    userId,
-                    wordId,
                 },
             });
 
@@ -659,64 +643,6 @@ export const getUserBookmarkIds = async (userId: number) => {
         return {
             data: null,
             message: "Failed to fetch bookmarks",
-            success: false,
-        };
-    }
-};
-
-export const getWordLearningEvents = async (
-    page: number = 1,
-    limit: number = 10,
-) => {
-    try {
-        const skip = (page - 1) * limit;
-
-        const [events, total] = await Promise.all([
-            prisma.wordLearningEvent.findMany({
-                skip,
-                take: limit,
-                orderBy: { createdAt: "desc" },
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            name: true,
-                            user_name: true,
-                            email: true,
-                            image: true,
-                        },
-                    },
-                    word: {
-                        select: {
-                            id: true,
-                            word: true,
-                            meaningBn: true,
-                            level: true,
-                        },
-                    },
-                },
-            }),
-            prisma.wordLearningEvent.count(),
-        ]);
-
-        const totalPages = Math.ceil(total / limit);
-
-        return {
-            data: events,
-            pagination: {
-                total,
-                page,
-                limit,
-                totalPages,
-            },
-            message: "Learning events fetched successfully",
-            success: true,
-        };
-    } catch (error) {
-        logger.error(`Failed to fetch learning events: ${error}`);
-        return {
-            data: null,
-            message: "Failed to fetch learning events",
             success: false,
         };
     }
