@@ -94,7 +94,7 @@ export default async function SingleUserPage({
   const stats = [
     { label: "Bookmarked", value: user.bookmarkedCount, icon: Bookmark },
     { label: "Still Learning", value: rich.stillLearning.length, icon: BookOpen },
-    { label: "Learned", value: rich.learned.length, icon: GraduationCap },
+    { label: "Learned", value: user.learnedWordCount, icon: GraduationCap },
     { label: "Quiz Result", value: `${rich.quizResult}%`, icon: ClipboardCheck },
   ];
 
@@ -190,7 +190,7 @@ export default async function SingleUserPage({
               ],
               ["Role", user.role],
               ["Status", rich.status],
-              ["Total Words Studied", String(rich.totalWordsStudied)],
+              ["Total Words Studied", String(user.learnedWordCount)],
               ["Joined", formatDay(rich.joinedAt)],
               ["Last Active", formatDay(rich.lastActive)],
               ["Study Streak", `${rich.studyStreak} days`],

@@ -9,6 +9,7 @@ export type ApiUser = {
   created_at: string;
   updated_at: string;
   bookmarkedCount: number;
+  learnedWordCount: number;
 };
 
 export type UserListResponse = {
