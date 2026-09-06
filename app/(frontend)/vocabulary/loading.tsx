@@ -1,1 +1,1 @@
-export { default } from "@/components/PageLoader";
+export { VocabularySkeleton as default } from "@/components/skeletons";

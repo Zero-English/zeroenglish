@@ -1,0 +1,1 @@
+export { LoginSkeleton as default } from "@/components/skeletons";
