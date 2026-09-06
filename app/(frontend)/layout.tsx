@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { SidebarProvider } from "@/components/sidebar-provider";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import Footer from "@/components/Footer";
+import { TopLoader } from "@/components/top-loader";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export default function FrontendLayout({
 }>) {
   return (
     <HtmlShell>
+      <TopLoader />
       <SidebarProvider>
         <div className="flex flex-col min-h-screen md:flex-row">
           <Sidebar />
