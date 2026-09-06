@@ -9,6 +9,7 @@ import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, LogIn, LogOut
 import { toast } from "sonner";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
+import { cn } from "@/lib/utils";
 import {
   Sheet,
   SheetContent,
@@ -16,12 +17,16 @@ import {
 } from "@/components/ui/sheet";
 import logo from "../public/assets/logo.png";
 
+const spring = { type: "spring", stiffness: 420, damping: 32, mass: 0.9 } as const;
+
 function NavLinks({
   isOpen: showLabels,
   onNavigate,
+  activeId,
 }: {
   isOpen: boolean;
   onNavigate?: () => void;
+  activeId: string;
 }) {
   const pathname = usePathname();
   const { status } = useAuthStatus();
@@ -45,13 +50,16 @@ function NavLinks({
             key={link.href}
             href={link.href}
             onClick={onNavigate}
-            className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors gap-3 whitespace-nowrap ${
-              isActive
-                ? "bg-primary/10 text-primary"
-                : "text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300 dark:hover:text-white"
-            }`}
+            className="relative flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors gap-3 whitespace-nowrap text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300 dark:hover:text-white"
           >
-            <link.icon className="h-5 w-5 shrink-0" />
+            {isActive && (
+              <motion.span
+                layoutId={activeId}
+                transition={spring}
+                className="absolute inset-0 rounded-md border border-primary/20 bg-primary/15"
+              />
+            )}
+            <link.icon className={cn("h-5 w-5 shrink-0 relative", isActive && "text-primary")} />
             <AnimatePresence initial={false}>
               {showLabels && (
                 <motion.span
@@ -59,7 +67,7 @@ function NavLinks({
                   animate={{ opacity: 1, width: "auto" }}
                   exit={{ opacity: 0, width: 0 }}
                   transition={{ duration: 0.15 }}
-                  className="truncate"
+                  className={cn("relative truncate", isActive && "text-primary font-semibold")}
                 >
                   {link.label}
                 </motion.span>
@@ -130,7 +138,7 @@ export function Sidebar() {
           </button>
         </div>
         <div className="flex flex-col flex-1 overflow-hidden">
-          <NavLinks isOpen={isDesktopOpen} />
+          <NavLinks isOpen={isDesktopOpen} activeId="sidebar-active-desktop" />
           {isLoggedIn && (
             <LogoutButton showLabels={isDesktopOpen} onLogout={handleLogout} />
           )}
@@ -154,7 +162,7 @@ export function Sidebar() {
             </Link>
           </div>
           <div className="flex flex-col flex-1 overflow-hidden">
-            <NavLinks isOpen onNavigate={close} />
+            <NavLinks isOpen onNavigate={close} activeId="sidebar-active-mobile" />
             {isLoggedIn && (
               <LogoutButton showLabels onLogout={handleLogout} />
             )}

@@ -10,8 +10,10 @@ import { cn } from '@/lib/utils'
 import { useAuthStatus } from '@/lib/auth-store'
 import { UserAvatar } from '@/components/UserAvatar'
 
+const spring = { type: 'spring', stiffness: 420, damping: 32, mass: 0.9 } as const
+
 const itemClass =
-  'flex flex-1 flex-col items-center gap-0.5 rounded-lg px-1 py-1.5 transition-colors'
+  'relative flex flex-1 flex-col items-center gap-0.5 rounded-lg px-1 py-1.5 transition-colors'
 
 export function MobileBottomNav() {
   const pathname = usePathname()
@@ -49,10 +51,10 @@ export function MobileBottomNav() {
   return (
     <motion.nav
       animate={{ y: isHidden ? '100%' : '0%' }}
-      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={spring}
       className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 md:hidden"
     >
-      <div className="flex items-center justify-between p-1">
+      <div className="relative flex items-center justify-between p-1">
         {links.map(({ href, label, icon: Icon, avatar }) => {
           const active =
             href === '/' ? pathname === '/' : pathname.startsWith(href)
@@ -63,27 +65,54 @@ export function MobileBottomNav() {
               href={href}
               className={cn(
                 itemClass,
-                active
-                  ? 'bg-foreground/10 text-foreground'
-                  : 'text-muted-foreground',
+                active ? 'text-foreground' : 'text-muted-foreground',
               )}
             >
-              {showAvatar ? (
-                <UserAvatar
-                  id={avatar.id ?? 0}
-                  name={avatar.name}
-                  userName={avatar.name}
-                  image={avatar.image}
-                  size="sm"
+              {active && (
+                <motion.span
+                  layoutId="bottom-nav-active"
+                  transition={spring}
+                  className="absolute inset-0 rounded-lg border border-primary/20 bg-primary/15"
                 />
-              ) : (
-                <Icon className="size-5" strokeWidth={active ? 2.5 : 2} />
               )}
-              {!showAvatar && (
-                <span className="text-[10px] font-medium leading-none">
-                  {label}
-                </span>
-              )}
+              <span className="relative z-10 flex flex-col items-center gap-0.5">
+                {showAvatar ? (
+                  <UserAvatar
+                    id={avatar.id ?? 0}
+                    name={avatar.name}
+                    userName={avatar.name}
+                    image={avatar.image}
+                    size="sm"
+                  />
+                ) : (
+                  <motion.span
+                    animate={active ? { y: -2, scale: 1.15 } : { y: 0, scale: 1 }}
+                    transition={spring}
+                    className="block [&>svg]:transition-colors"
+                  >
+                    <Icon
+                      className={cn('size-5', active && 'text-primary')}
+                      strokeWidth={active ? 2.5 : 2}
+                    />
+                  </motion.span>
+                )}
+                {!showAvatar && (
+                  <motion.span
+                    animate={
+                      active
+                        ? { opacity: 1, y: 0, scale: 1 }
+                        : { opacity: 0.75, y: 0, scale: 1 }
+                    }
+                    transition={{ duration: 0.18 }}
+                    className={cn(
+                      'text-[10px] leading-none transition-colors',
+                      active ? 'font-bold text-primary' : 'font-medium',
+                    )}
+                  >
+                    {label}
+                  </motion.span>
+                )}
+              </span>
             </Link>
           )
         })}

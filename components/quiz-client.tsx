@@ -19,6 +19,8 @@ import Link from "next/link";
 
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
 
+type QuizLevel = LevelOption | "C1" | "C2";
+
 interface Question {
   word: Word;
   options: { text: string; correct: boolean }[];
@@ -27,7 +29,7 @@ interface Question {
 const LEVEL_SCOPE_OPTIONS: LevelOption[] = ["A1", "A2", "B1", "B2", "Random"];
 
 const LEVEL_CONFIG: Record<
-  LevelOption,
+  QuizLevel,
   { bg: string; border: string; text: string; gradient: string; label: string }
 > = {
   A1: {
@@ -64,6 +66,20 @@ const LEVEL_CONFIG: Record<
     text: "text-purple-700 dark:text-purple-300",
     gradient: "from-purple-500 to-violet-500",
     label: "Mixed Levels",
+  },
+  C1: {
+    bg: "bg-violet-50 dark:bg-violet-950/40",
+    border: "border-violet-200 dark:border-violet-800",
+    text: "text-violet-700 dark:text-violet-300",
+    gradient: "from-violet-500 to-purple-500",
+    label: "Advanced",
+  },
+  C2: {
+    bg: "bg-fuchsia-50 dark:bg-fuchsia-950/40",
+    border: "border-fuchsia-200 dark:border-fuchsia-800",
+    text: "text-fuchsia-700 dark:text-fuchsia-300",
+    gradient: "from-fuchsia-500 to-pink-500",
+    label: "Mastery",
   },
 };
 
@@ -198,7 +214,7 @@ export function QuizClient({ words }: { words: Word[] }) {
       );
       const picked = levels.filter((lv) => lv !== "Random");
       if (levels.length === 0 || picked.length === 0) return validWords;
-      return validWords.filter((w) => picked.includes(w.level));
+      return validWords.filter((w) => (picked as readonly QuizLevel[]).includes(w.level));
     },
     [words]
   );

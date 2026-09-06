@@ -28,6 +28,8 @@ const LEVEL_GRADIENT: Record<string, string> = {
   A2: "from-sky-500 to-blue-500",
   B1: "from-amber-500 to-orange-500",
   B2: "from-rose-500 to-pink-500",
+  C1: "from-violet-500 to-purple-500",
+  C2: "from-fuchsia-500 to-pink-500",
 };
 
 export function SearchClient() {
