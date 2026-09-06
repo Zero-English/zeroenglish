@@ -1,5 +1,5 @@
 import { cache } from "react";
-import prisma from "@/utils/prisma";
+import prisma, { withPrismaRetry } from "@/utils/prisma";
 import type { Levels } from "@/generated/prisma/enums";
 
 export type Word = {
@@ -52,17 +52,21 @@ function toPublicWord(w: DbWordRecord): Word {
 }
 
 export const getAllWords = cache(async (): Promise<Word[]> => {
-  const words = await prisma.word.findMany({ orderBy: { id: "asc" } });
+  const words = await withPrismaRetry(() =>
+    prisma.word.findMany({ orderBy: { id: "asc" } })
+  );
   return words.map(toPublicWord);
 });
 
 export const getWordsByLevel = cache(
   async (level: string): Promise<Word[]> => {
     const upper = level.toUpperCase() as Levels;
-    const words = await prisma.word.findMany({
-      where: { level: upper },
-      orderBy: { id: "asc" },
-    });
+    const words = await withPrismaRetry(() =>
+      prisma.word.findMany({
+        where: { level: upper },
+        orderBy: { id: "asc" },
+      })
+    );
     return words.map(toPublicWord);
   }
 );

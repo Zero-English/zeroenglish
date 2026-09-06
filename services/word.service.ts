@@ -449,40 +449,18 @@ export const deleteWordById = async (id: number) => {
 
 export const markWordAsLearned = async (userId: number, wordId: number) => {
     try {
-        return prisma.$transaction(async (tx) => {
-            const existing = await tx.userWord.findUnique({
-                where: {
-                    userId_wordId: {
-                        userId,
-                        wordId,
-                    },
-                },
-            });
-
-            // Already learned → don't create another learning event
-            if (existing?.isLearned === "LEARNED") {
-                return existing;
-            }
-
-            // Update current state
-            const userWord = await tx.userWord.upsert({
-                where: {
-                    userId_wordId: {
-                        userId,
-                        wordId,
-                    },
-                },
-                create: {
+        return prisma.userWord.upsert({
+            where: {
+                userId_wordId: {
                     userId,
                     wordId,
-                    isLearned: "LEARNED",
                 },
-                update: {
-                    isLearned: "LEARNED",
-                },
-            });
-
-            return userWord;
+            },
+            create: {
+                userId,
+                wordId,
+            },
+            update: {},
         });
     } catch (error) {
         logger.error(`Failed to mark word as learned: ${error}`);
@@ -496,41 +474,29 @@ export const markWordAsLearned = async (userId: number, wordId: number) => {
 
 export const markWordAsUnLearned = async (userId: number, wordId: number) => {
     try {
-        return prisma.$transaction(async (tx) => {
-            const existing = await tx.userWord.findUnique({
-                where: {
-                    userId_wordId: {
-                        userId,
-                        wordId,
-                    },
-                },
-            });
-
-            // Already unlearned → don't create another unlearning event
-            if (existing?.isLearned === "UNLEARNED") {
-                return existing;
-            }
-
-            // Update current state
-            const userWord = await tx.userWord.upsert({
-                where: {
-                    userId_wordId: {
-                        userId,
-                        wordId,
-                    },
-                },
-                create: {
+        const existing = await prisma.userWord.findUnique({
+            where: {
+                userId_wordId: {
                     userId,
                     wordId,
-                    isLearned: "UNLEARNED",
                 },
-                update: {
-                    isLearned: "UNLEARNED",
-                },
-            });
-
-            return userWord;
+            },
         });
+
+        if (!existing) {
+            return null;
+        }
+
+        await prisma.userWord.delete({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+        });
+
+        return existing;
     } catch (error) {
         logger.error(`Failed to mark word as unlearned: ${error}`);
         return {
@@ -643,6 +609,29 @@ export const getUserBookmarkIds = async (userId: number) => {
         return {
             data: null,
             message: "Failed to fetch bookmarks",
+            success: false,
+        };
+    }
+};
+
+export const getLearnedWordIds = async (userId: number) => {
+    try {
+        const learned = await prisma.userWord.findMany({
+            where: { userId },
+            select: { wordId: true },
+            orderBy: { learnedAt: "desc" },
+        });
+
+        return {
+            data: learned.map((w) => w.wordId),
+            message: "Learned words fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch learned words: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch learned words",
             success: false,
         };
     }
