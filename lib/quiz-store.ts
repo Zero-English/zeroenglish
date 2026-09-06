@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { createLocalStorage } from "./state-storage";
 import type { Word } from "@/lib/data";
+import type { QuizType } from "@/lib/quiz-history-store";
 
 export type Step = "select" | "settings" | "quiz" | "results";
 export type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
@@ -21,7 +22,8 @@ export interface IncorrectAnswer {
 
 export interface QuizState {
   step: Step;
-  selectedLevel: LevelOption | null;
+  quizType: QuizType | null;
+  selectedLevels: LevelOption[];
   quantity: number;
   useAllQuestions: boolean;
   timePerQuestion: number;
@@ -38,7 +40,8 @@ export interface QuizState {
 
 const initialState: QuizState = {
   step: "select",
-  selectedLevel: null,
+  quizType: null,
+  selectedLevels: [],
   quantity: 10,
   useAllQuestions: false,
   timePerQuestion: 15,
