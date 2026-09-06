@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useSyncExternalStore,
   type ReactNode,
 } from "react";
@@ -98,6 +99,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     (value: string | number) => (lang === "en" ? String(value) : toBanglaDigits(value)),
     [lang]
   );
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.lang = lang;
+    root.lang = lang;
+  }, [lang]);
 
   return (
     <LanguageContext.Provider value={{ lang, setLanguage, toggleLanguage, t, num }}>
