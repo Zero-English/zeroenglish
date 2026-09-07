@@ -459,8 +459,11 @@ export const markWordAsLearned = async (userId: number, wordId: number) => {
             create: {
                 userId,
                 wordId,
+                learningStatus: "LEARNED",
             },
-            update: {},
+            update: {
+                learningStatus: "LEARNED",
+            },
         });
     } catch (error) {
         logger.error(`Failed to mark word as learned: ${error}`);
@@ -617,9 +620,9 @@ export const getUserBookmarkIds = async (userId: number) => {
 export const getLearnedWordIds = async (userId: number) => {
     try {
         const learned = await prisma.userWord.findMany({
-            where: { userId },
+            where: { userId, learningStatus: "LEARNED" },
             select: { wordId: true },
-            orderBy: { learnedAt: "desc" },
+            orderBy: { updatedAt: "desc" },
         });
 
         return {
@@ -632,6 +635,126 @@ export const getLearnedWordIds = async (userId: number) => {
         return {
             data: null,
             message: "Failed to fetch learned words",
+            success: false,
+        };
+    }
+};
+
+export const markWordsAsStillLearning = async (
+    userId: number,
+    wordIds: number[],
+) => {
+    try {
+        const uniqueIds = Array.from(
+            new Set(wordIds.filter((id) => Number.isInteger(id))),
+        );
+
+        if (uniqueIds.length === 0) {
+            return {
+                data: { count: 0 },
+                message: "No words to mark as still learning",
+                success: true,
+            };
+        }
+
+        const now = new Date();
+
+        await prisma.$transaction([
+            prisma.userWord.updateMany({
+                where: {
+                    userId,
+                    wordId: { in: uniqueIds },
+                },
+                data: { learningStatus: "STILL_LEARNING", updatedAt: now },
+            }),
+            prisma.userWord.createMany({
+                data: uniqueIds.map((wordId) => ({
+                    userId,
+                    wordId,
+                    learningStatus: "STILL_LEARNING",
+                    createdAt: now,
+                    updatedAt: now,
+                })),
+                skipDuplicates: true,
+            }),
+        ]);
+
+        return {
+            data: { count: uniqueIds.length },
+            message: "Words marked as still learning successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to mark words as still learning: ${error}`);
+        return {
+            data: null,
+            message: "Failed to mark words as still learning",
+            success: false,
+        };
+    }
+};
+
+export const getStillLearningWordIds = async (userId: number) => {
+    try {
+        const stillLearning = await prisma.userWord.findMany({
+            where: { userId, learningStatus: "STILL_LEARNING" },
+            select: { wordId: true },
+            orderBy: { updatedAt: "desc" },
+        });
+
+        return {
+            data: stillLearning.map((w) => w.wordId),
+            message: "Still learning words fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch still learning words: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch still learning words",
+            success: false,
+        };
+    }
+};
+
+export const removeStillLearning = async (userId: number, wordId: number) => {
+    try {
+        const existing = await prisma.userWord.findUnique({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+        });
+
+        if (!existing || existing.learningStatus !== "STILL_LEARNING") {
+            return {
+                data: null,
+                message: "Word not found in still learning",
+                success: false,
+            };
+        }
+
+        await prisma.userWord.delete({
+            where: {
+                userId_wordId: {
+                    userId,
+                    wordId,
+                },
+            },
+        });
+
+        return {
+            data: { wordId },
+            message: "Word removed from still learning successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to remove word from still learning: ${error}`);
+        return {
+            data: null,
+            message: "Failed to remove word from still learning",
             success: false,
         };
     }

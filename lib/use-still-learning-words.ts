@@ -1,18 +1,64 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { putWord, deleteWord, bulkPutWords, getWordsByType, WordListType } from "./db";
-import { useAuthPath } from "./auth-store";
-
-const TYPE = "still-learning" as const;
-const STORAGE_KEY = "still-learning-words";
+import { useAuthStatus } from "./auth-store";
 
 function key(id: number) {
   return String(id);
 }
 
+async function listServerStillLearning(): Promise<number[] | null> {
+  try {
+    const res = await fetch("/api/v1/words/still-learning", {
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const body = (await res.json()) as { data?: number[]; success?: boolean };
+    if (!body.success || !Array.isArray(body.data)) return null;
+    return body.data;
+  } catch (err) {
+    console.error("Failed to fetch still learning words from server:", err);
+    return null;
+  }
+}
+
+async function syncServerStillLearning(wordIds: number[]): Promise<void> {
+  try {
+    const res = await fetch("/api/v1/words/still-learning", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ wordIds }),
+    });
+    if (!res.ok) {
+      console.error(
+        "Failed to mark words as still learning on server:",
+        await res.text()
+      );
+    }
+  } catch (err) {
+    console.error("Failed to sync still learning words:", err);
+  }
+}
+
+async function deleteServerStillLearning(id: number): Promise<void> {
+  try {
+    const res = await fetch(`/api/v1/words/${id}/still-learning`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      console.error(
+        `Failed to remove still learning word #${id} on server:`,
+        await res.text()
+      );
+    }
+  } catch (err) {
+    console.error(`Failed to sync remove still learning word #${id}:`, err);
+  }
+}
+
 export function useStillLearningWords() {
-  const { path, hydrated } = useAuthPath();
+  const { status, hydrated } = useAuthStatus();
+  const authenticated = status === "google";
   const [stillLearningIds, setStillLearningIds] = useState<Set<string>>(
     new Set()
   );
@@ -22,46 +68,35 @@ export function useStillLearningWords() {
     if (!hydrated) return;
     (async () => {
       setLoaded(false);
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          const oldData = JSON.parse(stored) as string[];
-          await bulkPutWords(
-            oldData.map((k) => ({ id: String(Number(k.split("|")[0])), type: TYPE }))
-              .filter((e) => Number.isFinite(Number(e.id))),
-            path
-          );
-          localStorage.removeItem(STORAGE_KEY);
+      if (authenticated) {
+        try {
+          const ids = await listServerStillLearning();
+          if (ids) setStillLearningIds(new Set(ids.map(String)));
+        } catch (err) {
+          console.error("Failed to load still-learning words:", err);
         }
-
-        const records = await getWordsByType(TYPE, path);
-        setStillLearningIds(new Set(records.map((r) => r.id)));
-      } catch (err) {
-        console.error("Failed to load still-learning words:", err);
+      } else {
+        setStillLearningIds(new Set());
       }
       setLoaded(true);
     })();
-  }, [path, hydrated]);
+  }, [hydrated, authenticated]);
 
   const addStillLearning = useCallback(
     (entries: { id: number }[]) => {
-      const ks = entries.map(({ id }) => key(id));
+      const ids = entries.map(({ id }) => id);
 
       setStillLearningIds((prev) => {
         const next = new Set(prev);
-        for (const k of ks) next.add(k);
+        for (const id of ids) next.add(key(id));
         return next;
       });
 
-      const toPut: { id: string; type: WordListType }[] = ks.map((k) => ({
-        id: k,
-        type: TYPE,
-      }));
-      if (toPut.length > 0) {
-        bulkPutWords(toPut, path);
+      if (authenticated && ids.length > 0) {
+        syncServerStillLearning(ids);
       }
     },
-    [path]
+    [authenticated]
   );
 
   const toggleStillLearning = useCallback(
@@ -74,12 +109,12 @@ export function useStillLearningWords() {
         return next;
       });
       if (stillLearningIds.has(k)) {
-        deleteWord(path, TYPE, k);
+        if (authenticated) deleteServerStillLearning(id);
       } else {
-        putWord({ id: k, type: TYPE }, path);
+        if (authenticated) syncServerStillLearning([id]);
       }
     },
-    [path, stillLearningIds]
+    [authenticated, stillLearningIds]
   );
 
   const removeStillLearning = useCallback(
@@ -90,9 +125,9 @@ export function useStillLearningWords() {
         next.delete(k);
         return next;
       });
-      deleteWord(path, TYPE, k);
+      if (authenticated) deleteServerStillLearning(id);
     },
-    [path]
+    [authenticated]
   );
 
   const isStillLearning = useCallback(

@@ -15,7 +15,6 @@ import DailyProgress from "./daily-progress";
 import { UserAvatar } from "@/components/UserAvatar";
 
 const RICH = {
-  stillLearning: [2, 5, 9, 14, 20, 28, 35, 41, 50, 58, 63, 72, 80, 91, 100],
   learned: [4, 6, 10, 15, 22, 30, 38, 46, 53, 60, 68, 75, 82, 90, 98],
   quizResult: 78,
   status: "Active" as const,
@@ -93,7 +92,7 @@ export default async function SingleUserPage({
 
   const stats = [
     { label: "Bookmarked", value: user.bookmarkedCount, icon: Bookmark },
-    { label: "Still Learning", value: rich.stillLearning.length, icon: BookOpen },
+    { label: "Still Learning", value: user.stillLearningCount, icon: BookOpen },
     { label: "Learned", value: user.learnedWordCount, icon: GraduationCap },
     { label: "Quiz Result", value: `${rich.quizResult}%`, icon: ClipboardCheck },
   ];
