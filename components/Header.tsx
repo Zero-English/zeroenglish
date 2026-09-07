@@ -8,7 +8,8 @@ import { useLanguage } from "@/components/language-provider";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { motion } from "motion/react";
-import logo from "../public/assets/logo.png";
+import logoLight from "../public/assets/logo/zeroenglish-new-logo-light.png";
+import logoDark from "../public/assets/logo/zeroenglish-new-logo-dark.png";
 
 export function Header() {
   const { toggle } = useSidebar();
@@ -70,16 +71,8 @@ export function Header() {
       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
       className={` bg-background/95 backdrop-blur md:border-b supports-backdrop-filter:bg-background/80 sticky top-0 z-30 ${isScrolled ? "border-b" : ""}`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative">
-        <div className="flex items-center gap-1">
-          <button
-            onClick={toggle}
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-md"
-          >
-            <Menu className="h-6 w-6" />
-          </button>
-        </div>
-        <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center space-x-2">
-          <Image src={logo} alt="Logo" className="h-5 w-auto dark:brightness-0 dark:invert" />
+        <Link href="/" className="flex items-center space-x-2">
+          <Image src={mounted && currentTheme === "dark" ? logoDark : logoLight} alt="Logo" className="h-10 w-auto" />
         </Link>
         <div className="flex items-center gap-1">
           <button
@@ -106,12 +99,13 @@ export function Header() {
               <Moon className="h-5 w-5" />
             ))}
           </button>
-          <Link
-            href="/search"
-            className="inline-flex items-center justify-center p-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          <button
+            onClick={toggle}
+            aria-label="Open menu"
+            className="md:hidden inline-flex items-center justify-center p-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           >
-            <Search className="h-5 w-5" />
-          </Link>
+            <Menu className="h-6 w-6" />
+          </button>
         </div>
       </nav>
     </motion.header>

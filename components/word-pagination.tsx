@@ -27,9 +27,9 @@ export function WordPagination({ currentPage, totalPages, level }: PaginationPro
 
   const createPageUrl = (page: number) => {
     if (page === 1) {
-      return `/${level ?? ""}`;
+      return `/vocabulary/${level ?? ""}`;
     }
-    return `/${level ?? ""}/${page}`;
+    return `/vocabulary/${level ?? ""}/${page}`;
   };
 
   const pageItems = getPageItems();

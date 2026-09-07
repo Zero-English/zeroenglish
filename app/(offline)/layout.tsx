@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "You're Offline",
   description: "No internet connection",
   manifest: "/manifest.webmanifest",
-  icons: "/assets/icon.jpeg",
+  icons: "/assets/logo/zeroenglish-new-logo-square.png",
   other: {
     "theme-color": "#f97316",
   },

@@ -9,6 +9,7 @@ import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, LogIn, LogOut
 import { toast } from "sonner";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
+import { useSelectedLevel } from "@/lib/level-store";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import {
@@ -16,7 +17,9 @@ import {
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet";
-import logo from "../public/assets/logo.png";
+import logoLight from "../public/assets/logo/zeroenglish-new-logo-light.png";
+import logoDark from "../public/assets/logo/zeroenglish-new-logo-dark.png";
+import { useTheme } from "next-themes";
 
 const spring = { type: "spring", stiffness: 420, damping: 32, mass: 0.9 } as const;
 
@@ -31,11 +34,13 @@ function NavLinks({
 }) {
   const pathname = usePathname();
   const { status } = useAuthStatus();
+  const { level } = useSelectedLevel();
   const t = useT();
   const isLoggedIn = status !== "none";
+  const vocabularyHref = level ? `/vocabulary/${level.toLowerCase()}` : "/vocabulary";
   const navLinks = [
     { href: "/", label: t("হোম", "Home"), icon: Home },
-    { href: "/vocabulary", label: t("শব্দভাণ্ডার", "Vocabulary"), icon: LibraryBig },
+    { href: vocabularyHref, label: t("শব্দভাণ্ডার", "Vocabulary"), icon: LibraryBig },
     { href: "/search", label: t("অনুসন্ধান", "Search"), icon: Search },
     { href: "/quiz", label: t("কুইজ", "Quiz"), icon: BookOpenCheck },
     isLoggedIn
@@ -107,6 +112,8 @@ function LogoutButton({
 export function Sidebar() {
   const { isOpen, isDesktopOpen, close, toggleDesktop } = useSidebar();
   const { status } = useAuthStatus();
+  const { theme, systemTheme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
   const t = useT();
   const logout = useAuthStore((s) => s.logout);
   const isLoggedIn = status !== "none";
@@ -156,13 +163,13 @@ export function Sidebar() {
           className="w-64 gap-0 p-0 bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800"
         >
           <SheetTitle className="sr-only">{t("নেভিগেশন মেনু", "Navigation Menu")}</SheetTitle>
-          <div className="flex items-center p-4 border-b">
+          <div className="flex items-center p-3 border-b">
             <Link
               href="/"
               onClick={close}
               className="flex items-center space-x-2"
             >
-              <Image src={logo} alt="Logo" className="h-5 w-auto dark:brightness-0 dark:invert" />
+              <Image src={currentTheme === "dark" ? logoDark : logoLight} alt="Logo" className="h-10 w-auto" />
             </Link>
           </div>
           <div className="flex flex-col flex-1 overflow-hidden">
