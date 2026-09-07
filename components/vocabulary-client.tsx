@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { useLearnedWords } from "@/lib/use-learned-words";
+import { useSelectedLevel, setSelectedLevel } from "@/lib/level-store";
 import { useT, useNum } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import type { WordRef, WordStatsResponse } from "@/types/api";
@@ -83,8 +85,16 @@ const LEVELS = Object.keys(LEVEL_CARD_CONFIG);
 
 export function VocabularyClient() {
   const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
+  const { level: storedLevel, hydrated } = useSelectedLevel();
+  const router = useRouter();
   const t = useT();
   const num = useNum();
+
+  useEffect(() => {
+    if (hydrated && storedLevel) {
+      router.replace(`/vocabulary/${storedLevel.toLowerCase()}`);
+    }
+  }, [hydrated, storedLevel, router]);
 
   const [stats, setStats] = useState<Record<string, number>>({});
   const [wordRefs, setWordRefs] = useState<WordRef[]>([]);
@@ -195,7 +205,8 @@ export function VocabularyClient() {
                   className="h-full"
                 >
                   <Link
-                    href={`/${lv.toLowerCase()}`}
+                    href={`/vocabulary/${lv.toLowerCase()}`}
+                    onClick={() => setSelectedLevel(lv.toUpperCase() as Parameters<typeof setSelectedLevel>[0])}
                     className={cn(
                       "group relative flex h-full flex-col overflow-hidden rounded-3xl border-2 p-4 sm:p-5 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98]",
                       c.border,

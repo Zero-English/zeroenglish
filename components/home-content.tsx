@@ -186,7 +186,7 @@ export function HomeContent({ words }: { words: Word[] }) {
                 return (
                   <Link
                     key={level}
-                    href={`/${level.toLowerCase()}`}
+                    href={`/vocabulary/${level.toLowerCase()}`}
                     className={cn(
                       "group relative overflow-hidden rounded-3xl border-2 p-5 sm:p-6 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98]",
                       c.border,

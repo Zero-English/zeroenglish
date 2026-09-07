@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { useAuthStatus } from '@/lib/auth-store'
+import { useSelectedLevel } from '@/lib/level-store'
 import { useT } from '@/components/language-provider'
 import { UserAvatar } from '@/components/UserAvatar'
 
@@ -23,9 +24,11 @@ export function MobileBottomNav() {
   const isLoggedIn = status !== 'none'
   const isGoogle = status === 'google'
   const t = useT()
+  const { level } = useSelectedLevel()
+  const vocabularyHref = level ? `/vocabulary/${level.toLowerCase()}` : '/vocabulary'
   const links = [
     { href: '/', label: t('হোম', 'Home'), icon: Home },
-    { href: '/vocabulary', label: t('শব্দভাণ্ডার', 'Vocabulary'), icon: LibraryBig },
+    { href: vocabularyHref, label: t('শব্দভাণ্ডার', 'Vocabulary'), icon: LibraryBig },
     { href: '/search', label: t('অনুসন্ধান', 'Search'), icon: Search },
     { href: '/quiz', label: t('কুইজ', 'Quiz'), icon: BadgeQuestionMark },
     isLoggedIn

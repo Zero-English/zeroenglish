@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import type { Word } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
+import { setSelectedLevel } from "@/lib/level-store";
 import { useT, useNum } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, Sparkles, CheckCircle2 } from "lucide-react";
@@ -48,6 +49,7 @@ export function LevelHero({
       <div className="relative mx-auto max-w-4xl px-4 pt-8 pb-6 sm:px-6 lg:px-8">
         <Link
           href="/vocabulary"
+          onClick={() => setSelectedLevel(null)}
           className="group inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />

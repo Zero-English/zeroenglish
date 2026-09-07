@@ -4,7 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, ArrowRight } from "lucide-react";
 import { useT } from "@/components/language-provider";
-import logo from "../public/assets/logo.png";
+import logoLight from "../public/assets/logo/zeroenglish-new-logo-light.png";
+import logoDark from "../public/assets/logo/zeroenglish-new-logo-dark.png";
+import { useTheme } from "next-themes";
 
 interface FooterLink {
   labelBn: string;
@@ -21,6 +23,8 @@ interface FooterColumn {
 export default function FFooter() {
   const currentYear = new Date().getFullYear();
   const t = useT();
+  const { theme, systemTheme } = useTheme();
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
   const footerColumns: FooterColumn[] = [
     {
@@ -66,9 +70,9 @@ export default function FFooter() {
           <div className="lg:col-span-2 space-y-5 max-w-sm">
             <Link href="/" className="inline-flex items-center space-x-2">
               <Image
-                src={logo}
+                src={currentTheme === "dark" ? logoDark : logoLight}
                 alt="Zero English"
-                className="h-6 w-auto dark:brightness-0 dark:invert"
+                className="h-10 w-auto"
               />
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
@@ -102,7 +106,7 @@ export default function FFooter() {
                   <li key={`${column.categoryEn}-${link.labelEn}`}>
                     <Link
                       href={link.href}
-                      className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors active:text-foreground hover:text-foreground"
                     >
                       <ArrowRight className="size-3.5 shrink-0 text-muted-foreground/50 transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
                       {t(link.labelBn, link.labelEn)}
@@ -126,18 +130,19 @@ export default function FFooter() {
             )}
           </p>
           <div className="flex space-x-6">
-            <Link href="/privacy" className="hover:text-foreground transition-colors">
+            <Link href="/privacy" className="hover:text-foreground active:text-foreground transition-colors">
               {t("গোপনীয়তা", "Privacy")}
             </Link>
-            <Link href="#" className="hover:text-foreground transition-colors">
+            <Link href="#" className="hover:text-foreground active:text-foreground transition-colors">
               {t("শর্তাবলী", "Terms")}
             </Link>
-            <Link href="#" className="hover:text-foreground transition-colors">
+            <Link href="#" className="hover:text-foreground active:text-foreground transition-colors">
               {t("কুকিজ", "Cookies")}
             </Link>
           </div>
         </div>
       </div>
+      <div className="h-12 block md:hidden"></div>
     </footer>
   );
 }

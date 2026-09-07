@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { motion } from "motion/react";
 import type { Word } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 import { useLevelPage, useLevelFilter, useLevelSort, setLevelState } from "@/lib/level-pagination-store";
+import { setSelectedLevel } from "@/lib/level-store";
 import { useT, useNum } from "@/components/language-provider";
 
 const ITEMS_PER_PAGE = 10;
@@ -43,6 +44,10 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
   const loaded = learnedLoaded && bookmarkLoaded;
   const t = useT();
   const num = useNum();
+
+  useEffect(() => {
+    setSelectedLevel(level.toUpperCase() as Parameters<typeof setSelectedLevel>[0]);
+  }, [level]);
 
   const page = useLevelPage(level);
   const filter = useLevelFilter(level);
