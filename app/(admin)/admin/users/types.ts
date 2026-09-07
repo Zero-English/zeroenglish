@@ -10,6 +10,7 @@ export type ApiUser = {
   updated_at: string;
   bookmarkedCount: number;
   learnedWordCount: number;
+  stillLearningCount: number;
 };
 
 export type UserListResponse = {
