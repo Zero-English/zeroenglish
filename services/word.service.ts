@@ -759,3 +759,139 @@ export const removeStillLearning = async (userId: number, wordId: number) => {
         };
     }
 };
+
+const LEARNED_ACTIVITY_RANGES = [
+    "today",
+    "yesterday",
+    "7d",
+    "14d",
+    "30d",
+    "90d",
+    "1y",
+] as const;
+
+function hourLabel(h: number): string {
+    const ampm = h >= 12 ? "PM" : "AM";
+    const hr = h % 12 === 0 ? 12 : h % 12;
+    return `${hr} ${ampm}`;
+}
+
+function dateKey(d: Date): string {
+    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+}
+
+function hourlyLearnedActivity(
+    timestamps: Date[],
+    dayOffset: number,
+): { label: string; learned: number }[] {
+    const day = new Date();
+    day.setHours(0, 0, 0, 0);
+    day.setDate(day.getDate() - dayOffset);
+    const dayKey = dateKey(day);
+
+    const buckets: { label: string; learned: number }[] = [];
+    for (let h = 7; h <= 21; h++) {
+        buckets.push({ label: hourLabel(h), learned: 0 });
+    }
+
+    for (const t of timestamps) {
+        if (dateKey(t) !== dayKey) continue;
+        const h = t.getHours();
+        if (h >= 7 && h <= 21) buckets[h - 7].learned += 1;
+    }
+
+    return buckets;
+}
+
+function dailyLearnedActivity(
+    timestamps: Date[],
+    days: number,
+    endOffset: number,
+): { label: string; learned: number }[] {
+    const buckets: { label: string; learned: number }[] = [];
+    const index = new Map<string, { label: string; learned: number }>();
+    for (let i = days - 1; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - (i + endOffset));
+        const bucket = {
+            label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+            learned: 0,
+        };
+        buckets.push(bucket);
+        index.set(dateKey(d), bucket);
+    }
+
+    for (const t of timestamps) {
+        const bucket = index.get(dateKey(t));
+        if (bucket) bucket.learned += 1;
+    }
+
+    return buckets;
+}
+
+export const getLearnedWordActivity = async (userId: number, range: string) => {
+    try {
+        const valid = LEARNED_ACTIVITY_RANGES.includes(
+            range as (typeof LEARNED_ACTIVITY_RANGES)[number],
+        );
+        if (!valid) {
+            return {
+                data: null,
+                message: "Invalid range",
+                success: false,
+            };
+        }
+
+        const isHourly = range === "today" || range === "yesterday";
+        const dayCount =
+            range === "7d"
+                ? 7
+                : range === "14d"
+                  ? 14
+                  : range === "30d"
+                    ? 30
+                    : range === "90d"
+                      ? 90
+                      : range === "1y"
+                        ? 365
+                        : 2;
+
+        const since = new Date();
+        since.setHours(0, 0, 0, 0);
+        since.setDate(since.getDate() - dayCount * 2);
+
+        const rows = await prisma.userWord.findMany({
+            where: {
+                userId,
+                learningStatus: "LEARNED",
+                updatedAt: { gte: since },
+            },
+            select: { updatedAt: true },
+        });
+
+        const timestamps = rows.map((r) => r.updatedAt);
+
+        const current = isHourly
+            ? hourlyLearnedActivity(timestamps, range === "today" ? 0 : 1)
+            : dailyLearnedActivity(timestamps, dayCount, 0);
+        const previous = isHourly
+            ? hourlyLearnedActivity(timestamps, range === "today" ? 1 : 2)
+            : dailyLearnedActivity(timestamps, dayCount, dayCount);
+
+        return {
+            data: {
+                current,
+                previous,
+            },
+            message: "Learned word activity fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch learned word activity: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch learned word activity",
+            success: false,
+        };
+    }
+};

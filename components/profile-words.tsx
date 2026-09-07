@@ -250,6 +250,10 @@ function WordItem({
 
 export function ProfileTabs({ words }: { words: Word[] }) {
   const activeTab = useActiveTab();
+  const normalizedTab = activeTab === "still-learning" ? "quiz" : activeTab;
+  const [quizSubTab, setQuizSubTab] = useState<"history" | "still-learning">(
+    activeTab === "still-learning" ? "still-learning" : "history"
+  );
   const quizCount = useQuizHistoryStore((s) => s.entries.length);
   const { bookmarkedIds, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const { learnedIds, isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
@@ -315,7 +319,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   };
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab}>
+    <Tabs value={normalizedTab} onValueChange={setActiveTab}>
       <div className="overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden">
         <TabsList>
           <TabsTrigger value="overview" className="flex items-center gap-1.5">
@@ -328,15 +332,6 @@ export function ProfileTabs({ words }: { words: Word[] }) {
             {bookmarked.length > 0 && (
               <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
                 {num(bookmarked.length)}
-              </span>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="still-learning" className="flex items-center gap-1.5">
-            <RefreshCw className="h-4 w-4" />
-            {t("শিখছে", "Still Learning")}
-            {stillLearning.length > 0 && (
-              <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300">
-                {num(stillLearning.length)}
               </span>
             )}
           </TabsTrigger>
@@ -573,105 +568,6 @@ export function ProfileTabs({ words }: { words: Word[] }) {
         )}
       </TabsContent>
 
-      <TabsContent value="still-learning">
-        {stillLearning.length > 0 ? (() => {
-          const totalPagesS = Math.max(1, Math.ceil(stillLearning.length / ITEMS_PER_PAGE));
-          const currentPageS = Math.min(stillLearningPage, totalPagesS);
-          const startS = (currentPageS - 1) * ITEMS_PER_PAGE;
-          const pageWordsS = stillLearning.slice(startS, startS + ITEMS_PER_PAGE);
-          return (
-            <>
-              <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-                {t(`${num(stillLearning.length)}টি শব্দ পর্যালোচনা করতে হবে`, `${stillLearning.length} word${stillLearning.length !== 1 ? "s" : ""} to review`)}
-              </p>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <StaggerContainer className="contents">
-                  {pageWordsS.map((word) => (
-                    <StaggerItem
-                      key={wordKey(word)}
-                      onDoubleClick={() => handleMarkLearned(word.id)}
-                      className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80 cursor-pointer"
-                    >
-                      <div className="absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b from-orange-400 to-amber-500 opacity-60" />
-                      <WordCardDetails word={word} />
-                      <div className="absolute top-3 right-3 flex gap-1">
-                        <button
-                          onClick={() => toggleBookmark(word.id)}
-                          className={cn(
-                            "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
-                            bookmarkedIds.has(wordKey(word))
-                              ? "text-amber-500 hover:text-amber-600"
-                              : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
-                          )}
-                          title={bookmarkedIds.has(wordKey(word)) ? t("বুকমার্ক সরান", "Remove bookmark") : t("বুকমার্ক করুন", "Bookmark")}
-                        >
-                          {bookmarkedIds.has(wordKey(word)) ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
-                        </button>
-                        <button
-                          onClick={() => handleMarkLearned(word.id)}
-                          className={cn(
-                            "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
-                            learnedIds.has(wordKey(word))
-                              ? "text-emerald-500 hover:text-emerald-600"
-                              : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
-                          )}
-                          title={t("শেখা হয়েছে হিসেবে চিহ্নিত করুন", "Mark as learned")}
-                        >
-                          <CheckCircle2 className="h-5 w-5" />
-                        </button>
-                      </div>
-                    </StaggerItem>
-                  ))}
-                </StaggerContainer>
-              </div>
-              <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
-        {t(
-          `মোট ${num(stillLearning.length)}টির মধ্যে ${num(startS + 1)}–${num(Math.min(startS + ITEMS_PER_PAGE, stillLearning.length))} দেখানো হচ্ছে`,
-          `Showing ${startS + 1}–${Math.min(startS + ITEMS_PER_PAGE, stillLearning.length)} of ${stillLearning.length}`
-        )}
-      </p>
-      {totalPagesS > 1 && (
-                <Pagination>
-                  <div className="flex items-center gap-0.5 max-w-full">
-                    <PaginationItem>
-                      <PaginationPrevious
-                        href="#"
-                        onClick={(e) => { e.preventDefault(); if (currentPageS > 1) setStillLearningPage(currentPageS - 1); }}
-                        className={cn(currentPageS <= 1 ? "pointer-events-none opacity-50" : "")}
-                      />
-                    </PaginationItem>
-                    <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                      <PaginationContent>
-                        {Array.from({ length: totalPagesS }, (_, i) => i + 1).map((p) => (
-                          <PaginationItem key={p}>
-                            <PaginationLink
-                              href="#"
-                              onClick={(e) => { e.preventDefault(); setStillLearningPage(p); }}
-                              isActive={p === currentPageS}
-                            >
-                              {num(p)}
-                            </PaginationLink>
-                          </PaginationItem>
-                        ))}
-                      </PaginationContent>
-                    </div>
-                    <PaginationItem>
-                      <PaginationNext
-                        href="#"
-                        onClick={(e) => { e.preventDefault(); if (currentPageS < totalPagesS) setStillLearningPage(currentPageS + 1); }}
-                        className={cn(currentPageS >= totalPagesS ? "pointer-events-none opacity-50" : "")}
-                      />
-                    </PaginationItem>
-                  </div>
-                </Pagination>
-              )}
-            </>
-          );
-        })() : (
-          emptyState("still-learning")
-        )}
-      </TabsContent>
-
       <TabsContent value="learned">
         {learned.length > 0 ? (() => {
           const totalPagesL = Math.max(1, Math.ceil(learned.length / ITEMS_PER_PAGE));
@@ -746,7 +642,126 @@ export function ProfileTabs({ words }: { words: Word[] }) {
       </TabsContent>
 
       <TabsContent value="quiz">
-        <QuizHistoryPanel />
+        <Tabs value={quizSubTab} onValueChange={(v) => setQuizSubTab(v as "history" | "still-learning")}>
+          <TabsList>
+            <TabsTrigger value="history" className="flex items-center gap-1.5">
+              <GraduationCap className="h-4 w-4" />
+              {t("ইতিহাস", "History")}
+            </TabsTrigger>
+            <TabsTrigger value="still-learning" className="flex items-center gap-1.5">
+              <RefreshCw className="h-4 w-4" />
+              {t("শিখছে", "Still Learning")}
+              {stillLearning.length > 0 && (
+                <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300">
+                  {num(stillLearning.length)}
+                </span>
+              )}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="history">
+            <QuizHistoryPanel />
+          </TabsContent>
+
+          <TabsContent value="still-learning">
+            {stillLearning.length > 0 ? (() => {
+              const totalPagesS = Math.max(1, Math.ceil(stillLearning.length / ITEMS_PER_PAGE));
+              const currentPageS = Math.min(stillLearningPage, totalPagesS);
+              const startS = (currentPageS - 1) * ITEMS_PER_PAGE;
+              const pageWordsS = stillLearning.slice(startS, startS + ITEMS_PER_PAGE);
+              return (
+                <>
+                  <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
+                    {t(`${num(stillLearning.length)}টি শব্দ পর্যালোচনা করতে হবে`, `${stillLearning.length} word${stillLearning.length !== 1 ? "s" : ""} to review`)}
+                  </p>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <StaggerContainer className="contents">
+                      {pageWordsS.map((word) => (
+                        <StaggerItem
+                          key={wordKey(word)}
+                          onDoubleClick={() => handleMarkLearned(word.id)}
+                          className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80 cursor-pointer"
+                        >
+                          <div className="absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b from-orange-400 to-amber-500 opacity-60" />
+                          <WordCardDetails word={word} />
+                          <div className="absolute top-3 right-3 flex gap-1">
+                            <button
+                              onClick={() => toggleBookmark(word.id)}
+                              className={cn(
+                                "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                                bookmarkedIds.has(wordKey(word))
+                                  ? "text-amber-500 hover:text-amber-600"
+                                  : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
+                              )}
+                              title={bookmarkedIds.has(wordKey(word)) ? t("বুকমার্ক সরান", "Remove bookmark") : t("বুকমার্ক করুন", "Bookmark")}
+                            >
+                              {bookmarkedIds.has(wordKey(word)) ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
+                            </button>
+                            <button
+                              onClick={() => handleMarkLearned(word.id)}
+                              className={cn(
+                                "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
+                                learnedIds.has(wordKey(word))
+                                  ? "text-emerald-500 hover:text-emerald-600"
+                                  : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
+                              )}
+                              title={t("শেখা হয়েছে হিসেবে চিহ্নিত করুন", "Mark as learned")}
+                            >
+                              <CheckCircle2 className="h-5 w-5" />
+                            </button>
+                          </div>
+                        </StaggerItem>
+                      ))}
+                    </StaggerContainer>
+                  </div>
+                  <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
+                    {t(
+                      `মোট ${num(stillLearning.length)}টির মধ্যে ${num(startS + 1)}–${num(Math.min(startS + ITEMS_PER_PAGE, stillLearning.length))} দেখানো হচ্ছে`,
+                      `Showing ${startS + 1}–${Math.min(startS + ITEMS_PER_PAGE, stillLearning.length)} of ${stillLearning.length}`
+                    )}
+                  </p>
+                  {totalPagesS > 1 && (
+                    <Pagination>
+                      <div className="flex items-center gap-0.5 max-w-full">
+                        <PaginationItem>
+                          <PaginationPrevious
+                            href="#"
+                            onClick={(e) => { e.preventDefault(); if (currentPageS > 1) setStillLearningPage(currentPageS - 1); }}
+                            className={cn(currentPageS <= 1 ? "pointer-events-none opacity-50" : "")}
+                          />
+                        </PaginationItem>
+                        <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                          <PaginationContent>
+                            {Array.from({ length: totalPagesS }, (_, i) => i + 1).map((p) => (
+                              <PaginationItem key={p}>
+                                <PaginationLink
+                                  href="#"
+                                  onClick={(e) => { e.preventDefault(); setStillLearningPage(p); }}
+                                  isActive={p === currentPageS}
+                                >
+                                  {num(p)}
+                                </PaginationLink>
+                              </PaginationItem>
+                            ))}
+                          </PaginationContent>
+                        </div>
+                        <PaginationItem>
+                          <PaginationNext
+                            href="#"
+                            onClick={(e) => { e.preventDefault(); if (currentPageS < totalPagesS) setStillLearningPage(currentPageS + 1); }}
+                            className={cn(currentPageS >= totalPagesS ? "pointer-events-none opacity-50" : "")}
+                          />
+                        </PaginationItem>
+                      </div>
+                    </Pagination>
+                  )}
+                </>
+              );
+            })() : (
+              emptyState("still-learning")
+            )}
+          </TabsContent>
+        </Tabs>
       </TabsContent>
     </Tabs>
   );

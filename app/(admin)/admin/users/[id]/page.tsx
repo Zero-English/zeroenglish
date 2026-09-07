@@ -11,8 +11,9 @@ import {
 } from "lucide-react";
 import type { ApiUser, UserDetailResponse } from "../types";
 import UserActions from "./user-actions";
-import DailyProgress from "./daily-progress";
 import { UserAvatar } from "@/components/UserAvatar";
+import { ProfileActivityChart } from "@/components/profile-activity-chart";
+import { LanguageProvider } from "@/components/language-provider";
 
 const RICH = {
   learned: [4, 6, 10, 15, 22, 30, 38, 46, 53, 60, 68, 75, 82, 90, 98],
@@ -168,7 +169,9 @@ export default async function SingleUserPage({
       </section>
 
       <div className="mt-8">
-        <DailyProgress year={2026} />
+        <LanguageProvider>
+          <ProfileActivityChart />
+        </LanguageProvider>
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">

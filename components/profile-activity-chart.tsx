@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   ChartContainer,
@@ -22,6 +22,13 @@ import { Activity, CalendarDays, TrendingDown, TrendingUp } from "lucide-react";
 import { useT, useNum } from "@/components/language-provider";
 
 type ActivityPoint = { label: string; learned: number; quiz: number };
+
+interface GraphData {
+  title: string;
+  titleBn: string;
+  data: ActivityPoint[];
+  previous: ActivityPoint[];
+}
 
 const RANGE_OPTIONS = [
   { value: "today", label: "Today", labelBn: "আজ" },
@@ -94,7 +101,32 @@ const dummyGraphData = {
   "30d": { title: "the last 30 days", titleBn: "শেষ ৩০ দিনে", data: dailySeries(30, 0), previous: dailySeries(30, 30) },
   "90d": { title: "the last 90 days", titleBn: "শেষ ৯০ দিনে", data: dailySeries(90, 0), previous: dailySeries(90, 90) },
   "1y": { title: "the last 1 year", titleBn: "শেষ ১ বছরে", data: dailySeries(365, 0), previous: dailySeries(365, 365) },
-} satisfies Record<RangeKey, { title: string; titleBn: string; data: ActivityPoint[]; previous: ActivityPoint[] }>;
+} satisfies Record<RangeKey, GraphData>;
+
+type LearnedPoint = { label: string; learned: number };
+
+async function fetchLearnedActivity(range: RangeKey): Promise<{
+  current: LearnedPoint[];
+  previous: LearnedPoint[];
+} | null> {
+  try {
+    const res = await fetch(`/api/v1/words/learned-activity?range=${range}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const body = (await res.json()) as {
+      data?: { current?: LearnedPoint[]; previous?: LearnedPoint[] };
+      success?: boolean;
+    };
+    if (!body.success || !Array.isArray(body.data?.current) || !Array.isArray(body.data?.previous)) {
+      return null;
+    }
+    return { current: body.data.current, previous: body.data.previous };
+  } catch (err) {
+    console.error("Failed to fetch learned word activity:", err);
+    return null;
+  }
+}
 
 const chartConfig = {
   learned: { label: "Learned", color: "#10b981" },
@@ -104,10 +136,38 @@ const chartConfig = {
 export function ProfileActivityChart() {
   const [range, setRange] = useState<RangeKey>("7d");
   const [metric, setMetric] = useState<Metric>("all");
+  const [activity, setActivity] = useState<Record<RangeKey, GraphData>>(dummyGraphData);
   const t = useT();
   const num = useNum();
 
-  const active = dummyGraphData[range];
+  useEffect(() => {
+    let cancelled = false;
+    fetchLearnedActivity(range).then((res) => {
+      if (cancelled || !res) return;
+      setActivity((prev) => ({
+        ...prev,
+        [range]: {
+          title: prev[range].title,
+          titleBn: prev[range].titleBn,
+          data: res.current.map((pt, i) => ({
+            label: pt.label,
+            learned: pt.learned,
+            quiz: prev[range].data[i]?.quiz ?? 0,
+          })),
+          previous: res.previous.map((pt, i) => ({
+            label: pt.label,
+            learned: pt.learned,
+            quiz: prev[range].previous[i]?.quiz ?? 0,
+          })),
+        },
+      }));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [range]);
+
+  const active = activity[range];
 
   const stats = useMemo(() => {
     const sumLearned = (pts: ActivityPoint[]) => pts.reduce((acc, p) => acc + p.learned, 0);
@@ -143,7 +203,11 @@ export function ProfileActivityChart() {
         </div>
         <div>
           <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">{t("কার্যকলাপ", "Activity")}</h3>
-          <p className="text-xs text-zinc-400 dark:text-zinc-500">{t("ডেমো তথ্যের ভিত্তিতে", "Based on dummy data")}</p>
+          <p className="text-xs text-zinc-400 dark:text-zinc-500">
+            {metric === "quiz"
+              ? t("ডেমো তথ্যের ভিত্তিতে", "Based on dummy data")
+              : t("শেখা শব্দের অ্যানালিটিক্স", "Learned word analytics")}
+          </p>
         </div>
       </div>
 
