@@ -17,12 +17,12 @@ tracking, and personalized learning experiences.
 
 ## Primary Goals
 
--   Learn vocabulary from A1 to C2 levels
--   Full English and Bengali support
--   Quiz and revision systems
--   User progress tracking
--   PWA support
--   Future-ready architecture for AI features
+- [ ] Learn vocabulary from A1 to C2 levels
+- [ ] Full English and Bengali support
+- [ ] Quiz and revision systems
+- [ ] User progress tracking
+- [ ] PWA support
+- [ ] Future-ready architecture for AI features
 
 # 2. User Roles
 
@@ -34,18 +34,18 @@ tracking, and personalized learning experiences.
 
 # 3. Core Features
 
--   Vocabulary Learning
--   Search System
--   Quiz System
--   Learned Words
--   Bookmarked Words
--   Still Learning Words
--   Mistaken Words Practice
--   Daily Goals
--   User Dashboard
--   PWA & Offline Support
--   Future Leaderboards
--   Future Gamification
+- [ ] Vocabulary Learning
+- [ ] Search System
+- [ ] Quiz System
+- [ ] Learned Words
+- [ ] Bookmarked Words
+- [ ] Still Learning Words
+- [ ] Mistaken Words Practice
+- [ ] Daily Goals
+- [ ] User Dashboard
+- [ ] PWA & Offline Support
+- [ ] Future Leaderboards
+- [ ] Future Gamification
 
 # 4. Technical Stack
 
@@ -87,13 +87,13 @@ tracking, and personalized learning experiences.
 
 # 6. Future Roadmap
 
--   Google Authentication
--   Leaderboards
--   Achievements
--   AI Tutor
--   AI Quizzes
--   Android App
--   iOS App
+- [ ] Google Authentication
+- [ ] Leaderboards
+- [ ] Achievements
+- [ ] AI Tutor
+- [ ] AI Quizzes
+- [ ] Android App
+- [ ] iOS App
 
 # 7. Notes
 
