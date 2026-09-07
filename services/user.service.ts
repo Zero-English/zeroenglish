@@ -22,7 +22,7 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
                     _count: {
                         select: {
                             userBookmarks: true,
-                            learnedWords: true,
+                            relatedWords: true,
                         },
                     },
                 },
@@ -35,7 +35,7 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
         const users = rawUsers.map(({ _count, ...user }) => ({
             ...user,
             bookmarkedCount: _count.userBookmarks,
-            learnedWordCount: _count.learnedWords,
+            learnedWordCount: _count.relatedWords,
         }));
 
         return {
@@ -76,7 +76,7 @@ export const getUserById = async (id: number) => {
                 _count: {
                     select: {
                         userBookmarks: true,
-                        learnedWords: true,
+                        relatedWords: true,
                     },
                 },
             },
@@ -96,7 +96,7 @@ export const getUserById = async (id: number) => {
             data: {
                 ...user,
                 bookmarkedCount: _count.userBookmarks,
-                learnedWordCount: _count.learnedWords,
+                learnedWordCount: _count.relatedWords,
             },
             message: "User fetched successfully",
             success: true,
