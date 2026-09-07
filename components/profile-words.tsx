@@ -253,7 +253,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const quizCount = useQuizHistoryStore((s) => s.entries.length);
   const { bookmarkedIds, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const { learnedIds, isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
-  const { stillLearningIds, removeStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
+  const { stillLearningIds, removeStillLearning, toggleStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
   const { totalCorrectAnswers, loaded: quizLoaded } = useQuizActivity();
   const loaded = bookmarkLoaded && learnedLoaded && stillLearningLoaded;
   const t = useT();
@@ -267,6 +267,18 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const [bookmarkedPage, setBookmarkedPage] = useState(1);
   const [stillLearningPage, setStillLearningPage] = useState(1);
   const [learnedPage, setLearnedPage] = useState(1);
+
+  const handleMarkLearned = (id: number) => {
+    const k = String(id);
+    if (!learnedIds.has(k)) toggleLearned(id);
+    if (stillLearningIds.has(k)) removeStillLearning(id);
+  };
+
+  const handleMarkStillLearning = (id: number) => {
+    const k = String(id);
+    if (learnedIds.has(k)) toggleLearned(id);
+    if (!stillLearningIds.has(k)) toggleStillLearning(id);
+  };
 
   if (!loaded) {
     return (
@@ -577,7 +589,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                   {pageWordsS.map((word) => (
                     <StaggerItem
                       key={wordKey(word)}
-                      onDoubleClick={() => toggleLearned(word.id)}
+                      onDoubleClick={() => handleMarkLearned(word.id)}
                       className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80 cursor-pointer"
                     >
                       <div className="absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b from-orange-400 to-amber-500 opacity-60" />
@@ -596,23 +608,16 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                           {bookmarkedIds.has(wordKey(word)) ? <BookmarkCheck className="h-5 w-5" /> : <Bookmark className="h-5 w-5" />}
                         </button>
                         <button
-                          onClick={() => toggleLearned(word.id)}
+                          onClick={() => handleMarkLearned(word.id)}
                           className={cn(
                             "p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95",
                             learnedIds.has(wordKey(word))
                               ? "text-emerald-500 hover:text-emerald-600"
                               : "text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
                           )}
-                          title={learnedIds.has(wordKey(word)) ? t("শেখা থেকে সরান", "Mark as unlearned") : t("শেখা হিসেবে চিহ্নিত করুন", "Mark as learned")}
+                          title={t("শেখা হয়েছে হিসেবে চিহ্নিত করুন", "Mark as learned")}
                         >
-                          {learnedIds.has(wordKey(word)) ? <CheckCircle2 className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
-                        </button>
-                        <button
-                          onClick={() => removeStillLearning(word.id)}
-                          className="p-1.5 rounded-full transition-all duration-200 hover:scale-110 active:scale-95 text-zinc-300 dark:text-zinc-600 hover:text-zinc-400 dark:hover:text-zinc-500"
-                          title={t("শিখছি থেকে সরান", "Remove from still learning")}
-                        >
-                          <X className="h-5 w-5" />
+                          <CheckCircle2 className="h-5 w-5" />
                         </button>
                       </div>
                     </StaggerItem>
@@ -687,7 +692,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                       isLearned={true}
                       isBookmarked={bookmarkedIds.has(wordKey(word))}
                       onToggleBookmark={() => toggleBookmark(word.id)}
-                      onToggleLearned={() => toggleLearned(word.id)}
+                      onToggleLearned={() => handleMarkStillLearning(word.id)}
                     />
                   ))}
                 </StaggerContainer>
