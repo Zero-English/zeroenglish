@@ -7,6 +7,7 @@ import { useT } from "@/components/language-provider";
 import logoLight from "../public/assets/logo/zeroenglish-new-logo-light.png";
 import logoDark from "../public/assets/logo/zeroenglish-new-logo-dark.png";
 import { useTheme } from "next-themes";
+import { useQuizChrome } from "@/lib/quiz-chrome";
 
 interface FooterLink {
   labelBn: string;
@@ -23,6 +24,7 @@ interface FooterColumn {
 export default function FFooter() {
   const currentYear = new Date().getFullYear();
   const t = useT();
+  const hidden = useQuizChrome((s) => s.hidden);
   const { theme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
 
@@ -60,6 +62,8 @@ export default function FFooter() {
   const socialLinks = [
     { icon: Mail, href: "zeroenglishweb@gmail.com", label: "Email" },
   ];
+
+  if (hidden) return null;
 
   return (
     <footer className="border-t border-border bg-muted/40 text-muted-foreground mt-auto">

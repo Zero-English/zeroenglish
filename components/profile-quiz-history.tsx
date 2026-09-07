@@ -29,16 +29,16 @@ const QUIZ_META: Record<
   { label: string; labelBn: string; icon: LucideIcon; iconColor: string; bg: string; gradient: string }
 > = {
   english_to_bangla: {
-    label: "English → Bangla",
-    labelBn: "ইংরেজি → বাংলা",
+    label: "English to Bangla",
+    labelBn: "ইংরেজি থেকে বাংলা",
     icon: Languages,
     iconColor: "text-sky-600 dark:text-sky-400",
     bg: "bg-sky-100 dark:bg-sky-900/30",
     gradient: "from-sky-400 to-sky-500",
   },
   bangla_to_english: {
-    label: "Bangla → English",
-    labelBn: "বাংলা → ইংরেজি",
+    label: "Bangla to English",
+    labelBn: "বাংলা থেকে ইংরেজি",
     icon: ArrowLeftRight,
     iconColor: "text-indigo-600 dark:text-indigo-400",
     bg: "bg-indigo-100 dark:bg-indigo-900/30",

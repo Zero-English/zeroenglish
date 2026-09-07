@@ -34,6 +34,7 @@ export interface QuizState {
   selectedAnswer: string | null;
   isAnswered: boolean;
   timeLeft: number;
+  deadlineAt: number | null;
   incorrectAnswers: IncorrectAnswer[];
   resultsRecorded: boolean;
 }
@@ -52,6 +53,7 @@ const initialState: QuizState = {
   selectedAnswer: null,
   isAnswered: false,
   timeLeft: 0,
+  deadlineAt: null,
   incorrectAnswers: [],
   resultsRecorded: false,
 };

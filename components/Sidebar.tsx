@@ -11,6 +11,7 @@ import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
 import { useSelectedLevel } from "@/lib/level-store";
 import { useT } from "@/components/language-provider";
+import { useQuizChrome } from "@/lib/quiz-chrome";
 import { cn } from "@/lib/utils";
 import {
   Sheet,
@@ -110,6 +111,7 @@ function LogoutButton({
 }
 
 export function Sidebar() {
+  const hidden = useQuizChrome((s) => s.hidden);
   const { isOpen, isDesktopOpen, close, toggleDesktop } = useSidebar();
   const { status } = useAuthStatus();
   const { theme, systemTheme } = useTheme();
@@ -129,6 +131,8 @@ export function Sidebar() {
     await signOut({ callbackUrl: "/login" });
     toast.success(t("সফলভাবে লগ আউট হয়েছে", "Logged out successfully"));
   };
+
+  if (hidden) return null;
 
   return (
     <>

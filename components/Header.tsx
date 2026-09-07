@@ -8,10 +8,12 @@ import { useLanguage } from "@/components/language-provider";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { motion } from "motion/react";
+import { useQuizChrome } from "@/lib/quiz-chrome";
 import logoLight from "../public/assets/logo/zeroenglish-new-logo-light.png";
 import logoDark from "../public/assets/logo/zeroenglish-new-logo-dark.png";
 
 export function Header() {
+  const hidden = useQuizChrome((s) => s.hidden);
   const { toggle } = useSidebar();
   const { lang, toggleLanguage } = useLanguage();
   const { theme, setTheme, systemTheme } = useTheme();
@@ -63,6 +65,8 @@ export function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (hidden) return null;
 
   return (
     <motion.header
