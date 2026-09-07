@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NotFoundContent } from "@/components/not-found/not-found-content";
 import { HardNavLink } from "@/components/not-found/hard-nav-link";
-import logo from "../public/assets/logo/zeroenglish-new-logo-square.png";
+import logo from "../public/assets/logo/zeroenglish-new-logo-light.png";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -51,7 +51,7 @@ export default function GlobalNotFound() {
                   <Image
                     src={logo}
                     alt="Zero English"
-                    className="h-5 w-auto"
+                    className="h-10 w-auto"
                   />
                 </HardNavLink>
                 <span className="text-xs font-semibold uppercase tracking-widest text-primary">

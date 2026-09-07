@@ -49,7 +49,7 @@ export default function FFooter() {
       categoryBn: "প্রতিষ্ঠান",
       categoryEn: "Company",
       links: [
-        { labelBn: "আমাদের সম্পর্কে", labelEn: "About", href: "#" },
+        { labelBn: "আমাদের সম্পর্কে", labelEn: "About", href: "/about" },
         { labelBn: "যোগাযোগ", labelEn: "Contact", href: "#" },
         { labelBn: "গোপনীয়তা নীতি", labelEn: "Privacy Policy", href: "/privacy" },
         { labelBn: "পরিষেবার শর্তাবলী", labelEn: "Terms of Service", href: "#" },
