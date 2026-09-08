@@ -9,8 +9,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { motion } from "motion/react";
 import { useQuizChrome } from "@/lib/quiz-chrome";
-import logoLight from "../public/assets/logo/zeroenglish-new-logo-light.png";
-import logoDark from "../public/assets/logo/zeroenglish-new-logo-dark.png";
+import logo from "../public/assets/logo.png";
 
 export function Header() {
   const hidden = useQuizChrome((s) => s.hidden);
@@ -76,7 +75,7 @@ export function Header() {
       className={` bg-background/95 backdrop-blur md:border-b supports-backdrop-filter:bg-background/80 sticky top-0 z-30 ${isScrolled ? "border-b" : ""}`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative">
         <Link href="/" className="flex items-center space-x-2">
-          <Image src={mounted && currentTheme === "dark" ? logoDark : logoLight} alt="Logo" className="h-10 w-auto" />
+          <Image src={logo} alt="Logo" className="h-5 w-auto dark:brightness-0 dark:invert" />  
         </Link>
         <div className="flex items-center gap-1">
           <button

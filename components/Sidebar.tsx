@@ -18,9 +18,7 @@ import {
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet";
-import logoLight from "../public/assets/logo/zeroenglish-new-logo-light.png";
-import logoDark from "../public/assets/logo/zeroenglish-new-logo-dark.png";
-import { useTheme } from "next-themes";
+import logo from "../public/assets/logo.png";
 
 const spring = { type: "spring", stiffness: 420, damping: 32, mass: 0.9 } as const;
 
@@ -114,8 +112,6 @@ export function Sidebar() {
   const hidden = useQuizChrome((s) => s.hidden);
   const { isOpen, isDesktopOpen, close, toggleDesktop } = useSidebar();
   const { status } = useAuthStatus();
-  const { theme, systemTheme } = useTheme();
-  const currentTheme = theme === "system" ? systemTheme : theme;
   const t = useT();
   const logout = useAuthStore((s) => s.logout);
   const isLoggedIn = status !== "none";
@@ -173,7 +169,7 @@ export function Sidebar() {
               onClick={close}
               className="flex items-center space-x-2"
             >
-              <Image src={currentTheme === "dark" ? logoDark : logoLight} alt="Logo" className="h-10 w-auto" />
+              <Image src={logo} alt="Logo" className="h-5 w-auto dark:brightness-0 dark:invert" />
             </Link>
           </div>
           <div className="flex flex-col flex-1 overflow-hidden">

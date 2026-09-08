@@ -4,9 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, ArrowRight } from "lucide-react";
 import { useT } from "@/components/language-provider";
-import logoLight from "../public/assets/logo/zeroenglish-new-logo-light.png";
-import logoDark from "../public/assets/logo/zeroenglish-new-logo-dark.png";
-import { useTheme } from "next-themes";
+import logo from "../public/assets/logo.png";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 
 interface FooterLink {
@@ -25,8 +23,6 @@ export default function FFooter() {
   const currentYear = new Date().getFullYear();
   const t = useT();
   const hidden = useQuizChrome((s) => s.hidden);
-  const { theme, systemTheme } = useTheme();
-  const currentTheme = theme === "system" ? systemTheme : theme;
 
   const footerColumns: FooterColumn[] = [
     {
@@ -74,9 +70,9 @@ export default function FFooter() {
           <div className="lg:col-span-2 space-y-5 max-w-sm">
             <Link href="/" className="inline-flex items-center space-x-2">
               <Image
-                src={currentTheme === "dark" ? logoDark : logoLight}
+                src={logo}
                 alt="Zero English"
-                className="h-10 w-auto"
+                className="h-6 w-auto dark:brightness-0 dark:invert"
               />
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">

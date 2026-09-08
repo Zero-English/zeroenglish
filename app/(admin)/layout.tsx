@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Admin | Zero English",
   description: "Zero English admin panel for managing users and vocabulary.",
   manifest: "/manifest.webmanifest",
-  icons: "/assets/logo/zeroenglish-new-logo-square.png",
+  icons: "/assets/icon.jpeg",
   other: {
     "theme-color": "#f97316",
   },
