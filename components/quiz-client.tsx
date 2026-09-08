@@ -43,19 +43,21 @@ const LEVEL_ENUM: Record<string, string> = {
 
 async function saveQuizResultToDb(args: {
   userId: number | null;
+  clientId: string;
   quizType: QuizType;
   score: number;
   total: number;
   percentage: number;
   levels: string[];
   timePerQuestion: number;
-}): Promise<void> {
-  if (!args.userId) return;
+}): Promise<number | null> {
+  if (!args.userId) return null;
   try {
     const res = await fetch("/api/v1/quiz/results", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        clientId: args.clientId,
         quizType: QUIZ_TYPE_ENUM[args.quizType],
         questionCount: args.total,
         levels: args.levels
@@ -71,12 +73,17 @@ async function saveQuizResultToDb(args: {
     });
     if (!res.ok) {
       // non-fatal; the result is already stored in localStorage
+      return null;
     }
+    const body = (await res.json()) as { data?: { id?: number } | null; success?: boolean };
+    if (!body.success) return null;
     if (typeof window !== "undefined") {
       window.dispatchEvent(new Event("activity-changed"));
     }
+    return typeof body.data?.id === "number" ? body.data.id : null;
   } catch {
     // non-fatal; the result is already stored in localStorage
+    return null;
   }
 }
 
@@ -1154,6 +1161,7 @@ function ResultsView({
   const { path, hydrated } = useAuthPath();
   const userId = useAuthStore((s) => s.userId);
   const addHistoryEntry = useQuizHistoryStore((s) => s.addEntry);
+  const updateHistoryEntry = useQuizHistoryStore((s) => s.updateEntry);
   const t = useT();
   const num = useNum();
 
@@ -1180,20 +1188,24 @@ function ResultsView({
       levels,
       numberOfQuestions: total,
       timePerQuestion,
+      createdAt: Date.now(),
     };
     addHistoryEntry(entry);
     useQuizStore.setState({ resultsRecorded: true });
 
     saveQuizResultToDb({
       userId,
+      clientId: entry.id,
       quizType,
       score,
       total,
       percentage,
       levels,
       timePerQuestion,
-    }).catch(() => {
-      // DB save is best-effort; localStorage history already recorded.
+    }).then((dbId) => {
+      if (typeof dbId === "number") {
+        updateHistoryEntry(entry.id, { synced: true, dbId });
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, quizType]);

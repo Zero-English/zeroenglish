@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { createLocalStorage } from "./state-storage";
+import { adoptAnonDataIntoGuest } from "./db";
 
 export type AuthStatus = "none" | "guest" | "google";
 
@@ -37,8 +38,10 @@ export const useAuthStore = create<AuthState>()(
       userName: null,
       userEmail: null,
       userId: null,
-      continueAsGuest: () =>
-        set({ status: "guest", path: GUEST_PATH, userName: "Guest", userEmail: null, userId: null }),
+      continueAsGuest: () => {
+        adoptAnonDataIntoGuest();
+        set({ status: "guest", path: GUEST_PATH, userName: "Guest", userEmail: null, userId: null });
+      },
       setGoogleAuth: (name, email, id) =>
         set({
           status: "google",
@@ -108,4 +111,18 @@ export function useAuthHydrated(): boolean {
   }, []);
 
   return hydrated;
+}
+
+/**
+ * Stable, user-scoped namespace used to isolate localStorage data between
+ * identities. Uses the stable numeric DB userId for authenticated users and
+ * fixed labels for guest/anon. Never uses the email address.
+ */
+export function identityNamespace(): string {
+  const s = useAuthStore.getState();
+  if (s.status === "google") {
+    return s.userId != null && s.userId > 0 ? String(s.userId) : "user";
+  }
+  if (s.status === "guest") return "guest";
+  return "anon";
 }

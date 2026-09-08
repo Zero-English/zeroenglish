@@ -6,6 +6,7 @@ export interface WordEntry {
   id: string;
   type: WordListType;
   timestamp?: number;
+  synced?: boolean;
 }
 
 export interface ActivityEntry {
@@ -93,11 +94,32 @@ function writeAllActivity(entries: ActivityEntry[], scope: string): void {
 }
 
 export async function putWord(entry: WordEntry, scope: string): Promise<void> {
-  const enriched = { ...entry, timestamp: entry.timestamp ?? Date.now() };
+  const enriched = {
+    ...entry,
+    timestamp: entry.timestamp ?? Date.now(),
+    synced: entry.synced ?? false,
+  };
   localStorage.setItem(
     wordKey(scope, entry.type, entry.id),
     JSON.stringify(enriched)
   );
+}
+
+export async function setWordSynced(
+  scope: string,
+  type: WordListType,
+  id: string,
+  synced: boolean
+): Promise<void> {
+  const key = wordKey(scope, type, id);
+  const raw = localStorage.getItem(key);
+  if (!raw) return;
+  try {
+    const entry = JSON.parse(raw) as WordEntry;
+    localStorage.setItem(key, JSON.stringify({ ...entry, synced }));
+  } catch {
+    // skip corrupt entry
+  }
 }
 
 export async function deleteWord(
@@ -115,6 +137,7 @@ export async function bulkPutWords(
   const enriched = entries.map((e) => ({
     ...e,
     timestamp: e.timestamp ?? Date.now(),
+    synced: e.synced ?? false,
   }));
   for (const entry of enriched) {
     localStorage.setItem(wordKey(scope, entry.type, entry.id), JSON.stringify(entry));
@@ -172,4 +195,55 @@ export async function addCorrectAnswers(
     existing ? entries.map((e) => (e.date === date ? updated : e)) : [...entries, updated],
     scope
   );
+}
+
+/**
+ * Adopts data written while the user was not signed in (anonymous scope,
+ * "anon") into the guest scope. Called when a user explicitly continues as
+ * guest, so progress made before signing in is not orphaned inside a scope the
+ * UI never reads again. Existing guest data is never overwritten.
+ */
+export function adoptAnonDataIntoGuest(): void {
+  const FROM = "anon";
+  const TO = "guest";
+  const wordPrefix = `${LS_PREFIX}${FROM}/`;
+  const toPrefix = `${LS_PREFIX}${TO}/`;
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key || !key.startsWith(wordPrefix)) continue;
+    const target = key.replace(wordPrefix, toPrefix);
+    if (localStorage.getItem(target)) continue;
+    const raw = localStorage.getItem(key);
+    if (raw !== null) localStorage.setItem(target, raw);
+  }
+
+  const fromActivity = activityKey(FROM);
+  const toActivity = activityKey(TO);
+  const fromRaw = localStorage.getItem(fromActivity);
+  if (fromRaw && !localStorage.getItem(toActivity)) {
+    localStorage.setItem(toActivity, fromRaw);
+  }
+
+  const fromScoped = `zero_english:${FROM}`;
+  const toScoped = `zero_english:${TO}`;
+  const rawFrom = localStorage.getItem(fromScoped);
+  if (!rawFrom) return;
+  try {
+    const fromObj = JSON.parse(rawFrom) as Record<string, unknown>;
+    const rawTo = localStorage.getItem(toScoped);
+    const toObj = rawTo
+      ? (JSON.parse(rawTo) as Record<string, unknown>)
+      : {};
+    let changed = false;
+    for (const [name, value] of Object.entries(fromObj)) {
+      if (toObj[name] === undefined && value !== null && value !== undefined) {
+        toObj[name] = value;
+        changed = true;
+      }
+    }
+    if (changed) localStorage.setItem(toScoped, JSON.stringify(toObj));
+  } catch {
+    // skip corrupt anon scoped data
+  }
 }

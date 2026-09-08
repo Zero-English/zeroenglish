@@ -20,7 +20,13 @@ import {
 import { cn } from "@/lib/utils";
 import { Activity, CalendarDays, TrendingDown, TrendingUp } from "lucide-react";
 import { useT, useNum } from "@/components/language-provider";
-import { fetchQuizResultsFromDb, dbResultDate, type DbQuizResult } from "@/lib/quiz-results-api";
+import { fetchQuizResultsFromDb } from "@/lib/quiz-results-api";
+import { getWordsByType } from "@/lib/db";
+import {
+  useQuizHistoryStore,
+  type QuizHistoryEntry,
+} from "@/lib/quiz-history-store";
+import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
 
 type ActivityPoint = { label: string; learned: number; quiz: number };
 
@@ -104,6 +110,88 @@ const dummyGraphData = {
 
 type LearnedPoint = { label: string; learned: number };
 
+interface QuizLike {
+  createdAt: string | Date;
+  scoreInPercent: number;
+}
+
+function entryWin(e: QuizHistoryEntry): number {
+  const n = parseFloat(e.win);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function createdDate(r: QuizLike): Date {
+  return r.createdAt instanceof Date ? r.createdAt : new Date(r.createdAt);
+}
+
+function quizFromLocal(entries: QuizHistoryEntry[]): QuizLike[] {
+  return entries.map((e) => ({
+    createdAt: new Date(
+      e.createdAt ?? new Date(`${e.date}T12:00:00`).getTime()
+    ),
+    scoreInPercent: entryWin(e),
+  }));
+}
+
+function localHourlySeries(
+  records: { timestamp?: number }[],
+  daysAgo: number
+): LearnedPoint[] {
+  const target = new Date();
+  target.setHours(0, 0, 0, 0);
+  target.setDate(target.getDate() - daysAgo);
+  const tKey = dateKey(target);
+  const byHour = new Array<number>(24).fill(0);
+  for (const r of records) {
+    if (!r.timestamp) continue;
+    const d = new Date(r.timestamp);
+    if (dateKey(d) !== tKey) continue;
+    byHour[d.getHours()] += 1;
+  }
+  return byHour.map((learned, h) => ({ label: hourLabel(h), learned }));
+}
+
+function localDailySeries(
+  records: { timestamp?: number }[],
+  days: number,
+  endOffset: number
+): LearnedPoint[] {
+  const counts = new Map<string, number>();
+  for (const r of records) {
+    if (!r.timestamp) continue;
+    const k = dateKey(new Date(r.timestamp));
+    counts.set(k, (counts.get(k) ?? 0) + 1);
+  }
+  const out: LearnedPoint[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - (i + endOffset));
+    out.push({
+      label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      learned: counts.get(dateKey(d)) ?? 0,
+    });
+  }
+  return out;
+}
+
+function localLearnedSeries(
+  r: RangeKey,
+  records: { timestamp?: number }[]
+): { current: LearnedPoint[]; previous: LearnedPoint[] } {
+  if (r === "today" || r === "yesterday") {
+    const curOffset = r === "today" ? 0 : 1;
+    return {
+      current: localHourlySeries(records, curOffset),
+      previous: localHourlySeries(records, curOffset + 1),
+    };
+  }
+  const days = RANGE_DAYS[r] ?? 7;
+  return {
+    current: localDailySeries(records, days, 0),
+    previous: localDailySeries(records, days, days),
+  };
+}
+
 async function fetchLearnedActivity(range: RangeKey): Promise<{
   current: LearnedPoint[];
   previous: LearnedPoint[];
@@ -146,10 +234,10 @@ function dateKey(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-function buildQuizMap(results: DbQuizResult[]): Map<string, number> {
+function buildQuizMap(results: QuizLike[]): Map<string, number> {
   const byDate = new Map<string, { sum: number; count: number }>();
   for (const r of results) {
-    const date = dbResultDate(r);
+    const date = dateKey(createdDate(r));
     const rec = byDate.get(date) ?? { sum: 0, count: 0 };
     rec.sum += r.scoreInPercent;
     rec.count += 1;
@@ -166,7 +254,7 @@ function quizForDate(qmap: Map<string, number>, d: Date): number {
   return qmap.get(dateKey(d)) ?? 0;
 }
 
-function buildHourlyQuizMap(results: DbQuizResult[], daysAgo: number): Map<number, number> {
+function buildHourlyQuizMap(results: QuizLike[], daysAgo: number): Map<number, number> {
   const target = new Date();
   target.setHours(0, 0, 0, 0);
   target.setDate(target.getDate() - daysAgo);
@@ -174,8 +262,7 @@ function buildHourlyQuizMap(results: DbQuizResult[], daysAgo: number): Map<numbe
 
   const byHour = new Map<number, { sum: number; count: number }>();
   for (const r of results) {
-    const raw = r.createdAt instanceof Date ? r.createdAt.toISOString() : r.createdAt;
-    const d = new Date(raw);
+    const d = createdDate(r);
     if (dateKey(d) !== targetKey) continue;
     const h = d.getHours();
     const rec = byHour.get(h) ?? { sum: 0, count: 0 };
@@ -194,16 +281,29 @@ export function ProfileActivityChart() {
   const [activity, setActivity] = useState<Record<RangeKey, GraphData>>(dummyGraphData);
   const t = useT();
   const num = useNum();
+  const { status } = useAuthStatus();
+  const path = useAuthStore((s) => s.path);
+  const quizEntries = useQuizHistoryStore((s) => s.entries);
 
   const loadActivity = useCallback(async (r: RangeKey) => {
     const isHourly = r === "today" || r === "yesterday";
     const days = r === "today" || r === "yesterday" ? 1 : (RANGE_DAYS[r] ?? 7);
 
-    const [learnedRes, dbResults] = await Promise.all([
-      fetchLearnedActivity(r),
-      fetchQuizResultsFromDb(),
-    ]);
-    const qmap = buildQuizMap(dbResults);
+    let learnedRes: { current: LearnedPoint[]; previous: LearnedPoint[] } | null;
+    let quizSource: QuizLike[];
+
+    if (status === "google") {
+      [learnedRes, quizSource] = await Promise.all([
+        fetchLearnedActivity(r),
+        fetchQuizResultsFromDb(),
+      ]);
+    } else {
+      const records = await getWordsByType("learned", path);
+      learnedRes = localLearnedSeries(r, records);
+      quizSource = quizFromLocal(quizEntries);
+    }
+
+    const qmap = buildQuizMap(quizSource);
 
     setActivity((prev) => {
       const base = prev[r];
@@ -213,8 +313,8 @@ export function ProfileActivityChart() {
         const prevPoints = learnedRes ? learnedRes.previous : base.previous;
         const currentOffset = r === "today" ? 0 : 1;
         const previousOffset = r === "today" ? 1 : 2;
-        const currentMap = buildHourlyQuizMap(dbResults, currentOffset);
-        const previousMap = buildHourlyQuizMap(dbResults, previousOffset);
+        const currentMap = buildHourlyQuizMap(quizSource, currentOffset);
+        const previousMap = buildHourlyQuizMap(quizSource, previousOffset);
         return {
           ...prev,
           [r]: {
@@ -260,7 +360,7 @@ export function ProfileActivityChart() {
         },
       };
     });
-  }, []);
+  }, [status, path, quizEntries]);
 
   useEffect(() => {
     let cancelled = false;

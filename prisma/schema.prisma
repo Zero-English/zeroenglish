@@ -10,6 +10,7 @@ datasource db {
 model QuizResults {
   id          Int      @id @default(autoincrement())
   userId      Int
+  clientId    String?  @unique
   title       String?
   mode        QuizMode
   quizType    QuizType

@@ -4,6 +4,7 @@ import type { QuizMode, QuizType, Levels } from "@/generated/prisma/enums";
 
 export const createQuizResult = async (data: {
     userId: number;
+    clientId?: string | null;
     title?: string | null;
     mode: QuizMode;
     quizType: QuizType;
@@ -19,9 +20,23 @@ export const createQuizResult = async (data: {
     totalScore: number;
 }) => {
     try {
+        if (data.clientId) {
+            const existing = await prisma.quizResults.findUnique({
+                where: { clientId: data.clientId },
+            });
+            if (existing) {
+                return {
+                    data: existing,
+                    message: "Quiz result already recorded (idempotent)",
+                    success: true,
+                };
+            }
+        }
+
         const result = await prisma.quizResults.create({
             data: {
                 userId: data.userId,
+                clientId: data.clientId ?? null,
                 title: data.title ?? null,
                 mode: data.mode,
                 quizType: data.quizType,
@@ -48,6 +63,18 @@ export const createQuizResult = async (data: {
             success: true,
         };
     } catch (error) {
+        if (data.clientId && typeof error === "object" && error !== null && "code" in error && (error as { code?: string }).code === "P2002") {
+            const existing = await prisma.quizResults.findUnique({
+                where: { clientId: data.clientId },
+            });
+            if (existing) {
+                return {
+                    data: existing,
+                    message: "Quiz result already recorded (idempotent)",
+                    success: true,
+                };
+            }
+        }
         logger.error(`Failed to create quiz result: ${error}`);
         return {
             data: null,

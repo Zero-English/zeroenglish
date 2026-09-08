@@ -13,6 +13,7 @@ const DB_TO_CLIENT_QUIZ_TYPE: Record<string, ClientQuizType> = {
 export interface DbQuizResult {
   id: number;
   userId: number;
+  clientId: string | null;
   title: string | null;
   mode: string;
   quizType: string;

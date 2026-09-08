@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { putWord, deleteWord, bulkPutWords, getWordsByType } from "./db";
+import { putWord, deleteWord, bulkPutWords, getWordsByType, setWordSynced } from "./db";
 import { useAuthPath, useAuthStatus } from "./auth-store";
 
 const TYPE = "bookmarked" as const;
@@ -41,21 +41,24 @@ async function listDbBookmarks(): Promise<number[] | null> {
   }
 }
 
-async function syncDbBookmark(id: number, bookmarked: boolean): Promise<void> {
+async function syncDbBookmark(id: number, bookmarked: boolean): Promise<boolean> {
   try {
     const res = await fetch(`/api/v1/words/${id}/bookmark`, {
       method: bookmarked ? "POST" : "DELETE",
     });
-    if (bookmarked && res.status === 409) return;
-    if (!bookmarked && res.status === 404) return;
+    if (bookmarked && res.status === 409) return true;
+    if (!bookmarked && res.status === 404) return true;
     if (!res.ok) {
       console.error(
         `Failed to ${bookmarked ? "add" : "remove"} bookmark #${id} on server:`,
         await res.text()
       );
+      return false;
     }
+    return true;
   } catch (err) {
     console.error(`Failed to sync bookmark #${id}:`, err);
+    return false;
   }
 }
 
@@ -84,15 +87,21 @@ async function doLoad(path: string, status: string): Promise<void> {
 
       if (dbOnly.length > 0) {
         await bulkPutWords(
-          dbOnly.map((n) => ({ id: String(n), type: TYPE })),
+          dbOnly.map((n) => ({ id: String(n), type: TYPE, synced: true })),
           path
         );
         for (const n of dbOnly) {
-          local.set(String(n), { id: String(n), type: TYPE });
+          local.set(String(n), { id: String(n), type: TYPE, synced: true });
+        }
+      }
+      for (const record of records) {
+        if (record.synced !== true && dbSet.has(record.id)) {
+          await setWordSynced(path, TYPE, record.id, true);
         }
       }
       for (const n of localOnly) {
-        void syncDbBookmark(Number(n), true);
+        const okSync = await syncDbBookmark(Number(n), true);
+        if (okSync) await setWordSynced(path, TYPE, String(n), true);
       }
     }
 
@@ -147,7 +156,11 @@ export function useBookmarkedWords() {
       emitChange();
       if (adding) void putWord({ id: k, type: TYPE }, path);
       else void deleteWord(path, TYPE, k);
-      if (status === "google") void syncDbBookmark(id, adding);
+      if (status === "google") {
+        void syncDbBookmark(id, adding).then((okSync) => {
+          if (okSync && adding) void setWordSynced(path, TYPE, k, true);
+        });
+      }
     },
     [snap, path, status]
   );

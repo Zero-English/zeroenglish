@@ -27,6 +27,7 @@ import {
   dbResultToHistoryEntry,
 } from "@/lib/quiz-results-api";
 import { useT, useNum } from "@/components/language-provider";
+import { useAuthStatus } from "@/lib/auth-store";
 
 const QUIZ_META: Record<
   QuizType,
@@ -196,6 +197,7 @@ function QuizHistoryItem({ entry }: { entry: QuizHistoryEntry }) {
 
 export function QuizHistoryPanel() {
   const localEntries = useQuizHistoryStore((s) => s.entries);
+  const { status } = useAuthStatus();
   const [dbEntries, setDbEntries] = useState<QuizHistoryEntry[]>([]);
   const [dbLoaded, setDbLoaded] = useState(false);
   const t = useT();
@@ -203,15 +205,23 @@ export function QuizHistoryPanel() {
 
   useEffect(() => {
     let cancelled = false;
-    fetchQuizResultsFromDb().then((results) => {
+    void (async () => {
+      if (status !== "google") {
+        if (cancelled) return;
+        setDbEntries([]);
+        setDbLoaded(true);
+        return;
+      }
+      setDbLoaded(false);
+      const results = await fetchQuizResultsFromDb();
       if (cancelled) return;
       setDbEntries(results.map(dbResultToHistoryEntry));
       setDbLoaded(true);
-    });
+    })();
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [status]);
 
   const entries = useMemo(() => {
     const seen = new Set<string>();
@@ -222,6 +232,7 @@ export function QuizHistoryPanel() {
       combined.push(e);
     }
     for (const e of localEntries) {
+      if (e.dbId != null) continue;
       if (seen.has(e.id)) continue;
       seen.add(e.id);
       combined.push(e);

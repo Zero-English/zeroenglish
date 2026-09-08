@@ -5,6 +5,7 @@ import { ProfileGuard } from "@/components/profile-guard";
 import { ProfileAuthBanner } from "@/components/profile-auth-banner";
 import { ProfileCard } from "@/components/profile-card";
 import { ProfileHeader } from "@/components/profile-header";
+import { SyncStatus } from "@/components/sync-status";
 import { StaggerContainer } from "@/components/stagger";
 import { BackButton } from "@/components/back-button";
 
@@ -30,6 +31,9 @@ export default async function ProfilePage() {
                       <StaggerContainer>
                         <ProfileAuthBanner />
                         <ProfileCard />
+                        <div className="mb-4">
+                          <SyncStatus />
+                        </div>
                         <ProfileTabs words={words} />
                       </StaggerContainer>
                     </ProfileGuard>

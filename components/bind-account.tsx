@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/lib/auth-store";
-import { ShieldCheck, LogOut } from "lucide-react";
+import { ShieldCheck, LogOut, Loader2 } from "lucide-react";
 import { useT } from "@/components/language-provider";
+import { toast } from "sonner";
 
 function GoogleIcon() {
     return (
@@ -31,15 +33,45 @@ function GoogleIcon() {
 
 export function BindAccount() {
     const logout = useAuthStore((s) => s.logout);
+    const [binding, setBinding] = useState(false);
     const t = useT();
 
     const handleBind = async () => {
-        await signIn("google", { callbackUrl: "/profile" });
+        if (binding) return;
+        setBinding(true);
+        try {
+            const armRes = await fetch("/api/v1/auth/bind/begin", {
+                method: "POST",
+            });
+            if (!armRes.ok) {
+                toast.error(t("সাইন-ইন শুরু করা যায়নি। আবার চেষ্টা করুন।", "Could not start sign-in. Please try again."));
+                return;
+            }
+
+            // With redirect:false the client navigates to Google; a successful
+            // bind ends up redirecting back to /profile, where ProfileGuard
+            // detects the guest + new session and performs the guest-data sync
+            // and identity switch. An existing account is rejected by the
+            // signIn callback and redirected to /login?error=AccessDenied, which
+            // the login screen surfaces as a toast.
+            await signIn("google", {
+                redirect: false,
+                callbackUrl: "/profile",
+            });
+        } catch {
+            toast.error(t("কিছু ভুল হয়েছে। আবার চেষ্টা করুন।", "Something went wrong. Please try again."));
+        } finally {
+            setBinding(false);
+        }
     };
 
     const handleLogout = async () => {
         logout();
-        await signOut({ callbackUrl: "/login" });
+        await Promise.allSettled([
+            fetch("/api/v1/auth/logout", { method: "POST" }),
+            signOut({ redirect: false }),
+        ]);
+        window.location.replace("/login");
     };
 
     return (
@@ -55,8 +87,8 @@ export function BindAccount() {
                         </h2>
                         <p className="mt-1 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
                             {t(
-                                "আপনি বর্তমানে একটি অতিথি অ্যাকাউন্ট ব্যবহার করছেন। আপনার অগ্রগতি নিরাপদ রাখতে এবং ডিভাইস জুড়ে সিঙ্ক করতে Google-এর সাথে যুক্ত করুন।",
-                                "You're currently using a guest account. Bind it with Google to keep your progress safe and sync it across devices."
+                                "আপনি বর্তমানে একটি অতিথি অ্যাকাউন্ট ব্যবহার করছেন। আপনার অগ্রগতি নিরাপদ রাখতে এবং ডিভাইস জুড়ে সিঙ্ক করতে একটি নতুন Google অ্যাকাউন্ট দিয়ে যুক্ত করুন।",
+                                "You're currently using a guest account. Bind it with a new Google account to keep your progress safe and sync it across devices."
                             )}
                         </p>
                     </div>
@@ -66,8 +98,13 @@ export function BindAccount() {
                         variant="default"
                         className="h-10 gap-2 bg-orange-600 hover:bg-orange-700 text-white"
                         onClick={() => void handleBind()}
+                        disabled={binding}
                     >
-                        <GoogleIcon />
+                        {binding ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            <GoogleIcon />
+                        )}
                         {t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
                     </Button>
                     <Button
