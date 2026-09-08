@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { ShieldCheck } from "lucide-react";
+import { Globe, ShieldCheck } from "lucide-react";
 import { UserAvatar } from "@/components/UserAvatar";
 import { useAuthStore } from "@/lib/auth-store";
 import { useT } from "@/components/language-provider";
@@ -52,6 +52,15 @@ export function ProfileCard() {
             </p>
           </div>
         </div>
+        {user.id != null && (
+          <Link
+            href={`/profile/${user.id}`}
+            className="sm:ml-auto inline-flex items-center gap-1.5 rounded-md border border-zinc-200 dark:border-zinc-700 px-3 py-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          >
+            <Globe className="h-3.5 w-3.5" />
+            {t("পাবলিক প্রোফাইল দেখুন", "View Public Profile")}
+          </Link>
+        )}
       </div>
     </div>
   );

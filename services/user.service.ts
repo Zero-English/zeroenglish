@@ -1,6 +1,62 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 
+export const getLeaderboard = async (limit: number = 50, currentUserId?: number) => {
+    try {
+        const counts = await prisma.userWord.groupBy({
+            by: ["userId"],
+            where: { learningStatus: "LEARNED" },
+            _count: { _all: true },
+        });
+
+        const sorted = counts
+            .map((r) => ({ userId: r.userId, learnedWordCount: r._count._all }))
+            .sort((a, b) => b.learnedWordCount - a.learnedWordCount);
+
+        const top = sorted.slice(0, limit);
+        const topIds = new Set(top.map((r) => r.userId));
+        let viewer: (typeof top)[number] | null = null;
+        if (currentUserId && !topIds.has(currentUserId)) {
+            viewer = sorted.find((r) => r.userId === currentUserId) ?? null;
+        }
+
+        const neededIds = [...top.map((r) => r.userId)];
+        if (viewer) neededIds.push(viewer.userId);
+
+        const users = await prisma.user.findMany({
+            where: { id: { in: neededIds } },
+            select: { id: true, name: true, user_name: true, image: true },
+        });
+        const userMap = new Map(users.map((u) => [u.id, u]));
+
+        const rows = top.map((r, i) => ({
+            rank: i + 1,
+            ...userMap.get(r.userId),
+            learnedWordCount: r.learnedWordCount,
+        }));
+
+        let viewerRow: (typeof rows)[number] | null = null;
+        if (viewer) {
+            const rank = sorted.findIndex((r) => r.userId === viewer.userId) + 1;
+            viewerRow = {
+                rank,
+                ...userMap.get(viewer.userId),
+                learnedWordCount: viewer.learnedWordCount,
+            };
+        }
+
+        return { data: rows, viewer: viewerRow, success: true };
+    } catch (error) {
+        logger.error(`Failed to fetch leaderboard: ${error}`);
+        return {
+            data: null,
+            viewer: null,
+            message: "Failed to fetch leaderboard",
+            success: false,
+        };
+    }
+};
+
 export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
     try {
         const skip = (page - 1) * limit;
@@ -127,6 +183,106 @@ export const getUserById = async (id: number) => {
         return {
             data: null,
             message: "Failed to fetch user",
+            success: false,
+        };
+    }
+};
+
+const fmtDate = (d: Date): string =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+export const getUserLearningProgress = async (id: number) => {
+    try {
+        const userWords = await prisma.userWord.findMany({
+            where: { userId: id, learningStatus: "LEARNED" },
+            select: {
+                updatedAt: true,
+                word: { select: { level: true } },
+            },
+        });
+
+        const dailyCounts: Record<string, number> = {};
+        const levelCounts: Record<string, number> = {};
+        for (const r of userWords) {
+            const key = fmtDate(new Date(r.updatedAt));
+            dailyCounts[key] = (dailyCounts[key] ?? 0) + 1;
+            levelCounts[r.word.level] = (levelCounts[r.word.level] ?? 0) + 1;
+        }
+
+        const daily: { date: string; count: number }[] = [];
+        const now = new Date();
+        for (let i = 364; i >= 0; i--) {
+            const day = new Date(now);
+            day.setDate(day.getDate() - i);
+            const key = fmtDate(day);
+            daily.push({ date: key, count: dailyCounts[key] ?? 0 });
+        }
+
+        return {
+            data: {
+                daily,
+                levelCounts: levelCounts as Record<string, number>,
+            },
+            message: "Learning progress fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch learning progress for user ${id}: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch learning progress",
+            success: false,
+        };
+    }
+};
+
+export const getUserDailyActivity = async (id: number) => {
+    try {
+        const rows = await prisma.userWord.findMany({
+            where: { userId: id, learningStatus: "LEARNED" },
+            select: { updatedAt: true },
+        });
+
+        const counts: Record<string, number> = {};
+        for (const r of rows) {
+            const key = fmtDate(new Date(r.updatedAt));
+            counts[key] = (counts[key] ?? 0) + 1;
+        }
+
+        const daily: { date: string; count: number }[] = [];
+        const now = new Date();
+        for (let i = 364; i >= 0; i--) {
+            const day = new Date(now);
+            day.setDate(day.getDate() - i);
+            const key = fmtDate(day);
+            daily.push({ date: key, count: counts[key] ?? 0 });
+        }
+
+        const todayKey = fmtDate(now);
+        const todayLearned = counts[todayKey] ?? 0;
+
+        let streak = 0;
+        for (let i = 0; ; i++) {
+            const day = new Date(now);
+            day.setDate(day.getDate() - i);
+            if ((counts[fmtDate(day)] ?? 0) > 0) streak += 1;
+            else break;
+        }
+
+        return {
+            data: {
+                daily,
+                todayLearned,
+                streak,
+            },
+            message: "Daily activity fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch daily activity for user ${id}: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch daily activity",
             success: false,
         };
     }

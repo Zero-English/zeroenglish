@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, LogIn, LogOut } from "lucide-react";
+import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, Trophy, LogIn, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
@@ -18,9 +18,7 @@ import {
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet";
-import logoLight from "../public/assets/logo/zeroenglish-new-logo-light.png";
-import logoDark from "../public/assets/logo/zeroenglish-new-logo-dark.png";
-import { useTheme } from "next-themes";
+import logo from "../public/assets/logo.png";
 
 const spring = { type: "spring", stiffness: 420, damping: 32, mass: 0.9 } as const;
 
@@ -44,6 +42,7 @@ function NavLinks({
     { href: vocabularyHref, label: t("শব্দভাণ্ডার", "Vocabulary"), icon: LibraryBig },
     { href: "/search", label: t("অনুসন্ধান", "Search"), icon: Search },
     { href: "/quiz", label: t("কুইজ", "Quiz"), icon: BookOpenCheck },
+    { href: "/leaderboard", label: t("লিডারবোর্ড", "Leaderboard"), icon: Trophy },
     isLoggedIn
       ? { href: "/profile", label: t("প্রোফাইল", "Profile"), icon: User }
       : { href: "/login", label: t("লগইন", "Login"), icon: LogIn },
@@ -114,8 +113,6 @@ export function Sidebar() {
   const hidden = useQuizChrome((s) => s.hidden);
   const { isOpen, isDesktopOpen, close, toggleDesktop } = useSidebar();
   const { status } = useAuthStatus();
-  const { theme, systemTheme } = useTheme();
-  const currentTheme = theme === "system" ? systemTheme : theme;
   const t = useT();
   const logout = useAuthStore((s) => s.logout);
   const isLoggedIn = status !== "none";
@@ -173,7 +170,7 @@ export function Sidebar() {
               onClick={close}
               className="flex items-center space-x-2"
             >
-              <Image src={currentTheme === "dark" ? logoDark : logoLight} alt="Logo" className="h-10 w-auto" />
+              <Image src={logo} alt="Logo" className="h-5 w-auto dark:brightness-0 dark:invert" />
             </Link>
           </div>
           <div className="flex flex-col flex-1 overflow-hidden">

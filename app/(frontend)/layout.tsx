@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description:
     "Master 3000 essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to B2 levels covered.",
   manifest: "/manifest.webmanifest",
-  icons: "/assets/logo/zeroenglish-new-logo-square.png",
+  icons: "/assets/icon.jpeg",
   other: {
     "theme-color": "#f97316",
   },
