@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
-import { Home, Search, User, BadgeQuestionMark, LibraryBig, LogIn } from 'lucide-react'
+import { Home, Search, User, BadgeQuestionMark, LibraryBig, Trophy, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
@@ -33,6 +33,7 @@ export function MobileBottomNav() {
     { href: vocabularyHref, label: t('শব্দভাণ্ডার', 'Vocabulary'), icon: LibraryBig },
     { href: '/search', label: t('অনুসন্ধান', 'Search'), icon: Search },
     { href: '/quiz', label: t('কুইজ', 'Quiz'), icon: BadgeQuestionMark },
+    { href: '/leaderboard', label: t('লিডারবোর্ড', 'Leaderboard'), icon: Trophy },
     isLoggedIn
       ? { href: '/profile', label: t('প্রোফাইল', 'Profile'), icon: User, avatar: isGoogle ? session?.user : null }
       : { href: '/login', label: t('লগইন', 'Login'), icon: LogIn },

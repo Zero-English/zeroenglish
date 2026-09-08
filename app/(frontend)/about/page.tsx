@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Rocket, Target, Users, Sparkles, ArrowRight, Mail } from "lucide-react";
+import Image from "next/image";
+import { Rocket, Target, Users, Sparkles, ArrowRight, Mail, Globe, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/components/language-provider";
 
@@ -121,6 +122,180 @@ export default function AboutPage() {
                   </p>
                 </div>
               ))}
+            </div>
+          </section>
+
+          <section className="mb-14">
+            <div className="mb-8 text-center">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-4">
+                <Users className="h-3.5 w-3.5 text-orange-500" />
+                {t("আমাদের টিম", "Our Team")}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-3">
+                {t("জিরো ইংলিশের প্রতিষ্ঠাতা", "The Founders of Zero English")}
+              </h2>
+              <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto">
+                {t(
+                  "একটি লক্ষ্য, এক জোড়া দৃষ্টিভঙ্গি — শিক্ষাকে সহজ ও আনন্দময় করে তোলা।",
+                  "One mission, one shared vision — making learning simple and joyful."
+                )}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="group relative overflow-hidden rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-500/10">
+                <div className="relative aspect-[4/5] w-full">
+                  <Image
+                    src="/assets/images/founder-tahmid.png"
+                    alt="Tahmid Hasan"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    unoptimized
+                    className="object-cover object-top"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+                  <div className="absolute right-4 top-4">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 dark:bg-zinc-900/90 px-3 py-1 text-xs font-semibold text-zinc-900 dark:text-zinc-100 backdrop-blur">
+                      {t("প্রতিষ্ঠাতা", "Founder")}
+                    </span>
+                  </div>
+
+                  <div className="absolute inset-x-0 bottom-0 p-6">
+                    <div className="mb-3 flex items-center justify-center gap-2">
+                      <a
+                        href="https://github.com/iamtahmidhasan"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="GitHub"
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur ring-1 ring-white/30 transition-colors hover:bg-white hover:text-zinc-900"
+                      >
+                        <Share2 className="h-4 w-4" />
+                      </a>
+                      <a
+                        href="https://www.linkedin.com/in/im-tahmid-hasan/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn"
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur ring-1 ring-white/30 transition-colors hover:bg-white hover:text-zinc-900"
+                      >
+                        <Globe className="h-4 w-4" />
+                      </a>
+                      <a
+                        href="https://www.tahmidhasan.net"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Portfolio"
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur ring-1 ring-white/30 transition-colors hover:bg-white hover:text-zinc-900"
+                      >
+                        <Sparkles className="h-4 w-4" />
+                      </a>
+                      <a
+                        href="mailto:tahmidhasanpro@gmail.com"
+                        aria-label="Email"
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur ring-1 ring-white/30 transition-colors hover:bg-white hover:text-zinc-900"
+                      >
+                        <Mail className="h-4 w-4" />
+                      </a>
+                    </div>
+
+                    <h3 className="text-center text-xl font-bold text-white">
+                      Tahmid Hasan
+                    </h3>
+                    <p className="text-center text-sm font-medium text-orange-200 mt-0.5">
+                      {t("ওয়েব ডেভেলপার ও UI ডিজাইনার", "Web Developer & UI Designer")}
+                    </p>
+
+                    <div className="grid grid-rows-[0fr] opacity-0 transition-all duration-300 group-hover:grid-rows-[1fr] group-hover:opacity-100 group-active:grid-rows-[1fr] group-active:opacity-100 group-focus-within:grid-rows-[1fr] group-focus-within:opacity-100">
+                      <div className="overflow-hidden">
+                        <p className="mt-3 text-center text-sm leading-relaxed text-zinc-100/90 max-w-sm mx-auto">
+                          {t(
+                            "জিরো ইংলিশের প্রতিষ্ঠাতা। ইঞ্জিনিয়ারিং শিক্ষার্থী ও ডেভেলপার — WordPress, Next.js ও UI ডিজাইনে দক্ষ, যিনি আধুনিক ও ব্যবহারকারী-কেন্দ্রিক ডিজিটাল অভিজ্ঞতা তৈরি করেন।",
+                            "Founder of Zero English. An engineering student and developer specializing in WordPress, Next.js, and UI design — building modern, user-focused digital experiences."
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="group relative overflow-hidden rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-500/10">
+                <div className="relative aspect-[4/5] w-full">
+                  <Image
+                    src="/assets/images/co-founder-mahir.jpeg"
+                    alt="Md. Mahir Asef"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    unoptimized
+                    className="object-cover object-top"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+
+                  <div className="absolute right-4 top-4">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 dark:bg-zinc-900/90 px-3 py-1 text-xs font-semibold text-zinc-900 dark:text-zinc-100 backdrop-blur">
+                      {t("সহ-প্রতিষ্ঠাতা", "Co-Founder")}
+                    </span>
+                  </div>
+
+                  <div className="absolute inset-x-0 bottom-0 p-6">
+                    <div className="mb-3 flex items-center justify-center gap-2">
+                      <a
+                        href="https://github.com/Md-Mahir-Asef"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="GitHub"
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur ring-1 ring-white/30 transition-colors hover:bg-white hover:text-zinc-900"
+                      >
+                        <Share2 className="h-4 w-4" />
+                      </a>
+                      <a
+                        href="https://www.linkedin.com/in/md-mahir-asef-dev/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn"
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur ring-1 ring-white/30 transition-colors hover:bg-white hover:text-zinc-900"
+                      >
+                        <Globe className="h-4 w-4" />
+                      </a>
+                      <a
+                        href="https://mdmahirasef.vercel.app/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Portfolio"
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur ring-1 ring-white/30 transition-colors hover:bg-white hover:text-zinc-900"
+                      >
+                        <Sparkles className="h-4 w-4" />
+                      </a>
+                      <a
+                        href="mailto:mdmahirasef.dev@gmail.com"
+                        aria-label="Email"
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur ring-1 ring-white/30 transition-colors hover:bg-white hover:text-zinc-900"
+                      >
+                        <Mail className="h-4 w-4" />
+                      </a>
+                    </div>
+
+                    <h3 className="text-center text-xl font-bold text-white">
+                      {t("মো. মাহির আসেফ", "Md. Mahir Asef")}
+                    </h3>
+                    <p className="text-center text-sm font-medium text-sky-200 mt-0.5">
+                      {t("ফুল-স্ট্যাক সফটওয়্যার ইঞ্জিনিয়ার", "Full-Stack Software Engineer")}
+                    </p>
+
+                    <div className="grid grid-rows-[0fr] opacity-0 transition-all duration-300 group-hover:grid-rows-[1fr] group-hover:opacity-100 group-active:grid-rows-[1fr] group-active:opacity-100 group-focus-within:grid-rows-[1fr] group-focus-within:opacity-100">
+                      <div className="overflow-hidden">
+                        <p className="mt-3 text-center text-sm leading-relaxed text-zinc-100/90 max-w-sm mx-auto">
+                          {t(
+                            "জিরো ইংলিশের সহ-প্রতিষ্ঠাতা। ব্যাকএন্ড-ফোকাসড ফুল-স্ট্যাক ইঞ্জিনিয়ার — TypeScript, Node.js ও PostgreSQL-এ দক্ষ, যিনি পরিষ্কার ও প্রোডাকশন-রেডি ওয়েব অ্যাপ্লিকেশন তৈরিতে নিবেদিত।",
+                            "Co-founder of Zero English. A backend-focused full-stack engineer specializing in TypeScript, Node.js, and PostgreSQL — passionate about building clean, production-ready web applications."
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 

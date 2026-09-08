@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, LogIn, LogOut } from "lucide-react";
+import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, Trophy, LogIn, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
@@ -42,6 +42,7 @@ function NavLinks({
     { href: vocabularyHref, label: t("শব্দভাণ্ডার", "Vocabulary"), icon: LibraryBig },
     { href: "/search", label: t("অনুসন্ধান", "Search"), icon: Search },
     { href: "/quiz", label: t("কুইজ", "Quiz"), icon: BookOpenCheck },
+    { href: "/leaderboard", label: t("লিডারবোর্ড", "Leaderboard"), icon: Trophy },
     isLoggedIn
       ? { href: "/profile", label: t("প্রোফাইল", "Profile"), icon: User }
       : { href: "/login", label: t("লগইন", "Login"), icon: LogIn },

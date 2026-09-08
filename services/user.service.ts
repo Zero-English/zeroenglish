@@ -1,6 +1,62 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 
+export const getLeaderboard = async (limit: number = 50, currentUserId?: number) => {
+    try {
+        const counts = await prisma.userWord.groupBy({
+            by: ["userId"],
+            where: { learningStatus: "LEARNED" },
+            _count: { _all: true },
+        });
+
+        const sorted = counts
+            .map((r) => ({ userId: r.userId, learnedWordCount: r._count._all }))
+            .sort((a, b) => b.learnedWordCount - a.learnedWordCount);
+
+        const top = sorted.slice(0, limit);
+        const topIds = new Set(top.map((r) => r.userId));
+        let viewer: (typeof top)[number] | null = null;
+        if (currentUserId && !topIds.has(currentUserId)) {
+            viewer = sorted.find((r) => r.userId === currentUserId) ?? null;
+        }
+
+        const neededIds = [...top.map((r) => r.userId)];
+        if (viewer) neededIds.push(viewer.userId);
+
+        const users = await prisma.user.findMany({
+            where: { id: { in: neededIds } },
+            select: { id: true, name: true, user_name: true, image: true },
+        });
+        const userMap = new Map(users.map((u) => [u.id, u]));
+
+        const rows = top.map((r, i) => ({
+            rank: i + 1,
+            ...userMap.get(r.userId),
+            learnedWordCount: r.learnedWordCount,
+        }));
+
+        let viewerRow: (typeof rows)[number] | null = null;
+        if (viewer) {
+            const rank = sorted.findIndex((r) => r.userId === viewer.userId) + 1;
+            viewerRow = {
+                rank,
+                ...userMap.get(viewer.userId),
+                learnedWordCount: viewer.learnedWordCount,
+            };
+        }
+
+        return { data: rows, viewer: viewerRow, success: true };
+    } catch (error) {
+        logger.error(`Failed to fetch leaderboard: ${error}`);
+        return {
+            data: null,
+            viewer: null,
+            message: "Failed to fetch leaderboard",
+            success: false,
+        };
+    }
+};
+
 export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
     try {
         const skip = (page - 1) * limit;
