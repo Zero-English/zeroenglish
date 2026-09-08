@@ -7,6 +7,77 @@ datasource db {
   provider = "postgresql"
 }
 
+model QuizResults {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  title       String?
+  mode        QuizMode
+  quizType    QuizType
+  questionCount Int
+  levels       Levels[]
+  quizQuestions QuizResultQuestion[]
+  timePerQuestion Int
+  timeTotalQuiz Int
+  scheduleEnabled Boolean
+  scheduledOpeningTime DateTime?
+  scheduledClosingTime DateTime?
+  correctAnswers Int
+  scoreInPercent Int
+  totalScore  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model QuizResultQuestion {
+  quizResultId Int
+  questionId  Int
+
+  quizResult QuizResults @relation(fields: [quizResultId], references: [id], onDelete: Cascade)
+
+  quizQuestion QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([quizResultId, questionId])
+  @@index([questionId])
+}
+
+model QuizQuestion {
+  id Int @id @default(autoincrement())
+  quizType QuizType
+  questionText String
+  options String[]
+  difficultyLevel DifficultyLevels
+  answer String
+  quizResults QuizResultQuestion[]
+  hintWords Word[]
+}
+
+model Word {
+  id                 Int                 @id @default(autoincrement())
+  word               String              @unique
+  meaningBn          String[]
+  synonyms           String[]
+  antonyms           String[]
+  definitionEn       String
+  definitionBn       String
+  examplesEn         String[]
+  examplesBn         String[]
+  level              Levels
+  category           String
+  wordType           String[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  relatedBy          UserWord[]
+  userBookmarks      UserBookmark[]
+  quizQuestions      QuizQuestion[]
+
+  @@index([level])
+  @@index([category])
+}
+
 model UserBookmark {
   userId       Int
   wordId       Int
@@ -33,28 +104,6 @@ model UserWord {
   @@index([userId])
 }
 
-model Word {
-  id                 Int                 @id @default(autoincrement())
-  word               String              @unique
-  meaningBn          String[]
-  synonyms           String[]
-  antonyms           String[]
-  definitionEn       String
-  definitionBn       String
-  examplesEn         String[]
-  examplesBn         String[]
-  level              Levels
-  category           String
-  wordType           String[]
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  relatedBy          UserWord[]
-  userBookmarks      UserBookmark[]
-
-  @@index([level])
-  @@index([category])
-}
-
 model User {
   id                 Int                 @id @default(autoincrement())
   name               String?
@@ -65,11 +114,13 @@ model User {
   role               Roles               @default(user)
   created_at         DateTime            @default(now())
   updated_at         DateTime            @updatedAt
+  lastActivityAt     DateTime?           @default(now())
   password           String?
   accounts           Account[]
   sessions           Session[]
   relatedWords       UserWord[]
   userBookmarks      UserBookmark[]
+  quizResults        QuizResults[]
 }
 
 model Account {
@@ -123,4 +174,27 @@ enum Levels {
 enum LearningStatus {
   LEARNED
   STILL_LEARNING
+}
+
+enum QuizMode {
+  PRACTICE
+  WEEKLY
+  BIWEEKLY
+}
+
+enum QuizType {
+  ENGLISH_TO_BANGLA
+  BANGLA_TO_ENGLISH
+  SYNONYMS
+  ANTONYMS
+  MIXED
+  IDIOMS_AND_PHRASES
+  PREPOSITIONS
+  TRUE_FALSE
+}
+
+enum DifficultyLevels {
+  EASY
+  MEDIUM
+  HARD
 }
