@@ -1,13 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
-import { Languages, ArrowLeftRight, Shuffle, Layers, Volume2, Star, Sparkles, Gauge, ListOrdered, Check, X, type LucideIcon } from "lucide-react";
+import { Languages, ArrowLeftRight, ArrowRight, ArrowLeft, Shuffle, Layers, Volume2, Star, Sparkles, Gauge, ListOrdered, Check, X, Bookmark, BookmarkCheck, type LucideIcon } from "lucide-react";
 import { Word } from "@/lib/data";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
+import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
 import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
+import { useQuizChrome } from "@/lib/quiz-chrome";
 import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
 import { useAuthPath } from "@/lib/auth-store";
 import {
@@ -17,6 +19,7 @@ import {
 } from "@/lib/quiz-history-store";
 import Link from "next/link";
 import { useT, useNum } from "@/components/language-provider";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
 
@@ -99,8 +102,8 @@ const QUIZ_TYPE_CONFIG: Record<
   { label: string; labelBn: string; desc: string; descBn: string; icon: LucideIcon; gradient: string; bg: string; border: string; text: string }
 > = {
   english_to_bangla: {
-    label: "English → Bangla",
-    labelBn: "ইংরেজি → বাংলা",
+    label: "English to Bangla",
+    labelBn: "ইংরেজি থেকে বাংলা",
     desc: "Pick the correct Bangla meaning",
     descBn: "সঠিক বাংলা অর্থটি বেছে নিন",
     icon: Languages,
@@ -110,8 +113,8 @@ const QUIZ_TYPE_CONFIG: Record<
     text: "text-sky-700 dark:text-sky-300",
   },
   bangla_to_english: {
-    label: "Bangla → English",
-    labelBn: "বাংলা → ইংরেজি",
+    label: "Bangla to English",
+    labelBn: "বাংলা থেকে ইংরেজি",
     desc: "Pick the correct English word",
     descBn: "সঠিক ইংরেজি শব্দটি বেছে নিন",
     icon: ArrowLeftRight,
@@ -176,6 +179,26 @@ function firstMeaning(meaning: string): string {
   return meaning.split(";")[0].trim();
 }
 
+function requestQuizFullscreen(): void {
+  if (
+    typeof document !== "undefined" &&
+    document.fullscreenEnabled &&
+    !document.fullscreenElement
+  ) {
+    void document.documentElement.requestFullscreen().catch(() => {
+      // Fullscreen may be blocked without a user gesture; ignore.
+    });
+  }
+}
+
+function exitQuizFullscreen(): void {
+  if (typeof document !== "undefined" && document.fullscreenElement) {
+    void document.exitFullscreen().catch(() => {
+      // Ignore exit fullscreen errors.
+    });
+  }
+}
+
 export function QuizClient({ words }: { words: Word[] }) {
   const step = useQuizStore((s) => s.step);
   const quizType = useQuizStore((s) => s.quizType);
@@ -193,6 +216,18 @@ export function QuizClient({ words }: { words: Word[] }) {
   const incorrectAnswers = useQuizStore((s) => s.incorrectAnswers);
 
   const { addStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
+
+  const setQuizChromeHidden = useQuizChrome((s) => s.setHidden);
+  useEffect(() => {
+    const active = step === "quiz";
+    setQuizChromeHidden(active);
+    if (active) {
+      requestQuizFullscreen();
+    } else {
+      exitQuizFullscreen();
+    }
+    return () => setQuizChromeHidden(false);
+  }, [step, setQuizChromeHidden]);
 
   const savedRef = useRef(false);
   useEffect(() => {
@@ -342,9 +377,11 @@ export function QuizClient({ words }: { words: Word[] }) {
       selectedAnswer: null,
       isAnswered: false,
       timeLeft: noTimeLimit ? -1 : timePerQuestion,
+      deadlineAt: noTimeLimit ? null : Date.now() + timePerQuestion * 1000,
       resultsRecorded: false,
       step: "quiz",
     });
+    requestQuizFullscreen();
   };
 
   const handleOptionClick = (option: { text: string; correct: boolean }) => {
@@ -381,6 +418,7 @@ export function QuizClient({ words }: { words: Word[] }) {
         selectedAnswer: null,
         isAnswered: false,
         timeLeft: noTimeLimit ? -1 : timePerQuestion,
+        deadlineAt: noTimeLimit ? null : Date.now() + timePerQuestion * 1000,
       });
     }
   };
@@ -392,14 +430,17 @@ export function QuizClient({ words }: { words: Word[] }) {
   useEffect(() => {
     if (step !== "quiz" || isAnswered || noTimeLimit || timeLeft < 0) return;
 
+    const deadline = useQuizStore.getState().deadlineAt;
+    if (deadline == null) return;
+
+    useQuizStore.setState({
+      timeLeft: Math.max(0, Math.ceil((deadline - Date.now()) / 1000)),
+    });
+
     const timer = setInterval(() => {
-      const current = useQuizStore.getState().timeLeft;
-      if (current <= 1) {
-        clearInterval(timer);
-        useQuizStore.setState({ timeLeft: 0 });
-      } else {
-        useQuizStore.setState({ timeLeft: current - 1 });
-      }
+      useQuizStore.setState({
+        timeLeft: Math.max(0, Math.ceil((deadline - Date.now()) / 1000)),
+      });
     }, 1000);
 
     return () => clearInterval(timer);
@@ -554,12 +595,12 @@ function QuizTypeSelect({ onSelect }: { onSelect: (type: QuizType) => void }) {
                   <div className={`flex flex-wrap items-center gap-2 mt-4 ${featured ? "" : ""}`}>
                     {type === "english_to_bangla" && (
                       <span className="text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-                        {t("শব্দ → অর্থ", "Word → Meaning")}
+                        {t("শব্দ থেকে অর্থ", "Word to Meaning")}
                       </span>
                     )}
                     {type === "bangla_to_english" && (
                       <span className="text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-                        {t("অর্থ → শব্দ", "Meaning → Word")}
+                        {t("অর্থ থেকে শব্দ", "Meaning to Word")}
                       </span>
                     )}
                     {type === "synonym" && (
@@ -574,9 +615,7 @@ function QuizTypeSelect({ onSelect }: { onSelect: (type: QuizType) => void }) {
                     )}
                     <span className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
                       {t("শুরু", "Start")}
-                      <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-                        →
-                      </span>
+                      <ArrowRight className="inline-block h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
                 </div>
@@ -638,9 +677,7 @@ function SettingsView({
           onClick={onBack}
           className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors group mb-8"
         >
-          <span className="inline-block transition-transform group-hover:-translate-x-0.5">
-            &larr;
-          </span>
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
           {t("কুইজের ধরনে ফিরে যান", "Back to quiz types")}
         </button>
 
@@ -858,6 +895,9 @@ function QuizView({
   const qt = QUIZ_TYPE_CONFIG[quizType];
   const lc = LEVEL_CONFIG[question.word.level];
   const letters = ["A", "B", "C", "D"];
+  const [exitOpen, setExitOpen] = useState(false);
+  const { toggleBookmark, isBookmarked } = useBookmarkedWords();
+  const bookmarked = isBookmarked(question.word.id);
 
   return (
     <div className="relative min-h-dvh overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
@@ -891,6 +931,13 @@ function QuizView({
               {t("স্কোর", "Score")}{" "}
               <span className="font-semibold text-emerald-600 dark:text-emerald-400">{num(score)}</span>
             </span>
+            <button
+              onClick={() => setExitOpen(true)}
+              className="p-2 -m-2 rounded-xl text-zinc-400 hover:text-red-500 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+              title={t("কুইজ থেকে বেরিয়ে যান", "Exit quiz")}
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
         </div>
 
@@ -921,6 +968,22 @@ function QuizView({
                 <Volume2 className="h-6 w-6 sm:h-7 sm:w-7" />
               </button>
             )}
+            <button
+              onClick={() => toggleBookmark(question.word.id)}
+              className={cn(
+                "p-2 rounded-xl transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer",
+                bookmarked
+                  ? "text-amber-500 hover:text-amber-600"
+                  : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+              )}
+              title={bookmarked ? t("বুকমার্ক সরান", "Remove bookmark") : t("বুকমার্ক করুন", "Bookmark")}
+            >
+              {bookmarked ? (
+                <BookmarkCheck className="h-6 w-6 sm:h-7 sm:w-7" />
+              ) : (
+                <Bookmark className="h-6 w-6 sm:h-7 sm:w-7" />
+              )}
+            </button>
           </h2>
         </div>
 
@@ -1002,6 +1065,19 @@ function QuizView({
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        open={exitOpen}
+        onOpenChange={setExitOpen}
+        variant="warning"
+        title={t("কুইজটি ছেড়ে যাবেন?", "Exit the quiz?")}
+        description={t("আপনার অগ্রগতি সংরক্ষিত হবে না। আপনি কি নিশ্চিতভাবে প্রস্থান করতে চান?", "Your progress won't be saved. Are you sure you want to exit?")}
+        confirmText={t("প্রস্থান করুন", "Exit")}
+        cancelText={t("চালিয়ে যান", "Keep going")}
+        onConfirm={() => {
+          resetQuizState();
+        }}
+      />
     </div>
   );
 }

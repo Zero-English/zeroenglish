@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 import { useAuthStatus } from '@/lib/auth-store'
 import { useSelectedLevel } from '@/lib/level-store'
 import { useT } from '@/components/language-provider'
+import { useQuizChrome } from '@/lib/quiz-chrome'
 import { UserAvatar } from '@/components/UserAvatar'
 
 const spring = { type: 'spring', stiffness: 420, damping: 32, mass: 0.9 } as const
@@ -19,6 +20,7 @@ const itemClass =
 
 export function MobileBottomNav() {
   const pathname = usePathname()
+  const hidden = useQuizChrome((s) => s.hidden)
   const { status } = useAuthStatus()
   const { data: session } = useSession()
   const isLoggedIn = status !== 'none'
@@ -52,6 +54,8 @@ export function MobileBottomNav() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  if (hidden) return null
 
   return (
     <motion.nav
