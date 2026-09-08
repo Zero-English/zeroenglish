@@ -31,3 +31,26 @@ export const wordRowSchema = z.preprocess(
 export const wordsArraySchema = z.array(wordRowSchema);
 
 export type WordRowInput = z.infer<typeof wordRowSchema>;
+
+export const quizTypeEnumSchema = z.enum([
+  "ENGLISH_TO_BANGLA",
+  "BANGLA_TO_ENGLISH",
+  "SYNONYMS",
+  "ANTONYMS",
+  "MIXED",
+  "IDIOMS_AND_PHRASES",
+  "PREPOSITIONS",
+  "TRUE_FALSE",
+]);
+
+export const difficultyLevelEnumSchema = z.enum(["EASY", "MEDIUM", "HARD"]);
+
+export const quizQuestionSchema = z.object({
+  quizType: quizTypeEnumSchema,
+  questionText: z.string().trim().min(1, "Question text is required"),
+  options: z.array(z.string().min(1)).min(2, "At least 2 options are required"),
+  difficultyLevel: difficultyLevelEnumSchema,
+  answer: z.string().trim().min(1, "Answer is required"),
+});
+
+export type QuizQuestionInput = z.infer<typeof quizQuestionSchema>;
