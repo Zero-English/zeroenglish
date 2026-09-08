@@ -11,7 +11,7 @@ import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
 import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
-import { useAuthPath } from "@/lib/auth-store";
+import { useAuthPath, useAuthStore } from "@/lib/auth-store";
 import {
   useQuizHistoryStore,
   type QuizType,
@@ -24,6 +24,61 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
 
 type QuizLevel = LevelOption | "C1" | "C2";
+
+const QUIZ_TYPE_ENUM: Record<QuizType, string> = {
+  english_to_bangla: "ENGLISH_TO_BANGLA",
+  bangla_to_english: "BANGLA_TO_ENGLISH",
+  synonym: "SYNONYMS",
+  antonym: "ANTONYMS",
+};
+
+const LEVEL_ENUM: Record<string, string> = {
+  A1: "A1",
+  A2: "A2",
+  B1: "B1",
+  B2: "B2",
+  C1: "C1",
+  C2: "C2",
+};
+
+async function saveQuizResultToDb(args: {
+  userId: number | null;
+  quizType: QuizType;
+  score: number;
+  total: number;
+  percentage: number;
+  levels: string[];
+  timePerQuestion: number;
+}): Promise<void> {
+  if (!args.userId) return;
+  try {
+    const res = await fetch("/api/v1/quiz/results", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        quizType: QUIZ_TYPE_ENUM[args.quizType],
+        questionCount: args.total,
+        levels: args.levels
+          .filter((lv) => LEVEL_ENUM[lv])
+          .map((lv) => LEVEL_ENUM[lv]),
+        timePerQuestion: args.timePerQuestion,
+        timeTotalQuiz: args.total * args.timePerQuestion,
+        scheduleEnabled: false,
+        correctAnswers: args.score,
+        scoreInPercent: args.percentage,
+        totalScore: args.score,
+      }),
+    });
+    if (!res.ok) {
+      // non-fatal; the result is already stored in localStorage
+    }
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("activity-changed"));
+    }
+  } catch {
+    // non-fatal; the result is already stored in localStorage
+  }
+}
 
 interface Question {
   word: Word;
@@ -1097,6 +1152,7 @@ function ResultsView({
 }) {
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const { path, hydrated } = useAuthPath();
+  const userId = useAuthStore((s) => s.userId);
   const addHistoryEntry = useQuizHistoryStore((s) => s.addEntry);
   const t = useT();
   const num = useNum();
@@ -1111,6 +1167,8 @@ function ResultsView({
     const levels = Array.from(
       new Set(questions.map((q) => q.word.level))
     ).sort();
+    const isTimed = !useQuizStore.getState().noTimeLimit;
+    const timePerQuestion = isTimed ? useQuizStore.getState().timePerQuestion : 0;
     const entry: QuizHistoryEntry = {
       id:
         typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -1121,12 +1179,22 @@ function ResultsView({
       win: `${percentage}%`,
       levels,
       numberOfQuestions: total,
-      timePerQuestion: useQuizStore.getState().noTimeLimit
-            ? 0
-            : useQuizStore.getState().timePerQuestion,
+      timePerQuestion,
     };
     addHistoryEntry(entry);
     useQuizStore.setState({ resultsRecorded: true });
+
+    saveQuizResultToDb({
+      userId,
+      quizType,
+      score,
+      total,
+      percentage,
+      levels,
+      timePerQuestion,
+    }).catch(() => {
+      // DB save is best-effort; localStorage history already recorded.
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, quizType]);
 

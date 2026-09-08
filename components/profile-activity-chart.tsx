@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   ChartContainer,
@@ -20,6 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Activity, CalendarDays, TrendingDown, TrendingUp } from "lucide-react";
 import { useT, useNum } from "@/components/language-provider";
+import { fetchQuizResultsFromDb, dbResultDate, type DbQuizResult } from "@/lib/quiz-results-api";
 
 type ActivityPoint = { label: string; learned: number; quiz: number };
 
@@ -67,11 +68,10 @@ function hourLabel(h: number) {
 
 function hourlySeries(daysAgo: number): ActivityPoint[] {
   const points: ActivityPoint[] = [];
-  for (let h = 7; h <= 21; h++) {
+  for (let h = 0; h < 24; h++) {
     const seed = daysAgo * 1000 + h;
-    const learned = randInt(seed, h < 12 ? 2 : 4);
-    const quiz = Math.min(96, 50 + randInt(seed + 500, 46));
-    points.push({ label: hourLabel(h), learned, quiz });
+    const learned = randInt(seed, h >= 9 && h <= 17 ? 4 : 1);
+    points.push({ label: hourLabel(h), learned, quiz: 0 });
   }
   return points;
 }
@@ -83,11 +83,10 @@ function dailySeries(days: number, endOffset: number): ActivityPoint[] {
     d.setDate(d.getDate() - (i + endOffset));
     const seed = i * 17 + days * 3;
     const learned = randInt(seed, 5) + (i % 7 === 1 ? 2 : 0);
-    const quiz = Math.min(92, Math.max(35, 64 + randInt(seed + 11, 26) - (i % 7 === 4 ? 14 : 0)));
     points.push({
       label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
       learned,
-      quiz,
+      quiz: 0,
     });
   }
   return points;
@@ -133,6 +132,62 @@ const chartConfig = {
   quiz: { label: "Quiz win rate", color: "#0ea5e9" },
 } satisfies ChartConfig;
 
+const RANGE_DAYS: Record<RangeKey, number> = {
+  today: 1,
+  yesterday: 1,
+  "7d": 7,
+  "14d": 14,
+  "30d": 30,
+  "90d": 90,
+  "1y": 365,
+};
+
+function dateKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function buildQuizMap(results: DbQuizResult[]): Map<string, number> {
+  const byDate = new Map<string, { sum: number; count: number }>();
+  for (const r of results) {
+    const date = dbResultDate(r);
+    const rec = byDate.get(date) ?? { sum: 0, count: 0 };
+    rec.sum += r.scoreInPercent;
+    rec.count += 1;
+    byDate.set(date, rec);
+  }
+  const out = new Map<string, number>();
+  for (const [date, rec] of byDate) {
+    out.set(date, Math.round(rec.sum / rec.count));
+  }
+  return out;
+}
+
+function quizForDate(qmap: Map<string, number>, d: Date): number {
+  return qmap.get(dateKey(d)) ?? 0;
+}
+
+function buildHourlyQuizMap(results: DbQuizResult[], daysAgo: number): Map<number, number> {
+  const target = new Date();
+  target.setHours(0, 0, 0, 0);
+  target.setDate(target.getDate() - daysAgo);
+  const targetKey = dateKey(target);
+
+  const byHour = new Map<number, { sum: number; count: number }>();
+  for (const r of results) {
+    const raw = r.createdAt instanceof Date ? r.createdAt.toISOString() : r.createdAt;
+    const d = new Date(raw);
+    if (dateKey(d) !== targetKey) continue;
+    const h = d.getHours();
+    const rec = byHour.get(h) ?? { sum: 0, count: 0 };
+    rec.sum += r.scoreInPercent;
+    rec.count += 1;
+    byHour.set(h, rec);
+  }
+  const out = new Map<number, number>();
+  for (const [h, rec] of byHour) out.set(h, Math.round(rec.sum / rec.count));
+  return out;
+}
+
 export function ProfileActivityChart() {
   const [range, setRange] = useState<RangeKey>("7d");
   const [metric, setMetric] = useState<Metric>("all");
@@ -140,47 +195,123 @@ export function ProfileActivityChart() {
   const t = useT();
   const num = useNum();
 
+  const loadActivity = useCallback(async (r: RangeKey) => {
+    const isHourly = r === "today" || r === "yesterday";
+    const days = r === "today" || r === "yesterday" ? 1 : (RANGE_DAYS[r] ?? 7);
+
+    const [learnedRes, dbResults] = await Promise.all([
+      fetchLearnedActivity(r),
+      fetchQuizResultsFromDb(),
+    ]);
+    const qmap = buildQuizMap(dbResults);
+
+    setActivity((prev) => {
+      const base = prev[r];
+
+      if (isHourly) {
+        const basePoints = learnedRes ? learnedRes.current : base.data;
+        const prevPoints = learnedRes ? learnedRes.previous : base.previous;
+        const currentOffset = r === "today" ? 0 : 1;
+        const previousOffset = r === "today" ? 1 : 2;
+        const currentMap = buildHourlyQuizMap(dbResults, currentOffset);
+        const previousMap = buildHourlyQuizMap(dbResults, previousOffset);
+        return {
+          ...prev,
+          [r]: {
+            title: base.title,
+            titleBn: base.titleBn,
+            data: basePoints.map((p, i) => ({ ...p, quiz: currentMap.get(i) ?? 0 })),
+            previous: prevPoints.map((p, i) => ({ ...p, quiz: previousMap.get(i) ?? 0 })),
+          },
+        };
+      }
+
+      if (!learnedRes) {
+        const current = base.data.map((p, i) => {
+          const d = new Date();
+          d.setDate(d.getDate() - (days - 1) + i);
+          return { ...p, quiz: quizForDate(qmap, d) };
+        });
+        const previous = base.previous.map((p, i) => {
+          const d = new Date();
+          d.setDate(d.getDate() - (2 * days - 1) + i);
+          return { ...p, quiz: quizForDate(qmap, d) };
+        });
+        return { ...prev, [r]: { ...base, data: current, previous } };
+      }
+
+      const current = learnedRes.current.map((pt, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (days - 1) + i);
+        return { ...pt, quiz: quizForDate(qmap, d) };
+      });
+      const previous = learnedRes.previous.map((pt, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (2 * days - 1) + i);
+        return { ...pt, quiz: quizForDate(qmap, d) };
+      });
+      return {
+        ...prev,
+        [r]: {
+          title: base.title,
+          titleBn: base.titleBn,
+          data: current,
+          previous,
+        },
+      };
+    });
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
-    fetchLearnedActivity(range).then((res) => {
-      if (cancelled || !res) return;
-      setActivity((prev) => ({
-        ...prev,
-        [range]: {
-          title: prev[range].title,
-          titleBn: prev[range].titleBn,
-          data: res.current.map((pt, i) => ({
-            label: pt.label,
-            learned: pt.learned,
-            quiz: prev[range].data[i]?.quiz ?? 0,
-          })),
-          previous: res.previous.map((pt, i) => ({
-            label: pt.label,
-            learned: pt.learned,
-            quiz: prev[range].previous[i]?.quiz ?? 0,
-          })),
-        },
-      }));
-    });
+    const run = () => {
+      if (cancelled) return;
+      loadActivity(range);
+    };
+
+    run();
+
+    const onFocus = () => {
+      if (document.visibilityState === "visible") run();
+    };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
+
+    const onActivityChange = () => {
+      run();
+    };
+    window.addEventListener("activity-changed", onActivityChange);
+
+    const interval = setInterval(run, 30000);
+
     return () => {
       cancelled = true;
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
+      window.removeEventListener("activity-changed", onActivityChange);
+      clearInterval(interval);
     };
-  }, [range]);
+  }, [range, loadActivity]);
 
   const active = activity[range];
 
   const stats = useMemo(() => {
     const sumLearned = (pts: ActivityPoint[]) => pts.reduce((acc, p) => acc + p.learned, 0);
-    const avgQuiz = (pts: ActivityPoint[]) => (pts.length ? pts.reduce((acc, p) => acc + p.quiz, 0) / pts.length : 0);
+    const avgQuiz = (pts: ActivityPoint[]) => {
+      const active = pts.filter((p) => p.quiz > 0);
+      return active.length ? active.reduce((acc, p) => acc + p.quiz, 0) / active.length : 0;
+    };
+    const quizValues = (pts: ActivityPoint[]) => pts.map((p) => p.quiz).filter((v) => v > 0);
     const currentLearned = sumLearned(active.data);
     const currentQuiz = avgQuiz(active.data);
     const previousLearned = sumLearned(active.previous);
     const previousQuiz = avgQuiz(active.previous);
+    const curQuizValues = quizValues(active.data);
     return {
       learned: currentLearned,
       quizAvg: currentQuiz,
-      bestQuiz: Math.max(...active.data.map((p) => p.quiz)),
-      worstQuiz: Math.min(...active.data.map((p) => p.quiz)),
+      bestQuiz: curQuizValues.length ? Math.max(...curQuizValues) : 0,
+      worstQuiz: curQuizValues.length ? Math.min(...curQuizValues) : 0,
       avgLearned: currentLearned / active.data.length,
       learnedChange: previousLearned > 0 ? ((currentLearned - previousLearned) / previousLearned) * 100 : null,
       quizChange: previousQuiz > 0 ? ((currentQuiz - previousQuiz) / previousQuiz) * 100 : null,
@@ -204,9 +335,7 @@ export function ProfileActivityChart() {
         <div>
           <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">{t("কার্যকলাপ", "Activity")}</h3>
           <p className="text-xs text-zinc-400 dark:text-zinc-500">
-            {metric === "quiz"
-              ? t("ডেমো তথ্যের ভিত্তিতে", "Based on dummy data")
-              : t("শেখা শব্দের অ্যানালিটিক্স", "Learned word analytics")}
+            {t("কার্যকলাপ অ্যানালিটিক্স", "Activity analytics")}
           </p>
         </div>
       </div>

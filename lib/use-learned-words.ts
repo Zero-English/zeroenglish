@@ -146,6 +146,9 @@ export function useLearnedWords() {
       if (adding) void putWord({ id: k, type: TYPE }, path);
       else void deleteWord(path, TYPE, k);
       if (status === "google") void syncDbLearned(id, adding);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("activity-changed"));
+      }
     },
     [snap, path, status]
   );

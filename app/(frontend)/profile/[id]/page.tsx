@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getUserById, getUserLearningProgress } from "@/services/user.service";
+import { getQuizResultsByUser } from "@/services/quiz-result.service";
 import { getAllWords } from "@/lib/data";
 import { PublicProfileView } from "@/components/public-profile";
 import { BackButton } from "@/components/back-button";
@@ -45,9 +46,10 @@ export default async function PublicProfilePage({
     notFound();
   }
 
-  const [result, progressResult, words] = await Promise.all([
+  const [result, progressResult, quizResultsResult, words] = await Promise.all([
     getUserById(userId),
     getUserLearningProgress(userId),
+    getQuizResultsByUser(userId),
     getAllWords(),
   ]);
 
@@ -75,6 +77,11 @@ export default async function PublicProfilePage({
   const dailyData =
     progressResult.success && progressResult.data ? progressResult.data.daily : [];
 
+  const quizResults =
+    quizResultsResult.success && Array.isArray(quizResultsResult.data)
+      ? quizResultsResult.data
+      : [];
+
   return (
     <div className="relative min-h-dvh overflow-hidden">
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
@@ -98,6 +105,7 @@ export default async function PublicProfilePage({
             totalWords={words.length}
             levelProgress={levelProgress}
             dailyData={dailyData}
+            quizResults={quizResults}
           />
         </div>
       </div>

@@ -54,3 +54,27 @@ export const quizQuestionSchema = z.object({
 });
 
 export type QuizQuestionInput = z.infer<typeof quizQuestionSchema>;
+
+export const quizModeEnumSchema = z.enum(["PRACTICE", "WEEKLY", "BIWEEKLY"]);
+
+export const quizResultSchema = z
+  .object({
+    title: z.string().trim().max(200).nullish(),
+    mode: quizModeEnumSchema.default("PRACTICE"),
+    quizType: quizTypeEnumSchema,
+    questionCount: z.number().int().positive("questionCount must be positive"),
+    levels: z.array(levelEnumSchema).min(1, "At least one level is required"),
+    timePerQuestion: z.number().int().nonnegative("timePerQuestion must be non-negative"),
+    timeTotalQuiz: z.number().int().nonnegative("timeTotalQuiz must be non-negative"),
+    scheduleEnabled: z.boolean().default(false),
+    scheduledOpeningTime: z.string().datetime().nullish(),
+    scheduledClosingTime: z.string().datetime().nullish(),
+    correctAnswers: z
+      .number()
+      .int()
+      .nonnegative("correctAnswers must be non-negative"),
+    scoreInPercent: z.number().int().min(0, "scoreInPercent must be >= 0").max(100, "scoreInPercent must be <= 100"),
+    totalScore: z.number().int().nonnegative("totalScore must be non-negative"),
+  });
+
+export type QuizResultInput = z.infer<typeof quizResultSchema>;

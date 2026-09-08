@@ -5,7 +5,8 @@ import { UserAvatar } from "@/components/UserAvatar";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { ContributionCalendar } from "@/components/contribution-calendar";
 import { useT, useNum } from "@/components/language-provider";
-import { quizResult, quizResultStats, type QuizResultType } from "@/lib/quiz-result";
+import { dbResultToHistoryEntry, type DbQuizResult } from "@/lib/quiz-results-api";
+import type { QuizType } from "@/lib/quiz-history-store";
 import { cn } from "@/lib/utils";
 import {
   ShieldCheck,
@@ -42,7 +43,7 @@ export interface PublicProfileUser {
 }
 
 const QUIZ_META: Record<
-  QuizResultType,
+  QuizType,
   { label: string; labelBn: string; icon: LucideIcon; iconColor: string; bg: string; gradient: string }
 > = {
   english_to_bangla: {
@@ -150,10 +151,10 @@ function StatCard({
   );
 }
 
-function QuizItem({ index }: { index: number }) {
-  const entry = quizResult[index];
+function QuizItem({ entry }: { entry: { quizType: QuizType; date: string; win: string; levels: string[]; numberOfQuestions: number; timePerQuestion: number } }) {
   const meta = QUIZ_META[entry.quizType];
   const Icon = meta.icon;
+  const win = parseInt(entry.win, 10);
   const t = useT();
   const num = useNum();
 
@@ -178,7 +179,7 @@ function QuizItem({ index }: { index: number }) {
         <div className="flex items-center gap-2 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 px-3 py-2">
           <Trophy className="h-4 w-4 text-amber-500" />
           <span className="text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
-            {num(entry.win)}%
+            {num(win)}%
           </span>
           <span className="text-xs text-zinc-400">{t("জয়ের হার", "win rate")}</span>
         </div>
@@ -215,18 +216,31 @@ export function PublicProfileView({
   totalWords,
   levelProgress = [],
   dailyData = [],
+  quizResults = [],
 }: {
   user: PublicProfileUser;
   totalWords: number;
   levelProgress: { level: string; total: number; learned: number }[];
   dailyData: { date: string; count: number }[];
+  quizResults: DbQuizResult[];
 }) {
   const t = useT();
   const num = useNum();
   const isAdmin = user.role === "admin";
 
   const progress = totalWords > 0 ? Math.round((user.learnedCount / totalWords) * 100) : 0;
-  const stats = useMemo(() => quizResultStats(quizResult), []);
+  const quizEntries = useMemo(
+    () => quizResults.map((r) => dbResultToHistoryEntry(r)),
+    [quizResults]
+  );
+  const stats = useMemo(() => {
+    const total = quizEntries.length;
+    const totalQuestions = quizEntries.reduce((acc, e) => acc + e.numberOfQuestions, 0);
+    const avg =
+      total > 0 ? Math.round(quizEntries.reduce((acc, e) => acc + parseInt(e.win, 10), 0) / total) : 0;
+    const best = total > 0 ? Math.max(...quizEntries.map((e) => parseInt(e.win, 10))) : 0;
+    return { total, totalQuestions, avg, best };
+  }, [quizEntries]);
 
   return (
     <StaggerContainer className="space-y-6">
@@ -354,16 +368,13 @@ export function PublicProfileView({
         <ContributionCalendar userId={user.id} data={dailyData} />
       </StaggerItem>
 
-      {/* Quiz dummy data */}
+      {/* Quiz results */}
       <StaggerItem className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
         <div className="flex flex-wrap items-center gap-2 mb-1">
           <GraduationCap className="h-5 w-5 text-zinc-500" />
           <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
             {t("কুইজের ফলাফল", "Quiz Results")}
           </h3>
-          <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-            {t("ডেমো ডেটা", "Demo data")}
-          </span>
         </div>
         <p className="text-xs text-zinc-400 dark:text-zinc-500 mb-5">
           {t(
@@ -372,36 +383,50 @@ export function PublicProfileView({
           )}
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
-          <StaggerContainer className="contents">
-            <StatCard
-              icon={<GraduationCap className="h-5 w-5 text-indigo-600" />}
-              label={t("নেওয়া কুইজ", "Quizzes Taken")}
-              value={num(stats.total)}
-              color="bg-indigo-100 dark:bg-indigo-900/30"
-            />
-            <StatCard
-              icon={<BarChart3 className="h-5 w-5 text-sky-600" />}
-              label={t("গড় জয়ের হার", "Avg. Win Rate")}
-              value={`${num(stats.avg)}%`}
-              color="bg-sky-100 dark:bg-sky-900/30"
-            />
-            <StatCard
-              icon={<Award className="h-5 w-5 text-emerald-600" />}
-              label={t("সেরা স্কোর", "Best Score")}
-              value={`${num(stats.best)}%`}
-              color="bg-emerald-100 dark:bg-emerald-900/30"
-            />
-          </StaggerContainer>
-        </div>
+        {stats.total > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+              <StaggerContainer className="contents">
+                <StatCard
+                  icon={<GraduationCap className="h-5 w-5 text-indigo-600" />}
+                  label={t("নেওয়া কুইজ", "Quizzes Taken")}
+                  value={num(stats.total)}
+                  color="bg-indigo-100 dark:bg-indigo-900/30"
+                />
+                <StatCard
+                  icon={<BarChart3 className="h-5 w-5 text-sky-600" />}
+                  label={t("গড় জয়ের হার", "Avg. Win Rate")}
+                  value={`${num(stats.avg)}%`}
+                  color="bg-sky-100 dark:bg-sky-900/30"
+                />
+                <StatCard
+                  icon={<Award className="h-5 w-5 text-emerald-600" />}
+                  label={t("সেরা স্কোর", "Best Score")}
+                  value={`${num(stats.best)}%`}
+                  color="bg-emerald-100 dark:bg-emerald-900/30"
+                />
+              </StaggerContainer>
+            </div>
 
-        <div className="grid grid-cols-1 gap-4">
-          <StaggerContainer className="contents">
-            {quizResult.map((entry, idx) => (
-              <QuizItem key={entry.id} index={idx} />
-            ))}
-          </StaggerContainer>
-        </div>
+            <div className="grid grid-cols-1 gap-4">
+              <StaggerContainer className="contents">
+                {quizEntries.map((entry, idx) => (
+                  <QuizItem key={entry.id ?? `${idx}`} entry={entry} />
+                ))}
+              </StaggerContainer>
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-16">
+            <Trophy className="h-12 w-12 mx-auto text-zinc-300 dark:text-zinc-600 mb-4" />
+            <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-1">
+              {t("এখনো কোনো কুইজ ইতিহাস নেই।", "No quiz history yet.")}
+            </p>
+            <p className="text-zinc-400 dark:text-zinc-500 text-xs">
+              {t("কুইজ নিলে ফলাফল এখানে দেখা যাবে।", "Results will appear here once they take a quiz.")}
+            </p>
+          </div>
+        )}
       </StaggerItem>
     </StaggerContainer>
   );
