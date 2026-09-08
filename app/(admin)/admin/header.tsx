@@ -19,6 +19,7 @@ import {
 const TITLES: Record<string, string> = {
   "/admin/users": "Users",
   "/admin/vocabulary": "Vocabulary",
+  "/admin/quizzes": "Quizzes",
 };
 
 function resolveTitle(pathname: string): string {
