@@ -91,10 +91,23 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
             _count: { _all: true },
         });
 
+        const quizAvgs = await prisma.quizResults.groupBy({
+            by: ["userId"],
+            where: { userId: { in: rawUsers.map((u) => u.id) } },
+            _avg: { scoreInPercent: true },
+        });
+
         const userWordCountMap = new Map(
             userWordCounts.map((row) => [
                 `${row.userId}:${row.learningStatus}`,
                 row._count._all,
+            ])
+        );
+
+        const quizAvgMap = new Map(
+            quizAvgs.map((row) => [
+                row.userId,
+                Math.round(row._avg.scoreInPercent ?? 0),
             ])
         );
 
@@ -105,6 +118,7 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
             bookmarkedCount: _count.userBookmarks,
             learnedWordCount: userWordCountMap.get(`${user.id}:LEARNED`) ?? 0,
             stillLearningCount: userWordCountMap.get(`${user.id}:STILL_LEARNING`) ?? 0,
+            avgQuizScore: quizAvgMap.get(user.id) ?? null,
         }));
 
         return {
@@ -183,6 +197,121 @@ export const getUserById = async (id: number) => {
         return {
             data: null,
             message: "Failed to fetch user",
+            success: false,
+        };
+    }
+};
+
+export const updateUserById = async (
+    id: number,
+    data: {
+        name?: string | null;
+        user_name?: string;
+        email?: string;
+        role?: "user" | "admin";
+        image?: string | null;
+    }
+) => {
+    try {
+        if (data.email) {
+            const existing = await prisma.user.findFirst({
+                where: { email: data.email.toLowerCase().trim(), id: { not: id } },
+                select: { id: true },
+            });
+            if (existing) {
+                return {
+                    data: null,
+                    message: "Email is already in use by another user",
+                    success: false,
+                    status: 409,
+                };
+            }
+        }
+
+        const updated = await prisma.user.update({
+            where: { id },
+            data: {
+                name: data.name !== undefined ? data.name : undefined,
+                user_name: data.user_name,
+                email: data.email ? data.email.toLowerCase().trim() : undefined,
+                role: data.role,
+                image: data.image !== undefined ? data.image : undefined,
+            },
+            select: {
+                id: true,
+                name: true,
+                user_name: true,
+                email: true,
+                emailVerified: true,
+                image: true,
+                role: true,
+                created_at: true,
+                updated_at: true,
+            },
+        });
+
+        return {
+            data: updated,
+            message: "User updated successfully",
+            success: true,
+        };
+    } catch (error) {
+        if (typeof error === "object" && error !== null && "code" in error && (error as { code?: string }).code === "P2002") {
+            return {
+                data: null,
+                message: "Email is already in use by another user",
+                success: false,
+                status: 409,
+            };
+        }
+        logger.error(`Failed to update user ${id}: ${error}`);
+        return {
+            data: null,
+            message: "Failed to update user",
+            success: false,
+        };
+    }
+};
+
+export const deleteUserById = async (id: number) => {
+    try {
+        const existing = await prisma.user.findUnique({
+            where: { id },
+            select: { id: true },
+        });
+        if (!existing) {
+            return { data: null, message: "User not found", success: false };
+        }
+
+        await prisma.user.delete({ where: { id } });
+
+        return { data: { id }, message: "User deleted successfully", success: true };
+    } catch (error) {
+        logger.error(`Failed to delete user ${id}: ${error}`);
+        return {
+            data: null,
+            message: "Failed to delete user",
+            success: false,
+        };
+    }
+};
+
+export const deleteUsersByIds = async (ids: number[]) => {
+    try {
+        const result = await prisma.user.deleteMany({
+            where: { id: { in: ids } },
+        });
+
+        return {
+            data: { deletedCount: result.count },
+            message: `Deleted ${result.count} user(s) successfully`,
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to delete users ${ids.join(",")}: ${error}`);
+        return {
+            data: null,
+            message: "Failed to delete users",
             success: false,
         };
     }

@@ -2,7 +2,8 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { createLocalStorage } from "./state-storage";
+import { createScopedLocalStorage } from "./state-storage";
+import { identityNamespace } from "./auth-store";
 import type { Word } from "@/lib/data";
 import type { QuizType } from "@/lib/quiz-history-store";
 
@@ -63,7 +64,8 @@ export const useQuizStore = create<QuizState>()(
     () => initialState,
     {
       name: "quiz-state",
-      storage: createLocalStorage<QuizState>(),
+      storage: createScopedLocalStorage<QuizState>(identityNamespace),
+      skipHydration: true,
       partialize: (state) => state,
     }
   )

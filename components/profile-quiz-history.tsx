@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CalendarDays,
   Clock3,
@@ -22,7 +22,12 @@ import {
   type QuizHistoryEntry,
   type QuizType,
 } from "@/lib/quiz-history-store";
+import {
+  fetchQuizResultsFromDb,
+  dbResultToHistoryEntry,
+} from "@/lib/quiz-results-api";
 import { useT, useNum } from "@/components/language-provider";
+import { useAuthStatus } from "@/lib/auth-store";
 
 const QUIZ_META: Record<
   QuizType,
@@ -191,9 +196,49 @@ function QuizHistoryItem({ entry }: { entry: QuizHistoryEntry }) {
 }
 
 export function QuizHistoryPanel() {
-  const entries = useQuizHistoryStore((s) => s.entries);
+  const localEntries = useQuizHistoryStore((s) => s.entries);
+  const { status } = useAuthStatus();
+  const [dbEntries, setDbEntries] = useState<QuizHistoryEntry[]>([]);
+  const [dbLoaded, setDbLoaded] = useState(false);
   const t = useT();
   const num = useNum();
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      if (status !== "google") {
+        if (cancelled) return;
+        setDbEntries([]);
+        setDbLoaded(true);
+        return;
+      }
+      setDbLoaded(false);
+      const results = await fetchQuizResultsFromDb();
+      if (cancelled) return;
+      setDbEntries(results.map(dbResultToHistoryEntry));
+      setDbLoaded(true);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [status]);
+
+  const entries = useMemo(() => {
+    const seen = new Set<string>();
+    const combined: QuizHistoryEntry[] = [];
+    for (const e of dbEntries) {
+      if (seen.has(e.id)) continue;
+      seen.add(e.id);
+      combined.push(e);
+    }
+    for (const e of localEntries) {
+      if (e.dbId != null) continue;
+      if (seen.has(e.id)) continue;
+      seen.add(e.id);
+      combined.push(e);
+    }
+    return combined.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  }, [dbEntries, localEntries]);
 
   const stats = useMemo(() => {
     const total = entries.length;
@@ -209,6 +254,14 @@ export function QuizHistoryPanel() {
     { icon: BarChart3, label: t("গড় জয়ের হার", "Avg. Win Rate"), value: `${num(stats.avg)}%`, tint: "text-sky-600 dark:text-sky-400", bg: "bg-sky-100 dark:bg-sky-900/30" },
     { icon: Award, label: t("সেরা স্কোর", "Best Score"), value: `${num(stats.best)}%`, tint: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-100 dark:bg-emerald-900/30" },
   ];
+
+  if (!dbLoaded) {
+    return (
+      <div className="flex items-center justify-center py-20 text-zinc-400">
+        <GraduationCap className="size-6 animate-pulse" />
+      </div>
+    );
+  }
 
   return (
     <div>

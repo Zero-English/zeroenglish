@@ -8,6 +8,7 @@ import { MobileBottomNav } from "@/components/MobileBottomNav";
 import Footer from "@/components/Footer";
 import { TopLoader } from "@/components/top-loader";
 import { Toaster } from "@/components/ui/sonner";
+import { AppHydration } from "@/components/app-hydration";
 
 export const metadata: Metadata = {
   title: "Learn English Oxford 3000 Word Vocabulary in Bangla | Zero English",
@@ -32,6 +33,7 @@ export default function FrontendLayout({
   return (
     <HtmlShell>
       <TopLoader />
+      <AppHydration />
       <SidebarProvider>
         <LanguageProvider>
           <div className="flex flex-col min-h-screen md:flex-row">

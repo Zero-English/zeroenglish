@@ -54,3 +54,40 @@ export const quizQuestionSchema = z.object({
 });
 
 export type QuizQuestionInput = z.infer<typeof quizQuestionSchema>;
+
+export const quizModeEnumSchema = z.enum(["PRACTICE", "WEEKLY", "BIWEEKLY"]);
+
+export const quizResultSchema = z
+  .object({
+    clientId: z.string().trim().max(64).nullish(),
+    title: z.string().trim().max(200).nullish(),
+    mode: quizModeEnumSchema.default("PRACTICE"),
+    quizType: quizTypeEnumSchema,
+    questionCount: z.number().int().positive("questionCount must be positive"),
+    levels: z.array(levelEnumSchema).min(1, "At least one level is required"),
+    timePerQuestion: z.number().int().nonnegative("timePerQuestion must be non-negative"),
+    timeTotalQuiz: z.number().int().nonnegative("timeTotalQuiz must be non-negative"),
+    scheduleEnabled: z.boolean().default(false),
+    scheduledOpeningTime: z.string().datetime().nullish(),
+    scheduledClosingTime: z.string().datetime().nullish(),
+    correctAnswers: z
+      .number()
+      .int()
+      .nonnegative("correctAnswers must be non-negative"),
+    scoreInPercent: z.number().int().min(0, "scoreInPercent must be >= 0").max(100, "scoreInPercent must be <= 100"),
+    totalScore: z.number().int().nonnegative("totalScore must be non-negative"),
+  });
+
+export type QuizResultInput = z.infer<typeof quizResultSchema>;
+
+export const updateUserSchema = z
+  .object({
+    name: z.string().trim().max(120).nullable().optional(),
+    user_name: z.string().trim().min(1, "Username is required").max(50),
+    email: z.string().trim().min(1, "Email is required").email("Invalid email address"),
+    role: z.enum(["user", "admin"]),
+    image: z.string().trim().max(500).nullable().optional(),
+  })
+  .strict();
+
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;

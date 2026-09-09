@@ -6,6 +6,61 @@ import logger from "@/utils/logger";
 import prisma from "@/utils/prisma";
 import "dotenv/config";
 
+// Bind-intent flag. Armed by the NextAuth route handler (markBindIntentPending)
+// just before it runs the OAuth callback when a guest clicked "Continue with
+// Google" to bind an account. The signIn callback reads it to reject Google
+// accounts that already exist in the database (only brand-new accounts may be
+// bound, and they receive the guest's synced localStorage data).
+let bindIntentPending = false;
+
+/**
+ * Arms the bind intent for the current request. Called by the NextAuth route
+ * handler when the `pending_bind` cookie is present on an OAuth callback. The
+ * signIn callback then only allows brand-new accounts and rejects existing ones
+ * with an "AccessDenied" error so the client can show "account already exists".
+ */
+export function markBindIntentPending(): void {
+    bindIntentPending = true;
+}
+
+/**
+ * Clears the bind intent after the request finishes. Prevents the flag leaking
+ * into subsequent/concurrent requests handled by the same server process.
+ */
+export function clearBindIntent(): void {
+    bindIntentPending = false;
+}
+
+async function accountAlreadyExists(user: {
+    id?: number | string | null;
+    email?: string | null;
+}, account?: {
+    provider?: string | null;
+    providerAccountId?: string | null;
+} | null): Promise<boolean> {
+    const email = user?.email?.toLowerCase().trim();
+    if (email) {
+        const found = await prisma.user.findUnique({
+            where: { email },
+            select: { id: true },
+        });
+        if (found) return true;
+    }
+    if (account?.provider && account.providerAccountId) {
+        const linked = await prisma.account.findUnique({
+            where: {
+                provider_providerAccountId: {
+                    provider: account.provider,
+                    providerAccountId: account.providerAccountId,
+                },
+            },
+            select: { userId: true },
+        });
+        if (linked) return true;
+    }
+    return false;
+}
+
 const baseAdapter = PrismaAdapter(prisma);
 
 function logCall(method: string, ...args: unknown[]): void {
@@ -135,6 +190,7 @@ export const authOptions: NextAuthOptions = {
     adapter,
     secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
     session: { strategy: "jwt" },
+    pages: { error: "/login" },
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID || "",
@@ -142,7 +198,23 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        async signIn({ user }) {
+        async signIn({ user, account }) {
+            if (bindIntentPending) {
+                let exists = true;
+                try {
+                    exists = await accountAlreadyExists(user, account);
+                } catch (error) {
+                    logger.error("Bind intent existence check failed — rejecting", { error });
+                }
+                logger.info("Bind intent sign-in", { email: user?.email, exists });
+                if (exists) {
+                    logger.warn(
+                        "Bind rejected: account already exists — guest data will NOT be synced",
+                        { email: user?.email, provider: account?.provider }
+                    );
+                    return false;
+                }
+            }
             logger.info("Logged in Successfully", { user });
             return true;
         },
@@ -158,7 +230,13 @@ export const authOptions: NextAuthOptions = {
         },
         session({ session, token }) {
             if (session.user && token?.sub) {
-                session.user.id = Number(token.sub);
+                const sub = Number(token.sub);
+                // Only accept a real, positive DB user id. Anything else (e.g. a
+                // stale token carrying a provider account id) is left undefined
+                // so protected routes return 401 instead of FK-violating.
+                if (Number.isSafeInteger(sub) && sub > 0) {
+                    session.user.id = sub;
+                }
             }
             if (session.user && token?.role) {
                 session.user.role = token.role as "user" | "admin";

@@ -790,14 +790,14 @@ function hourlyLearnedActivity(
     const dayKey = dateKey(day);
 
     const buckets: { label: string; learned: number }[] = [];
-    for (let h = 7; h <= 21; h++) {
+    for (let h = 0; h < 24; h++) {
         buckets.push({ label: hourLabel(h), learned: 0 });
     }
 
     for (const t of timestamps) {
         if (dateKey(t) !== dayKey) continue;
         const h = t.getHours();
-        if (h >= 7 && h <= 21) buckets[h - 7].learned += 1;
+        if (h >= 0 && h < 24) buckets[h].learned += 1;
     }
 
     return buckets;

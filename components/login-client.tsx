@@ -49,19 +49,26 @@ export function LoginClient() {
   const greeted = useRef(false);
   const sessionLoading = sessionStatus === "loading";
   const t = useT();
+  const accessDenied =
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("error") === "AccessDenied";
 
   useEffect(() => {
     if (!hydrated || sessionLoading) return;
+    if (accessDenied) {
+      toast.error(t("এই Google অ্যাকাউন্টটি ইতিমধ্যে বিদ্যমান। অতিথি ডেটা এই অ্যাকাউন্টে সিঙ্ক করা হয়নি।", "This Google account already exists. Guest data was not synced to it."));
+      return;
+    }
     if (session?.user && !greeted.current) {
       greeted.current = true;
       setGoogleAuth(session.user.name ?? null, session.user.email ?? null, session.user.id ?? null);
       toast.success(t(`ফিরে এসে স্বাগতম, ${session.user.name ?? "আপনি"}!`, `Welcome back, ${session.user.name ?? "there"}!`));
       return;
     }
-    if (status !== "none") {
+    if (status === "guest" || (status !== "none" && session?.user)) {
       router.replace("/profile");
     }
-  }, [hydrated, sessionLoading, session, status, router, setGoogleAuth, t, greeted]);
+  }, [hydrated, sessionLoading, session, status, router, setGoogleAuth, t, greeted, accessDenied]);
 
     if (!hydrated || sessionLoading) {
         return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { putWord, deleteWord, bulkPutWords, getWordsByType } from "./db";
+import { putWord, deleteWord, bulkPutWords, getWordsByType, setWordSynced } from "./db";
 import { useAuthPath, useAuthStatus } from "./auth-store";
 
 const TYPE = "learned" as const;
@@ -41,7 +41,7 @@ async function listDbLearned(): Promise<number[] | null> {
   }
 }
 
-async function syncDbLearned(id: number, learned: boolean): Promise<void> {
+async function syncDbLearned(id: number, learned: boolean): Promise<boolean> {
   try {
     const res = await fetch(`/api/v1/words/${id}/learned`, {
       method: learned ? "POST" : "DELETE",
@@ -51,9 +51,12 @@ async function syncDbLearned(id: number, learned: boolean): Promise<void> {
         `Failed to ${learned ? "mark as learned" : "mark as unlearned"} word #${id} on server:`,
         await res.text()
       );
+      return false;
     }
+    return true;
   } catch (err) {
     console.error(`Failed to sync learned word #${id}:`, err);
+    return false;
   }
 }
 
@@ -82,15 +85,21 @@ async function doLoad(path: string, status: string): Promise<void> {
 
       if (dbOnly.length > 0) {
         await bulkPutWords(
-          dbOnly.map((n) => ({ id: String(n), type: TYPE })),
+          dbOnly.map((n) => ({ id: String(n), type: TYPE, synced: true })),
           path
         );
         for (const n of dbOnly) {
-          local.set(String(n), { id: String(n), type: TYPE });
+          local.set(String(n), { id: String(n), type: TYPE, synced: true });
+        }
+      }
+      for (const record of records) {
+        if (record.synced !== true && dbSet.has(record.id)) {
+          await setWordSynced(path, TYPE, record.id, true);
         }
       }
       for (const n of localOnly) {
-        void syncDbLearned(Number(n), true);
+        const okSync = await syncDbLearned(Number(n), true);
+        if (okSync) await setWordSynced(path, TYPE, String(n), true);
       }
     }
 
@@ -145,7 +154,14 @@ export function useLearnedWords() {
       emitChange();
       if (adding) void putWord({ id: k, type: TYPE }, path);
       else void deleteWord(path, TYPE, k);
-      if (status === "google") void syncDbLearned(id, adding);
+      if (status === "google") {
+        void syncDbLearned(id, adding).then((okSync) => {
+          if (okSync && adding) void setWordSynced(path, TYPE, k, true);
+        });
+      }
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("activity-changed"));
+      }
     },
     [snap, path, status]
   );
