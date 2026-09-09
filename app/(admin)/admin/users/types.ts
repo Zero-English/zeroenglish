@@ -6,6 +6,8 @@ export type ApiUser = {
   emailVerified: string | null;
   image: string | null;
   role: "user" | "admin";
+  userStatus: "Active" | "Inactive";
+  lastActivityAt: string | null;
   created_at: string;
   updated_at: string;
   bookmarkedCount: number;

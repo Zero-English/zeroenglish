@@ -75,6 +75,7 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
                     role: true,
                     created_at: true,
                     updated_at: true,
+                    lastActivityAt: true,
                     _count: {
                         select: {
                             userBookmarks: true,
@@ -113,8 +114,12 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
 
         const totalPages = Math.ceil(total / limit);
 
+        const now = new Date();
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
         const users = rawUsers.map(({ _count, ...user }) => ({
             ...user,
+            userStatus: user.lastActivityAt && new Date(user.lastActivityAt) > sevenDaysAgo ? "Active" : "Inactive",
             bookmarkedCount: _count.userBookmarks,
             learnedWordCount: userWordCountMap.get(`${user.id}:LEARNED`) ?? 0,
             stillLearningCount: userWordCountMap.get(`${user.id}:STILL_LEARNING`) ?? 0,
