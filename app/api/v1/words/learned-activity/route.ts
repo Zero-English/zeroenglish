@@ -40,7 +40,26 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const range = searchParams.get("range") ?? "7d";
 
-    const result = await getLearnedWordActivity(session.user.id, range);
+    let userId = session.user.id;
+    const userIdParam = searchParams.get("userId");
+    if (userIdParam) {
+        if (session.user.role !== "admin") {
+            return NextResponse.json(
+                { data: null, message: "Forbidden", success: false },
+                { status: 403 }
+            );
+        }
+        const parsed = parseInt(userIdParam, 10);
+        if (Number.isNaN(parsed)) {
+            return NextResponse.json(
+                { data: null, message: "Invalid user id", success: false },
+                { status: 400 }
+            );
+        }
+        userId = parsed;
+    }
+
+    const result = await getLearnedWordActivity(userId, range);
 
     if (!result.success) {
         return NextResponse.json(result, { status: 500 });

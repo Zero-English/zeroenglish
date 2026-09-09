@@ -14,37 +14,9 @@ import UserActions from "./user-actions";
 import { UserAvatar } from "@/components/UserAvatar";
 import { ProfileActivityChart } from "@/components/profile-activity-chart";
 import { LanguageProvider } from "@/components/language-provider";
-
-const RICH = {
-  learned: [4, 6, 10, 15, 22, 30, 38, 46, 53, 60, 68, 75, 82, 90, 98],
-  quizResult: 78,
-  status: "Active" as const,
-  joinedAt: "2025-09-15",
-  lastActive: "2026-08-30",
-  studyStreak: 14,
-  totalWordsStudied: 507,
-  bio: "Passionate about learning English vocabulary. Focuses on everyday conversational words.",
-  recentActivity: [
-    { action: "Learned word", date: "2026-08-30", detail: "ubiquitous" },
-    { action: "Took quiz", date: "2026-08-29", detail: "Score: 18/20" },
-    { action: "Bookmarked word", date: "2026-08-28", detail: "ephemeral" },
-    { action: "Completed level", date: "2026-08-25", detail: "A2 Section 4" },
-    { action: "Learned word", date: "2026-08-24", detail: "pragmatic" },
-  ],
-  quizHistory: [
-    { quiz: "A2 Vocabulary Test 1", score: 18, total: 20, date: "2026-08-29" },
-    { quiz: "A2 Vocabulary Test 2", score: 15, total: 20, date: "2026-08-20" },
-    { quiz: "A2 Grammar Quiz", score: 16, total: 20, date: "2026-08-12" },
-    { quiz: "A1 Review Test", score: 20, total: 20, date: "2026-07-30" },
-  ],
-  monthlyProgress: [
-    { month: "Apr", wordsLearned: 45, quizAvg: 72 },
-    { month: "May", wordsLearned: 62, quizAvg: 75 },
-    { month: "Jun", wordsLearned: 78, quizAvg: 78 },
-    { month: "Jul", wordsLearned: 90, quizAvg: 80 },
-    { month: "Aug", wordsLearned: 67, quizAvg: 78 },
-  ],
-};
+import { getQuizResultsByUser } from "@/services/quiz-result.service";
+import { getUserDailyActivity } from "@/services/user.service";
+import prisma from "@/utils/prisma";
 
 export const metadata: Metadata = {
   title: "User Detail | Admin — Zero English",
@@ -80,6 +52,172 @@ async function findUser(id: number): Promise<ApiUser | undefined> {
   return result.data;
 }
 
+const QUIZ_TYPE_LABELS: Record<string, string> = {
+  ENGLISH_TO_BANGLA: "English → Bangla",
+  BANGLA_TO_ENGLISH: "Bangla → English",
+  SYNONYMS: "Synonyms",
+  ANTONYMS: "Antonyms",
+  MIXED: "Mixed",
+  IDIOMS_AND_PHRASES: "Idioms & Phrases",
+  PREPOSITIONS: "Prepositions",
+  TRUE_FALSE: "True / False",
+};
+
+const MONTH_NAMES = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+const fmtDate = (d: Date): string =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+function deriveStatus(updatedAt: string | null | undefined): "Active" | "Inactive" {
+  const ACTIVITY_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+  if (!updatedAt) return "Inactive";
+  return new Date(updatedAt).getTime() > Date.now() - ACTIVITY_WINDOW_MS
+    ? "Active"
+    : "Inactive";
+}
+
+async function fetchUserData(userId: number) {
+  const [quizResults, dailyActivity, recentWords, recentBookmarks, recentQuizzes] =
+    await Promise.all([
+      getQuizResultsByUser(userId),
+      getUserDailyActivity(userId),
+      prisma.userWord.findMany({
+        where: { userId },
+        orderBy: { updatedAt: "desc" },
+        take: 5,
+        select: {
+          updatedAt: true,
+          word: { select: { word: true, level: true } },
+        },
+      }),
+      prisma.userBookmark.findMany({
+        where: { userId },
+        orderBy: { bookmarkedAt: "desc" },
+        take: 5,
+        select: {
+          bookmarkedAt: true,
+          word: { select: { word: true } },
+        },
+      }),
+      prisma.quizResults.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+        select: {
+          createdAt: true,
+          title: true,
+          quizType: true,
+          correctAnswers: true,
+          questionCount: true,
+        },
+      }),
+    ]);
+
+  return { quizResults, dailyActivity, recentWords, recentBookmarks, recentQuizzes };
+}
+
+function buildQuizHistory(quizResults: Awaited<ReturnType<typeof fetchUserData>>["quizResults"]) {
+  if (!quizResults.success || !quizResults.data) return [];
+  return quizResults.data.map((r) => ({
+    quiz:
+      r.title ||
+      QUIZ_TYPE_LABELS[r.quizType] ||
+      r.quizType.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c: string) => c.toUpperCase()),
+    score: r.correctAnswers,
+    total: r.questionCount,
+    date: fmtDate(new Date(r.createdAt)),
+  }));
+}
+
+function buildMonthlyProgress(
+  quizResults: Awaited<ReturnType<typeof fetchUserData>>["quizResults"],
+  dailyActivity: Awaited<ReturnType<typeof fetchUserData>>["dailyActivity"]
+) {
+  const monthlyWords: Record<string, number> = {};
+  if (dailyActivity.success && dailyActivity.data?.daily) {
+    for (const day of dailyActivity.data.daily) {
+      if (day.count > 0) {
+        const d = new Date(day.date);
+        const key = `${d.getFullYear()}-${d.getMonth()}`;
+        monthlyWords[key] = (monthlyWords[key] ?? 0) + day.count;
+      }
+    }
+  }
+
+  const monthlyQuizzes: Record<string, { total: number; count: number }> = {};
+  if (quizResults.success && quizResults.data) {
+    for (const r of quizResults.data) {
+      const d = new Date(r.createdAt);
+      const key = `${d.getFullYear()}-${d.getMonth()}`;
+      if (!monthlyQuizzes[key]) monthlyQuizzes[key] = { total: 0, count: 0 };
+      monthlyQuizzes[key].total += r.scoreInPercent;
+      monthlyQuizzes[key].count += 1;
+    }
+  }
+
+  const allKeys = new Set([...Object.keys(monthlyWords), ...Object.keys(monthlyQuizzes)]);
+  const entries = [...allKeys]
+    .map((key) => {
+      const [yearStr, monthStr] = key.split("-");
+      const year = parseInt(yearStr, 10);
+      const month = parseInt(monthStr, 10);
+      return { key, year, month };
+    })
+    .sort((a, b) => a.year - b.year || a.month - b.month)
+    .slice(-6);
+
+  return entries.map((e) => ({
+    month: `${MONTH_NAMES[e.month]} ${e.year}`,
+    wordsLearned: monthlyWords[e.key] ?? 0,
+    quizAvg:
+      monthlyQuizzes[e.key] && monthlyQuizzes[e.key].count > 0
+        ? Math.round(monthlyQuizzes[e.key].total / monthlyQuizzes[e.key].count)
+        : 0,
+  }));
+}
+
+function buildRecentActivity(
+  recentWords: Awaited<ReturnType<typeof fetchUserData>>["recentWords"],
+  recentBookmarks: Awaited<ReturnType<typeof fetchUserData>>["recentBookmarks"],
+  recentQuizzes: Awaited<ReturnType<typeof fetchUserData>>["recentQuizzes"]
+) {
+  const events: { action: string; date: string; detail: string; sortKey: Date }[] = [];
+
+  for (const w of recentWords) {
+    events.push({
+      action: "Learned word",
+      date: fmtDate(new Date(w.updatedAt)),
+      detail: `${w.word.word} (${w.word.level})`,
+      sortKey: new Date(w.updatedAt),
+    });
+  }
+
+  for (const b of recentBookmarks) {
+    events.push({
+      action: "Bookmarked word",
+      date: fmtDate(new Date(b.bookmarkedAt)),
+      detail: b.word.word,
+      sortKey: new Date(b.bookmarkedAt),
+    });
+  }
+
+  for (const q of recentQuizzes) {
+    events.push({
+      action: "Took quiz",
+      date: fmtDate(new Date(q.createdAt)),
+      detail: `${q.title || QUIZ_TYPE_LABELS[q.quizType] || "Quiz"} — ${q.correctAnswers}/${q.questionCount}`,
+      sortKey: new Date(q.createdAt),
+    });
+  }
+
+  return events
+    .sort((a, b) => b.sortKey.getTime() - a.sortKey.getTime())
+    .slice(0, 5);
+}
+
 export default async function SingleUserPage({
   params,
 }: {
@@ -89,13 +227,35 @@ export default async function SingleUserPage({
   const user = await findUser(Number(id));
   if (!user) notFound();
 
-  const rich = RICH;
+  const userId = Number(id);
+  const { quizResults, dailyActivity, recentWords, recentBookmarks, recentQuizzes } =
+    await fetchUserData(userId);
+
+  const quizHistory = buildQuizHistory(quizResults);
+  const monthlyProgress = buildMonthlyProgress(quizResults, dailyActivity);
+  const recentActivity = buildRecentActivity(recentWords, recentBookmarks, recentQuizzes);
+
+  const avgQuizScore =
+    quizResults.success && quizResults.data && quizResults.data.length > 0
+      ? Math.round(
+          quizResults.data.reduce((sum, r) => sum + r.scoreInPercent, 0) /
+            quizResults.data.length
+        )
+      : null;
+
+  const studyStreak = dailyActivity.success ? dailyActivity.data?.streak ?? 0 : 0;
+  const lastActive = user.updated_at;
+  const status = deriveStatus(lastActive);
 
   const stats = [
     { label: "Bookmarked", value: user.bookmarkedCount, icon: Bookmark },
     { label: "Still Learning", value: user.stillLearningCount, icon: BookOpen },
     { label: "Learned", value: user.learnedWordCount, icon: GraduationCap },
-    { label: "Quiz Result", value: `${rich.quizResult}%`, icon: ClipboardCheck },
+    {
+      label: "Avg Quiz Score",
+      value: avgQuizScore !== null ? `${avgQuizScore}%` : "—",
+      icon: ClipboardCheck,
+    },
   ];
 
   return (
@@ -133,12 +293,12 @@ export default async function SingleUserPage({
               </span>
               <span
                 className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                  rich.status === "Active"
+                  status === "Active"
                     ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
                     : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
                 }`}
               >
-                {rich.status}
+                {status}
               </span>
             </div>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -146,7 +306,7 @@ export default async function SingleUserPage({
             </p>
           </div>
         </div>
-        <UserActions user={user} status={rich.status} />
+        <UserActions user={user} />
       </header>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -170,7 +330,7 @@ export default async function SingleUserPage({
 
       <div className="mt-8">
         <LanguageProvider>
-          <ProfileActivityChart />
+          <ProfileActivityChart userId={user.id} />
         </LanguageProvider>
       </div>
 
@@ -191,11 +351,11 @@ export default async function SingleUserPage({
                 user.emailVerified ? formatDate(user.emailVerified) : "No",
               ],
               ["Role", user.role],
-              ["Status", rich.status],
+              ["Status", status],
               ["Total Words Studied", String(user.learnedWordCount)],
-              ["Joined", formatDay(rich.joinedAt)],
-              ["Last Active", formatDay(rich.lastActive)],
-              ["Study Streak", `${rich.studyStreak} days`],
+              ["Joined", formatDay(user.created_at)],
+              ["Last Active", formatDay(lastActive)],
+              ["Study Streak", `${studyStreak} days`],
             ].map(([label, value]) => (
               <div key={label} className="flex justify-between px-5 py-3 text-sm">
                 <dt className="text-gray-500 dark:text-gray-400">{label}</dt>
@@ -205,9 +365,6 @@ export default async function SingleUserPage({
               </div>
             ))}
           </dl>
-          <div className="px-5 py-4">
-            <p className="text-sm text-gray-500 dark:text-gray-400">{rich.bio}</p>
-          </div>
         </section>
 
         <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
@@ -216,26 +373,32 @@ export default async function SingleUserPage({
               Recent Activity
             </h2>
           </div>
-          <ul className="divide-y divide-gray-100 dark:divide-gray-800">
-            {rich.recentActivity.map((activity, i) => (
-              <li
-                key={i}
-                className="flex items-start justify-between px-5 py-3 text-sm"
-              >
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    {activity.action}
-                  </p>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    {activity.detail}
-                  </p>
-                </div>
-                <span className="shrink-0 pl-4 text-xs text-gray-400 dark:text-gray-500">
-                  {activity.date}
-                </span>
-              </li>
-            ))}
-          </ul>
+          {recentActivity.length === 0 ? (
+            <p className="px-5 py-6 text-sm text-gray-500 dark:text-gray-400">
+              No recent activity.
+            </p>
+          ) : (
+            <ul className="divide-y divide-gray-100 dark:divide-gray-800">
+              {recentActivity.map((activity, i) => (
+                <li
+                  key={i}
+                  className="flex items-start justify-between px-5 py-3 text-sm"
+                >
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {activity.action}
+                    </p>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {activity.detail}
+                    </p>
+                  </div>
+                  <span className="shrink-0 pl-4 text-xs text-gray-400 dark:text-gray-500">
+                    {activity.date}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
 
@@ -246,45 +409,51 @@ export default async function SingleUserPage({
               Quiz History
             </h2>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                  <th className="px-5 py-3 font-medium">Quiz</th>
-                  <th className="px-5 py-3 font-medium">Score</th>
-                  <th className="px-5 py-3 font-medium">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rich.quizHistory.map((q, i) => (
-                  <tr
-                    key={i}
-                    className="border-b border-gray-100 last:border-0 dark:border-gray-800"
-                  >
-                    <td className="px-5 py-3 text-gray-900 dark:text-white">
-                      {q.quiz}
-                    </td>
-                    <td className="px-5 py-3">
-                      <span
-                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
-                          q.score / q.total >= 0.8
-                            ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
-                            : q.score / q.total >= 0.6
-                              ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
-                              : "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400"
-                        }`}
-                      >
-                        {q.score}/{q.total}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-gray-500 dark:text-gray-400">
-                      {q.date}
-                    </td>
+          {quizHistory.length === 0 ? (
+            <p className="px-5 py-6 text-sm text-gray-500 dark:text-gray-400">
+              No quizzes taken yet.
+            </p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    <th className="px-5 py-3 font-medium">Quiz</th>
+                    <th className="px-5 py-3 font-medium">Score</th>
+                    <th className="px-5 py-3 font-medium">Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {quizHistory.map((q, i) => (
+                    <tr
+                      key={i}
+                      className="border-b border-gray-100 last:border-0 dark:border-gray-800"
+                    >
+                      <td className="px-5 py-3 text-gray-900 dark:text-white">
+                        {q.quiz}
+                      </td>
+                      <td className="px-5 py-3">
+                        <span
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                            q.score / q.total >= 0.8
+                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+                              : q.score / q.total >= 0.6
+                                ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+                                : "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400"
+                          }`}
+                        >
+                          {q.score}/{q.total}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-gray-500 dark:text-gray-400">
+                        {q.date}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
 
         <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
@@ -293,31 +462,38 @@ export default async function SingleUserPage({
               Monthly Progress
             </h2>
           </div>
-          <ul className="divide-y divide-gray-100 dark:divide-gray-800">
-            {rich.monthlyProgress.map((m, i) => (
-              <li key={i} className="px-5 py-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    {m.month}
-                  </span>
-                  <span className="text-gray-500 dark:text-gray-400">
-                    {m.wordsLearned} words · avg {m.quizAvg}%
-                  </span>
-                </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
-                  <div
-                    className="h-full rounded-full bg-primary"
-                    style={{
-                      width: `${Math.min(
-                        100,
-                        Math.round((m.wordsLearned / 250) * 100)
-                      )}%`,
-                    }}
-                  />
-                </div>
-              </li>
-            ))}
-          </ul>
+          {monthlyProgress.length === 0 ? (
+            <p className="px-5 py-6 text-sm text-gray-500 dark:text-gray-400">
+              No progress data yet.
+            </p>
+          ) : (
+            <ul className="divide-y divide-gray-100 dark:divide-gray-800">
+              {monthlyProgress.map((m, i) => (
+                <li key={i} className="px-5 py-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {m.month}
+                    </span>
+                    <span className="text-gray-500 dark:text-gray-400">
+                      {m.wordsLearned} words
+                      {m.quizAvg > 0 ? ` · avg ${m.quizAvg}%` : ""}
+                    </span>
+                  </div>
+                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          Math.round((m.wordsLearned / 250) * 100)
+                        )}%`,
+                      }}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
     </div>

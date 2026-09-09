@@ -6,7 +6,6 @@ import {
   Mail,
   Pencil,
   Trash2,
-  Ban,
 } from "lucide-react";
 import type { ApiUser, UserListResponse } from "./types";
 import { UserAvatar } from "@/components/UserAvatar";
@@ -14,17 +13,22 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 import { BackButton } from "@/components/back-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PaginationNav } from "@/components/pagination-nav";
+import EditUserDialog from "./edit-user-dialog";
 
 const PAGE_SIZES = [10, 20, 50];
 
-const RICH = {
-  quizResult: 78,
-  status: "Active" as const,
-};
+const ACTIVITY_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
 
 function formatDate(value?: string | Date | null) {
   if (!value) return "—";
   return new Date(value).toLocaleDateString();
+}
+
+function deriveStatus(updatedAt?: string | null): "Active" | "Inactive" {
+  if (!updatedAt) return "Inactive";
+  return new Date(updatedAt).getTime() > Date.now() - ACTIVITY_WINDOW_MS
+    ? "Active"
+    : "Inactive";
 }
 
 export default function AdminUsersPage() {
@@ -41,6 +45,8 @@ export default function AdminUsersPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<ApiUser | null>(null);
   const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState<ApiUser | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -110,18 +116,12 @@ export default function AdminUsersPage() {
   }
 
   function editUser(user: ApiUser) {
-    showMessage(`Edit user opened for ${user.user_name} (id: ${user.id})`);
+    setEditTarget(user);
+    setEditOpen(true);
   }
 
   function emailUser(user: ApiUser) {
     showMessage(`Email draft opened for ${user.user_name} (${user.email})`);
-  }
-
-  function suspendUser(user: ApiUser) {
-    const isActive = RICH.status === "Active";
-    showMessage(
-      `${user.user_name} (id: ${user.id}) is now ${isActive ? "suspended" : "reactivated"}`
-    );
   }
 
   function deleteUser(user: ApiUser) {
@@ -129,27 +129,49 @@ export default function AdminUsersPage() {
     setDeleteDialogOpen(true);
   }
 
-  function confirmDeleteUser() {
+  async function confirmDeleteUser() {
     if (!userToDelete) return;
-    showMessage(`Deleted user ${userToDelete.user_name} (id: ${userToDelete.id})`);
+    const res = await fetch(`/api/v1/user/${userToDelete.id}`, {
+      method: "DELETE",
+    });
+    const body = (await res.json()) as { success: boolean; message?: string };
+    if (!res.ok || !body.success) {
+      showMessage(body.message || "Failed to delete user");
+      setUserToDelete(null);
+      return;
+    }
+    setUsers((prev) => prev.filter((u) => u.id !== userToDelete.id));
+    setTotal((prev) => Math.max(0, prev - 1));
     setUserToDelete(null);
+    showMessage(`Deleted user ${userToDelete.user_name}`);
   }
 
   function bulkEmail() {
     showMessage(`Email draft opened for ${selectedList.length} selected user(s)`);
   }
 
-  function bulkSuspend() {
-    showMessage(`Suspend action applied to ${selectedList.length} selected user(s)`);
-  }
-
   function bulkDelete() {
     setBulkDeleteDialogOpen(true);
   }
 
-  function confirmBulkDelete() {
-    showMessage(`Deleted ${selectedList.length} selected user(s)`);
+  async function confirmBulkDelete() {
+    if (selectedList.length === 0) return;
+    const ids = selectedList.map((u) => u.id);
+    const res = await fetch(`/api/v1/user`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids }),
+    });
+    const body = (await res.json()) as { success: boolean; message?: string };
+    if (!res.ok || !body.success) {
+      showMessage(body.message || "Failed to delete users");
+      setSelected(new Set());
+      return;
+    }
+    setUsers((prev) => prev.filter((u) => !ids.includes(u.id)));
+    setTotal((prev) => Math.max(0, prev - ids.length));
     setSelected(new Set());
+    showMessage(`Deleted ${ids.length} selected user(s)`);
   }
 
   const start = total === 0 ? 0 : (page - 1) * pageSize + 1;
@@ -189,14 +211,6 @@ export default function AdminUsersPage() {
             >
               <Mail className="h-3.5 w-3.5" />
               Email
-            </button>
-            <button
-              type="button"
-              onClick={bulkSuspend}
-              className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-            >
-              <Ban className="h-3.5 w-3.5" />
-              Suspend
             </button>
             <button
               type="button"
@@ -295,6 +309,7 @@ export default function AdminUsersPage() {
                 </tr>
               ) : (
                 users.map((user) => {
+                  const status = deriveStatus(user.updated_at);
                   return (
                     <tr
                       key={user.id}
@@ -342,17 +357,23 @@ export default function AdminUsersPage() {
                         {user.learnedWordCount}
                       </td>
                       <td className="px-4 py-2.5">
-                        <span
-                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
-                            RICH.quizResult >= 80
-                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
-                              : RICH.quizResult >= 60
-                                ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
-                                : "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400"
-                          }`}
-                        >
-                          {RICH.quizResult}%
-                        </span>
+                        {user.avgQuizScore !== null ? (
+                          <span
+                            className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                              user.avgQuizScore >= 80
+                                ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+                                : user.avgQuizScore >= 60
+                                  ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+                                  : "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400"
+                            }`}
+                          >
+                            {user.avgQuizScore}%
+                          </span>
+                        ) : (
+                          <span className="text-gray-400 dark:text-gray-500">
+                            —
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-2.5">
                         <span
@@ -368,12 +389,12 @@ export default function AdminUsersPage() {
                       <td className="px-4 py-2.5">
                         <span
                           className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
-                            RICH.status === "Active"
+                            status === "Active"
                               ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
                               : "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400"
                           }`}
                         >
-                          {RICH.status}
+                          {status}
                         </span>
                       </td>
                       <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
@@ -392,15 +413,6 @@ export default function AdminUsersPage() {
                             className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
                           >
                             <Pencil className="h-3.5 w-3.5" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => suspendUser(user)}
-                            title={RICH.status === "Active" ? "Suspend" : "Reactivate"}
-                            aria-label={`${RICH.status === "Active" ? "Suspend" : "Reactivate"} ${user.user_name}`}
-                            className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 text-gray-600 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-                          >
-                            <Ban className="h-3.5 w-3.5" />
                           </button>
                           <button
                             type="button"
@@ -484,6 +496,18 @@ export default function AdminUsersPage() {
         description={`Are you sure you want to delete ${selectedList.length} selected user(s)? This action cannot be undone.`}
         confirmText="Delete All"
         onConfirm={confirmBulkDelete}
+      />
+
+      <EditUserDialog
+        user={editTarget}
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        onSaved={(updated) => {
+          setUsers((prev) =>
+            prev.map((u) => (u.id === updated.id ? updated : u))
+          );
+          showMessage(`Updated user ${updated.user_name}`);
+        }}
       />
     </div>
   );

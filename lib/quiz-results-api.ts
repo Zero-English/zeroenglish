@@ -31,9 +31,10 @@ export interface DbQuizResult {
   updatedAt: string | Date;
 }
 
-export async function fetchQuizResultsFromDb(): Promise<DbQuizResult[]> {
+export async function fetchQuizResultsFromDb(userId?: number): Promise<DbQuizResult[]> {
   try {
-    const res = await fetch("/api/v1/quiz/results", { cache: "no-store" });
+    const qs = userId != null ? `?userId=${userId}` : "";
+    const res = await fetch(`/api/v1/quiz/results${qs}`, { cache: "no-store" });
     if (!res.ok) return [];
     const body = (await res.json()) as {
       data?: DbQuizResult[];

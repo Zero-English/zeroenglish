@@ -79,3 +79,15 @@ export const quizResultSchema = z
   });
 
 export type QuizResultInput = z.infer<typeof quizResultSchema>;
+
+export const updateUserSchema = z
+  .object({
+    name: z.string().trim().max(120).nullable().optional(),
+    user_name: z.string().trim().min(1, "Username is required").max(50),
+    email: z.string().trim().min(1, "Email is required").email("Invalid email address"),
+    role: z.enum(["user", "admin"]),
+    image: z.string().trim().max(500).nullable().optional(),
+  })
+  .strict();
+
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;

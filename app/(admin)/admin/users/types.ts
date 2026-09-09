@@ -11,6 +11,7 @@ export type ApiUser = {
   bookmarkedCount: number;
   learnedWordCount: number;
   stillLearningCount: number;
+  avgQuizScore: number | null;
 };
 
 export type UserListResponse = {

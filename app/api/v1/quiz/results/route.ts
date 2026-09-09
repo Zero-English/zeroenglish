@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(result, { status: 201 });
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
@@ -99,7 +99,26 @@ export async function GET() {
         );
     }
 
-    const result = await getQuizResultsByUser(session.user.id);
+    let userId = session.user.id;
+    const userIdParam = new URL(request.url).searchParams.get("userId");
+    if (userIdParam) {
+        if (session.user.role !== "admin") {
+            return NextResponse.json(
+                { data: null, message: "Forbidden", success: false },
+                { status: 403 }
+            );
+        }
+        const parsed = parseInt(userIdParam, 10);
+        if (Number.isNaN(parsed)) {
+            return NextResponse.json(
+                { data: null, message: "Invalid user id", success: false },
+                { status: 400 }
+            );
+        }
+        userId = parsed;
+    }
+
+    const result = await getQuizResultsByUser(userId);
 
     if (!result.success) {
         return NextResponse.json(result, { status: 500 });

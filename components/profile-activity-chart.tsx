@@ -192,12 +192,17 @@ function localLearnedSeries(
   };
 }
 
-async function fetchLearnedActivity(range: RangeKey): Promise<{
+async function fetchLearnedActivity(
+  range: RangeKey,
+  userId?: number
+): Promise<{
   current: LearnedPoint[];
   previous: LearnedPoint[];
 } | null> {
   try {
-    const res = await fetch(`/api/v1/words/learned-activity?range=${range}`, {
+    const qs = new URLSearchParams({ range });
+    if (userId != null) qs.set("userId", String(userId));
+    const res = await fetch(`/api/v1/words/learned-activity?${qs}`, {
       cache: "no-store",
     });
     if (!res.ok) return null;
@@ -275,7 +280,7 @@ function buildHourlyQuizMap(results: QuizLike[], daysAgo: number): Map<number, n
   return out;
 }
 
-export function ProfileActivityChart() {
+export function ProfileActivityChart({ userId }: { userId?: number }) {
   const [range, setRange] = useState<RangeKey>("7d");
   const [metric, setMetric] = useState<Metric>("all");
   const [activity, setActivity] = useState<Record<RangeKey, GraphData>>(dummyGraphData);
@@ -285,6 +290,8 @@ export function ProfileActivityChart() {
   const path = useAuthStore((s) => s.path);
   const quizEntries = useQuizHistoryStore((s) => s.entries);
 
+  const storedUserId = userId;
+
   const loadActivity = useCallback(async (r: RangeKey) => {
     const isHourly = r === "today" || r === "yesterday";
     const days = r === "today" || r === "yesterday" ? 1 : (RANGE_DAYS[r] ?? 7);
@@ -292,10 +299,10 @@ export function ProfileActivityChart() {
     let learnedRes: { current: LearnedPoint[]; previous: LearnedPoint[] } | null;
     let quizSource: QuizLike[];
 
-    if (status === "google") {
+    if (status === "google" || storedUserId != null) {
       [learnedRes, quizSource] = await Promise.all([
-        fetchLearnedActivity(r),
-        fetchQuizResultsFromDb(),
+        fetchLearnedActivity(r, storedUserId),
+        fetchQuizResultsFromDb(storedUserId),
       ]);
     } else {
       const records = await getWordsByType("learned", path);
@@ -360,7 +367,7 @@ export function ProfileActivityChart() {
         },
       };
     });
-  }, [status, path, quizEntries]);
+  }, [status, path, quizEntries, storedUserId]);
 
   useEffect(() => {
     let cancelled = false;
