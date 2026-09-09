@@ -40,19 +40,32 @@ model QuizExam {
 }
 
 model QuizResults {
-  id             Int      @id @default(autoincrement())
-  userId         Int
-  examId         Int
-  clientId       String?
-  correctAnswers Int
-  scoreInPercent Int
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                     Int        @id @default(autoincrement())
+  userId                 Int
+  examId                 Int?
+  clientId               String?
+  title                  String
+  mode                   QuizMode
+  quizTypeId             Int
+  questionCount          Int
+  levels                 Levels[]
+  timePerQuestion        Int
+  timeTotalQuiz          Int
+  scheduleEnabled        Boolean    @default(false)
+  scheduledOpeningTime   DateTime?
+  scheduledClosingTime   DateTime?
+  correctAnswers         Int
+  scoreInPercent         Int
+  totalScore             Int
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
 
-  user User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  exam QuizExam @relation(fields: [examId], references: [id], onDelete: Cascade)
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exam     QuizExam? @relation(fields: [examId], references: [id], onDelete: SetNull)
+  quizType QuizType  @relation(fields: [quizTypeId], references: [id])
 
   @@index([userId, examId])
+  @@index([quizTypeId])
 }
 
 model QuizExamQuestion {
@@ -185,6 +198,7 @@ model QuizType {
   id               Int            @id @default(autoincrement())
   name             String         @unique
   relatedQuestions QuizQuestion[]
+  quizResults      QuizResults[]
 }
 
 enum Roles {

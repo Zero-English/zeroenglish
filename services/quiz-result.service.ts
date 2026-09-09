@@ -1,13 +1,13 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
-import type { QuizMode, QuizType, Levels } from "@/generated/prisma/enums";
+import type { QuizMode, Levels } from "@/generated/prisma/enums";
 
 export const createQuizResult = async (data: {
     userId: number;
     clientId?: string | null;
     title?: string | null;
     mode: QuizMode;
-    quizType: QuizType;
+    quizType: string;
     questionCount: number;
     levels: Levels[];
     timePerQuestion: number;
@@ -21,7 +21,7 @@ export const createQuizResult = async (data: {
 }) => {
     try {
         if (data.clientId) {
-            const existing = await prisma.quizResults.findUnique({
+            const existing = await prisma.quizResults.findFirst({
                 where: { clientId: data.clientId },
             });
             if (existing) {
@@ -33,24 +33,40 @@ export const createQuizResult = async (data: {
             }
         }
 
+        const scheduledOpeningTime = data.scheduledOpeningTime
+            ? new Date(data.scheduledOpeningTime)
+            : null;
+        const scheduledClosingTime = data.scheduledClosingTime
+            ? new Date(data.scheduledClosingTime)
+            : null;
+
+        const quizType = await prisma.quizType.findUnique({
+            where: { name: data.quizType },
+        });
+
+        if (!quizType) {
+            logger.warn(`Quiz result create rejected: unknown quizType "${data.quizType}"`);
+            return {
+                data: null,
+                message: `Unknown quizType "${data.quizType}"`,
+                success: false,
+            };
+        }
+
         const result = await prisma.quizResults.create({
             data: {
                 userId: data.userId,
                 clientId: data.clientId ?? null,
-                title: data.title ?? null,
+                title: data.title ?? "Practice Quiz",
                 mode: data.mode,
-                quizType: data.quizType,
+                quizTypeId: quizType.id,
                 questionCount: data.questionCount,
                 levels: data.levels,
                 timePerQuestion: data.timePerQuestion,
                 timeTotalQuiz: data.timeTotalQuiz,
                 scheduleEnabled: data.scheduleEnabled,
-                scheduledOpeningTime: data.scheduledOpeningTime
-                    ? new Date(data.scheduledOpeningTime)
-                    : null,
-                scheduledClosingTime: data.scheduledClosingTime
-                    ? new Date(data.scheduledClosingTime)
-                    : null,
+                scheduledOpeningTime,
+                scheduledClosingTime,
                 correctAnswers: data.correctAnswers,
                 scoreInPercent: data.scoreInPercent,
                 totalScore: data.totalScore,
@@ -64,7 +80,7 @@ export const createQuizResult = async (data: {
         };
     } catch (error) {
         if (data.clientId && typeof error === "object" && error !== null && "code" in error && (error as { code?: string }).code === "P2002") {
-            const existing = await prisma.quizResults.findUnique({
+            const existing = await prisma.quizResults.findFirst({
                 where: { clientId: data.clientId },
             });
             if (existing) {
@@ -89,6 +105,7 @@ export const getQuizResultsByUser = async (userId: number) => {
         const results = await prisma.quizResults.findMany({
             where: { userId },
             orderBy: { createdAt: "desc" },
+            include: { quizType: true },
         });
 
         return {

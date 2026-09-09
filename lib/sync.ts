@@ -61,7 +61,7 @@ function quizEntryKey(e: QuizHistoryEntry): string {
 
 function dbQuizKey(r: DbQuizResult): string {
   return [
-    r.quizType,
+    r.title,
     r.scoreInPercent,
     r.questionCount,
     dbResultDate(r),

@@ -52,15 +52,10 @@ async function findUser(id: number): Promise<ApiUser | undefined> {
   return result.data;
 }
 
-const QUIZ_TYPE_LABELS: Record<string, string> = {
-  ENGLISH_TO_BANGLA: "English → Bangla",
-  BANGLA_TO_ENGLISH: "Bangla → English",
-  SYNONYMS: "Synonyms",
-  ANTONYMS: "Antonyms",
-  MIXED: "Mixed",
-  IDIOMS_AND_PHRASES: "Idioms & Phrases",
-  PREPOSITIONS: "Prepositions",
-  TRUE_FALSE: "True / False",
+const QUIZ_MODE_LABELS: Record<string, string> = {
+  PRACTICE: "Practice Quiz",
+  WEEKLY: "Weekly Quiz",
+  BIWEEKLY: "Biweekly Quiz",
 };
 
 const MONTH_NAMES = [
@@ -108,9 +103,10 @@ async function fetchUserData(userId: number) {
         take: 5,
         select: {
           createdAt: true,
-          title: true,
-          quizType: true,
           correctAnswers: true,
+          scoreInPercent: true,
+          title: true,
+          mode: true,
           questionCount: true,
         },
       }),
@@ -119,15 +115,25 @@ async function fetchUserData(userId: number) {
   return { quizResults, dailyActivity, recentWords, recentBookmarks, recentQuizzes };
 }
 
+function quizLabel(
+  exam?: {
+    title?: string;
+    mode?: string;
+  } | null
+): string {
+  if (!exam) return "Quiz";
+  return (
+    exam.title ||
+    (exam.mode ? QUIZ_MODE_LABELS[exam.mode] || exam.mode : "Quiz")
+  );
+}
+
 function buildQuizHistory(quizResults: Awaited<ReturnType<typeof fetchUserData>>["quizResults"]) {
   if (!quizResults.success || !quizResults.data) return [];
   return quizResults.data.map((r) => ({
-    quiz:
-      r.title ||
-      QUIZ_TYPE_LABELS[r.quizType] ||
-      r.quizType.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c: string) => c.toUpperCase()),
+    quiz: `${r.title}`,
     score: r.correctAnswers,
-    total: r.questionCount,
+    total: r.questionCount ?? 1,
     date: fmtDate(new Date(r.createdAt)),
   }));
 }
@@ -208,7 +214,7 @@ function buildRecentActivity(
     events.push({
       action: "Took quiz",
       date: fmtDate(new Date(q.createdAt)),
-      detail: `${q.title || QUIZ_TYPE_LABELS[q.quizType] || "Quiz"} — ${q.correctAnswers}/${q.questionCount}`,
+      detail: `${quizLabel(q)} — ${q.correctAnswers}/${q.questionCount ?? 1}`,
       sortKey: new Date(q.createdAt),
     });
   }
