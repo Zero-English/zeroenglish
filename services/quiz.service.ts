@@ -1,15 +1,36 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
-import type { QuizType, DifficultyLevels } from "@/generated/prisma/client";
+import type { DifficultyLevels, Prisma } from "@/generated/prisma/client";
+import type { QuizTypeValue } from "@/app/(admin)/admin/_data/quizzes";
+
+const quizTypeInclude = {
+    quizType: {
+        select: { id: true, name: true },
+    },
+} as const;
+
+type QuizQuestionWithType = Prisma.QuizQuestionGetPayload<{
+    include: typeof quizTypeInclude;
+}>;
+
+const toApiQuestion = (q: QuizQuestionWithType) => ({
+    id: q.id,
+    quizType: q.quizType.name,
+    questionText: q.questionText,
+    options: q.options,
+    difficultyLevel: q.difficultyLevel,
+    answer: q.answer,
+});
 
 export const getAllQuizQuestions = async () => {
     try {
         const questions = await prisma.quizQuestion.findMany({
             orderBy: { id: "desc" },
+            include: quizTypeInclude,
         });
 
         return {
-            data: questions,
+            data: questions.map((q) => toApiQuestion(q)),
             message: "Quiz questions fetched successfully",
             success: true,
         };
@@ -32,6 +53,7 @@ export const getQuizQuestionsByPage = async (page: number = 1, limit: number = 1
                 skip,
                 take: limit,
                 orderBy: { id: "desc" },
+                include: quizTypeInclude,
             }),
             prisma.quizQuestion.count(),
         ]);
@@ -39,7 +61,7 @@ export const getQuizQuestionsByPage = async (page: number = 1, limit: number = 1
         const totalPages = Math.ceil(total / limit);
 
         return {
-            data: questions,
+            data: questions.map((q) => toApiQuestion(q)),
             pagination: {
                 total,
                 page,
@@ -63,6 +85,7 @@ export const getQuizQuestionById = async (id: number) => {
     try {
         const question = await prisma.quizQuestion.findUnique({
             where: { id },
+            include: quizTypeInclude,
         });
 
         if (!question) {
@@ -74,7 +97,7 @@ export const getQuizQuestionById = async (id: number) => {
         }
 
         return {
-            data: question,
+            data: toApiQuestion(question),
             message: "Quiz question fetched successfully",
             success: true,
         };
@@ -89,25 +112,38 @@ export const getQuizQuestionById = async (id: number) => {
 };
 
 export const createQuizQuestion = async (data: {
-    quizType: QuizType;
+    quizType: QuizTypeValue;
     questionText: string;
     options: string[];
     difficultyLevel: DifficultyLevels;
     answer: string;
 }) => {
     try {
+        const quizType = await prisma.quizType.findUnique({
+            where: { name: data.quizType },
+        });
+
+        if (!quizType) {
+            return {
+                data: null,
+                message: `Quiz type "${data.quizType}" not found`,
+                success: false,
+            };
+        }
+
         const question = await prisma.quizQuestion.create({
             data: {
-                quizType: data.quizType,
+                quizTypeId: quizType.id,
                 questionText: data.questionText,
                 options: data.options,
                 difficultyLevel: data.difficultyLevel,
                 answer: data.answer,
             },
+            include: quizTypeInclude,
         });
 
         return {
-            data: question,
+            data: toApiQuestion(question),
             message: "Quiz question created successfully",
             success: true,
         };
@@ -124,7 +160,7 @@ export const createQuizQuestion = async (data: {
 export const updateQuizQuestionById = async (
     id: number,
     data: Partial<{
-        quizType: QuizType;
+        quizType: QuizTypeValue;
         questionText: string;
         options: string[];
         difficultyLevel: DifficultyLevels;
@@ -144,13 +180,31 @@ export const updateQuizQuestionById = async (
             };
         }
 
+        const { quizType, ...rest } = data;
+        const updateData: Prisma.QuizQuestionUpdateInput = { ...rest };
+
+        if (quizType) {
+            const quizTypeRow = await prisma.quizType.findUnique({
+                where: { name: quizType },
+            });
+            if (!quizTypeRow) {
+                return {
+                    data: null,
+                    message: `Quiz type "${quizType}" not found`,
+                    success: false,
+                };
+            }
+            updateData.quizType = { connect: { id: quizTypeRow.id } };
+        }
+
         const question = await prisma.quizQuestion.update({
             where: { id },
-            data,
+            data: updateData,
+            include: quizTypeInclude,
         });
 
         return {
-            data: question,
+            data: toApiQuestion(question),
             message: "Quiz question updated successfully",
             success: true,
         };
