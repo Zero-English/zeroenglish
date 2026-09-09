@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import { TopLoader } from "@/components/top-loader";
 import { Toaster } from "@/components/ui/sonner";
 import { AppHydration } from "@/components/app-hydration";
+import {ActivityTracker} from "@/components/activity-tracker";
 
 export const metadata: Metadata = {
   title: "Learn English Oxford 3000 Word Vocabulary in Bangla | Zero English",
@@ -40,6 +41,7 @@ export default function FrontendLayout({
             <Sidebar />
             <div className="flex flex-col flex-1 min-w-0">
               <Header />
+              <ActivityTracker />
               <main className="flex-1 min-w-0 w-full">{children}</main>
               <MobileBottomNav />
               <Footer />

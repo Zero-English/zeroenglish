@@ -416,3 +416,4 @@ export const getUserDailyActivity = async (id: number) => {
         };
     }
 };
+
