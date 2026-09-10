@@ -1,6 +1,11 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
-import type { QuizMode, Levels } from "@/generated/prisma/enums";
+import type { QuizMode, Levels, QuizResultStatus } from "@/generated/prisma/enums";
+
+export type QuizResultStatusValue = Extract<
+  QuizResultStatus,
+  "SUBMITTED" | "LATE_SUBMITTED" | "ABANDONED" | "REATTEMPTED"
+>;
 
 export const createQuizResult = async (data: {
     userId: number;
@@ -19,6 +24,7 @@ export const createQuizResult = async (data: {
     correctAnswers: number;
     scoreInPercent: number;
     totalScore: number;
+    status?: string | null;
 }) => {
     try {
         if (data.clientId) {
@@ -34,6 +40,7 @@ export const createQuizResult = async (data: {
             }
         }
 
+        const now = new Date();
         const scheduledOpeningTime = data.scheduledOpeningTime
             ? new Date(data.scheduledOpeningTime)
             : null;
@@ -54,25 +61,64 @@ export const createQuizResult = async (data: {
             };
         }
 
-        const result = await prisma.quizResults.create({
-            data: {
-                userId: data.userId,
-                clientId: data.clientId ?? null,
-                examId: data.examId ?? null,
-                title: data.title ?? "Practice Quiz",
-                mode: data.mode,
-                quizTypeId: quizType.id,
-                questionCount: data.questionCount,
-                levels: data.levels,
-                timePerQuestion: data.timePerQuestion,
-                timeTotalQuiz: data.timeTotalQuiz,
-                scheduleEnabled: data.scheduleEnabled,
-                scheduledOpeningTime,
-                scheduledClosingTime,
-                correctAnswers: data.correctAnswers,
-                scoreInPercent: data.scoreInPercent,
-                totalScore: data.totalScore,
-            },
+        const baseData = {
+            userId: data.userId,
+            clientId: data.clientId ?? null,
+            examId: data.examId ?? null,
+            title: data.title ?? "Practice Quiz",
+            mode: data.mode,
+            quizTypeId: quizType.id,
+            questionCount: data.questionCount,
+            levels: data.levels,
+            timePerQuestion: data.timePerQuestion,
+            timeTotalQuiz: data.timeTotalQuiz,
+            scheduleEnabled: data.scheduleEnabled,
+            scheduledOpeningTime,
+            scheduledClosingTime,
+            correctAnswers: data.correctAnswers,
+            scoreInPercent: data.scoreInPercent,
+            totalScore: data.totalScore,
+        };
+
+        const result = await prisma.$transaction(async (tx) => {
+            if (data.examId != null) {
+                // Serialize writes per exam so two concurrent submissions can't both be
+                // recorded as the official first attempt.
+                await tx.$executeRaw`SELECT "id" FROM "QuizExam" WHERE "id" = ${data.examId} FOR UPDATE`;
+
+                // A previously completed attempt that was flagged as the official first
+                // attempt (isFirstAttempt = true) marks any later attempt as REATTEMPTED.
+                // Abandoned attempts never carry isFirstAttempt = true.
+                const priorFirst = await tx.quizResults.count({
+                    where: {
+                        userId: data.userId,
+                        examId: data.examId,
+                        isFirstAttempt: true,
+                        status: { in: ["SUBMITTED", "LATE_SUBMITTED"] },
+                    },
+                });
+
+                const isFirstAttempt =
+                    data.status !== "ABANDONED" && priorFirst === 0;
+                let status: QuizResultStatus;
+                if (data.status === "ABANDONED") {
+                    status = "ABANDONED";
+                } else if (priorFirst > 0) {
+                    status = "REATTEMPTED";
+                } else if (scheduledClosingTime && now > scheduledClosingTime) {
+                    status = "LATE_SUBMITTED";
+                } else {
+                    status = "SUBMITTED";
+                }
+
+                return tx.quizResults.create({
+                    data: { ...baseData, status, isFirstAttempt },
+                });
+            }
+
+            return tx.quizResults.create({
+                data: { ...baseData, status: "SUBMITTED", isFirstAttempt: true },
+            });
         });
 
         return {

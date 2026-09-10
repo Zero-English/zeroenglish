@@ -40,6 +40,12 @@ export interface DbQuizResult {
   correctAnswers: number;
   scoreInPercent: number;
   totalScore: number;
+  status:
+    | "SUBMITTED"
+    | "LATE_SUBMITTED"
+    | "ABANDONED"
+    | "REATTEMPTED";
+  isFirstAttempt: boolean;
   createdAt: string | Date;
   updatedAt: string | Date;
   exam?: DbQuizExam | null;
