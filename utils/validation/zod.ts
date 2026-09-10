@@ -80,6 +80,66 @@ export const quizResultSchema = z
 
 export type QuizResultInput = z.infer<typeof quizResultSchema>;
 
+const quizExamBaseSchema = z.object({
+  title: z.string().trim().min(1, "Title is required").max(200),
+  mode: quizModeEnumSchema,
+  questionCount: z
+    .number()
+    .int()
+    .positive("questionCount must be positive")
+    .optional(),
+  levels: z.array(levelEnumSchema).min(1, "At least one level is required"),
+  questionIds: z
+    .array(z.number().int().positive())
+    .min(1, "At least one question is required"),
+  timePerQuestion: z
+    .number()
+    .int()
+    .nonnegative("timePerQuestion must be non-negative"),
+  scheduleEnabled: z.boolean().default(false),
+  scheduledOpeningTime: z.string().datetime().nullish(),
+  scheduledClosingTime: z.string().datetime().nullish(),
+  resultsPublished: z.boolean().default(false),
+});
+
+const quizExamScheduleRefinement = (
+  data: {
+    scheduleEnabled?: boolean;
+    scheduledOpeningTime?: string | null;
+    scheduledClosingTime?: string | null;
+  }
+) => {
+  if (
+    data.scheduleEnabled &&
+    data.scheduledOpeningTime &&
+    data.scheduledClosingTime
+  ) {
+    return new Date(data.scheduledOpeningTime) < new Date(data.scheduledClosingTime);
+  }
+  return true;
+};
+
+const quizExamScheduleMessage = {
+  message: "Opening time must be before closing time",
+  path: ["scheduledClosingTime"],
+};
+
+export const quizExamSchema = quizExamBaseSchema.refine(
+  quizExamScheduleRefinement,
+  quizExamScheduleMessage
+);
+
+export const quizExamUpdateSchema =
+  quizExamBaseSchema.partial().refine(quizExamScheduleRefinement, quizExamScheduleMessage);
+
+export const quizExamPublishSchema = z.object({
+  published: z.boolean(),
+});
+
+export type QuizExamInput = z.infer<typeof quizExamSchema>;
+export type QuizExamUpdateInput = z.infer<typeof quizExamUpdateSchema>;
+export type QuizExamPublishInput = z.infer<typeof quizExamPublishSchema>;
+
 export const updateUserSchema = z
   .object({
     name: z.string().trim().max(120).nullable().optional(),
