@@ -9,7 +9,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { motion } from "motion/react";
 import { useQuizChrome } from "@/lib/quiz-chrome";
-import logo from "../public/assets/logo.png";
+import logo from "../public/assets/logo/main-logo.webp";
 
 export function Header() {
   const hidden = useQuizChrome((s) => s.hidden);
@@ -105,7 +105,7 @@ export function Header() {
           <button
             onClick={toggle}
             aria-label="Open menu"
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            className="md:hidden inline-flex items-center justify-center p-2 pr-0 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           >
             <Menu className="h-6 w-6" />
           </button>
