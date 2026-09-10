@@ -384,7 +384,7 @@ export function Leaderboard({
                                 <MiniStat
                                     icon={<FileText className="h-4 w-4" />}
                                     tone="bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300"
-                                    value={tabCount(tab, me)}
+                                    value={`${tabCount(tab, me)}`}
                                     label={t("পরীক্ষা", "Exams")}
                                 />
                             </div>
