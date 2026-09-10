@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getWordsByLevel } from "@/lib/data";
+import { mainCategoryLabel } from "@/lib/category";
 import { LevelPageContent } from "@/components/level-page-content";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -19,9 +20,10 @@ export async function generateMetadata({
   }
 
   const words = await getWordsByLevel(upper);
+  const category = mainCategoryLabel(words);
   return {
     title: `English Vocabulary - Level ${upper}`,
-    description: `Learn ${words.length} essential English words at ${upper} level. Oxford 3000 vocabulary list.`,
+    description: `Learn ${words.length} essential English words at ${upper} level. ${category} vocabulary list.`,
   };
 }
 

@@ -149,7 +149,7 @@ export const getWordStats = async () => {
                 _count: { _all: true },
             }),
             prisma.word.findMany({
-                select: { id: true, word: true, level: true },
+                select: { id: true, word: true, level: true, category: true },
                 orderBy: { id: "asc" },
             }),
         ]);
@@ -322,7 +322,7 @@ export const createWordsBulk = async (
             examplesEn: w.examplesEn ?? [],
             examplesBn: w.examplesBn ?? [],
             level: w.level ?? "A1",
-            category: w.category ?? "Oxford3000",
+            category: w.category ?? "Oxford5000",
             wordType: w.wordType ?? [],
         }));
 

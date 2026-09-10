@@ -199,34 +199,38 @@ export async function addCorrectAnswers(
 
 /**
  * Adopts data written while the user was not signed in (anonymous scope,
- * "anon") into the guest scope. Called when a user explicitly continues as
- * guest, so progress made before signing in is not orphaned inside a scope the
- * UI never reads again. Existing guest data is never overwritten.
+ * "anon") into the target scope. The `pathScope` is the auth-store path used
+ * for per-word and per-activity localStorage keys (e.g. "guest" or
+ * "google|5"); the `nsScope` is the identity namespace used for scoped zustand
+ * stores (e.g. "guest" or "5"). Called when a user explicitly continues as
+ * guest or signs in with Google directly, so progress made before signing in
+ * is not orphaned inside a scope the UI never reads again. Existing target
+ * data is never overwritten.
  */
-export function adoptAnonDataIntoGuest(): void {
+export function adoptAnonDataInto(pathScope: string, nsScope?: string): void {
   const FROM = "anon";
-  const TO = "guest";
+  const ns = nsScope ?? pathScope;
   const wordPrefix = `${LS_PREFIX}${FROM}/`;
-  const toPrefix = `${LS_PREFIX}${TO}/`;
+  const toPrefix = `${LS_PREFIX}${pathScope}/`;
 
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (!key || !key.startsWith(wordPrefix)) continue;
-    const target = key.replace(wordPrefix, toPrefix);
-    if (localStorage.getItem(target)) continue;
+    const targetKey = key.replace(wordPrefix, toPrefix);
+    if (localStorage.getItem(targetKey)) continue;
     const raw = localStorage.getItem(key);
-    if (raw !== null) localStorage.setItem(target, raw);
+    if (raw !== null) localStorage.setItem(targetKey, raw);
   }
 
   const fromActivity = activityKey(FROM);
-  const toActivity = activityKey(TO);
+  const toActivity = activityKey(pathScope);
   const fromRaw = localStorage.getItem(fromActivity);
   if (fromRaw && !localStorage.getItem(toActivity)) {
     localStorage.setItem(toActivity, fromRaw);
   }
 
   const fromScoped = `zero_english:${FROM}`;
-  const toScoped = `zero_english:${TO}`;
+  const toScoped = `zero_english:${ns}`;
   const rawFrom = localStorage.getItem(fromScoped);
   if (!rawFrom) return;
   try {
@@ -246,4 +250,8 @@ export function adoptAnonDataIntoGuest(): void {
   } catch {
     // skip corrupt anon scoped data
   }
+}
+
+export function adoptAnonDataIntoGuest(): void {
+  adoptAnonDataInto("guest");
 }

@@ -11,9 +11,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { AppHydration } from "@/components/app-hydration";
 
 export const metadata: Metadata = {
-  title: "Learn English Oxford 3000 Word Vocabulary in Bangla | Zero English",
+  title: "Learn English Vocabulary in Bangla | Zero English",
   description:
-    "Master 3000 essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to B2 levels covered.",
+    "Master essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to C2 levels covered.",
   manifest: "/manifest.webmanifest",
   icons: "/assets/icon.jpeg",
   other: {

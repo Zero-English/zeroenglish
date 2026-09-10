@@ -23,7 +23,7 @@ export const wordRowSchema = z.preprocess(
         examplesEn: z.array(z.string()).default([]),
         examplesBn: z.array(z.string()).default([]),
         level: levelEnumSchema.default("A1"),
-        category: z.string().default("Oxford3000"),
+        category: z.string().default("Oxford5000"),
         wordType: z.array(z.string()).default([]),
     }),
 );

@@ -8,7 +8,7 @@ import type { Word } from "@/lib/data";
 import type { QuizType } from "@/lib/quiz-history-store";
 
 export type Step = "select" | "settings" | "quiz" | "results";
-export type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
+export type LevelOption = "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Random";
 
 export interface Question {
   word: Word;

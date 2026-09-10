@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { Word } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
+import { mainCategoryLabel } from "@/lib/category";
 import { Button } from "@/components/ui/button";
 import { LibraryBig, BookOpenCheck, Search, ArrowRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -48,9 +49,27 @@ const LEVEL_CONFIG: Record<
     labelBn: "উচ্চ-মাঝারি",
     solid: "bg-rose-500",
   },
+  C1: {
+    bg: "bg-violet-50 dark:bg-violet-950/40",
+    border: "border-violet-200 dark:border-violet-800",
+    text: "text-violet-700 dark:text-violet-300",
+    gradient: "from-violet-500 to-purple-500",
+    label: "Advanced",
+    labelBn: "উন্নত",
+    solid: "bg-violet-500",
+  },
+  C2: {
+    bg: "bg-fuchsia-50 dark:bg-fuchsia-950/40",
+    border: "border-fuchsia-200 dark:border-fuchsia-800",
+    text: "text-fuchsia-700 dark:text-fuchsia-300",
+    gradient: "from-fuchsia-500 to-pink-500",
+    label: "Mastery",
+    labelBn: "পারদর্শী",
+    solid: "bg-fuchsia-500",
+  },
 };
 
-const LEVELS = ["A1", "A2", "B1", "B2"] as const;
+const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 
 const FEATURES = [
   {
@@ -58,8 +77,8 @@ const FEATURES = [
     icon: LibraryBig,
     titleEn: "Vocabulary",
     titleBn: "শব্দভাণ্ডার",
-    descriptionEn: "Browse all 3000 words, filter by level, and track what you've learned.",
-    descriptionBn: "সব ৩০০০ শব্দ ব্রাউজ করুন, লেভেল অনুযায়ী ফিল্টার করুন এবং যা শিখেছেন তা ট্র্যাক করুন।",
+    descriptionEn: "Browse the full word list, filter by level, and track what you've learned.",
+    descriptionBn: "সব শব্দ ব্রাউজ করুন, লেভেল অনুযায়ী ফিল্টার করুন এবং যা শিখেছেন তা ট্র্যাক করুন।",
     iconClass: "text-orange-500 bg-orange-100 dark:bg-orange-950/60",
   },
   {
@@ -86,6 +105,7 @@ export function HomeContent({ words }: { words: Word[] }) {
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
   const num = useNum();
+  const category = mainCategoryLabel(words);
 
   const levelStats = LEVELS.map((level) => {
     const items = words.filter((w) => w.level === level);
@@ -106,7 +126,7 @@ export function HomeContent({ words }: { words: Word[] }) {
           <section className="text-center mb-14 animate-fade-up">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5">
               <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-              {t("অক্সফোর্ড ৩০০০ · ইংরেজি ↔ বাংলা", "Oxford 3000 · English ↔ Bangla")}
+              {t(`${category} · ইংরেজি ↔ বাংলা`, `${category} · English ↔ Bangla`)}
             </div>
 
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
@@ -121,8 +141,8 @@ export function HomeContent({ words }: { words: Word[] }) {
 
             <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto mb-8">
               {t(
-                "অক্সফোর্ড ৩০০০ শব্দের সম্পূর্ণ তালিকা বাংলা অর্থসহ। আপনার লেভেল বেছে নিন, নতুন শব্দ শিখুন এবং প্রতিদিন আপনার অগ্রগতি ট্র্যাক করুন।",
-                "The complete Oxford 3000 word list with Bangla meanings. Pick your level, learn new words, and track your progress every day."
+                `${category} শব্দের সম্পূর্ণ তালিকা বাংলা অর্থসহ। আপনার লেভেল বেছে নিন, নতুন শব্দ শিখুন এবং প্রতিদিন আপনার অগ্রগতি ট্র্যাক করুন।`,
+                `The complete ${category} word list with Bangla meanings. Pick your level, learn new words, and track your progress every day.`
               )}
             </p>
 

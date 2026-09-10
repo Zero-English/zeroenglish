@@ -18,6 +18,7 @@ export interface WordRef {
     id: number;
     word: string;
     level: string;
+    category: string;
 }
 
 export interface WordStatsData {

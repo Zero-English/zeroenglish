@@ -20,10 +20,11 @@ import {
 import Link from "next/link";
 import { useT, useNum } from "@/components/language-provider";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { toast } from "sonner";
 
-type LevelOption = "A1" | "A2" | "B1" | "B2" | "Random";
+type LevelOption = "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Random";
 
-type QuizLevel = LevelOption | "C1" | "C2";
+type QuizLevel = LevelOption;
 
 const QUIZ_TYPE_ENUM: Record<QuizType, string> = {
   english_to_bangla: "ENGLISH_TO_BANGLA",
@@ -92,7 +93,7 @@ interface Question {
   options: { text: string; correct: boolean }[];
 }
 
-const LEVEL_SCOPE_OPTIONS: LevelOption[] = ["A1", "A2", "B1", "B2", "Random"];
+const LEVEL_SCOPE_OPTIONS: LevelOption[] = ["A1", "A2", "B1", "B2", "C1", "C2", "Random"];
 
 const LEVEL_CONFIG: Record<
   QuizLevel,
@@ -278,6 +279,7 @@ export function QuizClient({ words }: { words: Word[] }) {
   const incorrectAnswers = useQuizStore((s) => s.incorrectAnswers);
 
   const { addStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
+  const t = useT();
 
   const setQuizChromeHidden = useQuizChrome((s) => s.setHidden);
   useEffect(() => {
@@ -431,6 +433,15 @@ export function QuizClient({ words }: { words: Word[] }) {
       useAllQuestions,
       quizType
     );
+    if (generated.length === 0) {
+      toast.error(
+        t(
+          "এই লেভেলে কুইজের জন্য কোনো শব্দ নেই। অন্য লেভেল বা ধরন বেছে নিন।",
+          "No words available for this quiz. Pick a different level or quiz type."
+        )
+      );
+      return;
+    }
     useQuizStore.setState({
       questions: generated,
       currentIndex: 0,
