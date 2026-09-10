@@ -82,7 +82,7 @@ export function MobileBottomNav() {
                 <motion.span
                   layoutId="bottom-nav-active"
                   transition={spring}
-                  className="absolute inset-0 rounded-lg border bg-primary/15"
+                  className="absolute inset-0 rounded-lg bg-primary/15"
                 />
               )}
               <span className="relative z-10 flex flex-col items-center gap-0.5">
