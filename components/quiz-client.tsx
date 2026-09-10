@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
-import { Languages, ArrowLeftRight, ArrowRight, ArrowLeft, Shuffle, Layers, Volume2, Star, Sparkles, Gauge, ListOrdered, Check, X, Bookmark, BookmarkCheck, type LucideIcon } from "lucide-react";
+import { Languages, ArrowLeftRight, ArrowRight, ArrowLeft, Shuffle, Layers, Volume2, Star, Sparkles, Gauge, ListOrdered, Check, X, Bookmark, BookmarkCheck, ClipboardList, Timer, type LucideIcon } from "lucide-react";
 import { Word } from "@/lib/data";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
@@ -628,6 +628,56 @@ function QuizTypeSelect({ onSelect }: { onSelect: (type: QuizType) => void }) {
           </p>
         </div>
 
+        <div className="animate-fade-up mb-10">
+          <Link
+            href="/quiz/exam"
+            className="group relative flex flex-col text-left overflow-hidden rounded-3xl border-2 border-violet-200 dark:border-violet-900 bg-violet-50/60 dark:bg-violet-950/30 backdrop-blur-sm transition-all duration-300 hover:scale-[1.01] hover:-translate-y-0.5 active:scale-[0.99]"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-purple-500 opacity-0 group-hover:opacity-5 dark:group-hover:opacity-10 transition-opacity duration-300" />
+
+            <div className="relative flex items-center justify-between p-6">
+              <div className="flex-shrink-0 h-14 w-14 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg shadow-black/10">
+                <ClipboardList className="h-7 w-7 text-white" />
+              </div>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-100 dark:bg-violet-900/40 border border-violet-200 dark:border-violet-800 px-3 py-1 text-[11px] font-bold tracking-wide text-violet-700 dark:text-violet-300 uppercase">
+                <Timer className="h-3 w-3" />
+                {t("পরীক্ষা", "Exam")}
+              </span>
+            </div>
+
+            <div className="relative flex-1 px-6 pb-6">
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+                {t("কুইজ পরীক্ষা", "Quiz Exam")}
+              </h3>
+              <p className="text-sm font-medium mt-1 text-violet-700 dark:text-violet-300">
+                {t(
+                  "নির্ধারিত সময়ে সাপ্তাহিক ও দ্বি-সাপ্তাহিক পরীক্ষা নিন।",
+                  "Take weekly and biweekly exams on your schedule."
+                )}
+              </p>
+
+              <div className="flex flex-wrap items-center gap-2 mt-4">
+                <span className="text-xs px-2 py-1 rounded-lg bg-white/70 dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400">
+                  {t("নির্ধারিত সময়সূচি", "Scheduled")}
+                </span>
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
+                  {t("শুরু", "Start")}
+                  <ArrowRight className="inline-block h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+              </div>
+            </div>
+
+            <div className="absolute bottom-0 left-6 right-6 h-0.5 rounded-full bg-gradient-to-r from-violet-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </Link>
+        </div>
+
+        <div className="animate-fade-up-1 flex items-center gap-2 mb-4">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            <Sparkles className="h-3.5 w-3.5" />
+            {t("প্র্যাকটিস কুইজ", "Practice Quizzes")}
+          </span>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           {QUIZ_TYPE_ORDER.map((type, i) => {
             const c = QUIZ_TYPE_CONFIG[type];
@@ -647,8 +697,13 @@ function QuizTypeSelect({ onSelect }: { onSelect: (type: QuizType) => void }) {
                 <div className={`absolute inset-0 bg-gradient-to-br ${c.gradient} opacity-0 group-hover:opacity-5 dark:group-hover:opacity-10 transition-opacity duration-300`} />
 
                 <div className="relative flex items-center justify-between p-6">
-                  <div className={`flex-shrink-0 h-14 w-14 rounded-2xl bg-gradient-to-br ${c.gradient} flex items-center justify-center shadow-lg shadow-black/10`}>
-                    <Icon className="h-7 w-7 text-white" />
+                  <div className="flex items-center gap-3">
+                    <div className={`flex-shrink-0 h-14 w-14 rounded-2xl bg-gradient-to-br ${c.gradient} flex items-center justify-center shadow-lg shadow-black/10`}>
+                      <Icon className="h-7 w-7 text-white" />
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-700 px-3 py-1 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                      {t("প্র্যাকটিস", "Practice")}
+                    </span>
                   </div>
 
                   {featured && (
