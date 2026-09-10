@@ -18,6 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useLevelPage, useLevelFilter, useLevelSort, useLevelCategory, setLevelState } from "@/lib/level-pagination-store";
 import { setSelectedLevel } from "@/lib/level-store";
+import { recordLastLearned } from "@/lib/last-learned-store";
 import { useT, useNum } from "@/components/language-provider";
 
 const ITEMS_PER_PAGE = 10;
@@ -45,14 +46,16 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
   const t = useT();
   const num = useNum();
 
-  useEffect(() => {
-    setSelectedLevel(level.toUpperCase() as Parameters<typeof setSelectedLevel>[0]);
-  }, [level]);
-
   const page = useLevelPage(level);
   const filter = useLevelFilter(level);
   const sort = useLevelSort(level);
   const category = useLevelCategory(level);
+
+  useEffect(() => {
+    const levelKey = level.toUpperCase();
+    setSelectedLevel(levelKey as Parameters<typeof setSelectedLevel>[0]);
+    recordLastLearned(levelKey, page);
+  }, [level, page]);
 
   const categories = useMemo(
     () => Array.from(new Set(words.map((w) => w.category).filter(Boolean))).sort(),
