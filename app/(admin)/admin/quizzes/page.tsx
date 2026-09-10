@@ -35,13 +35,13 @@ import { BackButton } from "@/components/back-button";
 import { PaginationNav } from "@/components/pagination-nav";
 import {
   type QuizQuestionItem,
-  type QuizTypeValue,
   type DifficultyLevelValue,
   quizTypeOptions,
+  quizTypeLabel,
   difficultyOptions,
-  quizTypeLabelMap,
   difficultyLabelMap,
 } from "../_data/quizzes";
+import { QuizSectionNav } from "./quiz-nav";
 
 const PAGE_SIZES = [10, 20, 50, 100];
 
@@ -58,12 +58,14 @@ function mapApiQuestion(q: ApiQuizQuestion): QuizQuestionItem {
 
 type ApiQuizQuestion = {
   id: number;
-  quizType: QuizTypeValue;
+  quizType: string;
   questionText: string;
   options: string[];
   difficultyLevel: DifficultyLevelValue;
   answer: string;
 };
+
+type QuizTypeOption = { value: string; label: string };
 
 const difficultyVariant: Record<DifficultyLevelValue, "difficulty"> = {
   EASY: "difficulty",
@@ -88,10 +90,32 @@ export default function AdminQuizzesPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState<QuizQuestionItem | null>(null);
 
+  const [typeOptions, setTypeOptions] = useState<QuizTypeOption[]>(quizTypeOptions);
+  const [typesLoading, setTypesLoading] = useState(true);
+
   const messageTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     fetchQuestions();
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/v1/quiz-type")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data) && json.data.length) {
+          setTypeOptions(
+            json.data.map((t: { id: number; name: string }) => ({
+              value: t.name,
+              label: quizTypeLabel(t.name),
+            }))
+          );
+        }
+      })
+      .catch(() => {
+        // Fall back to the seeded quizTypeOptions list.
+      })
+      .finally(() => setTypesLoading(false));
   }, []);
 
   async function fetchQuestions() {
@@ -123,7 +147,7 @@ export default function AdminQuizzesPage() {
         const haystack = [
           item.questionText,
           item.answer,
-          quizTypeLabelMap[item.quizType],
+          quizTypeLabel(item.quizType),
           difficultyLabelMap[item.difficultyLevel],
           ...item.options,
         ]
@@ -136,6 +160,18 @@ export default function AdminQuizzesPage() {
       return true;
     });
   }, [questions, search, typeFilter, difficultyFilter]);
+
+  const filterTypeOptions = useMemo(() => {
+    const seen = new Set(typeOptions.map((t) => t.value));
+    const extras: QuizTypeOption[] = [];
+    for (const q of questions) {
+      if (!seen.has(q.quizType)) {
+        seen.add(q.quizType);
+        extras.push({ value: q.quizType, label: quizTypeLabel(q.quizType) });
+      }
+    }
+    return [...typeOptions, ...extras];
+  }, [typeOptions, questions]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const safePage = Math.min(page, totalPages);
@@ -223,6 +259,7 @@ export default function AdminQuizzesPage() {
   return (
     <div className="p-4 lg:p-8">
       <BackButton />
+      <QuizSectionNav />
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           {loading ? "Loading..." : `Manage quiz questions (${questions.length} questions)`}
@@ -278,7 +315,7 @@ export default function AdminQuizzesPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All types</SelectItem>
-                  {quizTypeOptions.map((t) => (
+                  {filterTypeOptions.map((t) => (
                     <SelectItem key={t.value} value={t.value}>
                       {t.label}
                     </SelectItem>
@@ -393,7 +430,7 @@ export default function AdminQuizzesPage() {
                     </span>
                   </td>
                   <td className="px-4 py-2.5">
-                    <Badge variant="category">{quizTypeLabelMap[q.quizType]}</Badge>
+                    <Badge variant="category">{quizTypeLabel(q.quizType)}</Badge>
                   </td>
                   <td className="px-4 py-2.5">
                     <Badge variant={difficultyVariant[q.difficultyLevel]}>
@@ -482,6 +519,8 @@ export default function AdminQuizzesPage() {
         onOpenChange={setFormOpen}
         editing={editing}
         onSave={handleSave}
+        typeOptions={typeOptions}
+        typesLoading={typesLoading}
       />
 
       {/* Delete confirmation dialog */}
@@ -508,11 +547,15 @@ function QuizFormDialog({
   onOpenChange,
   editing,
   onSave,
+  typeOptions,
+  typesLoading,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   editing: QuizQuestionItem | null;
   onSave: (data: Omit<QuizQuestionItem, "id">) => void;
+  typeOptions: QuizTypeOption[];
+  typesLoading?: boolean;
 }) {
   const [form, setForm] = useState<Omit<QuizQuestionItem, "id">>(() =>
     emptyForm()
@@ -582,19 +625,25 @@ function QuizFormDialog({
               <FieldLabel>Quiz Type</FieldLabel>
               <Select
                 value={form.quizType}
-                onValueChange={(v) => setForm({ ...form, quizType: v as QuizTypeValue })}
+                onValueChange={(v) => setForm({ ...form, quizType: v })}
               >
                 <SelectTrigger className="w-full" aria-label="Quiz type">
-                  <SelectValue placeholder="Quiz type" />
+                  <SelectValue placeholder="Quiz type">
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  {quizTypeOptions.map((t) => (
+                  {typeOptions.map((t) => (
                     <SelectItem key={t.value} value={t.value}>
                       {t.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
+              {typesLoading && (
+                <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                  Loading quiz types…
+                </p>
+              )}
             </Field>
           </div>
 

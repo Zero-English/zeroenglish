@@ -105,7 +105,7 @@ export const getQuizResultsByUser = async (userId: number) => {
         const results = await prisma.quizResults.findMany({
             where: { userId },
             orderBy: { createdAt: "desc" },
-            include: { quizType: true },
+            include: { exam: true, quizType: true },
         });
 
         return {

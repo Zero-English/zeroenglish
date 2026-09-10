@@ -17,18 +17,9 @@ import EditUserDialog from "./edit-user-dialog";
 
 const PAGE_SIZES = [10, 20, 50];
 
-const ACTIVITY_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
-
 function formatDate(value?: string | Date | null) {
   if (!value) return "—";
   return new Date(value).toLocaleDateString();
-}
-
-function deriveStatus(updatedAt?: string | null): "Active" | "Inactive" {
-  if (!updatedAt) return "Inactive";
-  return new Date(updatedAt).getTime() > Date.now() - ACTIVITY_WINDOW_MS
-    ? "Active"
-    : "Inactive";
 }
 
 export default function AdminUsersPage() {
@@ -246,6 +237,7 @@ export default function AdminUsersPage() {
                     className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                   />
                 </th>
+                <th className="px-4 py-2.5 font-medium">ID</th>
                 <th className="px-4 py-2.5 font-medium">Name</th>
                 <th className="px-4 py-2.5 font-medium">Email</th>
                 <th className="px-4 py-2.5 font-medium">Bookmarked</th>
@@ -254,6 +246,7 @@ export default function AdminUsersPage() {
                 <th className="px-4 py-2.5 font-medium">Quiz Result</th>
                 <th className="px-4 py-2.5 font-medium">Role</th>
                 <th className="px-4 py-2.5 font-medium">Status</th>
+                <th className="px-4 py-2.5 font-medium">Last Activity</th>
                 <th className="px-4 py-2.5 font-medium">Joined</th>
                 <th className="px-4 py-2.5 font-medium">Actions</th>
               </tr>
@@ -297,19 +290,19 @@ export default function AdminUsersPage() {
                 </>
               ) : error ? (
                 <tr>
-                  <td colSpan={11} className="px-4 py-10 text-center text-rose-600 dark:text-rose-400">
+                  <td colSpan={13} className="px-4 py-10 text-center text-rose-600 dark:text-rose-400">
                     {error}
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="px-4 py-10 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan={13} className="px-4 py-10 text-center text-gray-500 dark:text-gray-400">
                     No users found.
                   </td>
                 </tr>
               ) : (
                 users.map((user) => {
-                  const status = deriveStatus(user.updated_at);
+                  const status = user.userStatus;
                   return (
                     <tr
                       key={user.id}
@@ -329,6 +322,9 @@ export default function AdminUsersPage() {
                           aria-label={`Select ${user.user_name}`}
                           className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                         />
+                      </td>
+                      <td className="px-4 py-2.5 text-gray-500 dark:text-gray-400">
+                        {user.id}
                       </td>
                       <td className="px-4 py-2.5">
                         <div className="flex items-center gap-2.5 whitespace-nowrap">
@@ -396,6 +392,9 @@ export default function AdminUsersPage() {
                         >
                           {status}
                         </span>
+                      </td>
+                      <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
+                        {formatDate(user.lastActivityAt)}
                       </td>
                       <td className="px-4 py-2.5 text-gray-700 dark:text-gray-300">
                         {formatDate(user.created_at)}

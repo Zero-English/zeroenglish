@@ -46,7 +46,7 @@ export const quizTypeEnumSchema = z.enum([
 export const difficultyLevelEnumSchema = z.enum(["EASY", "MEDIUM", "HARD"]);
 
 export const quizQuestionSchema = z.object({
-  quizType: quizTypeEnumSchema,
+  quizType: z.string().trim().min(1, "Quiz type is required").max(50),
   questionText: z.string().trim().min(1, "Question text is required"),
   options: z.array(z.string().min(1)).min(2, "At least 2 options are required"),
   difficultyLevel: difficultyLevelEnumSchema,
@@ -54,6 +54,15 @@ export const quizQuestionSchema = z.object({
 });
 
 export type QuizQuestionInput = z.infer<typeof quizQuestionSchema>;
+
+export const quizTypeSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(50),
+});
+
+export const quizTypeUpdateSchema = quizTypeSchema.partial();
+
+export type QuizTypeInput = z.infer<typeof quizTypeSchema>;
+export type QuizTypeUpdateInput = z.infer<typeof quizTypeUpdateSchema>;
 
 export const quizModeEnumSchema = z.enum(["PRACTICE", "WEEKLY", "BIWEEKLY"]);
 
@@ -79,6 +88,66 @@ export const quizResultSchema = z
   });
 
 export type QuizResultInput = z.infer<typeof quizResultSchema>;
+
+const quizExamBaseSchema = z.object({
+  title: z.string().trim().min(1, "Title is required").max(200),
+  mode: quizModeEnumSchema,
+  questionCount: z
+    .number()
+    .int()
+    .positive("questionCount must be positive")
+    .optional(),
+  levels: z.array(levelEnumSchema).min(1, "At least one level is required"),
+  questionIds: z
+    .array(z.number().int().positive())
+    .min(1, "At least one question is required"),
+  timePerQuestion: z
+    .number()
+    .int()
+    .nonnegative("timePerQuestion must be non-negative"),
+  scheduleEnabled: z.boolean().default(false),
+  scheduledOpeningTime: z.string().datetime().nullish(),
+  scheduledClosingTime: z.string().datetime().nullish(),
+  resultsPublished: z.boolean().default(false),
+});
+
+const quizExamScheduleRefinement = (
+  data: {
+    scheduleEnabled?: boolean;
+    scheduledOpeningTime?: string | null;
+    scheduledClosingTime?: string | null;
+  }
+) => {
+  if (
+    data.scheduleEnabled &&
+    data.scheduledOpeningTime &&
+    data.scheduledClosingTime
+  ) {
+    return new Date(data.scheduledOpeningTime) < new Date(data.scheduledClosingTime);
+  }
+  return true;
+};
+
+const quizExamScheduleMessage = {
+  message: "Opening time must be before closing time",
+  path: ["scheduledClosingTime"],
+};
+
+export const quizExamSchema = quizExamBaseSchema.refine(
+  quizExamScheduleRefinement,
+  quizExamScheduleMessage
+);
+
+export const quizExamUpdateSchema =
+  quizExamBaseSchema.partial().refine(quizExamScheduleRefinement, quizExamScheduleMessage);
+
+export const quizExamPublishSchema = z.object({
+  published: z.boolean(),
+});
+
+export type QuizExamInput = z.infer<typeof quizExamSchema>;
+export type QuizExamUpdateInput = z.infer<typeof quizExamUpdateSchema>;
+export type QuizExamPublishInput = z.infer<typeof quizExamPublishSchema>;
 
 export const updateUserSchema = z
   .object({
