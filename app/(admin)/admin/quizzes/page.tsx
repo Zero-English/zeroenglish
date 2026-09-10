@@ -575,6 +575,26 @@ function QuizFormDialog({
     if (open) resetForm();
   }
 
+  // Only the non-empty, de-duplicated options are choosable as the answer.
+  const answerOptions = useMemo(() => {
+    const seen = new Set<string>();
+    return form.options
+      .map((opt, i) => ({ label: opt.trim(), index: i }))
+      .filter((o) => {
+        if (!o.label || seen.has(o.label)) return false;
+        seen.add(o.label);
+        return true;
+      });
+  }, [form.options]);
+
+  function handleOptionsChange(options: string[]) {
+    const nonEmpty = options.map((o) => o.trim()).filter(Boolean);
+    const nextAnswer = nonEmpty.includes(form.answer.trim())
+      ? form.answer.trim()
+      : (nonEmpty[0] ?? "");
+    setForm({ ...form, options, answer: nextAnswer });
+  }
+
   function handleSubmit() {
     if (!form.questionText.trim()) {
       setError("Question text is required.");
@@ -662,7 +682,7 @@ function QuizFormDialog({
 
           <OptionsEditor
             values={form.options}
-            onChange={(v) => setForm({ ...form, options: v })}
+            onChange={handleOptionsChange}
           />
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -671,11 +691,35 @@ function QuizFormDialog({
                 Answer
                 <span className="text-rose-500">*</span>
               </FieldLabel>
-              <Input
-                value={form.answer}
-                onChange={(e) => setForm({ ...form, answer: e.target.value })}
-                placeholder="Correct answer"
-              />
+              <Select
+                value={
+                  answerOptions.some((o) => o.label === form.answer)
+                    ? form.answer
+                    : ""
+                }
+                onValueChange={(v) => setForm({ ...form, answer: v })}
+              >
+                <SelectTrigger className="w-full" aria-label="Answer">
+                  <SelectValue placeholder="Select an answer" />
+                </SelectTrigger>
+                <SelectContent>
+                  {answerOptions.map((o) => (
+                    <SelectItem key={o.label} value={o.label}>
+                      <span className="flex items-center gap-2">
+                        <span className="shrink-0 font-medium text-gray-400">
+                          {String.fromCharCode(65 + o.index)}.
+                        </span>
+                        <span className="truncate">{o.label}</span>
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {answerOptions.length === 0 && (
+                <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                  Add at least one option above to choose an answer.
+                </p>
+              )}
             </Field>
             <Field>
               <FieldLabel>Difficulty</FieldLabel>
