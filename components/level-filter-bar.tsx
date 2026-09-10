@@ -31,6 +31,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
+import { formatCategoryLabel } from "@/lib/category";
 
 export type FilterType =
   | "all"
@@ -60,15 +61,21 @@ const sorts: { value: SortType; label: string; labelBn: string; icon: typeof Sli
 interface LevelFilterBarProps {
   filter: FilterType;
   sort: SortType;
+  category: string;
+  categories: string[];
   onFilterChange: (filter: FilterType) => void;
   onSortChange: (sort: SortType) => void;
+  onCategoryChange: (category: string) => void;
 }
 
 export function LevelFilterBar({
   filter,
   sort,
+  category,
+  categories,
   onFilterChange,
   onSortChange,
+  onCategoryChange,
 }: LevelFilterBarProps) {
   const [open, setOpen] = useState(false);
   const t = useT();
@@ -118,6 +125,19 @@ export function LevelFilterBar({
               <SelectItem value="default">{t("ডিফল্ট", "Default")}</SelectItem>
               <SelectItem value="az">A-Z</SelectItem>
               <SelectItem value="za">Z-A</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={category} onValueChange={(v) => onCategoryChange(v)}>
+            <SelectTrigger className="w-40" size="sm">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t("সব বিভাগ", "All categories")}</SelectItem>
+              {categories.map((c) => (
+                <SelectItem key={c} value={c}>
+                  {formatCategoryLabel(c)}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -182,6 +202,37 @@ export function LevelFilterBar({
                     )}
                     <Icon className="relative z-10 size-4" />
                     <span className="relative z-10 flex-1 text-left">{t(f.labelBn, f.label)}</span>
+                    {isActive && <Check className="relative z-10 size-4" />}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-6 space-y-1">
+              <p className="px-1 text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+                {t("বিভাগ", "Category")}
+              </p>
+              {[{ value: "all", label: "All categories", labelBn: "সব বিভাগ" }, ...categories.map((c) => ({ value: c, label: formatCategoryLabel(c), labelBn: formatCategoryLabel(c) }))].map((c) => {
+                const isActive = category === c.value;
+                return (
+                  <button
+                    key={c.value}
+                    onClick={() => onCategoryChange(c.value)}
+                    className={cn(
+                      "relative flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
+                      isActive
+                        ? "text-white dark:text-zinc-900"
+                        : "text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60"
+                    )}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="level-category-pill-mobile"
+                        transition={spring}
+                        className="absolute inset-0 rounded-xl bg-zinc-900 dark:bg-white"
+                      />
+                    )}
+                    <span className="relative z-10 flex-1 text-left">{t(c.labelBn, c.label)}</span>
                     {isActive && <Check className="relative z-10 size-4" />}
                   </button>
                 );

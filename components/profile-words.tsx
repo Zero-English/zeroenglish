@@ -38,13 +38,15 @@ const levelColors: Record<string, { bg: string; border: string; text: string; gr
   A2: { bg: "bg-sky-50 dark:bg-sky-950/40", border: "border-sky-200 dark:border-sky-800", text: "text-sky-700 dark:text-sky-300", gradient: "from-sky-500 to-blue-500", label: "Elementary", labelBn: "প্রাথমিক" },
   B1: { bg: "bg-amber-50 dark:bg-amber-950/40", border: "border-amber-200 dark:border-amber-800", text: "text-amber-700 dark:text-amber-300", gradient: "from-amber-500 to-orange-500", label: "Intermediate", labelBn: "মাঝারি" },
   B2: { bg: "bg-rose-50 dark:bg-rose-950/40", border: "border-rose-200 dark:border-rose-800", text: "text-rose-700 dark:text-rose-300", gradient: "from-rose-500 to-pink-500", label: "Upper Intermediate", labelBn: "উচ্চ-মাঝারি" },
+  C1: { bg: "bg-violet-50 dark:bg-violet-950/40", border: "border-violet-200 dark:border-violet-800", text: "text-violet-700 dark:text-violet-300", gradient: "from-violet-500 to-purple-500", label: "Advanced", labelBn: "উন্নত" },
+  C2: { bg: "bg-fuchsia-50 dark:bg-fuchsia-950/40", border: "border-fuchsia-200 dark:border-fuchsia-800", text: "text-fuchsia-700 dark:text-fuchsia-300", gradient: "from-fuchsia-500 to-pink-500", label: "Mastery", labelBn: "পারদর্শী" },
 };
 
 function wordKey(w: Word) {
   return String(w.id);
 }
 
-const levelOrder = ["A1", "A2", "B1", "B2"];
+const levelOrder = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
 function StatCard({
   icon,

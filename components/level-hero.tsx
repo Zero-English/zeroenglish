@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import type { Word } from "@/lib/data";
+import { type Word } from "@/lib/data";
+import { mainCategoryLabel } from "@/lib/category";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { setSelectedLevel } from "@/lib/level-store";
 import { useT, useNum } from "@/components/language-provider";
@@ -42,6 +43,7 @@ export function LevelHero({
   const num = useNum();
   const learned = words.filter((w) => learnedIds.has(String(w.id))).length;
   const pct = words.length > 0 ? Math.round((learned / words.length) * 100) : 0;
+  const category = mainCategoryLabel(words);
 
   return (
     <section className="relative">
@@ -67,7 +69,7 @@ export function LevelHero({
               )}
             >
               <Sparkles className="h-3.5 w-3.5" />
-              {t(labelBn, label)} · Oxford 3000
+              {t(labelBn, label)} · {category}
             </span>
             <h1
               className={cn(

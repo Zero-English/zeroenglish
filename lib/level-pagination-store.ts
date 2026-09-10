@@ -11,6 +11,7 @@ interface LevelPageEntry {
   page: number;
   filter: FilterType;
   sort: SortType;
+  category: string;
 }
 
 type LevelPaginationState = Record<string, LevelPageEntry>;
@@ -28,12 +29,12 @@ const useLevelPaginationStore = create<LevelPaginationState>()(
 
 export function getLevelState(level: string): LevelPageEntry {
   const state = useLevelPaginationStore.getState();
-  return state[level] ?? { page: 1, filter: "all" as FilterType, sort: "default" as SortType };
+  return state[level] ?? { page: 1, filter: "all" as FilterType, sort: "default" as SortType, category: "all" };
 }
 
 export function setLevelState(level: string, entry: Partial<LevelPageEntry>): void {
   const current = useLevelPaginationStore.getState();
-  const existing = current[level] ?? { page: 1, filter: "all" as FilterType, sort: "default" as SortType };
+  const existing = current[level] ?? { page: 1, filter: "all" as FilterType, sort: "default" as SortType, category: "all" };
   useLevelPaginationStore.setState({
     [level]: { ...existing, ...entry },
   });
@@ -49,4 +50,8 @@ export function useLevelFilter(level: string): FilterType {
 
 export function useLevelSort(level: string): SortType {
   return useLevelPaginationStore((s) => s[level]?.sort ?? "default");
+}
+
+export function useLevelCategory(level: string): string {
+  return useLevelPaginationStore((s) => s[level]?.category ?? "all");
 }

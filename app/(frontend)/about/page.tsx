@@ -82,8 +82,8 @@ export default function AboutPage() {
               </p>
               <p>
                 {t(
-                  "জিরো ইংলিশ সেই ফাঁক পূরণ করার জন্যই শুরু হওয়া একটি স্টার্টআপ। আমরা অক্সফোর্ড ৩০০০ শব্দের তালিকা বাংলা অর্থসহ বিন্যস্ত করেছি, যেন শিক্ষার্থীরা ধাপে ধাপে, নিজের গতিতে এগিয়ে যেতে পারে।",
-                  "Zero English is a startup built to fill that gap. We've organized the Oxford 3000 word list with Bangla meanings, so learners can progress step by step, at their own pace."
+                  "জিরো ইংলিশ সেই ফাঁক পূরণ করার জন্যই শুরু হওয়া একটি স্টার্টআপ। আমরা অক্সফোর্ড ৫০০০ শব্দের তালিকা বাংলা অর্থসহ বিন্যস্ত করেছি, যেন শিক্ষার্থীরা ধাপে ধাপে, নিজের গতিতে এগিয়ে যেতে পারে।",
+                  "Zero English is a startup built to fill that gap. We've organized the Oxford 5000 word list with Bangla meanings, so learners can progress step by step, at their own pace."
                 )}
               </p>
               <p>

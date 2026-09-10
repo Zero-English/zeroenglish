@@ -54,6 +54,11 @@ export function WordCard({ word, gradient }: WordCardProps) {
           <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
             {word.parts_of_speech}
           </span>
+          {word.category && (
+            <span className="text-xs text-orange-600 dark:text-orange-400 font-medium bg-orange-50 dark:bg-orange-950/40 rounded-md px-2 py-0.5">
+              {word.category.replace(/([a-z])([A-Z])/g, "$1 $2")}
+            </span>
+          )}
         </div>
         {word.meaning_bn !== "..." && (
           <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">

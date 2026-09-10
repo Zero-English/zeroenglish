@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { createLocalStorage } from "./state-storage";
-import { adoptAnonDataIntoGuest } from "./db";
+import { adoptAnonDataInto, adoptAnonDataIntoGuest } from "./db";
 
 export type AuthStatus = "none" | "guest" | "google";
 
@@ -42,14 +42,19 @@ export const useAuthStore = create<AuthState>()(
         adoptAnonDataIntoGuest();
         set({ status: "guest", path: GUEST_PATH, userName: "Guest", userEmail: null, userId: null });
       },
-      setGoogleAuth: (name, email, id) =>
+      setGoogleAuth: (name, email, id) => {
+        const ns = id != null && id > 0 ? String(id) : email ?? "user";
+        if (typeof window !== "undefined") {
+          adoptAnonDataInto(`google|${ns}`, ns);
+        }
         set({
           status: "google",
-          path: `google|${id ?? email ?? "user"}`,
+          path: `google|${ns}`,
           userName: name,
           userEmail: email,
           userId: id ?? null,
-        }),
+        });
+      },
       logout: () =>
         set({ status: "none", path: ANON_PATH, userName: null, userEmail: null, userId: null }),
     }),

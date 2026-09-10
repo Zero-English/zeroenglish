@@ -16,7 +16,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
-import { useLevelPage, useLevelFilter, useLevelSort, setLevelState } from "@/lib/level-pagination-store";
+import { useLevelPage, useLevelFilter, useLevelSort, useLevelCategory, setLevelState } from "@/lib/level-pagination-store";
 import { setSelectedLevel } from "@/lib/level-store";
 import { useT, useNum } from "@/components/language-provider";
 
@@ -52,6 +52,12 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
   const page = useLevelPage(level);
   const filter = useLevelFilter(level);
   const sort = useLevelSort(level);
+  const category = useLevelCategory(level);
+
+  const categories = useMemo(
+    () => Array.from(new Set(words.map((w) => w.category).filter(Boolean))).sort(),
+    [words]
+  );
 
   const filtered = useMemo(() => {
     let result = [...words];
@@ -73,6 +79,10 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
       }
     }
 
+    if (category !== "all") {
+      result = result.filter((w) => w.category === category);
+    }
+
     switch (sort) {
       case "az":
         result.sort((a, b) => a.word.localeCompare(b.word));
@@ -83,7 +93,7 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
     }
 
     return result;
-  }, [words, filter, sort, loaded, isLearned, isBookmarked]);
+  }, [words, filter, sort, loaded, isLearned, isBookmarked, category]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
   const currentPage = Math.min(page, totalPages);
@@ -96,6 +106,10 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
 
   const handleSortChange = (s: SortType) => {
     setLevelState(level, { sort: s, page: 1 });
+  };
+
+  const handleCategoryChange = (c: string) => {
+    setLevelState(level, { category: c, page: 1 });
   };
 
   const handlePageChange = (p: number) => {
@@ -115,8 +129,11 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
       <LevelFilterBar
         filter={filter}
         sort={sort}
+        category={category}
+        categories={categories}
         onFilterChange={handleFilterChange}
         onSortChange={handleSortChange}
+        onCategoryChange={handleCategoryChange}
       />
 
       {!loaded ? (

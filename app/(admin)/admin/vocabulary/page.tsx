@@ -35,11 +35,35 @@ import { Textarea } from "@/components/ui/textarea";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { BackButton } from "@/components/back-button";
 import { PaginationNav } from "@/components/pagination-nav";
-import {
-  levelOptions,
-  partsOfSpeechOptions,
-  type VocabularyWord,
-} from "../_data/vocabulary";
+
+type VocabularyWord = {
+  id: number;
+  word: string;
+  meaningBn: string[];
+  definitionEn: string;
+  definitionBn: string;
+  examplesEn: string[];
+  examplesBn: string[];
+  synonyms: string[];
+  antonyms: string[];
+  level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+  category: string;
+  wordType: string[];
+};
+
+const levelOptions = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
+
+const partsOfSpeechOptions = [
+  "noun",
+  "verb",
+  "adjective",
+  "adverb",
+  "pronoun",
+  "preposition",
+  "conjunction",
+  "interjection",
+  "article",
+];
 
 const PAGE_SIZES = [10, 20, 50, 100];
 
@@ -894,7 +918,7 @@ function emptyForm(): Omit<VocabularyWord, "id"> {
     synonyms: [],
     antonyms: [],
     level: "A1",
-    category: "Oxford3000",
+    category: "Oxford5000",
     wordType: [],
   };
 }
@@ -1022,7 +1046,7 @@ function CategoryInput({
             onClick={() => {
               if (categories.includes(value)) setMode("select");
               else setMode("select");
-              if (!value.trim()) onChange("Oxford3000");
+              if (!value.trim()) onChange("Oxford5000");
             }}
             title="Done"
             aria-label="Done editing category"
