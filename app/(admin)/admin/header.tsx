@@ -25,6 +25,7 @@ const TITLES: Record<string, string> = {
 function resolveTitle(pathname: string): string {
   if (TITLES[pathname]) return TITLES[pathname];
   if (pathname.startsWith("/admin/users/")) return "User Detail";
+  if (pathname.startsWith("/admin/quizzes/types")) return "Quiz Types";
   return "Admin";
 }
 

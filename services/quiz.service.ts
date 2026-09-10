@@ -1,7 +1,6 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 import type { DifficultyLevels, Prisma } from "@/generated/prisma/client";
-import type { QuizTypeValue } from "@/app/(admin)/admin/_data/quizzes";
 
 const quizTypeInclude = {
     quizType: {
@@ -112,7 +111,7 @@ export const getQuizQuestionById = async (id: number) => {
 };
 
 export const createQuizQuestion = async (data: {
-    quizType: QuizTypeValue;
+    quizType: string;
     questionText: string;
     options: string[];
     difficultyLevel: DifficultyLevels;
@@ -160,7 +159,7 @@ export const createQuizQuestion = async (data: {
 export const updateQuizQuestionById = async (
     id: number,
     data: Partial<{
-        quizType: QuizTypeValue;
+        quizType: string;
         questionText: string;
         options: string[];
         difficultyLevel: DifficultyLevels;

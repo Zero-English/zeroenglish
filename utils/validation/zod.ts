@@ -46,7 +46,7 @@ export const quizTypeEnumSchema = z.enum([
 export const difficultyLevelEnumSchema = z.enum(["EASY", "MEDIUM", "HARD"]);
 
 export const quizQuestionSchema = z.object({
-  quizType: quizTypeEnumSchema,
+  quizType: z.string().trim().min(1, "Quiz type is required").max(50),
   questionText: z.string().trim().min(1, "Question text is required"),
   options: z.array(z.string().min(1)).min(2, "At least 2 options are required"),
   difficultyLevel: difficultyLevelEnumSchema,
@@ -54,6 +54,15 @@ export const quizQuestionSchema = z.object({
 });
 
 export type QuizQuestionInput = z.infer<typeof quizQuestionSchema>;
+
+export const quizTypeSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(50),
+});
+
+export const quizTypeUpdateSchema = quizTypeSchema.partial();
+
+export type QuizTypeInput = z.infer<typeof quizTypeSchema>;
+export type QuizTypeUpdateInput = z.infer<typeof quizTypeUpdateSchema>;
 
 export const quizModeEnumSchema = z.enum(["PRACTICE", "WEEKLY", "BIWEEKLY"]);
 

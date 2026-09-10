@@ -1,6 +1,6 @@
 export type QuizQuestionItem = {
   id: number;
-  quizType: QuizTypeValue;
+  quizType: string;
   questionText: string;
   options: string[];
   difficultyLevel: DifficultyLevelValue;
@@ -19,7 +19,9 @@ export type QuizTypeValue =
 
 export type DifficultyLevelValue = "EASY" | "MEDIUM" | "HARD";
 
-export const quizTypeOptions: { value: QuizTypeValue; label: string }[] = [
+// Hardcoded fallback list of the seeded quiz types, used when the live list
+// cannot be loaded (offline, API error, etc.).
+export const quizTypeFallbackOptions: { value: string; label: string }[] = [
   { value: "ENGLISH_TO_BANGLA", label: "English to Bangla" },
   { value: "BANGLA_TO_ENGLISH", label: "Bangla to English" },
   { value: "SYNONYMS", label: "Synonyms" },
@@ -30,6 +32,8 @@ export const quizTypeOptions: { value: QuizTypeValue; label: string }[] = [
   { value: "TRUE_FALSE", label: "True / False" },
 ];
 
+export const quizTypeOptions = quizTypeFallbackOptions;
+
 export const difficultyOptions: { value: DifficultyLevelValue; label: string }[] = [
   { value: "EASY", label: "Easy" },
   { value: "MEDIUM", label: "Medium" },
@@ -39,6 +43,12 @@ export const difficultyOptions: { value: DifficultyLevelValue; label: string }[]
 export const quizTypeLabelMap: Record<QuizTypeValue, string> = Object.fromEntries(
   quizTypeOptions.map((o) => [o.value, o.label])
 ) as Record<QuizTypeValue, string>;
+
+// Returns a human-readable label for a quiz type name, falling back to the
+// raw value for types created at runtime that are not in the seeded set.
+export function quizTypeLabel(value: string): string {
+  return quizTypeLabelMap[value as QuizTypeValue] ?? value;
+}
 
 export const difficultyLabelMap: Record<DifficultyLevelValue, string> = Object.fromEntries(
   difficultyOptions.map((o) => [o.value, o.label])
