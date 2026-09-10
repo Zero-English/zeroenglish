@@ -17,7 +17,7 @@ import {
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet";
-import logo from "../public/assets/logo.png";
+import logo from "../public/assets/logo/main-logo.webp";
 
 const spring = { type: "spring", stiffness: 420, damping: 32, mass: 0.9 } as const;
 
@@ -48,7 +48,7 @@ function NavLinks({
   ];
 
   return (
-    <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+    <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
       {navLinks.map((link) => {
         const isActive = pathname === link.href;
         return (
@@ -62,7 +62,7 @@ function NavLinks({
               <motion.span
                 layoutId={activeId}
                 transition={spring}
-                className="absolute inset-0 rounded-md border border-primary/20 bg-primary/15"
+                className="absolute inset-0 rounded-md border bg-primary/15"
               />
             )}
             <link.icon className={cn("h-5 w-5 shrink-0 relative", isActive && "text-primary")} />
@@ -161,7 +161,7 @@ export function Sidebar() {
           className="w-64 gap-0 p-0 bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800"
         >
           <SheetTitle className="sr-only">{t("নেভিগেশন মেনু", "Navigation Menu")}</SheetTitle>
-          <div className="flex items-center p-3 border-b">
+          <div className="flex items-center p-4 border-b h-16">
             <Link
               href="/"
               onClick={close}

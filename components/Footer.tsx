@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, ArrowRight } from "lucide-react";
 import { useT } from "@/components/language-provider";
-import logo from "../public/assets/logo.png";
+import logo from "../public/assets/logo/main-logo.webp";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 
 interface FooterLink {

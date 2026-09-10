@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NotFoundContent } from "@/components/not-found/not-found-content";
 import { HardNavLink } from "@/components/not-found/hard-nav-link";
-import logo from "../public/assets/logo.png";
+import logo from "../public/assets/logo/main-logo.webp";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 

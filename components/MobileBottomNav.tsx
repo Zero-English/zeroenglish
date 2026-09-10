@@ -31,7 +31,7 @@ export function MobileBottomNav() {
   const links = [
     { href: '/', label: t('হোম', 'Home'), icon: Home },
     { href: vocabularyHref, label: t('শব্দভাণ্ডার', 'Vocabulary'), icon: LibraryBig },
-    { href: '/search', label: t('অনুসন্ধান', 'Search'), icon: Search },
+    // { href: '/search', label: t('অনুসন্ধান', 'Search'), icon: Search },
     { href: '/quiz', label: t('কুইজ', 'Quiz'), icon: BadgeQuestionMark },
     { href: '/leaderboard', label: t('লিডারবোর্ড', 'Leaderboard'), icon: Trophy },
     isLoggedIn
@@ -82,7 +82,7 @@ export function MobileBottomNav() {
                 <motion.span
                   layoutId="bottom-nav-active"
                   transition={spring}
-                  className="absolute inset-0 rounded-lg border border-primary/20 bg-primary/15"
+                  className="absolute inset-0 rounded-lg border bg-primary/15"
                 />
               )}
               <span className="relative z-10 flex flex-col items-center gap-0.5">
