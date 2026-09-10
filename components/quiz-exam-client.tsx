@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import {
   ClipboardList,
@@ -17,6 +18,9 @@ import {
   GraduationCap,
   Trophy,
   ArrowLeft,
+  Link2,
+  LogIn,
+  Loader2,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,7 +30,15 @@ import { useT, useNum } from "@/components/language-provider";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 import { useQuizExamStore, resetQuizExamState } from "@/lib/quiz-exam-store";
 import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
-import { useAuthPath, useAuthStore } from "@/lib/auth-store";
+import { useAuthPath, useAuthStore, useAuthStatus, GUEST_PATH } from "@/lib/auth-store";
+import { syncGuestDataToServer } from "@/lib/guest-bind";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import {
   useQuizExamHistoryStore,
   type QuizExamHistoryEntry,
@@ -76,6 +88,29 @@ const EXAM_MODE_ENUM: Record<string, string> = {
   WEEKLY: "WEEKLY",
   BIWEEKLY: "BIWEEKLY",
 };
+
+function GoogleIcon({ className }: { className?: string }) {
+    return (
+        <svg viewBox="0 0 24 24" className={className ?? "h-4 w-4"} aria-hidden="true">
+            <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4"
+            />
+            <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853"
+            />
+            <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                fill="#FBBC05"
+            />
+            <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335"
+            />
+        </svg>
+    );
+}
 
 function requestQuizFullscreen(): void {
   if (
@@ -452,6 +487,13 @@ function ExamListView() {
   const t = useT();
   const [exams, setExams] = useState<QuizExamPublicItem[] | null>(null);
   const [loadingId, setLoadingId] = useState<number | null>(null);
+  const { status, hydrated } = useAuthStatus();
+  const setGoogleAuth = useAuthStore((s) => s.setGoogleAuth);
+  const { data: session, status: sessionStatus } = useSession();
+  const [authPrompt, setAuthPrompt] = useState<"login" | "bind" | null>(null);
+  const [authBusy, setAuthBusy] = useState(false);
+  const sessionSyncedRef = useRef(false);
+  const guestAdoptedRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -480,7 +522,93 @@ function ExamListView() {
     };
   }, []);
 
+  // After a Google OAuth round-trip (login or guest bind), the browser lands
+  // back here with a live session while the auth store is still "none"/"guest".
+  // Adopt the session into the store (mirroring ProfileGuard) so the exam can
+  // actually be started.
+  useEffect(() => {
+    if (!hydrated || sessionStatus === "loading" || !session?.user) return;
+
+    if (status === "guest" && !guestAdoptedRef.current) {
+      guestAdoptedRef.current = true;
+      void (async () => {
+        try {
+          await syncGuestDataToServer(GUEST_PATH);
+        } catch (error) {
+          console.error("Failed to sync guest data before binding:", error);
+        }
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("activity-changed"));
+        }
+        setGoogleAuth(
+          session.user.name ?? null,
+          session.user.email ?? null,
+          session.user.id ?? null
+        );
+        setAuthPrompt(null);
+        toast.success(
+          t(
+            "অ্যাকাউন্ট যুক্ত হয়েছে এবং অতিথি ডেটা সিঙ্ক হয়েছে।",
+            "Account bound and guest data synced to your new account."
+          )
+        );
+      })();
+      return;
+    }
+
+    if (status === "none" && !sessionSyncedRef.current) {
+      sessionSyncedRef.current = true;
+      setGoogleAuth(
+        session.user.name ?? null,
+        session.user.email ?? null,
+        session.user.id ?? null
+      );
+      setAuthPrompt(null);
+      toast.success(t("লগইন সফল হয়েছে!", "Signed in successfully!"));
+    }
+  }, [hydrated, sessionStatus, session, status, setGoogleAuth, t]);
+
+  const handleAuthAction = async () => {
+    if (authBusy) return;
+    setAuthBusy(true);
+    try {
+      if (authPrompt === "bind") {
+        const armRes = await fetch("/api/v1/auth/bind/begin", {
+          method: "POST",
+        });
+        if (!armRes.ok) {
+          toast.error(
+            t(
+              "সাইন-ইন শুরু করা যায়নি। আবার চেষ্টা করুন।",
+              "Could not start sign-in. Please try again."
+            )
+          );
+          return;
+        }
+      }
+      const { signIn } = await import("next-auth/react");
+      await signIn("google", {
+        redirect: false,
+        callbackUrl: "/quiz/exam",
+      });
+    } catch {
+      toast.error(
+        t("কিছু ভুল হয়েছে। আবার চেষ্টা করুন।", "Something went wrong. Please try again.")
+      );
+    } finally {
+      setAuthBusy(false);
+    }
+  };
+
   const handleStart = async (exam: QuizExamPublicItem) => {
+    if (hydrated && status === "none") {
+      setAuthPrompt("login");
+      return;
+    }
+    if (hydrated && status === "guest") {
+      setAuthPrompt("bind");
+      return;
+    }
     setLoadingId(exam.id);
     try {
       const res = await fetch(`/api/v1/quiz-exam/${exam.id}/take`, {
@@ -590,6 +718,65 @@ function ExamListView() {
           </div>
         )}
       </div>
+
+      <Drawer open={authPrompt !== null} onOpenChange={(open) => { if (!open) setAuthPrompt(null); }}>
+        <DrawerContent className="mx-auto max-w-lg rounded-t-3xl">
+          <div className="px-6 pb-8 pt-2">
+            <div className="mb-5 flex justify-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 text-white shadow-lg shadow-orange-500/30">
+                {authPrompt === "bind" ? (
+                  <Link2 className="h-6 w-6" />
+                ) : (
+                  <LogIn className="h-6 w-6" />
+                )}
+              </div>
+            </div>
+            <DrawerTitle className="text-center text-base font-bold sm:text-lg">
+              {authPrompt === "bind"
+                ? t("অতিথি অ্যাকাউন্ট যুক্ত করুন", "Bind your guest account")
+                : t("পরীক্ষা দেওয়ার জন্য সাইন-ইন দরকার", "Sign in to take the exam")}
+            </DrawerTitle>
+            <DrawerDescription className="mt-1.5 text-center text-xs sm:text-sm leading-relaxed">
+              {authPrompt === "bind"
+                ? t(
+                    "পরীক্ষায় অংশ নেওয়ার আগে আপনার Google অ্যাকাউন্ট যুক্ত করতে হবে। আপনার অতিথি অগ্রগতি স্বয়ংক্রিয়ভাবে নতুন অ্যাকাউন্টে সিঙ্ক হবে।",
+                    "You need to link a Google account before taking the exam. Your guest progress will be synced to the new account automatically."
+                  )
+                : t(
+                    "পরীক্ষায় অংশ নেওয়ার জন্য একটি Google অ্যাকাউন্ট দিয়ে সাইন-ইন করতে হবে।",
+                    "You need to sign in with a Google account to take the exam."
+                  )}
+            </DrawerDescription>
+            <div className="mt-5 space-y-2">
+              <Button
+                size="lg"
+                className="w-full gap-2 bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/20"
+                onClick={() => void handleAuthAction()}
+                disabled={authBusy}
+              >
+                {authBusy ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <GoogleIcon />
+                )}
+                {authPrompt === "bind"
+                  ? t("Google অ্যাকাউন্ট যুক্ত করুন", "Link Google account")
+                  : t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
+              </Button>
+              <DrawerClose asChild>
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="w-full"
+                  disabled={authBusy}
+                >
+                  {t("পরে যুক্ত করুন", "Maybe later")}
+                </Button>
+              </DrawerClose>
+            </div>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

@@ -1,56 +1,72 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
+import { QuizMode, QuizResultStatus } from "@/generated/prisma/enums";
 
-export const getLeaderboard = async (limit: number = 50, currentUserId?: number) => {
+export const getLeaderboard = async () => {
     try {
-        const counts = await prisma.userWord.groupBy({
-            by: ["userId"],
-            where: { learningStatus: "LEARNED" },
-            _count: { _all: true },
-        });
+        const examWhere = {
+            mode: { in: [QuizMode.WEEKLY, QuizMode.BIWEEKLY] },
+            status: { in: [QuizResultStatus.SUBMITTED, QuizResultStatus.LATE_SUBMITTED] },
+        };
 
-        const sorted = counts
-            .map((r) => ({ userId: r.userId, learnedWordCount: r._count._all }))
-            .sort((a, b) => b.learnedWordCount - a.learnedWordCount);
+        const now = new Date();
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-        const top = sorted.slice(0, limit);
-        const topIds = new Set(top.map((r) => r.userId));
-        let viewer: (typeof top)[number] | null = null;
-        if (currentUserId && !topIds.has(currentUserId)) {
-            viewer = sorted.find((r) => r.userId === currentUserId) ?? null;
-        }
+        const [allTimeAvgs, lastWeekAvgs, users] = await Promise.all([
+            prisma.quizResults.groupBy({
+                by: ["userId"],
+                where: examWhere,
+                _avg: { scoreInPercent: true },
+                _count: { _all: true },
+            }),
+            prisma.quizResults.groupBy({
+                by: ["userId"],
+                where: { ...examWhere, createdAt: { gte: sevenDaysAgo } },
+                _avg: { scoreInPercent: true },
+                _count: { _all: true },
+            }),
+            prisma.user.findMany({
+                select: { id: true, name: true, user_name: true, image: true },
+                orderBy: { created_at: "asc" },
+            }),
+        ]);
 
-        const neededIds = [...top.map((r) => r.userId)];
-        if (viewer) neededIds.push(viewer.userId);
+        const allTimeMap = new Map(
+            allTimeAvgs.map((r) => [
+                r.userId,
+                {
+                    avg: Math.round(r._avg?.scoreInPercent ?? 0),
+                    count: r._count?._all ?? 0,
+                },
+            ])
+        );
+        const lastWeekMap = new Map(
+            lastWeekAvgs.map((r) => [
+                r.userId,
+                {
+                    avg: Math.round(r._avg?.scoreInPercent ?? 0),
+                    count: r._count?._all ?? 0,
+                },
+            ])
+        );
 
-        const users = await prisma.user.findMany({
-            where: { id: { in: neededIds } },
-            select: { id: true, name: true, user_name: true, image: true },
-        });
-        const userMap = new Map(users.map((u) => [u.id, u]));
-
-        const rows = top.map((r, i) => ({
-            rank: i + 1,
-            ...userMap.get(r.userId),
-            learnedWordCount: r.learnedWordCount,
-        }));
-
-        let viewerRow: (typeof rows)[number] | null = null;
-        if (viewer) {
-            const rank = sorted.findIndex((r) => r.userId === viewer.userId) + 1;
-            viewerRow = {
-                rank,
-                ...userMap.get(viewer.userId),
-                learnedWordCount: viewer.learnedWordCount,
+        const data = users.map((u) => {
+            const all = allTimeMap.get(u.id);
+            const last = lastWeekMap.get(u.id);
+            return {
+                ...u,
+                allTimeAvg: all?.avg ?? 0,
+                allTimeCount: all?.count ?? 0,
+                lastWeekAvg: last?.avg ?? 0,
+                lastWeekCount: last?.count ?? 0,
             };
-        }
+        });
 
-        return { data: rows, viewer: viewerRow, success: true };
+        return { data, success: true };
     } catch (error) {
         logger.error(`Failed to fetch leaderboard: ${error}`);
         return {
             data: null,
-            viewer: null,
             message: "Failed to fetch leaderboard",
             success: false,
         };
