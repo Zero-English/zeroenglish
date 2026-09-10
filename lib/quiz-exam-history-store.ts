@@ -19,6 +19,8 @@ export interface QuizExamHistoryEntry {
   synced?: boolean;
   dbId?: number | null;
   createdAt?: number;
+  status?: "SUBMITTED" | "LATE_SUBMITTED" | "ABANDONED" | "REATTEMPTED";
+  isFirstAttempt?: boolean;
 }
 
 function createEntryId(): string {

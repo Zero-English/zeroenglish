@@ -57,8 +57,10 @@ model QuizResults {
   correctAnswers         Int
   scoreInPercent         Int
   totalScore             Int
-  createdAt              DateTime   @default(now())
-  updatedAt              DateTime   @updatedAt
+  status                 QuizResultStatus @default(SUBMITTED)
+  isFirstAttempt         Boolean          @default(true)
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
 
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   exam     QuizExam? @relation(fields: [examId], references: [id], onDelete: SetNull)
@@ -224,6 +226,13 @@ enum QuizMode {
   PRACTICE
   WEEKLY
   BIWEEKLY
+}
+
+enum QuizResultStatus {
+  SUBMITTED
+  LATE_SUBMITTED
+  ABANDONED
+  REATTEMPTED
 }
 
 enum DifficultyLevels {

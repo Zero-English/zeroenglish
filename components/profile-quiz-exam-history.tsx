@@ -63,6 +63,32 @@ const EXAM_LEVEL_COLORS: Record<string, string> = {
   C2: "bg-fuchsia-50 text-fuchsia-700 dark:bg-fuchsia-950/40 dark:text-fuchsia-300",
 };
 
+const EXAM_STATUS_META: Record<
+  NonNullable<QuizExamHistoryEntry["status"]>,
+  { label: string; labelBn: string; classes: string }
+> = {
+  SUBMITTED: {
+    label: "Submitted",
+    labelBn: "জমা দেওয়া হয়েছে",
+    classes: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800",
+  },
+  LATE_SUBMITTED: {
+    label: "Late",
+    labelBn: "দেরিতে জমা",
+    classes: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800",
+  },
+  ABANDONED: {
+    label: "Abandoned",
+    labelBn: "পরিত্যক্ত",
+    classes: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800/60 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700",
+  },
+  REATTEMPTED: {
+    label: "Reattempted",
+    labelBn: "পুনরায় প্রচেষ্টা",
+    classes: "bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300 border border-sky-200 dark:border-sky-800",
+  },
+};
+
 function dbExamToEntry(r: DbQuizResult): QuizExamHistoryEntry {
   return {
     id: `db-${r.id}`,
@@ -74,6 +100,8 @@ function dbExamToEntry(r: DbQuizResult): QuizExamHistoryEntry {
     levels: r.levels,
     numberOfQuestions: r.questionCount,
     timePerQuestion: r.timePerQuestion,
+    status: r.status,
+    isFirstAttempt: r.isFirstAttempt,
   };
 }
 
@@ -140,6 +168,10 @@ function QuizExamHistoryItem({ entry }: { entry: QuizExamHistoryEntry }) {
   const win = winToNumber(entry);
   const t = useT();
   const num = useNum();
+  const statusMeta =
+    entry.status && entry.status !== "SUBMITTED"
+      ? EXAM_STATUS_META[entry.status]
+      : null;
 
   return (
     <StaggerItem className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
@@ -150,18 +182,28 @@ function QuizExamHistoryItem({ entry }: { entry: QuizExamHistoryEntry }) {
         )}
       />
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 items-center gap-3">
           <div className={cn("p-2.5 rounded-xl", meta.bg)}>
             <Icon className={cn("h-5 w-5", meta.tint)} />
           </div>
-          <div>
-            <h4 className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100">
+          <div className="min-w-0">
+            <h4 className="truncate text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100">
               {entry.title}
             </h4>
             <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-zinc-400 dark:text-zinc-500">
               <span className={cn("font-medium", meta.tint)}>
                 {t(meta.labelBn, meta.label)}
               </span>
+              {statusMeta && (
+                <span
+                  className={cn(
+                    "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                    statusMeta.classes
+                  )}
+                >
+                  {t(statusMeta.labelBn, statusMeta.label)}
+                </span>
+              )}
               <span className="flex items-center gap-1.5">
                 <CalendarDays className="h-3.5 w-3.5" />
                 {formatDate(entry.date)}
@@ -249,11 +291,12 @@ export function QuizExamHistoryPanel() {
   }, [dbEntries, localEntries]);
 
   const stats = useMemo(() => {
-    const total = entries.length;
-    const totalQuestions = entries.reduce((acc, e) => acc + e.numberOfQuestions, 0);
+    const completed = entries.filter((e) => e.status !== "ABANDONED");
+    const total = completed.length;
+    const totalQuestions = completed.reduce((acc, e) => acc + e.numberOfQuestions, 0);
     const avg =
-      total > 0 ? Math.round(entries.reduce((acc, e) => acc + winToNumber(e), 0) / total) : 0;
-    const best = total > 0 ? Math.max(...entries.map(winToNumber)) : 0;
+      total > 0 ? Math.round(completed.reduce((acc, e) => acc + winToNumber(e), 0) / total) : 0;
+    const best = total > 0 ? Math.max(...completed.map(winToNumber)) : 0;
     return { total, totalQuestions, avg, best };
   }, [entries]);
 

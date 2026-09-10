@@ -73,6 +73,7 @@ export async function POST(request: NextRequest) {
         title: parsed.data.title ?? undefined,
         scheduledOpeningTime: parsed.data.scheduledOpeningTime ?? undefined,
         scheduledClosingTime: parsed.data.scheduledClosingTime ?? undefined,
+        status: parsed.data.status ?? undefined,
     });
 
     if (!result.success) {

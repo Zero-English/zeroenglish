@@ -66,6 +66,13 @@ export type QuizTypeUpdateInput = z.infer<typeof quizTypeUpdateSchema>;
 
 export const quizModeEnumSchema = z.enum(["PRACTICE", "WEEKLY", "BIWEEKLY"]);
 
+export const quizResultStatusEnumSchema = z.enum([
+  "SUBMITTED",
+  "LATE_SUBMITTED",
+  "ABANDONED",
+  "REATTEMPTED",
+]);
+
 export const quizResultSchema = z
   .object({
     clientId: z.string().trim().max(64).nullish(),
@@ -86,6 +93,7 @@ export const quizResultSchema = z
       .nonnegative("correctAnswers must be non-negative"),
     scoreInPercent: z.number().int().min(0, "scoreInPercent must be >= 0").max(100, "scoreInPercent must be <= 100"),
     totalScore: z.number().int().nonnegative("totalScore must be non-negative"),
+    status: quizResultStatusEnumSchema.nullish(),
   });
 
 export type QuizResultInput = z.infer<typeof quizResultSchema>;

@@ -135,12 +135,14 @@ async function saveExamResultToDb(args: {
   timeTotalQuiz: number;
   scheduledOpeningTime: string | null;
   scheduledClosingTime: string | null;
+  status?: "ABANDONED";
 }): Promise<number | null> {
   if (!args.userId) return null;
   try {
     const res = await fetch("/api/v1/quiz/results", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      keepalive: true,
       body: JSON.stringify({
         clientId: args.clientId,
         examId: args.examId,
@@ -157,6 +159,7 @@ async function saveExamResultToDb(args: {
         correctAnswers: args.score,
         scoreInPercent: args.percentage,
         totalScore: args.score,
+        status: args.status,
       }),
     });
     if (!res.ok) {
@@ -173,6 +176,45 @@ async function saveExamResultToDb(args: {
     // non-fatal; the result is already stored in localStorage
     return null;
   }
+}
+
+function recordExamAbandon(): void {
+  const st = useQuizExamStore.getState();
+  const userId = useAuthStore.getState().userId;
+  if (
+    !userId ||
+    !st.examId ||
+    st.step !== "quiz" ||
+    st.resultsRecorded ||
+    st.abandonRecorded
+  ) {
+    return;
+  }
+
+  useQuizExamStore.setState({ abandonRecorded: true });
+
+  const state = useQuizExamStore.getState();
+  const total = state.questions.length;
+  const timeTotalQuiz = state.startedAt
+    ? Math.round((Date.now() - state.startedAt) / 1000)
+    : total * state.timePerQuestion;
+
+  void saveExamResultToDb({
+    userId,
+    clientId: `ab-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+    examId: state.examId,
+    title: state.examTitle ?? "Quiz Exam",
+    mode: state.examMode ?? "PRACTICE",
+    score: state.score,
+    total,
+    percentage: total > 0 ? Math.round((state.score / total) * 100) : 0,
+    levels: state.levels,
+    timePerQuestion: state.timePerQuestion,
+    timeTotalQuiz,
+    scheduledOpeningTime: state.scheduledOpeningTime,
+    scheduledClosingTime: state.scheduledClosingTime,
+    status: "ABANDONED",
+  });
 }
 
 function useNowMs(): number {
@@ -470,6 +512,7 @@ function ExamListView() {
         isAnswered: false,
         incorrectAnswers: [],
         resultsRecorded: false,
+        abandonRecorded: false,
         startedAt: 0,
         timeLeft: 0,
         deadlineAt: null,
@@ -678,6 +721,21 @@ function ExamQuizView({
     }
   }, [timeLeft, isAnswered]);
 
+  useEffect(() => {
+    const handleHide = () => {
+      const st = useQuizExamStore.getState();
+      if (st.step === "quiz" && !st.resultsRecorded && !st.abandonRecorded) {
+        recordExamAbandon();
+      }
+    };
+    window.addEventListener("pagehide", handleHide);
+    window.addEventListener("beforeunload", handleHide);
+    return () => {
+      window.removeEventListener("pagehide", handleHide);
+      window.removeEventListener("beforeunload", handleHide);
+    };
+  }, []);
+
   return (
     <div className="relative min-h-dvh flex flex-col overflow-hidden px-6 py-8">
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
@@ -822,6 +880,9 @@ function ExamQuizView({
         confirmText={t("প্রস্থান করুন", "Exit")}
         cancelText={t("চালিয়ে যান", "Keep going")}
         onConfirm={() => {
+          if (useQuizExamStore.getState().step === "quiz") {
+            recordExamAbandon();
+          }
           resetQuizExamState();
         }}
       />

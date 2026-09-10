@@ -30,6 +30,7 @@ interface ExamQuizState {
   deadlineAt: number | null;
   incorrectAnswers: QuizExamIncorrectAnswer[];
   resultsRecorded: boolean;
+  abandonRecorded: boolean;
   startedAt: number | null;
 }
 
@@ -51,6 +52,7 @@ const initialExamState: ExamQuizState = {
   deadlineAt: null,
   incorrectAnswers: [],
   resultsRecorded: false,
+  abandonRecorded: false,
   startedAt: null,
 };
 
