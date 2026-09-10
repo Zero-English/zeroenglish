@@ -26,7 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 import { useQuizExamStore, resetQuizExamState } from "@/lib/quiz-exam-store";
 import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
@@ -265,7 +265,7 @@ function useNowMs(): number {
   return now;
 }
 
-function formatCountdown(ms: number, num: (n: number) => string): string {
+function formatCountdown(ms: number): string {
   const total = Math.max(0, ms);
   const secs = Math.ceil(total / 1000);
   const days = Math.floor(secs / 86400);
@@ -273,10 +273,10 @@ function formatCountdown(ms: number, num: (n: number) => string): string {
   const minutes = Math.floor((secs % 3600) / 60);
   const seconds = secs % 60;
 
-  if (days > 0) return `${num(days)}d ${num(hours)}h ${num(minutes)}m`;
-  if (hours > 0) return `${num(hours)}h ${num(minutes)}m ${num(seconds)}s`;
-  if (minutes > 0) return `${num(minutes)}m ${num(seconds)}s`;
-  return `${num(seconds)}s`;
+  if (days > 0) return `${days}d ${hours}h ${minutes}m`;
+  if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+  if (minutes > 0) return `${minutes}m ${seconds}s`;
+  return `${seconds}s`;
 }
 
 export function QuizExamClient() {
@@ -364,7 +364,6 @@ function ExamCardItem({
   onStart: (exam: QuizExamPublicItem) => void;
 }) {
   const t = useT();
-  const num = useNum();
   const now = useNowMs();
 
   const meta = MODE_META[exam.mode] ?? MODE_META.PRACTICE;
@@ -408,7 +407,7 @@ function ExamCardItem({
           </span>
           <span className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold", meta.bg, meta.text)}>
             <Timer className="h-3 w-3" />
-            {num(Math.floor(exam.timePerQuestion))}s / {t("প্রশ্ন", "question")}
+            {Math.floor(exam.timePerQuestion)}s / {t("প্রশ্ন", "question")}
           </span>
         </div>
       </div>
@@ -424,7 +423,7 @@ function ExamCardItem({
         <div className="flex flex-wrap items-center gap-2 mt-4">
           <span className="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
             <ListChecks className="h-3 w-3" />
-            {num(exam.questionCount)} {t("প্রশ্ন", "questions")}
+            {exam.questionCount} {t("প্রশ্ন", "questions")}
           </span>
           <span className="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
             {exam.levels.join(", ")}
@@ -460,7 +459,7 @@ function ExamCardItem({
               isOpen ? "text-amber-800 dark:text-amber-200" : "text-sky-800 dark:text-sky-200"
             )}
           >
-            {formatCountdown(msLeft, num)}
+            {formatCountdown(msLeft)}
           </span>
         </div>
 
@@ -799,7 +798,6 @@ function ExamQuizView({
   isAnswered: boolean;
 }) {
   const t = useT();
-  const num = useNum();
   const speak = useSpeak();
   const [exitOpen, setExitOpen] = useState(false);
   const timePerQuestion = useQuizExamStore((s) => s.timePerQuestion);
@@ -931,7 +929,7 @@ function ExamQuizView({
       <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col justify-center">
         <div className="mb-6 flex items-center justify-between gap-3">
           <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-            {t("প্রশ্ন", "Question")} {num(currentIndex + 1)} / {num(totalQuestions)}
+            {t("প্রশ্ন", "Question")} {currentIndex + 1} / {totalQuestions}
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 text-sm font-semibold text-zinc-700 dark:text-zinc-300 tabular-nums">
             <Timer className="h-4 w-4 text-amber-500" />
@@ -939,7 +937,7 @@ function ExamQuizView({
           </span>
           <span className="text-zinc-500 dark:text-zinc-400">
             {t("স্কোর", "Score")}{" "}
-            <span className="font-semibold text-emerald-600 dark:text-emerald-400">{num(score)}</span>
+            <span className="font-semibold text-emerald-600 dark:text-emerald-400">{score}</span>
           </span>
           <button
             onClick={() => setExitOpen(true)}
@@ -1089,7 +1087,6 @@ function ExamResultsView({
   incorrectAnswers: { questionId: number; questionText: string; correctAnswer: string; userAnswer: string }[];
 }) {
   const t = useT();
-  const num = useNum();
   const { path, hydrated } = useAuthPath();
   const userId = useAuthStore((s) => s.userId);
   const addHistoryEntry = useQuizExamHistoryStore((s) => s.addEntry);
@@ -1183,15 +1180,15 @@ function ExamResultsView({
         <div className="animate-fade-up-1 mb-10">
           <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-8 text-center">
             <div className="text-6xl sm:text-7xl font-black bg-gradient-to-br from-zinc-700 to-zinc-400 dark:from-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent mb-2">
-              {num(percentage)}%
+              {percentage}%
             </div>
             <p className="text-lg text-zinc-500 dark:text-zinc-400">
               <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                {num(score)}
+                {score}
               </span>{" "}
               {t("টির মধ্যে সঠিক", "correct out of")}{" "}
               <span className="font-semibold text-zinc-700 dark:text-zinc-300">
-                {num(total)}
+                {total}
               </span>{" "}
               {t("প্রশ্ন", "questions")}
             </p>
@@ -1202,7 +1199,7 @@ function ExamResultsView({
           <div className="animate-fade-up-2 mb-10">
             <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
               {t(
-                `সঠিক নয় এমন প্রশ্ন (${num(incorrectAnswers.length)})`,
+                `সঠিক নয় এমন প্রশ্ন (${incorrectAnswers.length})`,
                 `Questions to Review (${incorrectAnswers.length})`
               )}
             </h3>

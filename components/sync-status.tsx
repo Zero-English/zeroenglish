@@ -2,7 +2,7 @@
 
 import { useSyncStore, runSync } from "@/lib/sync";
 import { useAuthStatus } from "@/lib/auth-store";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import {
   AlertTriangle,
@@ -37,8 +37,6 @@ export function SyncStatus() {
   } = useSyncStore();
   const { status: authStatus, hydrated } = useAuthStatus();
   const t = useT();
-  const num = useNum();
-
   const signedIn = authStatus === "google";
   const syncing = status === "syncing";
   const failed = status === "failed";
@@ -124,7 +122,7 @@ export function SyncStatus() {
                 ? t("সিঙ্ক হয়েছে", "Synced")
                 : failed
                   ? t("ব্যর্থ", "Failed")
-                  : t(`${num(pending)}টি বাকি`, `${num(pending)} pending`)}
+                  : t(`${pending}টি বাকি`, `${pending} pending`)}
           </span>
         )}
       </div>
@@ -163,8 +161,8 @@ export function SyncStatus() {
             <p className="flex items-center gap-1.5 text-xs font-medium text-amber-600 dark:text-amber-400">
               <RefreshCw className="h-3.5 w-3.5 shrink-0" />
               {t(
-                `${num(pending)}টি রেকর্ড এখনও সিঙ্ক হয়নি`,
-                `${num(pending)} record${pending > 1 ? "s" : ""} still waiting to sync`
+                `${pending}টি রেকর্ড এখনও সিঙ্ক হয়নি`,
+                `${pending} record${pending > 1 ? "s" : ""} still waiting to sync`
               )}
             </p>
           ) : (
@@ -187,7 +185,7 @@ export function SyncStatus() {
                   {label}
                   {count > 0 && (
                     <span className="rounded-full bg-zinc-200 dark:bg-zinc-800 px-1.5 py-0.5 text-[10px] font-semibold tabular-nums">
-                      {num(count)}
+                      {count}
                     </span>
                   )}
                 </span>

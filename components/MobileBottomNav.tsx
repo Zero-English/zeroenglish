@@ -62,7 +62,7 @@ export function MobileBottomNav() {
     <motion.nav
       animate={{ y: isHidden ? '100%' : '0%' }}
       transition={spring}
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 md:hidden"
+      className="fixed bottom-nav inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 md:hidden"
     >
       <div className="relative flex items-center justify-between p-1">
         {links.map(({ href, label, icon: Icon, avatar }) => {

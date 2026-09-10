@@ -21,7 +21,7 @@ import {
   dbResultDate,
   type DbQuizResult,
 } from "@/lib/quiz-results-api";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { useAuthStatus } from "@/lib/auth-store";
 
 const EXAM_MODE_META: Record<
@@ -128,7 +128,6 @@ function ExamWinRing({ win }: { win: number }) {
   const r = 22;
   const circumference = 2 * Math.PI * r;
   const offset = circumference * (1 - win / 100);
-  const num = useNum();
 
   return (
     <div className="relative h-16 w-16 flex-shrink-0">
@@ -156,7 +155,7 @@ function ExamWinRing({ win }: { win: number }) {
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center text-sm font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
-        {num(win)}%
+        {win}%
       </div>
     </div>
   );
@@ -167,7 +166,6 @@ function QuizExamHistoryItem({ entry }: { entry: QuizExamHistoryEntry }) {
   const Icon = meta.icon;
   const win = winToNumber(entry);
   const t = useT();
-  const num = useNum();
   const statusMeta =
     entry.status && entry.status !== "SUBMITTED"
       ? EXAM_STATUS_META[entry.status]
@@ -218,13 +216,13 @@ function QuizExamHistoryItem({ entry }: { entry: QuizExamHistoryEntry }) {
         <div className="flex items-center gap-2">
           <ListChecks className="h-4 w-4 text-zinc-400" />
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            {t(`${num(entry.numberOfQuestions)}টি প্রশ্ন`, `${entry.numberOfQuestions} Questions`)}
+            {t(`${entry.numberOfQuestions}টি প্রশ্ন`, `${entry.numberOfQuestions} Questions`)}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <Clock3 className="h-4 w-4 text-zinc-400" />
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            {num(entry.timePerQuestion)}
+            {entry.timePerQuestion}
             {t(" সেকেন্ড / প্রশ্ন", "s / question")}
           </span>
         </div>
@@ -249,7 +247,6 @@ export function QuizExamHistoryPanel() {
   const [dbEntries, setDbEntries] = useState<QuizExamHistoryEntry[]>([]);
   const [dbLoaded, setDbLoaded] = useState(false);
   const t = useT();
-  const num = useNum();
 
   useEffect(() => {
     let cancelled = false;
@@ -301,9 +298,9 @@ export function QuizExamHistoryPanel() {
   }, [entries]);
 
   const summary = [
-    { icon: ClipboardList, label: t("নেওয়া পরীক্ষা", "Exams Taken"), value: num(stats.total), tint: "text-violet-600 dark:text-violet-400", bg: "bg-violet-100 dark:bg-violet-900/30" },
-    { icon: BarChart3, label: t("গড় স্কোর", "Avg. Score"), value: `${num(stats.avg)}%`, tint: "text-sky-600 dark:text-sky-400", bg: "bg-sky-100 dark:bg-sky-900/30" },
-    { icon: Award, label: t("সেরা স্কোর", "Best Score"), value: `${num(stats.best)}%`, tint: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-100 dark:bg-emerald-900/30" },
+    { icon: ClipboardList, label: t("নেওয়া পরীক্ষা", "Exams Taken"), value: stats.total, tint: "text-violet-600 dark:text-violet-400", bg: "bg-violet-100 dark:bg-violet-900/30" },
+    { icon: BarChart3, label: t("গড় স্কোর", "Avg. Score"), value: `${stats.avg}%`, tint: "text-sky-600 dark:text-sky-400", bg: "bg-sky-100 dark:bg-sky-900/30" },
+    { icon: Award, label: t("সেরা স্কোর", "Best Score"), value: `${stats.best}%`, tint: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-100 dark:bg-emerald-900/30" },
   ];
 
   if (!dbLoaded) {
@@ -318,7 +315,7 @@ export function QuizExamHistoryPanel() {
     <div>
       <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
         {t(
-          `${num(stats.total)}টি পরীক্ষা · ${num(stats.totalQuestions)}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
+          `${stats.total}টি পরীক্ষা · ${stats.totalQuestions}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
           `${stats.total} exam${stats.total !== 1 ? "s" : ""} · ${stats.totalQuestions} questions answered`
         )}
       </p>

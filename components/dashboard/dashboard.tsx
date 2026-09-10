@@ -16,7 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import type { Word } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { useLanguage, useT, useNum } from "@/components/language-provider";
+import { useLanguage, useT } from "@/components/language-provider";
 import { useAuthStore } from "@/lib/auth-store";
 import { useLastLearned, type LastLearnedEntry } from "@/lib/last-learned-store";
 import { useLearnedWords } from "@/lib/use-learned-words";
@@ -144,7 +144,6 @@ function getGreeting(): GreetingText {
 
 export function Dashboard({ words }: { words: Word[] }) {
   const t = useT();
-  const num = useNum();
   const { lang } = useLanguage();
   const userName = useAuthStore((s) => s.userName);
   const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
@@ -204,7 +203,7 @@ export function Dashboard({ words }: { words: Word[] }) {
                 <ProgressRing pct={ready ? overallPct : 0} size={80} stroke={7} />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
-                    {ready ? `${num(overallPct)}%` : "…"}
+                    {ready ? `${overallPct}%` : "…"}
                   </span>
                 </div>
               </div>
@@ -215,8 +214,8 @@ export function Dashboard({ words }: { words: Word[] }) {
                 <p className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
                   {ready ? (
                     <>
-                      {num(totalLearned)}
-                      <span className="font-normal text-zinc-400"> / {num(totalWords)}</span>
+                      {totalLearned}
+                      <span className="font-normal text-zinc-400"> / {totalWords}</span>
                     </>
                   ) : (
                     "…"
@@ -252,19 +251,19 @@ export function Dashboard({ words }: { words: Word[] }) {
                 icon={GraduationCap}
                 labelEn="Words learned"
                 labelBn="শব্দ শেখা হয়েছে"
-                value={ready ? `${num(totalLearned)}` : "…"}
-                subEn={`of ${num(totalWords)} total`}
-                subBn={`মোট ${num(totalWords)}টির মধ্যে`}
+                value={ready ? `${totalLearned}` : "…"}
+                subEn={`of ${totalWords} total`}
+                subBn={`মোট ${totalWords}টির মধ্যে`}
                 iconClass="text-orange-500 bg-orange-100 dark:bg-orange-950/60"
               />
               <StatTile
                 icon={Sparkles}
                 labelEn="Today's words"
                 labelBn="আজ শেখা শব্দ"
-                value={statsReady ? `${num(todayLearned)}` : "…"}
-                subEn={dailyGoal > 0 ? `daily goal ${num(dailyGoal)}` : "set a daily goal"}
+                value={statsReady ? `${todayLearned}` : "…"}
+                subEn={dailyGoal > 0 ? `daily goal ${dailyGoal}` : "set a daily goal"}
                 subBn={
-                  dailyGoal > 0 ? `দৈনিক লক্ষ্য ${num(dailyGoal)}` : "দৈনিক লক্ষ্য নির্ধারণ করুন"
+                  dailyGoal > 0 ? `দৈনিক লক্ষ্য ${dailyGoal}` : "দৈনিক লক্ষ্য নির্ধারণ করুন"
                 }
                 iconClass="text-sky-500 bg-sky-100 dark:bg-sky-950/60"
               />
@@ -272,7 +271,7 @@ export function Dashboard({ words }: { words: Word[] }) {
                 icon={Flame}
                 labelEn="Day streak"
                 labelBn="দিনের ধারা"
-                value={statsReady ? `${num(streak)}` : "…"}
+                value={statsReady ? `${streak}` : "…"}
                 subEn="days in a row"
                 subBn="টানা কত দিন"
                 iconClass="text-amber-500 bg-amber-100 dark:bg-amber-950/60"
@@ -281,9 +280,9 @@ export function Dashboard({ words }: { words: Word[] }) {
                 icon={Target}
                 labelEn="Daily goal"
                 labelBn="দৈনিক লক্ষ্য"
-                value={statsReady ? `${num(goalPct)}%` : "…"}
-                subEn={`${num(todayLearned)} of ${num(dailyGoal)} words`}
-                subBn={`${num(dailyGoal)}টির মধ্যে ${num(todayLearned)}টি`}
+                value={statsReady ? `${goalPct}%` : "…"}
+                subEn={`${todayLearned} of ${dailyGoal} words`}
+                subBn={`${dailyGoal}টির মধ্যে ${todayLearned}টি`}
                 iconClass="text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60"
               />
             </div>
@@ -429,7 +428,6 @@ function ContinueLearningCard({
   words: Word[];
 }) {
   const t = useT();
-  const num = useNum();
 
   const targetLevel = lastLearned?.level ?? "A1";
   const meta = LEVEL_META[targetLevel] ?? LEVEL_META.A1;
@@ -456,8 +454,8 @@ function ContinueLearningCard({
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
               {lastLearned
                 ? t(
-                    `লেভেল ${targetLevel} · পৃষ্ঠা ${num(lastLearned.page)}`,
-                    `Level ${targetLevel} · Page ${num(lastLearned.page)}`
+                    `লেভেল ${targetLevel} · পৃষ্ঠা ${lastLearned.page}`,
+                    `Level ${targetLevel} · Page ${lastLearned.page}`
                   )
                 : t("একটি লেভেল বেছে নিয়ে শেখা শুরু করুন।", "Pick a level and start learning.")}
             </p>
@@ -473,7 +471,7 @@ function ContinueLearningCard({
                 )}
               </div>
               <span className="shrink-0 text-xs font-medium tabular-nums text-zinc-500 dark:text-zinc-400">
-                {loaded ? `${num(learned)}/${num(levelWords.length)}` : "\u00A0"}
+                {loaded ? `${learned}/${levelWords.length}` : "\u00A0"}
               </span>
             </div>
           </div>

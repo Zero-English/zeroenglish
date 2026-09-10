@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useDailyGoal } from "@/lib/use-daily-goal";
 import { cn } from "@/lib/utils";
 import { Flame, Target, ChevronUp, ChevronDown, BookOpen } from "lucide-react";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 
 const GOAL_OPTIONS = [5, 10, 15, 20, 30, 50];
 
@@ -23,7 +23,6 @@ export function DailyGoalCard() {
   const { dailyGoal, setDailyGoal, todayLearned, streak, contributionData, loaded, refresh } = useDailyGoal();
   const [showPicker, setShowPicker] = useState(false);
   const t = useT();
-  const num = useNum();
 
   if (!loaded) return null;
 
@@ -81,7 +80,7 @@ export function DailyGoalCard() {
           {streak > 0 && (
             <div className="flex items-center gap-1 text-sm font-semibold text-orange-500">
               <Flame className="h-4 w-4" />
-              {t(`${num(streak)} দিন`, `${streak} day${streak > 1 ? "s" : ""}`)}
+              {t(`${streak} দিন`, `${streak} day${streak > 1 ? "s" : ""}`)}
             </div>
           )}
           <button
@@ -110,8 +109,8 @@ export function DailyGoalCard() {
               )} />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{num(todayLearned)}</span>
-            <span className="text-[10px] text-zinc-400">/ {num(dailyGoal)}</span>
+            <span className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{todayLearned}</span>
+            <span className="text-[10px] text-zinc-400">/ {dailyGoal}</span>
           </div>
         </div>
 
@@ -120,7 +119,7 @@ export function DailyGoalCard() {
             {progress >= 1
               ? t("লক্ষ্য পূরণ হয়েছে! দারুণ করেছেন!", "Goal completed! Great job!")
               : t(
-                  `${num(dailyGoal - todayLearned)}টি শব্দ বাকি`,
+                  `${dailyGoal - todayLearned}টি শব্দ বাকি`,
                   `${dailyGoal - todayLearned} more word${dailyGoal - todayLearned > 1 ? "s" : ""} to reach today's goal`
                 )}
           </p>
@@ -152,7 +151,7 @@ export function DailyGoalCard() {
                   : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
               )}
             >
-{num(n)}
+{n}
             </button>
           ))}
         </div>
@@ -162,7 +161,7 @@ export function DailyGoalCard() {
         <div className="flex items-center gap-2 mb-3">
           <BookOpen className="h-4 w-4 text-zinc-400" />
           <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-            {num(currentYear)}
+            {currentYear}
           </span>
         </div>
 
@@ -202,7 +201,7 @@ export function DailyGoalCard() {
                         "h-3 w-3 rounded-sm",
                         day.count === -1 ? "bg-transparent" : getIntensity(day.count)
                       )}
-                      title={day.date ? `${day.date}: ${t(`${num(day.count)}টি শব্দ`, `${day.count} word${day.count !== 1 ? "s" : ""}`)}` : undefined}
+                      title={day.date ? `${day.date}: ${t(`${day.count}টি শব্দ`, `${day.count} word${day.count !== 1 ? "s" : ""}`)}` : undefined}
                     />
                   ))}
                 </div>

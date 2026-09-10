@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Activity, CalendarDays, TrendingDown, TrendingUp } from "lucide-react";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { fetchQuizResultsFromDb } from "@/lib/quiz-results-api";
 import { getWordsByType } from "@/lib/db";
 import {
@@ -285,7 +285,6 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
   const [metric, setMetric] = useState<Metric>("all");
   const [activity, setActivity] = useState<Record<RangeKey, GraphData>>(dummyGraphData);
   const t = useT();
-  const num = useNum();
   const { status } = useAuthStatus();
   const path = useAuthStore((s) => s.path);
   const quizEntries = useQuizHistoryStore((s) => s.entries);
@@ -427,7 +426,7 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
 
   const change = metric === "quiz" ? stats.quizChange : stats.learnedChange;
   const headline =
-    metric === "quiz" ? `${num(stats.quizAvg.toFixed(0))}%` : num(stats.learned.toLocaleString());
+    metric === "quiz" ? `${stats.quizAvg.toFixed(0)}%` : stats.learned.toLocaleString();
   const showLearned = metric !== "quiz";
   const showQuiz = metric !== "learned";
   const granularity = range === "today" || range === "yesterday" ? "hr" : "day";
@@ -492,7 +491,7 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
             {headline}
             {metric === "all" && (
               <span className="text-sm font-semibold text-zinc-400 dark:text-zinc-500">
-                {t("· কুইজে জয়ের হার", "· Quiz win")} {num(stats.quizAvg.toFixed(0))}%
+                {t("· কুইজে জয়ের হার", "· Quiz win")} {stats.quizAvg.toFixed(0)}%
               </span>
             )}
           </p>
@@ -517,15 +516,15 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
                 ) : (
                   <TrendingDown className="size-3" />
                 )}
-                {num(Math.abs(change).toFixed(1))}%
+                {Math.abs(change).toFixed(1)}%
               </>
             )}
           </span>
           <span className="text-xs text-zinc-400 dark:text-zinc-500">
             {metric === "quiz"
-              ? t(`সেরা ${num(stats.bestQuiz)}% · খারাপ ${num(stats.worstQuiz)}%`, `best ${stats.bestQuiz}% · worst ${stats.worstQuiz}%`)
+              ? t(`সেরা ${stats.bestQuiz}% · খারাপ ${stats.worstQuiz}%`, `best ${stats.bestQuiz}% · worst ${stats.worstQuiz}%`)
               : t(
-                  `আগের তুলনায় · গড় ${num(stats.avgLearned.toFixed(1))}/${
+                  `আগের তুলনায় · গড় ${stats.avgLearned.toFixed(1)}/${
                     granularity === "hr" ? "ঘণ্টা" : "দিন"
                   }`,
                   `vs previous · avg ${stats.avgLearned.toFixed(1)}/${granularity}`

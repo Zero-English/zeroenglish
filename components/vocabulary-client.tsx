@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useSelectedLevel, setSelectedLevel } from "@/lib/level-store";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { formatCategoryLabel } from "@/lib/category";
 import type { WordRef, WordStatsResponse } from "@/types/api";
@@ -103,7 +103,7 @@ export function VocabularyClient() {
   const { level: storedLevel, hydrated } = useSelectedLevel();
   const router = useRouter();
   const t = useT();
-  const num = useNum();
+
 
   useEffect(() => {
     if (hydrated && storedLevel) {
@@ -214,19 +214,19 @@ export function VocabularyClient() {
           <div className="mt-6 grid grid-cols-3 gap-2.5 max-w-md animate-fade-up-1">
             <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-3 text-center">
               <p className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                {statsLoading ? "· · ·" : num(totalWords)}
+                {statsLoading ? "· · ·" : totalWords}
               </p>
               <p className="text-[11px] text-zinc-400 mt-0.5">{t("শব্দ", "Words")}</p>
             </div>
             <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-3 text-center">
               <p className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                {statsLoading ? "· · ·" : num(categories.length)}
+                {statsLoading ? "· · ·" : categories.length}
               </p>
               <p className="text-[11px] text-zinc-400 mt-0.5">{t("বিভাগ", "Categories")}</p>
             </div>
             <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-3 text-center">
               <p className="text-xl sm:text-2xl font-bold text-orange-500 tabular-nums">
-                {statsLoading || !learnedLoaded ? "· · ·" : `${num(overallPct)}%`}
+                {statsLoading || !learnedLoaded ? "· · ·" : `${overallPct}%`}
               </p>
               <p className="text-[11px] text-zinc-400 mt-0.5">{t("শেখা হয়েছে", "Learned")}</p>
             </div>
@@ -255,11 +255,11 @@ export function VocabularyClient() {
                       {group.label}
                     </span>
                     <span className="text-xs text-zinc-400 dark:text-zinc-500">
-                      {statsLoading ? "\u00A0" : t(`${num(group.total)}টি শব্দ · ${num(group.levels.length)}টি লেভেল`, `${num(group.total)} words · ${num(group.levels.length)} levels`)}
+                      {statsLoading ? "\u00A0" : t(`${group.total}টি শব্দ · ${group.levels.length}টি লেভেল`, `${group.total} words · ${group.levels.length} levels`)}
                     </span>
                   </div>
                   <span className="text-xs font-semibold text-orange-500 tabular-nums">
-                    {loaded ? `${num(pct)}% ${t("শেখা", "learned")}` : "\u00A0"}
+                    {loaded ? `${pct}% ${t("শেখা", "learned")}` : "\u00A0"}
                   </span>
                 </div>
 
@@ -314,10 +314,10 @@ export function VocabularyClient() {
                               </div>
                               <div className="mt-2 space-y-0.5">
                                 <p className="text-sm font-medium text-zinc-600 dark:text-zinc-300">
-                                  {statsLoading ? "\u00A0" : t(`${num(total)}টি শব্দ`, `${total} words`)}
+                                  {statsLoading ? "\u00A0" : t(`${total}টি শব্দ`, `${total} words`)}
                                 </p>
                                 <p className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
-                                  {ready ? t(`${num(learned)}টি শেখা`, `${learned} learned`) : "\u00A0"}
+                                  {ready ? t(`${learned}টি শেখা`, `${learned} learned`) : "\u00A0"}
                                 </p>
                               </div>
                             </div>
@@ -346,7 +346,7 @@ export function VocabularyClient() {
                                 />
                               </svg>
                               <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-xs font-bold text-zinc-700 dark:text-zinc-200 tabular-nums">
-                                {ready ? num(levelPct) : "–"}
+                                {ready ? levelPct : "–"}
                               </span>
                             </div>
                           </div>

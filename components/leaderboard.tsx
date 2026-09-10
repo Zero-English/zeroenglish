@@ -13,7 +13,7 @@ import {
     Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { UserAvatar } from "@/components/UserAvatar";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -96,7 +96,6 @@ function scoreColor(pct: number): string {
 
 function Podium({ top3, tab }: { top3: RankedRow[]; tab: TabKey }) {
     const t = useT();
-    const num = useNum();
     const places = [2, 1, 3].filter((p) => top3.some((r) => r.rank === p));
 
     return (
@@ -164,11 +163,11 @@ function Podium({ top3, tab }: { top3: RankedRow[]; tab: TabKey }) {
                                 theme.scoreChip
                             )}
                         >
-                            {num(Math.round(tabValue(tab, row)))}
+                            {Math.round(tabValue(tab, row))}
                             <span className="text-[10px] font-bold sm:text-xs">%</span>
                         </span>
                         <span className="mt-0.5 text-[10px] tabular-nums text-zinc-400 dark:text-zinc-500">
-                            {num(tabCount(tab, row))} {t("পরীক্ষা", "exams")}
+                            {tabCount(tab, row)} {t("পরীক্ষা", "exams")}
                         </span>
 
                         <span
@@ -199,7 +198,6 @@ function Row({
     tab: TabKey;
 }) {
     const t = useT();
-    const num = useNum();
     const value = tabValue(tab, row);
     const count = tabCount(tab, row);
     const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
@@ -252,10 +250,10 @@ function Row({
 
             <span className="shrink-0 text-right">
                 <span className={cn("block text-sm font-bold tabular-nums", scoreColor(value))}>
-                    {num(Math.round(value))}%
+                    {Math.round(value)}%
                 </span>
                 <span className="mt-0.5 block text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-                    {num(count)} {t("পরীক্ষা", "exams")}
+                    {count} {t("পরীক্ষা", "exams")}
                 </span>
             </span>
         </>
@@ -310,7 +308,6 @@ export function Leaderboard({
     currentUserId?: number;
 }) {
     const t = useT();
-    const num = useNum();
     const [tab, setTab] = useState<TabKey>("allTime");
 
     const ranked = useMemo(() => {
@@ -375,19 +372,19 @@ export function Leaderboard({
                                 <MiniStat
                                     icon={<Hash className="h-4 w-4" />}
                                     tone="bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-300"
-                                    value={`#${num(me.rank)}`}
+                                    value={`#${me.rank}`}
                                     label={t("র‍্যাংক", "Rank")}
                                 />
                                 <MiniStat
                                     icon={<Target className="h-4 w-4" />}
                                     tone="bg-sky-100 text-sky-600 dark:bg-sky-900/30 dark:text-sky-300"
-                                    value={`${num(Math.round(tabValue(tab, me)))}%`}
+                                    value={`${Math.round(tabValue(tab, me))}%`}
                                     label={tabMetricLabel(tab, t)}
                                 />
                                 <MiniStat
                                     icon={<FileText className="h-4 w-4" />}
                                     tone="bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300"
-                                    value={num(tabCount(tab, me))}
+                                    value={tabCount(tab, me)}
                                     label={t("পরীক্ষা", "Exams")}
                                 />
                             </div>
