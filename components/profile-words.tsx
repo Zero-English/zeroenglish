@@ -23,13 +23,15 @@ import { useQuizActivity } from "@/lib/use-quiz-activity";
 import { Classic } from "@/components/classic";
 import { ProfileActivityChart } from "@/components/profile-activity-chart";
 import { QuizHistoryPanel } from "@/components/profile-quiz-history";
+import { QuizExamHistoryPanel } from "@/components/profile-quiz-exam-history";
 import { useQuizHistoryStore } from "@/lib/quiz-history-store";
+import { useQuizExamHistoryStore } from "@/lib/quiz-exam-history-store";
 import { useT, useNum } from "@/components/language-provider";
 
 const ITEMS_PER_PAGE = 10;
 import {
   BookmarkCheck, CheckCircle2, Bookmark, Circle,
-  BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Volume2,
+  BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Volume2, ClipboardList,
 } from "lucide-react";
 
 
@@ -253,10 +255,11 @@ function WordItem({
 export function ProfileTabs({ words }: { words: Word[] }) {
   const activeTab = useActiveTab();
   const normalizedTab = activeTab === "still-learning" ? "quiz" : activeTab;
-  const [quizSubTab, setQuizSubTab] = useState<"history" | "still-learning">(
+  const [quizSubTab, setQuizSubTab] = useState<"history" | "exams" | "still-learning">(
     activeTab === "still-learning" ? "still-learning" : "history"
   );
   const quizCount = useQuizHistoryStore((s) => s.entries.length);
+  const examCount = useQuizExamHistoryStore((s) => s.entries.length);
   const { bookmarkedIds, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const { learnedIds, isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
   const { stillLearningIds, removeStillLearning, toggleStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
@@ -644,11 +647,20 @@ export function ProfileTabs({ words }: { words: Word[] }) {
       </TabsContent>
 
       <TabsContent value="quiz">
-        <Tabs value={quizSubTab} onValueChange={(v) => setQuizSubTab(v as "history" | "still-learning")}>
+        <Tabs value={quizSubTab} onValueChange={(v) => setQuizSubTab(v as "history" | "exams" | "still-learning")}>
           <TabsList>
             <TabsTrigger value="history" className="flex items-center gap-1.5">
               <GraduationCap className="h-4 w-4" />
-              {t("ইতিহাস", "History")}
+              {t("প্র্যাকটিস", "Practice")}
+            </TabsTrigger>
+            <TabsTrigger value="exams" className="flex items-center gap-1.5">
+              <ClipboardList className="h-4 w-4" />
+              {t("পরীক্ষা", "Exams")}
+              {examCount > 0 && (
+                <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+                  {num(examCount)}
+                </span>
+              )}
             </TabsTrigger>
             <TabsTrigger value="still-learning" className="flex items-center gap-1.5">
               <RefreshCw className="h-4 w-4" />
@@ -663,6 +675,10 @@ export function ProfileTabs({ words }: { words: Word[] }) {
 
           <TabsContent value="history">
             <QuizHistoryPanel />
+          </TabsContent>
+
+          <TabsContent value="exams">
+            <QuizExamHistoryPanel />
           </TabsContent>
 
           <TabsContent value="still-learning">

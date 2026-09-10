@@ -5,6 +5,7 @@ import type { QuizMode, Levels } from "@/generated/prisma/enums";
 export const createQuizResult = async (data: {
     userId: number;
     clientId?: string | null;
+    examId?: number | null;
     title?: string | null;
     mode: QuizMode;
     quizType: string;
@@ -57,6 +58,7 @@ export const createQuizResult = async (data: {
             data: {
                 userId: data.userId,
                 clientId: data.clientId ?? null,
+                examId: data.examId ?? null,
                 title: data.title ?? "Practice Quiz",
                 mode: data.mode,
                 quizTypeId: quizType.id,

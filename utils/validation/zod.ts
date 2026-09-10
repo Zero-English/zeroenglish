@@ -69,6 +69,7 @@ export const quizModeEnumSchema = z.enum(["PRACTICE", "WEEKLY", "BIWEEKLY"]);
 export const quizResultSchema = z
   .object({
     clientId: z.string().trim().max(64).nullish(),
+    examId: z.number().int().positive("examId must be positive").nullish(),
     title: z.string().trim().max(200).nullish(),
     mode: quizModeEnumSchema.default("PRACTICE"),
     quizType: quizTypeEnumSchema,
