@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import type { Word } from "@/lib/data";
 import { WordCard } from "@/components/word-card";
+import { searchCachedWords, getCachedWords } from "@/lib/vocab-cache";
 import type { BrowseWordsResponse, PaginationInfo } from "@/types/api";
 import {
   Pagination,
@@ -124,6 +125,23 @@ export function SearchClient() {
     setLoading(true);
     setError(null);
     try {
+      const cached = await getCachedWords();
+      if (cached.length > 0) {
+        const all = await searchCachedWords(trimmed);
+        const start = (page - 1) * ITEMS_PER_PAGE;
+        const sliced = all.slice(start, start + ITEMS_PER_PAGE);
+        const total = all.length;
+        const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+        setResults(sliced);
+        setPagination({
+          total,
+          page: Math.min(page, totalPages),
+          limit: ITEMS_PER_PAGE,
+          totalPages,
+        });
+        return;
+      }
+
       const params = new URLSearchParams({
         page: String(page),
         limit: String(ITEMS_PER_PAGE),

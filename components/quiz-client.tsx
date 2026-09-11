@@ -6,17 +6,23 @@ import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
 import { Languages, ArrowLeftRight, ArrowRight, ArrowLeft, Shuffle, Layers, Volume2, Star, Sparkles, Gauge, ListOrdered, Check, X, Bookmark, BookmarkCheck, ClipboardList, Timer, type LucideIcon } from "lucide-react";
 import { Word } from "@/lib/data";
+import { useCachedWords } from "@/lib/use-cached-words";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
+import {
+  generateQuestions,
+  getQuizPoolCount,
+} from "@/lib/quiz-generation-core";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
 import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
-import { useAuthPath, useAuthStore } from "@/lib/auth-store";
+import { useAuthPath } from "@/lib/auth-store";
+import { putQuizHistoryEntry } from "@/lib/use-quiz-history";
 import {
-  useQuizHistoryStore,
   type QuizType,
   type QuizHistoryEntry,
 } from "@/lib/quiz-history-store";
+import { requestLogin } from "@/lib/login-required";
 import Link from "next/link";
 import { useT } from "@/components/language-provider";
 import { ConfirmDialog } from "@/components/confirm-dialog";
@@ -25,68 +31,6 @@ import { toast } from "sonner";
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Random";
 
 type QuizLevel = LevelOption;
-
-const QUIZ_TYPE_ENUM: Record<QuizType, string> = {
-  english_to_bangla: "ENGLISH_TO_BANGLA",
-  bangla_to_english: "BANGLA_TO_ENGLISH",
-  synonym: "SYNONYMS",
-  antonym: "ANTONYMS",
-};
-
-const LEVEL_ENUM: Record<string, string> = {
-  A1: "A1",
-  A2: "A2",
-  B1: "B1",
-  B2: "B2",
-  C1: "C1",
-  C2: "C2",
-};
-
-async function saveQuizResultToDb(args: {
-  userId: number | null;
-  clientId: string;
-  quizType: QuizType;
-  score: number;
-  total: number;
-  percentage: number;
-  levels: string[];
-  timePerQuestion: number;
-}): Promise<number | null> {
-  if (!args.userId) return null;
-  try {
-    const res = await fetch("/api/v1/quiz/results", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        clientId: args.clientId,
-        quizType: QUIZ_TYPE_ENUM[args.quizType],
-        questionCount: args.total,
-        levels: args.levels
-          .filter((lv) => LEVEL_ENUM[lv])
-          .map((lv) => LEVEL_ENUM[lv]),
-        timePerQuestion: args.timePerQuestion,
-        timeTotalQuiz: args.total * args.timePerQuestion,
-        scheduleEnabled: false,
-        correctAnswers: args.score,
-        scoreInPercent: args.percentage,
-        totalScore: args.score,
-      }),
-    });
-    if (!res.ok) {
-      // non-fatal; the result is already stored in localStorage
-      return null;
-    }
-    const body = (await res.json()) as { data?: { id?: number } | null; success?: boolean };
-    if (!body.success) return null;
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new Event("activity-changed"));
-    }
-    return typeof body.data?.id === "number" ? body.data.id : null;
-  } catch {
-    // non-fatal; the result is already stored in localStorage
-    return null;
-  }
-}
 
 interface Question {
   word: Word;
@@ -217,8 +161,8 @@ const QUIZ_TYPE_ORDER: QuizType[] = [
   "antonym",
 ];
 
-function firstMeaning(meaning: string): string {
-  return meaning.split(";")[0].trim();
+function firstMeaning(meaning: string[]): string {
+  return (meaning[0] ?? "").trim();
 }
 
 function requestQuizFullscreen(): void {
@@ -258,6 +202,8 @@ export function QuizClient() {
   const incorrectAnswers = useQuizStore((s) => s.incorrectAnswers);
 
   const { addStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
+  const { words: cachedWords, loading: cacheLoading } = useCachedWords();
+  const cacheEmpty = !cacheLoading && cachedWords.length === 0;
   const t = useT();
 
   const setQuizChromeHidden = useQuizChrome((s) => s.setHidden);
@@ -308,29 +254,19 @@ export function QuizClient() {
   useEffect(() => {
     if (step !== "settings") return;
     const requestId = ++poolRequestRef.current;
-    const params = new URLSearchParams({
-      quizType: quizType ?? "english_to_bangla",
-    });
-    if (selectedLevels.length > 0) params.set("levels", selectedLevels.join(","));
-    fetch(`/api/v1/quiz/pool?${params.toString()}`, { cache: "no-store" })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((body) => {
-        const count =
-          body && typeof body.data?.maxCount === "number"
-            ? body.data.maxCount
-            : 0;
-        if (poolRequestRef.current === requestId) {
-          setPoolCount(count);
-          setCountLoading(false);
-        }
-      })
-      .catch(() => {
-        if (poolRequestRef.current === requestId) {
-          setPoolCount(0);
-          setCountLoading(false);
-        }
-      });
-  }, [step, quizType, selectedLevels]);
+    const count =
+      cachedWords.length > 0
+        ? getQuizPoolCount(
+            cachedWords,
+            selectedLevels,
+            quizType ?? "english_to_bangla"
+          )
+        : 0;
+    if (poolRequestRef.current === requestId) {
+      setPoolCount(count);
+      setCountLoading(false);
+    }
+  }, [step, quizType, selectedLevels, cachedWords]);
 
   const handleQuizTypeSelect = (type: QuizType) => {
     setCountLoading(true);
@@ -362,31 +298,25 @@ export function QuizClient() {
 
   const handleStartQuiz = async () => {
     if (!quizType || starting) return;
+    if (requestLogin()) return;
     setStarting(true);
     try {
-      const res = await fetch("/api/v1/quiz/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          quizType,
-          levels: selectedLevels,
-          quantity,
-          useAllQuestions,
-        }),
-      });
-      const body = (await res.json()) as {
-        data?: { questions?: Question[] } | null;
-        message?: string;
-        success?: boolean;
-      };
-      if (!res.ok || !body.success || !body.data) {
+      if (cacheEmpty || cachedWords.length === 0) {
         toast.error(
-          body?.message ??
-            t("কুইজ তৈরি করা যায়নি", "Couldn't create the quiz")
+          t(
+            "কুইজের শব্দভাণ্ডার ডাউনলোড হয়নি। প্রথমে অনলাইনে শব্দভাণ্ডার পৃষ্ঠাটি খুলুন, তারপর আবার চেষ্টা করুন।",
+            "The quiz word bank hasn't been downloaded yet. Open the vocabulary page once while online, then try again."
+          )
         );
         return;
       }
-      const generated = body.data.questions ?? [];
+      const generated = generateQuestions(
+        cachedWords,
+        selectedLevels,
+        quantity,
+        useAllQuestions,
+        quizType
+      );
       if (generated.length === 0) {
         toast.error(
           t(
@@ -432,7 +362,7 @@ export function QuizClient() {
             ...prev.incorrectAnswers,
             {
               word: q.word,
-              correctMeaning: q.word.meaning_bn,
+              correctMeaning: firstMeaning(q.word.meaningBn),
               userAnswer: option.text,
             },
           ],
@@ -496,7 +426,7 @@ export function QuizClient() {
             ...prev.incorrectAnswers,
             {
               word: q.word,
-              correctMeaning: q.word.meaning_bn,
+              correctMeaning: firstMeaning(q.word.meaningBn),
               userAnswer: "Time's up!",
             },
           ],
@@ -522,6 +452,7 @@ export function QuizClient() {
         noTimeLimit={noTimeLimit}
         maxCount={poolCount}
         countLoading={countLoading}
+        cacheEmpty={cacheEmpty}
         starting={starting}
         onLevelChange={toggleLevel}
         onQuantityChange={(q) => useQuizStore.setState({ quantity: q })}
@@ -728,6 +659,7 @@ function SettingsView({
   noTimeLimit,
   maxCount,
   countLoading,
+  cacheEmpty,
   starting,
   onLevelChange,
   onQuantityChange,
@@ -745,6 +677,7 @@ function SettingsView({
   noTimeLimit: boolean;
   maxCount: number | null;
   countLoading: boolean;
+  cacheEmpty: boolean;
   starting: boolean;
   onLevelChange: (lv: LevelOption) => void;
   onQuantityChange: (q: number) => void;
@@ -794,6 +727,26 @@ function SettingsView({
               </div>
             </div>
           </div>
+
+          {cacheEmpty && (
+            <div className="mb-8 rounded-2xl border border-amber-200 dark:border-amber-900 bg-amber-50/70 dark:bg-amber-950/30 p-4 sm:p-5">
+              <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">
+                {t("শব্দভাণ্ডার এখনও ডাউনলোড হয়নি", "Word bank not downloaded yet")}
+              </p>
+              <p className="mt-1 text-xs text-amber-600/90 dark:text-amber-400/90">
+                {t(
+                  "কুইজ তৈরির জন্য শব্দভাণ্ডারটি আপনার ডিভাইসে সংরক্ষিত করা প্রয়োজন।",
+                  "The vocabulary needs to be saved on your device to generate quizzes."
+                )}{" "}
+                <Link
+                  href="/vocabulary"
+                  className="font-semibold underline underline-offset-2 hover:text-amber-800 dark:hover:text-amber-200"
+                >
+                  {t("শব্দভাণ্ডার পৃষ্ঠায় যান", "Go to vocabulary")}
+                </Link>
+              </p>
+            </div>
+          )}
 
           <div className="space-y-6">
             <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-5 sm:p-6">
@@ -986,7 +939,7 @@ function QuizView({
   const speak = useSpeak();
   const t = useT();
   const progress = ((currentIndex + 1) / totalQuestions) * 100;
-  const prompt = quizType === "bangla_to_english" ? firstMeaning(question.word.meaning_bn) : question.word.word;
+  const prompt = quizType === "bangla_to_english" ? firstMeaning(question.word.meaningBn) : question.word.word;
   const qt = QUIZ_TYPE_CONFIG[quizType];
   const lc = LEVEL_CONFIG[question.word.level];
   const letters = ["A", "B", "C", "D"];
@@ -1047,7 +1000,7 @@ function QuizView({
         {/* Word */}
         <div className="animate-fade-up text-center">
           <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-xs text-zinc-400 dark:text-zinc-500">{question.word.parts_of_speech}</span>
+            <span className="text-xs text-zinc-400 dark:text-zinc-500">{question.word.wordType.join(", ")}</span>
             <span className="text-xs text-zinc-300 dark:text-zinc-600">·</span>
             <span className={cn("text-xs font-semibold", lc.text)}>{question.word.level}</span>
           </div>
@@ -1192,53 +1145,46 @@ function ResultsView({
 }) {
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const { path, hydrated } = useAuthPath();
-  const userId = useAuthStore((s) => s.userId);
-  const addHistoryEntry = useQuizHistoryStore((s) => s.addEntry);
-  const updateHistoryEntry = useQuizHistoryStore((s) => s.updateEntry);
   const t = useT();
 
   useEffect(() => {
     if (!hydrated || useQuizStore.getState().resultsRecorded) return;
-    const today = new Date();
-    const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-    incrementQuizzesDone(dateStr, path);
-    addCorrectAnswers(dateStr, score, path);
-    const questions = useQuizStore.getState().questions;
-    const levels = Array.from(
-      new Set(questions.map((q) => q.word.level))
-    ).sort();
-    const isTimed = !useQuizStore.getState().noTimeLimit;
-    const timePerQuestion = isTimed ? useQuizStore.getState().timePerQuestion : 0;
-    const entry: QuizHistoryEntry = {
-      id:
-        typeof crypto !== "undefined" && "randomUUID" in crypto
-          ? crypto.randomUUID()
-          : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
-      quizType,
-      date: dateStr,
-      win: `${percentage}%`,
-      levels,
-      numberOfQuestions: total,
-      timePerQuestion,
-      createdAt: Date.now(),
-    };
-    addHistoryEntry(entry);
-    useQuizStore.setState({ resultsRecorded: true });
-
-    saveQuizResultToDb({
-      userId,
-      clientId: entry.id,
-      quizType,
-      score,
-      total,
-      percentage,
-      levels,
-      timePerQuestion,
-    }).then((dbId) => {
-      if (typeof dbId === "number") {
-        updateHistoryEntry(entry.id, { synced: true, dbId });
+    let cancelled = false;
+    void (async () => {
+      const today = new Date();
+      const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+      await incrementQuizzesDone(dateStr, path);
+      await addCorrectAnswers(dateStr, score, path);
+      const questions = useQuizStore.getState().questions;
+      const levels = Array.from(
+        new Set(questions.map((q) => q.word.level))
+      ).sort();
+      const isTimed = !useQuizStore.getState().noTimeLimit;
+      const timePerQuestion = isTimed ? useQuizStore.getState().timePerQuestion : 0;
+      const entry: QuizHistoryEntry = {
+        id:
+          typeof crypto !== "undefined" && "randomUUID" in crypto
+            ? crypto.randomUUID()
+            : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+        quizType,
+        date: dateStr,
+        win: `${percentage}%`,
+        levels,
+        numberOfQuestions: total,
+        timePerQuestion,
+        createdAt: Date.now(),
+      };
+      await putQuizHistoryEntry(path, entry);
+      if (cancelled) return;
+      useQuizStore.setState({ resultsRecorded: true });
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("progress-changed"));
+        window.dispatchEvent(new Event("activity-changed"));
       }
-    });
+    })();
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hydrated, quizType]);
 
@@ -1307,7 +1253,7 @@ function ResultsView({
                       {item.word.word}
                     </span>
                     <span className="text-xs text-zinc-400 dark:text-zinc-500 bg-zinc-100 dark:bg-zinc-800 rounded-md px-2 py-0.5">
-                      {item.word.parts_of_speech}
+                      {item.word.wordType.join(", ")}
                     </span>
                   </div>
                   <div className="mt-2 text-sm space-y-1">

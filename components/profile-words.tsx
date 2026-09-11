@@ -24,7 +24,7 @@ import { Classic } from "@/components/classic";
 import { ProfileActivityChart } from "@/components/profile-activity-chart";
 import { QuizHistoryPanel } from "@/components/profile-quiz-history";
 import { QuizExamHistoryPanel } from "@/components/profile-quiz-exam-history";
-import { useQuizHistoryStore } from "@/lib/quiz-history-store";
+import { useQuizHistory } from "@/lib/use-quiz-history";
 import { useQuizExamHistoryStore } from "@/lib/quiz-exam-history-store";
 import { useT } from "@/components/language-provider";
 
@@ -98,19 +98,19 @@ function WordCardDetails({ word }: { word: Word }) {
           <Volume2 className="h-4 w-4" />
         </button>
         <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono bg-zinc-100 dark:bg-zinc-800/60 rounded-md px-2 py-0.5">
-          {word.parts_of_speech}
+          {word.wordType.join(", ")}
         </span>
         <span className={cn("text-xs font-medium px-2 py-0.5 rounded-md", colorCfg?.bg, colorCfg?.text)}>
           {word.level}
         </span>
       </div>
-      {word.meaning_bn !== "..." && (
+      {word.meaningBn.length > 0 && word.meaningBn[0] !== "..." && (
         <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-2 font-medium">
-          {word.meaning_bn}
+          {word.meaningBn.join("; ")}
         </p>
       )}
       <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-        {`${word.definition_en} (${word.definition_bn})`}
+        {`${word.definitionEn} (${word.definitionBn})`}
       </p>
       {(word.synonyms.length > 0 || word.antonyms.length > 0) && (
         <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 border-t border-zinc-100 dark:border-zinc-800 pt-3">
@@ -146,15 +146,15 @@ function WordCardDetails({ word }: { word: Word }) {
           )}
         </div>
       )}
-      {word.examples_en.length > 0 && word.examples_bn.length > 0 ? (
+      {word.examplesEn.length > 0 && word.examples_bn.length > 0 ? (
         <div className="mt-3 space-y-3 border-t border-zinc-100 dark:border-zinc-800 pt-3">
           {Array.from({
-            length: Math.max(word.examples_en.length, word.examples_bn.length),
+            length: Math.max(word.examplesEn.length, word.examples_bn.length),
           }).map((_, i) => (
             <div key={i} className="space-y-1.5">
-              {word.examples_en[i] && (
+              {word.examplesEn[i] && (
                 <p className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
-                  &ldquo;{word.examples_en[i]}&rdquo;
+                  &ldquo;{word.examplesEn[i]}&rdquo;
                 </p>
               )}
               {word.examples_bn[i] && (
@@ -165,9 +165,9 @@ function WordCardDetails({ word }: { word: Word }) {
             </div>
           ))}
         </div>
-      ) : word.examples_en.length > 0 ? (
+      ) : word.examplesEn.length > 0 ? (
         <div className="mt-3 space-y-1.5 border-t border-zinc-100 dark:border-zinc-800 pt-3">
-          {word.examples_en.map((ex, i) => (
+          {word.examplesEn.map((ex, i) => (
             <p key={i} className="text-sm text-zinc-400 dark:text-zinc-500 italic leading-relaxed">
               &ldquo;{ex}&rdquo;
             </p>
@@ -258,7 +258,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const [quizSubTab, setQuizSubTab] = useState<"history" | "exams" | "still-learning">(
     activeTab === "still-learning" ? "still-learning" : "history"
   );
-  const quizCount = useQuizHistoryStore((s) => s.entries.length);
+  const quizCount = useQuizHistory().entries.length;
   const examCount = useQuizExamHistoryStore((s) => s.entries.length);
   const { bookmarkedIds, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const { learnedIds, isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();

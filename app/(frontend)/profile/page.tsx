@@ -6,6 +6,7 @@ import { ProfileAuthBanner } from "@/components/profile-auth-banner";
 import { ProfileCard } from "@/components/profile-card";
 import { ProfileHeader } from "@/components/profile-header";
 import { SyncStatus } from "@/components/sync-status";
+import { ProfileSyncTrigger } from "@/components/profile-sync-trigger";
 import { StaggerContainer } from "@/components/stagger";
 import { BackButton } from "@/components/back-button";
 
@@ -24,6 +25,7 @@ export default async function ProfilePage() {
 
             <div className="relative px-4 py-8 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
+                    <ProfileSyncTrigger />
                     <BackButton />
                     <ProfileHeader />
 

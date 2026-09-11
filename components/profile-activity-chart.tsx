@@ -22,10 +22,8 @@ import { Activity, CalendarDays, TrendingDown, TrendingUp } from "lucide-react";
 import { useT } from "@/components/language-provider";
 import { fetchQuizResultsFromDb } from "@/lib/quiz-results-api";
 import { getWordsByType } from "@/lib/db";
-import {
-  useQuizHistoryStore,
-  type QuizHistoryEntry,
-} from "@/lib/quiz-history-store";
+import type { QuizHistoryEntry } from "@/lib/quiz-history-store";
+import { useQuizHistory } from "@/lib/use-quiz-history";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
 
 type ActivityPoint = { label: string; learned: number; quiz: number };
@@ -287,7 +285,7 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
   const t = useT();
   const { status } = useAuthStatus();
   const path = useAuthStore((s) => s.path);
-  const quizEntries = useQuizHistoryStore((s) => s.entries);
+  const quizEntries = useQuizHistory().entries;
 
   const storedUserId = userId;
 

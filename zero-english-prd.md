@@ -73,15 +73,15 @@ tracking, and personalized learning experiences.
 {
   "id": 1,
   "word": "a, an",
-  "meaning_bn": "...",
-  "definition_en": "...",
-  "definition_bn": "...",
-  "examples_en": [],
+  "meaningBn": "...",
+  "definitionEn": "...",
+  "definitionBn": "...",
+  "examplesEn": [],
   "examples_bn": [],
   "synonyms": [],
   "level": "A1",
   "category": "Oxford3000",
-  "parts_of_speech": "indefinite article"
+  "wordType": "indefinite article"
 }
 ```
 

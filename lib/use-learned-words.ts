@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { putWord, deleteWord, bulkPutWords, getWordsByType, setWordSynced } from "./db";
-import { useAuthPath, useAuthStatus } from "./auth-store";
+import { putWord, setWordRemoved, reviveWord, getWordsByType, getWord, deleteWord } from "./db";
+import { useAuthPath } from "./auth-store";
+import { requestLogin } from "./login-required";
 
 const TYPE = "learned" as const;
-const STORAGE_KEY = "learned-words";
 
 function key(id: number) {
   return String(id);
@@ -28,94 +28,32 @@ function emitChange() {
   for (const listener of listeners) listener();
 }
 
-async function listDbLearned(): Promise<number[] | null> {
-  try {
-    const res = await fetch("/api/v1/words/learned", { cache: "no-store" });
-    if (!res.ok) return null;
-    const body = (await res.json()) as { data?: number[]; success?: boolean };
-    if (!body.success || !Array.isArray(body.data)) return null;
-    return body.data;
-  } catch (err) {
-    console.error("Failed to fetch learned words from server:", err);
-    return null;
+function notifyProgressChanged() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("progress-changed"));
+    window.dispatchEvent(new Event("activity-changed"));
   }
 }
 
-async function syncDbLearned(id: number, learned: boolean): Promise<boolean> {
+async function doLoad(path: string): Promise<void> {
   try {
-    const res = await fetch(`/api/v1/words/${id}/learned`, {
-      method: learned ? "POST" : "DELETE",
-    });
-    if (!res.ok) {
-      console.error(
-        `Failed to ${learned ? "mark as learned" : "mark as unlearned"} word #${id} on server:`,
-        await res.text()
-      );
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error(`Failed to sync learned word #${id}:`, err);
-    return false;
-  }
-}
-
-async function doLoad(path: string, status: string): Promise<void> {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      const oldData = JSON.parse(stored) as string[];
-      await bulkPutWords(
-        oldData
-          .map((k) => ({ id: String(Number(k.split("|")[0])), type: TYPE }))
-          .filter((e) => Number.isFinite(Number(e.id))),
-        path
-      );
-      localStorage.removeItem(STORAGE_KEY);
-    }
-
     const records = await getWordsByType(TYPE, path);
-    const local = new Map(records.map((r) => [r.id, r]));
-
-    const db = status === "google" ? await listDbLearned() : null;
-    if (db) {
-      const dbSet = new Set(db.map(String));
-      const dbOnly = db.filter((n) => !local.has(String(n)));
-      const localOnly = Array.from(local.keys()).filter((k) => !dbSet.has(k));
-
-      if (dbOnly.length > 0) {
-        await bulkPutWords(
-          dbOnly.map((n) => ({ id: String(n), type: TYPE, synced: true })),
-          path
-        );
-        for (const n of dbOnly) {
-          local.set(String(n), { id: String(n), type: TYPE, synced: true });
-        }
-      }
-      for (const record of records) {
-        if (record.synced !== true && dbSet.has(record.id)) {
-          await setWordSynced(path, TYPE, record.id, true);
-        }
-      }
-      for (const n of localOnly) {
-        const okSync = await syncDbLearned(Number(n), true);
-        if (okSync) await setWordSynced(path, TYPE, String(n), true);
-      }
-    }
-
-    snapshot = { ids: new Set(Array.from(local.keys())), loaded: true };
+    snapshot = {
+      ids: new Set(records.map((r) => r.id)),
+      loaded: true,
+    };
   } catch (err) {
     console.error("Failed to load learned words:", err);
     snapshot = { ...snapshot, loaded: true };
   }
 }
 
-function loadLearned(path: string, status: string): Promise<void> {
-  const loadKey = `${status}|${path}`;
+function loadLearned(path: string): Promise<void> {
+  const loadKey = `${path}`;
   if (currentLoad && currentLoadKey === loadKey) return currentLoad;
   if (loadedKey === loadKey && snapshot.loaded) return Promise.resolve();
   currentLoadKey = loadKey;
-  currentLoad = doLoad(path, status).finally(() => {
+  currentLoad = doLoad(path).finally(() => {
     loadedKey = currentLoadKey;
     currentLoad = null;
     currentLoadKey = null;
@@ -126,11 +64,10 @@ function loadLearned(path: string, status: string): Promise<void> {
 
 export function useLearnedWords() {
   const { path, hydrated } = useAuthPath();
-  const { status } = useAuthStatus();
 
   useEffect(() => {
-    if (hydrated) void loadLearned(path, status);
-  }, [path, status, hydrated]);
+    if (hydrated) void loadLearned(path);
+  }, [path, hydrated]);
 
   const snap = useSyncExternalStore(
     (onStoreChange) => {
@@ -145,6 +82,7 @@ export function useLearnedWords() {
 
   const toggleLearned = useCallback(
     (id: number) => {
+      if (requestLogin()) return;
       const k = key(id);
       const adding = !snap.ids.has(k);
       const next = new Set(snap.ids);
@@ -152,18 +90,25 @@ export function useLearnedWords() {
       else next.delete(k);
       snapshot = { ...snap, ids: next };
       emitChange();
-      if (adding) void putWord({ id: k, type: TYPE }, path);
-      else void deleteWord(path, TYPE, k);
-      if (status === "google") {
-        void syncDbLearned(id, adding).then((okSync) => {
-          if (okSync && adding) void setWordSynced(path, TYPE, k, true);
-        });
+      if (adding) {
+        void (async () => {
+          await reviveWord(path, TYPE, k);
+          await putWord({ id: k, type: TYPE }, path);
+        })();
+      } else {
+        void (async () => {
+          const existing = await getWord(path, TYPE, k);
+          if (!existing) return;
+          if (existing.synced === true) {
+            await setWordRemoved(path, TYPE, k);
+          } else {
+            await deleteWord(path, TYPE, k);
+          }
+        })();
       }
-      if (typeof window !== "undefined") {
-        window.dispatchEvent(new Event("activity-changed"));
-      }
+      notifyProgressChanged();
     },
-    [snap, path, status]
+    [snap, path]
   );
 
   const isLearned = useCallback((id: number) => snap.ids.has(key(id)), [snap]);

@@ -18,10 +18,10 @@ import {
 import { cn } from "@/lib/utils";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import {
-  useQuizHistoryStore,
   type QuizHistoryEntry,
   type QuizType,
 } from "@/lib/quiz-history-store";
+import { useQuizHistory } from "@/lib/use-quiz-history";
 import {
   fetchQuizResultsFromDb,
   dbResultToHistoryEntry,
@@ -192,7 +192,7 @@ function QuizHistoryItem({ entry }: { entry: QuizHistoryEntry }) {
 }
 
 export function QuizHistoryPanel() {
-  const localEntries = useQuizHistoryStore((s) => s.entries);
+  const { entries: localEntries } = useQuizHistory();
   const { status } = useAuthStatus();
   const [dbEntries, setDbEntries] = useState<QuizHistoryEntry[]>([]);
   const [dbLoaded, setDbLoaded] = useState(false);

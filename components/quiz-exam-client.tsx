@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import {
   ClipboardList,
@@ -30,8 +29,8 @@ import { useT } from "@/components/language-provider";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 import { useQuizExamStore, resetQuizExamState } from "@/lib/quiz-exam-store";
 import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
-import { useAuthPath, useAuthStore, useAuthStatus, GUEST_PATH } from "@/lib/auth-store";
-import { syncGuestDataToServer } from "@/lib/guest-bind";
+import { useAuthPath, useAuthStore, useAuthStatus } from "@/lib/auth-store";
+import { isOffline } from "@/lib/is-online";
 import {
   Drawer,
   DrawerClose,
@@ -488,12 +487,8 @@ function ExamListView() {
   const [exams, setExams] = useState<QuizExamPublicItem[] | null>(null);
   const [loadingId, setLoadingId] = useState<number | null>(null);
   const { status, hydrated } = useAuthStatus();
-  const setGoogleAuth = useAuthStore((s) => s.setGoogleAuth);
-  const { data: session, status: sessionStatus } = useSession();
   const [authPrompt, setAuthPrompt] = useState<"login" | "bind" | null>(null);
   const [authBusy, setAuthBusy] = useState(false);
-  const sessionSyncedRef = useRef(false);
-  const guestAdoptedRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -522,51 +517,12 @@ function ExamListView() {
     };
   }, []);
 
-  // After a Google OAuth round-trip (login or guest bind), the browser lands
-  // back here with a live session while the auth store is still "none"/"guest".
-  // Adopt the session into the store (mirroring ProfileGuard) so the exam can
-  // actually be started.
-  useEffect(() => {
-    if (!hydrated || sessionStatus === "loading" || !session?.user) return;
-
-    if (status === "guest" && !guestAdoptedRef.current) {
-      guestAdoptedRef.current = true;
-      void (async () => {
-        try {
-          await syncGuestDataToServer(GUEST_PATH);
-        } catch (error) {
-          console.error("Failed to sync guest data before binding:", error);
-        }
-        if (typeof window !== "undefined") {
-          window.dispatchEvent(new Event("activity-changed"));
-        }
-        setGoogleAuth(
-          session.user.name ?? null,
-          session.user.email ?? null,
-          session.user.id ?? null
-        );
-        setAuthPrompt(null);
-        toast.success(
-          t(
-            "অ্যাকাউন্ট যুক্ত হয়েছে এবং অতিথি ডেটা সিঙ্ক হয়েছে।",
-            "Account bound and guest data synced to your new account."
-          )
-        );
-      })();
-      return;
-    }
-
-    if (status === "none" && !sessionSyncedRef.current) {
-      sessionSyncedRef.current = true;
-      setGoogleAuth(
-        session.user.name ?? null,
-        session.user.email ?? null,
-        session.user.id ?? null
-      );
-      setAuthPrompt(null);
-      toast.success(t("লগইন সফল হয়েছে!", "Signed in successfully!"));
-    }
-  }, [hydrated, sessionStatus, session, status, setGoogleAuth, t]);
+  // Identity adoption after the OAuth round-trip (login or guest bind) is
+  // handled globally by SessionAdopter; the auth prompt below is only shown
+  // while the store is still "none"/"guest", so it disappears automatically
+  // once the identity reaches "google".
+  const promptOpen =
+    authPrompt !== null && (status === "none" || status === "guest");
 
   const handleAuthAction = async () => {
     if (authBusy) return;
@@ -607,6 +563,15 @@ function ExamListView() {
     }
     if (hydrated && status === "guest") {
       setAuthPrompt("bind");
+      return;
+    }
+    if (isOffline()) {
+      toast.error(
+        t(
+          "পরীক্ষা দেওয়ার জন্য ইন্টারনেট সংযোগ প্রয়োজন।",
+          "An internet connection is required to take the exam."
+        )
+      );
       return;
     }
     setLoadingId(exam.id);
@@ -719,7 +684,7 @@ function ExamListView() {
         )}
       </div>
 
-      <Drawer open={authPrompt !== null} onOpenChange={(open) => { if (!open) setAuthPrompt(null); }}>
+      <Drawer open={promptOpen} onOpenChange={(open) => { if (!open) setAuthPrompt(null); }}>
         <DrawerContent className="mx-auto max-w-lg rounded-t-3xl">
           <div className="px-6 pb-8 pt-2">
             <div className="mb-5 flex justify-center">
@@ -1091,61 +1056,91 @@ function ExamResultsView({
   const { path, hydrated } = useAuthPath();
   const userId = useAuthStore((s) => s.userId);
   const addHistoryEntry = useQuizExamHistoryStore((s) => s.addEntry);
-  const updateHistoryEntry = useQuizExamHistoryStore((s) => s.updateEntry);
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
 
-  useEffect(() => {
-    if (!hydrated || useQuizExamStore.getState().resultsRecorded) return;
-    const today = new Date();
-    const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-    incrementQuizzesDone(dateStr, path);
-    addCorrectAnswers(dateStr, score, path);
+  const [saveState, setSaveState] = useState<"saving" | "saved" | "error">("saving");
+  const attemptingRef = useRef(false);
 
+  // Exam results live in the database, so the upload is mandatory: the attempt
+  // is finalized only after the POST succeeds (retry is offered otherwise).
+  const record = useCallback(async () => {
+    if (attemptingRef.current) return;
+    if (useQuizExamStore.getState().resultsRecorded) {
+      setSaveState("saved");
+      return;
+    }
+    attemptingRef.current = true;
+    setSaveState("saving");
     const state = useQuizExamStore.getState();
     const levels = state.levels;
     const timePerQuestion = state.timePerQuestion;
     const timeTotalQuiz = state.startedAt
       ? Math.round((Date.now() - state.startedAt) / 1000)
       : total * timePerQuestion;
-    const entry: QuizExamHistoryEntry = {
-      id:
-        typeof crypto !== "undefined" && "randomUUID" in crypto
-          ? crypto.randomUUID()
-          : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
-      examId: examId ?? 0,
-      title: state.examTitle ?? "Quiz Exam",
-      mode: state.examMode ?? "PRACTICE",
-      date: dateStr,
-      win: `${percentage}%`,
-      levels,
-      numberOfQuestions: total,
-      timePerQuestion,
-      createdAt: Date.now(),
-    };
-    addHistoryEntry(entry);
-    useQuizExamStore.setState({ resultsRecorded: true });
-
-    saveExamResultToDb({
-      userId,
-      clientId: entry.id,
-      examId: examId ?? null,
-      title: state.examTitle ?? "Quiz Exam",
-      mode: state.examMode ?? "PRACTICE",
-      score,
-      total,
-      percentage,
-      levels,
-      timePerQuestion,
-      timeTotalQuiz,
-      scheduledOpeningTime: state.scheduledOpeningTime,
-      scheduledClosingTime: state.scheduledClosingTime,
-    }).then((dbId) => {
-      if (typeof dbId === "number") {
-        updateHistoryEntry(entry.id, { synced: true, dbId });
+    try {
+      const dbId = await saveExamResultToDb({
+        userId,
+        clientId:
+          typeof crypto !== "undefined" && "randomUUID" in crypto
+            ? crypto.randomUUID()
+            : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+        examId: examId ?? null,
+        title: state.examTitle ?? "Quiz Exam",
+        mode: state.examMode ?? "PRACTICE",
+        score,
+        total,
+        percentage,
+        levels,
+        timePerQuestion,
+        timeTotalQuiz,
+        scheduledOpeningTime: state.scheduledOpeningTime,
+        scheduledClosingTime: state.scheduledClosingTime,
+      });
+      if (dbId == null) {
+        setSaveState("error");
+        return;
       }
-    });
+      const today = new Date();
+      const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+      await incrementQuizzesDone(dateStr, path);
+      await addCorrectAnswers(dateStr, score, path);
+      const entry: QuizExamHistoryEntry = {
+        id:
+          typeof crypto !== "undefined" && "randomUUID" in crypto
+            ? crypto.randomUUID()
+            : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+        examId: examId ?? 0,
+        title: state.examTitle ?? "Quiz Exam",
+        mode: state.examMode ?? "PRACTICE",
+        date: dateStr,
+        win: `${percentage}%`,
+        levels,
+        numberOfQuestions: total,
+        timePerQuestion,
+        createdAt: Date.now(),
+        synced: true,
+        dbId,
+      };
+      addHistoryEntry(entry);
+      useQuizExamStore.setState({ resultsRecorded: true });
+      setSaveState("saved");
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("progress-changed"));
+        window.dispatchEvent(new Event("activity-changed"));
+      }
+    } catch {
+      setSaveState("error");
+    } finally {
+      attemptingRef.current = false;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated]);
+  }, [examId, score, total, percentage, path]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const id = window.setTimeout(() => void record(), 0);
+    return () => window.clearTimeout(id);
+  }, [hydrated, record]);
 
   let resultColor: string;
   let resultLabel: string;
@@ -1237,18 +1232,47 @@ function ExamResultsView({
         )}
 
         <div className="animate-fade-up-3 flex flex-col sm:flex-row gap-3 justify-center">
-          <Button
-            onClick={() => resetQuizExamState()}
-            size="lg"
-            className="px-8"
-          >
-            {t("পরীক্ষার তালিকায় ফিরুন", "Back to Exam List")}
-          </Button>
-          <Link href="/">
-            <Button variant="outline" size="lg" className="w-full sm:w-auto px-8">
-              {t("হোমে ফিরে যান", "Back to Home")}
-            </Button>
-          </Link>
+          {saveState === "saving" && (
+            <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              {t(
+                "ফলাফল ডেটাবেসে সংরক্ষণ করা হচ্ছে...",
+                "Saving your result to the database..."
+              )}
+            </div>
+          )}
+
+          {saveState === "error" && (
+            <div className="flex flex-col items-center gap-3 rounded-2xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40 p-4">
+              <p className="text-sm font-medium text-red-600 dark:text-red-400 flex items-center gap-1.5">
+                <Loader2 className="h-4 w-4" />
+                {t(
+                  "ফলাফল সংরক্ষণ করা যায়নি। ইন্টারনেট সংযোগ সংরক্ষণের জন্য প্রয়োজন।",
+                  "Your result couldn't be saved. An internet connection is required to save exam results."
+                )}
+              </p>
+              <Button size="lg" className="px-8" onClick={() => void record()}>
+                {t("আবার চেষ্টা করুন", "Retry")}
+              </Button>
+            </div>
+          )}
+
+          {saveState === "saved" && (
+            <>
+              <Button
+                onClick={() => resetQuizExamState()}
+                size="lg"
+                className="px-8"
+              >
+                {t("পরীক্ষার তালিকায় ফিরুন", "Back to Exam List")}
+              </Button>
+              <Link href="/">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto px-8">
+                  {t("হোমে ফিরে যান", "Back to Home")}
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
-// import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { useLearnedWords } from "@/lib/use-learned-words";
-import { useSelectedLevel, setSelectedLevel } from "@/lib/level-store";
+import { useCachedWords } from "@/lib/use-cached-words";
+import { setSelectedLevel } from "@/lib/level-store";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { formatCategoryLabel } from "@/lib/category";
-import type { WordRef, WordStatsResponse } from "@/types/api";
+import type { WordRef } from "@/types/api";
 
 const RING_RADIUS = 22;
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
@@ -100,21 +100,28 @@ interface CategoryGroup {
 
 export function VocabularyClient() {
   const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
-  const { level: storedLevel, hydrated } = useSelectedLevel();
-  // const router = useRouter();
+  const { words: cachedWords, loading: cacheLoading } = useCachedWords();
   const t = useT();
 
 
-  // Fixed by Mahir because it should go to /vocabulary not /vocabulary/:level
-  // useEffect(() => {
-  //   if (hydrated && storedLevel) {
-  //     router.replace(`/vocabulary/${storedLevel.toLowerCase()}`);
-  //   }
-  // }, [hydrated, storedLevel, router]);
+  const wordRefs = useMemo<WordRef[]>(
+    () =>
+      cachedWords.map((w) => ({
+        id: w.id,
+        word: w.word,
+        level: w.level,
+        category: w.category,
+      })),
+    [cachedWords]
+  );
 
-  const [stats, setStats] = useState<Record<string, number>>({});
-  const [wordRefs, setWordRefs] = useState<WordRef[]>([]);
-  const [statsLoading, setStatsLoading] = useState(true);
+  const stats = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const w of cachedWords) {
+      map[w.level] = (map[w.level] ?? 0) + 1;
+    }
+    return map;
+  }, [cachedWords]);
 
   const categoryLabel = useMemo(() => {
     const cats = new Set(wordRefs.map((r) => r.category || "Oxford5000"));
@@ -128,27 +135,6 @@ export function VocabularyClient() {
     const dominant = Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0]?.[0];
     return dominant ? formatCategoryLabel(dominant) : "Oxford 5000";
   }, [wordRefs]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch("/api/v1/words/stats");
-        const json = (await res.json()) as WordStatsResponse;
-        if (json.success && json.data) {
-          const map: Record<string, number> = {};
-          json.data.levels.forEach((lv) => {
-            map[lv.level] = lv.count;
-          });
-          setStats(map);
-          setWordRefs(json.data.wordRefs);
-        }
-      } catch (err) {
-        console.error("Failed to load vocabulary stats:", err);
-      } finally {
-        setStatsLoading(false);
-      }
-    })();
-  }, []);
 
   const categories = useMemo<CategoryGroup[]>(() => {
     const map = new Map<string, { label: string; total: number; learned: number; levels: LevelStatRow[] }>();
@@ -185,7 +171,7 @@ export function VocabularyClient() {
   const totalWords = Object.values(stats).reduce((sum, n) => sum + n, 0);
   const totalLearned = wordRefs.filter((ref) => learnedIds.has(String(ref.id))).length;
   const overallPct = totalWords > 0 ? Math.round((totalLearned / totalWords) * 100) : 0;
-  const loaded = !statsLoading && learnedLoaded;
+  const loaded = !cacheLoading && learnedLoaded;
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
@@ -215,19 +201,19 @@ export function VocabularyClient() {
           <div className="mt-6 grid grid-cols-3 gap-2.5 max-w-md animate-fade-up-1">
             <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-3 text-center">
               <p className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                {statsLoading ? "· · ·" : totalWords}
+                {cacheLoading ? "· · ·" : totalWords}
               </p>
               <p className="text-[11px] text-zinc-400 mt-0.5">{t("শব্দ", "Words")}</p>
             </div>
             <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-3 text-center">
               <p className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                {statsLoading ? "· · ·" : categories.length}
+                {cacheLoading ? "· · ·" : categories.length}
               </p>
               <p className="text-[11px] text-zinc-400 mt-0.5">{t("বিভাগ", "Categories")}</p>
             </div>
             <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-3 text-center">
               <p className="text-xl sm:text-2xl font-bold text-orange-500 tabular-nums">
-                {statsLoading || !learnedLoaded ? "· · ·" : `${overallPct}%`}
+                {cacheLoading || !learnedLoaded ? "· · ·" : `${overallPct}%`}
               </p>
               <p className="text-[11px] text-zinc-400 mt-0.5">{t("শেখা হয়েছে", "Learned")}</p>
             </div>
@@ -256,7 +242,7 @@ export function VocabularyClient() {
                       {group.label}
                     </span>
                     <span className="text-xs text-zinc-400 dark:text-zinc-500">
-                      {statsLoading ? "\u00A0" : t(`${group.total}টি শব্দ · ${group.levels.length}টি লেভেল`, `${group.total} words · ${group.levels.length} levels`)}
+                      {cacheLoading ? "\u00A0" : t(`${group.total}টি শব্দ · ${group.levels.length}টি লেভেল`, `${group.total} words · ${group.levels.length} levels`)}
                     </span>
                   </div>
                   <span className="text-xs font-semibold text-orange-500 tabular-nums">
@@ -315,7 +301,7 @@ export function VocabularyClient() {
                               </div>
                               <div className="mt-2 space-y-0.5">
                                 <p className="text-sm font-medium text-zinc-600 dark:text-zinc-300">
-                                  {statsLoading ? "\u00A0" : t(`${total}টি শব্দ`, `${total} words`)}
+                                  {cacheLoading ? "\u00A0" : t(`${total}টি শব্দ`, `${total} words`)}
                                 </p>
                                 <p className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
                                   {ready ? t(`${learned}টি শেখা`, `${learned} learned`) : "\u00A0"}

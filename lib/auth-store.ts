@@ -10,6 +10,30 @@ export type AuthStatus = "none" | "guest" | "google";
 
 export const ANON_PATH = "anon";
 export const GUEST_PATH = "guest";
+export const GOOGLE_SCOPE_PREFIX = "google:";
+const LEGACY_GOOGLE_PATH_PREFIX = "google|";
+
+export function googleScope(ns: string): string {
+  return `${GOOGLE_SCOPE_PREFIX}${ns}`;
+}
+
+function normalizeGooglePath(path: string): string {
+  return path.startsWith(LEGACY_GOOGLE_PATH_PREFIX)
+    ? `${GOOGLE_SCOPE_PREFIX}${path.slice(LEGACY_GOOGLE_PATH_PREFIX.length)}`
+    : path;
+}
+
+/**
+ * Resolves the Google scope path for a session user. Prefers the stable numeric
+ * DB user id so a re-auth / email change can never re-scope an identity.
+ */
+export function googlePathFromSession(
+  id?: number | string | null,
+  email?: string | null
+): string {
+  const n = id != null && Number(id) > 0 ? String(id) : email ?? "user";
+  return googleScope(n);
+}
 
 export interface AuthPersistedProfile {
   status?: "guest" | "google";
@@ -26,7 +50,11 @@ interface AuthState {
   userEmail: string | null;
   userId: number | null;
   continueAsGuest: () => void;
-  setGoogleAuth: (name: string | null, email: string | null, id?: number | null) => void;
+  setGoogleAuth: (
+    name: string | null,
+    email: string | null,
+    id?: number | string | null
+  ) => string;
   logout: () => void;
 }
 
@@ -43,17 +71,15 @@ export const useAuthStore = create<AuthState>()(
         set({ status: "guest", path: GUEST_PATH, userName: "Guest", userEmail: null, userId: null });
       },
       setGoogleAuth: (name, email, id) => {
-        const ns = id != null && id > 0 ? String(id) : email ?? "user";
+        const path = googlePathFromSession(id, email);
+        const ns = path.slice(GOOGLE_SCOPE_PREFIX.length);
         if (typeof window !== "undefined") {
-          adoptAnonDataInto(`google|${ns}`, ns);
+          adoptAnonDataInto(path, ns);
         }
-        set({
-          status: "google",
-          path: `google|${ns}`,
-          userName: name,
-          userEmail: email,
-          userId: id ?? null,
-        });
+        const userId =
+          id != null && !Number.isNaN(Number(id)) ? Number(id) : null;
+        set({ status: "google", path, userName: name, userEmail: email, userId });
+        return path;
       },
       logout: () =>
         set({ status: "none", path: ANON_PATH, userName: null, userEmail: null, userId: null }),
@@ -75,14 +101,16 @@ export const useAuthStore = create<AuthState>()(
       merge: (persisted, current) => {
         const saved = persisted as AuthPersistedProfile | undefined;
         if (!saved || (saved.status !== "guest" && saved.status !== "google")) return current;
+        const path = normalizeGooglePath(
+          saved.path ??
+            (saved.status === "google"
+              ? googleScope(`${saved.userId ?? saved.userEmail ?? "user"}`)
+              : GUEST_PATH)
+        );
         return {
           ...current,
           status: saved.status,
-          path:
-            saved.path ??
-            (saved.status === "google"
-              ? `google|${saved.userId ?? saved.userEmail ?? "user"}`
-              : GUEST_PATH),
+          path,
           userName: saved.userName ?? null,
           userEmail: saved.userEmail ?? null,
           userId: saved.userId ?? null,

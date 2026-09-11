@@ -206,6 +206,12 @@ model QuizType {
   quizResults      QuizResults[]
 }
 
+model VocabMeta {
+  id        Int      @id @default(1)
+  version   Int      @default(1)
+  updatedAt DateTime @updatedAt
+}
+
 enum Roles {
   user
   admin
