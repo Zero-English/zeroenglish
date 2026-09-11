@@ -1,48 +1,83 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import NextAuth from "next-auth";
-import { authOptions, markBindIntentPending, clearBindIntent } from "@/lib/auth";
+import { authOptions, bindIntentStore } from "@/lib/auth";
 import { BIND_COOKIE } from "@/lib/bind-intent";
+import { ALLOWED_SITE_HOSTS } from "@/lib/site-domains";
 
 const baseAuth = NextAuth(authOptions);
 
 // Cookie armed by POST /api/v1/auth/bind/begin when a guest clicks
 // "Continue with Google" to bind an account. The OAuth callback request
-// carries it; if present we mark a bind intent so the signIn callback can
-// reject existing accounts and create new ones (which then receive the
-// guest's synced data).
+// carries it; if present we run the callback with a request-scoped bind intent
+// (AsyncLocalStorage) so the signIn callback can reject existing accounts and
+// forbid rebinding an already-registered Google account onto guest data.
 
 // NextAuth v4 hardcodes the default base path (/api/auth) for the OAuth
 // redirect/callback URLs it generates on the server. To keep sign-in and the
 // Google callback working, this route MUST live at /api/auth/[...nextauth].
 // We additionally pin NEXTAUTH_URL to the live request host so sign-in/return
-// URLs match whatever domain the app is served from (localhost in dev, the
-// real public domain in production) instead of a hardcoded URL.
+// URLs match whatever domain the app is served from. The host is only trusted
+// when it comes from an allow-listed domain, so spoofed Host /
+// X-Forwarded-Host headers cannot steer OAuth redirect URLs.
+
+const normalizedHost = (value: string | null): string | undefined => {
+    const h = value?.trim().toLowerCase().replace(/\/+$/, "");
+    return h ? h : undefined;
+};
+
+function configHost(): string | undefined {
+    const configured = process.env.NEXTAUTH_URL || process.env.AUTH_URL;
+    if (!configured) return undefined;
+    try {
+        return new URL(configured).host.toLowerCase();
+    } catch {
+        return undefined;
+    }
+}
+
+function buildAutoUrl(req: NextRequest): string | undefined {
+    const configured = process.env.NEXTAUTH_URL || process.env.AUTH_URL;
+    // Only auto-derive when no URL is configured or we're on the dev default.
+    if (configured && configured !== "http://localhost:3000") return undefined;
+
+    const host = normalizedHost(
+        req.headers.get("x-forwarded-host") || req.headers.get("host")
+    );
+    if (!host) return undefined;
+
+    const trusted =
+        host === configHost() || (ALLOWED_SITE_HOSTS as readonly string[]).includes(host);
+    if (!trusted) return undefined;
+
+    let proto = (req.headers.get("x-forwarded-proto") || "http")
+        .split(",")[0]
+        .trim()
+        .toLowerCase();
+    if (proto !== "https" && proto !== "http") proto = "http";
+
+    return `${proto}://${host}`;
+}
 
 async function handler(
     req: NextRequest,
     ctx: { params: Promise<{ nextauth: string[] }> },
 ) {
-    const configured = process.env.NEXTAUTH_URL || process.env.AUTH_URL;
-    const host =
-        req.headers.get("x-forwarded-host") || req.headers.get("host") || undefined;
-    const proto = req.headers.get("x-forwarded-proto") || "http";
-
-    if (host && (!configured || configured === "http://localhost:3000")) {
-        process.env.NEXTAUTH_URL = `${proto}://${host}`;
+    const autoUrl = buildAutoUrl(req);
+    if (autoUrl) {
+        process.env.NEXTAUTH_URL = autoUrl;
     }
 
     const params = await ctx.params;
     const isCallback = params.nextauth?.[0] === "callback";
     const hasBindIntent = req.cookies.get(BIND_COOKIE)?.value === "1";
-    if (isCallback && hasBindIntent) {
-        markBindIntentPending();
-    }
 
-    const res = await baseAuth(req, { params: ctx.params });
+    const res = await bindIntentStore.run(
+        { pending: isCallback && hasBindIntent },
+        () => baseAuth(req, { params: ctx.params }),
+    );
 
     if (isCallback && hasBindIntent) {
-        clearBindIntent();
         // NextAuth returns a plain Response here (cookies already serialized
         // into "Set-Cookie" headers), so append the cookie expiry instead of
         // mutating res.cookies.

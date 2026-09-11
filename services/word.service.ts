@@ -306,8 +306,6 @@ export const createWordsBulk = async (
     }[],
 ) => {
     try {
-        logger.info("Raw data: " + JSON.stringify(wordDataArray[0]));
-        logger.info("Hitted createWordsBulk function");
         logger.info(
             `Bulk word import started with ${wordDataArray.length} words`,
         );
@@ -327,7 +325,6 @@ export const createWordsBulk = async (
         }));
 
         logger.info(`Creating ${data.length} words in bulk`);
-        logger.info(`Word data: ${JSON.stringify(data[0])}`);
 
         const result = await prisma.word.createMany({
             data,
@@ -647,7 +644,7 @@ export const markWordsAsStillLearning = async (
     try {
         const uniqueIds = Array.from(
             new Set(wordIds.filter((id) => Number.isInteger(id))),
-        );
+        ).slice(0, 500);
 
         if (uniqueIds.length === 0) {
             return {

@@ -154,6 +154,20 @@ export const quizExamPublishSchema = z.object({
   published: z.boolean(),
 });
 
+export const quizExamSubmitAnswerSchema = z.object({
+  questionId: z.number().int().positive("questionId must be positive"),
+  selectedOption: z.string().trim().min(1, "selectedOption is required"),
+});
+
+export const quizExamSubmitSchema = z.object({
+  clientId: z.string().trim().max(64).nullish(),
+  timeTotalQuiz: z.number().int().nonnegative().nullish(),
+  status: quizResultStatusEnumSchema.nullish(),
+  answers: z.array(quizExamSubmitAnswerSchema).default([]),
+});
+
+export type QuizExamSubmitInput = z.infer<typeof quizExamSubmitSchema>;
+
 export type QuizExamInput = z.infer<typeof quizExamSchema>;
 export type QuizExamUpdateInput = z.infer<typeof quizExamUpdateSchema>;
 export type QuizExamPublishInput = z.infer<typeof quizExamPublishSchema>;

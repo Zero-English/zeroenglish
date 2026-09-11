@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { useLearnedWords } from "@/lib/use-learned-words";
@@ -101,15 +101,16 @@ interface CategoryGroup {
 export function VocabularyClient() {
   const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
   const { level: storedLevel, hydrated } = useSelectedLevel();
-  const router = useRouter();
+  // const router = useRouter();
   const t = useT();
 
 
-  useEffect(() => {
-    if (hydrated && storedLevel) {
-      router.replace(`/vocabulary/${storedLevel.toLowerCase()}`);
-    }
-  }, [hydrated, storedLevel, router]);
+  // Fixed by Mahir because it should go to /vocabulary not /vocabulary/:level
+  // useEffect(() => {
+  //   if (hydrated && storedLevel) {
+  //     router.replace(`/vocabulary/${storedLevel.toLowerCase()}`);
+  //   }
+  // }, [hydrated, storedLevel, router]);
 
   const [stats, setStats] = useState<Record<string, number>>({});
   const [wordRefs, setWordRefs] = useState<WordRef[]>([]);

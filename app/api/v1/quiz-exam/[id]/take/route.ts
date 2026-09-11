@@ -3,6 +3,25 @@ import prisma from "@/utils/prisma";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Builds the full option set for a question and shuffles it. The correct
+ * answer is merged with the stored distractors here so the client never
+ * receives a payload that identifies the right option. Options are shuffled
+ * server-side per request so screen-scraping the network response reveals
+ * nothing about which option is correct.
+ */
+function buildShuffledOptions(options: string[], answer: string): string[] {
+    const distractors = options.filter(
+        (o) => o.trim().toLowerCase() !== answer.trim().toLowerCase()
+    );
+    const full = [answer, ...distractors];
+    for (let i = full.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [full[i], full[j]] = [full[j], full[i]];
+    }
+    return full;
+}
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -66,12 +85,17 @@ export async function GET(
       );
     }
 
+    // The `answer` field is intentionally NOT included in the response. The
+    // client receives a pre-shuffled full option set and cannot tell which
+    // option is correct. Scoring is done server-side on submission.
     const questions = exam.quizQuestions.map((eqq) => ({
       id: eqq.quizQuestion.id,
       questionText: eqq.quizQuestion.questionText,
-      options: eqq.quizQuestion.options,
+      options: buildShuffledOptions(
+        eqq.quizQuestion.options,
+        eqq.quizQuestion.answer
+      ),
       difficultyLevel: eqq.quizQuestion.difficultyLevel,
-      answer: eqq.quizQuestion.answer,
     }));
 
     return NextResponse.json({

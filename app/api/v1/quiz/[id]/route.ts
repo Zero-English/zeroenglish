@@ -1,10 +1,14 @@
 import { NextResponse, NextRequest } from "next/server";
+import { requireAdmin } from "@/lib/api-auth";
 import { getQuizQuestionById, updateQuizQuestionById, deleteQuizQuestionById } from "@/services/quiz.service";
 
 export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const { id } = await params;
     const questionId = parseInt(id, 10);
 
@@ -29,6 +33,9 @@ export async function PUT(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const { id } = await params;
     const questionId = parseInt(id, 10);
 
@@ -54,6 +61,9 @@ export async function DELETE(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const { id } = await params;
     const questionId = parseInt(id, 10);
 

@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getAllWords, getWordsByPage, createWord, createWordsBulk } from "@/services/word.service";
 import { wordsArraySchema } from "@/utils/validation/zod";
+import { requireAdmin } from "@/lib/api-auth";
 import logger from "@/utils/logger";
 
 /**
@@ -29,12 +30,18 @@ import logger from "@/utils/logger";
  *         description: List of words
  */
 export async function GET(request: NextRequest) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const searchParams = request.nextUrl.searchParams;
     const pageParam = searchParams.get("page");
 
     if (pageParam) {
-        const page = parseInt(pageParam, 10);
-        const limit = parseInt(searchParams.get("limit") || "10", 10);
+        const page = Math.max(1, parseInt(pageParam, 10) || 1);
+        const limit = Math.min(
+            100,
+            Math.max(1, parseInt(searchParams.get("limit") || "10", 10) || 10)
+        );
         const result = await getWordsByPage(page, limit);
         return NextResponse.json(result);
     }
@@ -110,6 +117,9 @@ export async function GET(request: NextRequest) {
  *         description: Word already exists
  */
 export async function POST(request: NextRequest) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const isBulk = request.nextUrl.searchParams.get("bulk") === "true";
 
     if (isBulk) {
@@ -146,6 +156,17 @@ async function handleBulkCreate(request: NextRequest) {
         );
     }
 
+    if (file.size > 5 * 1024 * 1024) {
+        logger.warn(`Bulk word import rejected: file too large`, {
+            fileName: file.name,
+            size: file.size,
+        });
+        return NextResponse.json(
+            { data: null, message: "File is too large (max 5MB)", success: false },
+            { status: 400 }
+        );
+    }
+
     const text = await file.text();
 
     let body: unknown;
@@ -174,6 +195,17 @@ async function handleBulkCreate(request: NextRequest) {
         logger.warn(`Bulk word import rejected: empty array`, { fileName: file.name });
         return NextResponse.json(
             { data: null, message: "The JSON file does not contain any words", success: false },
+            { status: 400 }
+        );
+    }
+
+    if (body.length > 10_000) {
+        logger.warn(`Bulk word import rejected: too many rows`, {
+            fileName: file.name,
+            rowCount: body.length,
+        });
+        return NextResponse.json(
+            { data: null, message: "Too many words in one file (max 10000)", success: false },
             { status: 400 }
         );
     }

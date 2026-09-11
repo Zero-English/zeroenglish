@@ -48,6 +48,7 @@ import type {
   QuizExamPublicItem,
   QuizExamTakeData,
   QuizExamTakeQuestion,
+  QuizExamIncorrectAnswer,
 } from "@/types/quiz-exam";
 
 const MODE_META: Record<
@@ -1084,7 +1085,7 @@ function ExamResultsView({
   examId: number | null;
   score: number;
   total: number;
-  incorrectAnswers: { questionId: number; questionText: string; correctAnswer: string; userAnswer: string }[];
+  incorrectAnswers: QuizExamIncorrectAnswer[];
 }) {
   const t = useT();
   const { path, hydrated } = useAuthPath();

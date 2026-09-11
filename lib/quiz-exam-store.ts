@@ -28,6 +28,7 @@ interface ExamQuizState {
   isAnswered: boolean;
   timeLeft: number;
   deadlineAt: number | null;
+  answers: Record<number, string>;
   incorrectAnswers: QuizExamIncorrectAnswer[];
   resultsRecorded: boolean;
   abandonRecorded: boolean;
@@ -50,6 +51,7 @@ const initialExamState: ExamQuizState = {
   isAnswered: false,
   timeLeft: 0,
   deadlineAt: null,
+  answers: {},
   incorrectAnswers: [],
   resultsRecorded: false,
   abandonRecorded: false,
