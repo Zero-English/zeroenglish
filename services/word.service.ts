@@ -507,6 +507,60 @@ export const markWordAsUnLearned = async (userId: number, wordId: number) => {
     }
 };
 
+export const markWordsAsLearned = async (
+    userId: number,
+    wordIds: number[],
+) => {
+    try {
+        const uniqueIds = Array.from(
+            new Set(wordIds.filter((id) => Number.isInteger(id))),
+        ).slice(0, 500);
+
+        if (uniqueIds.length === 0) {
+            return {
+                data: { count: 0 },
+                message: "No words to mark as learned",
+                success: true,
+            };
+        }
+
+        const now = new Date();
+
+        await prisma.$transaction([
+            prisma.userWord.updateMany({
+                where: {
+                    userId,
+                    wordId: { in: uniqueIds },
+                },
+                data: { learningStatus: "LEARNED", updatedAt: now },
+            }),
+            prisma.userWord.createMany({
+                data: uniqueIds.map((wordId) => ({
+                    userId,
+                    wordId,
+                    learningStatus: "LEARNED",
+                    createdAt: now,
+                    updatedAt: now,
+                })),
+                skipDuplicates: true,
+            }),
+        ]);
+
+        return {
+            data: { count: uniqueIds.length },
+            message: "Words marked as learned successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to mark words as learned: ${error}`);
+        return {
+            data: null,
+            message: "Failed to mark words as learned",
+            success: false,
+        };
+    }
+};
+
 export const markBookmark = async (userId: number, wordId: number) => {
     try {
         const existing = await prisma.userBookmark.findUnique({
@@ -586,6 +640,61 @@ export const removeBookmark = async (userId: number, wordId: number) => {
         return {
             data: null,
             message: "Failed to remove bookmark",
+            success: false,
+        };
+    }
+};
+
+export const markWordsAsBookmarked = async (
+    userId: number,
+    wordIds: number[],
+) => {
+    try {
+        const uniqueIds = Array.from(
+            new Set(wordIds.filter((id) => Number.isInteger(id))),
+        ).slice(0, 500);
+
+        if (uniqueIds.length === 0) {
+            return {
+                data: { count: 0, created: 0, updated: 0 },
+                message: "No words to bookmark",
+                success: true,
+            };
+        }
+
+        const now = new Date();
+
+        const [updated, created] = await prisma.$transaction([
+            prisma.userBookmark.updateMany({
+                where: {
+                    userId,
+                    wordId: { in: uniqueIds },
+                },
+                data: { bookmarkedAt: now },
+            }),
+            prisma.userBookmark.createMany({
+                data: uniqueIds.map((wordId) => ({
+                    userId,
+                    wordId,
+                })),
+                skipDuplicates: true,
+            }),
+        ]);
+
+        return {
+            data: {
+                count: uniqueIds.length,
+                created: created.count,
+                updated: updated.count,
+            },
+            message: "Words bookmarked successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to bookmark words: ${error}`);
+        return {
+            data: null,
+            message: "Failed to bookmark words",
             success: false,
         };
     }
