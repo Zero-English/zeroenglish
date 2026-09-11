@@ -11,7 +11,7 @@ const allowedOrigins = [
     "https://zeroenglish.org",
 ];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const origin = request.headers.get("origin");
     // Create response first
     let response: NextResponse;
