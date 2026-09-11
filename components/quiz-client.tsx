@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
@@ -217,27 +217,6 @@ const QUIZ_TYPE_ORDER: QuizType[] = [
   "antonym",
 ];
 
-function shuffleArray<T>(arr: T[]): T[] {
-  const shuffled = [...arr];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
-function wordDistractors(pool: Word[], correctText: string): string[] {
-  const seen = new Set<string>([correctText]);
-  const out: string[] = [];
-  for (const w of pool) {
-    if (seen.has(w.word)) continue;
-    seen.add(w.word);
-    out.push(w.word);
-    if (out.length === 3) break;
-  }
-  return out;
-}
-
 function firstMeaning(meaning: string): string {
   return meaning.split(";")[0].trim();
 }
@@ -262,7 +241,7 @@ function exitQuizFullscreen(): void {
   }
 }
 
-export function QuizClient({ words }: { words: Word[] }) {
+export function QuizClient() {
   const step = useQuizStore((s) => s.step);
   const quizType = useQuizStore((s) => s.quizType);
   const selectedLevels = useQuizStore((s) => s.selectedLevels);
@@ -322,86 +301,39 @@ export function QuizClient({ words }: { words: Word[] }) {
     currentIndexRef.current = currentIndex;
   }, [currentIndex]);
 
-  const getPool = useCallback(
-    (levels: LevelOption[]): Word[] => {
-      const validWords = words.filter(
-        (w) => w.meaning_bn !== "..." && w.meaning_bn.length > 0
-      );
-      const picked = levels.filter((lv) => lv !== "Random");
-      if (levels.length === 0 || picked.length === 0) return validWords;
-      return validWords.filter((w) => (picked as readonly QuizLevel[]).includes(w.level));
-    },
-    [words]
-  );
+  const [poolCount, setPoolCount] = useState<number | null>(null);
+  const [countLoading, setCountLoading] = useState(false);
+  const poolRequestRef = useRef(0);
 
-  const getQuizPool = useCallback(
-    (levels: LevelOption[], type: QuizType): Word[] => {
-      const pool = getPool(levels);
-      if (type === "synonym") return pool.filter((w) => w.synonyms.length > 0);
-      if (type === "antonym") return pool.filter((w) => w.antonyms.length > 0);
-      return pool;
-    },
-    [getPool]
-  );
-
-  const getMaxCount = useCallback(
-    (levels: LevelOption[], type: QuizType) => getQuizPool(levels, type).length,
-    [getQuizPool]
-  );
-
-  const generateQuestions = useCallback(
-    (levels: LevelOption[], qty: number, all: boolean, type: QuizType) => {
-      const pool = getQuizPool(levels, type);
-      const shuffled = shuffleArray(pool);
-      const count = all ? shuffled.length : Math.min(qty, shuffled.length);
-      const selected = shuffled.slice(0, count);
-
-      return selected.map((word) => {
-        const others = shuffleArray(pool.filter((w) => w.id !== word.id)).slice(0, 6);
-        let options: { text: string; correct: boolean }[];
-
-        if (type === "bangla_to_english") {
-          options = shuffleArray([
-            { text: word.word, correct: true },
-            ...others.slice(0, 3).map((d) => ({ text: d.word, correct: false })),
-          ]);
-        } else if (type === "synonym") {
-          const correctText =
-            word.synonyms[Math.floor(Math.random() * word.synonyms.length)];
-          options = shuffleArray([
-            { text: correctText, correct: true },
-            ...wordDistractors(others, correctText).map((t) => ({
-              text: t,
-              correct: false,
-            })),
-          ]);
-        } else if (type === "antonym") {
-          const correctText =
-            word.antonyms[Math.floor(Math.random() * word.antonyms.length)];
-          options = shuffleArray([
-            { text: correctText, correct: true },
-            ...wordDistractors(others, correctText).map((t) => ({
-              text: t,
-              correct: false,
-            })),
-          ]);
-        } else {
-          options = shuffleArray([
-            { text: firstMeaning(word.meaning_bn), correct: true },
-            ...others.slice(0, 3).map((d) => ({
-              text: firstMeaning(d.meaning_bn),
-              correct: false,
-            })),
-          ]);
+  useEffect(() => {
+    if (step !== "settings") return;
+    const requestId = ++poolRequestRef.current;
+    const params = new URLSearchParams({
+      quizType: quizType ?? "english_to_bangla",
+    });
+    if (selectedLevels.length > 0) params.set("levels", selectedLevels.join(","));
+    fetch(`/api/v1/quiz/pool?${params.toString()}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((body) => {
+        const count =
+          body && typeof body.data?.maxCount === "number"
+            ? body.data.maxCount
+            : 0;
+        if (poolRequestRef.current === requestId) {
+          setPoolCount(count);
+          setCountLoading(false);
         }
-
-        return { word, options };
+      })
+      .catch(() => {
+        if (poolRequestRef.current === requestId) {
+          setPoolCount(0);
+          setCountLoading(false);
+        }
       });
-    },
-    [getQuizPool]
-  );
+  }, [step, quizType, selectedLevels]);
 
   const handleQuizTypeSelect = (type: QuizType) => {
+    setCountLoading(true);
     useQuizStore.setState({
       quizType: type,
       selectedLevels: [],
@@ -410,6 +342,7 @@ export function QuizClient({ words }: { words: Word[] }) {
   };
 
   const toggleLevel = (lv: LevelOption) => {
+    setCountLoading(true);
     useQuizStore.setState((prev) => {
       if (lv === "Random") {
         return {
@@ -425,36 +358,62 @@ export function QuizClient({ words }: { words: Word[] }) {
     });
   };
 
-  const handleStartQuiz = () => {
-    if (!quizType) return;
-    const generated = generateQuestions(
-      selectedLevels,
-      quantity,
-      useAllQuestions,
-      quizType
-    );
-    if (generated.length === 0) {
-      toast.error(
-        t(
-          "এই লেভেলে কুইজের জন্য কোনো শব্দ নেই। অন্য লেভেল বা ধরন বেছে নিন।",
-          "No words available for this quiz. Pick a different level or quiz type."
-        )
-      );
-      return;
+  const [starting, setStarting] = useState(false);
+
+  const handleStartQuiz = async () => {
+    if (!quizType || starting) return;
+    setStarting(true);
+    try {
+      const res = await fetch("/api/v1/quiz/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          quizType,
+          levels: selectedLevels,
+          quantity,
+          useAllQuestions,
+        }),
+      });
+      const body = (await res.json()) as {
+        data?: { questions?: Question[] } | null;
+        message?: string;
+        success?: boolean;
+      };
+      if (!res.ok || !body.success || !body.data) {
+        toast.error(
+          body?.message ??
+            t("কুইজ তৈরি করা যায়নি", "Couldn't create the quiz")
+        );
+        return;
+      }
+      const generated = body.data.questions ?? [];
+      if (generated.length === 0) {
+        toast.error(
+          t(
+            "এই লেভেলে কুইজের জন্য কোনো শব্দ নেই। অন্য লেভেল বা ধরন বেছে নিন।",
+            "No words available for this quiz. Pick a different level or quiz type."
+          )
+        );
+        return;
+      }
+      useQuizStore.setState({
+        questions: generated,
+        currentIndex: 0,
+        score: 0,
+        incorrectAnswers: [],
+        selectedAnswer: null,
+        isAnswered: false,
+        timeLeft: noTimeLimit ? -1 : timePerQuestion,
+        deadlineAt: noTimeLimit ? null : Date.now() + timePerQuestion * 1000,
+        resultsRecorded: false,
+        step: "quiz",
+      });
+      requestQuizFullscreen();
+    } catch {
+      toast.error(t("কুইজ তৈরি করা যায়নি", "Couldn't create the quiz"));
+    } finally {
+      setStarting(false);
     }
-    useQuizStore.setState({
-      questions: generated,
-      currentIndex: 0,
-      score: 0,
-      incorrectAnswers: [],
-      selectedAnswer: null,
-      isAnswered: false,
-      timeLeft: noTimeLimit ? -1 : timePerQuestion,
-      deadlineAt: noTimeLimit ? null : Date.now() + timePerQuestion * 1000,
-      resultsRecorded: false,
-      step: "quiz",
-    });
-    requestQuizFullscreen();
   };
 
   const handleOptionClick = (option: { text: string; correct: boolean }) => {
@@ -561,7 +520,9 @@ export function QuizClient({ words }: { words: Word[] }) {
         useAllQuestions={useAllQuestions}
         timePerQuestion={timePerQuestion}
         noTimeLimit={noTimeLimit}
-        maxCount={getMaxCount(selectedLevels, quizType ?? "english_to_bangla")}
+        maxCount={poolCount}
+        countLoading={countLoading}
+        starting={starting}
         onLevelChange={toggleLevel}
         onQuantityChange={(q) => useQuizStore.setState({ quantity: q })}
         onUseAllChange={(v) => useQuizStore.setState({ useAllQuestions: v })}
@@ -766,6 +727,8 @@ function SettingsView({
   timePerQuestion,
   noTimeLimit,
   maxCount,
+  countLoading,
+  starting,
   onLevelChange,
   onQuantityChange,
   onUseAllChange,
@@ -780,7 +743,9 @@ function SettingsView({
   useAllQuestions: boolean;
   timePerQuestion: number;
   noTimeLimit: boolean;
-  maxCount: number;
+  maxCount: number | null;
+  countLoading: boolean;
+  starting: boolean;
   onLevelChange: (lv: LevelOption) => void;
   onQuantityChange: (q: number) => void;
   onUseAllChange: (all: boolean) => void;
@@ -793,6 +758,8 @@ function SettingsView({
   const c = LEVEL_CONFIG[levels.includes("Random") ? "Random" : (levels[0] ?? "A1")];
   const QuizIcon = qt.icon;
   const t = useT();
+  const countLabel =
+    countLoading || maxCount === null ? "…" : String(maxCount);
   return (
     <div className="relative min-h-dvh overflow-hidden px-4 py-10 sm:px-6 sm:py-14">
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
@@ -822,7 +789,7 @@ function SettingsView({
                 </h2>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
                   {t(qt.descBn, qt.desc)} ·{" "}
-                  {t(`${maxCount}টি শব্দ পাওয়া যায়`, `${maxCount} words available`)}
+                  {t(`${countLabel}টি শব্দ পাওয়া যায়`, `${countLabel} words available`)}
                 </p>
               </div>
             </div>
@@ -894,12 +861,12 @@ function SettingsView({
                       : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
                   }`}
                 >
-                  {t(`সব (${maxCount})`, `All (${maxCount})`)}
+                  {t(`সব (${countLabel})`, `All (${countLabel})`)}
                 </button>
                 <input
                   type="number"
                   min={1}
-                  max={maxCount}
+                  max={maxCount ?? undefined}
                   placeholder={t("কাস্টম", "Custom")}
                   value={quantity}
                   onChange={(e) => {
@@ -968,13 +935,16 @@ function SettingsView({
             <div className="pt-2">
               <Button
                 onClick={onStart}
+                disabled={starting || countLoading}
                 className={`w-full h-12 text-base font-semibold bg-gradient-to-r ${qt.gradient} hover:opacity-90`}
               >
-                {t("কুইজ শুরু করুন", "Start Quiz")}
+                {starting
+                  ? t("তৈরি হচ্ছে…", "Preparing…")
+                  : t("কুইজ শুরু করুন", "Start Quiz")}
               </Button>
               <p className="text-center text-xs text-zinc-400 dark:text-zinc-500 mt-3">
                 {useAllQuestions
-                  ? t(`${maxCount}টি প্রশ্ন · সব লেভেল`, `${maxCount} question${maxCount !== 1 ? "s" : ""} · all levels`)
+                  ? t(`${countLabel}টি প্রশ্ন · সব লেভেল`, `${countLabel} question${maxCount !== 1 ? "s" : ""} · all levels`)
                   : t(
                       `${quantity}টি প্রশ্ন · ${levels.length === 0 || levels.includes("Random") ? "সব লেভেল" : levels.join(", ")}`,
                       `${quantity} question${quantity !== 1 ? "s" : ""} · ${levels.length === 0 || levels.includes("Random") ? "all levels" : levels.join(", ")}`
