@@ -1,13 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import {
-  putWord,
-  deleteWord,
-  bulkPutWords,
-  getWordsByType,
-  setWordSynced,
-} from "./db";
+import { putWord, deleteWord, bulkPutWords, getWordsByType, getWord } from "./db";
 import { useAuthPath, useAuthStatus } from "./auth-store";
 
 const TYPE = "still-learning" as const;
@@ -33,110 +27,33 @@ function emitChange() {
   for (const listener of listeners) listener();
 }
 
-async function listDbStillLearning(): Promise<number[] | null> {
+async function syncDbStillLearningDelete(id: number): Promise<void> {
   try {
-    const res = await fetch("/api/v1/words/still-learning", {
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    const body = (await res.json()) as { data?: number[]; success?: boolean };
-    if (!body.success || !Array.isArray(body.data)) return null;
-    return body.data;
+    await fetch(`/api/v1/words/${id}/still-learning`, { method: "DELETE" });
   } catch (err) {
-    console.error("Failed to fetch still learning words from server:", err);
-    return null;
+    console.error(`Failed to sync removed still learning word #${id}:`, err);
   }
 }
 
-async function pushDbStillLearning(wordIds: number[]): Promise<boolean> {
-  if (wordIds.length === 0) return true;
-  try {
-    const res = await fetch("/api/v1/words/still-learning", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ wordIds }),
-    });
-    if (!res.ok) {
-      console.error(
-        "Failed to mark words as still learning on server:",
-        await res.text()
-      );
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error("Failed to sync still learning words:", err);
-    return false;
-  }
-}
-
-async function removeDbStillLearning(id: number): Promise<boolean> {
-  try {
-    const res = await fetch(`/api/v1/words/${id}/still-learning`, {
-      method: "DELETE",
-    });
-    if (!res.ok) {
-      console.error(
-        `Failed to remove still learning word #${id} on server:`,
-        await res.text()
-      );
-      return false;
-    }
-    return true;
-  } catch (err) {
-    console.error(`Failed to sync remove still learning word #${id}:`, err);
-    return false;
-  }
-}
-
-async function doLoad(path: string, status: string): Promise<void> {
+async function doLoad(path: string): Promise<void> {
   try {
     const records = await getWordsByType(TYPE, path);
-    const local = new Map(records.map((r) => [r.id, r]));
-
-    const db = status === "google" ? await listDbStillLearning() : null;
-    if (db) {
-      const dbSet = new Set(db.map(String));
-      const dbOnly = db.filter((n) => !local.has(String(n)));
-      const localOnly = Array.from(local.keys()).filter((k) => !dbSet.has(k));
-
-      if (dbOnly.length > 0) {
-        await bulkPutWords(
-          dbOnly.map((n) => ({ id: String(n), type: TYPE, synced: true })),
-          path
-        );
-        for (const n of dbOnly) {
-          local.set(String(n), { id: String(n), type: TYPE, synced: true });
-        }
-      }
-      for (const record of records) {
-        if (record.synced !== true && dbSet.has(record.id)) {
-          await setWordSynced(path, TYPE, record.id, true);
-        }
-      }
-      if (localOnly.length > 0) {
-        const okPush = await pushDbStillLearning(localOnly.map(Number));
-        if (okPush) {
-          for (const n of localOnly) {
-            await setWordSynced(path, TYPE, n, true);
-          }
-        }
-      }
-    }
-
-    snapshot = { ids: new Set(Array.from(local.keys())), loaded: true };
+    snapshot = {
+      ids: new Set(records.map((r) => r.id)),
+      loaded: true,
+    };
   } catch (err) {
     console.error("Failed to load still learning words:", err);
     snapshot = { ...snapshot, loaded: true };
   }
 }
 
-function loadStillLearning(path: string, status: string): Promise<void> {
-  const loadKey = `${status}|${path}`;
+function loadStillLearning(path: string): Promise<void> {
+  const loadKey = `${path}`;
   if (currentLoad && currentLoadKey === loadKey) return currentLoad;
   if (loadedKey === loadKey && snapshot.loaded) return Promise.resolve();
   currentLoadKey = loadKey;
-  currentLoad = doLoad(path, status).finally(() => {
+  currentLoad = doLoad(path).finally(() => {
     loadedKey = currentLoadKey;
     currentLoad = null;
     currentLoadKey = null;
@@ -150,8 +67,8 @@ export function useStillLearningWords() {
   const { status } = useAuthStatus();
 
   useEffect(() => {
-    if (hydrated) void loadStillLearning(path, status);
-  }, [path, status, hydrated]);
+    if (hydrated) void loadStillLearning(path);
+  }, [path, hydrated]);
 
   const snap = useSyncExternalStore(
     (onStoreChange) => {
@@ -180,16 +97,9 @@ export function useStillLearningWords() {
           toAdd.map((id) => ({ id, type: TYPE })),
           path
         );
-        if (status === "google") {
-          void pushDbStillLearning(toAdd.map(Number)).then((okSync) => {
-            if (okSync) {
-              for (const id of toAdd) void setWordSynced(path, TYPE, id, true);
-            }
-          });
-        }
       }
     },
-    [snap, path, status]
+    [snap, path]
   );
 
   const toggleStillLearning = useCallback(
@@ -203,16 +113,14 @@ export function useStillLearningWords() {
       emitChange();
       if (adding) {
         void putWord({ id: k, type: TYPE }, path);
-        if (status === "google") {
-          void pushDbStillLearning([id]).then((okSync) => {
-            if (okSync) void setWordSynced(path, TYPE, k, true);
-          });
-        }
       } else {
-        void deleteWord(path, TYPE, k);
-        if (status === "google") {
-          void removeDbStillLearning(id);
-        }
+        void (async () => {
+          const existing = await getWord(path, TYPE, k);
+          if (status === "google" && existing?.synced === true) {
+            await syncDbStillLearningDelete(id);
+          }
+          await deleteWord(path, TYPE, k);
+        })();
       }
     },
     [snap, path, status]
@@ -225,10 +133,13 @@ export function useStillLearningWords() {
       next.delete(k);
       snapshot = { ...snap, ids: next };
       emitChange();
-      void deleteWord(path, TYPE, k);
-      if (status === "google") {
-        void removeDbStillLearning(id);
-      }
+      void (async () => {
+        const existing = await getWord(path, TYPE, k);
+        if (status === "google" && existing?.synced === true) {
+          await syncDbStillLearningDelete(id);
+        }
+        await deleteWord(path, TYPE, k);
+      })();
     },
     [snap, path, status]
   );

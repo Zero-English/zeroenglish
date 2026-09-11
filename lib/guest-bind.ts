@@ -1,6 +1,7 @@
 "use client";
 
 import { getWordsByType } from "@/lib/db";
+import { pushLearnedBulk, pushBookmarkBulk } from "@/lib/sync";
 import { useQuizHistoryStore } from "@/lib/quiz-history-store";
 
 const QUIZ_TYPE_ENUM: Record<string, string> = {
@@ -56,17 +57,6 @@ async function postQuizResult(entry: {
   }
 }
 
-async function postWordSync(id: number, kind: "learned" | "bookmark"): Promise<boolean> {
-  try {
-    const res = await fetch(`/api/v1/words/${id}/${kind}`, {
-      method: "POST",
-    });
-    return res.ok || res.status === 409;
-  } catch {
-    return false;
-  }
-}
-
 async function postStillLearningSync(wordIds: number[]): Promise<boolean> {
   if (wordIds.length === 0) return true;
   try {
@@ -104,20 +94,28 @@ export async function syncGuestDataToServer(
   }
 
   const learned = await getWordsByType("learned", scope);
-  for (const w of learned) {
-    if (await postWordSync(Number(w.id), "learned")) {
-      result.learned += 1;
+  if (learned.length > 0) {
+    if (
+      await pushLearnedBulk(
+        learned.map((w) => Number(w.id)).filter((n) => Number.isFinite(n))
+      )
+    ) {
+      result.learned += learned.length;
     } else {
-      result.failed += 1;
+      result.failed += learned.length;
     }
   }
 
   const bookmarked = await getWordsByType("bookmarked", scope);
-  for (const w of bookmarked) {
-    if (await postWordSync(Number(w.id), "bookmark")) {
-      result.bookmarked += 1;
+  if (bookmarked.length > 0) {
+    if (
+      await pushBookmarkBulk(
+        bookmarked.map((w) => Number(w.id)).filter((n) => Number.isFinite(n))
+      )
+    ) {
+      result.bookmarked += bookmarked.length;
     } else {
-      result.failed += 1;
+      result.failed += bookmarked.length;
     }
   }
 

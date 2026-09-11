@@ -175,6 +175,45 @@ export const getWordStats = async () => {
     }
 };
 
+export const getAllPublicWords = async () => {
+    try {
+        const words = await prisma.word.findMany({
+            orderBy: { id: "asc" },
+        });
+
+        return {
+            data: words.map(toPublicWord),
+            message: "Words fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch words: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch words",
+            success: false,
+        };
+    }
+};
+
+export const getVocabVersion = async () => {
+    try {
+        const meta = await prisma.vocabMeta.findUnique({ where: { id: 1 } });
+        return {
+            data: { version: meta?.version ?? 1 },
+            message: "Vocabulary version fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch vocabulary version: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch vocabulary version",
+            success: false,
+        };
+    }
+};
+
 export const getAllWords = async () => {
     try {
         const words = await prisma.word.findMany({
@@ -232,6 +271,14 @@ export const getWordsByPage = async (page: number = 1, limit: number = 10) => {
     }
 };
 
+const incrementVocabVersion = async (): Promise<void> => {
+    await prisma.vocabMeta.upsert({
+        where: { id: 1 },
+        create: { id: 1, version: 1 },
+        update: { version: { increment: 1 } },
+    });
+};
+
 export const createWord = async (wordData: {
     word: string;
     meaningBn: string[];
@@ -273,6 +320,7 @@ export const createWord = async (wordData: {
                 wordType: wordData.wordType,
             },
         });
+        await incrementVocabVersion();
 
         return {
             data: word,
@@ -332,6 +380,8 @@ export const createWordsBulk = async (
         });
 
         logger.info(`Bulk create result: ${JSON.stringify(result)}`);
+
+        if (result.count > 0) await incrementVocabVersion();
 
         return {
             data: { count: result.count },
@@ -395,6 +445,7 @@ export const updateWordById = async (
             where: { id },
             data: wordData,
         });
+        await incrementVocabVersion();
 
         return {
             data: word,
@@ -428,6 +479,7 @@ export const deleteWordById = async (id: number) => {
         await prisma.word.delete({
             where: { id },
         });
+        await incrementVocabVersion();
 
         return {
             data: null,

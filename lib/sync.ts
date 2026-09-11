@@ -6,7 +6,7 @@ import {
   useQuizHistoryStore,
   type QuizHistoryEntry,
 } from "@/lib/quiz-history-store";
-import { getWordsByType, setWordSynced } from "@/lib/db";
+import { getWordsByType, setWordSynced, getUserPendingByType } from "@/lib/db";
 import {
   fetchQuizResultsFromDb,
   dbResultDate,
@@ -134,10 +134,12 @@ async function pushQuizResult(entry: QuizHistoryEntry): Promise<number | null> {
   }
 }
 
-async function pushLearned(wordId: number): Promise<boolean> {
+export async function pushLearnedBulk(wordIds: number[]): Promise<boolean> {
   try {
-    const res = await fetch(`/api/v1/words/${wordId}/learned`, {
+    const res = await fetch("/api/v1/words/learned", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ wordIds }),
     });
     return res.ok;
   } catch {
@@ -145,10 +147,12 @@ async function pushLearned(wordId: number): Promise<boolean> {
   }
 }
 
-async function pushBookmark(wordId: number): Promise<boolean> {
+export async function pushBookmarkBulk(wordIds: number[]): Promise<boolean> {
   try {
-    const res = await fetch(`/api/v1/words/${wordId}/bookmark`, {
+    const res = await fetch("/api/v1/words/bookmarks", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ wordIds }),
     });
     return res.ok || res.status === 409;
   } catch {
@@ -210,7 +214,7 @@ async function reconcileWordType(
   type: "learned" | "bookmarked",
   scope: string,
   dbIds: Set<number> | null,
-  pushFn: (id: number) => Promise<boolean>
+  pushBulkFn: (ids: number[]) => Promise<boolean>
 ): Promise<{ ok: number; failed: number }> {
   if (!dbIds) return { ok: 0, failed: 1 };
   const local = await getWordsByType(type, scope);
@@ -224,14 +228,30 @@ async function reconcileWordType(
     if (dbIds.has(id)) {
       await setWordSynced(scope, type, entry.id, true);
       ok += 1;
-      continue;
     }
-    const pushed = await pushFn(id);
-    if (pushed) {
-      await setWordSynced(scope, type, entry.id, true);
-      ok += 1;
-    } else {
-      failed += 1;
+  }
+
+  const pending = (await getUserPendingByType(scope, type)).filter((w) => {
+    const n = Number(w.id);
+    return !Number.isNaN(n) && !dbIds.has(n);
+  });
+  if (pending.length > 0) {
+    const chunks: number[][] = [];
+    for (let i = 0; i < pending.length; i += 500) {
+      chunks.push(pending.slice(i, i + 500).map((w) => Number(w.id)));
+    }
+    for (const chunk of chunks) {
+      const pushed = await pushBulkFn(chunk);
+      if (pushed) {
+        for (const w of pending) {
+          if (chunk.includes(Number(w.id))) {
+            await setWordSynced(scope, type, w.id, true);
+            ok += 1;
+          }
+        }
+      } else {
+        failed += chunk.length;
+      }
     }
   }
 
@@ -258,7 +278,7 @@ async function performSync(scope: string): Promise<void> {
     "learned",
     scope,
     dbLearned,
-    pushLearned
+    pushLearnedBulk
   );
   failed += learned.failed;
 
@@ -266,7 +286,7 @@ async function performSync(scope: string): Promise<void> {
     "bookmarked",
     scope,
     dbBookmarks,
-    pushBookmark
+    pushBookmarkBulk
   );
   failed += bookmarked.failed;
 
