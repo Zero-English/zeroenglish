@@ -79,7 +79,10 @@ async function doLoad(): Promise<void> {
       return;
     }
 
-    const remote = remoteVer !== null ? await fetchAllRemoteWords() : null;
+    // The version endpoint is an optimization to avoid re-downloading the word
+    // bank. When it is missing/down (remoteVer === null) but the network is
+    // fine, still try to fetch and store words so the cache gets populated.
+    const remote = await fetchAllRemoteWords();
     if (remote && remote.length > 0) {
       await setCachedWords(remote);
       if (remoteVer !== null) await setCachedVersion(remoteVer);
@@ -95,7 +98,7 @@ async function doLoad(): Promise<void> {
     snapshot = {
       words: [],
       loading: false,
-      error: remoteVer === null ? "offline" : "failed",
+      error: "offline",
       cacheLoaded: true,
     };
   } catch {

@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
-import { getWordsByLevel } from "@/lib/data";
-import { mainCategoryLabel } from "@/lib/category";
 import { LevelPageContent } from "@/components/level-page-content";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 
-export const dynamic = "force-dynamic";
+const LEVEL_LABELS: Record<(typeof VALID_LEVELS)[number], { label: string; labelBn: string }> = {
+  A1: { label: "Beginner", labelBn: "শিক্ষানবিস" },
+  A2: { label: "Elementary", labelBn: "প্রাথমিক" },
+  B1: { label: "Intermediate", labelBn: "মাঝারি" },
+  B2: { label: "Upper Intermediate", labelBn: "উচ্চ-মাঝারি" },
+  C1: { label: "Advanced", labelBn: "উন্নত" },
+  C2: { label: "Mastery", labelBn: "পারদর্শী" },
+};
 
 export async function generateMetadata({
   params,
@@ -19,11 +24,10 @@ export async function generateMetadata({
     return { title: "Level Not Found" };
   }
 
-  const words = await getWordsByLevel(upper);
-  const category = mainCategoryLabel(words);
+  const labels = LEVEL_LABELS[upper as (typeof VALID_LEVELS)[number]];
   return {
-    title: `English Vocabulary - Level ${upper}`,
-    description: `Learn ${words.length} essential English words at ${upper} level. ${category} vocabulary list.`,
+    title: `English Vocabulary - Level ${upper} (${labels.label})`,
+    description: `Learn essential English words at ${upper} level (${labels.label}). ${labels.labelBn} vocabulary list with Bangla meanings, examples, synonyms and antonyms.`,
   };
 }
 

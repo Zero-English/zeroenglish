@@ -85,7 +85,7 @@ gtag('js', new Date());
 gtag('config', 'G-6BF3FVESN8');`}
                 </Script>
             </head>
-            <body className="min-h-full">
+            <body className="min-h-full" cz-shortcut-listen="true">
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="system"

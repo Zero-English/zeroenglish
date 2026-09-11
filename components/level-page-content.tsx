@@ -1,7 +1,12 @@
-import { notFound } from "next/navigation";
-import { getWordsByLevel } from "@/lib/data";
+"use client";
+
+import Link from "next/link";
+import { useCachedWords } from "@/lib/use-cached-words";
 import { LevelHero } from "@/components/level-hero";
 import { LevelWordsClient } from "@/components/level-words-client";
+import { useT } from "@/components/language-provider";
+import { ArrowLeft, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 
@@ -83,18 +88,103 @@ export interface LevelPageContentProps {
   level: string;
 }
 
-export async function LevelPageContent({ level }: LevelPageContentProps) {
-  const upper = level.toUpperCase();
+function NotFoundScreen() {
+  const t = useT();
+  return (
+    <div className="relative min-h-dvh overflow-hidden px-6 py-16">
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
+      <div className="max-w-md mx-auto text-center mt-24">
+        <div className="text-7xl mb-6">🗺️</div>
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+          {t("লেভেলটি খুঁজে পাওয়া যায়নি", "Level not found")}
+        </h1>
+        <p className="text-zinc-500 dark:text-zinc-400 mb-8">
+          {t(
+            "আপনি যে লেভেলটি খুঁজছেন সেটি বিদ্যমান নেই।",
+            "The level you're looking for doesn't exist."
+          )}
+        </p>
+        <Button asChild>
+          <Link href="/vocabulary">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            {t("লেভেল তালিকায় ফিরুন", "Back to levels")}
+          </Link>
+        </Button>
+      </div>
+    </div>
+  );
+}
 
-  if (!VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number])) {
-    notFound();
+function LoadingScreen() {
+  return (
+    <div className="relative min-h-dvh overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
+      <div className="mx-auto max-w-4xl">
+        <div className="space-y-4">
+          <div className="h-5 w-32 rounded-lg bg-zinc-200/80 dark:bg-zinc-800 animate-pulse" />
+          <div className="h-16 w-56 rounded-2xl bg-zinc-200/80 dark:bg-zinc-800 animate-pulse" />
+          <div className="h-4 w-72 rounded-lg bg-zinc-200/80 dark:bg-zinc-800 animate-pulse" />
+        </div>
+        <div className="mt-10 space-y-4">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-32 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 animate-pulse"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OfflineScreen({ onRetry }: { onRetry: () => void }) {
+  const t = useT();
+  return (
+    <div className="relative min-h-dvh overflow-hidden px-6 py-16">
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
+      <div className="max-w-md mx-auto text-center mt-24">
+        <div className="text-6xl mb-6">📡</div>
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+          {t("সংযোগ পাওয়া যাচ্ছে না", "You're offline")}
+        </h1>
+        <p className="text-zinc-500 dark:text-zinc-400 mb-8">
+          {t(
+            "এই শব্দভাণ্ডারটি এখনও ডাউনলোড হয়নি। প্রথমে অনলাইনে বেতার-শব্দভাণ্ডার পৃষ্ঠাটি খুলুন, তারপর আবার চেষ্টা করুন।",
+            "This vocabulary hasn't been downloaded yet. Open the vocabulary page once while online to download it, then try again."
+          )}
+        </p>
+        <Button onClick={onRetry}>
+          <RefreshCw className="mr-2 h-4 w-4" />
+          {t("আবার চেষ্টা করুন", "Try again")}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export function LevelPageContent({ level }: LevelPageContentProps) {
+  const { words, loading, error, refresh, getWordsByLevel } = useCachedWords();
+
+  const upper = level.toUpperCase();
+  const valid = VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number]);
+  const allWords = valid ? getWordsByLevel(upper) : [];
+  const config = valid
+    ? levelConfig[upper as (typeof VALID_LEVELS)[number]]
+    : null;
+
+  if (!valid) return <NotFoundScreen />;
+
+  if (!loading && error === "offline" && words.length === 0) {
+    return <OfflineScreen onRetry={refresh} />;
   }
 
-  const config = levelConfig[upper as (typeof VALID_LEVELS)[number]];
-  const allWords = await getWordsByLevel(upper);
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
-  if (allWords.length === 0) {
-    notFound();
+  if (words.length === 0 || allWords.length === 0) {
+    return <NotFoundScreen />;
   }
 
   return (
@@ -104,20 +194,20 @@ export async function LevelPageContent({ level }: LevelPageContentProps) {
 
       <LevelHero
         level={upper}
-        label={config.label}
-        labelBn={config.labelBn}
-        gradient={config.gradient}
-        text={config.text}
-        bg={config.bg}
-        border={config.border}
-        solid={config.solid}
-        stroke={config.stroke}
+        label={config!.label}
+        labelBn={config!.labelBn}
+        gradient={config!.gradient}
+        text={config!.text}
+        bg={config!.bg}
+        border={config!.border}
+        solid={config!.solid}
+        stroke={config!.stroke}
         words={allWords}
       />
 
       <div className="relative px-4 pb-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
-          <LevelWordsClient words={allWords} gradient={config.gradient} level={upper} />
+          <LevelWordsClient words={allWords} gradient={config!.gradient} level={upper} />
         </div>
       </div>
     </div>

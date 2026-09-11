@@ -245,4 +245,23 @@ db.version(3)
     }
   });
 
+/**
+ * v4: the public Word shape changed (meaning_bn -> meaningBn, parts_of_speech
+ * -> wordType, ...), so any words cached by earlier app versions are stale.
+ * The words table is a pure cache that is re-downloaded on next load, so we
+ * drop it (and the recorded version) to force a fresh fetch from the API.
+ */
+db.version(4)
+  .stores({
+    words: "id, word, level, category",
+    progress: "[scope+wordId+type], [scope+type], scope, synced",
+    activity: "[scope+date], scope",
+    quizHistory: "[scope+id], scope, synced",
+    metadata: "key",
+  })
+  .upgrade(async (tx) => {
+    await tx.table("words").clear();
+    await tx.table("metadata").where("key").equals("vocabularyVersion").delete();
+  });
+
 export default db;

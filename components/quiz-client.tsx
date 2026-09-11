@@ -6,7 +6,12 @@ import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
 import { Languages, ArrowLeftRight, ArrowRight, ArrowLeft, Shuffle, Layers, Volume2, Star, Sparkles, Gauge, ListOrdered, Check, X, Bookmark, BookmarkCheck, ClipboardList, Timer, type LucideIcon } from "lucide-react";
 import { Word } from "@/lib/data";
+import { useCachedWords } from "@/lib/use-cached-words";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
+import {
+  generateQuestions,
+  getQuizPoolCount,
+} from "@/lib/quiz-generation-core";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
 import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
 import { useQuizChrome } from "@/lib/quiz-chrome";
@@ -197,6 +202,8 @@ export function QuizClient() {
   const incorrectAnswers = useQuizStore((s) => s.incorrectAnswers);
 
   const { addStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
+  const { words: cachedWords, loading: cacheLoading } = useCachedWords();
+  const cacheEmpty = !cacheLoading && cachedWords.length === 0;
   const t = useT();
 
   const setQuizChromeHidden = useQuizChrome((s) => s.setHidden);
@@ -247,29 +254,19 @@ export function QuizClient() {
   useEffect(() => {
     if (step !== "settings") return;
     const requestId = ++poolRequestRef.current;
-    const params = new URLSearchParams({
-      quizType: quizType ?? "english_to_bangla",
-    });
-    if (selectedLevels.length > 0) params.set("levels", selectedLevels.join(","));
-    fetch(`/api/v1/quiz/pool?${params.toString()}`, { cache: "no-store" })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((body) => {
-        const count =
-          body && typeof body.data?.maxCount === "number"
-            ? body.data.maxCount
-            : 0;
-        if (poolRequestRef.current === requestId) {
-          setPoolCount(count);
-          setCountLoading(false);
-        }
-      })
-      .catch(() => {
-        if (poolRequestRef.current === requestId) {
-          setPoolCount(0);
-          setCountLoading(false);
-        }
-      });
-  }, [step, quizType, selectedLevels]);
+    const count =
+      cachedWords.length > 0
+        ? getQuizPoolCount(
+            cachedWords,
+            selectedLevels,
+            quizType ?? "english_to_bangla"
+          )
+        : 0;
+    if (poolRequestRef.current === requestId) {
+      setPoolCount(count);
+      setCountLoading(false);
+    }
+  }, [step, quizType, selectedLevels, cachedWords]);
 
   const handleQuizTypeSelect = (type: QuizType) => {
     setCountLoading(true);
@@ -304,29 +301,22 @@ export function QuizClient() {
     if (requestLogin()) return;
     setStarting(true);
     try {
-      const res = await fetch("/api/v1/quiz/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          quizType,
-          levels: selectedLevels,
-          quantity,
-          useAllQuestions,
-        }),
-      });
-      const body = (await res.json()) as {
-        data?: { questions?: Question[] } | null;
-        message?: string;
-        success?: boolean;
-      };
-      if (!res.ok || !body.success || !body.data) {
+      if (cacheEmpty || cachedWords.length === 0) {
         toast.error(
-          body?.message ??
-            t("কুইজ তৈরি করা যায়নি", "Couldn't create the quiz")
+          t(
+            "কুইজের শব্দভাণ্ডার ডাউনলোড হয়নি। প্রথমে অনলাইনে শব্দভাণ্ডার পৃষ্ঠাটি খুলুন, তারপর আবার চেষ্টা করুন।",
+            "The quiz word bank hasn't been downloaded yet. Open the vocabulary page once while online, then try again."
+          )
         );
         return;
       }
-      const generated = body.data.questions ?? [];
+      const generated = generateQuestions(
+        cachedWords,
+        selectedLevels,
+        quantity,
+        useAllQuestions,
+        quizType
+      );
       if (generated.length === 0) {
         toast.error(
           t(
@@ -462,6 +452,7 @@ export function QuizClient() {
         noTimeLimit={noTimeLimit}
         maxCount={poolCount}
         countLoading={countLoading}
+        cacheEmpty={cacheEmpty}
         starting={starting}
         onLevelChange={toggleLevel}
         onQuantityChange={(q) => useQuizStore.setState({ quantity: q })}
@@ -668,6 +659,7 @@ function SettingsView({
   noTimeLimit,
   maxCount,
   countLoading,
+  cacheEmpty,
   starting,
   onLevelChange,
   onQuantityChange,
@@ -685,6 +677,7 @@ function SettingsView({
   noTimeLimit: boolean;
   maxCount: number | null;
   countLoading: boolean;
+  cacheEmpty: boolean;
   starting: boolean;
   onLevelChange: (lv: LevelOption) => void;
   onQuantityChange: (q: number) => void;
@@ -734,6 +727,26 @@ function SettingsView({
               </div>
             </div>
           </div>
+
+          {cacheEmpty && (
+            <div className="mb-8 rounded-2xl border border-amber-200 dark:border-amber-900 bg-amber-50/70 dark:bg-amber-950/30 p-4 sm:p-5">
+              <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">
+                {t("শব্দভাণ্ডার এখনও ডাউনলোড হয়নি", "Word bank not downloaded yet")}
+              </p>
+              <p className="mt-1 text-xs text-amber-600/90 dark:text-amber-400/90">
+                {t(
+                  "কুইজ তৈরির জন্য শব্দভাণ্ডারটি আপনার ডিভাইসে সংরক্ষিত করা প্রয়োজন।",
+                  "The vocabulary needs to be saved on your device to generate quizzes."
+                )}{" "}
+                <Link
+                  href="/vocabulary"
+                  className="font-semibold underline underline-offset-2 hover:text-amber-800 dark:hover:text-amber-200"
+                >
+                  {t("শব্দভাণ্ডার পৃষ্ঠায় যান", "Go to vocabulary")}
+                </Link>
+              </p>
+            </div>
+          )}
 
           <div className="space-y-6">
             <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-5 sm:p-6">
