@@ -53,8 +53,8 @@ Example:
 {
   "id": 1,
   "word": "a, an",
-  "meaning_bn": "একটি; একজন; কোনো (অনির্দিষ্ট ব্যক্তি, বস্তু বা বিষয় বোঝাতে ব্যবহৃত)",
-  "definition_en": "Used before a singular countable noun when referring to a person or thing for the first time."
+  "meaningBn": "একটি; একজন; কোনো (অনির্দিষ্ট ব্যক্তি, বস্তু বা বিষয় বোঝাতে ব্যবহৃত)",
+  "definitionEn": "Used before a singular countable noun when referring to a person or thing for the first time."
 }
 ```
 

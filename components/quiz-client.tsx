@@ -217,8 +217,8 @@ const QUIZ_TYPE_ORDER: QuizType[] = [
   "antonym",
 ];
 
-function firstMeaning(meaning: string): string {
-  return meaning.split(";")[0].trim();
+function firstMeaning(meaning: string[]): string {
+  return (meaning[0] ?? "").trim();
 }
 
 function requestQuizFullscreen(): void {
@@ -432,7 +432,7 @@ export function QuizClient() {
             ...prev.incorrectAnswers,
             {
               word: q.word,
-              correctMeaning: q.word.meaning_bn,
+              correctMeaning: firstMeaning(q.word.meaningBn),
               userAnswer: option.text,
             },
           ],
@@ -496,7 +496,7 @@ export function QuizClient() {
             ...prev.incorrectAnswers,
             {
               word: q.word,
-              correctMeaning: q.word.meaning_bn,
+              correctMeaning: firstMeaning(q.word.meaningBn),
               userAnswer: "Time's up!",
             },
           ],
@@ -986,7 +986,7 @@ function QuizView({
   const speak = useSpeak();
   const t = useT();
   const progress = ((currentIndex + 1) / totalQuestions) * 100;
-  const prompt = quizType === "bangla_to_english" ? firstMeaning(question.word.meaning_bn) : question.word.word;
+  const prompt = quizType === "bangla_to_english" ? firstMeaning(question.word.meaningBn) : question.word.word;
   const qt = QUIZ_TYPE_CONFIG[quizType];
   const lc = LEVEL_CONFIG[question.word.level];
   const letters = ["A", "B", "C", "D"];
@@ -1047,7 +1047,7 @@ function QuizView({
         {/* Word */}
         <div className="animate-fade-up text-center">
           <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-xs text-zinc-400 dark:text-zinc-500">{question.word.parts_of_speech}</span>
+            <span className="text-xs text-zinc-400 dark:text-zinc-500">{question.word.wordType.join(", ")}</span>
             <span className="text-xs text-zinc-300 dark:text-zinc-600">·</span>
             <span className={cn("text-xs font-semibold", lc.text)}>{question.word.level}</span>
           </div>
@@ -1307,7 +1307,7 @@ function ResultsView({
                       {item.word.word}
                     </span>
                     <span className="text-xs text-zinc-400 dark:text-zinc-500 bg-zinc-100 dark:bg-zinc-800 rounded-md px-2 py-0.5">
-                      {item.word.parts_of_speech}
+                      {item.word.wordType.join(", ")}
                     </span>
                   </div>
                   <div className="mt-2 text-sm space-y-1">

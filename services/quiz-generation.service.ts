@@ -60,13 +60,13 @@ function wordDistractors(pool: Word[], correctText: string): string[] {
     return out;
 }
 
-function firstMeaning(meaning: string): string {
-    return meaning.split(";")[0].trim();
+function firstMeaning(meaning: string[]): string {
+    return (meaning[0] ?? "").trim();
 }
 
 function getPool(words: Word[], levels: QuizLevelOption[]): Word[] {
     const validWords = words.filter(
-        (w) => w.meaning_bn !== "..." && w.meaning_bn.length > 0
+        (w) => w.meaningBn.length > 0 && w.meaningBn[0] !== "..."
     );
     const picked = levels.filter((lv) => lv !== "Random");
     if (levels.length === 0 || picked.length === 0) return validWords;
@@ -134,9 +134,9 @@ function generateQuestions(
             ]);
         } else {
             options = shuffleArray([
-                { text: firstMeaning(word.meaning_bn), correct: true },
+                { text: firstMeaning(word.meaningBn), correct: true },
                 ...others.slice(0, 3).map((d) => ({
-                    text: firstMeaning(d.meaning_bn),
+                    text: firstMeaning(d.meaningBn),
                     correct: false,
                 })),
             ]);

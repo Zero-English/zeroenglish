@@ -5,16 +5,16 @@ import type { Levels } from "@/generated/prisma/enums";
 export type Word = {
   id: number;
   word: string;
-  meaning_bn: string;
-  definition_en: string;
-  definition_bn: string;
-  examples_en: string[];
+  meaningBn: string[];
+  definitionEn: string;
+  definitionBn: string;
+  examplesEn: string[];
   examples_bn: string[];
   synonyms: string[];
   antonyms: string[];
   level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
   category: string;
-  parts_of_speech: string;
+  wordType: string[];
 };
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -38,16 +38,16 @@ function toPublicWord(w: DbWordRecord): Word {
   return {
     id: w.id,
     word: w.word,
-    meaning_bn: w.meaningBn.join("; "),
-    definition_en: w.definitionEn,
-    definition_bn: w.definitionBn,
-    examples_en: w.examplesEn,
+    meaningBn: w.meaningBn,
+    definitionEn: w.definitionEn,
+    definitionBn: w.definitionBn,
+    examplesEn: w.examplesEn,
     examples_bn: w.examplesBn,
     synonyms: w.synonyms,
     antonyms: w.antonyms,
     level: w.level as Word["level"],
     category: w.category,
-    parts_of_speech: w.wordType.join(", "),
+    wordType: w.wordType,
   };
 }
 

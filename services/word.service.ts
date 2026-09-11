@@ -27,16 +27,16 @@ interface DbWordRecord {
 const toPublicWord = (w: DbWordRecord): Word => ({
     id: w.id,
     word: w.word,
-    meaning_bn: w.meaningBn.join("; "),
-    definition_en: w.definitionEn,
-    definition_bn: w.definitionBn,
-    examples_en: w.examplesEn,
+    meaningBn: w.meaningBn,
+    definitionEn: w.definitionEn,
+    definitionBn: w.definitionBn,
+    examplesEn: w.examplesEn,
     examples_bn: w.examplesBn,
     synonyms: w.synonyms,
     antonyms: w.antonyms,
     level: w.level as Word["level"],
     category: w.category,
-    parts_of_speech: w.wordType.join(", "),
+    wordType: w.wordType,
 });
 
 interface BrowseWordsParams {

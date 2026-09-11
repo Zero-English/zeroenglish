@@ -34,9 +34,9 @@ export async function searchCachedWords(query: string): Promise<Word[]> {
     .map((row) => {
       let score = 0;
       const word = row.word.toLowerCase();
-      const meaning = row.meaning_bn.toLowerCase();
-      const defEn = row.definition_en.toLowerCase();
-      const defBn = row.definition_bn.toLowerCase();
+      const meaning = row.meaningBn.join(" ").toLowerCase();
+      const defEn = row.definitionEn.toLowerCase();
+      const defBn = row.definitionBn.toLowerCase();
 
       if (word === q) score += 100;
       else if (word.startsWith(q)) score += 50;
