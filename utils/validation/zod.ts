@@ -43,6 +43,38 @@ export const quizTypeEnumSchema = z.enum([
   "TRUE_FALSE",
 ]);
 
+export const quizTypeNameEnumSchema = z.enum([
+  "english_to_bangla",
+  "bangla_to_english",
+  "synonym",
+  "antonym",
+]);
+
+export const quizLevelOptionEnumSchema = z.enum([
+  "A1",
+  "A2",
+  "B1",
+  "B2",
+  "C1",
+  "C2",
+  "Random",
+]);
+
+export const quizGenerateSchema = z.object({
+  quizType: quizTypeNameEnumSchema,
+  levels: z.array(quizLevelOptionEnumSchema).max(7).default([]),
+  quantity: z.number().int().positive("quantity must be positive").max(200),
+  useAllQuestions: z.boolean().default(false),
+});
+
+export const quizPoolSchema = z.object({
+  quizType: quizTypeNameEnumSchema,
+  levels: z.array(quizLevelOptionEnumSchema).max(7).default([]),
+});
+
+export type QuizGenerateInput = z.infer<typeof quizGenerateSchema>;
+export type QuizPoolInput = z.infer<typeof quizPoolSchema>;
+
 export const difficultyLevelEnumSchema = z.enum(["EASY", "MEDIUM", "HARD"]);
 
 export const quizQuestionSchema = z.object({

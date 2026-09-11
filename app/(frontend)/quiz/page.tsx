@@ -1,4 +1,3 @@
-import { getAllWords } from "@/lib/data";
 import { QuizClient } from "@/components/quiz-client";
 
 export const metadata = {
@@ -7,7 +6,6 @@ export const metadata = {
     "Test your English vocabulary knowledge with interactive quizzes. Practice translations, synonyms and antonyms across all difficulty levels.",
 };
 
-export default async function QuizPage() {
-  const words = await getAllWords();
-  return <QuizClient words={words} />;
+export default function QuizPage() {
+  return <QuizClient />;
 }
