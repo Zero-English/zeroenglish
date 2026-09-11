@@ -26,7 +26,7 @@ import {
   fetchQuizResultsFromDb,
   dbResultToHistoryEntry,
 } from "@/lib/quiz-results-api";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { useAuthStatus } from "@/lib/auth-store";
 
 const QUIZ_META: Record<
@@ -99,8 +99,6 @@ function WinRing({ win }: { win: number }) {
   const r = 22;
   const circumference = 2 * Math.PI * r;
   const offset = circumference * (1 - win / 100);
-  const num = useNum();
-
   return (
     <div className="relative h-16 w-16 flex-shrink-0">
       <svg viewBox="0 0 56 56" className="h-full w-full -rotate-90">
@@ -127,7 +125,7 @@ function WinRing({ win }: { win: number }) {
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center text-sm font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
-        {num(win)}%
+        {win}%
       </div>
     </div>
   );
@@ -138,8 +136,6 @@ function QuizHistoryItem({ entry }: { entry: QuizHistoryEntry }) {
   const Icon = meta.icon;
   const win = winToNumber(entry);
   const t = useT();
-  const num = useNum();
-
   return (
     <StaggerItem className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
       <div
@@ -170,13 +166,13 @@ function QuizHistoryItem({ entry }: { entry: QuizHistoryEntry }) {
         <div className="flex items-center gap-2">
           <ListChecks className="h-4 w-4 text-zinc-400" />
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            {t(`${num(entry.numberOfQuestions)}টি প্রশ্ন`, `${entry.numberOfQuestions} Questions`)}
+            {t(`${entry.numberOfQuestions}টি প্রশ্ন`, `${entry.numberOfQuestions} Questions`)}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <Clock3 className="h-4 w-4 text-zinc-400" />
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            {num(entry.timePerQuestion)}
+            {entry.timePerQuestion}
             {t(" সেকেন্ড / প্রশ্ন", "s / question")}
           </span>
         </div>
@@ -201,8 +197,6 @@ export function QuizHistoryPanel() {
   const [dbEntries, setDbEntries] = useState<QuizHistoryEntry[]>([]);
   const [dbLoaded, setDbLoaded] = useState(false);
   const t = useT();
-  const num = useNum();
-
   useEffect(() => {
     let cancelled = false;
     void (async () => {
@@ -254,9 +248,9 @@ export function QuizHistoryPanel() {
   }, [entries]);
 
   const summary = [
-    { icon: GraduationCap, label: t("নেওয়া কুইজ", "Quizzes Taken"), value: num(stats.total), tint: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-100 dark:bg-indigo-900/30" },
-    { icon: BarChart3, label: t("গড় জয়ের হার", "Avg. Win Rate"), value: `${num(stats.avg)}%`, tint: "text-sky-600 dark:text-sky-400", bg: "bg-sky-100 dark:bg-sky-900/30" },
-    { icon: Award, label: t("সেরা স্কোর", "Best Score"), value: `${num(stats.best)}%`, tint: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-100 dark:bg-emerald-900/30" },
+    { icon: GraduationCap, label: t("নেওয়া কুইজ", "Quizzes Taken"), value: stats.total, tint: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-100 dark:bg-indigo-900/30" },
+    { icon: BarChart3, label: t("গড় জয়ের হার", "Avg. Win Rate"), value: `${stats.avg}%`, tint: "text-sky-600 dark:text-sky-400", bg: "bg-sky-100 dark:bg-sky-900/30" },
+    { icon: Award, label: t("সেরা স্কোর", "Best Score"), value: `${stats.best}%`, tint: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-100 dark:bg-emerald-900/30" },
   ];
 
   if (!dbLoaded) {
@@ -271,7 +265,7 @@ export function QuizHistoryPanel() {
     <div>
       <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
         {t(
-          `${num(stats.total)}টি কুইজ · ${num(stats.totalQuestions)}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
+          `${stats.total}টি কুইজ · ${stats.totalQuestions}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
           `${stats.total} quiz${stats.total !== 1 ? "zes" : ""} · ${stats.totalQuestions} questions answered`
         )}
       </p>

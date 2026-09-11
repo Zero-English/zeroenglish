@@ -26,7 +26,7 @@ import { QuizHistoryPanel } from "@/components/profile-quiz-history";
 import { QuizExamHistoryPanel } from "@/components/profile-quiz-exam-history";
 import { useQuizHistoryStore } from "@/lib/quiz-history-store";
 import { useQuizExamHistoryStore } from "@/lib/quiz-exam-history-store";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 
 const ITEMS_PER_PAGE = 10;
 import {
@@ -266,7 +266,6 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const { totalCorrectAnswers, loaded: quizLoaded } = useQuizActivity();
   const loaded = bookmarkLoaded && learnedLoaded && stillLearningLoaded;
   const t = useT();
-  const num = useNum();
 
   const bookmarked = words.filter((w) => bookmarkedIds.has(wordKey(w)));
   const learned = words.filter((w) => learnedIds.has(wordKey(w)));
@@ -336,7 +335,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
             {t("বুকমার্ক করা", "Bookmarked")}
             {bookmarked.length > 0 && (
               <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
-                {num(bookmarked.length)}
+                {bookmarked.length}
               </span>
             )}
           </TabsTrigger>
@@ -345,7 +344,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
             {t("শেখা হয়েছে", "Learned")}
             {learned.length > 0 && (
               <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
-                {num(learned.length)}
+                {learned.length}
               </span>
             )}
           </TabsTrigger>
@@ -354,7 +353,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
             {t("কুইজ", "Quiz")}
             {quizCount > 0 && (
               <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
-                {num(quizCount)}
+                {quizCount}
               </span>
             )}
           </TabsTrigger>
@@ -366,28 +365,28 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           <StatCard
             icon={<BookOpen className="h-5 w-5 text-sky-600" />}
             label={t("মোট শব্দ", "Total Words")}
-            value={num(total)}
+            value={total}
             color="bg-sky-100 dark:bg-sky-900/30"
           />
           <StatCard
             icon={<BookmarkCheck className="h-5 w-5 text-amber-600" />}
             label={t("বুকমার্ক করা", "Bookmarked")}
-            value={num(bookmarked.length)}
-            sub={total > 0 ? t(`মোটের ${num(Math.round((bookmarked.length / total) * 100))}%`, `${Math.round((bookmarked.length / total) * 100)}% of total`) : undefined}
+            value={bookmarked.length}
+            sub={total > 0 ? t(`মোটের ${Math.round((bookmarked.length / total) * 100)}%`, `${Math.round((bookmarked.length / total) * 100)}% of total`) : undefined}
             color="bg-amber-100 dark:bg-amber-900/30"
           />
           <StatCard
             icon={<RefreshCw className="h-5 w-5 text-orange-600" />}
             label={t("শিখছে", "Still Learning")}
-            value={num(stillLearning.length)}
-            sub={total > 0 ? t(`মোটের ${num(Math.round((stillLearning.length / total) * 100))}%`, `${Math.round((stillLearning.length / total) * 100)}% of total`) : undefined}
+            value={stillLearning.length}
+            sub={total > 0 ? t(`মোটের ${Math.round((stillLearning.length / total) * 100)}%`, `${Math.round((stillLearning.length / total) * 100)}% of total`) : undefined}
             color="bg-orange-100 dark:bg-orange-900/30"
           />
           <StatCard
             icon={<Award className="h-5 w-5 text-emerald-600" />}
             label={t("শেখা হয়েছে", "Learned")}
-            value={num(learned.length)}
-            sub={t(`মোটের ${num(overallProgress)}%`, `${overallProgress}% of total`)}
+            value={learned.length}
+            sub={t(`মোটের ${overallProgress}%`, `${overallProgress}% of total`)}
             color="bg-emerald-100 dark:bg-emerald-900/30"
           />
           <StaggerItem className="col-span-2 lg:col-span-4">
@@ -417,7 +416,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                   </div>
                   <div>
                     <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {quizLoaded ? num(totalCorrectAnswers) : "—"}
+                      {quizLoaded ? totalCorrectAnswers : "—"}
                     </div>
                     <div className="text-xs text-zinc-400">{t("সঠিক উত্তর", "Correct Answers")}</div>
                   </div>
@@ -428,7 +427,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                   </div>
                   <div>
                     <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {num(stillLearning.length)}
+                      {stillLearning.length}
                     </div>
                     <div className="text-xs text-zinc-400">{t("ভুল শব্দ", "Wrong Words")}</div>
                   </div>
@@ -439,7 +438,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                   </div>
                   <div>
                     <div className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {quizLoaded ? num(totalCorrectAnswers + stillLearning.length) : "—"}
+                      {quizLoaded ? totalCorrectAnswers + stillLearning.length : "—"}
                     </div>
                     <div className="text-xs text-zinc-400">{t("মোট কুইজ", "Total Quiz")}</div>
                   </div>
@@ -467,7 +466,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                           <span className="text-xs text-zinc-400">{t(c.labelBn, c.label)}</span>
                         </div>
                         <span className="text-xs text-zinc-500">
-                          {num(l)}/{num(totalInLevel)} ({num(pct)}%)
+                          {l}/{totalInLevel} ({pct}%)
                         </span>
                       </div>
                       <div className="h-2 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
@@ -485,7 +484,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800">
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">{t("সব মিলিয়ে", "Overall")}</span>
-                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{num(overallProgress)}%</span>
+                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{overallProgress}%</span>
                 </div>
                 <div className="h-2.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
                   <div
@@ -509,7 +508,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           return (
             <>
               <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-                {t(`${num(bookmarked.length)}টি বুকমার্ক করা শব্দ`, `${bookmarked.length} bookmarked word${bookmarked.length !== 1 ? "s" : ""}`)}
+                {t(`${bookmarked.length}টি বুকমার্ক করা শব্দ`, `${bookmarked.length} bookmarked word${bookmarked.length !== 1 ? "s" : ""}`)}
               </p>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <StaggerContainer className="contents">
@@ -527,7 +526,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               </div>
               <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
                 {t(
-                  `মোট ${num(bookmarked.length)}টির মধ্যে ${num(startB + 1)}–${num(Math.min(startB + ITEMS_PER_PAGE, bookmarked.length))} দেখানো হচ্ছে`,
+                  `মোট ${bookmarked.length}টির মধ্যে ${startB + 1}–${Math.min(startB + ITEMS_PER_PAGE, bookmarked.length)} দেখানো হচ্ছে`,
                   `Showing ${startB + 1}–${Math.min(startB + ITEMS_PER_PAGE, bookmarked.length)} of ${bookmarked.length}`
                 )}
               </p>
@@ -550,7 +549,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                               onClick={(e) => { e.preventDefault(); setBookmarkedPage(p); }}
                               isActive={p === currentPageB}
                             >
-                              {num(p)}
+                              {p}
                             </PaginationLink>
                           </PaginationItem>
                         ))}
@@ -582,7 +581,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           return (
             <>
               <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-                {t(`${num(learned.length)}টি শেখা শব্দ`, `${learned.length} learned word${learned.length !== 1 ? "s" : ""}`)}
+                {t(`${learned.length}টি শেখা শব্দ`, `${learned.length} learned word${learned.length !== 1 ? "s" : ""}`)}
               </p>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <StaggerContainer className="contents">
@@ -600,7 +599,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               </div>
               <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
                 {t(
-                  `মোট ${num(learned.length)}টির মধ্যে ${num(startL + 1)}–${num(Math.min(startL + ITEMS_PER_PAGE, learned.length))} দেখানো হচ্ছে`,
+                  `মোট ${learned.length}টির মধ্যে ${startL + 1}–${Math.min(startL + ITEMS_PER_PAGE, learned.length)} দেখানো হচ্ছে`,
                   `Showing ${startL + 1}–${Math.min(startL + ITEMS_PER_PAGE, learned.length)} of ${learned.length}`
                 )}
               </p>
@@ -623,7 +622,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                               onClick={(e) => { e.preventDefault(); setLearnedPage(p); }}
                               isActive={p === currentPageL}
                             >
-                              {num(p)}
+                              {p}
                             </PaginationLink>
                           </PaginationItem>
                         ))}
@@ -658,7 +657,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               {t("পরীক্ষা", "Exams")}
               {examCount > 0 && (
                 <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
-                  {num(examCount)}
+                  {examCount}
                 </span>
               )}
             </TabsTrigger>
@@ -667,7 +666,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               {t("শিখছে", "Still Learning")}
               {stillLearning.length > 0 && (
                 <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300">
-                  {num(stillLearning.length)}
+                  {stillLearning.length}
                 </span>
               )}
             </TabsTrigger>
@@ -690,7 +689,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               return (
                 <>
                   <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
-                    {t(`${num(stillLearning.length)}টি শব্দ পর্যালোচনা করতে হবে`, `${stillLearning.length} word${stillLearning.length !== 1 ? "s" : ""} to review`)}
+                    {t(`${stillLearning.length}টি শব্দ পর্যালোচনা করতে হবে`, `${stillLearning.length} word${stillLearning.length !== 1 ? "s" : ""} to review`)}
                   </p>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <StaggerContainer className="contents">
@@ -734,7 +733,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                   </div>
                   <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
                     {t(
-                      `মোট ${num(stillLearning.length)}টির মধ্যে ${num(startS + 1)}–${num(Math.min(startS + ITEMS_PER_PAGE, stillLearning.length))} দেখানো হচ্ছে`,
+                      `মোট ${stillLearning.length}টির মধ্যে ${startS + 1}–${Math.min(startS + ITEMS_PER_PAGE, stillLearning.length)} দেখানো হচ্ছে`,
                       `Showing ${startS + 1}–${Math.min(startS + ITEMS_PER_PAGE, stillLearning.length)} of ${stillLearning.length}`
                     )}
                   </p>
@@ -757,7 +756,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                                   onClick={(e) => { e.preventDefault(); setStillLearningPage(p); }}
                                   isActive={p === currentPageS}
                                 >
-                                  {num(p)}
+                                  {p}
                                 </PaginationLink>
                               </PaginationItem>
                             ))}

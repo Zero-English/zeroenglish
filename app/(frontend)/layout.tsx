@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import HtmlShell from "@/components/html-shell";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
@@ -39,6 +39,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+};
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function FrontendLayout({

@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 import { useLevelPage, useLevelFilter, useLevelSort, useLevelCategory, setLevelState } from "@/lib/level-pagination-store";
 import { setSelectedLevel } from "@/lib/level-store";
 import { recordLastLearned } from "@/lib/last-learned-store";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -44,7 +44,6 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
   const { isBookmarked, loaded: bookmarkLoaded } = useBookmarkedWords();
   const loaded = learnedLoaded && bookmarkLoaded;
   const t = useT();
-  const num = useNum();
 
   const page = useLevelPage(level);
   const filter = useLevelFilter(level);
@@ -172,7 +171,7 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
 
           <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
             {t(
-              `মোট ${num(filtered.length)}টির মধ্যে ${num(start + 1)}–${num(Math.min(start + ITEMS_PER_PAGE, filtered.length))} দেখানো হচ্ছে`,
+              `মোট ${filtered.length}টির মধ্যে ${start + 1}–${Math.min(start + ITEMS_PER_PAGE, filtered.length)} দেখানো হচ্ছে`,
               `Showing ${start + 1}–${Math.min(start + ITEMS_PER_PAGE, filtered.length)} of ${filtered.length}`
             )}
           </p>
@@ -205,7 +204,7 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
                           }}
                           isActive={pageNum === currentPage}
                         >
-{num(pageNum)}
+{pageNum}
                         </PaginationLink>
                       </PaginationItem>
                     ))}

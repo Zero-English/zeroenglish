@@ -7,7 +7,7 @@ import { mainCategoryLabel } from "@/lib/category";
 import { Button } from "@/components/ui/button";
 import { LibraryBig, BookOpenCheck, Search, ArrowRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 
 const LEVEL_CONFIG: Record<
   string,
@@ -104,7 +104,7 @@ const FEATURES = [
 export function HomeContent({ words }: { words: Word[] }) {
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
-  const num = useNum();
+
   const category = mainCategoryLabel(words);
 
   const levelStats = LEVELS.map((level) => {
@@ -168,19 +168,19 @@ export function HomeContent({ words }: { words: Word[] }) {
             <div className="flex flex-wrap items-center justify-center gap-2.5">
               <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
                 <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                  {num(words.length)}
+                  {words.length}
                 </p>
                 <p className="text-xs text-zinc-400">{t("শব্দ", "Words")}</p>
               </div>
               <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
                 <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                  {num(LEVELS.length)}
+                  {LEVELS.length}
                 </p>
                 <p className="text-xs text-zinc-400">{t("লেভেল", "Levels")}</p>
               </div>
               <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
                 <p className="text-2xl font-bold text-orange-500 tabular-nums">
-                  {loaded ? `${num(overallPct)}%` : "· · ·"}
+                  {loaded ? `${overallPct}%` : "· · ·"}
                 </p>
                 <p className="text-xs text-zinc-400">{t("শেখা হয়েছে", "Learned")}</p>
               </div>
@@ -235,10 +235,10 @@ export function HomeContent({ words }: { words: Word[] }) {
                       <div className="space-y-1.5">
                         <div className="flex items-baseline justify-between text-sm">
                           <span className="text-zinc-500 dark:text-zinc-400 font-medium">
-                            {t(`${num(total)}টি শব্দ`, `${total} words`)}
+                            {t(`${total}টি শব্দ`, `${total} words`)}
                           </span>
                           <span className="text-zinc-400 dark:text-zinc-500 tabular-nums">
-                            {loaded ? t(`${num(learned)}টি শেখা`, `${learned} learned`) : `\u00A0`}
+                            {loaded ? t(`${learned}টি শেখা`, `${learned} learned`) : `\u00A0`}
                           </span>
                         </div>
                         <div className="h-1.5 w-full rounded-full bg-zinc-200/70 dark:bg-zinc-800 overflow-hidden">

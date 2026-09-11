@@ -11,31 +11,11 @@ import {
 
 export type Language = "bn" | "en";
 
-const BANGLA_DIGITS = "০১২৩৪৫৬৭৮৯";
-
-export const ARABIC_TO_BANGLA_DIGITS: Record<string, string> = {
-  "0": "০",
-  "1": "১",
-  "2": "২",
-  "3": "৩",
-  "4": "৪",
-  "5": "৫",
-  "6": "৬",
-  "7": "৭",
-  "8": "৮",
-  "9": "৯",
-};
-
-export function toBanglaDigits(value: string | number): string {
-  return String(value).replace(/[0-9]/g, (d) => BANGLA_DIGITS[Number(d)]);
-}
-
 interface LanguageContextValue {
   lang: Language;
   setLanguage: (lang: Language) => void;
   toggleLanguage: () => void;
   t: (bangla: string, english: string) => string;
-  num: (value: string | number) => string;
 }
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
@@ -95,11 +75,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     [lang]
   );
 
-  const num = useCallback(
-    (value: string | number) => (lang === "en" ? String(value) : toBanglaDigits(value)),
-    [lang]
-  );
-
   useEffect(() => {
     const root = document.documentElement;
     root.dataset.lang = lang;
@@ -107,7 +82,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [lang]);
 
   return (
-    <LanguageContext.Provider value={{ lang, setLanguage, toggleLanguage, t, num }}>
+    <LanguageContext.Provider value={{ lang, setLanguage, toggleLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
@@ -123,8 +98,4 @@ export function useLanguage() {
 
 export function useT() {
   return useLanguage().t;
-}
-
-export function useNum() {
-  return useLanguage().num;
 }

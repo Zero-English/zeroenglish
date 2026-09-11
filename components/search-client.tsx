@@ -16,7 +16,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { Search, Sparkles, X, ArrowDown } from "lucide-react";
 
 const ITEMS_PER_PAGE = 10;
@@ -59,7 +59,6 @@ const PICK_COUNT = 6;
 export function SearchClient() {
   const router = useRouter();
   const t = useT();
-  const num = useNum();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const initialPage = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
@@ -379,7 +378,7 @@ export function SearchClient() {
                     ) : (
                       <>
                         <span className="font-semibold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                          {num(total)}
+{total}
                         </span>{" "}
                         {t("টি শব্দ পাওয়া গেছে", "words found")}
                       </>
@@ -416,7 +415,7 @@ export function SearchClient() {
                     <p className="mt-8 mb-5 flex items-center justify-center gap-1.5 text-center text-sm text-zinc-400 dark:text-zinc-500">
                       <ArrowDown className="h-3.5 w-3.5" />
                       {t(
-                        `মোট ${num(total)}টির মধ্যে ${num(start)}–${num(end)} দেখানো হচ্ছে`,
+                        `মোট ${total}টির মধ্যে ${start}–${end} দেখানো হচ্ছে`,
                         `Showing ${start}–${end} of ${total}`
                       )}
                     </p>
@@ -447,7 +446,7 @@ export function SearchClient() {
                                 }}
                                 isActive={item === safePage}
                               >
-                                {num(item)}
+                                {item}
                               </PaginationLink>
                             </PaginationItem>
                           )

@@ -1,5 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata,Viewport  } from "next";
 import HtmlShell from "@/components/html-shell";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "Admin | Zero English",
