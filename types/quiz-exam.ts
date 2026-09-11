@@ -44,6 +44,6 @@ export type QuizExamStep = "list" | "quiz" | "results";
 export interface QuizExamIncorrectAnswer {
   questionId: number;
   questionText: string;
-  correctAnswer: string;
-  userAnswer: string;
+  correctAnswer: string | null;
+  userAnswer: string | null;
 }
