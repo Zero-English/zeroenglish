@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getAllWords, getWordsByPage, createWord, createWordsBulk } from "@/services/word.service";
 import { wordsArraySchema } from "@/utils/validation/zod";
+import { requireAdmin } from "@/lib/api-auth";
 import logger from "@/utils/logger";
 
 /**
@@ -29,6 +30,9 @@ import logger from "@/utils/logger";
  *         description: List of words
  */
 export async function GET(request: NextRequest) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const searchParams = request.nextUrl.searchParams;
     const pageParam = searchParams.get("page");
 
@@ -110,6 +114,9 @@ export async function GET(request: NextRequest) {
  *         description: Word already exists
  */
 export async function POST(request: NextRequest) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const isBulk = request.nextUrl.searchParams.get("bulk") === "true";
 
     if (isBulk) {

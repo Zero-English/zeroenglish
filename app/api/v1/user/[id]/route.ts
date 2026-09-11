@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { requireAdmin } from "@/lib/api-auth";
 import { getUserById, updateUserById, deleteUserById } from "@/services/user.service";
 import { updateUserSchema } from "@/utils/validation/zod";
 import logger from "@/utils/logger";
@@ -97,16 +98,13 @@ function parseId(id: string): number | null {
     return Number.isNaN(parsed) ? null : parsed;
 }
 
-async function requireAdmin(): Promise<boolean> {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) return false;
-    return session.user.role === "admin";
-}
-
 export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const { id } = await params;
     const userId = parseId(id);
 
@@ -130,12 +128,8 @@ export async function PUT(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
-    if (!(await requireAdmin())) {
-        return NextResponse.json(
-            { data: null, message: "Forbidden", success: false },
-            { status: 403 }
-        );
-    }
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
 
     const { id } = await params;
     const userId = parseId(id);

@@ -36,6 +36,7 @@ import type {
   QuizExamPublicItem,
   QuizExamTakeData,
   QuizExamTakeQuestion,
+  QuizExamFinalResult,
 } from "@/types/quiz-exam";
 
 const MODE_META: Record<
@@ -71,12 +72,6 @@ const MODE_META: Record<
   },
 };
 
-const EXAM_MODE_ENUM: Record<string, string> = {
-  PRACTICE: "PRACTICE",
-  WEEKLY: "WEEKLY",
-  BIWEEKLY: "BIWEEKLY",
-};
-
 function requestQuizFullscreen(): void {
   if (
     typeof document !== "undefined" &&
@@ -97,84 +92,60 @@ function exitQuizFullscreen(): void {
   }
 }
 
-function shuffleArray<T>(arr: T[]): T[] {
-  const shuffled = [...arr];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
 function toTakeQuestions(exam: QuizExamTakeData): QuizExamTakeQuestion[] {
   return exam.questions.map((q) => ({
     id: q.id,
     questionText: q.questionText,
     difficultyLevel: q.difficultyLevel,
-    options: shuffleArray([
-      { text: q.answer, correct: true },
-      ...shuffleArray(q.options.filter((o) => o !== q.answer)).map((o) => ({
-        text: o,
-        correct: false,
-      })),
-    ]),
+    options: q.options,
   }));
 }
 
-async function saveExamResultToDb(args: {
-  userId: number | null;
-  clientId: string;
-  examId: number | null;
-  title: string;
-  mode: string;
-  score: number;
-  total: number;
-  percentage: number;
-  levels: string[];
-  timePerQuestion: number;
-  timeTotalQuiz: number;
-  scheduledOpeningTime: string | null;
-  scheduledClosingTime: string | null;
-  status?: "ABANDONED";
-}): Promise<number | null> {
-  if (!args.userId) return null;
+async function submitExamAnswers(): Promise<{
+  success: boolean;
+  result?: QuizExamFinalResult;
+}> {
+  const st = useQuizExamStore.getState();
+  if (!st.examId) return { success: false };
+
+  const clientId =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `exam-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+  const timeTotalQuiz = st.startedAt
+    ? Math.round((Date.now() - st.startedAt) / 1000)
+    : st.questions.length * st.timePerQuestion;
+
+  const answers = Object.entries(st.answers)
+    .map(([questionId, selectedOption]) => ({
+      questionId: Number(questionId),
+      selectedOption,
+    }))
+    .filter((a) => Number.isFinite(a.questionId));
+
   try {
-    const res = await fetch("/api/v1/quiz/results", {
+    const res = await fetch(`/api/v1/quiz-exam/${st.examId}/submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      keepalive: true,
-      body: JSON.stringify({
-        clientId: args.clientId,
-        examId: args.examId,
-        title: args.title,
-        mode: EXAM_MODE_ENUM[args.mode] ?? "PRACTICE",
-        quizType: "ENGLISH_TO_BANGLA",
-        questionCount: args.total,
-        levels: args.levels,
-        timePerQuestion: args.timePerQuestion,
-        timeTotalQuiz: args.timeTotalQuiz,
-        scheduleEnabled: true,
-        scheduledOpeningTime: args.scheduledOpeningTime ?? undefined,
-        scheduledClosingTime: args.scheduledClosingTime ?? undefined,
-        correctAnswers: args.score,
-        scoreInPercent: args.percentage,
-        totalScore: args.score,
-        status: args.status,
-      }),
+      body: JSON.stringify({ clientId, timeTotalQuiz, answers }),
     });
-    if (!res.ok) {
-      // non-fatal; the result is already stored in localStorage
-      return null;
-    }
-    const body = (await res.json()) as { data?: { id?: number } | null; success?: boolean };
-    if (!body.success) return null;
+    const json = (await res.json()) as {
+      success?: boolean;
+      data?: QuizExamFinalResult | null;
+    };
+    if (!res.ok || !json.success || !json.data) return { success: false };
+    useQuizExamStore.setState({
+      finalResult: json.data,
+      resultsRecorded: false,
+      abandonRecorded: true,
+    });
     if (typeof window !== "undefined") {
       window.dispatchEvent(new Event("activity-changed"));
     }
-    return typeof body.data?.id === "number" ? body.data.id : null;
+    return { success: true, result: json.data };
   } catch {
-    // non-fatal; the result is already stored in localStorage
-    return null;
+    return { success: false };
   }
 }
 
@@ -193,27 +164,31 @@ function recordExamAbandon(): void {
 
   useQuizExamStore.setState({ abandonRecorded: true });
 
-  const state = useQuizExamStore.getState();
-  const total = state.questions.length;
-  const timeTotalQuiz = state.startedAt
-    ? Math.round((Date.now() - state.startedAt) / 1000)
-    : total * state.timePerQuestion;
+  const timeTotalQuiz = st.startedAt
+    ? Math.round((Date.now() - st.startedAt) / 1000)
+    : st.questions.length * st.timePerQuestion;
 
-  void saveExamResultToDb({
-    userId,
-    clientId: `ab-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
-    examId: state.examId,
-    title: state.examTitle ?? "Quiz Exam",
-    mode: state.examMode ?? "PRACTICE",
-    score: state.score,
-    total,
-    percentage: total > 0 ? Math.round((state.score / total) * 100) : 0,
-    levels: state.levels,
-    timePerQuestion: state.timePerQuestion,
-    timeTotalQuiz,
-    scheduledOpeningTime: state.scheduledOpeningTime,
-    scheduledClosingTime: state.scheduledClosingTime,
-    status: "ABANDONED",
+  const answers = Object.entries(st.answers).map(
+    ([questionId, selectedOption]) => ({
+      questionId: Number(questionId),
+      selectedOption,
+    })
+  );
+
+  // Best-effort, fire-and-forget: the server marks the attempt ABANDONED
+  // (never the official first attempt) and grades whatever was answered.
+  void fetch(`/api/v1/quiz-exam/${st.examId}/submit`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    keepalive: true,
+    body: JSON.stringify({
+      clientId: `ab-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+      status: "ABANDONED",
+      timeTotalQuiz,
+      answers,
+    }),
+  }).catch(() => {
+    // non-fatal; the abandon record is best-effort
   });
 }
 
@@ -246,14 +221,11 @@ function formatCountdown(ms: number, num: (n: number) => string): string {
 
 export function QuizExamClient() {
   const step = useQuizExamStore((s) => s.step);
-  const examId = useQuizExamStore((s) => s.examId);
   const questions = useQuizExamStore((s) => s.questions);
   const currentIndex = useQuizExamStore((s) => s.currentIndex);
-  const score = useQuizExamStore((s) => s.score);
   const selectedAnswer = useQuizExamStore((s) => s.selectedAnswer);
   const isAnswered = useQuizExamStore((s) => s.isAnswered);
   const timeLeft = useQuizExamStore((s) => s.timeLeft);
-  const incorrectAnswers = useQuizExamStore((s) => s.incorrectAnswers);
 
   const setQuizChromeHidden = useQuizChrome((s) => s.setHidden);
   useEffect(() => {
@@ -281,7 +253,6 @@ export function QuizExamClient() {
         question={q}
         currentIndex={currentIndex}
         totalQuestions={questions.length}
-        score={score}
         timeLeft={timeLeft}
         selectedAnswer={selectedAnswer}
         isAnswered={isAnswered}
@@ -290,14 +261,7 @@ export function QuizExamClient() {
   }
 
   if (step === "results") {
-    return (
-      <ExamResultsView
-        examId={examId}
-        score={score}
-        total={questions.length}
-        incorrectAnswers={incorrectAnswers}
-      />
-    );
+    return <ExamResultsView />;
   }
 
   return <ExamListView />;
@@ -511,6 +475,8 @@ function ExamListView() {
         selectedAnswer: null,
         isAnswered: false,
         incorrectAnswers: [],
+        answers: {},
+        finalResult: null,
         resultsRecorded: false,
         abandonRecorded: false,
         startedAt: 0,
@@ -598,7 +564,6 @@ function ExamQuizView({
   question,
   currentIndex,
   totalQuestions,
-  score,
   timeLeft,
   selectedAnswer,
   isAnswered,
@@ -606,7 +571,6 @@ function ExamQuizView({
   question: QuizExamTakeQuestion;
   currentIndex: number;
   totalQuestions: number;
-  score: number;
   timeLeft: number;
   selectedAnswer: string | null;
   isAnswered: boolean;
@@ -615,6 +579,7 @@ function ExamQuizView({
   const num = useNum();
   const speak = useSpeak();
   const [exitOpen, setExitOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const timePerQuestion = useQuizExamStore((s) => s.timePerQuestion);
 
   const progress = totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
@@ -633,31 +598,27 @@ function ExamQuizView({
     currentIndexRef.current = currentIndex;
   }, [currentIndex]);
 
-  const handleOptionClick = (option: { text: string; correct: boolean }) => {
+  // The client never learns which option is correct (answers are only graded
+  // server-side on submission), so it only records the user's selection.
+  const handleOptionClick = (option: string) => {
     if (isAnswered) return;
     useQuizExamStore.setState({
-      selectedAnswer: option.text,
+      selectedAnswer: option,
       isAnswered: true,
-      score: score + (option.correct ? 1 : 0),
-      incorrectAnswers: [
-        ...useQuizExamStore.getState().incorrectAnswers,
-        ...(option.correct
-          ? []
-          : [
-              {
-                questionId: question.id,
-                questionText: question.questionText,
-                correctAnswer: question.options.find((o) => o.correct)?.text ?? "",
-                userAnswer: option.text,
-              },
-            ]),
-      ],
+      answers: { ...useQuizExamStore.getState().answers, [question.id]: option },
     });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentIndex >= totalQuestions - 1) {
-      useQuizExamStore.setState({ step: "results" });
+      setSubmitting(true);
+      const { success } = await submitExamAnswers();
+      setSubmitting(false);
+      if (success) {
+        useQuizExamStore.setState({ step: "results" });
+      } else {
+        toast.error(t("ফলাফল জমা দেওয়া যায়নি", "Couldn't submit your answers"));
+      }
     } else {
       useQuizExamStore.setState({
         currentIndex: currentIndex + 1,
@@ -704,20 +665,12 @@ function ExamQuizView({
 
     const q = questionsRef.current[currentIndexRef.current];
     if (q) {
-      useQuizExamStore.setState((prev) => ({
+      // Timeout: mark the question as answered-but-skipped. It is graded as
+      // unanswered (incorrect) server-side; nothing else happens here.
+      useQuizExamStore.setState({
         isAnswered: true,
         selectedAnswer: null,
-        score: prev.score,
-        incorrectAnswers: [
-          ...prev.incorrectAnswers,
-          {
-            questionId: q.id,
-            questionText: q.questionText,
-            correctAnswer: q.options.find((o) => o.correct)?.text ?? "",
-            userAnswer: "Time's up!",
-          },
-        ],
-      }));
+      });
     }
   }, [timeLeft, isAnswered]);
 
@@ -749,10 +702,6 @@ function ExamQuizView({
           <span className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 text-sm font-semibold text-zinc-700 dark:text-zinc-300 tabular-nums">
             <Timer className="h-4 w-4 text-amber-500" />
             {timeLeft}s
-          </span>
-          <span className="text-zinc-500 dark:text-zinc-400">
-            {t("স্কোর", "Score")}{" "}
-            <span className="font-semibold text-emerald-600 dark:text-emerald-400">{num(score)}</span>
           </span>
           <button
             onClick={() => setExitOpen(true)}
@@ -791,23 +740,17 @@ function ExamQuizView({
 
         <div className="space-y-2.5 pt-4">
           {question.options.map((option, i) => {
-            const isCorrectOption = option.correct;
-            const isWrongPick = isAnswered && option.text === selectedAnswer && !isCorrectOption;
+            // The client never knows the correct answer (grading happens
+            // server-side), so it only highlights the user's own selection.
+            const isPicked = isAnswered && option === selectedAnswer;
 
             let optionStyle =
               "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60";
 
             if (isAnswered) {
-              if (isCorrectOption) {
-                optionStyle =
-                  "border-emerald-400 dark:border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 ring-2 ring-emerald-400/30";
-              } else if (isWrongPick) {
-                optionStyle =
-                  "border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-950/40 ring-2 ring-red-400/30";
-              } else {
-                optionStyle =
-                  "border-zinc-200 dark:border-zinc-700 bg-white/40 dark:bg-zinc-950/30 opacity-50";
-              }
+              optionStyle = isPicked
+                ? "border-violet-400 dark:border-violet-600 bg-violet-50 dark:bg-violet-950/40 ring-2 ring-violet-400/30"
+                : "border-zinc-200 dark:border-zinc-700 bg-white/40 dark:bg-zinc-950/30 opacity-50";
             }
 
             return (
@@ -821,20 +764,14 @@ function ExamQuizView({
                   className={cn(
                     "flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold",
                     isAnswered
-                      ? isCorrectOption
-                        ? "bg-emerald-500 text-white"
-                        : isWrongPick
-                        ? "bg-red-500 text-white"
+                      ? isPicked
+                        ? "bg-violet-500 text-white"
                         : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"
                       : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"
                   )}
                 >
-                  {isAnswered && (isCorrectOption || isWrongPick) ? (
-                    isCorrectOption ? (
-                      <Check className="h-3.5 w-3.5" />
-                    ) : (
-                      <X className="h-3.5 w-3.5" />
-                    )
+                  {isAnswered && isPicked ? (
+                    <Check className="h-3.5 w-3.5" />
                   ) : (
                     letters[i] ?? ""
                   )}
@@ -843,14 +780,12 @@ function ExamQuizView({
                 <span
                   className={cn(
                     "flex-1 text-sm sm:text-base leading-relaxed",
-                    isCorrectOption && isAnswered
-                      ? "text-emerald-800 dark:text-emerald-200 font-medium"
-                      : isWrongPick
-                      ? "text-red-800 dark:text-red-200 font-medium"
+                    isPicked
+                      ? "text-violet-800 dark:text-violet-200 font-medium"
                       : "text-zinc-700 dark:text-zinc-300"
                   )}
                 >
-                  {option.text}
+                  {option}
                 </span>
               </button>
             );
@@ -859,8 +794,15 @@ function ExamQuizView({
 
         {isAnswered && (
           <div className="mt-7 flex justify-center animate-fade-up">
-            <Button onClick={handleNext} size="lg" className="px-10">
-              {currentIndex >= totalQuestions - 1
+            <Button
+              onClick={handleNext}
+              size="lg"
+              className="px-10"
+              disabled={submitting}
+            >
+              {submitting
+                ? t("জমা দেওয়া হচ্ছে…", "Submitting…")
+                : currentIndex >= totalQuestions - 1
                 ? t("ফলাফল দেখুন", "See Results")
                 : t("পরের প্রশ্ন", "Next Question")}
             </Button>
@@ -890,77 +832,54 @@ function ExamQuizView({
   );
 }
 
-function ExamResultsView({
-  examId,
-  score,
-  total,
-  incorrectAnswers,
-}: {
-  examId: number | null;
-  score: number;
-  total: number;
-  incorrectAnswers: { questionId: number; questionText: string; correctAnswer: string; userAnswer: string }[];
-}) {
+function ExamResultsView() {
   const t = useT();
   const num = useNum();
   const { path, hydrated } = useAuthPath();
-  const userId = useAuthStore((s) => s.userId);
   const addHistoryEntry = useQuizExamHistoryStore((s) => s.addEntry);
   const updateHistoryEntry = useQuizExamHistoryStore((s) => s.updateEntry);
-  const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+  const finalResult = useQuizExamStore((s) => s.finalResult);
 
   useEffect(() => {
-    if (!hydrated || useQuizExamStore.getState().resultsRecorded) return;
+    if (!hydrated || !finalResult || useQuizExamStore.getState().resultsRecorded) return;
     const today = new Date();
     const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
     incrementQuizzesDone(dateStr, path);
-    addCorrectAnswers(dateStr, score, path);
+    addCorrectAnswers(dateStr, finalResult.correctAnswers, path);
 
     const state = useQuizExamStore.getState();
     const levels = state.levels;
     const timePerQuestion = state.timePerQuestion;
-    const timeTotalQuiz = state.startedAt
-      ? Math.round((Date.now() - state.startedAt) / 1000)
-      : total * timePerQuestion;
     const entry: QuizExamHistoryEntry = {
       id:
         typeof crypto !== "undefined" && "randomUUID" in crypto
           ? crypto.randomUUID()
           : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
-      examId: examId ?? 0,
+      examId: state.examId ?? 0,
       title: state.examTitle ?? "Quiz Exam",
       mode: state.examMode ?? "PRACTICE",
       date: dateStr,
-      win: `${percentage}%`,
+      win: `${finalResult.scoreInPercent}%`,
       levels,
-      numberOfQuestions: total,
+      numberOfQuestions: finalResult.questionCount,
       timePerQuestion,
       createdAt: Date.now(),
     };
     addHistoryEntry(entry);
+    // The server already persisted this attempt; the history entry references
+    // the server record so it does not need a separate sync request.
+    updateHistoryEntry(entry.id, { synced: true, dbId: finalResult.id });
     useQuizExamStore.setState({ resultsRecorded: true });
-
-    saveExamResultToDb({
-      userId,
-      clientId: entry.id,
-      examId: examId ?? null,
-      title: state.examTitle ?? "Quiz Exam",
-      mode: state.examMode ?? "PRACTICE",
-      score,
-      total,
-      percentage,
-      levels,
-      timePerQuestion,
-      timeTotalQuiz,
-      scheduledOpeningTime: state.scheduledOpeningTime,
-      scheduledClosingTime: state.scheduledClosingTime,
-    }).then((dbId) => {
-      if (typeof dbId === "number") {
-        updateHistoryEntry(entry.id, { synced: true, dbId });
-      }
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated]);
+  }, [hydrated, finalResult]);
+
+  if (!finalResult) {
+    return null;
+  }
+
+  const total = finalResult.questionCount;
+  const score = finalResult.correctAnswers;
+  const percentage = finalResult.scoreInPercent;
 
   let resultColor: string;
   let resultLabel: string;
@@ -1011,16 +930,16 @@ function ExamResultsView({
           </div>
         </div>
 
-        {incorrectAnswers.length > 0 && (
+        {finalResult.review.length > 0 && (
           <div className="animate-fade-up-2 mb-10">
             <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
               {t(
-                `সঠিক নয় এমন প্রশ্ন (${num(incorrectAnswers.length)})`,
-                `Questions to Review (${incorrectAnswers.length})`
+                `সঠিক নয় এমন প্রশ্ন (${num(finalResult.review.length)})`,
+                `Questions to Review (${finalResult.review.length})`
               )}
             </h3>
             <div className="space-y-3">
-              {incorrectAnswers.map((item, i) => (
+              {finalResult.review.map((item, i) => (
                 <div
                   key={i}
                   className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-4 sm:p-5"
@@ -1034,14 +953,13 @@ function ExamResultsView({
                     <p className="text-emerald-600 dark:text-emerald-400">
                       {t("সঠিক:", "Correct:")} {item.correctAnswer}
                     </p>
-                    {item.userAnswer !== "Time's up!" && (
+                    {item.userAnswer !== null ? (
                       <p className="text-red-500 dark:text-red-400">
                         {t("আপনার উত্তর:", "Your answer:")} {item.userAnswer}
                       </p>
-                    )}
-                    {item.userAnswer === "Time's up!" && (
+                    ) : (
                       <p className="text-amber-500 dark:text-amber-400">
-                        {t("সময় শেষ হয়ে গেছে", "Time ran out")}
+                        {t("উত্তর দেওয়া হয়নি", "Not answered")}
                       </p>
                     )}
                   </div>

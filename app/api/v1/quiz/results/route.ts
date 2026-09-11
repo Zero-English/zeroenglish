@@ -67,6 +67,20 @@ export async function POST(request: NextRequest) {
         );
     }
 
+    // Exam results are graded server-side and must be submitted through
+    // POST /api/v1/quiz-exam/{id}/submit. Accepting client-computed scores
+    // here for exams would let any user forge their exam result.
+    if (parsed.data.examId != null) {
+        return NextResponse.json(
+            {
+                data: null,
+                message: "Exam results must be submitted via the exam submit endpoint",
+                success: false,
+            },
+            { status: 403 }
+        );
+    }
+
     const result = await createQuizResult({
         ...parsed.data,
         userId: session.user.id,

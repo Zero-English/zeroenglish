@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { requireAdmin } from "@/lib/api-auth";
 import { getUsersByPage, deleteUsersByIds } from "@/services/user.service";
 import logger from "@/utils/logger";
 
@@ -55,6 +56,9 @@ import logger from "@/utils/logger";
  *         description: Forbidden
  */
 export async function GET(request: NextRequest) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const searchParams = request.nextUrl.searchParams;
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "10", 10);

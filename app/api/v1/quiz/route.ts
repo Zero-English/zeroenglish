@@ -1,9 +1,13 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getAllQuizQuestions, getQuizQuestionsByPage, createQuizQuestion } from "@/services/quiz.service";
 import { quizQuestionSchema } from "@/utils/validation/zod";
+import { requireAdmin } from "@/lib/api-auth";
 import logger from "@/utils/logger";
 
 export async function GET(request: NextRequest) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const searchParams = request.nextUrl.searchParams;
     const pageParam = searchParams.get("page");
 
@@ -19,6 +23,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     logger.info("Quiz question create started");
 
     const body = await request.json();

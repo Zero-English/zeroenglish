@@ -1,4 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
+import { requireAdmin } from "@/lib/api-auth";
 import { updateWordById, deleteWordById } from "@/services/word.service";
 
 /**
@@ -91,6 +92,9 @@ export async function PUT(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const { id } = await params;
     const wordId = parseInt(id, 10);
 
@@ -121,6 +125,9 @@ export async function DELETE(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
     const { id } = await params;
     const wordId = parseInt(id, 10);
 
