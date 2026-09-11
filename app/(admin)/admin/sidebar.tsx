@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { AnimatePresence, motion } from "motion/react";
-import { PanelLeft, Users, BookOpen, Brain, ClipboardList, LogOut } from "lucide-react";
+import { PanelLeft, Users, BookOpen, Brain, ClipboardList, Image, LogOut } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -14,6 +14,7 @@ import {
 const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/vocabulary", label: "Vocabulary", icon: BookOpen },
+  { href: "/admin/media", label: "Media", icon: Image },
   { href: "/admin/quizzes", label: "Quizzes", icon: Brain },
   { href: "/admin/exams", label: "Exams", icon: ClipboardList },
 ];

@@ -25,6 +25,25 @@ model Blog {
   updatedAt       DateTime @updatedAt
 }
 
+model Media {
+  id        Int      @id @default(autoincrement())
+  fileId    String   @unique
+  url       String
+  name      String
+  filePath  String
+  mimeType  String
+  size      Int
+  width     Int?
+  height    Int?
+  altText   String   @default("")
+  caption   String   @default("")
+  tags      String[] @default([])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
 model QuizExam {
   id                   Int                @id @default(autoincrement())
   title                String
