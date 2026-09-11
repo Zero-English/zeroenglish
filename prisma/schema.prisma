@@ -5,17 +5,20 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-}
+} 
 
 model Blog {
   id              Int      @id @default(autoincrement())
-  title           String
-  description     String
+  titleEn           String
+  titleBn           String
+  descriptionEn     String
+  descriptionBn     String
   metaTitle       String
   metaDescription String
   slug            String   @unique
   keywords        String[]
-  content         String
+  contentEn         String
+  contentBn         String
   media           String?
   published       Boolean  @default(false)
   createdAt       DateTime @default(now())
