@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { putWord, deleteWord, bulkPutWords, getWordsByType, getWord } from "./db";
-import { useAuthPath, useAuthStatus } from "./auth-store";
+import { putWord, setWordRemoved, reviveWord, deleteWord, bulkPutWords, getWordsByType, getWord } from "./db";
+import { useAuthPath } from "./auth-store";
+import { requestLogin } from "./login-required";
 
 const TYPE = "still-learning" as const;
 
@@ -27,11 +28,10 @@ function emitChange() {
   for (const listener of listeners) listener();
 }
 
-async function syncDbStillLearningDelete(id: number): Promise<void> {
-  try {
-    await fetch(`/api/v1/words/${id}/still-learning`, { method: "DELETE" });
-  } catch (err) {
-    console.error(`Failed to sync removed still learning word #${id}:`, err);
+function notifyProgressChanged() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("progress-changed"));
+    window.dispatchEvent(new Event("activity-changed"));
   }
 }
 
@@ -64,7 +64,6 @@ function loadStillLearning(path: string): Promise<void> {
 
 export function useStillLearningWords() {
   const { path, hydrated } = useAuthPath();
-  const { status } = useAuthStatus();
 
   useEffect(() => {
     if (hydrated) void loadStillLearning(path);
@@ -84,6 +83,7 @@ export function useStillLearningWords() {
   const addStillLearning = useCallback(
     (entries: { id: number }[]) => {
       if (entries.length === 0) return;
+      if (requestLogin()) return;
       const next = new Set(snap.ids);
       for (const { id } of entries) next.add(key(id));
       snapshot = { ...snap, ids: next };
@@ -93,17 +93,24 @@ export function useStillLearningWords() {
         .map(({ id }) => key(id))
         .filter((k) => !snap.ids.has(k));
       if (toAdd.length > 0) {
-        void bulkPutWords(
-          toAdd.map((id) => ({ id, type: TYPE })),
-          path
-        );
+        void (async () => {
+          for (const id of toAdd) {
+            await reviveWord(path, TYPE, id);
+          }
+          await bulkPutWords(
+            toAdd.map((id) => ({ id, type: TYPE })),
+            path
+          );
+        })();
       }
+      notifyProgressChanged();
     },
     [snap, path]
   );
 
   const toggleStillLearning = useCallback(
     (id: number) => {
+      if (requestLogin()) return;
       const k = key(id);
       const adding = !snap.ids.has(k);
       const next = new Set(snap.ids);
@@ -112,22 +119,29 @@ export function useStillLearningWords() {
       snapshot = { ...snap, ids: next };
       emitChange();
       if (adding) {
-        void putWord({ id: k, type: TYPE }, path);
+        void (async () => {
+          await reviveWord(path, TYPE, k);
+          await putWord({ id: k, type: TYPE }, path);
+        })();
       } else {
         void (async () => {
           const existing = await getWord(path, TYPE, k);
-          if (status === "google" && existing?.synced === true) {
-            await syncDbStillLearningDelete(id);
+          if (!existing) return;
+          if (existing.synced === true) {
+            await setWordRemoved(path, TYPE, k);
+          } else {
+            await deleteWord(path, TYPE, k);
           }
-          await deleteWord(path, TYPE, k);
         })();
       }
+      notifyProgressChanged();
     },
-    [snap, path, status]
+    [snap, path]
   );
 
   const removeStillLearning = useCallback(
     (id: number) => {
+      if (requestLogin()) return;
       const k = key(id);
       const next = new Set(snap.ids);
       next.delete(k);
@@ -135,13 +149,16 @@ export function useStillLearningWords() {
       emitChange();
       void (async () => {
         const existing = await getWord(path, TYPE, k);
-        if (status === "google" && existing?.synced === true) {
-          await syncDbStillLearningDelete(id);
+        if (!existing) return;
+        if (existing.synced === true) {
+          await setWordRemoved(path, TYPE, k);
+        } else {
+          await deleteWord(path, TYPE, k);
         }
-        await deleteWord(path, TYPE, k);
       })();
+      notifyProgressChanged();
     },
-    [snap, path, status]
+    [snap, path]
   );
 
   const isStillLearning = useCallback(

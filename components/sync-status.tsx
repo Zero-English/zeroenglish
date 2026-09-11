@@ -1,9 +1,10 @@
 "use client";
 
-import { useSyncStore, runSync } from "@/lib/sync";
+import { useSyncStore, runSync, refreshPending } from "@/lib/sync";
 import { useAuthStatus } from "@/lib/auth-store";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 import {
   AlertTriangle,
   Bookmark,
@@ -32,6 +33,7 @@ export function SyncStatus() {
     pendingQuiz,
     pendingLearned,
     pendingBookmarked,
+    pendingStillLearning,
     lastSyncedAt,
     lastError,
   } = useSyncStore();
@@ -40,8 +42,15 @@ export function SyncStatus() {
   const signedIn = authStatus === "google";
   const syncing = status === "syncing";
   const failed = status === "failed";
-  const pending = pendingQuiz + pendingLearned + pendingBookmarked;
+  const pending = pendingQuiz + pendingLearned + pendingBookmarked + pendingStillLearning;
   const allSynced = signedIn && !syncing && !failed && pending === 0;
+
+  useEffect(() => {
+    if (!signedIn || !hydrated) return;
+    const onChange = () => void refreshPending();
+    window.addEventListener("progress-changed", onChange);
+    return () => window.removeEventListener("progress-changed", onChange);
+  }, [signedIn, hydrated]);
 
   const rows = [
     {
@@ -64,6 +73,13 @@ export function SyncStatus() {
       icon: Bookmark,
       tint: "text-amber-600 dark:text-amber-400",
       bg: "bg-amber-100 dark:bg-amber-900/30",
+    },
+    {
+      label: t("শিখছি", "Still learning"),
+      count: pendingStillLearning,
+      icon: RefreshCw,
+      tint: "text-violet-600 dark:text-violet-400",
+      bg: "bg-violet-100 dark:bg-violet-900/30",
     },
   ];
 

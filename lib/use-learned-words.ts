@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
-import { putWord, deleteWord, getWordsByType, getWord } from "./db";
-import { useAuthPath, useAuthStatus } from "./auth-store";
+import { putWord, setWordRemoved, reviveWord, getWordsByType, getWord, deleteWord } from "./db";
+import { useAuthPath } from "./auth-store";
+import { requestLogin } from "./login-required";
 
 const TYPE = "learned" as const;
 
@@ -27,11 +28,10 @@ function emitChange() {
   for (const listener of listeners) listener();
 }
 
-async function syncDbLearnedDelete(id: number): Promise<void> {
-  try {
-    await fetch(`/api/v1/words/${id}/learned`, { method: "DELETE" });
-  } catch (err) {
-    console.error(`Failed to sync unlearned word #${id}:`, err);
+function notifyProgressChanged() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("progress-changed"));
+    window.dispatchEvent(new Event("activity-changed"));
   }
 }
 
@@ -64,7 +64,6 @@ function loadLearned(path: string): Promise<void> {
 
 export function useLearnedWords() {
   const { path, hydrated } = useAuthPath();
-  const { status } = useAuthStatus();
 
   useEffect(() => {
     if (hydrated) void loadLearned(path);
@@ -83,6 +82,7 @@ export function useLearnedWords() {
 
   const toggleLearned = useCallback(
     (id: number) => {
+      if (requestLogin()) return;
       const k = key(id);
       const adding = !snap.ids.has(k);
       const next = new Set(snap.ids);
@@ -91,21 +91,24 @@ export function useLearnedWords() {
       snapshot = { ...snap, ids: next };
       emitChange();
       if (adding) {
-        void putWord({ id: k, type: TYPE }, path);
+        void (async () => {
+          await reviveWord(path, TYPE, k);
+          await putWord({ id: k, type: TYPE }, path);
+        })();
       } else {
         void (async () => {
           const existing = await getWord(path, TYPE, k);
-          if (status === "google" && existing?.synced === true) {
-            await syncDbLearnedDelete(id);
+          if (!existing) return;
+          if (existing.synced === true) {
+            await setWordRemoved(path, TYPE, k);
+          } else {
+            await deleteWord(path, TYPE, k);
           }
-          await deleteWord(path, TYPE, k);
         })();
       }
-      if (typeof window !== "undefined") {
-        window.dispatchEvent(new Event("activity-changed"));
-      }
+      notifyProgressChanged();
     },
-    [snap, path, status]
+    [snap, path]
   );
 
   const isLearned = useCallback((id: number) => snap.ids.has(key(id)), [snap]);

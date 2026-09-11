@@ -6,7 +6,6 @@ import {
   useAuthHydrated,
   identityNamespace,
 } from "@/lib/auth-store";
-import { useQuizHistoryStore } from "@/lib/quiz-history-store";
 import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
 import { runSync } from "@/lib/sync";
 
@@ -60,31 +59,26 @@ const noopStorage = {
 };
 
 /**
- * Resets the in-memory scoped stores (quiz-history, quiz-state) when the
- * identity changes. Must NOT go through the zustand persist-wrapped setter,
- * because that would immediately write the wiped state back to localStorage —
- * destroying the current identity's saved data before rehydrate can read it.
- * Temporarily swap the persist storage for a no-op, reset, then restore so the
- * following rehydrate reads the intact persisted data.
+ * Resets the in-memory scoped stores (quiz-state) when the identity changes.
+ * Must NOT go through the zustand persist-wrapped setter, because that would
+ * immediately write the wiped state back to localStorage — destroying the
+ * current identity's saved data before rehydrate can read it. Temporarily swap
+ * the persist storage for a no-op, reset, then restore so the following
+ * rehydrate reads the intact persisted data.
+ *
+ * Practice quiz history is no longer here: it lives in IndexedDB scoped by the
+ * auth path (see `lib/use-quiz-history.ts`), so it needs no clear/rehydrate.
  */
 function clearScopedStores(): void {
-  const historyStorage = useQuizHistoryStore.persist.getOptions().storage;
   const stateStorage = useQuizStore.persist.getOptions().storage;
-
-  useQuizHistoryStore.persist.setOptions({ storage: noopStorage });
-  useQuizHistoryStore.setState({ entries: [] });
-  useQuizHistoryStore.persist.setOptions({ storage: historyStorage });
 
   useQuizStore.persist.setOptions({ storage: noopStorage });
   resetQuizState();
   useQuizStore.persist.setOptions({ storage: stateStorage });
 }
 
-function rehydrateScopedStores(): Promise<void> {
-  return Promise.all([
-    useQuizHistoryStore.persist.rehydrate(),
-    useQuizStore.persist.rehydrate(),
-  ]).then(() => undefined);
+async function rehydrateScopedStores(): Promise<void> {
+  await useQuizStore.persist.rehydrate();
 }
 
 export function useAppHydration(): void {

@@ -49,11 +49,12 @@ export function BindAccount() {
             }
 
             // With redirect:false the client navigates to Google; a successful
-            // bind ends up redirecting back to /profile, where ProfileGuard
-            // detects the guest + new session and performs the guest-data sync
-            // and identity switch. An existing account is rejected by the
-            // signIn callback and redirected to /login?error=AccessDenied, which
-            // the login screen surfaces as a toast.
+            // bind ends up redirecting back to /profile, where SessionAdopter
+            // detects the guest + new session and migrates the guest's
+            // IndexedDB profile into the new account (then syncs it). An
+            // existing account is rejected by the signIn callback and
+            // redirected to /login?error=AccessDenied, which the login screen
+            // surfaces as a toast.
             await signIn("google", {
                 redirect: false,
                 callbackUrl: "/profile",

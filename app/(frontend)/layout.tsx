@@ -10,6 +10,8 @@ import { TopLoader } from "@/components/top-loader";
 import { Toaster } from "@/components/ui/sonner";
 import { AppHydration } from "@/components/app-hydration";
 import {ActivityTracker} from "@/components/activity-tracker";
+import { LoginRequiredDrawer } from "@/components/login-required-drawer";
+import { SessionAdopter } from "@/components/session-adopter";
 
 export const metadata: Metadata = {
   title: "Learn English Vocabulary in Bangla | Zero English",
@@ -66,6 +68,8 @@ export default function FrontendLayout({
               <MobileBottomNav />
               <Footer />
             </div>
+            <LoginRequiredDrawer />
+            <SessionAdopter />
           </div>
         </LanguageProvider>
       </SidebarProvider>

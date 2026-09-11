@@ -24,7 +24,7 @@ import { Classic } from "@/components/classic";
 import { ProfileActivityChart } from "@/components/profile-activity-chart";
 import { QuizHistoryPanel } from "@/components/profile-quiz-history";
 import { QuizExamHistoryPanel } from "@/components/profile-quiz-exam-history";
-import { useQuizHistoryStore } from "@/lib/quiz-history-store";
+import { useQuizHistory } from "@/lib/use-quiz-history";
 import { useQuizExamHistoryStore } from "@/lib/quiz-exam-history-store";
 import { useT } from "@/components/language-provider";
 
@@ -258,7 +258,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const [quizSubTab, setQuizSubTab] = useState<"history" | "exams" | "still-learning">(
     activeTab === "still-learning" ? "still-learning" : "history"
   );
-  const quizCount = useQuizHistoryStore((s) => s.entries.length);
+  const quizCount = useQuizHistory().entries.length;
   const examCount = useQuizExamHistoryStore((s) => s.entries.length);
   const { bookmarkedIds, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
   const { learnedIds, isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();

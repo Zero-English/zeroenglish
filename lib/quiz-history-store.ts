@@ -1,9 +1,14 @@
 "use client";
 
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { createScopedLocalStorage } from "./state-storage";
-import { identityNamespace } from "./auth-store";
+/**
+ * Shared types for practice quiz results.
+ *
+ * Practice quiz results are now stored identity-scoped in IndexedDB (see
+ * `lib/use-quiz-history.ts`); this module only re-exports the shared types so
+ * consumers (sync, quiz UI, profile panels) keep a single source of truth.
+ * The old zustand/localStorage store has been removed — data was migrated to
+ * the IndexedDB `quizHistory` table by the Dexie v3 upgrade.
+ */
 
 export type QuizType =
   | "english_to_bangla"
@@ -23,43 +28,3 @@ export interface QuizHistoryEntry {
   dbId?: number | null;
   createdAt?: number;
 }
-
-function createEntryId(): string {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
-  }
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-}
-
-interface QuizHistoryState {
-  entries: QuizHistoryEntry[];
-  addEntry: (entry: QuizHistoryEntry) => void;
-  updateEntry: (id: string, patch: Partial<QuizHistoryEntry>) => void;
-  clearHistory: () => void;
-}
-
-export const useQuizHistoryStore = create<QuizHistoryState>()(
-  persist(
-    (set) => ({
-      entries: [],
-      addEntry: (entry) =>
-        set((s) => ({
-          entries: [
-            { ...entry, id: entry.id ?? createEntryId(), synced: entry.synced ?? false },
-            ...s.entries,
-          ],
-        })),
-      updateEntry: (id, patch) =>
-        set((s) => ({
-          entries: s.entries.map((e) => (e.id === id ? { ...e, ...patch } : e)),
-        })),
-      clearHistory: () => set({ entries: [] }),
-    }),
-    {
-      name: "quiz-history",
-      storage: createScopedLocalStorage<Pick<QuizHistoryState, "entries">>(identityNamespace),
-      skipHydration: true,
-      partialize: (s) => ({ entries: s.entries }),
-    }
-  )
-);
