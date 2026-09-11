@@ -35,7 +35,8 @@ function NavLinks({
   const { level } = useSelectedLevel();
   const t = useT();
   const isLoggedIn = status !== "none";
-  const vocabularyHref = level ? `/vocabulary/${level.toLowerCase()}` : "/vocabulary";
+  // const vocabularyHref = level ? `/vocabulary/${level.toLowerCase()}` : "/vocabulary";
+  const vocabularyHref = "/vocabulary"; // Fixed by Mahir because it should go to /vocabulary not /vocabulary/:level
   const navLinks = [
     { href: "/", label: t("হোম", "Home"), icon: Home },
     { href: vocabularyHref, label: t("শব্দভাণ্ডার", "Vocabulary"), icon: LibraryBig },
