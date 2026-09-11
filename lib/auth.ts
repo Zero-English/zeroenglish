@@ -1,3 +1,4 @@
+import { AsyncLocalStorage } from "node:async_hooks";
 import type { Adapter, AdapterUser } from "next-auth/adapters";
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
@@ -6,29 +7,24 @@ import logger from "@/utils/logger";
 import prisma from "@/utils/prisma";
 import "dotenv/config";
 
-// Bind-intent flag. Armed by the NextAuth route handler (markBindIntentPending)
-// just before it runs the OAuth callback when a guest clicked "Continue with
-// Google" to bind an account. The signIn callback reads it to reject Google
-// accounts that already exist in the database (only brand-new accounts may be
-// bound, and they receive the guest's synced localStorage data).
-let bindIntentPending = false;
+// Request-scoped bind intent. Armed by the NextAuth route handler (via the
+// AsyncLocalStorage context) just before it runs the OAuth callback when a
+// guest clicked "Continue with Google" to bind an account. The signIn
+// callback reads it to reject Google accounts that already exist in the
+// database (only brand-new accounts may be bound, and they receive the
+// guest's synced localStorage data). Using AsyncLocalStorage keeps the intent
+// isolated per-request so concurrent logins can never observe each other's
+// state.
+export const bindIntentStore = new AsyncLocalStorage<{ pending: boolean }>();
 
-/**
- * Arms the bind intent for the current request. Called by the NextAuth route
- * handler when the `pending_bind` cookie is present on an OAuth callback. The
- * signIn callback then only allows brand-new accounts and rejects existing ones
- * with an "AccessDenied" error so the client can show "account already exists".
- */
 export function markBindIntentPending(): void {
-    bindIntentPending = true;
+    const store = bindIntentStore.getStore();
+    if (store) store.pending = true;
 }
 
-/**
- * Clears the bind intent after the request finishes. Prevents the flag leaking
- * into subsequent/concurrent requests handled by the same server process.
- */
 export function clearBindIntent(): void {
-    bindIntentPending = false;
+    const store = bindIntentStore.getStore();
+    if (store) store.pending = false;
 }
 
 async function accountAlreadyExists(user: {
@@ -63,15 +59,10 @@ async function accountAlreadyExists(user: {
 
 const baseAdapter = PrismaAdapter(prisma);
 
-function logCall(method: string, ...args: unknown[]): void {
-    logger.info(`[prisma-adapter] ${method}`, { args });
-}
-
 const adapter: Adapter = {
     ...baseAdapter,
 
     createUser: async (user: AdapterUser) => {
-        logger.info("[prisma-adapter] createUser", { user });
         const email = user.email ?? "";
         const userName =
             user.name?.trim() ||
@@ -83,105 +74,66 @@ const adapter: Adapter = {
             user_name: userName,
         } as AdapterUser & { user_name: string };
 
-        const result = (await baseAdapter.createUser?.(data)) as ReturnType<
+        return (await baseAdapter.createUser?.(data)) as ReturnType<
             NonNullable<Adapter["createUser"]>
         >;
-        logger.info("[prisma-adapter] createUser result", { result });
-        return result;
     },
 
     getUser: async (id) => {
-        logCall("getUser", { id });
         const userId = Number(id);
-        const result = (await prisma.user.findUnique({
+        return (await prisma.user.findUnique({
             where: {
                 id: userId,
             },
         })) as ReturnType<NonNullable<Adapter["getUser"]>>;
-        logger.info("[prisma-adapter] getUser result", { result });
-        return result;
     },
 
-    getUserByEmail: async (email) => {
-        logCall("getUserByEmail", { email });
-        const result = (await baseAdapter.getUserByEmail?.(email)) as ReturnType<
+    getUserByEmail: async (email) =>
+        (await baseAdapter.getUserByEmail?.(email)) as ReturnType<
             NonNullable<Adapter["getUserByEmail"]>
-        >;
-        logger.info("[prisma-adapter] getUserByEmail result", { result });
-        return result;
-    },
+        >,
 
-    getUserByAccount: async ({ provider, providerAccountId }) => {
-        logCall("getUserByAccount", { provider, providerAccountId });
-        const result = (await baseAdapter.getUserByAccount?.({
+    getUserByAccount: async ({ provider, providerAccountId }) =>
+        (await baseAdapter.getUserByAccount?.({
             provider,
             providerAccountId,
-        })) as ReturnType<NonNullable<Adapter["getUserByAccount"]>>;
-        logger.info("[prisma-adapter] getUserByAccount result", { result });
-        return result;
-    },
+        })) as ReturnType<NonNullable<Adapter["getUserByAccount"]>>,
 
-    updateUser: async (user) => {
-        logCall("updateUser", { user });
-        const result = (await baseAdapter.updateUser?.(user)) as ReturnType<
+    updateUser: async (user) =>
+        (await baseAdapter.updateUser?.(user)) as ReturnType<
             NonNullable<Adapter["updateUser"]>
-        >;
-        logger.info("[prisma-adapter] updateUser result", { result });
-        return result;
-    },
+        >,
 
     deleteUser: async (id) => {
-        logCall("deleteUser", { id });
         await baseAdapter.deleteUser?.(id);
     },
 
-    linkAccount: async (account: Parameters<NonNullable<Adapter["linkAccount"]>>[0]) => {
-        logCall("linkAccount", { account });
-        const result = (await baseAdapter.linkAccount?.(account)) as ReturnType<
+    linkAccount: async (account: Parameters<NonNullable<Adapter["linkAccount"]>>[0]) =>
+        (await baseAdapter.linkAccount?.(account)) as ReturnType<
             NonNullable<Adapter["linkAccount"]>
-        >;
-        logger.info("[prisma-adapter] linkAccount result", { result });
-        return result;
-    },
+        >,
 
-    unlinkAccount: async (account: Parameters<NonNullable<Adapter["unlinkAccount"]>>[0]) => {
-        logCall("unlinkAccount", { account });
-        const result = (await baseAdapter.unlinkAccount?.(
+    unlinkAccount: async (account: Parameters<NonNullable<Adapter["unlinkAccount"]>>[0]) =>
+        (await baseAdapter.unlinkAccount?.(
             account
-        )) as ReturnType<NonNullable<Adapter["unlinkAccount"]>>;
-        logger.info("[prisma-adapter] unlinkAccount result", { result });
-        return result;
-    },
+        )) as ReturnType<NonNullable<Adapter["unlinkAccount"]>>,
 
-    createSession: async (session) => {
-        logCall("createSession", { session });
-        const result = (await baseAdapter.createSession?.(session)) as ReturnType<
+    createSession: async (session) =>
+        (await baseAdapter.createSession?.(session)) as ReturnType<
             NonNullable<Adapter["createSession"]>
-        >;
-        logger.info("[prisma-adapter] createSession result", { result });
-        return result;
-    },
+        >,
 
-    getSessionAndUser: async (sessionToken) => {
-        logCall("getSessionAndUser", { sessionToken });
-        const result = (await baseAdapter.getSessionAndUser?.(
+    getSessionAndUser: async (sessionToken) =>
+        (await baseAdapter.getSessionAndUser?.(
             sessionToken
-        )) as ReturnType<NonNullable<Adapter["getSessionAndUser"]>>;
-        logger.info("[prisma-adapter] getSessionAndUser result", { result });
-        return result;
-    },
+        )) as ReturnType<NonNullable<Adapter["getSessionAndUser"]>>,
 
-    updateSession: async (session) => {
-        logCall("updateSession", { session });
-        const result = (await baseAdapter.updateSession?.(session)) as ReturnType<
+    updateSession: async (session) =>
+        (await baseAdapter.updateSession?.(session)) as ReturnType<
             NonNullable<Adapter["updateSession"]>
-        >;
-        logger.info("[prisma-adapter] updateSession result", { result });
-        return result;
-    },
+        >,
 
     deleteSession: async (sessionToken) => {
-        logCall("deleteSession", { sessionToken });
         await baseAdapter.deleteSession?.(sessionToken);
     },
 };
@@ -199,7 +151,8 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         async signIn({ user, account }) {
-            if (bindIntentPending) {
+            const bind = bindIntentStore.getStore();
+            if (bind?.pending) {
                 let exists = true;
                 try {
                     exists = await accountAlreadyExists(user, account);
@@ -215,7 +168,7 @@ export const authOptions: NextAuthOptions = {
                     return false;
                 }
             }
-            logger.info("Logged in Successfully", { user });
+            logger.info("Logged in successfully", { userId: user?.id });
             return true;
         },
         async jwt({ token, user }) {

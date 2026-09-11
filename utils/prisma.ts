@@ -10,7 +10,18 @@ import logger from "./logger";
 //     process.env.DATABASE_URL;
 // const adapter = new PrismaPg({ connectionString: dbUrl });
 
-const connectionString = `${process.env?.["DATABASE_URL"]}`;
+const connectionString = `${process.env?.["DATABASE_URL"] ?? ""}`;
+
+// Never log the full connection string: it embeds the DB user/password.
+// Derive a safe identifier (host[:port]) for diagnostics instead.
+const safeDbHost = (() => {
+    try {
+        const parsed = new URL(connectionString);
+        return parsed.host || "unknown";
+    } catch {
+        return "unknown";
+    }
+})();
 
 const pool = new Pool({
     connectionString,
@@ -56,17 +67,14 @@ export const withPrismaRetry = async <T>(
 
 export const connectionCheck = async () => {
     try {
-        logger.info(`Checking Prisma connection to DB at ${connectionString}`);
         const [sizeResult] = await prisma.$queryRaw<
             { size: string }[]
         >`SELECT pg_size_pretty(pg_database_size(current_database())) as size`;
-        logger.info(`Database size is ${sizeResult?.size}`);
         const [nameResult] = await prisma.$queryRaw<
             { name: string }[]
         >`SELECT current_database()::text as name`;
-        logger.info(`Database name is ${nameResult?.name}`);
         logger.info(
-            `Prisma is connected to DB: ${nameResult?.name} at ${connectionString}. Database size: ${sizeResult?.size}`,
+            `Prisma is connected to DB "${nameResult?.name}" at ${safeDbHost} (size: ${sizeResult?.size})`,
         );
     } catch (error) {
         logger.warn(

@@ -60,6 +60,7 @@ export type QuizExamStep = "list" | "quiz" | "results";
 export interface QuizExamIncorrectAnswer {
   questionId: number;
   questionText: string;
-  correctAnswer: string;
+  // null while a competitive exam is still open (answer key withheld)
+  correctAnswer: string | null;
   userAnswer: string | null;
 }

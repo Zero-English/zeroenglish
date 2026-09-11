@@ -73,8 +73,11 @@ export async function GET(request: NextRequest) {
     if (forbidden) return forbidden;
 
     const searchParams = request.nextUrl.searchParams;
-    const page = parseInt(searchParams.get("page") || "1", 10);
-    const limit = parseInt(searchParams.get("limit") || "10", 10);
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
+    const limit = Math.min(
+        100,
+        Math.max(1, parseInt(searchParams.get("limit") || "10", 10) || 10)
+    );
     const modeParam = searchParams.get("mode");
     const levelParam = searchParams.get("level");
     const search = searchParams.get("search") || undefined;

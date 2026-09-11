@@ -81,6 +81,37 @@ export async function POST(request: NextRequest) {
         );
     }
 
+    // Practice results are client-computed (localStorage-first), but we still
+    // enforce internal consistency so patently forged values are rejected:
+    // the correct count can never exceed the question count, totalScore must
+    // match correctAnswers, and the percentage must match (within rounding).
+    const questionCount = parsed.data.questionCount;
+    const correctAnswers = parsed.data.correctAnswers;
+    const expected = questionCount > 0 ? Math.round((correctAnswers / questionCount) * 100) : 0;
+    const scoreConsistent =
+        correctAnswers >= 0 &&
+        correctAnswers <= questionCount &&
+        parsed.data.totalScore === correctAnswers &&
+        parsed.data.scoreInPercent >= 0 &&
+        parsed.data.scoreInPercent <= 100 &&
+        Math.abs(parsed.data.scoreInPercent - expected) <= 5 &&
+        questionCount <= 200 &&
+        parsed.data.timePerQuestion <= 600;
+
+    if (!scoreConsistent) {
+        logger.warn(`Quiz result create rejected: inconsistent score values`, {
+            userId: session.user.id,
+            questionCount,
+            correctAnswers,
+            scoreInPercent: parsed.data.scoreInPercent,
+            totalScore: parsed.data.totalScore,
+        });
+        return NextResponse.json(
+            { data: null, message: "Invalid score values", success: false },
+            { status: 400 }
+        );
+    }
+
     const result = await createQuizResult({
         ...parsed.data,
         userId: session.user.id,

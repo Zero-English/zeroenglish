@@ -950,9 +950,18 @@ function ExamResultsView() {
                     </span>
                   </div>
                   <div className="mt-2 text-sm space-y-1">
-                    <p className="text-emerald-600 dark:text-emerald-400">
-                      {t("সঠিক:", "Correct:")} {item.correctAnswer}
-                    </p>
+                    {item.correctAnswer !== null ? (
+                      <p className="text-emerald-600 dark:text-emerald-400">
+                        {t("সঠিক:", "Correct:")} {item.correctAnswer}
+                      </p>
+                    ) : (
+                      <p className="text-zinc-500 dark:text-zinc-400">
+                        {t(
+                          "পরীক্ষা শেষ হওয়ার পর সঠিক উত্তর দেখা যাবে",
+                          "Correct answer will be shown after the exam closes"
+                        )}
+                      </p>
+                    )}
                     {item.userAnswer !== null ? (
                       <p className="text-red-500 dark:text-red-400">
                         {t("আপনার উত্তর:", "Your answer:")} {item.userAnswer}

@@ -12,8 +12,11 @@ export async function GET(request: NextRequest) {
     const pageParam = searchParams.get("page");
 
     if (pageParam) {
-        const page = parseInt(pageParam, 10);
-        const limit = parseInt(searchParams.get("limit") || "10", 10);
+        const page = Math.max(1, parseInt(pageParam, 10) || 1);
+        const limit = Math.min(
+            100,
+            Math.max(1, parseInt(searchParams.get("limit") || "10", 10) || 10)
+        );
         const result = await getQuizQuestionsByPage(page, limit);
         return NextResponse.json(result);
     }

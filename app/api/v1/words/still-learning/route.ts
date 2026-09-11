@@ -101,6 +101,13 @@ export async function POST(request: NextRequest) {
         );
     }
 
+    if (wordIds.length > 500) {
+        return NextResponse.json(
+            { data: null, message: "Too many word ids (max 500)", success: false },
+            { status: 400 }
+        );
+    }
+
     const result = await markWordsAsStillLearning(
         session.user.id,
         wordIds as number[]

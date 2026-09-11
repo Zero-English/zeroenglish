@@ -9,6 +9,13 @@ import logger from "@/utils/logger";
 
 export const dynamic = "force-dynamic";
 
+// Small tolerance so a submission that lands in flight right at the closing
+// instant is not discarded; anything after the window is rejected.
+const SUBMIT_GRACE_MS = 60_000;
+// Non-PRACTICE (competitive) exams allow one official attempt plus one
+// reattempt. ABANDONED attempts never count toward the cap.
+const MAX_COMPETITIVE_ATTEMPTS = 2;
+
 /**
  * @openapi
  * /api/v1/quiz-exam/{id}/submit:
@@ -19,7 +26,11 @@ export const dynamic = "force-dynamic";
  *       persists the result, and returns the official score plus a review of
  *       every wrong/unanswered question. The client never receives the correct
  *       answers before submission, so client-supplied scores cannot be trusted
- *       (they are ignored entirely).
+ *       (they are ignored entirely). Duplicate answers to the same question are
+ *       graded once, submissions are only accepted while the exam is open
+ *       (plus a small grace period), and competitive exams are capped at a
+ *       small number of attempts. For competitive exams the correct answers in
+ *       the review are withheld until the exam has closed.
  *     tags:
  *       - Quiz Exam
  *     parameters:
@@ -56,7 +67,7 @@ export const dynamic = "force-dynamic";
  *       401:
  *         description: Unauthorized
  *       403:
- *         description: Exam not open
+ *         description: Exam not open, closed, or maximum attempts reached
  *       404:
  *         description: Exam not found
  *       500:
@@ -136,47 +147,109 @@ export async function POST(
       );
     }
 
+    const now = new Date();
+    const openingTime = exam.scheduledOpeningTime;
+    const closingTime = exam.scheduledClosingTime;
+    if (!openingTime || !closingTime) {
+      return NextResponse.json(
+        { data: null, message: "This exam is not open", success: false },
+        { status: 403 }
+      );
+    }
+
+    // A submission is only valid while the exam is open (with a small grace
+    // window for attempts that finished right at the closing instant). This
+    // prevents harvesting questions during the window and submitting answers
+    // after it has closed.
+    if (now < openingTime) {
+      return NextResponse.json(
+        { data: null, message: "This exam has not started yet", success: false },
+        { status: 403 }
+      );
+    }
+    if (now.getTime() > closingTime.getTime() + SUBMIT_GRACE_MS) {
+      return NextResponse.json(
+        { data: null, message: "This exam has closed", success: false },
+        { status: 403 }
+      );
+    }
+
+    // Cap attempts for competitive exams so users cannot brute-force the exam
+    // by re-submitting until they discover every answer.
+    if (exam.mode !== "PRACTICE") {
+      const attempts = await prisma.quizResults.count({
+        where: {
+          userId,
+          examId,
+          status: { in: ["SUBMITTED", "LATE_SUBMITTED", "REATTEMPTED"] },
+        },
+      });
+      if (attempts >= MAX_COMPETITIVE_ATTEMPTS) {
+        return NextResponse.json(
+          { data: null, message: "Maximum attempts reached for this exam", success: false },
+          { status: 403 }
+        );
+      }
+    }
+
     // Grade server-side. Client-supplied counts are ignored entirely.
     const answerByQuestion = new Map(
       exam.quizQuestions.map((q) => [q.quizQuestion.id, q.quizQuestion.answer])
     );
 
+    // Deduplicate answers: each question is graded exactly once (first
+    // submission wins), so repeated questionIds can no longer inflate scores.
+    const firstAnswerByQuestion = new Map<number, string>();
+    for (const a of parsed.data.answers) {
+      if (!firstAnswerByQuestion.has(a.questionId)) {
+        firstAnswerByQuestion.set(a.questionId, a.selectedOption);
+      }
+    }
+
+    // For competitive exams the correct answers are only revealed in the
+    // review once the exam window has closed, so an empty submission cannot be
+    // used to harvest the answer key while the exam is still live.
+    const revealAnswers =
+      exam.mode === "PRACTICE" || now.getTime() >= closingTime.getTime();
+
     let correctAnswers = 0;
     const review: QuizExamIncorrectAnswer[] = [];
 
-    for (const a of parsed.data.answers) {
-      const expected = answerByQuestion.get(a.questionId);
+    for (const [questionId, selectedOption] of firstAnswerByQuestion) {
+      const expected = answerByQuestion.get(questionId);
       if (expected === undefined) continue;
-      const isCorrect = expected.trim() === a.selectedOption.trim();
+      const isCorrect = expected.trim() === selectedOption.trim();
       if (isCorrect) {
         correctAnswers += 1;
       } else {
-        const q = exam.quizQuestions.find((x) => x.quizQuestion.id === a.questionId);
+        const q = exam.quizQuestions.find((x) => x.quizQuestion.id === questionId);
         review.push({
-          questionId: a.questionId,
+          questionId,
           questionText: q?.quizQuestion.questionText ?? "",
-          correctAnswer: expected,
-          userAnswer: a.selectedOption,
+          correctAnswer: revealAnswers ? expected : null,
+          userAnswer: selectedOption,
         });
       }
     }
 
     // Unanswered questions (e.g. time ran out) are graded wrong and included
     // in the review so students can see what they missed.
-    const submittedIds = new Set(parsed.data.answers.map((a) => a.questionId));
+    const submittedIds = new Set(firstAnswerByQuestion.keys());
     for (const q of exam.quizQuestions) {
       if (submittedIds.has(q.quizQuestion.id)) continue;
       review.push({
         questionId: q.quizQuestion.id,
         questionText: q.quizQuestion.questionText,
-        correctAnswer: q.quizQuestion.answer,
+        correctAnswer: revealAnswers ? q.quizQuestion.answer : null,
         userAnswer: null,
       });
     }
 
     const questionCount = exam.questionCount;
     const scoreInPercent =
-      questionCount > 0 ? Math.round((correctAnswers / questionCount) * 100) : 0;
+      questionCount > 0
+        ? Math.min(100, Math.round((correctAnswers / questionCount) * 100))
+        : 0;
 
     const result = await createQuizResult({
       userId,
@@ -191,8 +264,8 @@ export async function POST(
       timePerQuestion: exam.timePerQuestion,
       timeTotalQuiz: parsed.data.timeTotalQuiz ?? questionCount * exam.timePerQuestion,
       scheduleEnabled: exam.scheduleEnabled,
-      scheduledOpeningTime: exam.scheduledOpeningTime?.toISOString() ?? null,
-      scheduledClosingTime: exam.scheduledClosingTime?.toISOString() ?? null,
+      scheduledOpeningTime: openingTime.toISOString(),
+      scheduledClosingTime: closingTime.toISOString(),
       correctAnswers,
       scoreInPercent,
       totalScore: correctAnswers,
