@@ -26,6 +26,8 @@ const EMPTY_SNAPSHOT: CachedWordsSnapshot = {
 let snapshot: CachedWordsSnapshot = EMPTY_SNAPSHOT;
 const listeners = new Set<() => void>();
 let currentLoad: Promise<void> | null = null;
+let lastRemoteVersionCheckAt = 0;
+const REMOTE_VERSION_CHECK_TTL_MS = 5 * 60 * 1000;
 
 function emitChange() {
   for (const listener of listeners) listener();
@@ -61,13 +63,17 @@ async function fetchAllRemoteWords(): Promise<Word[] | null> {
   }
 }
 
-async function doLoad(): Promise<void> {
+async function doLoad(force = false): Promise<void> {
   try {
+    const shouldCheckRemoteVersion =
+      force || Date.now() - lastRemoteVersionCheckAt >= REMOTE_VERSION_CHECK_TTL_MS;
+
     const [cached, cachedVer, remoteVer] = await Promise.all([
       getCachedWords(),
       getCachedVersion(),
-      fetchRemoteVersion(),
+      shouldCheckRemoteVersion ? fetchRemoteVersion() : Promise.resolve(null),
     ]);
+    if (remoteVer !== null) lastRemoteVersionCheckAt = Date.now();
 
     if (remoteVer !== null && cachedVer === remoteVer && cached.length > 0) {
       snapshot = { words: cached, loading: false, error: null, cacheLoaded: true };
@@ -106,11 +112,11 @@ async function doLoad(): Promise<void> {
   }
 }
 
-function loadWords(): Promise<void> {
+function loadWords(force = false): Promise<void> {
   if (currentLoad) return currentLoad;
   snapshot = { ...snapshot, loading: true };
   emitChange();
-  currentLoad = doLoad().finally(() => {
+  currentLoad = doLoad(force).finally(() => {
     currentLoad = null;
     emitChange();
   });
@@ -134,7 +140,7 @@ export function useCachedWords() {
   );
 
   const refresh = useCallback(() => {
-    void loadWords();
+    void loadWords(true);
   }, []);
 
   const getWordsByLevel = useCallback(
