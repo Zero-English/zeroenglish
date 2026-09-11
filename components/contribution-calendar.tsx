@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { BookOpen, Flame, Target, Trophy } from "lucide-react";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -57,7 +57,6 @@ export function ContributionCalendar({
   data?: { date: string; count: number }[];
 }) {
   const t = useT();
-  const num = useNum();
 
   const isDemo = !data || data.length === 0;
   const items = useMemo(
@@ -121,11 +120,11 @@ export function ContributionCalendar({
   const currentYear = new Date().getFullYear();
 
   const summary = [
-    { icon: BookOpen, tint: "text-emerald-600", bg: "bg-emerald-100 dark:bg-emerald-900/30", label: t("এ বছর মোট", "Total this year"), value: num(stats.total) },
-    { icon: Target, tint: "text-sky-600", bg: "bg-sky-100 dark:bg-sky-900/30", label: t("আজ", "Today"), value: num(todayCount) },
-    { icon: Flame, tint: "text-orange-600", bg: "bg-orange-100 dark:bg-orange-900/30", label: t("চলমান ধারা", "Current Streak"), value: `${num(stats.streak)}${t(" দিন", "d")}` },
-    { icon: Trophy, tint: "text-amber-600", bg: "bg-amber-100 dark:bg-amber-900/30", label: t("দীর্ঘতম ধারা", "Longest Streak"), value: `${num(stats.longest)}${t(" দিন", "d")}` },
-    { icon: BookOpen, tint: "text-violet-600", bg: "bg-violet-100 dark:bg-violet-900/30", label: t("সেরা দিন", "Best Day"), value: num(stats.bestDay) },
+    { icon: BookOpen, tint: "text-emerald-600", bg: "bg-emerald-100 dark:bg-emerald-900/30", label: t("এ বছর মোট", "Total this year"), value: stats.total },
+    { icon: Target, tint: "text-sky-600", bg: "bg-sky-100 dark:bg-sky-900/30", label: t("আজ", "Today"), value: todayCount },
+    { icon: Flame, tint: "text-orange-600", bg: "bg-orange-100 dark:bg-orange-900/30", label: t("চলমান ধারা", "Current Streak"), value: `${stats.streak}${t(" দিন", "d")}` },
+    { icon: Trophy, tint: "text-amber-600", bg: "bg-amber-100 dark:bg-amber-900/30", label: t("দীর্ঘতম ধারা", "Longest Streak"), value: `${stats.longest}${t(" দিন", "d")}` },
+    { icon: BookOpen, tint: "text-violet-600", bg: "bg-violet-100 dark:bg-violet-900/30", label: t("সেরা দিন", "Best Day"), value: stats.bestDay },
   ];
 
   return (
@@ -165,7 +164,7 @@ export function ContributionCalendar({
       <div className="border-t border-zinc-100 dark:border-zinc-800 pt-4">
         <div className="flex items-center gap-2 mb-3">
           <BookOpen className="h-4 w-4 text-zinc-400" />
-          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">{num(currentYear)}</span>
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">{currentYear}</span>
         </div>
 
         <div className="overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden">
@@ -203,7 +202,7 @@ export function ContributionCalendar({
                         )}
                         title={
                           day.date
-                            ? `${day.date}: ${t(`${num(day.count)}টি শব্দ`, `${day.count} word${day.count !== 1 ? "s" : ""}`)}`
+                            ? `${day.date}: ${t(`${day.count}টি শব্দ`, `${day.count} word${day.count !== 1 ? "s" : ""}`)}`
                             : undefined
                         }
                       />

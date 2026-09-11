@@ -1,7 +1,7 @@
 import { getAllWords } from "@/lib/data";
-import { HomeContent } from "@/components/home-content";
+import { HomeOrDashboard } from "@/components/home-or-dashboard";
 
 export default async function Home() {
   const words = await getAllWords();
-  return <HomeContent words={words} />;
+  return <HomeOrDashboard words={words} />;
 }

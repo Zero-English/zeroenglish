@@ -71,7 +71,7 @@ export function BindAccount() {
             fetch("/api/v1/auth/logout", { method: "POST" }),
             signOut({ redirect: false }),
         ]);
-        window.location.replace("/login");
+        window.location.replace("/");
     };
 
     return (

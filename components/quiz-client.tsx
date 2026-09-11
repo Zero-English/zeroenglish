@@ -18,7 +18,7 @@ import {
   type QuizHistoryEntry,
 } from "@/lib/quiz-history-store";
 import Link from "next/link";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { toast } from "sonner";
 
@@ -793,8 +793,6 @@ function SettingsView({
   const c = LEVEL_CONFIG[levels.includes("Random") ? "Random" : (levels[0] ?? "A1")];
   const QuizIcon = qt.icon;
   const t = useT();
-  const num = useNum();
-
   return (
     <div className="relative min-h-dvh overflow-hidden px-4 py-10 sm:px-6 sm:py-14">
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
@@ -824,7 +822,7 @@ function SettingsView({
                 </h2>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
                   {t(qt.descBn, qt.desc)} ·{" "}
-                  {t(`${num(maxCount)}টি শব্দ পাওয়া যায়`, `${maxCount} words available`)}
+                  {t(`${maxCount}টি শব্দ পাওয়া যায়`, `${maxCount} words available`)}
                 </p>
               </div>
             </div>
@@ -976,9 +974,9 @@ function SettingsView({
               </Button>
               <p className="text-center text-xs text-zinc-400 dark:text-zinc-500 mt-3">
                 {useAllQuestions
-                  ? t(`${num(maxCount)}টি প্রশ্ন · সব লেভেল`, `${maxCount} question${maxCount !== 1 ? "s" : ""} · all levels`)
+                  ? t(`${maxCount}টি প্রশ্ন · সব লেভেল`, `${maxCount} question${maxCount !== 1 ? "s" : ""} · all levels`)
                   : t(
-                      `${num(quantity)}টি প্রশ্ন · ${levels.length === 0 || levels.includes("Random") ? "সব লেভেল" : levels.join(", ")}`,
+                      `${quantity}টি প্রশ্ন · ${levels.length === 0 || levels.includes("Random") ? "সব লেভেল" : levels.join(", ")}`,
                       `${quantity} question${quantity !== 1 ? "s" : ""} · ${levels.length === 0 || levels.includes("Random") ? "all levels" : levels.join(", ")}`
                     )}
               </p>
@@ -1017,7 +1015,6 @@ function QuizView({
 }) {
   const speak = useSpeak();
   const t = useT();
-  const num = useNum();
   const progress = ((currentIndex + 1) / totalQuestions) * 100;
   const prompt = quizType === "bangla_to_english" ? firstMeaning(question.word.meaning_bn) : question.word.word;
   const qt = QUIZ_TYPE_CONFIG[quizType];
@@ -1035,9 +1032,9 @@ function QuizView({
         {/* Top bar */}
         <div className="flex items-center justify-between mb-4">
           <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            <span className="font-semibold text-zinc-700 dark:text-zinc-300">{num(currentIndex + 1)}</span>
+            <span className="font-semibold text-zinc-700 dark:text-zinc-300">{currentIndex + 1}</span>
             <span className="mx-1 text-zinc-300 dark:text-zinc-600">/</span>
-            {num(totalQuestions)}
+            {totalQuestions}
           </div>
 
           <div className="flex items-center gap-4 text-sm">
@@ -1057,7 +1054,7 @@ function QuizView({
             )}
             <span className="text-zinc-500 dark:text-zinc-400">
               {t("স্কোর", "Score")}{" "}
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400">{num(score)}</span>
+              <span className="font-semibold text-emerald-600 dark:text-emerald-400">{score}</span>
             </span>
             <button
               onClick={() => setExitOpen(true)}
@@ -1229,7 +1226,6 @@ function ResultsView({
   const addHistoryEntry = useQuizHistoryStore((s) => s.addEntry);
   const updateHistoryEntry = useQuizHistoryStore((s) => s.updateEntry);
   const t = useT();
-  const num = useNum();
 
   useEffect(() => {
     if (!hydrated || useQuizStore.getState().resultsRecorded) return;
@@ -1310,15 +1306,15 @@ function ResultsView({
         <div className="animate-fade-up-1 mb-10">
           <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-8 text-center">
             <div className="text-6xl sm:text-7xl font-black bg-gradient-to-br from-zinc-700 to-zinc-400 dark:from-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent mb-2">
-              {num(percentage)}%
+              {percentage}%
             </div>
             <p className="text-lg text-zinc-500 dark:text-zinc-400">
               <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                {num(score)}
+                {score}
               </span>{" "}
               {t("টির মধ্যে সঠিক", "correct out of")}{" "}
               <span className="font-semibold text-zinc-700 dark:text-zinc-300">
-                {num(total)}
+                {total}
               </span>{" "}
               {t("প্রশ্ন", "questions")}
             </p>
@@ -1328,7 +1324,7 @@ function ResultsView({
         {incorrectAnswers.length > 0 && (
           <div className="animate-fade-up-2 mb-10">
             <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4 flex items-center gap-2">
-              <span>{t(`পুনরায় দেখার শব্দ (${num(incorrectAnswers.length)})`, `Words to Review (${incorrectAnswers.length})`)}</span>
+              <span>{t(`পুনরায় দেখার শব্দ (${incorrectAnswers.length})`, `Words to Review (${incorrectAnswers.length})`)}</span>
             </h3>
             <div className="space-y-3">
               {incorrectAnswers.map((item, i) => (

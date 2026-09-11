@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { UserAvatar } from "@/components/UserAvatar";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { ContributionCalendar } from "@/components/contribution-calendar";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { dbResultToHistoryEntry, type DbQuizResult } from "@/lib/quiz-results-api";
 import type { QuizType } from "@/lib/quiz-history-store";
 import { cn } from "@/lib/utils";
@@ -156,7 +156,6 @@ function QuizItem({ entry }: { entry: { quizType: QuizType; date: string; win: s
   const Icon = meta.icon;
   const win = parseInt(entry.win, 10);
   const t = useT();
-  const num = useNum();
 
   return (
     <StaggerItem className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
@@ -179,7 +178,7 @@ function QuizItem({ entry }: { entry: { quizType: QuizType; date: string; win: s
         <div className="flex items-center gap-2 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 px-3 py-2">
           <Trophy className="h-4 w-4 text-amber-500" />
           <span className="text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
-            {num(win)}%
+            {win}%
           </span>
           <span className="text-xs text-zinc-400">{t("জয়ের হার", "win rate")}</span>
         </div>
@@ -189,13 +188,13 @@ function QuizItem({ entry }: { entry: { quizType: QuizType; date: string; win: s
         <div className="flex items-center gap-2">
           <ListChecks className="h-4 w-4 text-zinc-400" />
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            {t(`${num(entry.numberOfQuestions)}টি প্রশ্ন`, `${entry.numberOfQuestions} Questions`)}
+            {t(`${entry.numberOfQuestions}টি প্রশ্ন`, `${entry.numberOfQuestions} Questions`)}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <Clock3 className="h-4 w-4 text-zinc-400" />
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            {num(entry.timePerQuestion)}
+            {entry.timePerQuestion}
             {t(" সেকেন্ড / প্রশ্ন", "s / question")}
           </span>
         </div>
@@ -225,7 +224,6 @@ export function PublicProfileView({
   quizResults: DbQuizResult[];
 }) {
   const t = useT();
-  const num = useNum();
   const isAdmin = user.role === "admin";
 
   const progress = totalWords > 0 ? Math.round((user.learnedCount / totalWords) * 100) : 0;
@@ -296,20 +294,20 @@ export function PublicProfileView({
             <StatCard
               icon={<CheckCircle2 className="h-5 w-5 text-emerald-600" />}
               label={t("শেখা হয়েছে", "Learned")}
-              value={num(user.learnedCount)}
-              sub={t(`মোটের ${num(progress)}%`, `${progress}% of total`)}
+              value={user.learnedCount}
+              sub={t(`মোটের ${progress}%`, `${progress}% of total`)}
               color="bg-emerald-100 dark:bg-emerald-900/30"
             />
             <StatCard
               icon={<RefreshCw className="h-5 w-5 text-orange-600" />}
               label={t("শিখছে", "Still Learning")}
-              value={num(user.stillLearningCount)}
+              value={user.stillLearningCount}
               color="bg-orange-100 dark:bg-orange-900/30"
             />
             <StatCard
               icon={<BookmarkCheck className="h-5 w-5 text-amber-600" />}
               label={t("বুকমার্ক করা", "Bookmarked")}
-              value={num(user.bookmarkedCount)}
+              value={user.bookmarkedCount}
               color="bg-amber-100 dark:bg-amber-900/30"
             />
           </StaggerContainer>
@@ -320,7 +318,7 @@ export function PublicProfileView({
               {t("সব মিলিয়ে অগ্রগতি", "Overall Progress")}
             </span>
             <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-              {num(user.learnedCount)}/{num(totalWords)} ({num(progress)}%)
+              {user.learnedCount}/{totalWords} ({progress}%)
             </span>
           </div>
           <ProgressBar pct={progress} />
@@ -344,10 +342,10 @@ export function PublicProfileView({
                       <div className="flex items-center gap-2">
                         <span className={cn("text-xs font-bold", LEVEL_TEXT_COLORS[l.level])}>{l.level}</span>
                         <span className="text-[11px] text-zinc-400">
-                          {num(l.learned)}/{num(l.total)}
+                          {l.learned}/{l.total}
                         </span>
                       </div>
-                      <span className="text-[11px] text-zinc-500">{num(pct)}%</span>
+                      <span className="text-[11px] text-zinc-500">{pct}%</span>
                     </div>
                     <div className="h-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
                       <div
@@ -378,7 +376,7 @@ export function PublicProfileView({
         </div>
         <p className="text-xs text-zinc-400 dark:text-zinc-500 mb-5">
           {t(
-            `${num(stats.total)}টি কুইজ · ${num(stats.totalQuestions)}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
+            `${stats.total}টি কুইজ · ${stats.totalQuestions}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
             `${stats.total} quiz${stats.total !== 1 ? "zes" : ""} · ${stats.totalQuestions} questions answered`
           )}
         </p>
@@ -390,19 +388,19 @@ export function PublicProfileView({
                 <StatCard
                   icon={<GraduationCap className="h-5 w-5 text-indigo-600" />}
                   label={t("নেওয়া কুইজ", "Quizzes Taken")}
-                  value={num(stats.total)}
+                  value={stats.total}
                   color="bg-indigo-100 dark:bg-indigo-900/30"
                 />
                 <StatCard
                   icon={<BarChart3 className="h-5 w-5 text-sky-600" />}
                   label={t("গড় জয়ের হার", "Avg. Win Rate")}
-                  value={`${num(stats.avg)}%`}
+                  value={`${stats.avg}%`}
                   color="bg-sky-100 dark:bg-sky-900/30"
                 />
                 <StatCard
                   icon={<Award className="h-5 w-5 text-emerald-600" />}
                   label={t("সেরা স্কোর", "Best Score")}
-                  value={`${num(stats.best)}%`}
+                  value={`${stats.best}%`}
                   color="bg-emerald-100 dark:bg-emerald-900/30"
                 />
               </StaggerContainer>

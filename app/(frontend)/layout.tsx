@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import HtmlShell from "@/components/html-shell";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
@@ -16,7 +16,22 @@ export const metadata: Metadata = {
   description:
     "Master essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to C2 levels covered.",
   manifest: "/manifest.webmanifest",
-  icons: "/assets/icon.jpeg",
+  icons: "/assets/logo/favicon.webp",
+  openGraph: {
+    title: "Learn English Vocabulary in Bangla | Zero English",
+    description:
+      "Master essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to C2 levels covered.",
+    images: [
+      {
+        url: "/assets/logo/open-graph.png",
+        width: 1254,
+        height: 1254,
+        alt: "Zero English - Learn English Vocabulary in Bangla",
+      },
+    ],
+    type: "website",
+    siteName: "Zero English",
+  },
   other: {
     "theme-color": "#f97316",
   },
@@ -24,6 +39,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+};
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function FrontendLayout({

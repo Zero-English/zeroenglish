@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import {
   ClipboardList,
@@ -17,16 +18,27 @@ import {
   GraduationCap,
   Trophy,
   ArrowLeft,
+  Link2,
+  LogIn,
+  Loader2,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 import { useQuizExamStore, resetQuizExamState } from "@/lib/quiz-exam-store";
 import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
-import { useAuthPath, useAuthStore } from "@/lib/auth-store";
+import { useAuthPath, useAuthStore, useAuthStatus, GUEST_PATH } from "@/lib/auth-store";
+import { syncGuestDataToServer } from "@/lib/guest-bind";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import {
   useQuizExamHistoryStore,
   type QuizExamHistoryEntry,
@@ -205,7 +217,7 @@ function useNowMs(): number {
   return now;
 }
 
-function formatCountdown(ms: number, num: (n: number) => string): string {
+function formatCountdown(ms: number): string {
   const total = Math.max(0, ms);
   const secs = Math.ceil(total / 1000);
   const days = Math.floor(secs / 86400);
@@ -213,10 +225,10 @@ function formatCountdown(ms: number, num: (n: number) => string): string {
   const minutes = Math.floor((secs % 3600) / 60);
   const seconds = secs % 60;
 
-  if (days > 0) return `${num(days)}d ${num(hours)}h ${num(minutes)}m`;
-  if (hours > 0) return `${num(hours)}h ${num(minutes)}m ${num(seconds)}s`;
-  if (minutes > 0) return `${num(minutes)}m ${num(seconds)}s`;
-  return `${num(seconds)}s`;
+  if (days > 0) return `${days}d ${hours}h ${minutes}m`;
+  if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+  if (minutes > 0) return `${minutes}m ${seconds}s`;
+  return `${seconds}s`;
 }
 
 export function QuizExamClient() {
@@ -293,7 +305,6 @@ function ExamCardItem({
   onStart: (exam: QuizExamPublicItem) => void;
 }) {
   const t = useT();
-  const num = useNum();
   const now = useNowMs();
 
   const meta = MODE_META[exam.mode] ?? MODE_META.PRACTICE;
@@ -337,7 +348,7 @@ function ExamCardItem({
           </span>
           <span className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold", meta.bg, meta.text)}>
             <Timer className="h-3 w-3" />
-            {num(Math.floor(exam.timePerQuestion))}s / {t("প্রশ্ন", "question")}
+            {Math.floor(exam.timePerQuestion)}s / {t("প্রশ্ন", "question")}
           </span>
         </div>
       </div>
@@ -353,7 +364,7 @@ function ExamCardItem({
         <div className="flex flex-wrap items-center gap-2 mt-4">
           <span className="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
             <ListChecks className="h-3 w-3" />
-            {num(exam.questionCount)} {t("প্রশ্ন", "questions")}
+            {exam.questionCount} {t("প্রশ্ন", "questions")}
           </span>
           <span className="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
             {exam.levels.join(", ")}
@@ -389,7 +400,7 @@ function ExamCardItem({
               isOpen ? "text-amber-800 dark:text-amber-200" : "text-sky-800 dark:text-sky-200"
             )}
           >
-            {formatCountdown(msLeft, num)}
+            {formatCountdown(msLeft)}
           </span>
         </div>
 
@@ -416,6 +427,13 @@ function ExamListView() {
   const t = useT();
   const [exams, setExams] = useState<QuizExamPublicItem[] | null>(null);
   const [loadingId, setLoadingId] = useState<number | null>(null);
+  const { status, hydrated } = useAuthStatus();
+  const setGoogleAuth = useAuthStore((s) => s.setGoogleAuth);
+  const { data: session, status: sessionStatus } = useSession();
+  const [authPrompt, setAuthPrompt] = useState<"login" | "bind" | null>(null);
+  const [authBusy, setAuthBusy] = useState(false);
+  const sessionSyncedRef = useRef(false);
+  const guestAdoptedRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -444,7 +462,93 @@ function ExamListView() {
     };
   }, []);
 
+  // After a Google OAuth round-trip (login or guest bind), the browser lands
+  // back here with a live session while the auth store is still "none"/"guest".
+  // Adopt the session into the store (mirroring ProfileGuard) so the exam can
+  // actually be started.
+  useEffect(() => {
+    if (!hydrated || sessionStatus === "loading" || !session?.user) return;
+
+    if (status === "guest" && !guestAdoptedRef.current) {
+      guestAdoptedRef.current = true;
+      void (async () => {
+        try {
+          await syncGuestDataToServer(GUEST_PATH);
+        } catch (error) {
+          console.error("Failed to sync guest data before binding:", error);
+        }
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("activity-changed"));
+        }
+        setGoogleAuth(
+          session.user.name ?? null,
+          session.user.email ?? null,
+          session.user.id ?? null
+        );
+        setAuthPrompt(null);
+        toast.success(
+          t(
+            "অ্যাকাউন্ট যুক্ত হয়েছে এবং অতিথি ডেটা সিঙ্ক হয়েছে।",
+            "Account bound and guest data synced to your new account."
+          )
+        );
+      })();
+      return;
+    }
+
+    if (status === "none" && !sessionSyncedRef.current) {
+      sessionSyncedRef.current = true;
+      setGoogleAuth(
+        session.user.name ?? null,
+        session.user.email ?? null,
+        session.user.id ?? null
+      );
+      setAuthPrompt(null);
+      toast.success(t("লগইন সফল হয়েছে!", "Signed in successfully!"));
+    }
+  }, [hydrated, sessionStatus, session, status, setGoogleAuth, t]);
+
+  const handleAuthAction = async () => {
+    if (authBusy) return;
+    setAuthBusy(true);
+    try {
+      if (authPrompt === "bind") {
+        const armRes = await fetch("/api/v1/auth/bind/begin", {
+          method: "POST",
+        });
+        if (!armRes.ok) {
+          toast.error(
+            t(
+              "সাইন-ইন শুরু করা যায়নি। আবার চেষ্টা করুন।",
+              "Could not start sign-in. Please try again."
+            )
+          );
+          return;
+        }
+      }
+      const { signIn } = await import("next-auth/react");
+      await signIn("google", {
+        redirect: false,
+        callbackUrl: "/quiz/exam",
+      });
+    } catch {
+      toast.error(
+        t("কিছু ভুল হয়েছে। আবার চেষ্টা করুন।", "Something went wrong. Please try again.")
+      );
+    } finally {
+      setAuthBusy(false);
+    }
+  };
+
   const handleStart = async (exam: QuizExamPublicItem) => {
+    if (hydrated && status === "none") {
+      setAuthPrompt("login");
+      return;
+    }
+    if (hydrated && status === "guest") {
+      setAuthPrompt("bind");
+      return;
+    }
     setLoadingId(exam.id);
     try {
       const res = await fetch(`/api/v1/quiz-exam/${exam.id}/take`, {
@@ -556,6 +660,65 @@ function ExamListView() {
           </div>
         )}
       </div>
+
+      <Drawer open={authPrompt !== null} onOpenChange={(open) => { if (!open) setAuthPrompt(null); }}>
+        <DrawerContent className="mx-auto max-w-lg rounded-t-3xl">
+          <div className="px-6 pb-8 pt-2">
+            <div className="mb-5 flex justify-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 text-white shadow-lg shadow-orange-500/30">
+                {authPrompt === "bind" ? (
+                  <Link2 className="h-6 w-6" />
+                ) : (
+                  <LogIn className="h-6 w-6" />
+                )}
+              </div>
+            </div>
+            <DrawerTitle className="text-center text-base font-bold sm:text-lg">
+              {authPrompt === "bind"
+                ? t("অতিথি অ্যাকাউন্ট যুক্ত করুন", "Bind your guest account")
+                : t("পরীক্ষা দেওয়ার জন্য সাইন-ইন দরকার", "Sign in to take the exam")}
+            </DrawerTitle>
+            <DrawerDescription className="mt-1.5 text-center text-xs sm:text-sm leading-relaxed">
+              {authPrompt === "bind"
+                ? t(
+                    "পরীক্ষায় অংশ নেওয়ার আগে আপনার Google অ্যাকাউন্ট যুক্ত করতে হবে। আপনার অতিথি অগ্রগতি স্বয়ংক্রিয়ভাবে নতুন অ্যাকাউন্টে সিঙ্ক হবে।",
+                    "You need to link a Google account before taking the exam. Your guest progress will be synced to the new account automatically."
+                  )
+                : t(
+                    "পরীক্ষায় অংশ নেওয়ার জন্য একটি Google অ্যাকাউন্ট দিয়ে সাইন-ইন করতে হবে।",
+                    "You need to sign in with a Google account to take the exam."
+                  )}
+            </DrawerDescription>
+            <div className="mt-5 space-y-2">
+              <Button
+                size="lg"
+                className="w-full gap-2 bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/20"
+                onClick={() => void handleAuthAction()}
+                disabled={authBusy}
+              >
+                {authBusy ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <GoogleIcon />
+                )}
+                {authPrompt === "bind"
+                  ? t("Google অ্যাকাউন্ট যুক্ত করুন", "Link Google account")
+                  : t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
+              </Button>
+              <DrawerClose asChild>
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="w-full"
+                  disabled={authBusy}
+                >
+                  {t("পরে যুক্ত করুন", "Maybe later")}
+                </Button>
+              </DrawerClose>
+            </div>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }
@@ -576,7 +739,6 @@ function ExamQuizView({
   isAnswered: boolean;
 }) {
   const t = useT();
-  const num = useNum();
   const speak = useSpeak();
   const [exitOpen, setExitOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -697,7 +859,7 @@ function ExamQuizView({
       <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col justify-center">
         <div className="mb-6 flex items-center justify-between gap-3">
           <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-            {t("প্রশ্ন", "Question")} {num(currentIndex + 1)} / {num(totalQuestions)}
+            {t("প্রশ্ন", "Question")} {currentIndex + 1} / {totalQuestions}
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 text-sm font-semibold text-zinc-700 dark:text-zinc-300 tabular-nums">
             <Timer className="h-4 w-4 text-amber-500" />
@@ -834,7 +996,6 @@ function ExamQuizView({
 
 function ExamResultsView() {
   const t = useT();
-  const num = useNum();
   const { path, hydrated } = useAuthPath();
   const addHistoryEntry = useQuizExamHistoryStore((s) => s.addEntry);
   const updateHistoryEntry = useQuizExamHistoryStore((s) => s.updateEntry);
@@ -915,15 +1076,15 @@ function ExamResultsView() {
         <div className="animate-fade-up-1 mb-10">
           <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-8 text-center">
             <div className="text-6xl sm:text-7xl font-black bg-gradient-to-br from-zinc-700 to-zinc-400 dark:from-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent mb-2">
-              {num(percentage)}%
+              {percentage}%
             </div>
             <p className="text-lg text-zinc-500 dark:text-zinc-400">
               <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                {num(score)}
+                {score}
               </span>{" "}
               {t("টির মধ্যে সঠিক", "correct out of")}{" "}
               <span className="font-semibold text-zinc-700 dark:text-zinc-300">
-                {num(total)}
+                {total}
               </span>{" "}
               {t("প্রশ্ন", "questions")}
             </p>

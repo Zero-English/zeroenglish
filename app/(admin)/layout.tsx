@@ -1,11 +1,17 @@
-import type { Metadata } from "next";
+import type { Metadata,Viewport  } from "next";
 import HtmlShell from "@/components/html-shell";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "Admin | Zero English",
   description: "Zero English admin panel for managing users and vocabulary.",
   manifest: "/manifest.webmanifest",
-  icons: "/assets/icon.jpeg",
+  icons: "/assets/logo/favicon.webp",
   other: {
     "theme-color": "#f97316",
   },

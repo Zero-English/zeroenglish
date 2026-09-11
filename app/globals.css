@@ -176,3 +176,6 @@ html[data-lang="bn"] {
 li::marker{
   display: none !important;
 }
+.bottom-nav{
+  padding-bottom: env(safe-area-inset-bottom);
+}

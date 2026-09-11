@@ -6,7 +6,7 @@ import { type Word } from "@/lib/data";
 import { mainCategoryLabel } from "@/lib/category";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { setSelectedLevel } from "@/lib/level-store";
-import { useT, useNum } from "@/components/language-provider";
+import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, Sparkles, CheckCircle2 } from "lucide-react";
 
@@ -40,7 +40,6 @@ export function LevelHero({
 }: LevelHeroProps) {
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
-  const num = useNum();
   const learned = words.filter((w) => learnedIds.has(String(w.id))).length;
   const pct = words.length > 0 ? Math.round((learned / words.length) * 100) : 0;
   const category = mainCategoryLabel(words);
@@ -81,7 +80,7 @@ export function LevelHero({
             </h1>
             <p className="mt-3 max-w-md text-sm sm:text-base text-zinc-500 dark:text-zinc-400">
               {t(
-                `বাংলা অর্থ, উদাহরণ, সমার্থক ও বিপরীত শব্দসহ ${num(words.length)}টি প্রয়োজনীয় ইংরেজি শব্দ আয়ত্ত করুন — এক লেভেল এক সময়ে।`,
+                `বাংলা অর্থ, উদাহরণ, সমার্থক ও বিপরীত শব্দসহ ${words.length}টি প্রয়োজনীয় ইংরেজি শব্দ আয়ত্ত করুন — এক লেভেল এক সময়ে।`,
                 `Master ${words.length} essential English words with Bangla meanings, examples, synonyms and antonyms — one level at a time.`
               )}
             </p>
@@ -113,17 +112,17 @@ export function LevelHero({
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-black tabular-nums">{loaded ? `${num(pct)}%` : "…%"}</span>
+                <span className="text-2xl font-black tabular-nums">{loaded ? `${pct}%` : "…%"}</span>
                 <span className="text-[10px] font-medium text-zinc-400">{t("শেখা হয়েছে", "learned")}</span>
               </div>
             </div>
             <div className="space-y-2">
               <div>
                 <p className="text-2xl font-bold leading-none tabular-nums">
-                  {loaded ? num(learned) : "·"}
+                  {loaded ? learned : "·"}
                 </p>
                 <p className="mt-1 text-xs text-zinc-400">
-                  {t(`${num(words.length)}টি শব্দের মধ্যে`, `of ${words.length} words`)}
+                  {t(`${words.length}টি শব্দের মধ্যে`, `of ${words.length} words`)}
                 </p>
               </div>
               <div className="h-1.5 w-36 overflow-hidden rounded-full bg-zinc-200/70 dark:bg-zinc-800">

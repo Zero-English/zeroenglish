@@ -14,23 +14,23 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["education", "language"],
     icons: [
       {
-        src: "/icon-192x192.png",
+        src: "/assets/logo/pwa.png",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        src: "/icon-512x512.png",
+        src: "/assets/logo/pwa.png",
         sizes: "512x512",
         type: "image/png",
       },
       {
-        src: "/icon-192x192.png",
+        src: "/assets/logo/pwa.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "maskable",
       },
       {
-        src: "/icon-512x512.png",
+        src: "/assets/logo/pwa.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
