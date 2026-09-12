@@ -49,7 +49,7 @@ export function LatestPosts({ posts }: { posts: LatestPost[] }) {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
+        {posts.slice(0, 3).map((post) => (
           <BlogCard
             key={post.slug}
             slug={post.slug}

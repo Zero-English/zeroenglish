@@ -16,30 +16,30 @@ import { PopupHost } from "@/components/popup/popup-host";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://zeroenglish.com"
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://zeroenglish.org"
   ),
-  title: "Learn English Vocabulary in Bangla | Zero English",
+  title: "Everything You Need to Master English | Zero English",
   description:
-    "Master essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to C2 levels covered.",
+    "Master English in one place with Zero English — learn grammar, vocabulary, composition, quizzes, and more through a complete English learning experience.",
   manifest: "/manifest.webmanifest",
   icons: "/assets/logo/favicon.webp",
   openGraph: {
-    title: "Learn English Vocabulary in Bangla | Zero English",
+    title: "Everything You Need to Master English | Zero English",
     description:
-      "Master essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to C2 levels covered.",
+      "Master English in one place with Zero English — learn grammar, vocabulary, composition, quizzes, and more through a complete English learning experience.",
     images: [
       {
         url: "/assets/logo/open-graph.png",
         width: 1254,
         height: 1254,
-        alt: "Zero English - Learn English Vocabulary in Bangla",
+        alt: "Zero English | Everything You Need to Master English",
       },
     ],
     type: "website",
     siteName: "Zero English",
   },
   other: {
-    "theme-color": "#f97316",
+    "theme-color": "#000000",
   },
   robots: {
     index: true,
