@@ -130,6 +130,26 @@ export const quizResultSchema = z
 
 export type QuizResultInput = z.infer<typeof quizResultSchema>;
 
+export const vocabularyExamResultSchema = z.object({
+  correctWordIds: z.array(z.number().int().positive()).default([]),
+  incorrectWordIds: z.array(z.number().int().positive()).default([]),
+  scoreInPercent: z
+    .number()
+    .int()
+    .min(0, "scoreInPercent must be >= 0")
+    .max(100, "scoreInPercent must be <= 100"),
+  levels: z.array(levelEnumSchema).min(1, "At least one level is required"),
+  timePerWord: z
+    .number()
+    .int()
+    .nonnegative("timePerWord must be non-negative"),
+  quizType: quizTypeEnumSchema,
+});
+
+export type VocabularyExamResultInput = z.infer<
+  typeof vocabularyExamResultSchema
+>;
+
 const quizExamBaseSchema = z.object({
   title: z.string().trim().min(1, "Title is required").max(200),
   mode: quizModeEnumSchema,

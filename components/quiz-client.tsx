@@ -16,7 +16,7 @@ import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
 import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
-import { useAuthPath } from "@/lib/auth-store";
+import { useAuthPath, useAuthStatus } from "@/lib/auth-store";
 import { putQuizHistoryEntry } from "@/lib/use-quiz-history";
 import {
   type QuizType,
@@ -160,6 +160,13 @@ const QUIZ_TYPE_ORDER: QuizType[] = [
   "synonym",
   "antonym",
 ];
+
+const CLIENT_TO_DB_QUIZ_TYPE: Record<QuizType, string> = {
+  english_to_bangla: "ENGLISH_TO_BANGLA",
+  bangla_to_english: "BANGLA_TO_ENGLISH",
+  synonym: "SYNONYMS",
+  antonym: "ANTONYMS",
+};
 
 function firstMeaning(meaning: string[]): string {
   return (meaning[0] ?? "").trim();
@@ -1145,7 +1152,9 @@ function ResultsView({
 }) {
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const { path, hydrated } = useAuthPath();
+  const { status } = useAuthStatus();
   const t = useT();
+  const vocabUploadedRef = useRef(false);
 
   useEffect(() => {
     if (!hydrated || useQuizStore.getState().resultsRecorded) return;
@@ -1175,6 +1184,43 @@ function ResultsView({
         createdAt: Date.now(),
       };
       await putQuizHistoryEntry(path, entry);
+      if (!cancelled && !vocabUploadedRef.current && status === "google") {
+        vocabUploadedRef.current = true;
+        const incorrectWordIds = Array.from(
+          new Set(
+            useQuizStore
+              .getState()
+              .incorrectAnswers.map((ia) => ia.word.id)
+          )
+        );
+        const correctWordIds = useQuizStore
+          .getState()
+          .questions.map((q) => q.word.id)
+          .filter((id) => !incorrectWordIds.includes(id));
+        const quizStoreState = useQuizStore.getState();
+        try {
+          await fetch("/api/v1/vocabulary-exam-result", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              correctWordIds,
+              incorrectWordIds,
+              scoreInPercent: percentage,
+              levels: Array.from(
+                new Set(
+                  useQuizStore.getState().questions.map((q) => q.word.level)
+                )
+              ),
+              timePerWord: quizStoreState.noTimeLimit
+                ? 0
+                : quizStoreState.timePerQuestion,
+              quizType: CLIENT_TO_DB_QUIZ_TYPE[quizType],
+            }),
+          });
+        } catch {
+          // Best-effort upload; the local record is already saved.
+        }
+      }
       if (cancelled) return;
       useQuizStore.setState({ resultsRecorded: true });
       if (typeof window !== "undefined") {
@@ -1186,7 +1232,7 @@ function ResultsView({
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated, quizType]);
+  }, [hydrated, quizType, status]);
 
   let resultColor: string;
   let resultLabel: string;
