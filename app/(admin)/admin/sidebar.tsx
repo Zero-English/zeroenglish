@@ -17,6 +17,7 @@ import {
   ExternalLink,
   LogOut,
   ChevronDown,
+  Megaphone,
 } from "lucide-react";
 import { UserAvatar } from "@/components/UserAvatar";
 import {
@@ -40,6 +41,7 @@ const navItems = [
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/quizzes", label: "Quizzes", icon: Brain },
   { href: "/admin/exams", label: "Exams", icon: ClipboardList },
+  { href: "/admin/popup", label: "Popup", icon: Megaphone },
 ];
 
 function NavLinks({

@@ -297,3 +297,85 @@ export const blogPublishSchema = z.object({
 export type BlogInput = z.infer<typeof blogSchema>;
 export type BlogUpdateInput = z.infer<typeof blogUpdateSchema>;
 export type BlogPublishInput = z.infer<typeof blogPublishSchema>;
+
+export const popupAudienceSchema = z.enum([
+  "ALL",
+  "LOGGED_OUT_ONLY",
+  "LOGGED_IN_ONLY",
+  "GUEST_ONLY",
+]);
+
+export const popupPageRuleSchema = z.enum(["ALL", "HOME", "SPECIFIC_PATHS"]);
+
+export const popupAnimationSchema = z.enum([
+  "FADE",
+  "ZOOM",
+  "SLIDE_UP",
+  "SLIDE_DOWN",
+  "NONE",
+]);
+
+export type PopupAudience = z.infer<typeof popupAudienceSchema>;
+export type PopupPageRule = z.infer<typeof popupPageRuleSchema>;
+export type PopupAnimation = z.infer<typeof popupAnimationSchema>;
+
+const popupBaseSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(200),
+  active: z.boolean().default(true),
+  link: z.string().trim().max(2000).default(""),
+  landscapeMediaId: z.number().int().positive().nullish(),
+  portraitMediaId: z.number().int().positive().nullish(),
+  scheduleEnabled: z.boolean().default(false),
+  scheduledOpeningTime: z.string().datetime().nullish(),
+  scheduledClosingTime: z.string().datetime().nullish(),
+  audience: popupAudienceSchema.default("ALL"),
+  pageRule: popupPageRuleSchema.default("ALL"),
+  includePaths: z
+    .array(
+      z
+        .string()
+        .trim()
+        .min(1, "Path is required")
+        .max(300, "Path is too long")
+        .startsWith("/", "Path must start with /"),
+    )
+    .max(100, "Too many paths (max 100)")
+    .default([]),
+  animation: popupAnimationSchema.default("FADE"),
+});
+
+const popupScheduleRefinement = (
+  data: {
+    scheduleEnabled?: boolean;
+    scheduledOpeningTime?: string | null;
+    scheduledClosingTime?: string | null;
+  },
+) => {
+  if (
+    data.scheduleEnabled &&
+    data.scheduledOpeningTime &&
+    data.scheduledClosingTime
+  ) {
+    return (
+      new Date(data.scheduledOpeningTime) < new Date(data.scheduledClosingTime)
+    );
+  }
+  return true;
+};
+
+const popupScheduleMessage = {
+  message: "Opening time must be before closing time",
+  path: ["scheduledClosingTime"],
+};
+
+export const popupSchema = popupBaseSchema.refine(
+  popupScheduleRefinement,
+  popupScheduleMessage,
+);
+
+export const popupUpdateSchema = popupBaseSchema
+  .partial()
+  .refine(popupScheduleRefinement, popupScheduleMessage);
+
+export type PopupInput = z.infer<typeof popupSchema>;
+export type PopupUpdateInput = z.infer<typeof popupUpdateSchema>;
