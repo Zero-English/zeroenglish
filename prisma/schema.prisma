@@ -147,6 +147,7 @@ model QuizQuestion {
   difficultyLevel DifficultyLevels
   answer          String
   quizExams       QuizExamQuestion[]
+  class           Class[]
   hintWords       Word[]
 }
 
@@ -168,6 +169,8 @@ model Word {
   relatedBy     UserWord[]
   userBookmarks UserBookmark[]
   quizQuestions QuizQuestion[]
+  relatedVocabularyQuizResultCorrectWords VocabularyExamResult[] @relation("CorrectWords")
+  relatedVocabularyQuizResultInCorrectWords VocabularyExamResult[] @relation("InCorrectWords")
 
   @@index([level])
   @@index([category])
@@ -203,6 +206,12 @@ model User {
   id             Int            @id @default(autoincrement())
   name           String?
   user_name      String
+  institutionName String?
+  bio            String?
+  class          Class?
+  gender         Gender   @default(NOT_SET)
+  socialLinks    String[]
+  location       String?
   email          String         @unique
   emailVerified  DateTime?
   image          String?
@@ -216,6 +225,7 @@ model User {
   relatedWords   UserWord[]
   userBookmarks  UserBookmark[]
   quizResults    QuizResults[]
+  vocabularyExamResults VocabularyExamResult[]
 }
 
 model Account {
@@ -257,12 +267,29 @@ model QuizType {
   name             String         @unique
   relatedQuestions QuizQuestion[]
   quizResults      QuizResults[]
+  vocabularyQuizResults VocabularyExamResult[]
 }
 
 model VocabMeta {
   id        Int      @id @default(1)
   version   Int      @default(1)
   updatedAt DateTime @updatedAt
+}
+
+model VocabularyExamResult {
+  id Int @id @default(autoincrement())
+  userId Int 
+  correctWords Word[] @relation("CorrectWords")
+  incorrectWords Word[] @relation("InCorrectWords")
+  scoreInPercent Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  levels Levels[]
+  timePerWord Int
+  quizTypeId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizType QuizType @relation(fields: [quizTypeId], references: [id], onDelete: Cascade)
 }
 
 enum Roles {
@@ -301,4 +328,31 @@ enum DifficultyLevels {
   EASY
   MEDIUM
   HARD
+}
+
+enum Class {
+  PrePrimary
+  Class1
+  Class2
+  Class3
+  Class4
+  Class5
+  Class6
+  Class7
+  Class8
+  SSC
+  HSC
+  IELTS
+  TOEFL
+  University
+  Masters
+  Diploma
+  BCS
+  JOB
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NOT_SET
 }

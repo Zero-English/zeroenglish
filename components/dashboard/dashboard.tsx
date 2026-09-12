@@ -171,7 +171,8 @@ export function Dashboard({ words, posts }: { words: Word[]; posts: LatestPost[]
     }
   }, [lang]);
 
-  const firstName = userName?.trim().split(/\s+/)[0] ?? null;
+  const firstName = userName;
+  // const firstName = userName?.trim().split(/\s+/)[0] ?? null; // Changed by Mahir
   const greetingFull = firstName
     ? t(`${greeting.bn}, ${firstName}`, `${greeting.en}, ${firstName}`)
     : t(greeting.bn, greeting.en);
