@@ -47,8 +47,35 @@ model Media {
   updatedAt DateTime @updatedAt
 
   blogs Blog[]
+  popupLandscape Popup[] @relation("PopupLandscape")
+  popupPortrait  Popup[] @relation("PopupPortrait")
 
   @@index([createdAt])
+}
+
+model Popup {
+  id                   Int      @id @default(autoincrement())
+  name                 String
+  active               Boolean  @default(true)
+  link                 String   @default("")
+  landscapeMediaId     Int?
+  portraitMediaId      Int?
+  scheduleEnabled      Boolean  @default(false)
+  scheduledOpeningTime DateTime?
+  scheduledClosingTime DateTime?
+  audience             String   @default("ALL")
+  pageRule             String   @default("ALL")
+  includePaths         String[] @default([])
+  animation            String   @default("FADE")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  landscapeMedia Media? @relation("PopupLandscape", fields: [landscapeMediaId], references: [id], onDelete: SetNull)
+  portraitMedia  Media? @relation("PopupPortrait", fields: [portraitMediaId], references: [id], onDelete: SetNull)
+
+  @@index([landscapeMediaId])
+  @@index([portraitMediaId])
+  @@index([active, scheduleEnabled])
 }
 
 model QuizExam {

@@ -11,6 +11,8 @@ import {
   CalendarClock,
   Clock,
   Eye,
+  Upload,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +38,7 @@ import {
   type QuizExamListResponse,
 } from "../_data/exams";
 import { ExamFormDialog, type ExamPayload } from "./exam-form-dialog";
+import { downloadJson } from "@/lib/json-export";
 
 const PAGE_SIZES = [10, 20, 50, 100];
 
@@ -68,6 +71,10 @@ export default function AdminExamsPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [examToDelete, setExamToDelete] = useState<QuizExamItem | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const [importing, setImporting] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const messageTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const requestId = useRef(0);
@@ -203,17 +210,113 @@ export default function AdminExamsPage() {
     setExamToDelete(null);
   }
 
+  async function handleExport() {
+    setExporting(true);
+    try {
+      const res = await fetch("/api/v1/quiz-exam", { cache: "no-store" });
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        const payload = json.data.map((exam: {
+          mode: string;
+          levels: ExamLevelValue[];
+          questionIds: number[];
+          scheduleEnabled: boolean;
+          scheduledOpeningTime: string | null;
+          scheduledClosingTime: string | null;
+          resultsPublished: boolean;
+          title: string;
+          timePerQuestion: number;
+        }) => ({
+          title: exam.title,
+          mode: exam.mode,
+          levels: exam.levels,
+          questionIds: exam.questionIds,
+          timePerQuestion: exam.timePerQuestion,
+          scheduleEnabled: exam.scheduleEnabled,
+          scheduledOpeningTime: exam.scheduledOpeningTime,
+          scheduledClosingTime: exam.scheduledClosingTime,
+          resultsPublished: exam.resultsPublished,
+        }));
+        downloadJson(payload, "exams.json");
+        notify(`Exported ${payload.length} exam(s)`);
+      } else {
+        notify(json.message || "Failed to export exams");
+      }
+    } catch {
+      notify("Failed to export exams");
+    } finally {
+      setExporting(false);
+    }
+  }
+
+  async function handleImportFile(file: File) {
+    setImporting(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/v1/quiz-exam?bulk=true", {
+        method: "POST",
+        body: formData,
+      });
+      const json = await res.json();
+      if (json.success) {
+        notify(json.message || "Exams imported");
+        setRefreshKey((k) => k + 1);
+      } else {
+        notify(json.message || "Failed to import exams");
+      }
+    } catch {
+      notify("Failed to upload the file. Please try again.");
+    } finally {
+      setImporting(false);
+    }
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+    e.target.value = "";
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith(".json")) {
+      notify("Only .json files are allowed.");
+      return;
+    }
+    handleImportFile(file);
+  }
+
   const start = total === 0 ? 0 : (page - 1) * pageSize + 1;
   const end = Math.min(page * pageSize, total);
 
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-3 lg:p-4">
       <BackButton />
-      <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           {loading ? "Loading..." : `Manage exams (${total} exams)`}
         </p>
         <div className="flex items-center gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json,application/json"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <Button
+            variant="outline"
+            disabled={exporting}
+            onClick={handleExport}
+          >
+            <Download />
+            {exporting ? "Exporting..." : "Export JSON"}
+          </Button>
+          <Button
+            variant="outline"
+            disabled={importing}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Upload />
+            {importing ? "Importing..." : "Import JSON"}
+          </Button>
           <Button onClick={openCreate}>
             <Plus />
             Create Exam

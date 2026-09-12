@@ -35,7 +35,7 @@ export function LatestPosts({ posts }: { posts: LatestPost[] }) {
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
             {t(
               "সাম্প্রতিক আর্টিকেল, টিপস ও আপডেট।",
-              "Recent articles, tips and updates from Zero English."
+              "Recent articles, tips and updates"
             )}
           </p>
         </div>

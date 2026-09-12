@@ -156,6 +156,61 @@ export const createQuizQuestion = async (data: {
     }
 };
 
+export const createQuizQuestionsBulk = async (data: {
+    quizType: string;
+    questionText: string;
+    options: string[];
+    difficultyLevel: DifficultyLevels;
+    answer: string;
+}[]) => {
+    try {
+        const names = [...new Set(data.map((q) => q.quizType))];
+
+        const quizTypes = await prisma.quizType.findMany({
+            where: { name: { in: names } },
+            select: { id: true, name: true },
+        });
+
+        const nameToId = new Map(quizTypes.map((t) => [t.name, t.id]));
+        const missingTypes = names.filter((n) => !nameToId.has(n));
+
+        if (missingTypes.length > 0) {
+            return {
+                data: null,
+                message: `Quiz type(s) not found: ${missingTypes.join(", ")}`,
+                success: false,
+            };
+        }
+
+        await prisma.$transaction(
+            data.map((q) =>
+                prisma.quizQuestion.create({
+                    data: {
+                        quizTypeId: nameToId.get(q.quizType)!,
+                        questionText: q.questionText,
+                        options: q.options,
+                        difficultyLevel: q.difficultyLevel,
+                        answer: q.answer,
+                    },
+                })
+            )
+        );
+
+        return {
+            data: { count: data.length },
+            message: `${data.length} question(s) created successfully`,
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to bulk create quiz questions: ${error}`);
+        return {
+            data: null,
+            message: "Failed to bulk create quiz questions",
+            success: false,
+        };
+    }
+};
+
 export const updateQuizQuestionById = async (
     id: number,
     data: Partial<{

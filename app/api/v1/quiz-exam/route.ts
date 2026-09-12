@@ -3,9 +3,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import {
     createQuizExam,
+    createQuizExamsBulk,
     getQuizExamsByPage,
+    getAllQuizExams,
 } from "@/services/quiz-exam.service";
-import { quizExamSchema } from "@/utils/validation/zod";
+import { quizExamSchema, quizExamsArraySchema } from "@/utils/validation/zod";
+import { parseBulkJsonFile } from "@/utils/bulk-import";
 import logger from "@/utils/logger";
 import type { Levels, QuizMode } from "@/generated/prisma/enums";
 
@@ -72,6 +75,18 @@ export async function GET(request: NextRequest) {
     const forbidden = await requireAdmin();
     if (forbidden) return forbidden;
 
+    const pageParam = request.nextUrl.searchParams.get("page");
+
+    if (!pageParam) {
+        const result = await getAllQuizExams();
+
+        if (!result.success) {
+            return NextResponse.json(result, { status: 500 });
+        }
+
+        return NextResponse.json(result);
+    }
+
     const searchParams = request.nextUrl.searchParams;
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
     const limit = Math.min(
@@ -106,6 +121,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     const forbidden = await requireAdmin();
     if (forbidden) return forbidden;
+
+    const isBulk = request.nextUrl.searchParams.get("bulk") === "true";
+    if (isBulk) return handleBulkCreate(request);
 
     logger.info("Quiz exam create started");
 
@@ -144,6 +162,49 @@ export async function POST(request: NextRequest) {
     }
 
     logger.info(`Quiz exam create succeeded`, { id: result.data?.id });
+
+    return NextResponse.json(result, { status: 201 });
+}
+
+async function handleBulkCreate(request: NextRequest) {
+    logger.info("Quiz exam bulk import started");
+
+    const parsedFile = await parseBulkJsonFile(request);
+    if (!parsedFile.ok) return parsedFile.response;
+
+    const parsed = quizExamsArraySchema.safeParse(parsedFile.rows);
+
+    if (!parsed.success) {
+        const firstError = parsed.error.issues[0];
+        const location = firstError?.path?.join(".");
+        const detail = firstError?.message ?? "Invalid data";
+        const message = location
+            ? `Validation failed at "${location}": ${detail}`
+            : `Validation failed: ${detail}`;
+        logger.warn(`Quiz exam bulk import rejected: validation failed`, {
+            location,
+            detail,
+        });
+        return NextResponse.json(
+            { data: null, message, success: false },
+            { status: 400 }
+        );
+    }
+
+    const result = await createQuizExamsBulk(parsed.data);
+
+    if (!result.success) {
+        logger.error(`Quiz exam bulk import failed during database write`, {
+            rowCount: parsed.data.length,
+            message: result.message,
+        });
+        return NextResponse.json(result, { status: 400 });
+    }
+
+    logger.info(`Quiz exam bulk import completed`, {
+        rowCount: parsed.data.length,
+        createdCount: result.data?.count,
+    });
 
     return NextResponse.json(result, { status: 201 });
 }

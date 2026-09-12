@@ -12,6 +12,7 @@ import { AppHydration } from "@/components/app-hydration";
 import {ActivityTracker} from "@/components/activity-tracker";
 import { LoginRequiredDrawer } from "@/components/login-required-drawer";
 import { SessionAdopter } from "@/components/session-adopter";
+import { PopupHost } from "@/components/popup/popup-host";
 
 export const metadata: Metadata = {
   title: "Learn English Vocabulary in Bangla | Zero English",
@@ -70,6 +71,7 @@ export default function FrontendLayout({
             </div>
             <LoginRequiredDrawer />
             <SessionAdopter />
+            <PopupHost />
           </div>
         </LanguageProvider>
       </SidebarProvider>

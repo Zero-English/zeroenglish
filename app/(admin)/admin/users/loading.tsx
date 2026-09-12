@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function UsersListLoading() {
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-3 lg:p-4">
       <Skeleton className="mb-6 h-4 w-44" />
 
       <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">

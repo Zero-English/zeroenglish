@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { headers } from "next/headers";
 import {
   ArrowLeft,
   Bookmark,
@@ -9,13 +8,13 @@ import {
   ClipboardCheck,
   GraduationCap,
 } from "lucide-react";
-import type { ApiUser, UserDetailResponse } from "../types";
+import type { ApiUser } from "../types";
 import UserActions from "./user-actions";
 import { UserAvatar } from "@/components/UserAvatar";
 import { ProfileActivityChart } from "@/components/profile-activity-chart";
 import { LanguageProvider } from "@/components/language-provider";
 import { getQuizResultsByUser } from "@/services/quiz-result.service";
-import { getUserDailyActivity } from "@/services/user.service";
+import { getUserById, getUserDailyActivity } from "@/services/user.service";
 import prisma from "@/utils/prisma";
 
 export const metadata: Metadata = {
@@ -34,22 +33,10 @@ function formatDay(value?: string) {
   return new Date(value).toLocaleDateString();
 }
 
-async function buildBaseUrl() {
-  const headersList = await headers();
-  const host = headersList.get("x-forwarded-host") || headersList.get("host");
-  const proto = headersList.get("x-forwarded-proto") || "http";
-  return `${proto}://${host}`;
-}
-
 async function findUser(id: number): Promise<ApiUser | undefined> {
-  const baseUrl = await buildBaseUrl();
-  const res = await fetch(`${baseUrl}/api/v1/user/${id}`, {
-    cache: "no-store",
-  });
-  if (!res.ok) return undefined;
-  const result = (await res.json()) as UserDetailResponse;
+  const result = await getUserById(id);
   if (!result.success || !result.data) return undefined;
-  return result.data;
+  return result.data as unknown as ApiUser;
 }
 
 const QUIZ_MODE_LABELS: Record<string, string> = {
@@ -265,7 +252,7 @@ export default async function SingleUserPage({
   ];
 
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-3 lg:p-4">
       <Link
         href="/admin/users"
         className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
@@ -319,10 +306,10 @@ export default async function SingleUserPage({
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm"
+            className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <stat.icon className="h-5 w-5" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <stat.icon className="h-4 w-4" />
             </div>
             <p className="mt-4 text-3xl font-bold text-gray-900 dark:text-white">
               {stat.value}
@@ -340,7 +327,7 @@ export default async function SingleUserPage({
         </LanguageProvider>
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+      <div className="mt-6 grid gap-5 lg:grid-cols-2">
         <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
           <div className="border-b border-gray-200 dark:border-gray-800 px-5 py-4">
             <h2 className="text-base font-semibold text-gray-900 dark:text-white">
@@ -408,7 +395,7 @@ export default async function SingleUserPage({
         </section>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-5 grid gap-5 lg:grid-cols-2">
         <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
           <div className="border-b border-gray-200 dark:border-gray-800 px-5 py-4">
             <h2 className="text-base font-semibold text-gray-900 dark:text-white">

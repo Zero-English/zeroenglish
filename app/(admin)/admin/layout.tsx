@@ -1,7 +1,6 @@
 "use client";
 
 import AdminSidebar from "./sidebar";
-import AdminHeader from "./header";
 import { useState } from "react";
 
 export default function AdminLayout({
@@ -19,11 +18,12 @@ export default function AdminLayout({
         isDesktopOpen={isDesktopOpen}
         close={() => setIsOpen(false)}
         toggleDesktop={() => setIsDesktopOpen((prev) => !prev)}
+        onMenu={() => setIsOpen(true)}
       />
-      <div className="flex flex-col flex-1 min-w-0">
-        <AdminHeader onMenu={() => setIsOpen(true)} />
-        <main className="flex-1 min-w-0 w-full">{children}</main>
-      </div>
+      <main className="flex-1 min-w-0 w-full">
+        <div className="h-14 md:hidden" aria-hidden="true" />
+        {children}
+      </main>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Plus, Pencil } from "lucide-react";
+import { Plus, Pencil, Upload, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,6 +18,7 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { BackButton } from "@/components/back-button";
 import { QuizSectionNav } from "../quiz-nav";
 import { quizTypeLabel } from "../../_data/quizzes";
+import { downloadJson } from "@/lib/json-export";
 
 type QuizTypeItem = {
   id: number;
@@ -34,6 +35,9 @@ export default function AdminQuizTypesPage() {
 
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<QuizTypeItem | null>(null);
+
+  const [importing, setImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const messageTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -100,17 +104,83 @@ export default function AdminQuizTypesPage() {
     }
   }
 
+  function handleExport() {
+    const payload = types.map((t) => ({ name: t.name }));
+    downloadJson(payload, "quiz-types.json");
+    notify(`Exported ${payload.length} type(s)`);
+  }
+
+  async function handleImportFile(file: File) {
+    setImporting(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/v1/quiz-type?bulk=true", {
+        method: "POST",
+        body: formData,
+      });
+      const json = await res.json();
+      if (json.success) {
+        notify(json.message || "Quiz types imported");
+        fetch("/api/v1/quiz-type")
+          .then((res) => res.json())
+          .then((json) => {
+            if (json.success) setTypes(json.data || []);
+          })
+          .catch(() => {});
+      } else {
+        notify(json.message || "Failed to import quiz types");
+      }
+    } catch {
+      notify("Failed to upload the file. Please try again.");
+    } finally {
+      setImporting(false);
+    }
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+    e.target.value = "";
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith(".json")) {
+      notify("Only .json files are allowed.");
+      return;
+    }
+    handleImportFile(file);
+  }
+
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-3 lg:p-4">
       <BackButton />
-      <QuizSectionNav />
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {loading
-            ? "Loading..."
-            : `Manage quiz types (${types.length} types)`}
-        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <QuizSectionNav />
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {loading
+              ? "Loading..."
+              : `Manage quiz types (${types.length} types)`}
+          </p>
+        </div>
         <div className="flex items-center gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json,application/json"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <Button variant="outline" onClick={handleExport}>
+            <Download />
+            Export JSON
+          </Button>
+          <Button
+            variant="outline"
+            disabled={importing}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Upload />
+            {importing ? "Importing..." : "Import JSON"}
+          </Button>
           <Button onClick={() => { setEditing(null); setFormOpen(true); }}>
             <Plus />
             Add Type

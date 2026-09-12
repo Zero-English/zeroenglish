@@ -87,7 +87,7 @@ export default async function SingleExamPage({
   ];
 
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-3 lg:p-4">
       <Link
         href="/admin/exams"
         className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
@@ -128,7 +128,7 @@ export default async function SingleExamPage({
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+            className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <stat.icon className="h-5 w-5" />
@@ -143,7 +143,7 @@ export default async function SingleExamPage({
         ))}
       </section>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+      <div className="mt-6 grid gap-5 lg:grid-cols-2">
         <section className="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
           <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
             <h2 className="text-base font-semibold text-gray-900 dark:text-white">
