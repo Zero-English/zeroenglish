@@ -15,6 +15,9 @@ import { SessionAdopter } from "@/components/session-adopter";
 import { PopupHost } from "@/components/popup/popup-host";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://zeroenglish.com"
+  ),
   title: "Learn English Vocabulary in Bangla | Zero English",
   description:
     "Master essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to C2 levels covered.",
