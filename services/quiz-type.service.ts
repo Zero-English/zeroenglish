@@ -111,6 +111,28 @@ export const createQuizType = async (data: { name: string }) => {
     }
 };
 
+export const createQuizTypesBulk = async (data: { name: string }[]) => {
+    try {
+        const result = await prisma.quizType.createMany({
+            data,
+            skipDuplicates: true,
+        });
+
+        return {
+            data: { count: result.count },
+            message: `${result.count} quiz type(s) created successfully`,
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to bulk create quiz types: ${error}`);
+        return {
+            data: null,
+            message: "Failed to bulk create quiz types",
+            success: false,
+        };
+    }
+};
+
 export const updateQuizTypeById = async (
     id: number,
     data: { name?: string },

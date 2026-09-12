@@ -213,7 +213,7 @@ export default function AdminBlogEditorPage() {
 
   if (loading) {
     return (
-      <div className="space-y-6 p-4 lg:p-8">
+      <div className="space-y-4 p-3 lg:p-4">
         <Skeleton className="h-8 w-64" />
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="space-y-6 lg:col-span-2">
@@ -232,7 +232,7 @@ export default function AdminBlogEditorPage() {
 
   if (notFound || !blog) {
     return (
-      <div className="p-4 lg:p-8">
+      <div className="p-3 lg:p-4">
         <Link
           href="/admin/blog"
           className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
@@ -321,8 +321,8 @@ export default function AdminBlogEditorPage() {
         </div>
       </div>
 
-      <div className="mx-auto w-full px-4 py-8 lg:px-6">
-        <div className="grid gap-8 lg:grid-cols-3">
+      <div className="mx-auto w-full px-3 py-4 lg:px-4">
+        <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <div className="mx-auto w-full">
               <Input
@@ -357,7 +357,7 @@ export default function AdminBlogEditorPage() {
               <Tabs
                 value={langTab}
                 onValueChange={(v) => setLangTab(v === "bn" ? "bn" : "en")}
-                className="mt-8"
+                className="mt-6"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <TabsList>
@@ -366,7 +366,7 @@ export default function AdminBlogEditorPage() {
                   </TabsList>
                 </div>
                 <TabsContent value="en">
-                  <div className="border-t border-gray-200 pt-6 dark:border-gray-800">
+                  <div className="border-t border-gray-200 pt-4 dark:border-gray-800">
                     <BlockNoteEditorDynamic
                       initialMarkdown={contentEn}
                       onChange={setContentEn}
@@ -374,7 +374,7 @@ export default function AdminBlogEditorPage() {
                   </div>
                 </TabsContent>
                 <TabsContent value="bn">
-                  <div className="border-t border-gray-200 pt-6 dark:border-gray-800">
+                  <div className="border-t border-gray-200 pt-4 dark:border-gray-800">
                     <BlockNoteEditorDynamic
                       initialMarkdown={contentBn}
                       onChange={setContentBn}
@@ -386,9 +386,9 @@ export default function AdminBlogEditorPage() {
           </div>
 
           <aside className="lg:col-span-1">
-            <div className="space-y-6 lg:sticky lg:top-20">
-              <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="space-y-4 lg:sticky lg:top-16">
+              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                   <h2 className="text-base font-semibold text-gray-900 dark:text-white">
                     Featured image
                   </h2>
@@ -443,7 +443,7 @@ export default function AdminBlogEditorPage() {
                 )}
               </section>
 
-              <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div className="flex items-center justify-between gap-2">
                   <h2 className="text-base font-semibold text-gray-900 dark:text-white">Post</h2>
                   <Badge variant={blog.published ? "pos" : "level"}>
@@ -482,8 +482,8 @@ export default function AdminBlogEditorPage() {
                 </dl>
               </section>
 
-              <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-                <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
+              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <h2 className="mb-3 text-base font-semibold text-gray-900 dark:text-white">
                   SEO &amp; settings
                 </h2>
                 <div className="space-y-4">
@@ -541,7 +541,7 @@ export default function AdminBlogEditorPage() {
                 </div>
               </section>
 
-              <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <h2 className="mb-3 text-base font-semibold text-gray-900 dark:text-white">
                   Danger zone
                 </h2>

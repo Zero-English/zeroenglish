@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function UserDetailLoading() {
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-3 lg:p-4">
       {/* header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-center gap-4">

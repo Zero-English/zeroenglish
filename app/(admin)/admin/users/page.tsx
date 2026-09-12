@@ -169,9 +169,9 @@ export default function AdminUsersPage() {
   const end = Math.min(page * pageSize, total);
 
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-3 lg:p-4">
       <BackButton />
-      <header className="mb-6">
+      <header className="mb-4">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           All registered users ({total})
         </p>

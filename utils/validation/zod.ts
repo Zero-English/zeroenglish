@@ -87,6 +87,11 @@ export const quizQuestionSchema = z.object({
 
 export type QuizQuestionInput = z.infer<typeof quizQuestionSchema>;
 
+export const quizQuestionsArraySchema = z
+  .array(quizQuestionSchema)
+  .min(1, "At least one question is required")
+  .max(10_000, "Too many questions in one file (max 10000)");
+
 export const quizTypeSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(50),
 });
@@ -95,6 +100,11 @@ export const quizTypeUpdateSchema = quizTypeSchema.partial();
 
 export type QuizTypeInput = z.infer<typeof quizTypeSchema>;
 export type QuizTypeUpdateInput = z.infer<typeof quizTypeUpdateSchema>;
+
+export const quizTypesArraySchema = z
+  .array(quizTypeSchema)
+  .min(1, "At least one quiz type is required")
+  .max(10_000, "Too many quiz types in one file (max 10000)");
 
 export const quizModeEnumSchema = z.enum(["PRACTICE", "WEEKLY", "BIWEEKLY"]);
 
@@ -203,6 +213,11 @@ export type QuizExamSubmitInput = z.infer<typeof quizExamSubmitSchema>;
 export type QuizExamInput = z.infer<typeof quizExamSchema>;
 export type QuizExamUpdateInput = z.infer<typeof quizExamUpdateSchema>;
 export type QuizExamPublishInput = z.infer<typeof quizExamPublishSchema>;
+
+export const quizExamsArraySchema = z
+  .array(quizExamSchema)
+  .min(1, "At least one exam is required")
+  .max(1000, "Too many exams in one file (max 1000)");
 
 export const updateUserSchema = z
   .object({

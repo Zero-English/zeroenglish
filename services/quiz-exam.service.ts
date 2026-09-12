@@ -180,6 +180,43 @@ export const getQuizExamsByPage = async (
     }
 };
 
+export const getAllQuizExams = async () => {
+    try {
+        const exams = await prisma.quizExam.findMany({
+            orderBy: { id: "asc" },
+            include: {
+                quizQuestions: { select: { questionId: true } },
+            },
+        });
+
+        return {
+            data: exams.map((exam) => ({
+                id: exam.id,
+                title: exam.title,
+                mode: exam.mode,
+                levels: exam.levels,
+                timePerQuestion: exam.timePerQuestion,
+                questionIds: exam.quizQuestions.map((q) => q.questionId),
+                scheduleEnabled: exam.scheduleEnabled,
+                scheduledOpeningTime: exam.scheduledOpeningTime,
+                scheduledClosingTime: exam.scheduledClosingTime,
+                resultsPublished: exam.resultsPublished,
+                createdAt: exam.createdAt,
+                updatedAt: exam.updatedAt,
+            })),
+            message: "Quiz exams fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch all quiz exams: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch quiz exams",
+            success: false,
+        };
+    }
+};
+
 export const getQuizExamById = async (id: number) => {
     try {
         const exam = await prisma.quizExam.findUnique({
@@ -268,6 +305,39 @@ export const createQuizExam = async (data: QuizExamCreateInput) => {
             success: false,
         };
     }
+};
+
+export const createQuizExamsBulk = async (data: QuizExamCreateInput[]) => {
+    let createdCount = 0;
+    const errors: string[] = [];
+
+    for (const exam of data) {
+        const result = await createQuizExam(exam);
+        if (result.success) {
+            createdCount += 1;
+        } else {
+            errors.push(`"${exam.title}: ${result.message}"`);
+        }
+    }
+
+    if (createdCount === 0) {
+        return {
+            data: null,
+            message: `Failed to create exams: ${errors.join(", ")}`,
+            success: false,
+        };
+    }
+
+    const message =
+        errors.length === 0
+            ? `${createdCount} exam(s) created successfully`
+            : `${createdCount} exam(s) created; ${errors.length} skipped: ${errors.join(", ")}`;
+
+    return {
+        data: { count: createdCount },
+        message,
+        success: true,
+    };
 };
 
 export const updateQuizExamById = async (

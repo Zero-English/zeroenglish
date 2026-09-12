@@ -322,9 +322,9 @@ export default function AdminVocabularyPage() {
   }
 
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-3 lg:p-4">
       <BackButton />
-      <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           {loading ? "Loading..." : `Manage vocabulary entries (${words.length} words)`}
         </p>

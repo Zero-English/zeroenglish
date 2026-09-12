@@ -8,6 +8,8 @@ import {
   Trash2,
   RotateCcw,
   X,
+  Upload,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +44,7 @@ import {
   difficultyLabelMap,
 } from "../_data/quizzes";
 import { QuizSectionNav } from "./quiz-nav";
+import { downloadJson } from "@/lib/json-export";
 
 const PAGE_SIZES = [10, 20, 50, 100];
 
@@ -89,6 +92,9 @@ export default function AdminQuizzesPage() {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState<QuizQuestionItem | null>(null);
+
+  const [importing, setImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [typeOptions, setTypeOptions] = useState<QuizTypeOption[]>(quizTypeOptions);
   const [typesLoading, setTypesLoading] = useState(true);
@@ -256,15 +262,82 @@ export default function AdminQuizzesPage() {
     }
   }
 
+  function handleExport() {
+    const payload = questions.map((q) => ({
+      quizType: q.quizType,
+      questionText: q.questionText,
+      options: q.options,
+      difficultyLevel: q.difficultyLevel,
+      answer: q.answer,
+    }));
+    downloadJson(payload, "quizzes.json");
+    notify(`Exported ${payload.length} question(s)`);
+  }
+
+  async function handleImportFile(file: File) {
+    setImporting(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch("/api/v1/quiz?bulk=true", {
+        method: "POST",
+        body: formData,
+      });
+      const json = await res.json();
+      if (json.success) {
+        notify(json.message || "Questions imported");
+        fetchQuestions();
+      } else {
+        notify(json.message || "Failed to import questions");
+      }
+    } catch {
+      notify("Failed to upload the file. Please try again.");
+    } finally {
+      setImporting(false);
+    }
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+    e.target.value = "";
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith(".json")) {
+      notify("Only .json files are allowed.");
+      return;
+    }
+    handleImportFile(file);
+  }
+
   return (
-    <div className="p-4 lg:p-8">
+    <div className="p-3 lg:p-4">
       <BackButton />
-      <QuizSectionNav />
-      <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {loading ? "Loading..." : `Manage quiz questions (${questions.length} questions)`}
-        </p>
+      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <QuizSectionNav />
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {loading ? "Loading..." : `Manage quiz questions (${questions.length} questions)`}
+          </p>
+        </div>
         <div className="flex items-center gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json,application/json"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <Button variant="outline" onClick={handleExport}>
+            <Download />
+            Export JSON
+          </Button>
+          <Button
+            variant="outline"
+            disabled={importing}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Upload />
+            {importing ? "Importing..." : "Import JSON"}
+          </Button>
           <Button onClick={() => { setEditing(null); setFormOpen(true); }}>
             <Plus />
             Add Question

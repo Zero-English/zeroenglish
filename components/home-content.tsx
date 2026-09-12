@@ -260,7 +260,7 @@ export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost
             </div>
           </section>
 
-          <section>
+          <section className="mb-14">
             <div className="mb-5">
               <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
                 {t("আপনার জন্য যা যা দরকার", "Everything you need")}
