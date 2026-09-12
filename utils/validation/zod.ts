@@ -245,3 +245,40 @@ export const folderCreateSchema = z.object({
 });
 
 export type FolderCreateInput = z.infer<typeof folderCreateSchema>;
+
+export const slugSchema = z
+    .string()
+    .trim()
+    .min(1, "Slug is required")
+    .max(200, "Slug must be 200 characters or fewer")
+    .regex(
+        /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+        "Slug can only contain lowercase letters, numbers and hyphens",
+    );
+
+export const blogSchema = z
+    .object({
+        titleEn: z.string().trim().min(1, "English title is required").max(300),
+        titleBn: z.string().trim().min(1, "Bangla title is required").max(300),
+        descriptionEn: z.string().trim().min(1, "English description is required").max(3000),
+        descriptionBn: z.string().trim().min(1, "Bangla description is required").max(3000),
+        metaTitle: z.string().trim().max(300).nullish(),
+        metaDescription: z.string().trim().max(1000).nullish(),
+        slug: slugSchema.nullish(),
+        keywords: z.array(z.string().trim().min(1).max(100)).max(50).default([]),
+        contentEn: z.string().default(""),
+        contentBn: z.string().default(""),
+        featuredMediaId: z.number().int().positive().nullish(),
+        published: z.boolean().default(false),
+    })
+    .strict();
+
+export const blogUpdateSchema = blogSchema.partial();
+
+export const blogPublishSchema = z.object({
+    published: z.boolean(),
+});
+
+export type BlogInput = z.infer<typeof blogSchema>;
+export type BlogUpdateInput = z.infer<typeof blogUpdateSchema>;
+export type BlogPublishInput = z.infer<typeof blogPublishSchema>;

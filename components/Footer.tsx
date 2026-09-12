@@ -31,7 +31,7 @@ export default function FFooter() {
       links: [
         { labelBn: "বৈশিষ্ট্য", labelEn: "Features", href: "#" },
         { labelBn: "মূল্য", labelEn: "Pricing", href: "#" },
-        { labelBn: "ব্লগ", labelEn: "Blog", href: "#" },
+        { labelBn: "নিউজ ও ব্লগ", labelEn: "News & Blog", href: "/news" },
       ],
     },
     {
