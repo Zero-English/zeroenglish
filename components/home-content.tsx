@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { LibraryBig, BookOpenCheck, Search, ArrowRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
+import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
 
 const LEVEL_CONFIG: Record<
   string,
@@ -101,7 +102,7 @@ const FEATURES = [
   },
 ];
 
-export function HomeContent({ words }: { words: Word[] }) {
+export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost[] }) {
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
 
@@ -297,6 +298,8 @@ export function HomeContent({ words }: { words: Word[] }) {
               ))}
             </div>
           </section>
+
+          <LatestPosts posts={posts} />
         </div>
       </div>
     </div>

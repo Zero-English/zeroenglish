@@ -9,20 +9,46 @@ datasource db {
 
 model Blog {
   id              Int      @id @default(autoincrement())
-  titleEn           String
-  titleBn           String
-  descriptionEn     String
-  descriptionBn     String
+  titleEn         String
+  titleBn         String
+  descriptionEn   String
+  descriptionBn   String
   metaTitle       String
   metaDescription String
   slug            String   @unique
   keywords        String[]
-  contentEn         String
-  contentBn         String
-  media           String?
+  contentEn       String
+  contentBn       String
+  featuredMediaId Int?
   published       Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  featuredMedia Media? @relation(fields: [featuredMediaId], references: [id], onDelete: SetNull)
+
+  @@index([featuredMediaId])
+  @@index([published, createdAt])
+}
+
+model Media {
+  id        Int      @id @default(autoincrement())
+  fileId    String   @unique
+  url       String
+  name      String
+  filePath  String
+  mimeType  String
+  size      Int
+  width     Int?
+  height    Int?
+  altText   String   @default("")
+  caption   String   @default("")
+  tags      String[] @default([])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  blogs Blog[]
+
+  @@index([createdAt])
 }
 
 model QuizExam {
