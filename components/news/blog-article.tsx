@@ -35,7 +35,7 @@ export function BlogArticle({
   return (
     <article>
       {imageUrl && (
-        <div className="relative mb-8 aspect-video w-full overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80">
+        <div className="relative mb-8 aspect-[4:3] w-full overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={imageUrl}

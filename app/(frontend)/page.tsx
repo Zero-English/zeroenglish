@@ -2,7 +2,6 @@ import { getAllWords } from "@/lib/data";
 import { HomeOrDashboard } from "@/components/home-or-dashboard";
 import { getPublishedBlogsByPage } from "@/services/blog.service";
 
-export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const words = await getAllWords();
