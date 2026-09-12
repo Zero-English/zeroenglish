@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
@@ -26,6 +26,7 @@ import { requestLogin } from "@/lib/login-required";
 import Link from "next/link";
 import { useT } from "@/components/language-provider";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { VocabularyExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
 import { toast } from "sonner";
 
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Random";
@@ -212,6 +213,27 @@ export function QuizClient() {
   const { words: cachedWords, loading: cacheLoading } = useCachedWords();
   const cacheEmpty = !cacheLoading && cachedWords.length === 0;
   const t = useT();
+
+  // On a fresh page mount, never show a previously finished quiz's results
+  // screen. Drop the transient progress (the quiz settings are preserved in
+  // the persisted store, and a full reload already starts at "select").
+  useEffect(() => {
+    const { step: currentStep } = useQuizStore.getState();
+    if (currentStep === "results") {
+      useQuizStore.setState({
+        step: "select",
+        questions: [],
+        currentIndex: 0,
+        score: 0,
+        selectedAnswer: null,
+        isAnswered: false,
+        timeLeft: 0,
+        deadlineAt: null,
+        incorrectAnswers: [],
+        resultsRecorded: false,
+      });
+    }
+  }, []);
 
   const setQuizChromeHidden = useQuizChrome((s) => s.setHidden);
   useEffect(() => {
@@ -445,7 +467,12 @@ export function QuizClient() {
   }, [timeLeft, noTimeLimit, step]);
 
   if (step === "select") {
-    return <QuizTypeSelect onSelect={handleQuizTypeSelect} />;
+    return (
+      <QuizTypeSelect
+        onSelect={handleQuizTypeSelect}
+        resultsSlot={<PastExamResultsSection />}
+      />
+    );
   }
 
   if (step === "settings") {
@@ -506,7 +533,28 @@ export function QuizClient() {
   return null;
 }
 
-function QuizTypeSelect({ onSelect }: { onSelect: (type: QuizType) => void }) {
+function PastExamResultsSection() {
+  const t = useT();
+  return (
+    <div className="mt-16 animate-fade-up-2">
+      <div className="flex items-center gap-2 mb-6">
+        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-100 dark:bg-violet-900/40 border border-violet-200 dark:border-violet-800 text-xs font-bold tracking-wide text-violet-700 dark:text-violet-300 uppercase">
+          <ClipboardList className="h-3.5 w-3.5" />
+          {t("পূর্বের পরীক্ষার ফলাফল", "Past Exam Results")}
+        </span>
+      </div>
+      <VocabularyExamResultsPanel />
+    </div>
+  );
+}
+
+function QuizTypeSelect({
+  onSelect,
+  resultsSlot,
+}: {
+  onSelect: (type: QuizType) => void;
+  resultsSlot?: ReactNode;
+}) {
   const t = useT();
   return (
     <div className="relative min-h-dvh flex flex-col items-center justify-center overflow-hidden px-6 py-16">
@@ -652,6 +700,8 @@ function QuizTypeSelect({ onSelect }: { onSelect: (type: QuizType) => void }) {
             );
           })}
         </div>
+
+        {resultsSlot}
       </div>
     </div>
   );

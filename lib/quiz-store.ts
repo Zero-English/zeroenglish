@@ -59,14 +59,46 @@ const initialState: QuizState = {
   resultsRecorded: false,
 };
 
+type QuizPersistedSettings = Pick<
+  QuizState,
+  | "quizType"
+  | "selectedLevels"
+  | "quantity"
+  | "useAllQuestions"
+  | "timePerQuestion"
+  | "noTimeLimit"
+>;
+
 export const useQuizStore = create<QuizState>()(
   persist(
     () => initialState,
     {
       name: "quiz-state",
-      storage: createScopedLocalStorage<QuizState>(identityNamespace),
+      storage: createScopedLocalStorage<QuizPersistedSettings>(identityNamespace),
       skipHydration: true,
-      partialize: (state) => state,
+      // Only settings survive a reload. Transient progress (step, questions,
+      // score, timers, etc.) must never be restored, otherwise a finished or
+      // in-progress quiz would reappear on the quiz page.
+      partialize: (state) => ({
+        quizType: state.quizType,
+        selectedLevels: state.selectedLevels,
+        quantity: state.quantity,
+        useAllQuestions: state.useAllQuestions,
+        timePerQuestion: state.timePerQuestion,
+        noTimeLimit: state.noTimeLimit,
+      }),
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<QuizPersistedSettings>;
+        return {
+          ...current,
+          quizType: p.quizType ?? current.quizType,
+          selectedLevels: p.selectedLevels ?? current.selectedLevels,
+          quantity: p.quantity ?? current.quantity,
+          useAllQuestions: p.useAllQuestions ?? current.useAllQuestions,
+          timePerQuestion: p.timePerQuestion ?? current.timePerQuestion,
+          noTimeLimit: p.noTimeLimit ?? current.noTimeLimit,
+        };
+      },
     }
   )
 );
