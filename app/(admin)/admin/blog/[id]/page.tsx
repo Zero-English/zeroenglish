@@ -253,7 +253,7 @@ export default function AdminBlogEditorPage() {
   return (
     <div className="min-h-screen">
       <div className="sticky top-0 z-30 border-b border-gray-200/80 bg-white/80 backdrop-blur-xl dark:border-gray-800/80 dark:bg-gray-950/80">
-        <div className="mx-auto max-w-7xl px-4 py-3 lg:px-6">
+        <div className="mx-auto w-full px-4 py-3 lg:px-6">
           <div className="flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
               <Link
@@ -321,50 +321,10 @@ export default function AdminBlogEditorPage() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-8 lg:px-6">
+      <div className="mx-auto w-full px-4 py-8 lg:px-6">
         <div className="grid gap-8 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <div className="mx-auto max-w-3xl">
-              <div className="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800">
-                {featuredMedia ? (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => setPickerOpen(true)}
-                      className="relative block aspect-[2/1] w-full"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={thumbnailUrl(featuredMedia.url)}
-                        alt={featuredMedia.altText || featuredMedia.name}
-                        className="h-full w-full object-cover"
-                      />
-                      <span className="absolute inset-0 flex items-center justify-center gap-2 bg-gray-950/0 text-sm font-medium text-white opacity-0 transition-all duration-200 group-hover:bg-gray-950/40 group-hover:opacity-100">
-                        <Images className="h-4 w-4" />
-                        Change cover
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setFeaturedMedia(null)}
-                      title="Remove cover image"
-                      className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-950/60 text-white transition-colors hover:bg-rose-600"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setPickerOpen(true)}
-                    className="flex aspect-[2/1] w-full flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-gray-300 text-gray-400 transition-colors hover:border-gray-400 hover:bg-gray-50 hover:text-gray-500 dark:border-gray-700 dark:text-gray-500 dark:hover:border-gray-600 dark:hover:bg-gray-900/50 dark:hover:text-gray-400"
-                  >
-                    <ImagePlus className="h-7 w-7" />
-                    <span className="text-sm font-medium">Set featured image</span>
-                  </button>
-                )}
-              </div>
-
+            <div className="mx-auto w-full">
               <Input
                 value={langTab === "en" ? titleEn : titleBn}
                 onChange={(e) =>
@@ -374,7 +334,7 @@ export default function AdminBlogEditorPage() {
                   langTab === "en" ? "Post title (English)…" : "পোস্টের শিরোনাম (বাংলা)…"
                 }
                 aria-label="Post title"
-                className="mt-8 h-auto border-0 bg-transparent px-0 py-0 text-3xl font-bold tracking-tight text-gray-900 shadow-none focus-visible:ring-transparent dark:text-white sm:text-5xl"
+                className="h-auto border-0 bg-transparent px-0 py-0 text-3xl font-bold tracking-tight text-gray-900 shadow-none focus-visible:ring-transparent dark:text-white sm:text-5xl"
               />
 
               <Textarea
@@ -399,10 +359,12 @@ export default function AdminBlogEditorPage() {
                 onValueChange={(v) => setLangTab(v === "bn" ? "bn" : "en")}
                 className="mt-8"
               >
-                <TabsList>
-                  <TabsTrigger value="en">English</TabsTrigger>
-                  <TabsTrigger value="bn">বাংলা</TabsTrigger>
-                </TabsList>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <TabsList>
+                    <TabsTrigger value="en">English</TabsTrigger>
+                    <TabsTrigger value="bn">বাংলা</TabsTrigger>
+                  </TabsList>
+                </div>
                 <TabsContent value="en">
                   <div className="border-t border-gray-200 pt-6 dark:border-gray-800">
                     <BlockNoteEditorDynamic
@@ -425,6 +387,62 @@ export default function AdminBlogEditorPage() {
 
           <aside className="lg:col-span-1">
             <div className="space-y-6 lg:sticky lg:top-20">
+              <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                  <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+                    Featured image
+                  </h2>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPickerOpen(true)}
+                  >
+                    {featuredMedia ? (
+                      <Images className="h-4 w-4" />
+                    ) : (
+                      <ImagePlus className="h-4 w-4" />
+                    )}
+                    {featuredMedia ? "Change" : "Set image"}
+                  </Button>
+                </div>
+                {featuredMedia ? (
+                  <div className="space-y-3">
+                    <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={thumbnailUrl(featuredMedia.url)}
+                        alt={featuredMedia.altText || featuredMedia.name}
+                        className="aspect-video w-full object-cover"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                        {featuredMedia.name}
+                      </p>
+                      <p className="break-all text-xs text-gray-500 dark:text-gray-400">
+                        {featuredMedia.url}
+                      </p>
+                      <p className="mt-0.5 truncate text-xs text-gray-400 dark:text-gray-500">
+                        ID: {featuredMedia.id}
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full text-rose-600 dark:text-rose-400"
+                      onClick={() => setFeaturedMedia(null)}
+                    >
+                      <X className="h-4 w-4" />
+                      Remove
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    No featured image selected.
+                  </p>
+                )}
+              </section>
+
               <section className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div className="flex items-center justify-between gap-2">
                   <h2 className="text-base font-semibold text-gray-900 dark:text-white">Post</h2>

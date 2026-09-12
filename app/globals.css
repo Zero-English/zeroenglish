@@ -190,3 +190,9 @@ li::marker{
 .bottom-nav{
   padding-bottom: env(safe-area-inset-bottom);
 }
+.left-env-space{
+  padding-left: env(safe-area-inset-left);
+}
+.right-env-space{
+  padding-right: env(safe-area-inset-right);
+}

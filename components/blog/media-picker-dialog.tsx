@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import { ImageIcon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,16 +13,12 @@ import {
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PaginationNav } from "@/components/pagination-nav";
-
-type PickerMedia = {
-  id: number;
-  url: string;
-  name: string;
-  altText: string;
-  mimeType: string;
-};
-
-const PAGE_LIMIT = 12;
+import {
+  MEDIA_PAGE_LIMIT,
+  thumbnailUrl,
+  useMediaLibrary,
+  type PickerMedia,
+} from "./use-media-library";
 
 export function MediaPickerDialog({
   open,
@@ -34,60 +29,8 @@ export function MediaPickerDialog({
   onOpenChange: (open: boolean) => void;
   onSelect: (media: PickerMedia) => void;
 }) {
-  const [media, setMedia] = useState<PickerMedia[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
-  const requestId = useRef(0);
-
-  const thumbnailUrl = (url: string, mimeType: string) =>
-    mimeType === "image/svg+xml" ? url : `${url}?tr=w-320,h-320`;
-
-  const load = useCallback(() => {
-    const id = ++requestId.current;
-    setLoading(true);
-    const params = new URLSearchParams({ page: String(page), limit: String(PAGE_LIMIT) });
-    if (debouncedSearch) params.set("search", debouncedSearch);
-
-    fetch(`/api/v1/media?${params.toString()}`)
-      .then((res) => res.json())
-      .then((json) => {
-        if (requestId.current !== id) return;
-        if (json.success && Array.isArray(json.data)) {
-          setMedia(json.data);
-          setTotalPages(json.pagination?.totalPages ?? 1);
-          setTotal(json.pagination?.total ?? 0);
-        } else {
-          setMedia([]);
-        }
-      })
-      .catch(() => {
-        if (requestId.current === id) setMedia([]);
-      })
-      .finally(() => {
-        if (requestId.current === id) setLoading(false);
-      });
-  }, [page, debouncedSearch]);
-
-  useEffect(() => {
-    if (!open) return;
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search.trim());
-      setPage(1);
-    }, 350);
-    return () => clearTimeout(timer);
-  }, [search, open]);
-
-  useEffect(() => {
-    if (open) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      load();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, page, debouncedSearch]);
+  const { media, loading, page, setPage, totalPages, total, search, setSearch } =
+    useMediaLibrary(open);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -110,7 +53,7 @@ export function MediaPickerDialog({
         <div className="max-h-[46vh] overflow-y-auto">
           {loading ? (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-              {Array.from({ length: PAGE_LIMIT }).map((_, i) => (
+              {Array.from({ length: MEDIA_PAGE_LIMIT }).map((_, i) => (
                 <Skeleton key={i} className="aspect-square w-full rounded-lg" />
               ))}
             </div>
@@ -147,7 +90,7 @@ export function MediaPickerDialog({
           )}
         </div>
 
-        {!loading && total > PAGE_LIMIT && (
+        {!loading && total > MEDIA_PAGE_LIMIT && (
           <div className="flex items-center justify-between border-t border-gray-200 pt-3 dark:border-gray-800">
             <span className="text-xs text-gray-500 dark:text-gray-400">
               {total} image{total === 1 ? "" : "s"}

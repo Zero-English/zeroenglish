@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useCreateBlockNote } from "@blocknote/react";
+import { useCreateBlockNote, FilePanelController } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
+import { MediaLibraryFilePanel } from "./file-panel-media-tab";
 
-export function BlockNoteEditor({
+export const BlockNoteEditor = ({
   initialMarkdown,
   onChange,
 }: {
   initialMarkdown: string;
   onChange: (markdown: string) => void;
-}) {
+}) => {
   const editor = useCreateBlockNote();
   const loadedRef = useRef(false);
   const onChangeRef = useRef(onChange);
@@ -48,5 +49,9 @@ export function BlockNoteEditor({
     return () => unsub();
   }, [editor]);
 
-  return <BlockNoteView editor={editor} />;
-}
+  return (
+    <BlockNoteView editor={editor} filePanel={false}>
+      <FilePanelController filePanel={MediaLibraryFilePanel} />
+    </BlockNoteView>
+  );
+};
