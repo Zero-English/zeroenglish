@@ -22,16 +22,16 @@ import { useActiveTab, setActiveTab } from "@/lib/profile-tab-store";
 import { useQuizActivity } from "@/lib/use-quiz-activity";
 import { Classic } from "@/components/classic";
 import { ProfileActivityChart } from "@/components/profile-activity-chart";
-import { QuizHistoryPanel } from "@/components/profile-quiz-history";
 import { QuizExamHistoryPanel } from "@/components/profile-quiz-exam-history";
 import { useQuizHistory } from "@/lib/use-quiz-history";
 import { useQuizExamHistoryStore } from "@/lib/quiz-exam-history-store";
+import { VocabularyExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
 import { useT } from "@/components/language-provider";
 
 const ITEMS_PER_PAGE = 10;
 import {
   BookmarkCheck, CheckCircle2, Bookmark, Circle,
-  BookOpen, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Volume2, ClipboardList,
+  BookOpen, BookOpenCheck, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Volume2, ClipboardList,
 } from "lucide-react";
 
 
@@ -255,8 +255,8 @@ function WordItem({
 export function ProfileTabs({ words }: { words: Word[] }) {
   const activeTab = useActiveTab();
   const normalizedTab = activeTab === "still-learning" ? "quiz" : activeTab;
-  const [quizSubTab, setQuizSubTab] = useState<"history" | "exams" | "still-learning">(
-    activeTab === "still-learning" ? "still-learning" : "history"
+  const [quizSubTab, setQuizSubTab] = useState<"exams" | "vocab" | "still-learning">(
+    activeTab === "still-learning" ? "still-learning" : "vocab"
   );
   const quizCount = useQuizHistory().entries.length;
   const examCount = useQuizExamHistoryStore((s) => s.entries.length);
@@ -646,11 +646,11 @@ export function ProfileTabs({ words }: { words: Word[] }) {
       </TabsContent>
 
       <TabsContent value="quiz">
-        <Tabs value={quizSubTab} onValueChange={(v) => setQuizSubTab(v as "history" | "exams" | "still-learning")}>
+        <Tabs value={quizSubTab} onValueChange={(v) => setQuizSubTab(v as "exams" | "vocab" | "still-learning")}>
           <TabsList>
-            <TabsTrigger value="history" className="flex items-center gap-1.5">
-              <GraduationCap className="h-4 w-4" />
-              {t("প্র্যাকটিস", "Practice")}
+            <TabsTrigger value="vocab" className="flex items-center gap-1.5">
+              <BookOpenCheck className="h-4 w-4" />
+              {t("শব্দ কুইজ", "Practice")}
             </TabsTrigger>
             <TabsTrigger value="exams" className="flex items-center gap-1.5">
               <ClipboardList className="h-4 w-4" />
@@ -672,8 +672,8 @@ export function ProfileTabs({ words }: { words: Word[] }) {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="history">
-            <QuizHistoryPanel />
+          <TabsContent value="vocab">
+            <VocabularyExamResultsPanel />
           </TabsContent>
 
           <TabsContent value="exams">

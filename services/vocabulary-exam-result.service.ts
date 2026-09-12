@@ -83,14 +83,29 @@ export const createVocabularyExamResult = async (data: {
     }
 };
 
+const wordDetailSelect = {
+    id: true,
+    word: true,
+    meaningBn: true,
+    synonyms: true,
+    antonyms: true,
+    definitionEn: true,
+    definitionBn: true,
+    examplesEn: true,
+    examplesBn: true,
+    level: true,
+    category: true,
+    wordType: true,
+} as const;
+
 export const getVocabularyExamResultsByUser = async (userId: number) => {
     try {
         const results = await prisma.vocabularyExamResult.findMany({
             where: { userId },
             orderBy: { createdAt: "desc" },
             include: {
-                correctWords: { select: { id: true, word: true } },
-                incorrectWords: { select: { id: true, word: true } },
+                correctWords: { select: wordDetailSelect },
+                incorrectWords: { select: wordDetailSelect },
                 quizType: { select: { id: true, name: true } },
             },
         });
@@ -105,6 +120,43 @@ export const getVocabularyExamResultsByUser = async (userId: number) => {
         return {
             data: null,
             message: "Failed to fetch vocabulary exam results",
+            success: false,
+        };
+    }
+};
+
+export const getVocabularyExamResultById = async (
+    resultId: number,
+    userId?: number
+) => {
+    try {
+        const result = await prisma.vocabularyExamResult.findFirst({
+            where: { id: resultId, ...(userId != null ? { userId } : {}) },
+            include: {
+                correctWords: { select: wordDetailSelect },
+                incorrectWords: { select: wordDetailSelect },
+                quizType: { select: { id: true, name: true } },
+            },
+        });
+
+        if (!result) {
+            return {
+                data: null,
+                message: "Vocabulary exam result not found",
+                success: false,
+            };
+        }
+
+        return {
+            data: result,
+            message: "Vocabulary exam result fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch vocabulary exam result by id: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch vocabulary exam result",
             success: false,
         };
     }
