@@ -30,7 +30,7 @@ export function BlogCard({
       href={`/news/${slug}`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-zinc-200/70 bg-white/80 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 dark:border-zinc-800/80 dark:bg-zinc-950/60"
     >
-      <div className="relative aspect-video w-full overflow-hidden bg-zinc-100 dark:bg-zinc-900">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-900">
         {imageUrl ? (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
