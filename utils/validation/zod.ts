@@ -215,3 +215,70 @@ export const updateUserSchema = z
   .strict();
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+
+export const FOLDER_NAME_REGEX = /^[A-Za-z0-9 _-]+$/;
+
+export const mediaUpdateSchema = z
+    .object({
+        altText: z.string().trim().max(500).optional(),
+        caption: z.string().trim().max(2000).optional(),
+        tags: z.array(z.string().trim().min(1).max(50)).max(50).optional(),
+        folder: z
+            .string()
+            .trim()
+            .max(40)
+            .regex(FOLDER_NAME_REGEX, "Invalid folder name")
+            .nullable()
+            .optional(),
+    })
+    .strict();
+
+export type MediaUpdateInput = z.infer<typeof mediaUpdateSchema>;
+
+export const folderCreateSchema = z.object({
+    name: z
+        .string()
+        .trim()
+        .min(1, "Folder name is required")
+        .max(40, "Folder name must be 40 characters or fewer")
+        .regex(FOLDER_NAME_REGEX, "Folder name can only contain letters, numbers, spaces, hyphens and underscores"),
+});
+
+export type FolderCreateInput = z.infer<typeof folderCreateSchema>;
+
+export const slugSchema = z
+    .string()
+    .trim()
+    .min(1, "Slug is required")
+    .max(200, "Slug must be 200 characters or fewer")
+    .regex(
+        /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+        "Slug can only contain lowercase letters, numbers and hyphens",
+    );
+
+export const blogSchema = z
+    .object({
+        titleEn: z.string().trim().min(1, "English title is required").max(300),
+        titleBn: z.string().trim().min(1, "Bangla title is required").max(300),
+        descriptionEn: z.string().trim().min(1, "English description is required").max(3000),
+        descriptionBn: z.string().trim().min(1, "Bangla description is required").max(3000),
+        metaTitle: z.string().trim().max(300).nullish(),
+        metaDescription: z.string().trim().max(1000).nullish(),
+        slug: slugSchema.nullish(),
+        keywords: z.array(z.string().trim().min(1).max(100)).max(50).default([]),
+        contentEn: z.string().default(""),
+        contentBn: z.string().default(""),
+        featuredMediaId: z.number().int().positive().nullish(),
+        published: z.boolean().default(false),
+    })
+    .strict();
+
+export const blogUpdateSchema = blogSchema.partial();
+
+export const blogPublishSchema = z.object({
+    published: z.boolean(),
+});
+
+export type BlogInput = z.infer<typeof blogSchema>;
+export type BlogUpdateInput = z.infer<typeof blogUpdateSchema>;
+export type BlogPublishInput = z.infer<typeof blogPublishSchema>;

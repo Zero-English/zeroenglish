@@ -2,6 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@plugin "@tailwindcss/typography";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -176,6 +178,21 @@ html[data-lang="bn"] {
 li::marker{
   display: none !important;
 }
+.blog-article li::marker{
+  display: revert !important;
+}
+.blog-article ol{
+  list-style: decimal;
+}
+.blog-article ul{
+  list-style: disc;
+}
 .bottom-nav{
   padding-bottom: env(safe-area-inset-bottom);
+}
+.left-env-space{
+  padding-left: env(safe-area-inset-left);
+}
+.right-env-space{
+  padding-right: env(safe-area-inset-right);
 }

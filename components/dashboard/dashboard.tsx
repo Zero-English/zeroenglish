@@ -21,6 +21,7 @@ import { useAuthStore } from "@/lib/auth-store";
 import { useLastLearned, type LastLearnedEntry } from "@/lib/last-learned-store";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useDailyGoal } from "@/lib/use-daily-goal";
+import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
 
 const LEVEL_META: Record<
   string,
@@ -142,7 +143,7 @@ function getGreeting(): GreetingText {
   return { bn: "শুভ সন্ধ্যা", en: "Good evening" };
 }
 
-export function Dashboard({ words }: { words: Word[] }) {
+export function Dashboard({ words, posts }: { words: Word[]; posts: LatestPost[] }) {
   const t = useT();
   const { lang } = useLanguage();
   const userName = useAuthStore((s) => s.userName);
@@ -326,6 +327,8 @@ export function Dashboard({ words }: { words: Word[] }) {
               )}
             </div>
           </section>
+
+          <LatestPosts posts={posts} />
         </div>
       </div>
     </div>
