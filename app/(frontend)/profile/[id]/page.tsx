@@ -31,6 +31,7 @@ export async function generateMetadata({
     description: displayName
       ? `Public profile of ${displayName} on Zero English — track learned words and quiz progress.`
       : "Public profile on Zero English.",
+    alternates: { canonical: `/profile/${userId}` },
   };
 }
 

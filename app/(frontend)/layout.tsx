@@ -13,11 +13,10 @@ import {ActivityTracker} from "@/components/activity-tracker";
 import { LoginRequiredDrawer } from "@/components/login-required-drawer";
 import { SessionAdopter } from "@/components/session-adopter";
 import { PopupHost } from "@/components/popup/popup-host";
+import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://zeroenglish.org"
-  ),
+  metadataBase: new URL(SITE_URL),
   title: "Everything You Need to Master English | Zero English",
   description:
     "Master English in one place with Zero English — learn grammar, vocabulary, composition, quizzes, and more through a complete English learning experience.",
@@ -36,7 +35,7 @@ export const metadata: Metadata = {
       },
     ],
     type: "website",
-    siteName: "Zero English",
+    siteName: SITE_NAME,
   },
   other: {
     "theme-color": "#000000",

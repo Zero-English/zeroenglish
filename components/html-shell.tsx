@@ -5,6 +5,7 @@ import { Geist, Geist_Mono, Hind_Siliguri, Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionProvider from "@/components/session-provider";
+import { SITE_URL, SITE_NAME, SITE_DEFAULT_DESCRIPTION } from "@/lib/site-config";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -25,18 +26,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    metadataBase: new URL(
-        process.env.NEXT_PUBLIC_SITE_URL ?? "https://zeroenglish.com"
-    ),
+    metadataBase: new URL(SITE_URL),
     title: "Learn English Vocabulary in Bangla | Zero English",
-    description:
-        "Master essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to C2 levels covered.",
+    description: SITE_DEFAULT_DESCRIPTION,
     manifest: "/manifest.webmanifest",
     icons: "/assets/logo/favicon.webp",
     openGraph: {
         title: "Learn English Vocabulary in Bangla | Zero English",
-        description:
-            "Master essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to C2 levels covered.",
+        description: SITE_DEFAULT_DESCRIPTION,
+        locale: "en_US",
+        url: SITE_URL,
+        siteName: SITE_NAME,
         images: [
             {
                 url: "/assets/logo/open-graph.png",
@@ -46,7 +46,12 @@ export const metadata: Metadata = {
             },
         ],
         type: "website",
-        siteName: "Zero English",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Learn English Vocabulary in Bangla | Zero English",
+        description: SITE_DEFAULT_DESCRIPTION,
+        images: ["/assets/logo/open-graph.png"],
     },
     other: {
         "theme-color": "#f97316",

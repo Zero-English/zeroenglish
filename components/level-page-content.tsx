@@ -86,6 +86,7 @@ const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
 
 export interface LevelPageContentProps {
   level: string;
+  pageNum?: number;
 }
 
 function NotFoundScreen() {
@@ -163,7 +164,7 @@ function OfflineScreen({ onRetry }: { onRetry: () => void }) {
   );
 }
 
-export function LevelPageContent({ level }: LevelPageContentProps) {
+export function LevelPageContent({ level, pageNum = 1 }: LevelPageContentProps) {
   const { words, loading, error, refresh, getWordsByLevel } = useCachedWords();
 
   const upper = level.toUpperCase();
@@ -207,7 +208,7 @@ export function LevelPageContent({ level }: LevelPageContentProps) {
 
       <div className="relative px-4 pb-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
-          <LevelWordsClient words={allWords} gradient={config!.gradient} level={upper} />
+          <LevelWordsClient words={allWords} gradient={config!.gradient} level={upper} pageNum={pageNum} />
         </div>
       </div>
     </div>

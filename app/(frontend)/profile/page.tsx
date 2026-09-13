@@ -11,8 +11,9 @@ import { StaggerContainer } from "@/components/stagger";
 import { BackButton } from "@/components/back-button";
 
 export const metadata: Metadata = {
-    title: "My Profile",
+    title: "My Profile | Zero English",
     description: "Track your vocabulary learning progress.",
+    robots: { index: false, follow: false },
 };
 
 export default async function ProfilePage() {

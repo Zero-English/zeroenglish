@@ -21,13 +21,14 @@ export async function generateMetadata({
   const upper = level.toUpperCase();
 
   if (!VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number])) {
-    return { title: "Level Not Found" };
+    return { title: "Level Not Found", robots: { index: false, follow: false } };
   }
 
   const labels = LEVEL_LABELS[upper as (typeof VALID_LEVELS)[number]];
   return {
     title: `English Vocabulary - Level ${upper} (${labels.label})`,
     description: `Learn essential English words at ${upper} level (${labels.label}). ${labels.labelBn} vocabulary list with Bangla meanings, examples, synonyms and antonyms.`,
+    alternates: { canonical: `/vocabulary/${upper.toLowerCase()}` },
   };
 }
 
