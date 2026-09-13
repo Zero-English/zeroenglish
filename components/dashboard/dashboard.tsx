@@ -328,7 +328,7 @@ export function Dashboard({ words, posts }: { words: Word[]; posts: LatestPost[]
             </div>
           </section>
 
-          <LatestPosts posts={posts} />
+          {/* <LatestPosts posts={posts} /> */}
         </div>
       </div>
     </div>

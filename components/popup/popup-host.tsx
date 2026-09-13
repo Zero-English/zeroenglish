@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { X } from "lucide-react";
@@ -203,12 +204,9 @@ export function PopupHost() {
                   <X className="h-4 w-4" />
                 </button>
                 {popup.link ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      dismiss(popup.id);
-                      window.location.href = popup.link;
-                    }}
+                  <Link
+                    href={popup.link}
+                    onClick={() => dismiss(popup.id)}
                     aria-label={`Open ${popup.link}`}
                     className="block overflow-hidden rounded-xl shadow-xl"
                   >
@@ -218,7 +216,7 @@ export function PopupHost() {
                       alt={media.name}
                       className={portrait ? "w-full rounded-xl object-cover" : "w-full rounded-xl object-cover"}
                     />
-                  </button>
+                  </Link>
                 ) : (
                   <div className="overflow-hidden rounded-xl shadow-xl">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
