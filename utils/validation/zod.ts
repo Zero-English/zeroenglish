@@ -92,6 +92,43 @@ export const quizQuestionsArraySchema = z
   .min(1, "At least one question is required")
   .max(10_000, "Too many questions in one file (max 10000)");
 
+export const quizClassEnumSchema = z.enum([
+  "PrePrimary",
+  "Class1",
+  "Class2",
+  "Class3",
+  "Class4",
+  "Class5",
+  "Class6",
+  "Class7",
+  "Class8",
+  "SSC",
+  "HSC",
+  "IELTS",
+  "TOEFL",
+  "University",
+  "Masters",
+  "Diploma",
+  "BCS",
+  "JOB",
+]);
+
+export const bulkQuizQuestionSchema = z.object({
+  quizType: z.string().trim().min(1, "Quiz type is required").max(50),
+  questionText: z.string().trim().min(1, "Question text is required"),
+  options: z.array(z.string().min(1)).min(2, "At least 2 options are required"),
+  difficultyLevel: difficultyLevelEnumSchema,
+  answer: z.string().trim().min(1, "Answer is required"),
+  class: z.array(quizClassEnumSchema).default([]),
+});
+
+export const bulkQuizUploadSchema = z
+  .array(bulkQuizQuestionSchema)
+  .min(1, "At least one question is required")
+  .max(10_000, "Too many questions in one file (max 10000)");
+
+export type BulkQuizUploadInput = z.infer<typeof bulkQuizUploadSchema>;
+
 export const quizTypeSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(50),
 });

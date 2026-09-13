@@ -1,6 +1,6 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
-import type { DifficultyLevels, Prisma } from "@/generated/prisma/client";
+import type { DifficultyLevels, Class, Prisma } from "@/generated/prisma/client";
 
 const quizTypeInclude = {
     quizType: {
@@ -162,6 +162,7 @@ export const createQuizQuestionsBulk = async (data: {
     options: string[];
     difficultyLevel: DifficultyLevels;
     answer: string;
+    class?: Class[] | null;
 }[]) => {
     try {
         const names = [...new Set(data.map((q) => q.quizType))];
@@ -191,6 +192,7 @@ export const createQuizQuestionsBulk = async (data: {
                         options: q.options,
                         difficultyLevel: q.difficultyLevel,
                         answer: q.answer,
+                        class: q.class ?? [],
                     },
                 })
             )
