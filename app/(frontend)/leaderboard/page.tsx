@@ -9,6 +9,7 @@ export const metadata: Metadata = {
     title: "Leaderboard",
     description:
         "Top learners ranked by their quiz exam average and last week performance.",
+    alternates: { canonical: "/leaderboard" },
 };
 
 export const dynamic = "force-dynamic";

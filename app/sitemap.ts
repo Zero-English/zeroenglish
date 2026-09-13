@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getWordsByLevel } from "@/lib/data";
 import { getPublishedBlogsByPage } from "@/services/blog.service";
+import { SITE_URL } from "@/lib/site-config";
 
-const BASE_URL = "https://zeroenglish.tahmidhasan.net";
-const VALID_LEVELS = ["A1", "A2", "B1", "B2"] as const;
+const BASE_URL = SITE_URL;
+const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 const ITEMS_PER_PAGE = 10;
 
 const staticRoutes = [
@@ -11,9 +12,9 @@ const staticRoutes = [
   { url: `${BASE_URL}/vocabulary`, changeFrequency: "weekly" as const, priority: 0.9 },
   { url: `${BASE_URL}/search`, changeFrequency: "weekly" as const, priority: 0.8 },
   { url: `${BASE_URL}/quiz`, changeFrequency: "weekly" as const, priority: 0.8 },
+  { url: `${BASE_URL}/quiz/exam`, changeFrequency: "weekly" as const, priority: 0.7 },
   { url: `${BASE_URL}/news`, changeFrequency: "daily" as const, priority: 0.7 },
-  { url: `${BASE_URL}/profile`, changeFrequency: "monthly" as const, priority: 0.5 },
-  { url: `${BASE_URL}/offline`, changeFrequency: "monthly" as const, priority: 0.3 },
+  { url: `${BASE_URL}/leaderboard`, changeFrequency: "daily" as const, priority: 0.5 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -24,16 +25,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   for (const level of VALID_LEVELS) {
-    entries.push({
+    const words = await getWordsByLevel(level);
+    const totalPages = Math.ceil(words.length / ITEMS_PER_PAGE);
+    if (totalPages < 1) continue; // skip empty levels
+
+  entries.push({
       url: `${BASE_URL}/vocabulary/${level.toLowerCase()}`,
       lastModified: now,
       changeFrequency: "daily",
       priority: 0.9,
     });
 
-    const words = await getWordsByLevel(level);
-    const totalPages = Math.ceil(words.length / ITEMS_PER_PAGE);
-    for (let page = 1; page <= totalPages; page++) {
+    for (let page = 2; page <= totalPages; page++) {
       entries.push({
         url: `${BASE_URL}/vocabulary/${level.toLowerCase()}/${page}`,
         lastModified: now,

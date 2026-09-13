@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import type { Word } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
@@ -16,7 +17,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
-import { useLevelPage, useLevelFilter, useLevelSort, useLevelCategory, setLevelState } from "@/lib/level-pagination-store";
+import { useLevelFilter, useLevelSort, useLevelCategory, setLevelState } from "@/lib/level-pagination-store";
 import { setSelectedLevel } from "@/lib/level-store";
 import { recordLastLearned } from "@/lib/last-learned-store";
 import { useT } from "@/components/language-provider";
@@ -37,15 +38,18 @@ interface LevelWordsClientProps {
   words: Word[];
   gradient: string;
   level: string;
+  pageNum?: number;
 }
 
-export function LevelWordsClient({ words, gradient, level }: LevelWordsClientProps) {
+export function LevelWordsClient({ words, gradient, level, pageNum = 1 }: LevelWordsClientProps) {
   const { isLearned, loaded: learnedLoaded } = useLearnedWords();
   const { isBookmarked, loaded: bookmarkLoaded } = useBookmarkedWords();
   const loaded = learnedLoaded && bookmarkLoaded;
   const t = useT();
+  const router = useRouter();
 
-  const page = useLevelPage(level);
+  const page = pageNum;
+  const basePath = `/vocabulary/${level.toLowerCase()}`;
   const filter = useLevelFilter(level);
   const sort = useLevelSort(level);
   const category = useLevelCategory(level);
@@ -104,18 +108,17 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
 
   const handleFilterChange = (f: FilterType) => {
     setLevelState(level, { filter: f, page: 1 });
+    router.push(basePath);
   };
 
   const handleSortChange = (s: SortType) => {
     setLevelState(level, { sort: s, page: 1 });
+    router.push(basePath);
   };
 
   const handleCategoryChange = (c: string) => {
     setLevelState(level, { category: c, page: 1 });
-  };
-
-  const handlePageChange = (p: number) => {
-    setLevelState(level, { page: p });
+    router.push(basePath);
   };
 
   const getPageItems = () => {
@@ -176,16 +179,13 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
             )}
           </p>
 
-          {totalPages > 1 && (
+{totalPages > 1 && (
             <Pagination>
               <div className="flex items-center gap-0.5 max-w-full">
                 <PaginationItem>
-                    <PaginationPrevious
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (currentPage > 1) handlePageChange(currentPage - 1);
-                    }}
+                  <PaginationPrevious
+                    href={currentPage - 1 <= 1 ? basePath : `${basePath}/${currentPage - 1}`}
+                    aria-disabled={currentPage <= 1}
                     className={cn(
                       currentPage <= 1 ? "pointer-events-none opacity-50" : ""
                     )}
@@ -197,11 +197,7 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
                     {getPageItems().map((pageNum) => (
                       <PaginationItem key={pageNum}>
                         <PaginationLink
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handlePageChange(pageNum);
-                          }}
+                          href={pageNum <= 1 ? basePath : `${basePath}/${pageNum}`}
                           isActive={pageNum === currentPage}
                         >
 {pageNum}
@@ -213,11 +209,8 @@ export function LevelWordsClient({ words, gradient, level }: LevelWordsClientPro
 
                 <PaginationItem>
                   <PaginationNext
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (currentPage < totalPages) handlePageChange(currentPage + 1);
-                    }}
+                    href={currentPage + 1 <= 1 ? basePath : `${basePath}/${currentPage + 1}`}
+                    aria-disabled={currentPage >= totalPages}
                     className={cn(
                       currentPage >= totalPages
                         ? "pointer-events-none opacity-50"

@@ -24,10 +24,13 @@ export async function generateMetadata({
     title: blog.metaTitle,
     description: blog.metaDescription,
     keywords: blog.keywords,
+    alternates: { canonical: `/news/${blog.slug}` },
     openGraph: {
       title: blog.metaTitle,
       description: blog.metaDescription,
       type: "article",
+      publishedTime: blog.createdAt.toISOString(),
+      modifiedTime: blog.updatedAt.toISOString(),
       images: blog.featuredMedia
         ? [{ url: blog.featuredMedia.url, alt: blog.featuredMedia.altText || undefined }]
         : [],

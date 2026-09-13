@@ -3,13 +3,24 @@ import { getPublishedBlogsByPage } from "@/services/blog.service";
 import { BlogCard } from "@/components/news/blog-card";
 import { NewsPagination } from "@/components/news/news-pagination";
 
-export const metadata: Metadata = {
-  title: "News & Blog | Zero English",
-  description:
-    "Articles, tips and updates for Bangla-speaking English learners at Zero English.",
-};
-
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}): Promise<Metadata> {
+  const sp = await searchParams;
+  const page = Math.max(1, parseInt(sp.page || "1", 10) || 1);
+  return {
+    title: "News & Blog | Zero English",
+    description:
+      "Articles, tips and updates for Bangla-speaking English learners at Zero English.",
+    alternates: {
+      canonical: page <= 1 ? "/news" : `/news?page=${page}`,
+    },
+  };
+}
 
 const PAGE_LIMIT = 9;
 
