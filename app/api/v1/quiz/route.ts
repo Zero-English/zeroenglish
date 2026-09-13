@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getAllQuizQuestions, getQuizQuestionsByPage, createQuizQuestion, createQuizQuestionsBulk } from "@/services/quiz.service";
-import { quizQuestionSchema, quizQuestionsArraySchema } from "@/utils/validation/zod";
+import { quizQuestionSchema, bulkQuizUploadSchema } from "@/utils/validation/zod";
 import { parseBulkJsonFile } from "@/utils/bulk-import";
 import { requireAdmin } from "@/lib/api-auth";
 import logger from "@/utils/logger";
@@ -78,7 +78,7 @@ async function handleBulkCreate(request: NextRequest) {
     const parsedFile = await parseBulkJsonFile(request);
     if (!parsedFile.ok) return parsedFile.response;
 
-    const parsed = quizQuestionsArraySchema.safeParse(parsedFile.rows);
+    const parsed = bulkQuizUploadSchema.safeParse(parsedFile.rows);
 
     if (!parsed.success) {
         const firstError = parsed.error.issues[0];

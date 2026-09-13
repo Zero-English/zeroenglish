@@ -131,6 +131,8 @@ export default function AdminQuizzesPage() {
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
         setQuestions(json.data.map(mapApiQuestion));
+      } else {
+        notify(json?.message || "Failed to load quiz questions");
       }
     } catch {
       notify("Failed to load quiz questions");
