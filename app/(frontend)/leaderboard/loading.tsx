@@ -1,0 +1,1 @@
+export { LeaderboardSkeleton as default } from "@/components/skeletons";

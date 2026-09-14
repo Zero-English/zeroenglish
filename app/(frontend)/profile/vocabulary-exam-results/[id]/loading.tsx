@@ -1,0 +1,1 @@
+export { VocabularyExamResultSkeleton as default } from "@/components/skeletons";
