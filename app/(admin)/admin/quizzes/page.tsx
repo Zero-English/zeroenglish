@@ -84,6 +84,7 @@ export default function AdminQuizzesPage() {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
+  const [sortOrder, setSortOrder] = useState<"desc" | "asc">("desc");
   const [message, setMessage] = useState<string | null>(null);
   const [showMessage, setShowMessage] = useState(false);
 
@@ -150,7 +151,7 @@ export default function AdminQuizzesPage() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return questions.filter((item) => {
+    const result = questions.filter((item) => {
       if (q) {
         const haystack = [
           item.questionText,
@@ -167,7 +168,9 @@ export default function AdminQuizzesPage() {
       if (difficultyFilter !== "all" && item.difficultyLevel !== difficultyFilter) return false;
       return true;
     });
-  }, [questions, search, typeFilter, difficultyFilter]);
+    result.sort((a, b) => (sortOrder === "asc" ? a.id - b.id : b.id - a.id));
+    return result;
+  }, [questions, search, typeFilter, difficultyFilter, sortOrder]);
 
   const filterTypeOptions = useMemo(() => {
     const seen = new Set(typeOptions.map((t) => t.value));
@@ -411,6 +414,18 @@ export default function AdminQuizzesPage() {
                       {d.label}
                     </SelectItem>
                   ))}
+                </SelectContent>
+              </Select>
+              <Select
+                value={sortOrder}
+                onValueChange={(v) => { setSortOrder(v as "asc" | "desc"); setPage(1); }}
+              >
+                <SelectTrigger className="w-40" aria-label="Sort by ID">
+                  <SelectValue placeholder="Sort by ID" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="desc">Newest first</SelectItem>
+                  <SelectItem value="asc">Oldest first</SelectItem>
                 </SelectContent>
               </Select>
             </div>

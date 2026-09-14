@@ -80,6 +80,52 @@ export const getQuizQuestionsByPage = async (page: number = 1, limit: number = 1
     }
 };
 
+export const getQuizQuestionsByType = async (
+    quizType: string,
+    limit: number = 50
+) => {
+    try {
+        const type = await prisma.quizType.findUnique({
+            where: { name: quizType },
+            select: { id: true },
+        });
+
+        if (!type) {
+            return {
+                data: null,
+                message: `Quiz type "${quizType}" not found`,
+                success: false,
+            };
+        }
+
+        const questions = await prisma.quizQuestion.findMany({
+            where: { quizTypeId: type.id },
+            orderBy: { id: "asc" },
+            include: quizTypeInclude,
+        });
+
+        // Return questions in random order so every session feels fresh,
+        // capped at the requested limit.
+        const shuffled = questions
+            .map((q) => toApiQuestion(q))
+            .sort(() => Math.random() - 0.5)
+            .slice(0, limit);
+
+        return {
+            data: shuffled,
+            message: "Quiz questions fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch quiz questions by type: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch quiz questions by type",
+            success: false,
+        };
+    }
+};
+
 export const getQuizQuestionById = async (id: number) => {
     try {
         const question = await prisma.quizQuestion.findUnique({
