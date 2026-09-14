@@ -83,14 +83,14 @@ export default function RootLayout({
         >
             <head>
                 <Script
-                    src="https://www.googletagmanager.com/gtag/js?id=G-6BF3FVESN8"
+                    src="https://www.googletagmanager.com/gtag/js?id=G-FPN6QHHBXY"
                     strategy="afterInteractive"
                 />
                 <Script id="google-analytics" strategy="afterInteractive">
                     {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-6BF3FVESN8');`}
+gtag('config', 'G-FPN6QHHBXY');`}
                 </Script>
             </head>
             <body className="min-h-full left-env-space right-env-space" cz-shortcut-listen="true" suppressHydrationWarning>
