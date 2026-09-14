@@ -25,6 +25,7 @@ import {
 import { requestLogin } from "@/lib/login-required";
 import Link from "next/link";
 import { useT } from "@/components/language-provider";
+import { GrammarTopicsSection, ClassesSection } from "@/components/quiz-catalog";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { VocabularyExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
 import { toast } from "sonner";
@@ -565,17 +566,17 @@ function QuizTypeSelect({
         <div className="animate-fade-up text-center mb-12">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-4">
             <Sparkles className="h-3.5 w-3.5" />
-            {t("শব্দভাণ্ডার কুইজ", "Vocabulary Quiz")}
+            {t("কুইজ", "Quiz")}
           </span>
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-3 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-            {t("কুইজের ধরন বেছে নিন", "Choose a Quiz Type")}
+            {t("আপনার কুইজ বেছে নিন", "Choose a Quiz")}
           </h1>
           <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
-            {t("আপনি যেভাবে অনুশীলন করতে চান সেটি বেছে নিন। প্রতিটি মোডে আপনার শব্দভাণ্ডার ভিন্নভাবে গড়ে ওঠে।", "Pick how you want to practice. Every mode builds your vocabulary differently.")}
+            {t("গ্রামার টপিক, শ্রেণি, শব্দভাণ্ডার কিংবা নির্ধারিত পরীক্ষা — যেভাবে চান কুইজ দিয়ে অনুশীলন করুন।", "Practice with quizzes by grammar topic, class, vocabulary or scheduled exams — your way.")}
           </p>
         </div>
 
-        <div className="animate-fade-up mb-10">
+        <div className="animate-fade-up mb-16">
           <Link
             href="/quiz/exam"
             className="group relative flex flex-col text-left overflow-hidden rounded-3xl border-2 border-violet-200 dark:border-violet-900 bg-violet-50/60 dark:bg-violet-950/30 backdrop-blur-sm transition-all duration-300 hover:scale-[1.01] hover:-translate-y-0.5 active:scale-[0.99]"
@@ -618,12 +619,13 @@ function QuizTypeSelect({
           </Link>
         </div>
 
-        <div className="animate-fade-up-1 flex items-center gap-2 mb-4">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-            <Sparkles className="h-3.5 w-3.5" />
-            {t("প্র্যাকটিস কুইজ", "Practice Quizzes")}
-          </span>
-        </div>
+        <div className="animate-fade-up-1 mb-16">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+              <Sparkles className="h-3.5 w-3.5" />
+              {t("প্র্যাকটিস কুইজ", "Practice Quizzes")}
+            </span>
+          </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           {QUIZ_TYPE_ORDER.map((type, i) => {
@@ -699,6 +701,15 @@ function QuizTypeSelect({
               </button>
             );
           })}
+        </div>
+        </div>
+
+        <div className="animate-fade-up-1 mb-16">
+          <GrammarTopicsSection />
+        </div>
+
+        <div className="animate-fade-up-2 mb-16">
+          <ClassesSection />
         </div>
 
         {resultsSlot}

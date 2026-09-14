@@ -1,5 +1,6 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
+import { Class } from "@/generated/prisma/enums";
 
 const includeCounts = {
     _count: {
@@ -45,6 +46,14 @@ export const getAllQuizTypes = async () => {
             success: false,
         };
     }
+};
+
+export const getAllQuizClasses = () => {
+    return {
+        data: Object.values(Class) as Class[],
+        message: "Quiz classes fetched successfully",
+        success: true,
+    };
 };
 
 export const getQuizTypeById = async (id: number) => {
