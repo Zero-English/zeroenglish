@@ -3,10 +3,11 @@ import { getAllWords } from "@/lib/data";
 import { HomeOrDashboard } from "@/components/home-or-dashboard";
 import { getPublishedBlogsByPage } from "@/services/blog.service";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
-
 
 export default async function Home() {
   const words = await getAllWords();

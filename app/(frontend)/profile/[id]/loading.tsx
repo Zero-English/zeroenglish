@@ -1,0 +1,1 @@
+export { PublicProfileSkeleton as default } from "@/components/skeletons";

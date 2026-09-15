@@ -1,4 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/api-auth";
 import logger from "@/utils/logger";
 import { setBlogPublished } from "@/services/blog.service";
@@ -66,5 +67,6 @@ export async function PATCH(
         const status = result.message === "Blog not found" ? 404 : 500;
         return NextResponse.json(result, { status });
     }
+    revalidatePath("/");
     return NextResponse.json(result);
 }

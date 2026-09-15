@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
+import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import {
   Activity,
   ArrowRight,
@@ -186,150 +187,167 @@ export function Dashboard({ words, posts }: { words: Word[]; posts: LatestPost[]
       <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
 
       <div className="relative px-4 py-10 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto space-y-8 sm:space-y-10">
+        <StaggerContainer className="max-w-6xl mx-auto space-y-8 sm:space-y-10">
           {/* Header: greeting + overall progress */}
-          <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-orange-200/70 dark:border-orange-800/60 bg-orange-50/80 dark:bg-orange-950/40 px-3 py-1 text-xs font-medium text-orange-600 dark:text-orange-300">
-                <Sparkles className="h-3.5 w-3.5" />
-                {t("আপনার শেখার ড্যাশবোর্ড", "Your learning dashboard")}
+          <StaggerItem>
+            <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-orange-200/70 dark:border-orange-800/60 bg-orange-50/80 dark:bg-orange-950/40 px-3 py-1 text-xs font-medium text-orange-600 dark:text-orange-300">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  {t("আপনার শেখার ড্যাশবোর্ড", "Your learning dashboard")}
+                </div>
+                <h1 className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                  {greetingFull}
+                </h1>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">{dateLabel}</p>
               </div>
-              <h1 className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-                {greetingFull}
-              </h1>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">{dateLabel}</p>
-            </div>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-4 sm:px-5 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80">
-              <div className="relative h-20 w-20 shrink-0">
-                <ProgressRing pct={ready ? overallPct : 0} size={80} stroke={7} />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
-                    {ready ? `${overallPct}%` : "…"}
-                  </span>
+              <div className="flex items-center gap-4 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-4 sm:px-5 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
+                <div className="relative h-20 w-20 shrink-0">
+                  <ProgressRing pct={ready ? overallPct : 0} size={80} stroke={7} />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
+                      {ready ? `${overallPct}%` : "…"}
+                    </span>
+                  </div>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                    {t("সামগ্রিক অগ্রগতি", "Overall progress")}
+                  </p>
+                  <p className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
+                    {ready ? (
+                      <>
+                        {totalLearned}
+                        <span className="font-normal text-zinc-400"> / {totalWords}</span>
+                      </>
+                    ) : (
+                      "…"
+                    )}
+                  </p>
+                  <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                    {t("শব্দ শেখা হয়েছে", "words learned")}
+                  </p>
                 </div>
               </div>
-              <div className="min-w-0">
-                <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  {t("সামগ্রিক অগ্রগতি", "Overall progress")}
-                </p>
-                <p className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-                  {ready ? (
-                    <>
-                      {totalLearned}
-                      <span className="font-normal text-zinc-400"> / {totalWords}</span>
-                    </>
-                  ) : (
-                    "…"
-                  )}
-                </p>
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                  {t("শব্দ শেখা হয়েছে", "words learned")}
-                </p>
-              </div>
-            </div>
-          </header>
+            </header>
+          </StaggerItem>
 
           {/* Continue learning */}
-          <ContinueLearningCard
-            lastLearned={lastLearnedHydrated ? lastLearned : null}
-            loaded={learnedLoaded}
-            learnedIds={learnedIds}
-            words={words}
-          />
+          <StaggerItem>
+            <ContinueLearningCard
+              lastLearned={lastLearnedHydrated ? lastLearned : null}
+              loaded={learnedLoaded}
+              learnedIds={learnedIds}
+              words={words}
+            />
+          </StaggerItem>
 
           {/* Daily stats */}
-          <section>
-            <SectionHeading
-              icon={Target}
-              iconClass="text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60"
-              titleEn="Daily activity"
-              titleBn="দৈনিক কার্যকলাপ"
-              descriptionEn="Keep your learning streak alive today"
-              descriptionBn="আজ আপনার শেখার ধারা ধরে রাখুন"
-            />
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              <StatTile
-                icon={GraduationCap}
-                labelEn="Words learned"
-                labelBn="শব্দ শেখা হয়েছে"
-                value={ready ? `${totalLearned}` : "…"}
-                subEn={`of ${totalWords} total`}
-                subBn={`মোট ${totalWords}টির মধ্যে`}
-                iconClass="text-orange-500 bg-orange-100 dark:bg-orange-950/60"
-              />
-              <StatTile
-                icon={Sparkles}
-                labelEn="Today's words"
-                labelBn="আজ শেখা শব্দ"
-                value={statsReady ? `${todayLearned}` : "…"}
-                subEn={dailyGoal > 0 ? `daily goal ${dailyGoal}` : "set a daily goal"}
-                subBn={
-                  dailyGoal > 0 ? `দৈনিক লক্ষ্য ${dailyGoal}` : "দৈনিক লক্ষ্য নির্ধারণ করুন"
-                }
-                iconClass="text-sky-500 bg-sky-100 dark:bg-sky-950/60"
-              />
-              <StatTile
-                icon={Flame}
-                labelEn="Day streak"
-                labelBn="দিনের ধারা"
-                value={statsReady ? `${streak}` : "…"}
-                subEn="days in a row"
-                subBn="টানা কত দিন"
-                iconClass="text-amber-500 bg-amber-100 dark:bg-amber-950/60"
-              />
-              <StatTile
+          <StaggerItem>
+            <section>
+              <SectionHeading
                 icon={Target}
-                labelEn="Daily goal"
-                labelBn="দৈনিক লক্ষ্য"
-                value={statsReady ? `${goalPct}%` : "…"}
-                subEn={`${todayLearned} of ${dailyGoal} words`}
-                subBn={`${dailyGoal}টির মধ্যে ${todayLearned}টি`}
                 iconClass="text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60"
+                titleEn="Daily activity"
+                titleBn="দৈনিক কার্যকলাপ"
+                descriptionEn="Keep your learning streak alive today"
+                descriptionBn="আজ আপনার শেখার ধারা ধরে রাখুন"
               />
-            </div>
-          </section>
+              <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <StaggerItem>
+                  <StatTile
+                    icon={GraduationCap}
+                    labelEn="Words learned"
+                    labelBn="শব্দ শেখা হয়েছে"
+                    value={ready ? `${totalLearned}` : "…"}
+                    subEn={`of ${totalWords} total`}
+                    subBn={`মোট ${totalWords}টির মধ্যে`}
+                    iconClass="text-orange-500 bg-orange-100 dark:bg-orange-950/60"
+                  />
+                </StaggerItem>
+                <StaggerItem>
+                  <StatTile
+                    icon={Sparkles}
+                    labelEn="Today's words"
+                    labelBn="আজ শেখা শব্দ"
+                    value={statsReady ? `${todayLearned}` : "…"}
+                    subEn={dailyGoal > 0 ? `daily goal ${dailyGoal}` : "set a daily goal"}
+                    subBn={
+                      dailyGoal > 0 ? `দৈনিক লক্ষ্য ${dailyGoal}` : "দৈনিক লক্ষ্য নির্ধারণ করুন"
+                    }
+                    iconClass="text-sky-500 bg-sky-100 dark:bg-sky-950/60"
+                  />
+                </StaggerItem>
+                <StaggerItem>
+                  <StatTile
+                    icon={Flame}
+                    labelEn="Day streak"
+                    labelBn="দিনের ধারা"
+                    value={statsReady ? `${streak}` : "…"}
+                    subEn="days in a row"
+                    subBn="টানা কত দিন"
+                    iconClass="text-amber-500 bg-amber-100 dark:bg-amber-950/60"
+                  />
+                </StaggerItem>
+                <StaggerItem>
+                  <StatTile
+                    icon={Target}
+                    labelEn="Daily goal"
+                    labelBn="দৈনিক লক্ষ্য"
+                    value={statsReady ? `${goalPct}%` : "…"}
+                    subEn={`${todayLearned} of ${dailyGoal} words`}
+                    subBn={`${dailyGoal}টির মধ্যে ${todayLearned}টি`}
+                    iconClass="text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60"
+                  />
+                </StaggerItem>
+              </StaggerContainer>
+            </section>
+          </StaggerItem>
 
           {/* Quick actions */}
-          <section>
-            <SectionHeading
-              icon={Sparkles}
-              iconClass="text-orange-500 bg-orange-100 dark:bg-orange-950/60"
-              titleEn="Explore"
-              titleBn="এক্সপ্লোর করুন"
-              descriptionEn="Everything you need to keep learning, in one place"
-              descriptionBn="শেখা চালিয়ে যেতে প্রয়োজনীয় সব কিছু এক জায়গায়"
-            />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              {ACTION_CARDS.map(
-                ({ href, icon: Icon, titleEn, titleBn, descriptionEn, descriptionBn, iconClass }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    className="group flex flex-col rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 transition-all duration-300 hover:shadow-xl hover:shadow-zinc-200/50 dark:hover:shadow-black/30 hover:-translate-y-0.5 hover:border-zinc-300/80 dark:hover:border-zinc-700/80"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className={cn("flex h-12 w-12 items-center justify-center rounded-2xl", iconClass)}>
-                        <Icon className="h-6 w-6" />
-                      </div>
-                      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 text-zinc-400 transition-all group-hover:border-orange-600 group-hover:bg-orange-600 group-hover:text-white group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </span>
-                    </div>
-                    <h3 className="mt-4 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                      {t(titleBn, titleEn)}
-                    </h3>
-                    <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 flex-1">
-                      {t(descriptionBn, descriptionEn)}
-                    </p>
-                  </Link>
-                )
-              )}
-            </div>
-          </section>
+          <StaggerItem>
+            <section>
+              <SectionHeading
+                icon={Sparkles}
+                iconClass="text-orange-500 bg-orange-100 dark:bg-orange-950/60"
+                titleEn="Explore"
+                titleBn="এক্সপ্লোর করুন"
+                descriptionEn="Everything you need to keep learning, in one place"
+                descriptionBn="শেখা চালিয়ে যেতে প্রয়োজনীয় সব কিছু এক জায়গায়"
+              />
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                {ACTION_CARDS.map(
+                  ({ href, icon: Icon, titleEn, titleBn, descriptionEn, descriptionBn, iconClass }) => (
+                    <StaggerItem key={href} className="h-full">
+                      <Link
+                        href={href}
+                        className="group flex h-full flex-col rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 transition-all duration-300 hover:shadow-xl hover:shadow-zinc-200/50 dark:hover:shadow-black/30 hover:-translate-y-0.5 hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:shadow-xl active:shadow-zinc-200/50 dark:active:shadow-black/30 active:-translate-y-0.5 active:border-zinc-300/80 dark:active:border-zinc-700/80"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className={cn("flex h-12 w-12 items-center justify-center rounded-2xl", iconClass)}>
+                            <Icon className="h-6 w-6" />
+                          </div>
+                          <span className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 text-zinc-400 transition-all group-hover:border-orange-600 group-hover:bg-orange-600 group-hover:text-white group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-active:border-orange-600 group-active:bg-orange-600 group-active:text-white group-active:-translate-y-0.5 group-active:translate-x-0.5">
+                            <ArrowRight className="h-3.5 w-3.5" />
+                          </span>
+                        </div>
+                        <h3 className="mt-4 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                          {t(titleBn, titleEn)}
+                        </h3>
+                        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 flex-1">
+                          {t(descriptionBn, descriptionEn)}
+                        </p>
+                      </Link>
+                    </StaggerItem>
+                  )
+                )}
+              </StaggerContainer>
+            </section>
+          </StaggerItem>
 
           {/* <LatestPosts posts={posts} /> */}
-        </div>
+        </StaggerContainer>
       </div>
     </div>
   );
@@ -444,7 +462,7 @@ function ContinueLearningCard({
 
   return (
     <section>
-      <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80">
+      <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -482,7 +500,7 @@ function ContinueLearningCard({
 
           <Button
             asChild
-            className="shrink-0 gap-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white px-5 h-10 text-sm font-medium shadow-lg shadow-orange-500/20"
+            className="shrink-0 gap-2 rounded-xl bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white px-5 h-10 text-sm font-medium shadow-lg shadow-orange-500/20"
           >
             <Link href={href}>
               {lastLearned ? t("চালিয়ে যান", "Continue") : t("শেখা শুরু করুন", "Start Learning")}
@@ -515,7 +533,7 @@ function StatTile({
   const t = useT();
 
   return (
-    <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-4 sm:p-5 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80">
+    <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-4 sm:p-5 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
       <div className={cn("flex h-9 w-9 items-center justify-center rounded-xl", iconClass)}>
         <Icon className="size-4.5" />
       </div>

@@ -1,0 +1,1 @@
+export { NewsSkeleton as default } from "@/components/skeletons";
