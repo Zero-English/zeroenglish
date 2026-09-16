@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { StaggerContainer } from "@/components/stagger";
 
 function S({ className }: { className?: string }) {
   return <Skeleton className={cn("rounded-xl", className)} />;
@@ -447,62 +448,79 @@ export function PublicProfileSkeleton() {
       <div className="relative px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <S className="mb-6 h-4 w-16 rounded-full" />
-          <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 p-5 sm:p-6 dark:bg-zinc-900/60">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <div className="flex items-center gap-4">
-                <S className="h-14 w-14 rounded-full" />
-                <div className="space-y-2">
+
+          <StaggerContainer className="flex flex-col gap-5">
+            {/* Twitter-style profile card */}
+            <div className="relative overflow-hidden rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm">
+              <div className="h-24 bg-gradient-to-br from-zinc-200 to-zinc-300/70 sm:h-36 dark:from-zinc-800 dark:to-zinc-800/40">
+                <S className="absolute left-3 top-3 h-6 w-28 rounded-full sm:left-6 sm:top-5" />
+              </div>
+              <div className="relative px-4 pb-6 sm:px-6">
+                <div className="-mt-12 sm:-mt-16">
+                  <S className="h-24 w-24 rounded-full ring-4 ring-white dark:ring-zinc-950 sm:h-28 sm:w-28" />
+                </div>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
                   <S className="h-5 w-40 rounded-lg" />
-                  <S className="h-4 w-32 rounded-full" />
+                  <S className="h-5 w-16 rounded-full" />
+                </div>
+                <S className="mt-2 h-4 w-32 rounded-full" />
+                <div className="mt-3 flex flex-wrap items-center gap-3">
+                  <S className="h-4 w-36 rounded-full" />
+                  <S className="h-4 w-24 rounded-full" />
+                </div>
+                <div className="mt-4 flex items-center gap-6 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="flex items-center gap-1.5">
+                      <S className="h-4 w-4" />
+                      <S className="h-5 w-8 rounded-md" />
+                      <S className="h-3 w-14 rounded-full" />
+                    </div>
+                  ))}
                 </div>
               </div>
-              <S className="hidden h-4 w-28 rounded-full sm:ml-auto" />
             </div>
-          </div>
-          <div className="mt-5 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 p-5 sm:p-6 dark:bg-zinc-950/60">
-            <div className="flex items-center gap-2">
-              <S className="h-6 w-6 rounded-md" />
-              <S className="h-4 w-44 rounded-lg" />
-            </div>
-            <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
-              <S className="h-28 rounded-2xl" />
-              <S className="h-28 rounded-2xl" />
-              <S className="h-28 rounded-2xl" />
-            </div>
-            <div className="mt-6">
-              <div className="flex items-center justify-between">
-                <S className="h-4 w-36 rounded-lg" />
-                <S className="h-4 w-24 rounded-lg" />
-              </div>
-              <S className="mt-2 h-2.5 w-full rounded-full" />
-            </div>
-            <div className="mt-6 space-y-3 border-t border-zinc-100 pt-5 dark:border-zinc-800">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="flex items-center justify-between">
-                  <S className="h-3 w-8 rounded" />
-                  <S className="h-3 w-16 rounded-full" />
-                  <S className="h-3 w-8 rounded" />
-                </div>
-              ))}
-            </div>
-          </div>
-          <S className="mt-5 h-40 w-full rounded-2xl" />
-          <div className="mt-5 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 p-5 sm:p-6 dark:bg-zinc-950/60">
-            <div className="flex items-center gap-2">
-              <S className="h-6 w-6 rounded-md" />
-              <S className="h-4 w-36 rounded-lg" />
-            </div>
-            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
-              <S className="h-28 rounded-2xl" />
-              <S className="h-28 rounded-2xl" />
-              <S className="h-28 rounded-2xl" />
-            </div>
-            <div className="mt-6 space-y-3">
+
+            {/* Tabs */}
+            <div className="flex w-full items-center gap-1 overflow-x-auto rounded-xl bg-zinc-200/60 p-1 dark:bg-zinc-800/60">
               {Array.from({ length: 3 }).map((_, i) => (
-                <S key={i} className="h-28 rounded-2xl" />
+                <S key={i} className="h-8 flex-1 rounded-lg" />
               ))}
             </div>
-          </div>
+
+            {/* Overview content */}
+            <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-12">
+              <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 p-5 sm:p-6 lg:col-span-4 dark:bg-zinc-950/60 backdrop-blur-sm">
+                <div className="flex items-center gap-2.5">
+                  <S className="h-9 w-9 rounded-xl" />
+                  <S className="h-4 w-32 rounded-lg" />
+                </div>
+                <div className="mt-6 flex flex-col items-center gap-3">
+                  <S className="h-40 w-40 rounded-full" />
+                  <S className="h-4 w-28 rounded-full" />
+                </div>
+              </div>
+              <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 p-5 sm:p-6 lg:col-span-8 dark:bg-zinc-950/60 backdrop-blur-sm">
+                <div className="flex items-center gap-2.5">
+                  <S className="h-9 w-9 rounded-xl" />
+                  <S className="h-4 w-40 rounded-lg" />
+                </div>
+                <div className="mt-6 space-y-5">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <S className="h-5 w-9 rounded-md" />
+                          <S className="h-3 w-12 rounded-full" />
+                        </div>
+                        <S className="h-3 w-8 rounded-full" />
+                      </div>
+                      <S className="mt-2 h-2 w-full rounded-full" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </StaggerContainer>
         </div>
       </div>
     </SkeletonBackdrop>
