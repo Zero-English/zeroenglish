@@ -21,6 +21,15 @@ const toApiQuestion = (q: QuizQuestionWithType) => ({
     answer: q.answer,
 });
 
+const shuffleArray = <T,>(arr: T[]): T[] => {
+    const shuffled = [...arr];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+};
+
 export const getAllQuizQuestions = async () => {
     try {
         const questions = await prisma.quizQuestion.findMany({
@@ -105,9 +114,13 @@ export const getQuizQuestionsByType = async (
         });
 
         // Return questions in random order so every session feels fresh,
-        // capped at the requested limit.
+        // capped at the requested limit. Options are shuffled on the server
+        // too, so the correct answer doesn't always land on the same letter.
         const shuffled = questions
-            .map((q) => toApiQuestion(q))
+            .map((q) => ({
+                ...toApiQuestion(q),
+                options: shuffleArray(q.options),
+            }))
             .sort(() => Math.random() - 0.5)
             .slice(0, limit);
 
