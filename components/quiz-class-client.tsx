@@ -11,6 +11,7 @@ import { useT } from "@/components/language-provider";
 import { quizClassMeta, type QuizClassOption } from "@/lib/quiz-sections";
 import { useQuizMeta } from "@/lib/quiz-meta";
 import { ClassCard } from "@/components/quiz-catalog";
+import { QuizBackLink } from "@/components/quiz-back-link";
 
 function resolveSelectedClass(
   classes: string[],
@@ -33,6 +34,8 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
       <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
 
       <div className="max-w-3xl w-full mx-auto">
+        <QuizBackLink className="animate-fade-up mb-6" />
+
         {loading && selectedClassValue ? (
           <div className="animate-pulse space-y-6">
             <div className="h-5 w-40 rounded-lg bg-zinc-200/70 dark:bg-zinc-800/70" />

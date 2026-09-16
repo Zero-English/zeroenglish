@@ -1,12 +1,12 @@
-import { QuizClient } from "@/components/quiz-client";
+import { QuizMenu } from "@/components/quiz-menu";
 
 export const metadata = {
-  title: "Vocabulary Quiz - Test Your Knowledge",
+  title: "Quizzes - Practice Vocabulary, Grammar & More",
   description:
-    "Test your English vocabulary knowledge with interactive quizzes. Practice translations, synonyms and antonyms across all difficulty levels.",
+    "Test your English with interactive quizzes. Practice vocabulary, grammar topics and class based quizzes, take scheduled exams and review past results.",
   alternates: { canonical: "/quiz" },
 };
 
 export default function QuizPage() {
-  return <QuizClient />;
+  return <QuizMenu />;
 }
