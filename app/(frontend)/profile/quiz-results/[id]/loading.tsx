@@ -1,0 +1,1 @@
+export { QuizResultSkeleton as default } from "@/components/skeletons";

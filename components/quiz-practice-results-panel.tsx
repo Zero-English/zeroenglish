@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import {
   CalendarDays,
   Clock3,
@@ -107,6 +108,14 @@ function ResultItem({ result }: { result: DbQuizResult }) {
 
   return (
     <StaggerItem className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
+      <Link
+        href={`/profile/quiz-results/${result.id}`}
+        className="absolute inset-0 z-0"
+        aria-label={t(
+          `ফলাফল #${result.id} দেখুন`,
+          `View result #${result.id}`
+        )}
+      />
       <div className="pointer-events-none relative flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <ResultBadgeIcon r={result} />

@@ -177,6 +177,15 @@ export const createQuizResult = async (data: {
     }
 };
 
+const quizQuestionDetailSelect = {
+    id: true,
+    questionText: true,
+    options: true,
+    answer: true,
+    difficultyLevel: true,
+    class: true,
+} as const;
+
 export const getQuizResultsByUser = async (userId: number) => {
     try {
         const results = await prisma.quizResults.findMany({
@@ -185,22 +194,8 @@ export const getQuizResultsByUser = async (userId: number) => {
             include: {
                 exam: true,
                 quizType: true,
-                correctQuestions: {
-                    select: {
-                        id: true,
-                        questionText: true,
-                        answer: true,
-                        difficultyLevel: true,
-                    },
-                },
-                incorrectQuestions: {
-                    select: {
-                        id: true,
-                        questionText: true,
-                        answer: true,
-                        difficultyLevel: true,
-                    },
-                },
+                correctQuestions: { select: quizQuestionDetailSelect },
+                incorrectQuestions: { select: quizQuestionDetailSelect },
             },
         });
 
@@ -214,6 +209,44 @@ export const getQuizResultsByUser = async (userId: number) => {
         return {
             data: null,
             message: "Failed to fetch quiz results",
+            success: false,
+        };
+    }
+};
+
+export const getQuizResultById = async (
+    resultId: number,
+    userId?: number
+) => {
+    try {
+        const result = await prisma.quizResults.findFirst({
+            where: { id: resultId, ...(userId != null ? { userId } : {}) },
+            include: {
+                exam: true,
+                quizType: true,
+                correctQuestions: { select: quizQuestionDetailSelect },
+                incorrectQuestions: { select: quizQuestionDetailSelect },
+            },
+        });
+
+        if (!result) {
+            return {
+                data: null,
+                message: "Quiz result not found",
+                success: false,
+            };
+        }
+
+        return {
+            data: result,
+            message: "Quiz result fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch quiz result by id: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch quiz result",
             success: false,
         };
     }
