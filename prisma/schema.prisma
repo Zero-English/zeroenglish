@@ -107,6 +107,8 @@ model QuizResults {
   levels                 Levels[]
   timePerQuestion        Int
   timeTotalQuiz          Int
+  correctQuestions       QuizQuestion[] @relation("CorrectQuizQuestion")
+  incorrectQuestions     QuizQuestion[] @relation("IncorrectQuizQuestion")
   scheduleEnabled        Boolean    @default(false)
   scheduledOpeningTime   DateTime?
   scheduledClosingTime   DateTime?
@@ -149,6 +151,8 @@ model QuizQuestion {
   quizExams       QuizExamQuestion[]
   class           Class[]
   hintWords       Word[]
+  relaventQuizResultCorrectQuestions QuizResults[] @relation("CorrectQuizQuestion")
+  relaventQuizResultIncorrectQuestions QuizResults[] @relation("IncorrectQuizQuestion")
 }
 
 model Word {
