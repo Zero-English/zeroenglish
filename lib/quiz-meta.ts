@@ -12,6 +12,7 @@ export interface QuizTypeItem {
 export interface QuizMetaData {
   quizTypes: QuizTypeItem[];
   classes: string[];
+  classCounts: Record<string, number>;
 }
 
 export interface UseQuizMetaResult {

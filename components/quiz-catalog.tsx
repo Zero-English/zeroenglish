@@ -89,12 +89,15 @@ export function GrammarTopicCard({
 export function ClassCard({
   cls,
   index,
+  questionCount,
 }: {
   cls: QuizClassOption;
   index: number;
+  questionCount?: number;
 }) {
   const t = useT();
   const Icon = cls.icon;
+  const hasQuestions = (questionCount ?? 0) > 0;
   return (
     <Link
       href={`/quiz/class?class=${encodeURIComponent(cls.value)}`}
@@ -115,6 +118,16 @@ export function ClassCard({
         <span className="block truncate text-sm font-bold text-zinc-900 dark:text-zinc-100">
           {t(cls.labelBn, cls.label)}
         </span>
+        {questionCount != null && (
+          <span className="mt-0.5 block text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
+            {hasQuestions
+              ? t(
+                  `${questionCount}টি প্রশ্ন`,
+                  `${questionCount} question${questionCount !== 1 ? "s" : ""}`
+                )
+              : t("শীঘ্রই আসছে", "Coming soon")}
+          </span>
+        )}
       </div>
 
       <ArrowRight className="relative h-4 w-4 shrink-0 text-zinc-300 dark:text-zinc-600 transition-transform duration-300 group-hover:translate-x-1" />
@@ -261,7 +274,12 @@ export function ClassesSection() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
           {classes.map((cls, i) => (
-            <ClassCard key={cls.value} cls={cls} index={i} />
+            <ClassCard
+              key={cls.value}
+              cls={cls}
+              index={i}
+              questionCount={data?.classCounts?.[cls.value] ?? 0}
+            />
           ))}
         </div>
       )}
