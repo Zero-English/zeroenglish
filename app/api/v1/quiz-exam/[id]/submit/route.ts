@@ -214,6 +214,7 @@ export async function POST(
 
     let correctAnswers = 0;
     const review: QuizExamIncorrectAnswer[] = [];
+    const correctQuestionIds: number[] = [];
 
     for (const [questionId, selectedOption] of firstAnswerByQuestion) {
       const expected = answerByQuestion.get(questionId);
@@ -221,6 +222,7 @@ export async function POST(
       const isCorrect = expected.trim() === selectedOption.trim();
       if (isCorrect) {
         correctAnswers += 1;
+        correctQuestionIds.push(questionId);
       } else {
         const q = exam.quizQuestions.find((x) => x.quizQuestion.id === questionId);
         review.push({
@@ -270,6 +272,8 @@ export async function POST(
       scoreInPercent,
       totalScore: correctAnswers,
       status: parsed.data.status ?? undefined,
+      correctQuestionIds,
+      incorrectQuestionIds: review.map((r) => r.questionId),
     });
 
     if (!result.success || !result.data) {

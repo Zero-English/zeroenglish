@@ -229,26 +229,30 @@ function SelectedClassView({
           </div>
         </div>
 
-        <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-10 text-center">
-          <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-4">
-            <CircleAlert className="h-7 w-7 text-zinc-400" />
+        {questionCount === 0 ? (
+          <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-10 text-center">
+            <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-4">
+              <CircleAlert className="h-7 w-7 text-zinc-400" />
+            </div>
+            <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+              {t("এই শ্রেণিতে এখনো কোনো কুইজ নেই", "No quizzes for this class yet")}
+            </h3>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
+              {t(
+                `${selected.option.labelBn} শ্রেণির জন্য এখনো কোনো অনুশীলন প্রশ্ন যোগ করা হয়নি। অন্য শ্রেণি থেকে অনুশীলন করুন।`,
+                `No practice questions have been added for ${selected.option.label} yet. Try another class in the meantime.`
+              )}
+            </p>
+            <Link
+              href="/quiz/class"
+              className="inline-flex mt-6 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold px-6 py-3 text-sm hover:opacity-90 transition-opacity"
+            >
+              {t("আরেকটি শ্রেণি বেছে নিন", "Pick another class")}
+            </Link>
           </div>
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">
-            {t("এই কুইজটি শীঘ্রই আসছে", "This quiz is coming soon")}
-          </h3>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
-            {t(
-              `${selected.option.labelBn} শ্রেণির জন্য কুইজ তৈরির কাজ চলছে। আপাতত অন্য শ্রেণি থেকে অনুশীলন করুন।`,
-              `We're building the ${selected.option.label} quiz. Pick another class in the meantime.`
-            )}
-          </p>
-          <Link
-            href="/quiz/class"
-            className="inline-flex mt-6 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold px-6 py-3 text-sm hover:opacity-90 active:opacity-90 transition-opacity"
-          >
-            {t("আরেকটি শ্রেণি বেছে নিন", "Pick another class")}
-          </Link>
-        </div>
+        ) : (
+          <QuizClassPracticeSession cls={selected.option} />
+        )}
       </div>
     </>
   );

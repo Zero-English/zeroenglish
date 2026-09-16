@@ -22,6 +22,13 @@ export interface DbQuizType {
   name: string;
 }
 
+export interface DbQuizQuestion {
+  id: number;
+  questionText: string;
+  answer: string;
+  difficultyLevel: string;
+}
+
 export interface DbQuizResult {
   id: number;
   userId: number;
@@ -50,6 +57,8 @@ export interface DbQuizResult {
   updatedAt: string | Date;
   exam?: DbQuizExam | null;
   quizType?: DbQuizType | null;
+  correctQuestions?: DbQuizQuestion[];
+  incorrectQuestions?: DbQuizQuestion[];
 }
 
 export async function fetchQuizResultsFromDb(userId?: number): Promise<DbQuizResult[]> {

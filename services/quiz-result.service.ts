@@ -25,6 +25,8 @@ export const createQuizResult = async (data: {
     scoreInPercent: number;
     totalScore: number;
     status?: string | null;
+    correctQuestionIds?: number[];
+    incorrectQuestionIds?: number[];
 }) => {
     try {
         if (data.clientId) {
@@ -81,6 +83,21 @@ export const createQuizResult = async (data: {
         };
 
         const result = await prisma.$transaction(async (tx) => {
+            // Only keep question ids that actually exist; stale or forged ids are
+            // silently dropped so they can never fail the transaction.
+            const [correctQuestions, incorrectQuestions] = await Promise.all([
+                tx.quizQuestion.findMany({
+                    where: { id: { in: [...new Set(data.correctQuestionIds ?? [])] } },
+                    select: { id: true },
+                }),
+                tx.quizQuestion.findMany({
+                    where: { id: { in: [...new Set(data.incorrectQuestionIds ?? [])] } },
+                    select: { id: true },
+                }),
+            ]);
+            const correctConnect = correctQuestions.map((q) => ({ id: q.id }));
+            const incorrectConnect = incorrectQuestions.map((q) => ({ id: q.id }));
+
             if (data.examId != null) {
                 // Serialize writes per exam so two concurrent submissions can't both be
                 // recorded as the official first attempt.
@@ -112,12 +129,24 @@ export const createQuizResult = async (data: {
                 }
 
                 return tx.quizResults.create({
-                    data: { ...baseData, status, isFirstAttempt },
+                    data: {
+                        ...baseData,
+                        status,
+                        isFirstAttempt,
+                        correctQuestions: { connect: correctConnect },
+                        incorrectQuestions: { connect: incorrectConnect },
+                    },
                 });
             }
 
             return tx.quizResults.create({
-                data: { ...baseData, status: "SUBMITTED", isFirstAttempt: true },
+                data: {
+                    ...baseData,
+                    status: "SUBMITTED",
+                    isFirstAttempt: true,
+                    correctQuestions: { connect: correctConnect },
+                    incorrectQuestions: { connect: incorrectConnect },
+                },
             });
         });
 
@@ -153,7 +182,26 @@ export const getQuizResultsByUser = async (userId: number) => {
         const results = await prisma.quizResults.findMany({
             where: { userId },
             orderBy: { createdAt: "desc" },
-            include: { exam: true, quizType: true },
+            include: {
+                exam: true,
+                quizType: true,
+                correctQuestions: {
+                    select: {
+                        id: true,
+                        questionText: true,
+                        answer: true,
+                        difficultyLevel: true,
+                    },
+                },
+                incorrectQuestions: {
+                    select: {
+                        id: true,
+                        questionText: true,
+                        answer: true,
+                        difficultyLevel: true,
+                    },
+                },
+            },
         });
 
         return {
