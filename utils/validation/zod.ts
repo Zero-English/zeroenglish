@@ -180,6 +180,14 @@ export const quizResultSchema = z
     scoreInPercent: z.number().int().min(0, "scoreInPercent must be >= 0").max(100, "scoreInPercent must be <= 100"),
     totalScore: z.number().int().nonnegative("totalScore must be non-negative"),
     status: quizResultStatusEnumSchema.nullish(),
+    correctQuestionIds: z
+      .array(z.number().int().positive("question id must be positive"))
+      .max(200, "Too many question ids")
+      .default([]),
+    incorrectQuestionIds: z
+      .array(z.number().int().positive("question id must be positive"))
+      .max(200, "Too many question ids")
+      .default([]),
   });
 
 export type QuizResultInput = z.infer<typeof quizResultSchema>;

@@ -578,3 +578,5 @@ export function VocabularyExamResultSkeleton() {
 }
 
 export default HomeSkeleton;
+
+export { VocabularyExamResultSkeleton as QuizResultSkeleton };

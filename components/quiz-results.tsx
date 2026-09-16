@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, History } from "lucide-react";
+import { ArrowLeft, History, BookOpenCheck } from "lucide-react";
 import { useT } from "@/components/language-provider";
 import { VocabularyExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
+import { QuizPracticeResultsPanel } from "@/components/quiz-practice-results-panel";
 
 export function QuizResults() {
   const t = useT();
@@ -27,7 +28,7 @@ export function QuizResults() {
             <div className="flex items-center gap-2 mb-3">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-800 text-xs font-bold tracking-wide text-indigo-700 dark:text-indigo-300 uppercase">
                 <History className="h-3.5 w-3.5" />
-                {t("পূর্বের পরীক্ষার ফলাফল", "Past Exam Results")}
+                {t("পূর্বের কুইজের ফলাফল", "Past Quiz Results")}
               </span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
@@ -35,16 +36,35 @@ export function QuizResults() {
             </h1>
             <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 max-w-lg">
               {t(
-                "এখানে আপনার নেওয়া সব প্র্যাকটিস কুইজের শব্দভিত্তিক ফলাফল দেখুন।",
-                "Review the word-level results of every practice quiz you've taken."
+                "এখানে আপনার নেওয়া সব কুইজের ফলাফল দেখুন।",
+                "Review all the practice quiz results you've taken."
               )}
             </p>
           </div>
         </div>
 
-        <div className="animate-fade-up-1">
-          <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
-            <VocabularyExamResultsPanel />
+        <div className="space-y-8">
+          <div className="animate-fade-up">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 dark:bg-sky-900/40 border border-sky-200 dark:border-sky-800 text-xs font-bold tracking-wide text-sky-700 dark:text-sky-300 uppercase">
+                {t("শব্দ কুইজ", "Vocabulary Quizzes")}
+              </span>
+            </div>
+            <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
+              <VocabularyExamResultsPanel />
+            </div>
+          </div>
+
+          <div className="animate-fade-up-1">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/40 border border-amber-200 dark:border-amber-800 text-xs font-bold tracking-wide text-amber-700 dark:text-amber-300 uppercase">
+                <BookOpenCheck className="h-3.5 w-3.5" />
+                {t("গ্রামার ও শ্রেণি কুইজ", "Grammar & Class Quizzes")}
+              </span>
+            </div>
+            <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
+              <QuizPracticeResultsPanel />
+            </div>
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@ import { QuizExamHistoryPanel } from "@/components/profile-quiz-exam-history";
 import { useQuizHistory } from "@/lib/use-quiz-history";
 import { useQuizExamHistoryStore } from "@/lib/quiz-exam-history-store";
 import { VocabularyExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
+import { QuizPracticeResultsPanel } from "@/components/quiz-practice-results-panel";
 import { useT } from "@/components/language-provider";
 
 const ITEMS_PER_PAGE = 10;
@@ -650,7 +651,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           <TabsList>
             <TabsTrigger value="vocab" className="flex items-center gap-1.5">
               <BookOpenCheck className="h-4 w-4" />
-              {t("শব্দ কুইজ", "Practice")}
+              {t("প্র্যাকটিস", "Practice")}
             </TabsTrigger>
             <TabsTrigger value="exams" className="flex items-center gap-1.5">
               <ClipboardList className="h-4 w-4" />
@@ -673,7 +674,28 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           </TabsList>
 
           <TabsContent value="vocab">
-            <VocabularyExamResultsPanel />
+            <div className="space-y-8">
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 dark:bg-sky-900/40 border border-sky-200 dark:border-sky-800 text-xs font-bold tracking-wide text-sky-700 dark:text-sky-300 uppercase">
+                    {t("শব্দ কুইজ", "Vocabulary Quizzes")}
+                  </span>
+                </div>
+                <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
+                  <VocabularyExamResultsPanel />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/40 border border-amber-200 dark:border-amber-800 text-xs font-bold tracking-wide text-amber-700 dark:text-amber-300 uppercase">
+                    {t("গ্রামার ও শ্রেণি কুইজ", "Grammar & Class Quizzes")}
+                  </span>
+                </div>
+                <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
+                  <QuizPracticeResultsPanel />
+                </div>
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="exams">

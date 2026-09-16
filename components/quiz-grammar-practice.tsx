@@ -126,6 +126,8 @@ async function saveGrammarResultToDb(args: {
   correctAnswers: number;
   scoreInPercent: number;
   totalScore: number;
+  correctQuestionIds: number[];
+  incorrectQuestionIds: number[];
 }): Promise<boolean> {
   if (args.userId == null) return false;
   try {
@@ -145,6 +147,8 @@ async function saveGrammarResultToDb(args: {
         correctAnswers: args.correctAnswers,
         scoreInPercent: args.scoreInPercent,
         totalScore: args.totalScore,
+        correctQuestionIds: args.correctQuestionIds,
+        incorrectQuestionIds: args.incorrectQuestionIds,
       }),
     });
     if (!res.ok) return false;
@@ -196,6 +200,7 @@ export function GrammarPracticeSession({
   const quizQuestionsRef = useRef<PlayQuestion[]>([]);
   const currentIndexRef = useRef(0);
   const startedAtRef = useRef<number | null>(null);
+  const correctQuestionIdsRef = useRef<number[]>([]);
 
   useEffect(() => {
     questionsRef.current = questions;
@@ -283,6 +288,7 @@ export function GrammarPracticeSession({
       setCurrentIndex(0);
       setScore(0);
       setIncorrectAnswers([]);
+      correctQuestionIdsRef.current = [];
       setSelectedAnswer(null);
       setIsAnswered(false);
       setTimeLeft(noTimeLimit ? -1 : timePerQuestion);
@@ -300,6 +306,8 @@ export function GrammarPracticeSession({
     setSelectedAnswer(option.text);
     if (option.correct) {
       setScore((s) => s + 1);
+      const q = quizQuestionsRef.current[currentIndexRef.current];
+      if (q) correctQuestionIdsRef.current.push(q.id);
     } else {
       const idx = currentIndexRef.current;
       const q = quizQuestionsRef.current[idx];
@@ -422,6 +430,8 @@ export function GrammarPracticeSession({
       correctAnswers: finalScore,
       scoreInPercent: percentage,
       totalScore: finalScore,
+      correctQuestionIds: [...new Set(correctQuestionIdsRef.current)],
+      incorrectQuestionIds: incorrectAnswers.map((r) => r.question.id),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, userId]);

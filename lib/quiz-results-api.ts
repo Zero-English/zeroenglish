@@ -22,6 +22,15 @@ export interface DbQuizType {
   name: string;
 }
 
+export interface DbQuizQuestion {
+  id: number;
+  questionText: string;
+  options: string[];
+  answer: string;
+  difficultyLevel: string;
+  class?: string[];
+}
+
 export interface DbQuizResult {
   id: number;
   userId: number;
@@ -50,6 +59,8 @@ export interface DbQuizResult {
   updatedAt: string | Date;
   exam?: DbQuizExam | null;
   quizType?: DbQuizType | null;
+  correctQuestions?: DbQuizQuestion[];
+  incorrectQuestions?: DbQuizQuestion[];
 }
 
 export async function fetchQuizResultsFromDb(userId?: number): Promise<DbQuizResult[]> {
@@ -71,6 +82,23 @@ export async function fetchQuizResultsFromDb(userId?: number): Promise<DbQuizRes
 export function dbResultDate(r: DbQuizResult): string {
   const v = r.createdAt instanceof Date ? r.createdAt.toISOString() : r.createdAt;
   return v.slice(0, 10);
+}
+
+export async function fetchQuizResultById(id: number): Promise<DbQuizResult | null> {
+  try {
+    const res = await fetch(`/api/v1/quiz/results/${id}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const body = (await res.json()) as {
+      data?: DbQuizResult | null;
+      success?: boolean;
+    };
+    if (!body.success || !body.data) return null;
+    return body.data;
+  } catch {
+    return null;
+  }
 }
 
 const DB_TO_CLIENT_QUIZ_TYPE: Record<string, QuizType> = {
