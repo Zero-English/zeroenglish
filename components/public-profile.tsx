@@ -27,7 +27,6 @@ import {
   GraduationCap,
   Trophy,
   BarChart3,
-  Award,
   CalendarDays,
   Clock3,
   ListChecks,
@@ -145,7 +144,7 @@ function ProgressRing({ pct }: { pct: number }) {
 
   return (
     <div
-      className="relative h-40 w-40 rounded-full bg-zinc-200 dark:bg-zinc-800"
+      className="relative h-40 w-40 shrink-0 rounded-full bg-zinc-200 dark:bg-zinc-800"
       style={{ backgroundImage: `conic-gradient(#10b981 ${arc}deg, transparent 0deg)` }}
     >
       <div className="absolute inset-[11px] flex flex-col items-center justify-center rounded-full bg-white shadow-inner dark:bg-zinc-950">
@@ -182,34 +181,6 @@ function TileHeader({
         <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">{title}</h3>
       </div>
       {sub && <p className="mt-1.5 text-xs text-zinc-400 dark:text-zinc-500">{sub}</p>}
-    </div>
-  );
-}
-
-function StatRow({
-  icon,
-  label,
-  value,
-  iconBg,
-  iconTint,
-}: {
-  icon: ReactNode;
-  label: string;
-  value: string | number;
-  iconBg: string;
-  iconTint: string;
-}) {
-  return (
-    <div className="flex items-center justify-between gap-3">
-      <div className="flex min-w-0 items-center gap-2.5">
-        <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", iconBg)}>
-          <span className={iconTint}>{icon}</span>
-        </div>
-        <span className="truncate text-sm text-zinc-500 dark:text-zinc-400">{label}</span>
-      </div>
-      <span className="shrink-0 text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
-        {value}
-      </span>
     </div>
   );
 }
@@ -445,7 +416,7 @@ export function PublicProfileView({
 
           <TabsContent value="overview">
             <StaggerContainer className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-12">
-              {/* Overall progress */}
+              {/* Word progress */}
               <StaggerItem className="lg:col-span-4">
                 <div className={TILE}>
                   <TileHeader
@@ -531,28 +502,31 @@ export function PublicProfileView({
                     iconTint="text-indigo-600 dark:text-indigo-400"
                   />
                   {stats.total > 0 ? (
-                    <div className="flex flex-col gap-5">
-                      <StatRow
-                        icon={<GraduationCap className="h-4 w-4" />}
-                        label={t("নেওয়া কুইজ", "Quizzes Taken")}
-                        value={stats.total}
-                        iconBg="bg-indigo-100 dark:bg-indigo-900/30"
-                        iconTint="text-indigo-600 dark:text-indigo-400"
-                      />
-                      <StatRow
-                        icon={<BarChart3 className="h-4 w-4" />}
-                        label={t("গড় জয়ের হার", "Avg. Win Rate")}
-                        value={`${stats.avg}%`}
-                        iconBg="bg-sky-100 dark:bg-sky-900/30"
-                        iconTint="text-sky-600 dark:text-sky-400"
-                      />
-                      <StatRow
-                        icon={<Award className="h-4 w-4" />}
-                        label={t("সেরা স্কোর", "Best Score")}
-                        value={`${stats.best}%`}
-                        iconBg="bg-emerald-100 dark:bg-emerald-900/30"
-                        iconTint="text-emerald-600 dark:text-emerald-400"
-                      />
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-500 dark:text-zinc-400">
+                          {t("নেওয়া কুইজ", "Quizzes Taken")}
+                        </span>
+                        <span className="text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
+                          {stats.total}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-500 dark:text-zinc-400">
+                          {t("গড় জয়ের হার", "Avg. Win Rate")}
+                        </span>
+                        <span className="text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
+                          {stats.avg}%
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-zinc-500 dark:text-zinc-400">
+                          {t("সেরা স্কোর", "Best Score")}
+                        </span>
+                        <span className="text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
+                          {stats.best}%
+                        </span>
+                      </div>
                       <div className="border-t border-zinc-100 pt-4 dark:border-zinc-800">
                         <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
                           {t(
