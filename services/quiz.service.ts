@@ -1,5 +1,6 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
+import { Class as ClassEnum } from "@/generated/prisma/enums";
 import type { DifficultyLevels, Class, Prisma } from "@/generated/prisma/client";
 
 const quizTypeInclude = {
@@ -134,6 +135,80 @@ export const getQuizQuestionsByType = async (
         return {
             data: null,
             message: "Failed to fetch quiz questions by type",
+            success: false,
+        };
+    }
+};
+
+export const getQuizQuestionsByClass = async (
+    className: string,
+    limit: number = 50
+) => {
+    try {
+        const valid = Object.values(ClassEnum).includes(className as Class);
+        if (!valid) {
+            return {
+                data: null,
+                message: `Class "${className}" not found`,
+                success: false,
+            };
+        }
+
+        const questions = await prisma.quizQuestion.findMany({
+            where: { class: { hasSome: [className as Class] } },
+            orderBy: { id: "asc" },
+            include: quizTypeInclude,
+        });
+
+        // Return questions in random order so every session feels fresh,
+        // capped at the requested limit. Options are shuffled on the server
+        // too, so the correct answer doesn't always land on the same letter.
+        const shuffled = questions
+            .map((q) => ({
+                ...toApiQuestion(q),
+                options: shuffleArray(q.options),
+            }))
+            .sort(() => Math.random() - 0.5)
+            .slice(0, limit);
+
+        return {
+            data: shuffled,
+            message: "Quiz questions fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch quiz questions by class: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch quiz questions by class",
+            success: false,
+        };
+    }
+};
+
+export const getQuizQuestionCountsByClass = async () => {
+    try {
+        const rows = await prisma.quizQuestion.findMany({
+            select: { class: true },
+        });
+
+        const counts: Record<string, number> = {};
+        for (const row of rows) {
+            for (const cls of row.class) {
+                counts[cls] = (counts[cls] ?? 0) + 1;
+            }
+        }
+
+        return {
+            data: counts,
+            message: "Quiz class counts fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch quiz class counts: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch quiz class counts",
             success: false,
         };
     }

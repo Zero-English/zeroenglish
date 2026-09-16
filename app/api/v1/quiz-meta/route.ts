@@ -3,6 +3,7 @@ import {
     getAllQuizTypes,
     getAllQuizClasses,
 } from "@/services/quiz-type.service";
+import { getQuizQuestionCountsByClass } from "@/services/quiz.service";
 
 /**
  * @openapi
@@ -19,9 +20,10 @@ import {
  *         description: Failed to fetch quiz metadata
  */
 export async function GET() {
-    const [typesResult, classesResult] = await Promise.all([
+    const [typesResult, classesResult, classCountsResult] = await Promise.all([
         getAllQuizTypes(),
         getAllQuizClasses(),
+        getQuizQuestionCountsByClass(),
     ]);
 
     if (!typesResult.success) {
@@ -32,6 +34,7 @@ export async function GET() {
         data: {
             quizTypes: typesResult.data,
             classes: classesResult.data,
+            classCounts: classCountsResult.data ?? {},
         },
         message: "Quiz metadata fetched successfully",
         success: true,

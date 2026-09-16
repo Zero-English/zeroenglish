@@ -11,13 +11,16 @@ import { useT } from "@/components/language-provider";
 import { quizClassMeta, type QuizClassOption } from "@/lib/quiz-sections";
 import { useQuizMeta } from "@/lib/quiz-meta";
 import { ClassCard } from "@/components/quiz-catalog";
+import { QuizClassPracticeSession } from "@/components/quiz-class-practice";
 
 function resolveSelectedClass(
   classes: string[],
+  classCounts: Record<string, number>,
   value: string | undefined
-): QuizClassOption | null {
+): { option: QuizClassOption; questionCount: number } | null {
   if (!value) return null;
-  return classes.includes(value) ? quizClassMeta(value) : null;
+  if (!classes.includes(value)) return null;
+  return { option: quizClassMeta(value), questionCount: classCounts[value] ?? 0 };
 }
 
 export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: string }) {
@@ -25,7 +28,8 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
   const { data, loading, error, reload } = useQuizMeta();
 
   const classes = data?.classes ?? [];
-  const selected = resolveSelectedClass(classes, selectedClassValue);
+  const classCounts = data?.classCounts ?? {};
+  const selected = resolveSelectedClass(classes, classCounts, selectedClassValue);
 
   return (
     <div className="relative min-h-dvh overflow-hidden px-6 py-16">
@@ -60,6 +64,8 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
               {t("সব শ্রেণির কুইজ", "All class quizzes")}
             </Link>
           </div>
+        ) : selectedClassValue && !selected ? (
+          <ClassNotFound />
         ) : selected ? (
           <SelectedClassView selected={selected} />
         ) : (
@@ -74,8 +80,8 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
               </h1>
               <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
                 {t(
-                  "প্রাথমিক থেকে বিশ্ববিদ্যালয় পর্যন্ত সব শ্রেণির জন্য উপযোগী কুইজ আসছে। আপনার শ্রেণিটি বেছে নিন।",
-                  "Quizzes tailored for every class from primary to university are coming. Pick yours."
+                  "প্রাথমিক থেকে বিশ্ববিদ্যালয় পর্যন্ত সব শ্রেণির জন্য উপযোগী কুইজ। আপনার শ্রেণিটি বেছে নিন।",
+                  "Quizzes tailored for every class from primary to university. Pick yours."
                 )}
               </p>
             </div>
@@ -114,7 +120,12 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                 {classes.map((value, i) => (
-                  <ClassCard key={value} cls={quizClassMeta(value)} index={i} />
+                  <ClassCard
+                    key={value}
+                    cls={quizClassMeta(value)}
+                    index={i}
+                    questionCount={classCounts[value] ?? 0}
+                  />
                 ))}
               </div>
             )}
@@ -135,8 +146,49 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
   );
 }
 
-function SelectedClassView({ selected }: { selected: QuizClassOption }) {
+function ClassNotFound() {
   const t = useT();
+  return (
+    <>
+      <Link
+        href="/quiz/class"
+        className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors group mb-8"
+      >
+        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+        {t("সব শ্রেণির কুইজ", "All class quizzes")}
+      </Link>
+
+      <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-10 text-center">
+        <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-4">
+          <CircleAlert className="h-7 w-7 text-zinc-400" />
+        </div>
+        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">
+          {t("শ্রেণিটি পাওয়া যায়নি", "Class not found")}
+        </h3>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
+          {t(
+            "এই ঠিকানায় কোনো শ্রেণি নেই। নিচের তালিকা থেকে একটি শ্রেণি বেছে নিন।",
+            "There's no class at this address. Pick one from the list below."
+          )}
+        </p>
+        <Link
+          href="/quiz/class"
+          className="inline-flex mt-6 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold px-6 py-3 text-sm hover:opacity-90 transition-opacity"
+        >
+          {t("সব শ্রেণি দেখুন", "See all classes")}
+        </Link>
+      </div>
+    </>
+  );
+}
+
+function SelectedClassView({
+  selected,
+}: {
+  selected: { option: QuizClassOption; questionCount: number };
+}) {
+  const t = useT();
+  const { option: cls, questionCount } = selected;
   return (
     <>
       <Link
@@ -149,49 +201,32 @@ function SelectedClassView({ selected }: { selected: QuizClassOption }) {
 
       <div className="animate-fade-up">
         <div
-          className={`relative overflow-hidden rounded-3xl border-2 ${selected.border} ${selected.bg} backdrop-blur-sm p-6 sm:p-8 mb-8`}
+          className={`relative overflow-hidden rounded-3xl border-2 ${cls.border} ${cls.bg} backdrop-blur-sm p-6 sm:p-8 mb-8`}
         >
-          <div className={`absolute inset-0 bg-gradient-to-br ${selected.gradient} opacity-10`} />
+          <div className={`absolute inset-0 bg-gradient-to-br ${cls.gradient} opacity-10`} />
           <div className="relative flex items-center gap-4">
             <div
-              className={`flex-shrink-0 h-14 w-14 rounded-2xl bg-gradient-to-br ${selected.gradient} flex items-center justify-center shadow-lg shadow-black/10`}
+              className={`flex-shrink-0 h-14 w-14 rounded-2xl bg-gradient-to-br ${cls.gradient} flex items-center justify-center shadow-lg shadow-black/10`}
             >
-              <selected.icon className="h-7 w-7 text-white" />
+              <cls.icon className="h-7 w-7 text-white" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                {t(selected.labelBn, selected.label)}
+                {t(cls.labelBn, cls.label)}
               </h2>
               <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                {t(
-                  "শ্রেণি উপযোগী প্রশ্নের সেট",
-                  "A question set tailored for this class"
-                )}
+                {t("শ্রেণি উপযোগী প্রশ্ন", "Class-based questions")}{" "}
+                {questionCount > 0 &&
+                  `· ${t(
+                    `${questionCount}টি প্রশ্ন`,
+                    `${questionCount} question${questionCount !== 1 ? "s" : ""}`
+                  )}`}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-10 text-center">
-          <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-4">
-            <CircleAlert className="h-7 w-7 text-zinc-400" />
-          </div>
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">
-            {t("এই কুইজটি শীঘ্রই আসছে", "This quiz is coming soon")}
-          </h3>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
-            {t(
-              `${selected.labelBn} শ্রেণির জন্য কুইজ তৈরির কাজ চলছে। আপাতত অন্য শ্রেণি থেকে অনুশীলন করুন।`,
-              `We're building the ${selected.label} quiz. Pick another class in the meantime.`
-            )}
-          </p>
-          <Link
-            href="/quiz/class"
-            className="inline-flex mt-6 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold px-6 py-3 text-sm hover:opacity-90 transition-opacity"
-          >
-            {t("আরেকটি শ্রেণি বেছে নিন", "Pick another class")}
-          </Link>
-        </div>
+        <QuizClassPracticeSession cls={cls} />
       </div>
     </>
   );
