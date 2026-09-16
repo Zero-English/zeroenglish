@@ -1,7 +1,7 @@
 import { QuizMenu } from "@/components/quiz-menu";
 
 export const metadata = {
-  title: "Quizzes - Practice Vocabulary, Grammar & More",
+  title: "Quizzes | Practice Vocabulary, Grammar & More | Zero English",
   description:
     "Test your English with interactive quizzes. Practice vocabulary, grammar topics and class based quizzes, take scheduled exams and review past results.",
   alternates: { canonical: "/quiz" },

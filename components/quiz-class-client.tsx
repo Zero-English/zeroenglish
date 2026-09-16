@@ -58,7 +58,7 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
             </p>
             <Link
               href="/quiz/class"
-              className="inline-flex mt-6 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold px-6 py-3 text-sm hover:opacity-90 transition-opacity"
+              className="inline-flex mt-6 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold px-6 py-3 text-sm hover:opacity-90 active:opacity-90 transition-opacity"
             >
               {t("সব শ্রেণির কুইজ", "All class quizzes")}
             </Link>
@@ -103,7 +103,7 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
                 </p>
                 <button
                   onClick={reload}
-                  className="inline-flex items-center gap-1.5 mt-4 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-500 dark:from-zinc-200 dark:to-zinc-400 text-white dark:text-zinc-900 font-semibold px-5 py-2.5 text-sm hover:opacity-90 transition-opacity cursor-pointer"
+                  className="inline-flex items-center gap-1.5 mt-4 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-500 dark:from-zinc-200 dark:to-zinc-400 text-white dark:text-zinc-900 font-semibold px-5 py-2.5 text-sm hover:opacity-90 active:opacity-90 transition-opacity cursor-pointer"
                 >
                   {t("আবার চেষ্টা করুন", "Try again")}
                 </button>
@@ -127,9 +127,9 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
         <div className="mt-12 flex justify-center animate-fade-up-2">
           <Link
             href="/quiz"
-            className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors group"
+            className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300 transition-colors group"
           >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5 group-active:-translate-x-0.5" />
             {t("কুইজে ফিরে যান", "Back to Quiz")}
           </Link>
         </div>
@@ -144,9 +144,9 @@ function SelectedClassView({ selected }: { selected: QuizClassOption }) {
     <>
       <Link
         href="/quiz/class"
-        className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors group mb-8"
+        className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300 transition-colors group mb-8"
       >
-        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5 group-active:-translate-x-0.5" />
         {t("সব শ্রেণির কুইজ", "All class quizzes")}
       </Link>
 
@@ -190,7 +190,7 @@ function SelectedClassView({ selected }: { selected: QuizClassOption }) {
           </p>
           <Link
             href="/quiz/class"
-            className="inline-flex mt-6 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold px-6 py-3 text-sm hover:opacity-90 transition-opacity"
+            className="inline-flex mt-6 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-semibold px-6 py-3 text-sm hover:opacity-90 active:opacity-90 transition-opacity"
           >
             {t("আরেকটি শ্রেণি বেছে নিন", "Pick another class")}
           </Link>

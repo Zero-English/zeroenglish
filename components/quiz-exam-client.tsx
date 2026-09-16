@@ -379,7 +379,7 @@ function ExamCardItem({
   return (
     <div
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-3xl border-2 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.99]",
+        "group relative flex flex-col overflow-hidden rounded-3xl border-2 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 active:scale-[1.02] active:-translate-y-1",
         meta.border,
         meta.bg
       )}
@@ -619,7 +619,7 @@ function ExamListView() {
   };
 
   return (
-    <div className="relative min-h-dvh flex flex-col items-center justify-center overflow-hidden px-6 py-16">
+    <div className="relative flex flex-col items-center justify-center overflow-hidden px-6 py-8">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
       <div className="absolute inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
 
@@ -718,7 +718,7 @@ function ExamListView() {
             <div className="mt-5 space-y-2">
               <Button
                 size="lg"
-                className="w-full gap-2 bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/20"
+                className="w-full gap-2 bg-orange-600 hover:bg-orange-700 active:bg-orange-700 text-white shadow-lg shadow-orange-500/20"
                 onClick={() => void handleAuthAction()}
                 disabled={authBusy}
               >
@@ -910,7 +910,7 @@ function ExamQuizView({
           </span>
           <button
             onClick={() => setExitOpen(true)}
-            className="p-2 -m-2 rounded-xl text-zinc-400 hover:text-red-500 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+            className="p-2 -m-2 rounded-xl text-zinc-400 hover:text-red-500 active:text-red-500 transition-colors hover:bg-zinc-100 active:bg-zinc-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-800 cursor-pointer"
             title={t("পরীক্ষা থেকে বেরিয়ে যান", "Exit exam")}
           >
             <X className="h-5 w-5" />
@@ -935,7 +935,7 @@ function ExamQuizView({
             <span>{question.questionText}</span>
             <button
               onClick={() => speak(question.questionText)}
-              className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+              className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300 transition-colors hover:bg-zinc-100 active:bg-zinc-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-800 cursor-pointer"
               title={t("উচ্চারণ শুনুন", "Listen to pronunciation")}
             >
               <Volume2 className="h-6 w-6 sm:h-7 sm:w-7" />
@@ -949,7 +949,7 @@ function ExamQuizView({
             const isWrongPick = isAnswered && option.text === selectedAnswer && !isCorrectOption;
 
             let optionStyle =
-              "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60";
+              "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:bg-zinc-50 dark:active:bg-zinc-900/60";
 
             if (isAnswered) {
               if (isCorrectOption) {

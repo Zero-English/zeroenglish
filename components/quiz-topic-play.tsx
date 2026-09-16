@@ -108,7 +108,7 @@ export function QuizTopicPlay({
           </span>
           <Link
             href="/quiz/grammar"
-            className="p-2 -m-2 rounded-xl text-zinc-400 hover:text-red-500 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            className="p-2 -m-2 rounded-xl text-zinc-400 hover:text-red-500 active:text-red-500 transition-colors hover:bg-zinc-100 active:bg-zinc-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-800"
             title={t("কুইজ থেকে বেরিয়ে যান", "Exit quiz")}
           >
             <X className="h-5 w-5" />
@@ -144,7 +144,7 @@ export function QuizTopicPlay({
           const isWrongPick = isAnswered && option === picked && !isCorrect;
 
           let optionStyle =
-            "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60";
+            "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:bg-zinc-50 dark:active:bg-zinc-900/60";
 
           if (isAnswered) {
             if (isCorrect) {

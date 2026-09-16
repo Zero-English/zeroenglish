@@ -576,7 +576,7 @@ function QuizTypeSelect({
                   featured
                     ? "sm:col-span-2 border-2 " + c.border + " " + c.bg
                     : "border-2 " + c.border + " " + c.bg
-                } hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.99]`}
+                } hover:scale-[1.02] hover:-translate-y-1 active:scale-[1.02] active:-translate-y-1`}
                 style={{ animationDelay: `${i * 0.08}s` }}
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${c.gradient} opacity-0 group-hover:opacity-5 dark:group-hover:opacity-10 transition-opacity duration-300`} />
@@ -695,9 +695,9 @@ function SettingsView({
       <div className="max-w-2xl mx-auto">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors group mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300 transition-colors group mb-8"
         >
-          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5 group-active:-translate-x-0.5" />
           {t("কুইজের ধরনে ফিরে যান", "Back to quiz types")}
         </button>
 
@@ -734,7 +734,7 @@ function SettingsView({
                 )}{" "}
                 <Link
                   href="/vocabulary"
-                  className="font-semibold underline underline-offset-2 hover:text-amber-800 dark:hover:text-amber-200"
+                  className="font-semibold underline underline-offset-2 hover:text-amber-800 dark:hover:text-amber-200 active:text-amber-800 dark:active:text-amber-200"
                 >
                   {t("শব্দভাণ্ডার পৃষ্ঠায় যান", "Go to vocabulary")}
                 </Link>
@@ -756,7 +756,7 @@ function SettingsView({
                   const active = levels.includes(lv);
                   const lcStyle = active
                     ? `${lc.border} ${lc.bg} ${lc.text} border-2 shadow-sm`
-                    : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600";
+                    : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600";
                   return (
                     <button
                       key={lv}
@@ -794,7 +794,7 @@ function SettingsView({
                     className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
                       !useAllQuestions && quantity === q
                         ? `${c.border} ${c.bg} ${c.text} border-2 shadow-sm`
-                        : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
+                        : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600"
                     }`}
                   >
                     {q}
@@ -805,7 +805,7 @@ function SettingsView({
                   className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
                     useAllQuestions
                       ? `${c.border} ${c.bg} ${c.text} border-2 shadow-sm`
-                      : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
+                      : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600"
                   }`}
                 >
                   {t(`সব (${countLabel})`, `All (${countLabel})`)}
@@ -846,7 +846,7 @@ function SettingsView({
                     className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
                       !noTimeLimit && timePerQuestion === t
                         ? `${c.border} ${c.bg} ${c.text} border-2 shadow-sm`
-                        : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
+                        : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600"
                     }`}
                   >
                     {t}s
@@ -857,7 +857,7 @@ function SettingsView({
                   className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
                     noTimeLimit
                       ? `${c.border} ${c.bg} ${c.text} border-2 shadow-sm`
-                      : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
+                      : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600"
                   }`}
                 >
                   {t("সময়সীমা নেই", "No limit")}
@@ -883,7 +883,7 @@ function SettingsView({
               <Button
                 onClick={onStart}
                 disabled={starting || countLoading}
-                className={`w-full h-12 text-base font-semibold bg-gradient-to-r ${qt.gradient} hover:opacity-90`}
+                className={`w-full h-12 text-base font-semibold bg-gradient-to-r ${qt.gradient} hover:opacity-90 active:opacity-90`}
               >
                 {starting
                   ? t("তৈরি হচ্ছে…", "Preparing…")
@@ -975,7 +975,7 @@ function QuizView({
             </span>
             <button
               onClick={() => setExitOpen(true)}
-              className="p-2 -m-2 rounded-xl text-zinc-400 hover:text-red-500 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+              className="p-2 -m-2 rounded-xl text-zinc-400 hover:text-red-500 active:text-red-500 transition-colors hover:bg-zinc-100 active:bg-zinc-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-800 cursor-pointer"
               title={t("কুইজ থেকে বেরিয়ে যান", "Exit quiz")}
             >
               <X className="h-5 w-5" />
@@ -1004,7 +1004,7 @@ function QuizView({
             {quizType !== "bangla_to_english" && (
               <button
                 onClick={() => speak(question.word.word)}
-                className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+                className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300 transition-colors hover:bg-zinc-100 active:bg-zinc-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-800 cursor-pointer"
                 title={t("উচ্চারণ শুনুন", "Listen to pronunciation")}
               >
                 <Volume2 className="h-6 w-6 sm:h-7 sm:w-7" />
@@ -1013,10 +1013,10 @@ function QuizView({
             <button
               onClick={() => toggleBookmark(question.word.id)}
               className={cn(
-                "p-2 rounded-xl transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer",
+                "p-2 rounded-xl transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 cursor-pointer",
                 bookmarked
-                  ? "text-amber-500 hover:text-amber-600"
-                  : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                  ? "text-amber-500 hover:text-amber-600 active:text-amber-600"
+                  : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300"
               )}
               title={bookmarked ? t("বুকমার্ক সরান", "Remove bookmark") : t("বুকমার্ক করুন", "Bookmark")}
             >
@@ -1036,7 +1036,7 @@ function QuizView({
             const isWrongPick = isAnswered && option.text === selectedAnswer && !isCorrectOption;
 
             let optionStyle =
-              "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60";
+              "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:bg-zinc-50 dark:active:bg-zinc-900/60";
 
             if (isAnswered) {
               if (isCorrectOption) {
