@@ -1,10 +1,20 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import { UserAvatar } from "@/components/UserAvatar";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { ContributionCalendar } from "@/components/contribution-calendar";
 import { useT } from "@/components/language-provider";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { dbResultToHistoryEntry, type DbQuizResult } from "@/lib/quiz-results-api";
 import type { QuizType } from "@/lib/quiz-history-store";
 import { cn } from "@/lib/utils";
@@ -27,6 +37,7 @@ import {
   Shuffle,
   Layers,
   Globe,
+  Flame,
   type LucideIcon,
 } from "lucide-react";
 
@@ -41,6 +52,11 @@ export interface PublicProfileUser {
   stillLearningCount: number;
   bookmarkedCount: number;
 }
+
+const TILE =
+  "relative h-full rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80";
+
+const QUIZZES_PER_PAGE = 5;
 
 const QUIZ_META: Record<
   QuizType,
@@ -107,7 +123,7 @@ const LEVEL_TEXT_COLORS: Record<string, string> = {
   C2: "text-fuchsia-600 dark:text-fuchsia-400",
 };
 
-function formatDate(iso: string) {
+function formatDay(iso: string) {
   return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
@@ -115,39 +131,193 @@ function formatDate(iso: string) {
   });
 }
 
-function ProgressBar({ pct, className }: { pct: number; className?: string }) {
+function formatJoined(iso: string) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function ProgressRing({ pct }: { pct: number }) {
+  const clamped = Math.min(100, Math.max(0, Math.round(pct)));
+  const arc = clamped * 3.6;
+  const t = useT();
+
   return (
-    <div className={cn("h-2.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden", className)}>
-      <div
-        className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-700"
-        style={{ width: `${Math.min(100, Math.max(0, pct))}%` }}
-      />
+    <div
+      className="relative h-40 w-40 rounded-full bg-zinc-200 dark:bg-zinc-800"
+      style={{ backgroundImage: `conic-gradient(#10b981 ${arc}deg, transparent 0deg)` }}
+    >
+      <div className="absolute inset-[11px] flex flex-col items-center justify-center rounded-full bg-white shadow-inner dark:bg-zinc-950">
+        <span className="text-3xl font-extrabold tabular-nums text-zinc-900 dark:text-zinc-100">
+          {clamped}%
+        </span>
+        <span className="mt-0.5 text-[11px] text-zinc-400">
+          {t("সব মিলিয়ে", "overall")}
+        </span>
+      </div>
     </div>
   );
 }
 
-function StatCard({
+function TileHeader({
+  icon,
+  title,
+  sub,
+  iconBg,
+  iconTint,
+}: {
+  icon: ReactNode;
+  title: string;
+  sub?: string;
+  iconBg: string;
+  iconTint: string;
+}) {
+  return (
+    <div className="mb-6">
+      <div className="flex items-center gap-2.5">
+        <div className={cn("flex h-9 w-9 items-center justify-center rounded-xl", iconBg)}>
+          <span className={iconTint}>{icon}</span>
+        </div>
+        <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">{title}</h3>
+      </div>
+      {sub && <p className="mt-1.5 text-xs text-zinc-400 dark:text-zinc-500">{sub}</p>}
+    </div>
+  );
+}
+
+function StatRow({
   icon,
   label,
   value,
-  sub,
-  color,
+  iconBg,
+  iconTint,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
   value: string | number;
-  sub?: string;
-  color: string;
+  iconBg: string;
+  iconTint: string;
 }) {
   return (
-    <StaggerItem className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.02] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
-      <div className="flex items-center gap-3 mb-3">
-        <div className={cn("p-2 rounded-xl", color)}>{icon}</div>
-        <span className="text-sm text-zinc-500 dark:text-zinc-400">{label}</span>
+    <div className="flex items-center justify-between gap-3">
+      <div className="flex min-w-0 items-center gap-2.5">
+        <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", iconBg)}>
+          <span className={iconTint}>{icon}</span>
+        </div>
+        <span className="truncate text-sm text-zinc-500 dark:text-zinc-400">{label}</span>
       </div>
-      <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{value}</div>
-      {sub && <div className="text-xs text-zinc-400 dark:text-zinc-500 mt-1">{sub}</div>}
-    </StaggerItem>
+      <span className="shrink-0 text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function IdentityTile({
+  user,
+  isAdmin,
+}: {
+  user: PublicProfileUser;
+  isAdmin: boolean;
+}) {
+  const t = useT();
+  const displayName = user.name || user.userName || "User";
+
+  const stats = [
+    {
+      icon: <CheckCircle2 className="h-4 w-4" />,
+      tint: "text-emerald-500",
+      value: user.learnedCount,
+      label: t("শেখা হয়েছে", "Learned"),
+    },
+    {
+      icon: <RefreshCw className="h-4 w-4" />,
+      tint: "text-orange-500",
+      value: user.stillLearningCount,
+      label: t("শিখছে", "Still Learning"),
+    },
+    {
+      icon: <BookmarkCheck className="h-4 w-4" />,
+      tint: "text-amber-500",
+      value: user.bookmarkedCount,
+      label: t("বুকমার্ক করা", "Bookmarked"),
+    },
+  ];
+
+  return (
+    <div className="overflow-hidden rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm shadow-sm">
+      {/* Cover */}
+      <div className="relative h-24 overflow-hidden bg-gradient-to-br from-orange-500 to-rose-500 sm:h-36">
+        <div className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur-md sm:left-6 sm:top-5">
+          <Globe className="h-3.5 w-3.5" />
+          {t("পাবলিক প্রোফাইল", "Public Profile")}
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="relative px-4 pb-6 sm:px-6">
+        {/* Avatar overlapping the cover */}
+        <div className="-mt-12 sm:-mt-16">
+          <div className="relative inline-block">
+            <div className="absolute -inset-1 rounded-full bg-white dark:bg-zinc-950" />
+            <UserAvatar
+              id={user.id}
+              name={user.name}
+              userName={user.userName}
+              image={user.image}
+              size="xl"
+              className="relative ring-4 ring-white shadow-lg shadow-black/10 dark:ring-zinc-950"
+            />
+          </div>
+        </div>
+
+        {/* Name + badges */}
+        <div className="mt-3 flex flex-wrap items-center gap-2.5">
+          <h1 className="truncate text-xl font-bold text-zinc-900 dark:text-zinc-100 sm:text-2xl">
+            {displayName}
+          </h1>
+          {isAdmin ? (
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+              <ShieldCheck className="h-3 w-3" />
+              {t("অ্যাডমিন", "Admin")}
+            </span>
+          ) : (
+            <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+              {t("ব্যবহারকারী", "User")}
+            </span>
+          )}
+        </div>
+        <p className="mt-0.5 truncate text-sm text-zinc-500 dark:text-zinc-400">
+          {user.userName ? `@${user.userName}` : t("Zero English ব্যবহারকারী", "Zero English user")}
+        </p>
+
+        {/* Meta row */}
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-zinc-600 dark:text-zinc-300">
+          <span className="inline-flex items-center gap-1.5">
+            <CalendarDays className="h-4 w-4 text-zinc-400" />
+            {t("যোগ দিয়েছেন", "Joined")} {formatJoined(user.createdAt)}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300">
+            <CheckCircle2 className="h-4 w-4" />
+            {t("সক্রিয় শিক্ষার্থী", "Active learner")}
+          </span>
+        </div>
+
+        {/* Word stats */}
+        <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+          {stats.map((s) => (
+            <div key={s.label} className="flex items-center gap-1.5">
+              <span className={s.tint}>{s.icon}</span>
+              <span className="text-lg font-extrabold tabular-nums text-zinc-900 dark:text-zinc-100">
+                {s.value}
+              </span>
+              <span className="text-sm text-zinc-500 dark:text-zinc-400">{s.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -158,7 +328,7 @@ function QuizItem({ entry }: { entry: { quizType: QuizType; date: string; win: s
   const t = useT();
 
   return (
-    <StaggerItem className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
+    <StaggerItem className="relative overflow-hidden rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
       <div className={cn("absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b opacity-60", meta.gradient)} />
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -171,7 +341,7 @@ function QuizItem({ entry }: { entry: { quizType: QuizType; date: string; win: s
             </h4>
             <p className="mt-0.5 flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500">
               <CalendarDays className="h-3.5 w-3.5" />
-              {formatDate(entry.date)}
+              {formatDay(entry.date)}
             </p>
           </div>
         </div>
@@ -225,6 +395,7 @@ export function PublicProfileView({
 }) {
   const t = useT();
   const isAdmin = user.role === "admin";
+  const [quizPage, setQuizPage] = useState(1);
 
   const progress = totalWords > 0 ? Math.round((user.learnedCount / totalWords) * 100) : 0;
   const quizEntries = useMemo(
@@ -241,190 +412,251 @@ export function PublicProfileView({
   }, [quizEntries]);
 
   return (
-    <StaggerContainer className="space-y-6">
-      {/* User card */}
-      <StaggerItem className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300 dark:hover:border-zinc-700 active:scale-[1.01] active:shadow-lg active:border-zinc-300 dark:active:border-zinc-700">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-4">
-            <UserAvatar
-              id={user.id}
-              name={user.name}
-              userName={user.userName}
-              image={user.image}
-              size="lg"
-            />
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="truncate text-base font-semibold text-zinc-900 dark:text-zinc-100">
-                  {user.name || user.userName || "User"}
-                </h2>
-                {isAdmin ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-400">
-                    <ShieldCheck className="h-3 w-3" />
-                    {t("অ্যাডমিন", "Admin")}
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                    {t("ব্যবহারকারী", "User")}
+    <StaggerContainer className="flex flex-col gap-4 sm:gap-5">
+      {/* Identity hero */}
+      <StaggerItem>
+        <IdentityTile user={user} isAdmin={isAdmin} />
+      </StaggerItem>
+
+      {/* Organized tabs */}
+      <StaggerItem>
+        <Tabs defaultValue="overview">
+          <div className="overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden">
+            <TabsList>
+              <TabsTrigger value="overview" className="flex items-center gap-1.5">
+                <BarChart3 className="h-4 w-4" />
+                {t("সারসংক্ষেপ", "Overview")}
+              </TabsTrigger>
+              <TabsTrigger value="activity" className="flex items-center gap-1.5">
+                <Flame className="h-4 w-4" />
+                {t("কার্যকলাপ", "Activity")}
+              </TabsTrigger>
+              <TabsTrigger value="quizzes" className="flex items-center gap-1.5">
+                <GraduationCap className="h-4 w-4" />
+                {t("কুইজ", "Quizzes")}
+                {quizEntries.length > 0 && (
+                  <span className="inline-flex items-center justify-center h-5 min-w-5 px-1 rounded-full text-[11px] font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
+                    {quizEntries.length}
                   </span>
                 )}
-              </div>
-              <p className="mt-0.5 truncate text-sm text-zinc-500 dark:text-zinc-400">
-                {user.userName ? `@${user.userName}` : t("Zero English ব্যবহারকারী", "Zero English user")}
-              </p>
-            </div>
+              </TabsTrigger>
+            </TabsList>
           </div>
-          <div className="sm:ml-auto flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500">
-            <Globe className="h-3.5 w-3.5" />
-            {t("পাবলিক প্রোফাইল", "Public Profile")}
-          </div>
-        </div>
-      </StaggerItem>
 
-      {/* Learned word progress */}
-      <StaggerItem className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
-        <div className="flex items-center gap-2 mb-5">
-          <BookOpen className="h-5 w-5 text-zinc-500" />
-          <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-            {t("শেখা শব্দের অগ্রগতি", "Learned Word Progress")}
-          </h3>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-5">
-          <StaggerContainer className="contents">
-            <StatCard
-              icon={<CheckCircle2 className="h-5 w-5 text-emerald-600" />}
-              label={t("শেখা হয়েছে", "Learned")}
-              value={user.learnedCount}
-              sub={t(`মোটের ${progress}%`, `${progress}% of total`)}
-              color="bg-emerald-100 dark:bg-emerald-900/30"
-            />
-            <StatCard
-              icon={<RefreshCw className="h-5 w-5 text-orange-600" />}
-              label={t("শিখছে", "Still Learning")}
-              value={user.stillLearningCount}
-              color="bg-orange-100 dark:bg-orange-900/30"
-            />
-            <StatCard
-              icon={<BookmarkCheck className="h-5 w-5 text-amber-600" />}
-              label={t("বুকমার্ক করা", "Bookmarked")}
-              value={user.bookmarkedCount}
-              color="bg-amber-100 dark:bg-amber-900/30"
-            />
-          </StaggerContainer>
-        </div>
-        <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-              {t("সব মিলিয়ে অগ্রগতি", "Overall Progress")}
-            </span>
-            <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-              {user.learnedCount}/{totalWords} ({progress}%)
-            </span>
-          </div>
-          <ProgressBar pct={progress} />
-        </div>
-
-        {levelProgress.length > 0 && (
-          <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800">
-            <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="h-4 w-4 text-zinc-400" />
-              <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-                {t("লেভেল অনুযায়ী অগ্রগতি", "Progress by Level")}
-              </span>
-            </div>
-            <div className="space-y-3">
-              {levelProgress.map((l) => {
-                const pct = l.total > 0 ? Math.round((l.learned / l.total) * 100) : 0;
-                const c = LEVEL_GRADIENTS[l.level] ?? "from-zinc-400 to-zinc-500";
-                return (
-                  <div key={l.level}>
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-2">
-                        <span className={cn("text-xs font-bold", LEVEL_TEXT_COLORS[l.level])}>{l.level}</span>
-                        <span className="text-[11px] text-zinc-400">
-                          {l.learned}/{l.total}
-                        </span>
-                      </div>
-                      <span className="text-[11px] text-zinc-500">{pct}%</span>
-                    </div>
-                    <div className="h-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
-                      <div
-                        className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-700", c)}
-                        style={{ width: `${pct}%` }}
-                      />
-                    </div>
+          <TabsContent value="overview">
+            <StaggerContainer className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-12">
+              {/* Overall progress */}
+              <StaggerItem className="lg:col-span-4">
+                <div className={TILE}>
+                  <TileHeader
+                    icon={<BookOpen className="h-4 w-4" />}
+                    title={t("শব্দ অগ্রগতি", "Word Progress")}
+                    iconBg="bg-emerald-100 dark:bg-emerald-900/30"
+                    iconTint="text-emerald-600 dark:text-emerald-400"
+                  />
+                  <div className="flex flex-col items-center justify-center gap-3 pb-2 pt-1">
+                    <ProgressRing pct={progress} />
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                      <span className="font-semibold text-zinc-900 dark:text-zinc-100">{user.learnedCount}</span>
+                      {" / "}
+                      {totalWords} {t("শব্দ", "words")}
+                    </p>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </StaggerItem>
+                </div>
+              </StaggerItem>
 
-      {/* Daily progress calendar */}
-      <StaggerItem>
-        <ContributionCalendar userId={user.id} data={dailyData} />
-      </StaggerItem>
+              {/* Level progress */}
+              <StaggerItem className="lg:col-span-8">
+                <div className={TILE}>
+                  <TileHeader
+                    icon={<TrendingUp className="h-4 w-4" />}
+                    title={t("লেভেল অনুযায়ী অগ্রগতি", "Progress by Level")}
+                    iconBg="bg-violet-100 dark:bg-violet-900/30"
+                    iconTint="text-violet-600 dark:text-violet-400"
+                  />
+                  {levelProgress.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2">
+                      {levelProgress.map((l) => {
+                        const pct = l.total > 0 ? Math.round((l.learned / l.total) * 100) : 0;
+                        const c = LEVEL_GRADIENTS[l.level] ?? "from-zinc-400 to-zinc-500";
+                        return (
+                          <div key={l.level}>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <div className="flex items-center gap-2">
+                                <span className={cn("inline-flex w-9 justify-center rounded-md px-1.5 py-0.5 text-[11px] font-bold", LEVEL_COLORS[l.level])}>
+                                  {l.level}
+                                </span>
+                                <span className="text-xs tabular-nums text-zinc-500 dark:text-zinc-400">
+                                  {l.learned}/{l.total}
+                                </span>
+                              </div>
+                              <span className={cn("text-xs font-bold tabular-nums", LEVEL_TEXT_COLORS[l.level])}>
+                                {pct}%
+                              </span>
+                            </div>
+                            <div className="h-2 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+                              <div
+                                className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-700", c)}
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-sm text-zinc-400 dark:text-zinc-500">
+                      <TrendingUp className="h-4 w-4" />
+                      {t("লেভেল তথ্য উপলব্ধ নেই", "No level data yet")}
+                    </div>
+                  )}
+                </div>
+              </StaggerItem>
+            </StaggerContainer>
+          </TabsContent>
 
-      {/* Quiz results */}
-      <StaggerItem className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
-        <div className="flex flex-wrap items-center gap-2 mb-1">
-          <GraduationCap className="h-5 w-5 text-zinc-500" />
-          <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-            {t("কুইজের ফলাফল", "Quiz Results")}
-          </h3>
-        </div>
-        <p className="text-xs text-zinc-400 dark:text-zinc-500 mb-5">
-          {t(
-            `${stats.total}টি কুইজ · ${stats.totalQuestions}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
-            `${stats.total} quiz${stats.total !== 1 ? "zes" : ""} · ${stats.totalQuestions} questions answered`
-          )}
-        </p>
+          <TabsContent value="activity">
+            <ContributionCalendar userId={user.id} data={dailyData} />
+          </TabsContent>
 
-        {stats.total > 0 ? (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
-              <StaggerContainer className="contents">
-                <StatCard
-                  icon={<GraduationCap className="h-5 w-5 text-indigo-600" />}
-                  label={t("নেওয়া কুইজ", "Quizzes Taken")}
-                  value={stats.total}
-                  color="bg-indigo-100 dark:bg-indigo-900/30"
-                />
-                <StatCard
-                  icon={<BarChart3 className="h-5 w-5 text-sky-600" />}
-                  label={t("গড় জয়ের হার", "Avg. Win Rate")}
-                  value={`${stats.avg}%`}
-                  color="bg-sky-100 dark:bg-sky-900/30"
-                />
-                <StatCard
-                  icon={<Award className="h-5 w-5 text-emerald-600" />}
-                  label={t("সেরা স্কোর", "Best Score")}
-                  value={`${stats.best}%`}
-                  color="bg-emerald-100 dark:bg-emerald-900/30"
-                />
-              </StaggerContainer>
-            </div>
+          <TabsContent value="quizzes">
+            <StaggerContainer className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-12">
+              {/* Quiz overview */}
+              <StaggerItem className="lg:col-span-4">
+                <div className={TILE}>
+                  <TileHeader
+                    icon={<GraduationCap className="h-4 w-4" />}
+                    title={t("কুইজ ওভারভিউ", "Quiz Overview")}
+                    iconBg="bg-indigo-100 dark:bg-indigo-900/30"
+                    iconTint="text-indigo-600 dark:text-indigo-400"
+                  />
+                  {stats.total > 0 ? (
+                    <div className="flex flex-col gap-5">
+                      <StatRow
+                        icon={<GraduationCap className="h-4 w-4" />}
+                        label={t("নেওয়া কুইজ", "Quizzes Taken")}
+                        value={stats.total}
+                        iconBg="bg-indigo-100 dark:bg-indigo-900/30"
+                        iconTint="text-indigo-600 dark:text-indigo-400"
+                      />
+                      <StatRow
+                        icon={<BarChart3 className="h-4 w-4" />}
+                        label={t("গড় জয়ের হার", "Avg. Win Rate")}
+                        value={`${stats.avg}%`}
+                        iconBg="bg-sky-100 dark:bg-sky-900/30"
+                        iconTint="text-sky-600 dark:text-sky-400"
+                      />
+                      <StatRow
+                        icon={<Award className="h-4 w-4" />}
+                        label={t("সেরা স্কোর", "Best Score")}
+                        value={`${stats.best}%`}
+                        iconBg="bg-emerald-100 dark:bg-emerald-900/30"
+                        iconTint="text-emerald-600 dark:text-emerald-400"
+                      />
+                      <div className="border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                        <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
+                          {t(
+                            `${stats.totalQuestions}টি প্রশ্নের উত্তর দিয়েছেন`,
+                            `${stats.totalQuestions} questions answered`
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-3 py-8 text-center">
+                      <Trophy className="h-9 w-9 text-zinc-300 dark:text-zinc-600" />
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                        {t("এখনো কোনো কুইজ নেননি", "No quizzes taken yet")}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </StaggerItem>
 
-            <div className="grid grid-cols-1 gap-4">
-              <StaggerContainer className="contents">
-                {quizEntries.map((entry, idx) => (
-                  <QuizItem key={entry.id ?? `${idx}`} entry={entry} />
-                ))}
-              </StaggerContainer>
-            </div>
-          </>
-        ) : (
-          <div className="text-center py-16">
-            <Trophy className="h-12 w-12 mx-auto text-zinc-300 dark:text-zinc-600 mb-4" />
-            <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-1">
-              {t("এখনো কোনো কুইজ ইতিহাস নেই।", "No quiz history yet.")}
-            </p>
-            <p className="text-zinc-400 dark:text-zinc-500 text-xs">
-              {t("কুইজ নিলে ফলাফল এখানে দেখা যাবে।", "Results will appear here once they take a quiz.")}
-            </p>
-          </div>
-        )}
+              {/* Quiz history */}
+              <StaggerItem className="lg:col-span-8">
+                <div className={TILE}>
+                  <TileHeader
+                    icon={<GraduationCap className="h-4 w-4" />}
+                    title={t("কুইজের ইতিহাস", "Quiz History")}
+                    sub={t(
+                      `${stats.total}টি কুইজ · ${stats.totalQuestions}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
+                      `${stats.total} quiz${stats.total !== 1 ? "zes" : ""} · ${stats.totalQuestions} questions answered`
+                    )}
+                    iconBg="bg-indigo-100 dark:bg-indigo-900/30"
+                    iconTint="text-indigo-600 dark:text-indigo-400"
+                  />
+                  {stats.total > 0 ? (() => {
+                    const totalPagesQ = Math.max(1, Math.ceil(quizEntries.length / QUIZZES_PER_PAGE));
+                    const currentPageQ = Math.min(quizPage, totalPagesQ);
+                    const startQ = (currentPageQ - 1) * QUIZZES_PER_PAGE;
+                    const pageEntriesQ = quizEntries.slice(startQ, startQ + QUIZZES_PER_PAGE);
+                    return (
+                      <>
+                        <StaggerContainer className="grid grid-cols-1 gap-4">
+                          {pageEntriesQ.map((entry, idx) => (
+                            <QuizItem key={entry.id ?? `${startQ + idx}`} entry={entry} />
+                          ))}
+                        </StaggerContainer>
+                        <p className="mt-8 mb-5 text-center text-sm text-zinc-400 dark:text-zinc-500">
+                          {t(
+                            `মোট ${stats.total}টির মধ্যে ${startQ + 1}–${Math.min(startQ + QUIZZES_PER_PAGE, stats.total)} দেখানো হচ্ছে`,
+                            `Showing ${startQ + 1}–${Math.min(startQ + QUIZZES_PER_PAGE, stats.total)} of ${stats.total}`
+                          )}
+                        </p>
+                        {totalPagesQ > 1 && (
+                          <Pagination>
+                            <div className="flex items-center gap-0.5 max-w-full">
+                              <PaginationItem>
+                                <PaginationPrevious
+                                  href="#"
+                                  onClick={(e) => { e.preventDefault(); if (currentPageQ > 1) setQuizPage(currentPageQ - 1); }}
+                                  className={cn(currentPageQ <= 1 ? "pointer-events-none opacity-50" : "")}
+                                />
+                              </PaginationItem>
+                              <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                                <PaginationContent>
+                                  {Array.from({ length: totalPagesQ }, (_, i) => i + 1).map((p) => (
+                                    <PaginationItem key={p}>
+                                      <PaginationLink
+                                        href="#"
+                                        onClick={(e) => { e.preventDefault(); setQuizPage(p); }}
+                                        isActive={p === currentPageQ}
+                                      >
+                                        {p}
+                                      </PaginationLink>
+                                    </PaginationItem>
+                                  ))}
+                                </PaginationContent>
+                              </div>
+                              <PaginationItem>
+                                <PaginationNext
+                                  href="#"
+                                  onClick={(e) => { e.preventDefault(); if (currentPageQ < totalPagesQ) setQuizPage(currentPageQ + 1); }}
+                                  className={cn(currentPageQ >= totalPagesQ ? "pointer-events-none opacity-50" : "")}
+                                />
+                              </PaginationItem>
+                            </div>
+                          </Pagination>
+                        )}
+                      </>
+                    );
+                  })() : (
+                    <div className="text-center py-16">
+                      <Trophy className="h-12 w-12 mx-auto text-zinc-300 dark:text-zinc-600 mb-4" />
+                      <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-1">
+                        {t("এখনো কোনো কুইজ ইতিহাস নেই।", "No quiz history yet.")}
+                      </p>
+                      <p className="text-zinc-400 dark:text-zinc-500 text-xs">
+                        {t("কুইজ নিলে ফলাফল এখানে দেখা যাবে।", "Results will appear here once they take a quiz.")}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </StaggerItem>
+            </StaggerContainer>
+          </TabsContent>
+        </Tabs>
       </StaggerItem>
     </StaggerContainer>
   );
