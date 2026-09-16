@@ -244,46 +244,46 @@ function IdentityTile({
         </div>
 
         {/* Name + badges */}
-        <div className="mt-3 flex flex-wrap items-center gap-2.5">
-          <h1 className="truncate text-xl font-bold text-zinc-900 dark:text-zinc-100 sm:text-2xl">
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <h1 className="truncate text-lg font-bold text-zinc-900 dark:text-zinc-100 sm:text-xl">
             {displayName}
           </h1>
           {isAdmin ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-px text-[11px] font-semibold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
               <ShieldCheck className="h-3 w-3" />
               {t("অ্যাডমিন", "Admin")}
             </span>
           ) : (
-            <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+            <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-px text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
               {t("ব্যবহারকারী", "User")}
             </span>
           )}
         </div>
-        <p className="mt-0.5 truncate text-sm text-zinc-500 dark:text-zinc-400">
+        {/* <p className="mt-0.5 truncate text-sm text-zinc-500 dark:text-zinc-400">
           {user.userName ? `@${user.userName}` : t("Zero English ব্যবহারকারী", "Zero English user")}
-        </p>
+        </p> */}
 
         {/* Meta row */}
-        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-zinc-600 dark:text-zinc-300">
+        <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px] text-zinc-600 dark:text-zinc-300">
           <span className="inline-flex items-center gap-1.5">
-            <CalendarDays className="h-4 w-4 text-zinc-400" />
+            <CalendarDays className="h-3.5 w-3.5 text-zinc-400" />
             {t("যোগ দিয়েছেন", "Joined")} {formatJoined(user.createdAt)}
           </span>
           <span className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300">
-            <CheckCircle2 className="h-4 w-4" />
+            <CheckCircle2 className="h-3.5 w-3.5" />
             {t("সক্রিয় শিক্ষার্থী", "Active learner")}
           </span>
         </div>
 
         {/* Word stats */}
-        <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+        <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">
           {stats.map((s) => (
             <div key={s.label} className="flex items-center gap-1.5">
               <span className={s.tint}>{s.icon}</span>
-              <span className="text-lg font-extrabold tabular-nums text-zinc-900 dark:text-zinc-100">
+              <span className="text-base font-extrabold tabular-nums text-zinc-900 dark:text-zinc-100">
                 {s.value}
               </span>
-              <span className="text-sm text-zinc-500 dark:text-zinc-400">{s.label}</span>
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">{s.label}</span>
             </div>
           ))}
         </div>
