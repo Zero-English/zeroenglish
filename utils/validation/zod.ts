@@ -158,7 +158,14 @@ export const quizResultSchema = z
     examId: z.number().int().positive("examId must be positive").nullish(),
     title: z.string().trim().max(200).nullish(),
     mode: quizModeEnumSchema.default("PRACTICE"),
-    quizType: quizTypeEnumSchema,
+    // Any quiz type name that exists in the QuizType table is valid here,
+    // including grammar topic names created at runtime (the service resolves
+    // the row by name and rejects unknown values).
+    quizType: z
+      .string()
+      .trim()
+      .min(1, "quizType is required")
+      .max(50, "quizType is too long"),
     questionCount: z.number().int().positive("questionCount must be positive"),
     levels: z.array(levelEnumSchema).min(1, "At least one level is required"),
     timePerQuestion: z.number().int().nonnegative("timePerQuestion must be non-negative"),
