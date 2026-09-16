@@ -29,8 +29,8 @@ export default function FFooter() {
       categoryBn: "পণ্য",
       categoryEn: "Product",
       links: [
-        { labelBn: "বৈশিষ্ট্য", labelEn: "Features", href: "#" },
-        { labelBn: "মূল্য", labelEn: "Pricing", href: "#" },
+        { labelBn: "শব্দভান্ডার", labelEn: "Vocabulary", href: "/vocabulary" },
+        { labelBn: "কুইজ", labelEn: "Quiz", href: "/quiz" },
         { labelBn: "নিউজ ও ব্লগ", labelEn: "News & Blog", href: "/news" },
       ],
     },
@@ -38,9 +38,9 @@ export default function FFooter() {
       categoryBn: "শেখা",
       categoryEn: "Learning",
       links: [
-        { labelBn: "শিক্ষানবিস", labelEn: "Beginner", href: "/beginner" },
-        { labelBn: "মাঝারি", labelEn: "Intermediate", href: "/intermediate" },
-        { labelBn: "উন্নত", labelEn: "Advanced", href: "/advanced" },
+        { labelBn: "অগ্রগতি", labelEn: "Leaderboard", href: "/leaderboard" },
+        { labelBn: "অনুসন্ধান", labelEn: "Search", href: "/search" },
+        { labelBn: "প্রোফাইল", labelEn: "Profile", href: "/profile" },
       ],
     },
     {
@@ -48,15 +48,28 @@ export default function FFooter() {
       categoryEn: "Company",
       links: [
         { labelBn: "আমাদের সম্পর্কে", labelEn: "About", href: "/about" },
-        { labelBn: "যোগাযোগ", labelEn: "Contact", href: "#" },
         { labelBn: "গোপনীয়তা নীতি", labelEn: "Privacy Policy", href: "/privacy" },
-        { labelBn: "পরিষেবার শর্তাবলী", labelEn: "Terms of Service", href: "#" },
+        { labelBn: "যোগাযোগ", labelEn: "Contact", href: "mailto:zeroenglishweb@gmail.com" },
       ],
     },
   ];
 
-  const socialLinks = [
-    { icon: Mail, href: "zeroenglishweb@gmail.com", label: "Email" },
+  function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+    </svg>
+  );
+}
+
+const socialLinks = [
+    { icon: Mail, href: "mailto:zeroenglishweb@gmail.com", label: "Email" },
+    { icon: FacebookIcon, href: "https://facebook.com/zeroenglishorg", label: "Facebook" },
   ];
 
   if (hidden) return null;
@@ -85,7 +98,9 @@ export default function FFooter() {
               {socialLinks.map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
-                  href={`mailto:${href}`}
+                  href={href}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel={href.startsWith("http") ? "noreferrer" : undefined}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary"
                   aria-label={label}
                 >
@@ -133,12 +148,9 @@ export default function FFooter() {
             <Link href="/privacy" className="hover:text-foreground active:text-foreground transition-colors">
               {t("গোপনীয়তা", "Privacy")}
             </Link>
-            <Link href="#" className="hover:text-foreground active:text-foreground transition-colors">
-              {t("শর্তাবলী", "Terms")}
-            </Link>
-            <Link href="#" className="hover:text-foreground active:text-foreground transition-colors">
-              {t("কুকিজ", "Cookies")}
-            </Link>
+            <a href="mailto:zeroenglishweb@gmail.com" className="hover:text-foreground active:text-foreground transition-colors">
+              {t("যোগাযোগ", "Contact")}
+            </a>
           </div>
         </div>
       </div>

@@ -36,7 +36,7 @@ export function GrammarTopicCard({
   return (
     <Link
       href={`/quiz/grammar?topic=${encodeURIComponent(topic.name)}`}
-      className={`group relative flex flex-col text-left overflow-hidden rounded-3xl border-2 ${topic.border} ${topic.bg} backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.99]`}
+      className={`group relative flex flex-col text-left overflow-hidden rounded-3xl border-2 ${topic.border} ${topic.bg} backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 active:scale-[1.02] active:-translate-y-1`}
       style={{ animationDelay: `${index * 0.08}s` }}
     >
       <div
@@ -101,7 +101,7 @@ export function ClassCard({
   return (
     <Link
       href={`/quiz/class?class=${encodeURIComponent(cls.value)}`}
-      className={`group relative flex items-center gap-3 overflow-hidden rounded-2xl border-2 ${cls.border} ${cls.bg} backdrop-blur-sm p-3.5 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.99]`}
+      className={`group relative flex items-center gap-3 overflow-hidden rounded-2xl border-2 ${cls.border} ${cls.bg} backdrop-blur-sm p-3.5 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[1.02] active:-translate-y-0.5`}
       style={{ animationDelay: `${index * 0.04}s` }}
     >
       <div
@@ -168,7 +168,7 @@ function RetryState({ onRetry }: { onRetry: () => void }) {
       </p>
       <button
         onClick={onRetry}
-        className="inline-flex items-center gap-1.5 mt-4 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-500 dark:from-zinc-200 dark:to-zinc-400 text-white dark:text-zinc-900 font-semibold px-5 py-2.5 text-sm hover:opacity-90 transition-opacity cursor-pointer"
+        className="inline-flex items-center gap-1.5 mt-4 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-500 dark:from-zinc-200 dark:to-zinc-400 text-white dark:text-zinc-900 font-semibold px-5 py-2.5 text-sm hover:opacity-90 active:opacity-90 transition-opacity cursor-pointer"
       >
         <RefreshCw className="h-4 w-4" />
         {t("আবার চেষ্টা করুন", "Try again")}
@@ -232,7 +232,7 @@ export function GrammarTopicsSection() {
             <div className="mt-8 flex justify-center animate-fade-up-2">
               <button
                 onClick={() => setVisibleCount((n) => n + GRAMMAR_TOPICS_PER_PAGE)}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-500 dark:from-zinc-200 dark:to-zinc-400 text-white dark:text-zinc-900 font-semibold px-6 py-3 text-sm hover:opacity-90 transition-opacity cursor-pointer"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-zinc-700 to-zinc-500 dark:from-zinc-200 dark:to-zinc-400 text-white dark:text-zinc-900 font-semibold px-6 py-3 text-sm hover:opacity-90 active:opacity-90 transition-opacity cursor-pointer"
               >
                 <ChevronDown className="h-4 w-4" />
                 {t("আরও গ্রামার টপিক লোড করুন", "Load more grammar topics")}

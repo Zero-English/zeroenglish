@@ -128,7 +128,7 @@ export function ContributionCalendar({
   ];
 
   return (
-    <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
+    <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
       <div className="flex items-center gap-2 mb-1">
         <BookOpen className="h-5 w-5 text-zinc-500" />
         <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
