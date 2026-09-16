@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   BookMarked,
@@ -13,6 +14,7 @@ import { useQuizMeta, type QuizTypeItem } from "@/lib/quiz-meta";
 import { GrammarTopicCard } from "@/components/quiz-catalog";
 import { QuizTopicPlay, type TopicQuizQuestion } from "@/components/quiz-topic-play";
 import { QuizBackLink } from "@/components/quiz-back-link";
+import { GrammarPracticeSession } from "@/components/quiz-grammar-practice";
 
 function resolveSelectedTopics(
   quizTypes: QuizTypeItem[],
