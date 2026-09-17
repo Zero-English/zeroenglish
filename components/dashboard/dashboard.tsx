@@ -13,7 +13,6 @@ import {
   Search,
   Sparkles,
   Target,
-  Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Word } from "@/lib/data";
@@ -26,6 +25,18 @@ import { useDailyGoal } from "@/lib/use-daily-goal";
 import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
 import type { LeaderboardRow } from "@/components/leaderboard";
 import { TopLearners } from "@/components/top-learners";
+
+const CARD =
+  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
+
+const ICON_CHIP =
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-black/[0.04] dark:bg-white/[0.06] ring-1 ring-inset ring-black/[0.05] dark:ring-white/[0.08]";
+
+const BTN_PRIMARY =
+  "shrink-0 gap-2 rounded-xl bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white px-5 h-10 text-sm font-medium shadow-[0_1px_2px_rgba(234,88,12,0.3),0_4px_12px_-4px_rgba(234,88,12,0.35)] transition-colors";
+
+const BTN_VIOLET =
+  "shrink-0 gap-2 rounded-xl bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white px-5 h-10 text-sm font-medium shadow-[0_1px_2px_rgba(139,92,246,0.3),0_4px_12px_-4px_rgba(139,92,246,0.35)] transition-colors";
 
 const LEVEL_META: Record<
   string,
@@ -103,7 +114,7 @@ const ACTION_CARDS = [
     titleBn: "শব্দভাণ্ডার",
     descriptionEn: "Browse words by level and keep learning",
     descriptionBn: "লেভেল অনুযায়ী শব্দ ব্রাউজ করুন এবং শেখা চালিয়ে যান",
-    iconClass: "text-orange-500 bg-orange-100 dark:bg-orange-950/60",
+    iconClass: "text-orange-500 bg-orange-500/10",
   },
   {
     href: "/quiz",
@@ -112,7 +123,7 @@ const ACTION_CARDS = [
     titleBn: "কুইজ",
     descriptionEn: "Test yourself and grow your streak",
     descriptionBn: "নিজেকে পরীক্ষা করুন এবং ধারা বাড়ান",
-    iconClass: "text-sky-500 bg-sky-100 dark:bg-sky-950/60",
+    iconClass: "text-sky-500 bg-sky-500/10",
   },
   {
     href: "/profile",
@@ -121,7 +132,7 @@ const ACTION_CARDS = [
     titleBn: "অগ্রগতি",
     descriptionEn: "See your activity and achievements",
     descriptionBn: "আপনার কার্যকলাপ এবং অর্জন দেখুন",
-    iconClass: "text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60",
+    iconClass: "text-emerald-500 bg-emerald-500/10",
   },
   {
     href: "/search",
@@ -130,7 +141,7 @@ const ACTION_CARDS = [
     titleBn: "অনুসন্ধান",
     descriptionEn: "Look up any word instantly",
     descriptionBn: "যেকোনো শব্দ তাৎক্ষণিক খুঁজুন",
-    iconClass: "text-violet-500 bg-violet-100 dark:bg-violet-950/60",
+    iconClass: "text-violet-500 bg-violet-500/10",
   },
 ];
 
@@ -184,7 +195,6 @@ export function Dashboard({
   }, [lang]);
 
   const firstName = userName;
-  // const firstName = userName?.trim().split(/\s+/)[0] ?? null; // Changed by Mahir
   const greetingFull = firstName
     ? t(`${greeting.bn}, ${firstName}`, `${greeting.en}, ${firstName}`)
     : t(greeting.bn, greeting.en);
@@ -194,247 +204,183 @@ export function Dashboard({
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-50 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
+      {/* <div className="fixed inset-0 -z-10 bg-[radial-gradient(120%_120%_at_50%_-10%,#ffffff_0%,#f5f5f7_45%,#ececf0_100%)] dark:bg-[radial-gradient(120%_120%_at_50%_-10%,#18181b_0%,#101012_45%,#09090b_100%)]" /> */}
 
       <div className="relative px-4 py-10 sm:px-6 lg:px-8">
-        <StaggerContainer className="max-w-6xl mx-auto space-y-8 sm:space-y-10">
-          {/* Header: greeting + overall progress */}
-          <StaggerItem>
-            <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-orange-200/70 dark:border-orange-800/60 bg-orange-50/80 dark:bg-orange-950/40 px-3 py-1 text-xs font-medium text-orange-600 dark:text-orange-300">
-                  <Sparkles className="h-3.5 w-3.5" />
-                  {t("আপনার শেখার ড্যাশবোর্ড", "Your learning dashboard")}
-                </div>
-                <h1 className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-                  {greetingFull}
-                </h1>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">{dateLabel}</p>
-              </div>
-
-              <div className="flex items-center gap-4 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-4 sm:px-5 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
-                <div className="relative h-20 w-20 shrink-0">
-                  <ProgressRing pct={ready ? overallPct : 0} size={80} stroke={7} />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-lg font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
-                      {ready ? `${overallPct}%` : "…"}
-                    </span>
-                  </div>
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                    {t("সামগ্রিক অগ্রগতি", "Overall progress")}
-                  </p>
-                  <p className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-                    {ready ? (
-                      <>
-                        {totalLearned}
-                        <span className="font-normal text-zinc-400"> / {totalWords}</span>
-                      </>
-                    ) : (
-                      "…"
-                    )}
-                  </p>
-                  <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                    {t("শব্দ শেখা হয়েছে", "words learned")}
-                  </p>
-                </div>
-              </div>
-            </header>
-          </StaggerItem>
-
-          {/* Quiz challenge */}
-          <StaggerItem>
-            <section>
-              <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
-                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="min-w-0">
-                    <h2 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                      {t("কুইজ চ্যালেঞ্জ", "Quiz Challenge")}
-                    </h2>
-                    <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                      {t("নিজেকে পরীক্ষা করুন আর ধারা বাড়ান", "Test yourself and grow your streak")}
+        <StaggerContainer className="mx-auto max-w-6xl">
+          <div className="grid md:gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+            {/* Left rail: overview */}
+            <div className="space-y-4 sm:space-y-6 lg:sticky lg:top-6 lg:self-start">
+              <StaggerItem>
+                <div className={cn(CARD, "overflow-hidden")}>
+                  <div className="p-5 sm:p-6">
+                    <p className="text-xs font-medium text-zinc-400 dark:text-zinc-500">
+                      {dateLabel}
                     </p>
+                    <h1 className="mt-1 text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                      {greetingFull}
+                    </h1>
                   </div>
-                  <Button
-                    asChild
-                    className="shrink-0 gap-2 rounded-xl bg-violet-600 hover:bg-violet-700 active:bg-violet-800 text-white px-5 h-10 text-sm font-medium shadow-lg shadow-violet-500/20"
-                  >
-                    <Link href="/quiz">
-                      <BookOpenCheck className="size-4" />
-                      {t("কুইজ দিন", "Take a Quiz")}
-                    </Link>
-                  </Button>
+
+                  <div className="flex items-center gap-4 border-y border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4">
+                    <div className="relative h-14 w-14 shrink-0">
+                      <ProgressRing pct={ready ? overallPct : 0} size={56} stroke={5.5} />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-xs font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
+                          {ready ? `${overallPct}%` : "…"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                        {t("সামগ্রিক অগ্রগতি", "Overall progress")}
+                      </p>
+                      <p className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
+                        {ready ? (
+                          <>
+                            {totalLearned}
+                            <span className="font-normal text-zinc-400"> / {totalWords}</span>
+                          </>
+                        ) : (
+                          "…"
+                        )}
+                      </p>
+                      <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                        {t("শব্দ শেখা হয়েছে", "words learned")}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 overflow-hidden">
+                    <StatRow
+                      icon={GraduationCap}
+                      labelEn="Words learned"
+                      labelBn="শব্দ শেখা হয়েছে"
+                      value={ready ? `${totalLearned}` : "…"}
+                      subEn={`of ${totalWords} total`}
+                      subBn={`মোট ${totalWords}টির মধ্যে`}
+                      tint="text-orange-500"
+                    />
+                    <StatRow
+                      icon={Sparkles}
+                      labelEn="Today's words"
+                      labelBn="আজ শেখা শব্দ"
+                      value={statsReady ? `${todayLearned}` : "…"}
+                      subEn={dailyGoal > 0 ? `daily goal ${dailyGoal}` : "set a daily goal"}
+                      subBn={
+                        dailyGoal > 0 ? `দৈনিক লক্ষ্য ${dailyGoal}` : "দৈনিক লক্ষ্য নির্ধারণ করুন"
+                      }
+                      tint="text-sky-500"
+                    />
+                    <StatRow
+                      icon={Flame}
+                      labelEn="Day streak"
+                      labelBn="দিনের ধারা"
+                      value={statsReady ? `${streak}` : "…"}
+                      subEn="days in a row"
+                      subBn="টানা কত দিন"
+                      tint="text-amber-500"
+                    />
+                    <StatRow
+                      icon={Target}
+                      labelEn="Daily goal"
+                      labelBn="দৈনিক লক্ষ্য"
+                      value={statsReady ? `${goalPct}%` : "…"}
+                      subEn={`${todayLearned} of ${dailyGoal} words`}
+                      subBn={`${dailyGoal}টির মধ্যে ${todayLearned}টি`}
+                      tint="text-emerald-500"
+                    />
+                  </div>
                 </div>
-              </div>
-            </section>
-          </StaggerItem>
+              </StaggerItem>
 
-          {/* Continue learning */}
-          <StaggerItem>
-            <ContinueLearningCard
-              lastLearned={lastLearnedHydrated ? lastLearned : null}
-              loaded={learnedLoaded}
-              learnedIds={learnedIds}
-              words={words}
-            />
-          </StaggerItem>
+              <StaggerItem className="hidden lg:block">
+                <TopLearners rows={leaderboard} showHeader />
+              </StaggerItem>
+            </div>
 
-          {/* Daily stats */}
-          <StaggerItem>
-            <section>
-              <SectionHeading
-                icon={Target}
-                iconClass="text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60"
-                titleEn="Daily activity"
-                titleBn="দৈনিক কার্যকলাপ"
-                descriptionEn="Keep your learning streak alive today"
-                descriptionBn="আজ আপনার শেখার ধারা ধরে রাখুন"
-              />
-              <StaggerContainer className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                <StaggerItem>
-                  <StatTile
-                    icon={GraduationCap}
-                    labelEn="Words learned"
-                    labelBn="শব্দ শেখা হয়েছে"
-                    value={ready ? `${totalLearned}` : "…"}
-                    subEn={`of ${totalWords} total`}
-                    subBn={`মোট ${totalWords}টির মধ্যে`}
-                    iconClass="text-orange-500 bg-orange-100 dark:bg-orange-950/60"
-                  />
-                </StaggerItem>
-                <StaggerItem>
-                  <StatTile
-                    icon={Sparkles}
-                    labelEn="Today's words"
-                    labelBn="আজ শেখা শব্দ"
-                    value={statsReady ? `${todayLearned}` : "…"}
-                    subEn={dailyGoal > 0 ? `daily goal ${dailyGoal}` : "set a daily goal"}
-                    subBn={
-                      dailyGoal > 0 ? `দৈনিক লক্ষ্য ${dailyGoal}` : "দৈনিক লক্ষ্য নির্ধারণ করুন"
-                    }
-                    iconClass="text-sky-500 bg-sky-100 dark:bg-sky-950/60"
-                  />
-                </StaggerItem>
-                <StaggerItem>
-                  <StatTile
-                    icon={Flame}
-                    labelEn="Day streak"
-                    labelBn="দিনের ধারা"
-                    value={statsReady ? `${streak}` : "…"}
-                    subEn="days in a row"
-                    subBn="টানা কত দিন"
-                    iconClass="text-amber-500 bg-amber-100 dark:bg-amber-950/60"
-                  />
-                </StaggerItem>
-                <StaggerItem>
-                  <StatTile
-                    icon={Target}
-                    labelEn="Daily goal"
-                    labelBn="দৈনিক লক্ষ্য"
-                    value={statsReady ? `${goalPct}%` : "…"}
-                    subEn={`${todayLearned} of ${dailyGoal} words`}
-                    subBn={`${dailyGoal}টির মধ্যে ${todayLearned}টি`}
-                    iconClass="text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60"
-                  />
-                </StaggerItem>
-              </StaggerContainer>
-            </section>
-          </StaggerItem>
+            {/* Main column */}
+            <div className="space-y-4 sm:space-y-6">
+              <StaggerItem>
+                <div className={cn(CARD, "overflow-hidden")}>
+                  {/* Quiz challenge */}
+                  <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 border-b border-black/[0.06] dark:border-white/[0.08]">
+                    <div className="min-w-0">
+                      <h2 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                        {t("কুইজ চ্যালেঞ্জ", "Quiz Challenge")}
+                      </h2>
+                      <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                        {t("নিজেকে পরীক্ষা করুন আর ধারা বাড়ান", "Test yourself and grow your streak")}
+                      </p>
+                    </div>
+                    <Button
+                      asChild
+                      className={cn(BTN_VIOLET, "self-start sm:self-auto")}
+                    >
+                      <Link href="/quiz">
+                        <BookOpenCheck className="size-4" />
+                        {t("কুইজ দিন", "Take a Quiz")}
+                      </Link>
+                    </Button>
+                  </div>
 
-          {/* Quick actions */}
-          <StaggerItem>
-            <section>
-              <SectionHeading
-                icon={Sparkles}
-                iconClass="text-orange-500 bg-orange-100 dark:bg-orange-950/60"
-                titleEn="Explore"
-                titleBn="এক্সপ্লোর করুন"
-                descriptionEn="Everything you need to keep learning, in one place"
-                descriptionBn="শেখা চালিয়ে যেতে প্রয়োজনীয় সব কিছু এক জায়গায়"
-              />
-              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                {ACTION_CARDS.map(
-                  ({ href, icon: Icon, titleEn, titleBn, descriptionEn, descriptionBn, iconClass }) => (
-                    <StaggerItem key={href} className="h-full">
-                      <Link
-                        href={href}
-                        className="group flex h-full flex-col rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 transition-all duration-300 hover:shadow-xl hover:shadow-zinc-200/50 dark:hover:shadow-black/30 hover:-translate-y-0.5 hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:shadow-xl active:shadow-zinc-200/50 dark:active:shadow-black/30 active:-translate-y-0.5 active:border-zinc-300/80 dark:active:border-zinc-700/80"
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className={cn("flex h-12 w-12 items-center justify-center rounded-2xl", iconClass)}>
+                  {/* Continue learning */}
+                  <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 border-b border-black/[0.06] dark:border-white/[0.08]">
+                    <ContinueLearningContent
+                      lastLearned={lastLearnedHydrated ? lastLearned : null}
+                      loaded={learnedLoaded}
+                      learnedIds={learnedIds}
+                      words={words}
+                    />
+                  </div>
+
+                  {/* Explore dock tiles */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2">
+                    {ACTION_CARDS.map(
+                      ({ href, icon: Icon, titleEn, titleBn, descriptionEn, descriptionBn, iconClass }) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className={cn(
+                            "group flex flex-col gap-3 p-5 sm:p-6 transition-colors",
+                            "border-l border-t border-black/[0.06] dark:border-white/[0.08]",
+                            "[&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0",
+                            "hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              "flex h-12 w-12 items-center justify-center rounded-[14px] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_2px_8px_-2px_rgba(16,24,40,0.15)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_-2px_rgba(0,0,0,0.5)]",
+                              iconClass
+                            )}
+                          >
                             <Icon className="h-6 w-6" />
                           </div>
-                          <span className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 text-zinc-400 transition-all group-hover:border-orange-600 group-hover:bg-orange-600 group-hover:text-white group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-active:border-orange-600 group-active:bg-orange-600 group-active:text-white group-active:-translate-y-0.5 group-active:translate-x-0.5">
-                            <ArrowRight className="h-3.5 w-3.5" />
-                          </span>
-                        </div>
-                        <h3 className="mt-4 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                          {t(titleBn, titleEn)}
-                        </h3>
-                        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 flex-1">
-                          {t(descriptionBn, descriptionEn)}
-                        </p>
-                      </Link>
-                    </StaggerItem>
-                  )
-                )}
-              </StaggerContainer>
-            </section>
-          </StaggerItem>
+                          <div className="min-w-0">
+                            <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                              {t(titleBn, titleEn)}
+                            </h3>
+                            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                              {t(descriptionBn, descriptionEn)}
+                            </p>
+                          </div>
+                        </Link>
+                      )
+                    )}
+                  </div>
+                </div>
+              </StaggerItem>
 
-          {/* Top learners */}
-          <StaggerItem>
-            <section>
-              <SectionHeading
-                icon={Trophy}
-                iconClass="text-amber-500 bg-amber-100 dark:bg-amber-950/60"
-                titleEn="Top Learners"
-                titleBn="শীর্ষ শিক্ষার্থীরা"
-                descriptionEn="The best quiz exam averages across the community"
-                descriptionBn="সম্প্রদায়ের মধ্যে সেরা কুইজ পরীক্ষার গড় স্কোর"
-              />
-              <TopLearners rows={leaderboard} />
-            </section>
-          </StaggerItem>
+              <StaggerItem className="lg:hidden">
+                <TopLearners rows={leaderboard} showHeader />
+              </StaggerItem>
 
-          <StaggerItem>
-            <LatestPosts posts={posts} />
-          </StaggerItem>
+              <StaggerItem>
+                <LatestPosts posts={posts} />
+              </StaggerItem>
+            </div>
+          </div>
         </StaggerContainer>
-      </div>
-    </div>
-  );
-}
-
-function SectionHeading({
-  icon: Icon,
-  iconClass,
-  titleEn,
-  titleBn,
-  descriptionEn,
-  descriptionBn,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  iconClass: string;
-  titleEn: string;
-  titleBn: string;
-  descriptionEn: string;
-  descriptionBn: string;
-}) {
-  const t = useT();
-
-  return (
-    <div className="flex items-center gap-3 mb-4">
-      <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", iconClass)}>
-        <Icon className="size-4.5" />
-      </span>
-      <div className="min-w-0">
-        <h2 className="text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-          {t(titleBn, titleEn)}
-        </h2>
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">{t(descriptionBn, descriptionEn)}</p>
       </div>
     </div>
   );
@@ -476,7 +422,7 @@ function ProgressRing({
         cy={size / 2}
         r={r}
         strokeWidth={stroke}
-        className="fill-none stroke-zinc-200/80 dark:stroke-zinc-800"
+        className="fill-none stroke-black/[0.06] dark:stroke-white/[0.08]"
       />
       <circle
         cx={size / 2}
@@ -493,7 +439,7 @@ function ProgressRing({
   );
 }
 
-function ContinueLearningCard({
+function ContinueLearningContent({
   lastLearned,
   loaded,
   learnedIds,
@@ -516,66 +462,62 @@ function ContinueLearningCard({
     lastLearned && lastLearned.page > 1 ? `${levelPath}/${lastLearned.page}` : levelPath;
 
   return (
-    <section>
-      <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                {t("শেখা চালিয়ে যান", "Continue Learning")}
-              </h2>
-              <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", meta.bg, meta.text)}>
-                {targetLevel}
-              </span>
-            </div>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              {lastLearned
-                ? t(
-                    `লেভেল ${targetLevel} · পৃষ্ঠা ${lastLearned.page}`,
-                    `Level ${targetLevel} · Page ${lastLearned.page}`
-                  )
-                : t("একটি লেভেল বেছে নিয়ে শেখা শুরু করুন।", "Pick a level and start learning.")}
-            </p>
-            <div className="mt-3 flex items-center gap-3 max-w-sm">
-              <div className="h-2 flex-1 rounded-full bg-zinc-200/70 dark:bg-zinc-800 overflow-hidden">
-                {loaded ? (
-                  <div
-                    className={cn("h-full rounded-full bg-gradient-to-r transition-all duration-500", meta.gradient)}
-                    style={{ width: `${pct}%` }}
-                  />
-                ) : (
-                  <div className="h-full w-1/3 rounded-full bg-zinc-300/70 dark:bg-zinc-700 animate-pulse" />
-                )}
-              </div>
-              <span className="shrink-0 text-xs font-medium tabular-nums text-zinc-500 dark:text-zinc-400">
-                {loaded ? `${learned}/${levelWords.length}` : "\u00A0"}
-              </span>
-            </div>
+    <>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <h2 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+            {t("শেখা চালিয়ে যান", "Continue Learning")}
+          </h2>
+          <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", meta.bg, meta.text)}>
+            {targetLevel}
+          </span>
+        </div>
+        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+          {lastLearned
+            ? t(
+                `লেভেল ${targetLevel} · পৃষ্ঠা ${lastLearned.page}`,
+                `Level ${targetLevel} · Page ${lastLearned.page}`
+              )
+            : t("একটি লেভেল বেছে নিয়ে শেখা শুরু করুন।", "Pick a level and start learning.")}
+        </p>
+        <div className="mt-3 flex items-center gap-3 max-w-sm">
+          <div className="h-1.5 flex-1 rounded-full bg-black/[0.05] dark:bg-white/[0.08] overflow-hidden">
+            {loaded ? (
+              <div
+                className={cn("h-full rounded-full transition-all duration-500", meta.solid)}
+                style={{ width: `${pct}%` }}
+              />
+            ) : (
+              <div className="h-full w-1/3 rounded-full bg-zinc-300/70 dark:bg-zinc-700 animate-pulse" />
+            )}
           </div>
-
-          <Button
-            asChild
-            className="shrink-0 gap-2 rounded-xl bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white px-5 h-10 text-sm font-medium shadow-lg shadow-orange-500/20"
-          >
-            <Link href={href}>
-              {lastLearned ? t("চালিয়ে যান", "Continue") : t("শেখা শুরু করুন", "Start Learning")}
-              <ArrowRight className="size-4" />
-            </Link>
-          </Button>
+          <span className="shrink-0 text-xs font-medium tabular-nums text-zinc-500 dark:text-zinc-400">
+            {loaded ? `${learned}/${levelWords.length}` : "\u00A0"}
+          </span>
         </div>
       </div>
-    </section>
+
+      <Button
+        asChild
+        className={cn(BTN_PRIMARY, "self-start sm:self-auto")}
+      >
+        <Link href={href}>
+          {lastLearned ? t("চালিয়ে যান", "Continue") : t("শেখা শুরু করুন", "Start Learning")}
+          <ArrowRight className="size-4" />
+        </Link>
+      </Button>
+    </>
   );
 }
 
-function StatTile({
+function StatRow({
   icon: Icon,
   labelEn,
   labelBn,
   value,
   subEn,
   subBn,
-  iconClass,
+  tint,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   labelEn: string;
@@ -583,20 +525,31 @@ function StatTile({
   value: string;
   subEn: string;
   subBn: string;
-  iconClass: string;
+  tint: string;
 }) {
   const t = useT();
 
   return (
-    <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-4 sm:p-5 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
-      <div className={cn("flex h-9 w-9 items-center justify-center rounded-xl", iconClass)}>
+    <div
+      className={cn(
+        "flex items-center gap-3 border-l border-t px-5 py-4 border-black/[0.06] dark:border-white/[0.08]",
+        "[&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0"
+      )}
+    >
+      <div className={cn(ICON_CHIP, tint)}>
         <Icon className="size-4.5" />
       </div>
-      <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">{t(labelBn, labelEn)}</p>
-      <p className="mt-0.5 text-xl sm:text-2xl font-bold tabular-nums tracking-tight text-zinc-900 dark:text-zinc-100">
-        {value}
-      </p>
-      <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-500">{t(subBn, subEn)}</p>
+      <div className="min-w-0">
+        <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+          {t(labelBn, labelEn)}
+        </p>
+        <p className="mt-0.5 text-lg font-semibold tracking-tight tabular-nums text-zinc-900 dark:text-zinc-100">
+          {value}
+        </p>
+        <p className="truncate text-[11px] text-zinc-400 dark:text-zinc-500">
+          {t(subBn, subEn)}
+        </p>
+      </div>
     </div>
   );
 }
