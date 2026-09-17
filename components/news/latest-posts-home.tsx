@@ -6,6 +6,8 @@ import { useT } from "@/components/language-provider";
 import { BlogCard } from "@/components/news/blog-card";
 import type { LatestPost } from "@/components/news/latest-posts";
 
+export type { LatestPost };
+
 export function LatestPostsHome({ posts }: { posts: LatestPost[] }) {
   const t = useT();
 
