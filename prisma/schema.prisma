@@ -151,6 +151,7 @@ model QuizQuestion {
   quizExams       QuizExamQuestion[]
   class           Class[]
   hintWords       Word[]
+  explanation     String @default("")
   relaventQuizResultCorrectQuestions QuizResults[] @relation("CorrectQuizQuestion")
   relaventQuizResultIncorrectQuestions QuizResults[] @relation("IncorrectQuizQuestion")
 }
