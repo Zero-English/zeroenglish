@@ -1,14 +1,32 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
 import type { Word } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { mainCategoryLabel } from "@/lib/category";
 import { Button } from "@/components/ui/button";
-import { LibraryBig, BookOpenCheck, Search, ArrowRight, Sparkles, Layers, TrendingUp } from "lucide-react";
+import {
+  LibraryBig,
+  BookOpenCheck,
+  Search,
+  ArrowRight,
+  Sparkles,
+  Layers,
+  TrendingUp,
+  Languages,
+  BookMarked,
+  GraduationCap,
+  ClipboardList,
+  Trophy,
+  Crown,
+  Medal,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
 import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
+import type { LeaderboardRow } from "@/components/leaderboard";
+import { UserAvatar } from "@/components/UserAvatar";
 
 const LEVEL_CONFIG: Record<
   string,
@@ -102,9 +120,81 @@ const FEATURES = [
   },
 ];
 
-export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost[] }) {
+const QUIZ_MODES = [
+  {
+    href: "/quiz/vocabulary",
+    icon: Languages,
+    titleEn: "Vocabulary Practice",
+    titleBn: "শব্দভাণ্ডার অনুশীলন",
+    descriptionEn: "Test your word knowledge across all levels.",
+    descriptionBn: "সব লেভেলের শব্দ জ্ঞান যাচাই করুন।",
+    iconClass: "text-sky-500 bg-sky-100 dark:bg-sky-950/60",
+  },
+  {
+    href: "/quiz/grammar",
+    icon: BookMarked,
+    titleEn: "Grammar Quizzes",
+    titleBn: "গ্রামার কুইজ",
+    descriptionEn: "Tenses, prepositions, articles and more.",
+    descriptionBn: "টেন্স, প্রিপজিশন, আর্টিকেল ও আরও অনেক কিছু।",
+    iconClass: "text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60",
+  },
+  {
+    href: "/quiz/class",
+    icon: GraduationCap,
+    titleEn: "Class Based Quizzes",
+    titleBn: "শ্রেণি ভিত্তিক কুইজ",
+    descriptionEn: "SSC, HSC, IELTS, BCS and university level.",
+    descriptionBn: "SSC, HSC, IELTS, BCS ও বিশ্ববিদ্যালয় পর্যায়ে।",
+    iconClass: "text-orange-500 bg-orange-100 dark:bg-orange-950/60",
+  },
+  {
+    href: "/quiz/exam",
+    icon: ClipboardList,
+    titleEn: "Scheduled Exams",
+    titleBn: "নির্ধারিত পরীক্ষা",
+    descriptionEn: "Weekly and biweekly timed exams.",
+    descriptionBn: "সাপ্তাহিক ও দ্বি-সাপ্তাহিক সময়ভিত্তিক পরীক্ষা।",
+    iconClass: "text-violet-500 bg-violet-100 dark:bg-violet-950/60",
+  },
+];
+
+const PODIUM_DETAILS = [
+  {
+    ring: "from-amber-400/90 via-yellow-400/80 to-amber-500/90 ring-amber-400/50 dark:ring-amber-400/30",
+    name: "text-amber-700 dark:text-amber-300",
+    chip: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
+  },
+  {
+    ring: "from-zinc-300/90 via-zinc-200/80 to-zinc-400/90 ring-zinc-300/60 dark:ring-zinc-400/30",
+    name: "text-zinc-600 dark:text-zinc-300",
+    chip: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300",
+  },
+  {
+    ring: "from-orange-400/90 via-orange-300/80 to-orange-500/90 ring-orange-400/50 dark:ring-orange-400/30",
+    name: "text-orange-700 dark:text-orange-300",
+    chip: "bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-300",
+  },
+];
+
+export function HomeContent({
+  words,
+  posts,
+  leaderboard,
+}: {
+  words: Word[];
+  posts: LatestPost[];
+  leaderboard: LeaderboardRow[];
+}) {
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
+
+  const topLearners = useMemo(() => {
+    return [...leaderboard]
+      .filter((r) => r.allTimeAvg > 0)
+      .sort((a, b) => b.allTimeAvg - a.allTimeAvg || a.id - b.id)
+      .slice(0, 3);
+  }, [leaderboard]);
 
   const category = mainCategoryLabel(words);
 
@@ -320,7 +410,192 @@ export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost
             </div>
           </section>
 
+          <section className="mb-14">
+            <div className="flex items-end justify-between gap-4 mb-5">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                  {t("কুইজে নিজেকে যাচাই করুন", "Test yourself with quizzes")}
+                </h2>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  {t("চার ধরনের কুইজ — যেভাবে চান অনুশীলন করুন।", "Four quiz modes — practice your way.")}
+                </p>
+              </div>
+              <Link
+                href="/quiz"
+                className="hidden sm:inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors"
+              >
+                {t("সব কুইজ", "All quizzes")}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {QUIZ_MODES.map(({ href, icon: Icon, titleEn, titleBn, descriptionEn, descriptionBn, iconClass }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="group flex flex-col rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 transition-all duration-300 hover:shadow-xl hover:shadow-zinc-200/50 dark:hover:shadow-black/30 hover:-translate-y-0.5"
+                >
+                  <div
+                    className={cn(
+                      "flex h-12 w-12 items-center justify-center rounded-2xl",
+                      iconClass
+                    )}
+                  >
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <div className="mt-4 flex-1">
+                    <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                      {t(titleBn, titleEn)}
+                    </h3>
+                    <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                      {t(descriptionBn, descriptionEn)}
+                    </p>
+                  </div>
+                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-orange-600 dark:text-orange-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    {t("শুরু করুন", "Start")}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
           <LatestPosts posts={posts} />
+
+          <section className="mb-14">
+            <div className="flex items-end justify-between gap-4 mb-5">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                  {t("শীর্ষ শিক্ষার্থীরা", "Top Learners")}
+                </h2>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  {t("কুইজ পরীক্ষায় সেরা গড় স্কোর, এক নজরে।", "The best quiz exam averages, at a glance.")}
+                </p>
+              </div>
+              <Link
+                href="/leaderboard"
+                className="hidden sm:inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors"
+              >
+                {t("পুরো লিডারবোর্ড", "Full leaderboard")}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            {topLearners.length > 0 ? (
+              <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 shadow-sm">
+                <div className="grid grid-cols-3 items-end gap-2 sm:gap-4">
+                  {[1, 0, 2].map((idx) => {
+                    const row = topLearners[idx];
+                    if (!row) return <span key={idx} />;
+                    const first = idx === 0;
+                    const d = PODIUM_DETAILS[idx];
+                    return (
+                      <Link
+                        key={row.id}
+                        href={`/profile/${row.id}`}
+                        className="group flex min-w-0 flex-col items-center text-center"
+                      >
+                        <div className="relative mb-2 flex flex-col items-center">
+                          {first && <Crown className="mb-1.5 h-6 w-6 text-amber-500 drop-shadow-md" />}
+                          <span
+                            className={cn(
+                              "relative block rounded-full bg-gradient-to-b p-0.5 ring-2 transition-transform duration-300 group-hover:scale-105",
+                              d.ring
+                            )}
+                          >
+                            <UserAvatar
+                              id={row.id}
+                              name={row.name}
+                              userName={row.user_name}
+                              image={row.image}
+                              size={first ? "lg" : "md"}
+                            />
+                          </span>
+                          {!first && (
+                            <span className="absolute -right-1.5 -bottom-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm dark:bg-black">
+                              <Medal className={cn("h-4 w-4", idx === 1 ? "text-zinc-400" : "text-orange-500")} />
+                            </span>
+                          )}
+                        </div>
+                        <span className="mt-2 block w-full px-1 truncate text-[13px] font-bold sm:text-sm group-hover:underline">
+                          {row.name || row.user_name}
+                        </span>
+                        <span
+                          className={cn(
+                            "mt-2 inline-flex items-baseline gap-0.5 rounded-full px-2.5 py-1 text-xs font-extrabold tabular-nums sm:text-sm",
+                            d.chip
+                          )}
+                        >
+                          {Math.round(row.allTimeAvg)}
+                          <span className="text-[10px] font-bold sm:text-xs">%</span>
+                        </span>
+                        <span className="mt-0.5 text-[10px] tabular-nums text-zinc-400 dark:text-zinc-500">
+                          {row.allTimeCount} {t("পরীক্ষা", "exams")}
+                        </span>
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                <Link
+                  href="/leaderboard"
+                  className="group mt-6 flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 px-4 py-2.5 text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-all hover:border-orange-300 hover:text-orange-600 dark:hover:border-orange-800 dark:hover:text-orange-400 sm:hidden"
+                >
+                  <Trophy className="h-4 w-4" />
+                  {t("পুরো লিডারবোর্ড দেখুন", "View full leaderboard")}
+                </Link>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 px-6 py-12 text-center">
+                <Trophy className="mx-auto mb-3 h-9 w-9 text-zinc-300 dark:text-zinc-700" />
+                <p className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                  {t("এখনো কোনো শিক্ষার্থী নেই", "No learners yet")}
+                </p>
+                <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                  {t("আপনিই হতে পারেন প্রথম!", "You could be the first one up there!")}
+                </p>
+              </div>
+            )}
+          </section>
+
+          <section>
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-600 via-rose-600 to-pink-600 p-8 sm:p-12 text-center shadow-xl shadow-orange-500/20">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMjAnIGhlaWdodD0nMjAnIHZpZXdCb3g9JzAgMCAyMCAyMCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48Y2lyY2xlIGN4PScxMCcgY3k9JzEwJyByPScxLjInIGZpbGw9J3doaXRlJyBmaWxsLW9wYWNpdHk9JzAuMTgnLz48L3N2Zz4=')]"
+              />
+              <div className="relative">
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                  {t("আজই প্রথম শব্দটি শিখুন", "Learn your first word today")}
+                </h2>
+                <p className="mt-3 text-sm sm:text-base text-orange-50/90 max-w-xl mx-auto">
+                  {t(
+                    "৫০০০-এর বেশি শব্দ বাংলা অর্থসহ — আপনার লেভেল বেছে নিন, দিনে দিনে এগোন আর অগ্রগতি ট্র্যাক করুন।",
+                    "5,000+ words with Bangla meanings — pick your level, grow day by day, and track your progress."
+                  )}
+                </p>
+                <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+                  <Button
+                    asChild
+                    className="h-11 gap-2 rounded-xl bg-white px-6 text-sm font-medium text-rose-600 hover:bg-orange-50 shadow-lg shadow-black/10"
+                  >
+                    <Link href="/vocabulary">
+                      {t("শেখা শুরু করুন", "Start Learning")}
+                      <ArrowRight className="size-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="h-11 gap-2 rounded-xl border-white/40 bg-white/10 text-white px-6 text-sm font-medium backdrop-blur-sm hover:bg-white/20"
+                  >
+                    <Link href="/login">{t("অ্যাকাউন্ট খুলুন", "Create Account")}</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>

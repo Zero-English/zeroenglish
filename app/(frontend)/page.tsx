@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getAllWords } from "@/lib/data";
 import { HomeOrDashboard } from "@/components/home-or-dashboard";
 import { getPublishedBlogsByPage } from "@/services/blog.service";
+import { getLeaderboard } from "@/services/user.service";
 
 export const revalidate = 60;
 
@@ -24,5 +25,8 @@ export default async function Home() {
     createdAt: b.createdAt.toISOString(),
   }));
 
-  return <HomeOrDashboard words={words} posts={posts} />;
+  const leaderboardResult = await getLeaderboard();
+  const leaderboard = leaderboardResult.success && leaderboardResult.data ? leaderboardResult.data : [];
+
+  return <HomeOrDashboard words={words} posts={posts} leaderboard={leaderboard} />;
 }
