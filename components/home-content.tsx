@@ -20,9 +20,9 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
-import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
+import { LatestPostsHome, type LatestPost } from "@/components/news/latest-posts-home";
 import type { LeaderboardRow } from "@/components/leaderboard";
-import { TopLearners } from "@/components/top-learners";
+import { TopLearnersHome } from "@/components/top-learners-home";
 
 const LEVEL_CONFIG: Record<
   string,
@@ -432,28 +432,10 @@ export function HomeContent({
             </div>
           </section>
 
-          <LatestPosts posts={posts} />
+          <LatestPostsHome posts={posts} />
 
           <section className="mb-14">
-            <div className="flex items-end justify-between gap-4 mb-5">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                  {t("শীর্ষ শিক্ষার্থীরা", "Top Learners")}
-                </h2>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  {t("কুইজ পরীক্ষায় সেরা গড় স্কোর, এক নজরে।", "The best quiz exam averages, at a glance.")}
-                </p>
-              </div>
-              <Link
-                href="/leaderboard"
-                className="hidden sm:inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors"
-              >
-                {t("পুরো লিডারবোর্ড", "Full leaderboard")}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <TopLearners rows={leaderboard} />
+            <TopLearnersHome rows={leaderboard} />
           </section>
 
           <section>
