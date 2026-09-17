@@ -31,6 +31,7 @@ interface LevelConfig {
   label: string;
   labelBn: string;
   stroke: string;
+  dot: string;
   hoverBg: string;
 }
 
