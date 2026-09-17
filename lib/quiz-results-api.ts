@@ -29,6 +29,7 @@ export interface DbQuizQuestion {
   answer: string;
   difficultyLevel: string;
   class?: string[];
+  explanation?: string;
 }
 
 export interface DbQuizResult {

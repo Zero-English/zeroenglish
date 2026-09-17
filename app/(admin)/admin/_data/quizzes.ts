@@ -5,6 +5,7 @@ export type QuizQuestionItem = {
   options: string[];
   difficultyLevel: DifficultyLevelValue;
   answer: string;
+  explanation?: string;
 };
 
 export type QuizTypeValue =

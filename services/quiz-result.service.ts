@@ -184,6 +184,7 @@ const quizQuestionDetailSelect = {
     answer: true,
     difficultyLevel: true,
     class: true,
+    explanation: true,
 } as const;
 
 export const getQuizResultsByUser = async (userId: number) => {

@@ -28,6 +28,7 @@ export interface GrammarQuizQuestion {
   options: string[];
   difficultyLevel: string;
   answer: string;
+  explanation?: string;
 }
 
 type GrammarDifficulty = "EASY" | "MEDIUM" | "HARD";
