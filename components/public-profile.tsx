@@ -422,6 +422,7 @@ export function PublicProfileView({
                   <TileHeader
                     icon={<BookOpen className="h-4 w-4" />}
                     title={t("শব্দ অগ্রগতি", "Word Progress")}
+                    sub={t("মোট শেখা শব্দ ও সার্বিক অগ্রগতি এক নজরে", "Total words learned and overall progress at a glance")}
                     iconBg="bg-emerald-100 dark:bg-emerald-900/30"
                     iconTint="text-emerald-600 dark:text-emerald-400"
                   />
@@ -442,6 +443,7 @@ export function PublicProfileView({
                   <TileHeader
                     icon={<TrendingUp className="h-4 w-4" />}
                     title={t("লেভেল অনুযায়ী অগ্রগতি", "Progress by Level")}
+                    sub={t("কোন লেভেলে কতটা এগিয়েছেন", "How far they've climbed in each level")}
                     iconBg="bg-violet-100 dark:bg-violet-900/30"
                     iconTint="text-violet-600 dark:text-violet-400"
                   />
@@ -498,6 +500,7 @@ export function PublicProfileView({
                   <TileHeader
                     icon={<GraduationCap className="h-4 w-4" />}
                     title={t("কুইজ ওভারভিউ", "Quiz Overview")}
+                    sub={t("কুইজ পরিসংখ্যান এক নজরে", "Quiz stats at a glance")}
                     iconBg="bg-indigo-100 dark:bg-indigo-900/30"
                     iconTint="text-indigo-600 dark:text-indigo-400"
                   />

@@ -5,10 +5,24 @@ import type { Word } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { mainCategoryLabel } from "@/lib/category";
 import { Button } from "@/components/ui/button";
-import { LibraryBig, BookOpenCheck, Search, ArrowRight, Sparkles } from "lucide-react";
+import {
+  LibraryBig,
+  BookOpenCheck,
+  Search,
+  ArrowRight,
+  Sparkles,
+  Layers,
+  TrendingUp,
+  Languages,
+  BookMarked,
+  GraduationCap,
+  ClipboardList,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
-import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
+import { LatestPostsHome, type LatestPost } from "@/components/news/latest-posts-home";
+import type { LeaderboardRow } from "@/components/leaderboard";
+import { TopLearnersHome } from "@/components/top-learners-home";
 
 const LEVEL_CONFIG: Record<
   string,
@@ -102,7 +116,54 @@ const FEATURES = [
   },
 ];
 
-export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost[] }) {
+const QUIZ_MODES = [
+  {
+    href: "/quiz/vocabulary",
+    icon: Languages,
+    titleEn: "Vocabulary Practice",
+    titleBn: "শব্দভাণ্ডার অনুশীলন",
+    descriptionEn: "Test your word knowledge across all levels.",
+    descriptionBn: "সব লেভেলের শব্দ জ্ঞান যাচাই করুন।",
+    iconClass: "text-sky-500 bg-sky-100 dark:bg-sky-950/60",
+  },
+  {
+    href: "/quiz/grammar",
+    icon: BookMarked,
+    titleEn: "Grammar Quizzes",
+    titleBn: "গ্রামার কুইজ",
+    descriptionEn: "Tenses, prepositions, articles and more.",
+    descriptionBn: "টেন্স, প্রিপজিশন, আর্টিকেল ও আরও অনেক কিছু।",
+    iconClass: "text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60",
+  },
+  {
+    href: "/quiz/class",
+    icon: GraduationCap,
+    titleEn: "Class Based Quizzes",
+    titleBn: "শ্রেণি ভিত্তিক কুইজ",
+    descriptionEn: "SSC, HSC, IELTS, BCS and university level.",
+    descriptionBn: "SSC, HSC, IELTS, BCS ও বিশ্ববিদ্যালয় পর্যায়ে।",
+    iconClass: "text-orange-500 bg-orange-100 dark:bg-orange-950/60",
+  },
+  {
+    href: "/quiz/exam",
+    icon: ClipboardList,
+    titleEn: "Scheduled Exams",
+    titleBn: "নির্ধারিত পরীক্ষা",
+    descriptionEn: "Weekly and biweekly timed exams.",
+    descriptionBn: "সাপ্তাহিক ও দ্বি-সাপ্তাহিক সময়ভিত্তিক পরীক্ষা।",
+    iconClass: "text-violet-500 bg-violet-100 dark:bg-violet-950/60",
+  },
+];
+
+export function HomeContent({
+  words,
+  posts,
+  leaderboard,
+}: {
+  words: Word[];
+  posts: LatestPost[];
+  leaderboard: LeaderboardRow[];
+}) {
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
 
@@ -124,26 +185,31 @@ export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost
 
       <div className="relative px-4 py-14 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <section className="text-center mb-14 animate-fade-up">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5">
-              <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-              {t(`${category} · ইংরেজি ↔ বাংলা`, `${category} · English ↔ Bangla`)}
-            </div>
+          <section className="relative text-center mb-14 animate-fade-up">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 -top-6 -bottom-1/2 -z-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMjAnIGhlaWdodD0nMjAnIHZpZXdCb3g9JzAgMCAyMCAyMCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48Y2lyY2xlIGN4PScxMCcgY3k9JzEwJyByPScxLjInIGZpbGw9J2JsYWNrJyBmaWxsLW9wYWNpdHk9JzAuMicvPjwvc3ZnPg==')] dark:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMjAnIGhlaWdodD0nMjAnIHZpZXdCb3g9JzAgMCAyMCAyMCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48Y2lyY2xlIGN4PScxMCcgY3k9JzEwJyByPScxLjInIGZpbGw9J3doaXRlJyBmaWxsLW9wYWNpdHk9JzAuMjYnLz48L3N2Zz4=')] [mask-image:radial-gradient(ellipse_at_top,black,transparent_75%)]"
+            />
+            <div className="relative">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5">
+                <Sparkles className="h-3.5 w-3.5 text-orange-500" />
+                {t("যা গুরুত্বপূর্ণ, তা শিখুন", "Learn what matters")}
+              </div>
 
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
               <span className="bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-                {t("ইংরেজি আয়ত্ত করুন,", "Master English,")}
+                {t("শূন্য থেকে ইংরেজি আয়ত্ত,", "Everything")}
               </span>
               <br />
               <span className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 bg-clip-text text-transparent">
-                {t("শব্দে শব্দে।", "word by word.")}
+                {t("সবকিছু এক প্ল্যাটফর্মে।", "you need to master English.")}
               </span>
             </h1>
 
             <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto mb-8">
               {t(
-                `${category} শব্দের সম্পূর্ণ তালিকা বাংলা অর্থসহ। আপনার লেভেল বেছে নিন, নতুন শব্দ শিখুন এবং প্রতিদিন আপনার অগ্রগতি ট্র্যাক করুন।`,
-                `The complete ${category} word list with Bangla meanings. Pick your level, learn new words, and track your progress every day.`
+                `${category} শব্দ বাংলা অর্থসহ। প্রতিদিন ৫০টি নতুন শব্দ শিখুন, নিজের লেভেল বেছে নিন, আর আত্মবিশ্বাসটা বাড়তে দেখুন — শব্দে শব্দে, এক ধাপ থেকে আরেক ধাপে।`,
+                `${category} words with Bangla meanings. Learn 50 new words a day, pick your level, and watch your confidence build — one word, one step at a time.`
               )}
             </p>
 
@@ -167,25 +233,41 @@ export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-2.5">
-              <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
-                <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                  {words.length}
-                </p>
-                <p className="text-xs text-zinc-400">{t("শব্দ", "Words")}</p>
+              <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                  <LibraryBig className="h-4 w-4" />
+                </span>
+                <div className="text-left">
+                  <p className="text-xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums leading-none">
+                    {words.length}
+                  </p>
+                  <p className="text-xs text-zinc-400 mt-1">{t("শব্দশক্তি", "Word Power")}</p>
+                </div>
               </div>
-              <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
-                <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                  {LEVELS.length}
-                </p>
-                <p className="text-xs text-zinc-400">{t("লেভেল", "Levels")}</p>
+              <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                  <Layers className="h-4 w-4" />
+                </span>
+                <div className="text-left">
+                  <p className="text-xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums leading-none">
+                    {LEVELS.length}
+                  </p>
+                  <p className="text-xs text-zinc-400 mt-1">{t("লেভেলের সিঁড়ি", "Level Ladder")}</p>
+                </div>
               </div>
-              <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
-                <p className="text-2xl font-bold text-orange-500 tabular-nums">
-                  {loaded ? `${overallPct}%` : "· · ·"}
-                </p>
-                <p className="text-xs text-zinc-400">{t("শেখা হয়েছে", "Learned")}</p>
+              <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-500">
+                  <TrendingUp className="h-4 w-4" />
+                </span>
+                <div className="text-left">
+                  <p className="text-xl font-bold text-orange-500 tabular-nums leading-none">
+                    {loaded ? `${overallPct}%` : "· · ·"}
+                  </p>
+                  <p className="text-xs text-zinc-400 mt-1">{t("আপনার চড়াই", "Your Climb")}</p>
+                </div>
               </div>
             </div>
+          </div>
           </section>
 
           <section className="mb-14">
@@ -299,7 +381,100 @@ export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost
             </div>
           </section>
 
-          <LatestPosts posts={posts} />
+          <section className="mb-14">
+            <div className="flex items-end justify-between gap-4 mb-5">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                  {t("কুইজে নিজেকে যাচাই করুন", "Test yourself with quizzes")}
+                </h2>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  {t("চার ধরনের কুইজ — যেভাবে চান অনুশীলন করুন।", "Four quiz modes — practice your way.")}
+                </p>
+              </div>
+              <Link
+                href="/quiz"
+                className="hidden sm:inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors"
+              >
+                {t("সব কুইজ", "All quizzes")}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {QUIZ_MODES.map(({ href, icon: Icon, titleEn, titleBn, descriptionEn, descriptionBn, iconClass }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="group flex flex-col rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 transition-all duration-300 hover:shadow-xl hover:shadow-zinc-200/50 dark:hover:shadow-black/30 hover:-translate-y-0.5"
+                >
+                  <div
+                    className={cn(
+                      "flex h-12 w-12 items-center justify-center rounded-2xl",
+                      iconClass
+                    )}
+                  >
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <div className="mt-4 flex-1">
+                    <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                      {t(titleBn, titleEn)}
+                    </h3>
+                    <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                      {t(descriptionBn, descriptionEn)}
+                    </p>
+                  </div>
+                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-orange-600 dark:text-orange-400 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    {t("শুরু করুন", "Start")}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          <LatestPostsHome posts={posts} />
+
+          <section className="mb-14">
+            <TopLearnersHome rows={leaderboard} />
+          </section>
+
+          <section>
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-600 via-rose-600 to-pink-600 p-8 sm:p-12 text-center shadow-xl shadow-orange-500/20">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMjAnIGhlaWdodD0nMjAnIHZpZXdCb3g9JzAgMCAyMCAyMCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48Y2lyY2xlIGN4PScxMCcgY3k9JzEwJyByPScxLjInIGZpbGw9J3doaXRlJyBmaWxsLW9wYWNpdHk9JzAuMTgnLz48L3N2Zz4=')]"
+              />
+              <div className="relative">
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                  {t("আজই প্রথম শব্দটি শিখুন", "Learn your first word today")}
+                </h2>
+                <p className="mt-3 text-sm sm:text-base text-orange-50/90 max-w-xl mx-auto">
+                  {t(
+                    "৫০০০-এর বেশি শব্দ বাংলা অর্থসহ — আপনার লেভেল বেছে নিন, দিনে দিনে এগোন আর অগ্রগতি ট্র্যাক করুন।",
+                    "5,000+ words with Bangla meanings — pick your level, grow day by day, and track your progress."
+                  )}
+                </p>
+                <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+                  <Button
+                    asChild
+                    className="h-11 gap-2 rounded-xl bg-white px-6 text-sm font-medium text-rose-600 hover:bg-orange-50 shadow-lg shadow-black/10"
+                  >
+                    <Link href="/vocabulary">
+                      {t("শেখা শুরু করুন", "Start Learning")}
+                      <ArrowRight className="size-4" />
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="h-11 gap-2 rounded-xl border-white/40 bg-white/10 text-white px-6 text-sm font-medium backdrop-blur-sm hover:bg-white/20"
+                  >
+                    <Link href="/login">{t("অ্যাকাউন্ট খুলুন", "Create Account")}</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>
