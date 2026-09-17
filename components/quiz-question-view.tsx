@@ -136,7 +136,12 @@ export function QuizQuestionView({ question }: QuizQuestionViewProps) {
                   Explanation
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-amber-800 dark:text-amber-200">
-                  {question.explanation}
+                  {question.explanation.split(/<br\s*\/?>/i).map((line, i, arr) => (
+                    <span key={i}>
+                      {line}
+                      {i < arr.length - 1 && <br />}
+                    </span>
+                  ))}
                 </p>
               </div>
             </div>
