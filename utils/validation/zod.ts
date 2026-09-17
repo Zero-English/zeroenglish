@@ -83,6 +83,7 @@ export const quizQuestionSchema = z.object({
   options: z.array(z.string().min(1)).min(2, "At least 2 options are required"),
   difficultyLevel: difficultyLevelEnumSchema,
   answer: z.string().trim().min(1, "Answer is required"),
+  explanation: z.string().trim().optional().default(""),
 });
 
 export type QuizQuestionInput = z.infer<typeof quizQuestionSchema>;
@@ -120,6 +121,7 @@ export const bulkQuizQuestionSchema = z.object({
   difficultyLevel: difficultyLevelEnumSchema,
   answer: z.string().trim().min(1, "Answer is required"),
   class: z.array(quizClassEnumSchema).default([]),
+  explanation: z.string().trim().optional().default(""),
 });
 
 export const bulkQuizUploadSchema = z

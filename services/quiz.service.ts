@@ -20,6 +20,7 @@ const toApiQuestion = (q: QuizQuestionWithType) => ({
     options: q.options,
     difficultyLevel: q.difficultyLevel,
     answer: q.answer,
+    explanation: q.explanation,
 });
 
 const shuffleArray = <T,>(arr: T[]): T[] => {
@@ -250,6 +251,7 @@ export const createQuizQuestion = async (data: {
     options: string[];
     difficultyLevel: DifficultyLevels;
     answer: string;
+    explanation?: string;
 }) => {
     try {
         const quizType = await prisma.quizType.findUnique({
@@ -271,6 +273,7 @@ export const createQuizQuestion = async (data: {
                 options: data.options,
                 difficultyLevel: data.difficultyLevel,
                 answer: data.answer,
+                explanation: data.explanation ?? "",
             },
             include: quizTypeInclude,
         });
@@ -297,6 +300,7 @@ export const createQuizQuestionsBulk = async (data: {
     difficultyLevel: DifficultyLevels;
     answer: string;
     class?: Class[] | null;
+    explanation?: string;
 }[]) => {
     try {
         const names = [...new Set(data.map((q) => q.quizType))];
@@ -327,6 +331,7 @@ export const createQuizQuestionsBulk = async (data: {
                         difficultyLevel: q.difficultyLevel,
                         answer: q.answer,
                         class: q.class ?? [],
+                        explanation: q.explanation ?? "",
                     },
                 })
             )
@@ -355,6 +360,7 @@ export const updateQuizQuestionById = async (
         options: string[];
         difficultyLevel: DifficultyLevels;
         answer: string;
+        explanation?: string;
     }>,
 ) => {
     try {

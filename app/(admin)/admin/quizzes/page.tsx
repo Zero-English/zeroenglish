@@ -56,6 +56,7 @@ function mapApiQuestion(q: ApiQuizQuestion): QuizQuestionItem {
     options: q.options,
     difficultyLevel: q.difficultyLevel,
     answer: q.answer,
+    explanation: q.explanation ?? "",
   };
 }
 
@@ -66,6 +67,7 @@ type ApiQuizQuestion = {
   options: string[];
   difficultyLevel: DifficultyLevelValue;
   answer: string;
+  explanation: string;
 };
 
 type QuizTypeOption = { value: string; label: string };
@@ -229,6 +231,7 @@ export default function AdminQuizzesPage() {
       options: data.options,
       difficultyLevel: data.difficultyLevel,
       answer: data.answer,
+      explanation: data.explanation ?? "",
     };
 
     try {
@@ -274,6 +277,7 @@ export default function AdminQuizzesPage() {
       options: q.options,
       difficultyLevel: q.difficultyLevel,
       answer: q.answer,
+      explanation: q.explanation ?? "",
     }));
     downloadJson(payload, "quizzes.json");
     notify(`Exported ${payload.length} question(s)`);
@@ -775,6 +779,16 @@ function QuizFormDialog({
             onChange={handleOptionsChange}
           />
 
+          <Field>
+            <FieldLabel>Explanation (optional)</FieldLabel>
+            <Textarea
+              value={form.explanation ?? ""}
+              onChange={(e) => setForm({ ...form, explanation: e.target.value })}
+              placeholder="e.g. 'Abandon' means to leave something behind..."
+              rows={3}
+            />
+          </Field>
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field>
               <FieldLabel className="flex items-center gap-0.5">
@@ -856,6 +870,7 @@ function emptyForm(): Omit<QuizQuestionItem, "id"> {
     options: ["", ""],
     difficultyLevel: "EASY",
     answer: "",
+    explanation: "",
   };
 }
 
