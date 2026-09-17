@@ -19,7 +19,7 @@ export function HomeOrDashboard({
   const { status, hydrated } = useAuthStatus();
 
   if (hydrated && status !== "none") {
-    return <Dashboard words={words} posts={posts} />;
+    return <Dashboard words={words} posts={posts} leaderboard={leaderboard} />;
   }
 
   return <HomeContent words={words} posts={posts} leaderboard={leaderboard} />;

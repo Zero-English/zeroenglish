@@ -13,6 +13,7 @@ import {
   Search,
   Sparkles,
   Target,
+  Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Word } from "@/lib/data";
@@ -23,6 +24,8 @@ import { useLastLearned, type LastLearnedEntry } from "@/lib/last-learned-store"
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useDailyGoal } from "@/lib/use-daily-goal";
 import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
+import type { LeaderboardRow } from "@/components/leaderboard";
+import { TopLearners } from "@/components/top-learners";
 
 const LEVEL_META: Record<
   string,
@@ -144,7 +147,15 @@ function getGreeting(): GreetingText {
   return { bn: "শুভ সন্ধ্যা", en: "Good evening" };
 }
 
-export function Dashboard({ words, posts }: { words: Word[]; posts: LatestPost[] }) {
+export function Dashboard({
+  words,
+  posts,
+  leaderboard,
+}: {
+  words: Word[];
+  posts: LatestPost[];
+  leaderboard: LeaderboardRow[];
+}) {
   const t = useT();
   const { lang } = useLanguage();
   const userName = useAuthStore((s) => s.userName);
@@ -231,6 +242,33 @@ export function Dashboard({ words, posts }: { words: Word[]; posts: LatestPost[]
                 </div>
               </div>
             </header>
+          </StaggerItem>
+
+          {/* Quiz challenge */}
+          <StaggerItem>
+            <section>
+              <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0">
+                    <h2 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                      {t("কুইজ চ্যালেঞ্জ", "Quiz Challenge")}
+                    </h2>
+                    <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                      {t("নিজেকে পরীক্ষা করুন আর ধারা বাড়ান", "Test yourself and grow your streak")}
+                    </p>
+                  </div>
+                  <Button
+                    asChild
+                    className="shrink-0 gap-2 rounded-xl bg-violet-600 hover:bg-violet-700 active:bg-violet-800 text-white px-5 h-10 text-sm font-medium shadow-lg shadow-violet-500/20"
+                  >
+                    <Link href="/quiz">
+                      <BookOpenCheck className="size-4" />
+                      {t("কুইজ দিন", "Take a Quiz")}
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </section>
           </StaggerItem>
 
           {/* Continue learning */}
@@ -346,7 +384,24 @@ export function Dashboard({ words, posts }: { words: Word[]; posts: LatestPost[]
             </section>
           </StaggerItem>
 
-          {/* <LatestPosts posts={posts} /> */}
+          {/* Top learners */}
+          <StaggerItem>
+            <section>
+              <SectionHeading
+                icon={Trophy}
+                iconClass="text-amber-500 bg-amber-100 dark:bg-amber-950/60"
+                titleEn="Top Learners"
+                titleBn="শীর্ষ শিক্ষার্থীরা"
+                descriptionEn="The best quiz exam averages across the community"
+                descriptionBn="সম্প্রদায়ের মধ্যে সেরা কুইজ পরীক্ষার গড় স্কোর"
+              />
+              <TopLearners rows={leaderboard} />
+            </section>
+          </StaggerItem>
+
+          <StaggerItem>
+            <LatestPosts posts={posts} />
+          </StaggerItem>
         </StaggerContainer>
       </div>
     </div>
