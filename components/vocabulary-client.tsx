@@ -373,7 +373,7 @@ export function VocabularyClient() {
                       )}
                     </p>
                     <Link
-                      href="/quiz"
+                      href="/quiz/vocabulary"
                       className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-violet-500 text-sm font-medium text-white shadow-[0_1px_2px_rgba(139,92,246,0.3),0_4px_12px_-4px_rgba(139,92,246,0.35)] transition-colors hover:bg-violet-600 active:bg-violet-600"
                     >
                       <BookOpenCheck className="size-4" />
@@ -468,7 +468,7 @@ export function VocabularyClient() {
                               </span>
                             </div>
 
-                            <div className="flex flex-col">
+                            <StaggerContainer className="flex flex-col">
                               {group.levels.map(({ level: lv, config: c, total, learned }, li) => {
                                 const levelPct = total > 0 ? Math.round((learned / total) * 100) : 0;
                                 const ready = loaded;
@@ -530,11 +530,11 @@ export function VocabularyClient() {
                                         {ready ? `${levelPct}%` : "–"}
                                       </span>
                                       <ArrowRight className="h-4 w-4 shrink-0 text-zinc-300 dark:text-zinc-600 transition-all group-hover:translate-x-0.5 group-hover:text-orange-500 group-active:translate-x-0.5 group-active:text-orange-500" />
-                                    </Link>
-                                  </StaggerItem>
-                                );
-                              })}
-                            </div>
+</Link>
+                              </StaggerItem>
+                            );
+                          })}
+                        </StaggerContainer>
                           </div>
                         </StaggerItem>
                       );
