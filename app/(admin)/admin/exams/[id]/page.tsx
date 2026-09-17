@@ -239,9 +239,14 @@ export default async function SingleExamPage({
                     >
                       <td className="px-4 py-2.5 text-gray-400">{q.id}</td>
                       <td className="max-w-xs px-4 py-2.5">
-                        <p className="line-clamp-2 font-medium text-gray-900 dark:text-white">
+                        <Link
+                          href={`/quiz/question/${q.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="line-clamp-2 font-medium text-gray-900 hover:text-sky-600 dark:text-white dark:hover:text-sky-400 transition-colors"
+                        >
                           {q.questionText}
-                        </p>
+                        </Link>
                       </td>
                       <td className="px-4 py-2.5">
                         <Badge variant="category">

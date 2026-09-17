@@ -77,9 +77,12 @@ function QuestionCard({ question }: { question: DbQuizQuestion }) {
   return (
     <StaggerItem className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80">
       <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
-        <p className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100 leading-snug">
+        <Link
+          href={`/quiz/question/${question.id}`}
+          className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100 leading-snug hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
+        >
           {question.questionText}
-        </p>
+        </Link>
         <span
           className={cn(
             "rounded-md px-2 py-0.5 text-[11px] font-medium",
