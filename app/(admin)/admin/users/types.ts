@@ -14,6 +14,11 @@ export type ApiUser = {
   learnedWordCount: number;
   stillLearningCount: number;
   avgQuizScore: number | null;
+  institutionName: string | null;
+  bio: string | null;
+  class: string | null;
+  gender: string | null;
+  socialLinks: string[];
 };
 
 export type UserListResponse = {

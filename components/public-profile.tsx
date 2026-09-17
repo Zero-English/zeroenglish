@@ -37,6 +37,9 @@ import {
   Layers,
   Globe,
   Flame,
+  Building2,
+  Link2,
+  User,
   type LucideIcon,
 } from "lucide-react";
 
@@ -50,6 +53,11 @@ export interface PublicProfileUser {
   learnedCount: number;
   stillLearningCount: number;
   bookmarkedCount: number;
+  institutionName: string | null;
+  bio: string | null;
+  class: string | null;
+  gender: string | null;
+  socialLinks: string[];
 }
 
 const TILE =
@@ -137,6 +145,14 @@ function formatJoined(iso: string) {
   });
 }
 
+function linkLabel(link: string) {
+  try {
+    return new URL(link).hostname.replace(/^www\./, "");
+  } catch {
+    return link;
+  }
+}
+
 function ProgressRing({ pct }: { pct: number }) {
   const clamped = Math.min(100, Math.max(0, Math.round(pct)));
   const arc = clamped * 3.6;
@@ -220,6 +236,9 @@ function IdentityTile({
     <div className="overflow-hidden rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm shadow-sm">
       {/* Cover */}
       <div className="relative h-24 overflow-hidden bg-gradient-to-br from-orange-500 to-rose-500 sm:h-36">
+        <div
+          className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTAgMEgyNFYyNEgwWiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDI0SDI0TTI0IDBWMjQiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMC43NSIgc3Ryb2tlLW9wYWNpdHk9IjAuMTgiLz48L3N2Zz4=')] bg-repeat pointer-events-none"
+        />
         <div className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur-md sm:left-6 sm:top-5">
           <Globe className="h-3.5 w-3.5" />
           {t("পাবলিক প্রোফাইল", "Public Profile")}
@@ -274,6 +293,62 @@ function IdentityTile({
             {t("সক্রিয় শিক্ষার্থী", "Active learner")}
           </span>
         </div>
+
+        {/* Profile details */}
+        {(user.bio ||
+          user.institutionName ||
+          user.class ||
+          (user.gender && user.gender !== "NOT_SET") ||
+          user.socialLinks.length > 0) && (
+          <>
+            {user.bio && (
+              <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                {user.bio}
+              </p>
+            )}
+            {(user.institutionName || user.class || (user.gender && user.gender !== "NOT_SET")) && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {user.institutionName && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-2.5 py-1 text-xs font-medium text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">
+                    <Building2 className="h-3.5 w-3.5" />
+                    {user.institutionName}
+                  </span>
+                )}
+                {user.class && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">
+                    <GraduationCap className="h-3.5 w-3.5" />
+                    {user.class}
+                  </span>
+                )}
+                {user.gender && user.gender !== "NOT_SET" && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">
+                    <User className="h-3.5 w-3.5" />
+                    {t(
+                      user.gender === "MALE" ? "পুরুষ" : "মহিলা",
+                      user.gender === "MALE" ? "Male" : "Female"
+                    )}
+                  </span>
+                )}
+              </div>
+            )}
+            {user.socialLinks.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+                {user.socialLinks.map((link) => (
+                  <a
+                    key={link}
+                    href={link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-sky-600 transition-colors hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
+                  >
+                    <Link2 className="h-3.5 w-3.5" />
+                    {linkLabel(link)}
+                  </a>
+                ))}
+              </div>
+            )}
+          </>
+        )}
 
         {/* Word stats */}
         <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">

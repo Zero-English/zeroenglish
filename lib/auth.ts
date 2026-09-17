@@ -172,12 +172,18 @@ export const authOptions: NextAuthOptions = {
             return true;
         },
         async jwt({ token, user }) {
-            if (user) {
+            const userId =
+                user?.id ?? (token.sub ? Number(token.sub) : null);
+            if (userId != null && Number.isSafeInteger(Number(userId)) && Number(userId) > 0) {
                 const dbUser = await prisma.user.findUnique({
-                    where: { id: Number(user.id) },
-                    select: { role: true },
+                    where: { id: Number(userId) },
+                    select: { role: true, name: true, image: true },
                 });
-                token.role = dbUser?.role ?? "user";
+                if (dbUser) {
+                    token.role = dbUser.role ?? "user";
+                    token.name = dbUser.name ?? token.name;
+                    token.picture = dbUser.image ?? token.picture;
+                }
             }
             return token;
         },

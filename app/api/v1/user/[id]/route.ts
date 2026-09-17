@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { requireAdmin } from "@/lib/api-auth";
 import { getUserById, updateUserById, deleteUserById } from "@/services/user.service";
 import { updateUserSchema } from "@/utils/validation/zod";
+import { Class as ClassEnum, Gender as GenderEnum } from "@/generated/prisma/enums";
 import logger from "@/utils/logger";
 
 /**
@@ -159,7 +160,11 @@ export async function PUT(
         );
     }
 
-    const result = await updateUserById(userId, parsed.data);
+    const result = await updateUserById(userId, {
+        ...parsed.data,
+        class: parsed.data.class as ClassEnum | null | undefined,
+        gender: parsed.data.gender as GenderEnum | null | undefined,
+    });
 
     if (!result.success) {
         const status = (result as { status?: number }).status ?? 500;

@@ -28,11 +28,13 @@ import { useQuizExamHistoryStore } from "@/lib/quiz-exam-history-store";
 import { VocabularyExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
 import { QuizPracticeResultsPanel } from "@/components/quiz-practice-results-panel";
 import { useT } from "@/components/language-provider";
+import { useAuthStore } from "@/lib/auth-store";
+import { ProfileSettings } from "@/components/profile-settings";
 
 const ITEMS_PER_PAGE = 10;
 import {
   BookmarkCheck, CheckCircle2, Bookmark, Circle,
-  BookOpen, BookOpenCheck, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Volume2, ClipboardList,
+  BookOpen, BookOpenCheck, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Volume2, ClipboardList, Settings,
 } from "lucide-react";
 
 
@@ -256,6 +258,7 @@ function WordItem({
 export function ProfileTabs({ words }: { words: Word[] }) {
   const activeTab = useActiveTab();
   const normalizedTab = activeTab === "still-learning" ? "quiz" : activeTab;
+  const authStatus = useAuthStore((s) => s.status);
   const [quizSubTab, setQuizSubTab] = useState<"exams" | "vocab" | "still-learning">(
     activeTab === "still-learning" ? "still-learning" : "vocab"
   );
@@ -358,6 +361,12 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               </span>
             )}
           </TabsTrigger>
+          {authStatus === "google" && (
+            <TabsTrigger value="settings" className="flex items-center gap-1.5">
+              <Settings className="h-4 w-4" />
+              {t("সেটিংস", "Settings")}
+            </TabsTrigger>
+          )}
         </TabsList>
       </div>
 
@@ -808,6 +817,12 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           </TabsContent>
         </Tabs>
       </TabsContent>
+
+      {authStatus === "google" && (
+        <TabsContent value="settings">
+          <ProfileSettings />
+        </TabsContent>
+      )}
     </Tabs>
   );
 }
