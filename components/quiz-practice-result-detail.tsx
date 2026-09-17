@@ -12,6 +12,7 @@ import {
   ListChecks,
   Trophy,
   XCircle,
+  Lightbulb,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -130,6 +131,26 @@ function QuestionCard({ question }: { question: DbQuizQuestion }) {
           );
         })}
       </div>
+      {question.explanation ? (
+        <div className="mt-4 flex gap-3 rounded-2xl border border-amber-200 bg-amber-50/70 p-4 dark:border-amber-900 dark:bg-amber-950/30">
+          <Lightbulb className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-500" />
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400">
+              Explanation
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-amber-800 dark:text-amber-200">
+              {question.explanation
+                .split(/<br\s*\/?>/i)
+                .map((line, i, arr) => (
+                  <span key={i}>
+                    {line}
+                    {i < arr.length - 1 && <br />}
+                  </span>
+                ))}
+            </p>
+          </div>
+        </div>
+      ) : null}
     </StaggerItem>
   );
 }
