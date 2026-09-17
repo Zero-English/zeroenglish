@@ -124,8 +124,13 @@ export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost
 
       <div className="relative px-4 py-14 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <section className="text-center mb-14 animate-fade-up">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5">
+          <section className="relative text-center mb-14 animate-fade-up">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 -top-6 -bottom-1/2 -z-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nNDAnIGhlaWdodD0nNDAnIHZpZXdCb3g9JzAgMCA0MCA0MCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cGF0aCBkPSdNMCAwaDQwTTAgMHY0MCcgc3Ryb2tlPSdibGFjaycgc3Ryb2tlLXdpZHRoPScxJyBzdHJva2Utb3BhY2l0eT0nMC4xNScvPjwvc3ZnPg==')] dark:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nNDAnIGhlaWdodD0nNDAnIHZpZXdCb3g9JzAgMCA0MCA0MCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48cGF0aCBkPSdNMCAwaDQwTTAgMHY0MCcgc3Ryb2tlPSd3aGl0ZScgc3Ryb2tlLXdpZHRoPScxJyBzdHJva2Utb3BhY2l0eT0nMC4yJy8+PC9zdmc+')] [mask-image:radial-gradient(ellipse_at_top,black,transparent_75%)]"
+            />
+            <div className="relative">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5">
               <Sparkles className="h-3.5 w-3.5 text-orange-500" />
               {t(`${category} · ইংরেজি ↔ বাংলা`, `${category} · English ↔ Bangla`)}
             </div>
@@ -186,6 +191,7 @@ export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost
                 <p className="text-xs text-zinc-400">{t("শেখা হয়েছে", "Learned")}</p>
               </div>
             </div>
+          </div>
           </section>
 
           <section className="mb-14">
