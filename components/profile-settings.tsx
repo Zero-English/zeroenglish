@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Classic } from "@/components/classic";
 import { useAuthStore } from "@/lib/auth-store";
+import { useProfileStore, type ProfileData } from "@/lib/profile-store";
 import { useT } from "@/components/language-provider";
 
 const CLASS_OPTIONS = [
@@ -38,19 +39,6 @@ const CLASS_OPTIONS = [
   "BCS",
   "JOB",
 ] as const;
-
-type ProfileData = {
-  id: number;
-  name: string | null;
-  user_name: string;
-  email: string;
-  image: string | null;
-  institutionName: string | null;
-  bio: string | null;
-  class: string | null;
-  gender: string | null;
-  socialLinks: string[];
-};
 
 type ApiResponse = {
   data?: ProfileData | null;
@@ -176,6 +164,14 @@ export function ProfileSettings() {
       // across the app (header, profile card, etc.).
       void update();
       useAuthStore.setState({ userName: payload.user_name });
+      useProfileStore.setState((s) => ({
+        profile: {
+          ...(s.profile ?? { id: 0, user_name: payload.user_name, email: "", image: null, name: payload.name }),
+          ...payload,
+          gender: payload.gender === null ? "NOT_SET" : payload.gender,
+        } as ProfileData,
+        loaded: true,
+      }));
       setLoadedProfile(true);
       toast.success(t("প্রোফাইল সংরক্ষণ করা হয়েছে।", "Profile saved."));
     } catch {
