@@ -70,9 +70,14 @@ export function AboutClient() {
           </section>
 
           <section className="mb-14">
-            <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-5">
-              {t("আমরা কেন এখানে", "Why we're here")}
-            </h2>
+            <div className="mb-5">
+              <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                {t("আমরা কেন এখানে", "Why we're here")}
+              </h2>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
+                {t("ইংরেজি যেন আর কারও সামর্থ্যের বাইরে না থাকে।", "English should never be out of anyone's reach.")}
+              </p>
+            </div>
             <div className="prose prose-neutral dark:prose-invert space-y-4 text-zinc-600 dark:text-zinc-400">
               <p>
                 {t(

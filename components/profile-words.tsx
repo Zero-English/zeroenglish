@@ -407,8 +407,11 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               <div className="flex items-center gap-2 mb-5">
                 <GraduationCap className="h-5 w-5 text-zinc-500" />
                 <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-{t("কুইজের অগ্রগতি", "Quiz Progress")}
+                  {t("কুইজের অগ্রগতি", "Quiz Progress")}
                 </h3>
+                <span className="ml-auto text-[11px] text-zinc-400 dark:text-zinc-500">
+                  {t("সব কুইজজুড়ে", "across all quizzes")}
+                </span>
               </div>
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
@@ -454,6 +457,9 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                 <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                   {t("লেভেল অনুযায়ী অগ্রগতি", "Progress by Level")}
                 </h3>
+                <span className="ml-auto text-[11px] text-zinc-400 dark:text-zinc-500">
+                  {t("প্রতিটি লেভেলে", "in every level")}
+                </span>
               </div>
               <div className="space-y-4">
                 {levelStats.map(({ level, total: totalInLevel, learned: l }) => {

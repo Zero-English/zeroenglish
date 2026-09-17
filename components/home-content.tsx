@@ -5,7 +5,7 @@ import type { Word } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { mainCategoryLabel } from "@/lib/category";
 import { Button } from "@/components/ui/button";
-import { LibraryBig, BookOpenCheck, Search, ArrowRight, Sparkles } from "lucide-react";
+import { LibraryBig, BookOpenCheck, Search, ArrowRight, Sparkles, Layers, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
 import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
@@ -131,24 +131,24 @@ export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost
             />
             <div className="relative">
               <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5">
-              <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-              {t(`${category} · ইংরেজি ↔ বাংলা`, `${category} · English ↔ Bangla`)}
-            </div>
+                <Sparkles className="h-3.5 w-3.5 text-orange-500" />
+                {t("যা গুরুত্বপূর্ণ, তা শিখুন", "Learn what matters")}
+              </div>
 
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
               <span className="bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-                {t("ইংরেজি আয়ত্ত করুন,", "Master English,")}
+                {t("শূন্য থেকে ইংরেজি আয়ত্ত,", "Everything")}
               </span>
               <br />
               <span className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 bg-clip-text text-transparent">
-                {t("শব্দে শব্দে।", "word by word.")}
+                {t("সবকিছু এক প্ল্যাটফর্মে।", "you need to master English.")}
               </span>
             </h1>
 
             <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto mb-8">
               {t(
-                `${category} শব্দের সম্পূর্ণ তালিকা বাংলা অর্থসহ। আপনার লেভেল বেছে নিন, নতুন শব্দ শিখুন এবং প্রতিদিন আপনার অগ্রগতি ট্র্যাক করুন।`,
-                `The complete ${category} word list with Bangla meanings. Pick your level, learn new words, and track your progress every day.`
+                `${category} শব্দ বাংলা অর্থসহ। প্রতিদিন ৫০টি নতুন শব্দ শিখুন, নিজের লেভেল বেছে নিন, আর আত্মবিশ্বাসটা বাড়তে দেখুন — শব্দে শব্দে, এক ধাপ থেকে আরেক ধাপে।`,
+                `${category} words with Bangla meanings. Learn 50 new words a day, pick your level, and watch your confidence build — one word, one step at a time.`
               )}
             </p>
 
@@ -172,23 +172,38 @@ export function HomeContent({ words, posts }: { words: Word[]; posts: LatestPost
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-2.5">
-              <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
-                <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                  {words.length}
-                </p>
-                <p className="text-xs text-zinc-400">{t("শব্দ", "Words")}</p>
+              <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                  <LibraryBig className="h-4 w-4" />
+                </span>
+                <div className="text-left">
+                  <p className="text-xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums leading-none">
+                    {words.length}
+                  </p>
+                  <p className="text-xs text-zinc-400 mt-1">{t("শব্দশক্তি", "Word Power")}</p>
+                </div>
               </div>
-              <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
-                <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
-                  {LEVELS.length}
-                </p>
-                <p className="text-xs text-zinc-400">{t("লেভেল", "Levels")}</p>
+              <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                  <Layers className="h-4 w-4" />
+                </span>
+                <div className="text-left">
+                  <p className="text-xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums leading-none">
+                    {LEVELS.length}
+                  </p>
+                  <p className="text-xs text-zinc-400 mt-1">{t("লেভেলের সিঁড়ি", "Level Ladder")}</p>
+                </div>
               </div>
-              <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
-                <p className="text-2xl font-bold text-orange-500 tabular-nums">
-                  {loaded ? `${overallPct}%` : "· · ·"}
-                </p>
-                <p className="text-xs text-zinc-400">{t("শেখা হয়েছে", "Learned")}</p>
+              <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-500">
+                  <TrendingUp className="h-4 w-4" />
+                </span>
+                <div className="text-left">
+                  <p className="text-xl font-bold text-orange-500 tabular-nums leading-none">
+                    {loaded ? `${overallPct}%` : "· · ·"}
+                  </p>
+                  <p className="text-xs text-zinc-400 mt-1">{t("আপনার চড়াই", "Your Climb")}</p>
+                </div>
               </div>
             </div>
           </div>

@@ -72,9 +72,14 @@ export function DailyGoalCard() {
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <Target className="h-5 w-5 text-zinc-500" />
-          <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-            {t("দৈনিক লক্ষ্য", "Daily Goal")}
-          </h3>
+          <div className="flex flex-col">
+            <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+              {t("দৈনিক লক্ষ্য", "Daily Goal")}
+            </h3>
+            <span className="text-[11px] text-zinc-400 dark:text-zinc-500">
+              {t("প্রতিদিন কয়টা শব্দ শিখবেন", "Words you want to learn each day")}
+            </span>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           {streak > 0 && (
