@@ -1058,9 +1058,12 @@ function ClassResultsView({
                 key={i}
                 className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-4"
               >
-                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                <Link
+                  href={`/quiz/question/${question.id}`}
+                  className="inline text-sm font-semibold text-zinc-900 dark:text-zinc-100 hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
+                >
                   {question.questionText}
-                </p>
+                </Link>
                 <div className="mt-2 flex flex-wrap gap-2 text-xs">
                   {userAnswer !== "Time's up!" && (
                     <span className="rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 px-2 py-1 text-red-700 dark:text-red-300">

@@ -1210,7 +1210,12 @@ function ExamResultsView({
                 >
                   <div className="flex items-baseline gap-2 mb-1">
                     <span className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                      {item.questionText}
+                      <Link
+                        href={`/quiz/question/${item.questionId}`}
+                        className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
+                      >
+                        {item.questionText}
+                      </Link>
                     </span>
                   </div>
                   <div className="mt-2 text-sm space-y-1">
