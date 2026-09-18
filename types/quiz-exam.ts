@@ -17,7 +17,6 @@ export interface QuizExamQuestionData {
   questionText: string;
   options: string[];
   difficultyLevel: string;
-  answer: string;
 }
 
 export interface QuizExamTakeData {
@@ -35,7 +34,7 @@ export interface QuizExamTakeData {
 export interface QuizExamTakeQuestion {
   id: number;
   questionText: string;
-  options: { text: string; correct: boolean }[];
+  options: string[];
   difficultyLevel: string;
 }
 
@@ -46,4 +45,16 @@ export interface QuizExamIncorrectAnswer {
   questionText: string;
   correctAnswer: string | null;
   userAnswer: string | null;
+}
+
+export interface QuizExamSubmitResponse {
+  id: number;
+  correctAnswers: number;
+  scoreInPercent: number;
+  totalScore: number;
+  questionCount: number;
+  status: "SUBMITTED" | "LATE_SUBMITTED" | "ABANDONED" | "REATTEMPTED";
+  isFirstAttempt: boolean;
+  review: QuizExamIncorrectAnswer[];
+  message?: string;
 }
