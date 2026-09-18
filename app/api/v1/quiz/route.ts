@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { getAllQuizQuestions, getQuizQuestionsByPage, createQuizQuestion, createQuizQuestionsBulk } from "@/services/quiz.service";
 import { quizQuestionSchema, bulkQuizUploadSchema } from "@/utils/validation/zod";
 import { parseBulkJsonFile } from "@/utils/bulk-import";
-import { requireAdmin } from "@/lib/api-auth";
+import { requireAdmin, getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
 import logger from "@/utils/logger";
 
 export async function GET(request: NextRequest) {
@@ -30,8 +30,11 @@ export async function POST(request: NextRequest) {
     const forbidden = await requireAdmin();
     if (forbidden) return forbidden;
 
+    const sessionUser = await getApiSessionUser();
+    if (!sessionUser) return unauthorizedResponse();
+
     const isBulk = request.nextUrl.searchParams.get("bulk") === "true";
-    if (isBulk) return handleBulkCreate(request);
+    if (isBulk) return handleBulkCreate(request, sessionUser.id);
 
     logger.info("Quiz question create started");
 
@@ -56,7 +59,7 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const result = await createQuizQuestion(parsed.data);
+    const result = await createQuizQuestion(parsed.data, sessionUser.id);
 
     if (!result.success) {
         logger.error(`Quiz question create failed`, {
@@ -72,7 +75,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(result, { status: 201 });
 }
 
-async function handleBulkCreate(request: NextRequest) {
+async function handleBulkCreate(request: NextRequest, addedByUserId: number) {
     logger.info("Quiz question bulk import started");
 
     const parsedFile = await parseBulkJsonFile(request);
@@ -97,7 +100,7 @@ async function handleBulkCreate(request: NextRequest) {
         );
     }
 
-    const result = await createQuizQuestionsBulk(parsed.data);
+    const result = await createQuizQuestionsBulk(parsed.data, addedByUserId);
 
     if (!result.success) {
         logger.error(`Quiz question bulk import failed during database write`, {

@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import {
   ClipboardList,
   Timer,
-  Check,
   X,
   Volume2,
   Sparkles,
@@ -49,6 +48,7 @@ import type {
   QuizExamTakeData,
   QuizExamTakeQuestion,
   QuizExamIncorrectAnswer,
+  QuizExamSubmitResponse,
 } from "@/types/quiz-exam";
 
 const MODE_META: Record<
@@ -82,12 +82,6 @@ const MODE_META: Record<
     bg: "bg-violet-50 dark:bg-violet-950/40",
     border: "border-violet-200 dark:border-violet-800",
   },
-};
-
-const EXAM_MODE_ENUM: Record<string, string> = {
-  PRACTICE: "PRACTICE",
-  WEEKLY: "WEEKLY",
-  BIWEEKLY: "BIWEEKLY",
 };
 
 function GoogleIcon({ className }: { className?: string }) {
@@ -147,69 +141,44 @@ function toTakeQuestions(exam: QuizExamTakeData): QuizExamTakeQuestion[] {
     id: q.id,
     questionText: q.questionText,
     difficultyLevel: q.difficultyLevel,
-    options: shuffleArray([
-      { text: q.answer, correct: true },
-      ...shuffleArray(q.options.filter((o) => o !== q.answer)).map((o) => ({
-        text: o,
-        correct: false,
-      })),
-    ]),
+    options: shuffleArray(q.options),
   }));
 }
 
-async function saveExamResultToDb(args: {
-  userId: number | null;
+async function submitExamResult(args: {
   clientId: string;
-  examId: number | null;
-  title: string;
-  mode: string;
-  score: number;
-  total: number;
-  percentage: number;
-  levels: string[];
-  timePerQuestion: number;
+  examId: number;
   timeTotalQuiz: number;
-  scheduledOpeningTime: string | null;
-  scheduledClosingTime: string | null;
   status?: "ABANDONED";
-}): Promise<number | null> {
-  if (!args.userId) return null;
+  answers: { questionId: number; selectedOption: string }[];
+}): Promise<QuizExamSubmitResponse | null> {
   try {
-    const res = await fetch("/api/v1/quiz/results", {
+    const res = await fetch(`/api/v1/quiz-exam/${args.examId}/submit`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       keepalive: true,
       body: JSON.stringify({
         clientId: args.clientId,
-        examId: args.examId,
-        title: args.title,
-        mode: EXAM_MODE_ENUM[args.mode] ?? "PRACTICE",
-        quizType: "ENGLISH_TO_BANGLA",
-        questionCount: args.total,
-        levels: args.levels,
-        timePerQuestion: args.timePerQuestion,
         timeTotalQuiz: args.timeTotalQuiz,
-        scheduleEnabled: true,
-        scheduledOpeningTime: args.scheduledOpeningTime ?? undefined,
-        scheduledClosingTime: args.scheduledClosingTime ?? undefined,
-        correctAnswers: args.score,
-        scoreInPercent: args.percentage,
-        totalScore: args.score,
         status: args.status,
+        answers: args.answers,
       }),
     });
     if (!res.ok) {
-      // non-fatal; the result is already stored in localStorage
       return null;
     }
-    const body = (await res.json()) as { data?: { id?: number } | null; success?: boolean };
-    if (!body.success) return null;
+    const body = (await res.json()) as {
+      data?: QuizExamSubmitResponse | null;
+      success?: boolean;
+    };
+    if (!body.success || !body.data) {
+      return null;
+    }
     if (typeof window !== "undefined") {
       window.dispatchEvent(new Event("activity-changed"));
     }
-    return typeof body.data?.id === "number" ? body.data.id : null;
+    return body.data;
   } catch {
-    // non-fatal; the result is already stored in localStorage
     return null;
   }
 }
@@ -230,26 +199,22 @@ function recordExamAbandon(): void {
   useQuizExamStore.setState({ abandonRecorded: true });
 
   const state = useQuizExamStore.getState();
+  const examId = state.examId as number;
   const total = state.questions.length;
   const timeTotalQuiz = state.startedAt
     ? Math.round((Date.now() - state.startedAt) / 1000)
     : total * state.timePerQuestion;
+  const answers = Object.entries(state.answers).map(([questionId, selectedOption]) => ({
+    questionId: Number(questionId),
+    selectedOption,
+  }));
 
-  void saveExamResultToDb({
-    userId,
+  void submitExamResult({
     clientId: `ab-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
-    examId: state.examId,
-    title: state.examTitle ?? "Quiz Exam",
-    mode: state.examMode ?? "PRACTICE",
-    score: state.score,
-    total,
-    percentage: total > 0 ? Math.round((state.score / total) * 100) : 0,
-    levels: state.levels,
-    timePerQuestion: state.timePerQuestion,
+    examId,
     timeTotalQuiz,
-    scheduledOpeningTime: state.scheduledOpeningTime,
-    scheduledClosingTime: state.scheduledClosingTime,
     status: "ABANDONED",
+    answers,
   });
 }
 
@@ -290,6 +255,7 @@ export function QuizExamClient() {
   const isAnswered = useQuizExamStore((s) => s.isAnswered);
   const timeLeft = useQuizExamStore((s) => s.timeLeft);
   const incorrectAnswers = useQuizExamStore((s) => s.incorrectAnswers);
+  const officialResult = useQuizExamStore((s) => s.officialResult);
 
   const setQuizChromeHidden = useQuizChrome((s) => s.setHidden);
   useEffect(() => {
@@ -317,7 +283,6 @@ export function QuizExamClient() {
         question={q}
         currentIndex={currentIndex}
         totalQuestions={questions.length}
-        score={score}
         timeLeft={timeLeft}
         selectedAnswer={selectedAnswer}
         isAnswered={isAnswered}
@@ -329,6 +294,7 @@ export function QuizExamClient() {
     return (
       <ExamResultsView
         examId={examId}
+        officialResult={officialResult}
         score={score}
         total={questions.length}
         incorrectAnswers={incorrectAnswers}
@@ -604,7 +570,10 @@ function ExamListView() {
         score: 0,
         selectedAnswer: null,
         isAnswered: false,
+        answers: {},
         incorrectAnswers: [],
+        officialResult: null,
+        submitClientId: null,
         resultsRecorded: false,
         abandonRecorded: false,
         startedAt: 0,
@@ -753,7 +722,6 @@ function ExamQuizView({
   question,
   currentIndex,
   totalQuestions,
-  score,
   timeLeft,
   selectedAnswer,
   isAnswered,
@@ -761,7 +729,6 @@ function ExamQuizView({
   question: QuizExamTakeQuestion;
   currentIndex: number;
   totalQuestions: number;
-  score: number;
   timeLeft: number;
   selectedAnswer: string | null;
   isAnswered: boolean;
@@ -770,42 +737,17 @@ function ExamQuizView({
   const speak = useSpeak();
   const [exitOpen, setExitOpen] = useState(false);
   const timePerQuestion = useQuizExamStore((s) => s.timePerQuestion);
+  const answeredCount = useQuizExamStore((s) => Object.keys(s.answers).length);
 
   const progress = totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
   const letters = ["A", "B", "C", "D", "E", "F"];
 
-  const isAnsweredRef = useRef(false);
-  const questionsRef = useRef<QuizExamTakeQuestion[]>([]);
-  const currentIndexRef = useRef(0);
-  useEffect(() => {
-    isAnsweredRef.current = isAnswered;
-  }, [isAnswered]);
-  useEffect(() => {
-    questionsRef.current = useQuizExamStore.getState().questions;
-  }, [question]);
-  useEffect(() => {
-    currentIndexRef.current = currentIndex;
-  }, [currentIndex]);
-
-  const handleOptionClick = (option: { text: string; correct: boolean }) => {
+  const handleOptionClick = (option: string) => {
     if (isAnswered) return;
     useQuizExamStore.setState({
-      selectedAnswer: option.text,
+      selectedAnswer: option,
       isAnswered: true,
-      score: score + (option.correct ? 1 : 0),
-      incorrectAnswers: [
-        ...useQuizExamStore.getState().incorrectAnswers,
-        ...(option.correct
-          ? []
-          : [
-              {
-                questionId: question.id,
-                questionText: question.questionText,
-                correctAnswer: question.options.find((o) => o.correct)?.text ?? "",
-                userAnswer: option.text,
-              },
-            ]),
-      ],
+      answers: { ...useQuizExamStore.getState().answers, [question.id]: option },
     });
   };
 
@@ -856,23 +798,10 @@ function ExamQuizView({
     const st = useQuizExamStore.getState();
     if (st.isAnswered || st.deadlineAt == null || st.timeLeft !== 0) return;
 
-    const q = questionsRef.current[currentIndexRef.current];
-    if (q) {
-      useQuizExamStore.setState((prev) => ({
-        isAnswered: true,
-        selectedAnswer: null,
-        score: prev.score,
-        incorrectAnswers: [
-          ...prev.incorrectAnswers,
-          {
-            questionId: q.id,
-            questionText: q.questionText,
-            correctAnswer: q.options.find((o) => o.correct)?.text ?? "",
-            userAnswer: "Time's up!",
-          },
-        ],
-      }));
-    }
+    useQuizExamStore.setState({
+      isAnswered: true,
+      selectedAnswer: null,
+    });
   }, [timeLeft, isAnswered]);
 
   useEffect(() => {
@@ -905,8 +834,8 @@ function ExamQuizView({
             {timeLeft}s
           </span>
           <span className="text-zinc-500 dark:text-zinc-400">
-            {t("স্কোর", "Score")}{" "}
-            <span className="font-semibold text-emerald-600 dark:text-emerald-400">{score}</span>
+            {t("উত্তর", "Answered")}{" "}
+            <span className="font-semibold text-violet-600 dark:text-violet-400">{answeredCount}</span>
           </span>
           <button
             onClick={() => setExitOpen(true)}
@@ -945,24 +874,11 @@ function ExamQuizView({
 
         <div className="space-y-2.5 pt-4">
           {question.options.map((option, i) => {
-            const isCorrectOption = option.correct;
-            const isWrongPick = isAnswered && option.text === selectedAnswer && !isCorrectOption;
+            const isSelected = isAnswered && option === selectedAnswer;
 
-            let optionStyle =
-              "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:bg-zinc-50 dark:active:bg-zinc-900/60";
-
-            if (isAnswered) {
-              if (isCorrectOption) {
-                optionStyle =
-                  "border-emerald-400 dark:border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 ring-2 ring-emerald-400/30";
-              } else if (isWrongPick) {
-                optionStyle =
-                  "border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-950/40 ring-2 ring-red-400/30";
-              } else {
-                optionStyle =
-                  "border-zinc-200 dark:border-zinc-700 bg-white/40 dark:bg-zinc-950/30 opacity-50";
-              }
-            }
+            const optionStyle = isSelected
+              ? "border-violet-400 dark:border-violet-600 bg-violet-50 dark:bg-violet-950/40 ring-2 ring-violet-400/30"
+              : "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:bg-zinc-50 dark:active:bg-zinc-900/60";
 
             return (
               <button
@@ -974,37 +890,23 @@ function ExamQuizView({
                 <span
                   className={cn(
                     "flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold",
-                    isAnswered
-                      ? isCorrectOption
-                        ? "bg-emerald-500 text-white"
-                        : isWrongPick
-                        ? "bg-red-500 text-white"
-                        : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"
+                    isSelected
+                      ? "bg-violet-500 text-white"
                       : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"
                   )}
                 >
-                  {isAnswered && (isCorrectOption || isWrongPick) ? (
-                    isCorrectOption ? (
-                      <Check className="h-3.5 w-3.5" />
-                    ) : (
-                      <X className="h-3.5 w-3.5" />
-                    )
-                  ) : (
-                    letters[i] ?? ""
-                  )}
+                  {letters[i] ?? ""}
                 </span>
 
                 <span
                   className={cn(
                     "flex-1 text-sm sm:text-base leading-relaxed",
-                    isCorrectOption && isAnswered
-                      ? "text-emerald-800 dark:text-emerald-200 font-medium"
-                      : isWrongPick
-                      ? "text-red-800 dark:text-red-200 font-medium"
+                    isSelected
+                      ? "text-violet-800 dark:text-violet-200 font-medium"
                       : "text-zinc-700 dark:text-zinc-300"
                   )}
                 >
-                  {option.text}
+                  {option}
                 </span>
               </button>
             );
@@ -1046,30 +948,41 @@ function ExamQuizView({
 
 function ExamResultsView({
   examId,
+  officialResult,
   score,
   total,
   incorrectAnswers,
 }: {
   examId: number | null;
+  officialResult: QuizExamSubmitResponse | null;
   score: number;
   total: number;
   incorrectAnswers: QuizExamIncorrectAnswer[];
 }) {
   const t = useT();
   const { path, hydrated } = useAuthPath();
-  const userId = useAuthStore((s) => s.userId);
   const addHistoryEntry = useQuizExamHistoryStore((s) => s.addEntry);
-  const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+  const percentage =
+    officialResult != null
+      ? officialResult.scoreInPercent
+      : total > 0
+        ? Math.round((score / total) * 100)
+        : 0;
 
   const [saveState, setSaveState] = useState<"saving" | "saved" | "error">("saving");
   const attemptingRef = useRef(false);
 
-  // Exam results live in the database, so the upload is mandatory: the attempt
-  // is finalized only after the POST succeeds (retry is offered otherwise).
+  // Exam results are graded server-side, so the upload is mandatory: the
+  // attempt is finalized only after the submit POST succeeds (retry is
+  // offered otherwise).
   const record = useCallback(async () => {
     if (attemptingRef.current) return;
     if (useQuizExamStore.getState().resultsRecorded) {
       setSaveState("saved");
+      return;
+    }
+    if (examId == null) {
+      setSaveState("error");
       return;
     }
     attemptingRef.current = true;
@@ -1081,63 +994,70 @@ function ExamResultsView({
       ? Math.round((Date.now() - state.startedAt) / 1000)
       : total * timePerQuestion;
     try {
-      const dbId = await saveExamResultToDb({
-        userId,
-        clientId:
+      const answers = Object.entries(state.answers).map(([questionId, selectedOption]) => ({
+        questionId: Number(questionId),
+        selectedOption,
+      }));
+      let clientId = state.submitClientId;
+      if (!clientId) {
+        clientId =
           typeof crypto !== "undefined" && "randomUUID" in crypto
             ? crypto.randomUUID()
-            : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
-        examId: examId ?? null,
-        title: state.examTitle ?? "Quiz Exam",
-        mode: state.examMode ?? "PRACTICE",
-        score,
-        total,
-        percentage,
-        levels,
-        timePerQuestion,
+            : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+        useQuizExamStore.setState({ submitClientId: clientId });
+      }
+      const official = await submitExamResult({
+        clientId,
+        examId,
         timeTotalQuiz,
-        scheduledOpeningTime: state.scheduledOpeningTime,
-        scheduledClosingTime: state.scheduledClosingTime,
+        answers,
       });
-      if (dbId == null) {
+      if (!official) {
         setSaveState("error");
         return;
       }
+      useQuizExamStore.setState({
+        score: official.correctAnswers,
+        incorrectAnswers: official.review,
+        officialResult: official,
+        resultsRecorded: true,
+      });
       const today = new Date();
       const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
       await incrementQuizzesDone(dateStr, path);
-      await addCorrectAnswers(dateStr, score, path);
+      await addCorrectAnswers(dateStr, official.correctAnswers, path);
       const entry: QuizExamHistoryEntry = {
         id:
           typeof crypto !== "undefined" && "randomUUID" in crypto
             ? crypto.randomUUID()
             : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
-        examId: examId ?? 0,
+        examId,
         title: state.examTitle ?? "Quiz Exam",
         mode: state.examMode ?? "PRACTICE",
         date: dateStr,
-        win: `${percentage}%`,
+        win: `${official.scoreInPercent}%`,
         levels,
         numberOfQuestions: total,
         timePerQuestion,
         createdAt: Date.now(),
         synced: true,
-        dbId,
+        dbId: official.id,
+        status: official.status,
+        isFirstAttempt: official.isFirstAttempt,
       };
       addHistoryEntry(entry);
-      useQuizExamStore.setState({ resultsRecorded: true });
-      setSaveState("saved");
       if (typeof window !== "undefined") {
         window.dispatchEvent(new Event("progress-changed"));
         window.dispatchEvent(new Event("activity-changed"));
       }
+      setSaveState("saved");
     } catch {
       setSaveState("error");
     } finally {
       attemptingRef.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [examId, score, total, percentage, path]);
+  }, [examId, total, path]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -1219,17 +1139,27 @@ function ExamResultsView({
                     </span>
                   </div>
                   <div className="mt-2 text-sm space-y-1">
-                    <p className="text-emerald-600 dark:text-emerald-400">
-                      {t("সঠিক:", "Correct:")} {item.correctAnswer}
-                    </p>
-                    {item.userAnswer !== "Time's up!" && (
+                    {item.correctAnswer != null && (
+                      <p className="text-emerald-600 dark:text-emerald-400">
+                        {t("সঠিক:", "Correct:")} {item.correctAnswer}
+                      </p>
+                    )}
+                    {item.correctAnswer == null && (
+                      <p className="text-amber-500 dark:text-amber-400">
+                        {t(
+                          "পরীক্ষা শেষ হওয়ার পরে সঠিক উত্তর প্রকাশ করা হবে।",
+                          "Correct answers are revealed after the exam closes."
+                        )}
+                      </p>
+                    )}
+                    {item.userAnswer != null && (
                       <p className="text-red-500 dark:text-red-400">
                         {t("আপনার উত্তর:", "Your answer:")} {item.userAnswer}
                       </p>
                     )}
-                    {item.userAnswer === "Time's up!" && (
+                    {item.userAnswer == null && (
                       <p className="text-amber-500 dark:text-amber-400">
-                        {t("সময় শেষ হয়ে গেছে", "Time ran out")}
+                        {t("উত্তর দেওয়া হয়নি", "Unanswered")}
                       </p>
                     )}
                   </div>

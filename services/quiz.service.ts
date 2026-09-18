@@ -245,14 +245,17 @@ export const getQuizQuestionById = async (id: number) => {
     }
 };
 
-export const createQuizQuestion = async (data: {
-    quizType: string;
-    questionText: string;
-    options: string[];
-    difficultyLevel: DifficultyLevels;
-    answer: string;
-    explanation?: string;
-}) => {
+export const createQuizQuestion = async (
+    data: {
+        quizType: string;
+        questionText: string;
+        options: string[];
+        difficultyLevel: DifficultyLevels;
+        answer: string;
+        explanation?: string;
+    },
+    addedByUserId: number,
+) => {
     try {
         const quizType = await prisma.quizType.findUnique({
             where: { name: data.quizType },
@@ -274,6 +277,7 @@ export const createQuizQuestion = async (data: {
                 difficultyLevel: data.difficultyLevel,
                 answer: data.answer,
                 explanation: data.explanation ?? "",
+                addedByUserId,
             },
             include: quizTypeInclude,
         });
@@ -293,15 +297,18 @@ export const createQuizQuestion = async (data: {
     }
 };
 
-export const createQuizQuestionsBulk = async (data: {
-    quizType: string;
-    questionText: string;
-    options: string[];
-    difficultyLevel: DifficultyLevels;
-    answer: string;
-    class?: Class[] | null;
-    explanation?: string;
-}[]) => {
+export const createQuizQuestionsBulk = async (
+    data: {
+        quizType: string;
+        questionText: string;
+        options: string[];
+        difficultyLevel: DifficultyLevels;
+        answer: string;
+        class?: Class[] | null;
+        explanation?: string;
+    }[],
+    addedByUserId: number,
+) => {
     try {
         const names = [...new Set(data.map((q) => q.quizType))];
 
@@ -332,6 +339,7 @@ export const createQuizQuestionsBulk = async (data: {
                         answer: q.answer,
                         class: q.class ?? [],
                         explanation: q.explanation ?? "",
+                        addedByUserId,
                     },
                 })
             )

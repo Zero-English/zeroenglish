@@ -10,6 +10,7 @@ import type {
   QuizExamStep,
   QuizExamTakeQuestion,
   QuizExamIncorrectAnswer,
+  QuizExamSubmitResponse,
 } from "@/types/quiz-exam";
 
 interface ExamQuizState {
@@ -30,6 +31,8 @@ interface ExamQuizState {
   deadlineAt: number | null;
   answers: Record<number, string>;
   incorrectAnswers: QuizExamIncorrectAnswer[];
+  officialResult: QuizExamSubmitResponse | null;
+  submitClientId: string | null;
   resultsRecorded: boolean;
   abandonRecorded: boolean;
   startedAt: number | null;
@@ -53,6 +56,8 @@ const initialExamState: ExamQuizState = {
   deadlineAt: null,
   answers: {},
   incorrectAnswers: [],
+  officialResult: null,
+  submitClientId: null,
   resultsRecorded: false,
   abandonRecorded: false,
   startedAt: null,
