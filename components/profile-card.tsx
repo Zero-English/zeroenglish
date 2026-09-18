@@ -7,6 +7,7 @@ import { Globe, ShieldCheck, Settings, Building2, GraduationCap, User, Link2 } f
 import { UserAvatar } from "@/components/UserAvatar";
 import { useAuthStore } from "@/lib/auth-store";
 import { useProfileStore, type ProfileData } from "@/lib/profile-store";
+import { SyncStatus } from "@/components/sync-status";
 import { useT } from "@/components/language-provider";
 import { setActiveTab } from "@/lib/profile-tab-store";
 
@@ -158,6 +159,8 @@ export function ProfileCard() {
           {t("প্রোফাইল তথ্য লোড করা যায়নি।", "Could not load profile details.")}
         </p>
       )}
+
+      <SyncStatus />
     </div>
   );
 }
