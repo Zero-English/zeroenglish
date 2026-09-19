@@ -102,6 +102,11 @@ export default async function PublicProfilePage({
               learnedCount: data.learnedWordCount,
               stillLearningCount: data.stillLearningCount,
               bookmarkedCount: data.bookmarkedCount,
+              institutionName: data.institutionName,
+              bio: data.bio,
+              class: data.class,
+              gender: data.gender,
+              socialLinks: data.socialLinks,
             }}
             totalWords={words.length}
             levelProgress={levelProgress}

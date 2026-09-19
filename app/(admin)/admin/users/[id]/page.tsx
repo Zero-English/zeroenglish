@@ -346,18 +346,54 @@ export default async function SingleUserPage({
               ["Role", user.role],
               ["Status", status],
               ["Total Words Studied", String(user.learnedWordCount)],
+              ["Institution", user.institutionName || "—"],
+              ["Class", user.class || "—"],
+              [
+                "Gender",
+                user.gender === "NOT_SET" ? "Not set" : user.gender || "—",
+              ],
               ["Joined", formatDay(user.created_at)],
               ["Last Active", formatDay(lastActive)],
               ["Study Streak", `${studyStreak} days`],
             ].map(([label, value]) => (
               <div key={label} className="flex justify-between px-5 py-3 text-sm">
                 <dt className="text-gray-500 dark:text-gray-400">{label}</dt>
-                <dd className="font-medium text-gray-900 dark:text-white">
+                <dd className="ml-4 text-right font-medium text-gray-900 dark:text-white">
                   {value}
                 </dd>
               </div>
             ))}
           </dl>
+          {(user.bio || user.socialLinks.length > 0) && (
+            <dl className="divide-y divide-gray-100 dark:divide-gray-800 border-t border-gray-100 dark:border-gray-800">
+              {user.bio && (
+                <div className="px-5 py-3 text-sm">
+                  <dt className="text-gray-500 dark:text-gray-400">Bio</dt>
+                  <dd className="mt-1 whitespace-pre-wrap font-medium text-gray-900 dark:text-white">
+                    {user.bio}
+                  </dd>
+                </div>
+              )}
+              {user.socialLinks.length > 0 && (
+                <div className="px-5 py-3 text-sm">
+                  <dt className="text-gray-500 dark:text-gray-400">Social Links</dt>
+                  <dd className="mt-1 space-y-1">
+                    {user.socialLinks.map((link) => (
+                      <a
+                        key={link}
+                        href={link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block truncate font-medium text-primary hover:underline"
+                      >
+                        {link}
+                      </a>
+                    ))}
+                  </dd>
+                </div>
+              )}
+            </dl>
+          )}
         </section>
 
         <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">

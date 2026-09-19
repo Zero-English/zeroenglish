@@ -1,6 +1,7 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 import { QuizMode, QuizResultStatus } from "@/generated/prisma/enums";
+import { Class as ClassEnum, Gender as GenderEnum } from "@/generated/prisma/enums";
 
 export const getLeaderboard = async () => {
     try {
@@ -92,6 +93,11 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
                     created_at: true,
                     updated_at: true,
                     lastActivityAt: true,
+                    institutionName: true,
+                    bio: true,
+                    class: true,
+                    gender: true,
+                    socialLinks: true,
                     _count: {
                         select: {
                             userBookmarks: true,
@@ -178,6 +184,11 @@ export const getUserById = async (id: number) => {
                     role: true,
                     created_at: true,
                     updated_at: true,
+                    institutionName: true,
+                    bio: true,
+                    class: true,
+                    gender: true,
+                    socialLinks: true,
                     _count: {
                         select: {
                             userBookmarks: true,
@@ -231,6 +242,11 @@ export const updateUserById = async (
         email?: string;
         role?: "user" | "admin";
         image?: string | null;
+        institutionName?: string | null;
+        bio?: string | null;
+        class?: ClassEnum | null;
+        gender?: GenderEnum | null;
+        socialLinks?: string[];
     }
 ) => {
     try {
@@ -257,6 +273,16 @@ export const updateUserById = async (
                 email: data.email ? data.email.toLowerCase().trim() : undefined,
                 role: data.role,
                 image: data.image !== undefined ? data.image : undefined,
+                institutionName: data.institutionName !== undefined ? data.institutionName : undefined,
+                bio: data.bio !== undefined ? data.bio : undefined,
+                class: data.class !== undefined ? data.class : undefined,
+                gender:
+                    data.gender === null
+                        ? "NOT_SET"
+                        : data.gender !== undefined
+                          ? data.gender
+                          : undefined,
+                socialLinks: data.socialLinks !== undefined ? data.socialLinks : undefined,
             },
             select: {
                 id: true,
@@ -268,6 +294,11 @@ export const updateUserById = async (
                 role: true,
                 created_at: true,
                 updated_at: true,
+                institutionName: true,
+                bio: true,
+                class: true,
+                gender: true,
+                socialLinks: true,
             },
         });
 
@@ -289,6 +320,105 @@ export const updateUserById = async (
         return {
             data: null,
             message: "Failed to update user",
+            success: false,
+        };
+    }
+};
+
+export const getUserProfile = async (id: number) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id },
+            select: {
+                id: true,
+                name: true,
+                user_name: true,
+                email: true,
+                image: true,
+                institutionName: true,
+                bio: true,
+                class: true,
+                gender: true,
+                socialLinks: true,
+            },
+        });
+
+        if (!user) {
+            return {
+                data: null,
+                message: "User not found",
+                success: false,
+            };
+        }
+
+        return {
+            data: user,
+            message: "Profile fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch profile for user ${id}: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch profile",
+            success: false,
+        };
+    }
+};
+
+export const updateUserProfile = async (
+    id: number,
+    data: {
+        name?: string | null;
+        user_name?: string;
+        institutionName?: string | null;
+        bio?: string | null;
+        class?: ClassEnum | null;
+        gender?: GenderEnum | null;
+        socialLinks?: string[];
+    }
+) => {
+    try {
+        const updated = await prisma.user.update({
+            where: { id },
+            data: {
+                name: data.name !== undefined ? data.name : undefined,
+                user_name: data.user_name,
+                institutionName: data.institutionName !== undefined ? data.institutionName : undefined,
+                bio: data.bio !== undefined ? data.bio : undefined,
+                class: data.class !== undefined ? data.class : undefined,
+                gender:
+                    data.gender === null
+                        ? "NOT_SET"
+                        : data.gender !== undefined
+                          ? data.gender
+                          : undefined,
+                socialLinks: data.socialLinks !== undefined ? data.socialLinks : undefined,
+            },
+            select: {
+                id: true,
+                name: true,
+                user_name: true,
+                email: true,
+                image: true,
+                institutionName: true,
+                bio: true,
+                class: true,
+                gender: true,
+                socialLinks: true,
+            },
+        });
+
+        return {
+            data: updated,
+            message: "Profile updated successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to update profile for user ${id}: ${error}`);
+        return {
+            data: null,
+            message: "Failed to update profile",
             success: false,
         };
     }

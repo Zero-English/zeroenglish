@@ -300,10 +300,37 @@ export const updateUserSchema = z
     email: z.string().trim().min(1, "Email is required").email("Invalid email address"),
     role: z.enum(["user", "admin"]),
     image: z.string().trim().max(500).nullable().optional(),
+    institutionName: z.string().trim().max(200).nullable().optional(),
+    bio: z.string().trim().max(1000).nullable().optional(),
+    class: quizClassEnumSchema.nullable().optional(),
+    gender: z.enum(["MALE", "FEMALE", "NOT_SET"]).nullable().optional(),
+    socialLinks: z
+      .array(z.string().trim().max(500))
+      .max(10, "Too many social links (max 10)")
+      .optional(),
   })
   .strict();
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+
+export const genderEnumSchema = z.enum(["MALE", "FEMALE", "NOT_SET"]);
+
+export const profileUpdateSchema = z
+  .object({
+    name: z.string().trim().max(120).nullable().optional(),
+    user_name: z.string().trim().min(1, "Username is required").max(50),
+    institutionName: z.string().trim().max(200).nullable().optional(),
+    bio: z.string().trim().max(1000).nullable().optional(),
+    class: quizClassEnumSchema.nullable().optional(),
+    gender: genderEnumSchema.nullable().optional(),
+    socialLinks: z
+      .array(z.string().trim().max(500))
+      .max(10, "Too many social links (max 10)")
+      .optional(),
+  })
+  .strict();
+
+export type ProfileUpdateInput = z.infer<typeof profileUpdateSchema>;
 
 export const FOLDER_NAME_REGEX = /^[A-Za-z0-9 _-]+$/;
 

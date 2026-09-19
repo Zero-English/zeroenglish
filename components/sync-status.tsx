@@ -84,7 +84,7 @@ export function SyncStatus() {
   ];
 
   return (
-    <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80">
+    <div className="mt-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-sky-100 dark:bg-sky-900/30">
