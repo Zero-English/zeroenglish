@@ -70,6 +70,14 @@ async function handler(
 
     const params = await ctx.params;
     const isCallback = params.nextauth?.[0] === "callback";
+    // NextAuth redirects failed OAuth flows to its built-in signin page with
+    // ?error=OAuthCallback. Send those users to the home page instead.
+    if (
+        params.nextauth?.[0] === "signin" &&
+        req.nextUrl.searchParams.get("error") === "OAuthCallback"
+    ) {
+        return NextResponse.redirect(new URL("/", req.url));
+    }
     const hasBindIntent = req.cookies.get(BIND_COOKIE)?.value === "1";
 
     const res = await bindIntentStore.run(
