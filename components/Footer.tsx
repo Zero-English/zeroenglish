@@ -49,7 +49,7 @@ export default function FFooter() {
       links: [
         { labelBn: "আমাদের সম্পর্কে", labelEn: "About", href: "/about" },
         { labelBn: "গোপনীয়তা নীতি", labelEn: "Privacy Policy", href: "/privacy" },
-        { labelBn: "যোগাযোগ", labelEn: "Contact", href: "mailto:zeroenglishweb@gmail.com" },
+        { labelBn: "যোগাযোগ", labelEn: "Contact", href: "/contact" },
       ],
     },
   ];
@@ -148,9 +148,9 @@ const socialLinks = [
             <Link href="/privacy" className="hover:text-foreground active:text-foreground transition-colors">
               {t("গোপনীয়তা", "Privacy")}
             </Link>
-            <a href="mailto:zeroenglishweb@gmail.com" className="hover:text-foreground active:text-foreground transition-colors">
+            <Link href="/contact" className="hover:text-foreground active:text-foreground transition-colors">
               {t("যোগাযোগ", "Contact")}
-            </a>
+            </Link>
           </div>
         </div>
       </div>

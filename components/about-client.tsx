@@ -1,40 +1,184 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Rocket, Target, Users, Sparkles, ArrowRight, Mail, Globe, Share2 } from "lucide-react";
+import {
+  Rocket,
+  Target,
+  Users,
+  Sparkles,
+  ArrowRight,
+  Mail,
+  Globe,
+  Share2,
+  Eye,
+  Compass,
+  Accessibility,
+  Layers,
+  ChevronDown,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/components/language-provider";
 
-const VALUES = [
+const STATS = [
+  { value: "5,000+", labelBn: "অক্সফোর্ড শব্দ", labelEn: "Oxford words" },
+  { value: "6", labelBn: "CEFR লেভেল", labelEn: "CEFR levels" },
+  { value: "2", labelBn: "ভাষা", labelEn: "Languages" },
+  { value: "100%", labelBn: "বিনামূল্যে", labelEn: "Free to learn" },
+];
+
+const MISSION_VISION = [
   {
     icon: Target,
-    titleBn: "আমাদের লক্ষ্য",
-    titleEn: "Our Mission",
+    eyebrowBn: "আমাদের লক্ষ্য",
+    eyebrowEn: "Our Mission",
+    titleBn: "শূন্য থেকে আত্মবিশ্বাস",
+    titleEn: "From zero to confidence",
     descBn:
-      "প্রতিটি শিক্ষার্থী যেন নিজের গতিতে ইংরেজি আয়ত্ত করতে পারে — শব্দে শব্দে, ধাপে ধাপে।",
+      "প্রতিটি বাংলাভাষী শিক্ষার্থী যেন নিজের গতিতে, নিজের ভাষায় ইংরেজি আয়ত্ত করতে পারে — শব্দে শব্দে, ধাপে ধাপে, কোনো ভয় ছাড়াই।",
     descEn:
-      "To help every learner master English at their own pace — word by word, step by step.",
+      "To help every Bangla-speaking learner master English at their own pace and in their own language — word by word, step by step, without fear.",
   },
   {
-    icon: Users,
-    titleBn: "আমাদের দৃষ্টিভঙ্গি",
-    titleEn: "Our Vision",
+    icon: Eye,
+    eyebrowBn: "আমাদের স্বপ্ন",
+    eyebrowEn: "Our Vision",
+    titleBn: "ভাষা আর বাধা নয়",
+    titleEn: "Language without barriers",
     descBn:
-      "একটি জগৎ যেখানে ভাষা আর বাধা নয় — প্রযুক্তির মাধ্যমে সবার জন্য শেখা সহজলভ্য।",
+      "এমন একটি জগৎ যেখানে ইংরেজি শেখা সবার নাগালে — প্রযুক্তির সাহায্যে শিক্ষা হোক সবার জন্য সহজলভ্য ও আনন্দময়।",
     descEn:
-      "A world where language is never a barrier — making learning accessible to everyone through technology.",
+      "A world where English is within everyone's reach — using technology to make education accessible and joyful for all.",
+  },
+  {
+    icon: Compass,
+    eyebrowBn: "আমাদের পদ্ধতি",
+    eyebrowEn: "Our Approach",
+    titleBn: "ধাপে ধাপে, মজায় মজায়",
+    titleEn: "Step by step, with joy",
+    descBn:
+      "অক্সফোর্ড ৫০০০ তালিকা, CEFR লেভেল, বাংলা অর্থ ও কুইজ — সব মিলিয়ে একটি সহজ, কার্যকরী ও মজার শেখার পদ্ধতি।",
+    descEn:
+      "Oxford 5000, CEFR levels, Bangla meanings and quizzes — a simple, effective and fun learning method all in one place.",
+  },
+];
+
+const VALUES = [
+  {
+    icon: Accessibility,
+    titleBn: "সবার জন্য উন্মুক্ত",
+    titleEn: "Open to everyone",
+    descBn:
+      "১০০% বিনামূল্যে — যেকোনো ডিভাইসে, যেকোনো জায়গায় শেখা শুরু করুন।",
+    descEn: "100% free — start learning on any device, anywhere.",
+  },
+  {
+    icon: Layers,
+    titleBn: "গোছানো ও নির্ভরযোগ্য",
+    titleEn: "Structured & reliable",
+    descBn:
+      "A1 থেকে C2 — ধাপে ধাপে গোছানো পথচলা, যেন কেউ হারিয়ে না যায়।",
+    descEn: "A1 to C2 — a clearly structured path so nobody gets lost.",
   },
   {
     icon: Sparkles,
-    titleBn: "আমাদের পদ্ধতি",
-    titleEn: "Our Approach",
+    titleBn: "আনন্দময় অভিজ্ঞতা",
+    titleEn: "Joyful experience",
     descBn:
-      "বাংলা ও ইংরেজি দুই ভাষায় সম্পূর্ণ সাপোর্ট দিয়ে সহজ, মজার ও কার্যকরী শেখার অভিজ্ঞতা।",
-    descEn:
-      "A simple, fun and effective learning experience with full support in both Bangla and English.",
+      "কুইজ, পরীক্ষা ও অগ্রগতির আয়না — শেখা যেন বাধ্যবাধকতা না হয়ে হয় আনন্দ।",
+    descEn: "Quizzes, exams and progress tracking make learning a joy, not a chore.",
   },
 ];
+
+const FAQS = [
+  {
+    qBn: "জিরো ইংলিশ কী?",
+    qEn: "What is Zero English?",
+    aBn:
+      "জিরো ইংলিশ একটি দ্বিভাষিক ইংরেজি শেখার প্ল্যাটফর্ম — বাংলা অর্থসহ অক্সফোর্ড ৫০০০ শব্দের তালিকা থেকে A1 থেকে C2 লেভেল পর্যন্ত শেখানো হয়।",
+    aEn:
+      "Zero English is a bilingual English learning platform that teaches the Oxford 5000 word list with Bangla meanings, from A1 to C2 levels.",
+  },
+  {
+    qBn: "এটি কি সত্যিই বিনামূল্যে?",
+    qEn: "Is it really free?",
+    aBn:
+      "হ্যাঁ। সব শব্দ, কুইজ ও পরীক্ষা — সবকিছুই বিনামূল্যে। আমরা এখনো শুরুতে আছি, তাই প্রথম থেকেই সবকিছু সবার জন্য উন্মুক্ত রেখেছি।",
+    aEn:
+      "Yes. All words, quizzes and exams are completely free. We're still early, so we've kept everything open from day one.",
+  },
+  {
+    qBn: "কোন লেভেলগুলো কভার করা হয়?",
+    qEn: "Which levels are covered?",
+    aBn:
+      "A1, A2, B1, B2, C1 ও C2 — ছয়টি CEFR লেভেলই। আপনি যেকোনো লেভেল থেকে শুরু করে ধীরে ধীরে এগিয়ে যেতে পারেন।",
+    aEn:
+      "All six CEFR levels: A1, A2, B1, B2, C1 and C2. Start from any level and progress step by step.",
+  },
+  {
+    qBn: "কীভাবে শেখা শুরু করব?",
+    qEn: "How do I start learning?",
+    aBn:
+      "শব্দভান্ডার পেজ থেকে আপনার লেভেল বেছে নিন, অ্যাকাউন্ট খুলুন (ঐচ্ছিক) এবং দৈনিক ৫০টি শব্দের লক্ষ্য রাখুন। কুইজ দিয়ে নিজেকে যাচাই করুন।",
+    aEn:
+      "Pick your level from the vocabulary page, create an account (optional), and aim for 50 words a day. Test yourself with quizzes.",
+  },
+  {
+    qBn: "আমার অগ্রগতি কি ট্র্যাক হবে?",
+    qEn: "Will my progress be tracked?",
+    aBn:
+      "হ্যাঁ — শেখা শব্দ, বুকমার্ক ও কুইজের ফলাফল সংরক্ষিত হয় এবং প্রোফাইল থেকে সারাংশ ও অগ্রগতি চার্ট দেখা যায়।",
+    aEn:
+      "Yes — learned words, bookmarks and quiz results are saved, with a summary and progress chart in your profile.",
+  },
+  {
+    qBn: "অফলাইনে শেখা যাবে?",
+    qEn: "Can I learn offline?",
+    aBn:
+      "জিরো ইংলিশ একটি PWA — ওয়েব অ্যাপ হিসেবে ইন্সটল করলে অফলাইনেও শেখা চালিয়ে যেতে পারেন, প্রগতি ডিভাইসে সংরক্ষিত হয়।",
+    aEn:
+      "Zero English is a PWA — install it as an app and keep learning offline, with progress saved on your device.",
+  },
+];
+
+function FaqItem({
+  faq,
+}: {
+  faq: { qBn: string; qEn: string; aBn: string; aEn: string };
+}) {
+  const [open, setOpen] = useState(false);
+  const t = useT();
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left text-sm font-semibold text-zinc-900 dark:text-zinc-100 transition-colors hover:text-orange-500"
+      >
+        {t(faq.qBn, faq.qEn)}
+        <ChevronDown
+          className={`size-4 shrink-0 text-zinc-400 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+      <div
+        className={`grid transition-all duration-200 ${
+          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <p className="px-5 pb-4 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+            {t(faq.aBn, faq.aEn)}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function AboutClient() {
   const t = useT();
@@ -101,6 +245,68 @@ export function AboutClient() {
           </section>
 
           <section className="mb-14">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              {STATS.map((stat) => (
+                <div
+                  key={stat.labelEn}
+                  className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 text-center"
+                >
+                  <div className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+                    {stat.value}
+                  </div>
+                  <div className="mt-1 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
+                    {t(stat.labelBn, stat.labelEn)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="mb-14">
+            <div className="mb-8 text-center">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-4">
+                <Target className="h-3.5 w-3.5 text-orange-500" />
+                {t("কেন আমরা আছি", "Our Purpose")}
+              </div>
+              <h2 className="text-xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-3">
+                {t("লক্ষ্য, স্বপ্ন ও পদ্ধতি", "Mission, Vision & Approach")}
+              </h2>
+              <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto">
+                {t(
+                  "তিনটি স্তম্ভ আমাদের প্রতিটি পদক্ষেপকে পরিচালিত করে।",
+                  "Three pillars guide every step we take."
+                )}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+              {MISSION_VISION.map(
+                ({ icon: Icon, eyebrowBn, eyebrowEn, titleBn, titleEn, descBn, descEn }) => (
+                  <div
+                    key={eyebrowEn}
+                    className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-500">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                        {t(eyebrowBn, eyebrowEn)}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+                      {t(titleBn, titleEn)}
+                    </h3>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                      {t(descBn, descEn)}
+                    </p>
+                  </div>
+                )
+              )}
+            </div>
+          </section>
+
+          <section className="mb-14">
             <div className="mb-5">
               <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
                 {t("আমাদের মূল্যবোধ", "What we stand for")}
@@ -126,6 +332,26 @@ export function AboutClient() {
                     {t(descBn, descEn)}
                   </p>
                 </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="mb-14">
+            <div className="mb-5">
+              <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                {t("সাধারণ জিজ্ঞাসা", "Frequently Asked Questions")}
+              </h2>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
+                {t(
+                  "আপনার মনে আসা সবচেয়ে সাধারণ প্রশ্নগুলোর উত্তর।",
+                  "Quick answers to the questions we hear the most."
+                )}
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              {FAQS.map((faq) => (
+                <FaqItem key={faq.qEn} faq={faq} />
               ))}
             </div>
           </section>

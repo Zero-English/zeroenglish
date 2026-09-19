@@ -15,6 +15,7 @@ const staticRoutes = [
   { url: `${BASE_URL}/quiz/exam`, changeFrequency: "weekly" as const, priority: 0.7 },
   { url: `${BASE_URL}/news`, changeFrequency: "daily" as const, priority: 0.7 },
   { url: `${BASE_URL}/leaderboard`, changeFrequency: "daily" as const, priority: 0.5 },
+  { url: `${BASE_URL}/contact`, changeFrequency: "monthly" as const, priority: 0.5 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
