@@ -4,7 +4,7 @@ import { HomeOrDashboard } from "@/components/home-or-dashboard";
 import { getPublishedBlogsByPage } from "@/services/blog.service";
 import { getLeaderboard } from "@/services/user.service";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
