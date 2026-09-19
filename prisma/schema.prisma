@@ -148,10 +148,13 @@ model QuizQuestion {
   options         String[]
   difficultyLevel DifficultyLevels
   answer          String
+  isPending       Boolean @default(true)
   quizExams       QuizExamQuestion[]
   class           Class[]
   hintWords       Word[]
   explanation     String @default("")
+  addedByUserId   Int
+  addedBy         User @relation(fields: [addedByUserId], references: [id], onDelete: Cascade)
   relaventQuizResultCorrectQuestions QuizResults[] @relation("CorrectQuizQuestion")
   relaventQuizResultIncorrectQuestions QuizResults[] @relation("IncorrectQuizQuestion")
 }
@@ -230,6 +233,8 @@ model User {
   relatedWords   UserWord[]
   userBookmarks  UserBookmark[]
   quizResults    QuizResults[]
+  isPending      Boolean @default(true)
+  addedQuestions QuizQuestion[]
   vocabularyExamResults VocabularyExamResult[]
 }
 
@@ -300,6 +305,7 @@ model VocabularyExamResult {
 enum Roles {
   user
   admin
+  contributor
 }
 
 enum Levels {

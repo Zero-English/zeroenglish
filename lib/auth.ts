@@ -198,7 +198,7 @@ export const authOptions: NextAuthOptions = {
                 }
             }
             if (session.user && token?.role) {
-                session.user.role = token.role as "user" | "admin";
+                session.user.role = token.role as "user" | "admin" | "contributor";
             }
             return session;
         },

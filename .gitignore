@@ -43,3 +43,6 @@ next-env.d.ts
 /generated/prisma
 
 /logs
+
+# database backups (may contain sensitive data)
+/.backups
