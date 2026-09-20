@@ -13,6 +13,7 @@ import {
   Timer,
   CalendarClock,
   Hourglass,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
 import { useT } from "@/components/language-provider";
@@ -53,6 +54,22 @@ const CARDS: QuizCard[] = [
     pill: "bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
     badge: "Exam",
     badgeBn: "পরীক্ষা",
+    badgeIcon: Timer,
+  },
+  {
+    label: "Quick Quiz",
+    labelBn: "কুইক কুইজ",
+    desc: "A rapid 20-question mixed quiz with 20 seconds per question from grammar and class topics.",
+    descBn: "গ্রামার ও শ্রেণি টপিক থেকে ২০টি প্রশ্ন, প্রতিটি ২০ সেকেন্ডে দিন।",
+    href: "/quiz/quick",
+    icon: Zap,
+    accent:
+      "bg-rose-100/80 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300",
+    glow: "hover:shadow-rose-500/25 active:shadow-rose-500/25",
+    arrow: "group-hover:bg-rose-500 group-hover:text-white group-active:bg-rose-500 group-active:text-white",
+    pill: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300",
+    badge: "20 × 20s",
+    badgeBn: "২০ × ২০ সে.",
     badgeIcon: Timer,
   },
   {

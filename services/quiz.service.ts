@@ -141,6 +141,40 @@ export const getQuizQuestionsByType = async (
     }
 };
 
+export const getQuickQuizQuestions = async (limit: number = 20) => {
+    try {
+        const questions = await prisma.quizQuestion.findMany({
+            orderBy: { id: "asc" },
+            include: quizTypeInclude,
+        });
+
+        // Return a random set of questions drawn from every quiz type and
+        // class, capped at the requested limit. Options are shuffled on the
+        // server too, so the correct answer doesn't always land on the same
+        // letter.
+        const shuffled = questions
+            .map((q) => ({
+                ...toApiQuestion(q),
+                options: shuffleArray(q.options),
+            }))
+            .sort(() => Math.random() - 0.5)
+            .slice(0, limit);
+
+        return {
+            data: shuffled,
+            message: "Quick quiz questions fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch quick quiz questions: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch quick quiz questions",
+            success: false,
+        };
+    }
+};
+
 export const getQuizQuestionsByClass = async (
     className: string,
     limit: number = 50
