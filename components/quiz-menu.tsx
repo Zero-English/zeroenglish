@@ -240,7 +240,8 @@ export function QuizMenu() {
         <StaggerContainer className="mx-auto max-w-6xl">
           <div className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
             {/* Left rail: overview */}
-            <div className="space-y-4 sm:space-y-6 lg:sticky lg:top-6 lg:self-start">
+            <div className="order-2 space-y-4 sm:space-y-6 lg:order-1">
+              <div className="lg:sticky lg:top-6">
               <StaggerItem>
                 <div className={cn(CARD, "overflow-hidden")}>
                   <div className="p-5 sm:p-6">
@@ -363,20 +364,21 @@ export function QuizMenu() {
                         tint="text-violet-500"
                       />
                     </StaggerItem>
-                  </StaggerContainer>
-                </div>
-              </StaggerItem>
-
-              <StaggerItem>
-                <div className={cn(CARD, "overflow-hidden")}>
-                  <div className="flex items-center gap-2.5 border-b border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4">
-                    <div className={cn(ICON_CHIP, "text-violet-500")}>
-                      <CalendarClock className="size-4.5" />
-                    </div>
-                    <h2 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                      {t("পরবর্তী পরীক্ষা", "Next Exam")}
-                    </h2>
+</StaggerContainer>
                   </div>
+                </StaggerItem>
+                </div>
+
+                <StaggerItem>
+                  <div className={cn(CARD, "overflow-hidden")}>
+                    <div className="flex items-center gap-2.5 border-b border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4">
+                      <div className={cn(ICON_CHIP, "text-violet-500")}>
+                        <CalendarClock className="size-4.5" />
+                      </div>
+                      <h2 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                        {t("পরবর্তী পরীক্ষা", "Next Exam")}
+                      </h2>
+                    </div>
 
                   <div className="px-5 sm:px-6 py-4">
                     {!examReady ? (
@@ -440,7 +442,7 @@ export function QuizMenu() {
             </div>
 
             {/* Main column: quiz modes */}
-            <div className="space-y-4 sm:space-y-6">
+            <div className="order-1 space-y-4 sm:space-y-6 lg:order-2">
               <StaggerItem>
                 <section>
                   <div className="mb-4 px-1">
