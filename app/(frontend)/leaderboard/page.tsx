@@ -8,7 +8,7 @@ import { BackButton } from "@/components/back-button";
 export const metadata: Metadata = {
     title: "Leaderboard",
     description:
-        "Top learners ranked by their quiz exam average and last week performance.",
+        "Learners who took a quiz exam this week, ranked by their average score.",
     alternates: { canonical: "/leaderboard" },
 };
 

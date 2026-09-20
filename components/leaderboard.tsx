@@ -1,17 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import {
   ArrowRight,
-  CalendarRange,
   Crown,
   FileText,
   Gauge,
   GraduationCap,
   Hash,
-  History,
   ListOrdered,
   Medal,
   Sparkles,
@@ -23,7 +21,6 @@ import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
 import { UserAvatar } from "@/components/UserAvatar";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export interface LeaderboardRow {
   id: number;
@@ -36,7 +33,6 @@ export interface LeaderboardRow {
   lastWeekCount: number;
 }
 
-type TabKey = "allTime" | "lastWeek";
 type RankedRow = LeaderboardRow & { rank: number };
 type Translate = (bangla: string, english: string) => string;
 
@@ -79,20 +75,6 @@ const podiumThemes = [
   },
 ];
 
-function tabValue(tab: TabKey, row: LeaderboardRow): number {
-  return tab === "allTime" ? row.allTimeAvg : row.lastWeekAvg;
-}
-
-function tabCount(tab: TabKey, row: LeaderboardRow): number {
-  return tab === "allTime" ? row.allTimeCount : row.lastWeekCount;
-}
-
-function tabMetricLabel(tab: TabKey, t: Translate): string {
-  return tab === "allTime"
-    ? t("গড় স্কোর", "avg score")
-    : t("সপ্তাহের স্কোর", "weekly score");
-}
-
 function placeOrdinal(place: number, t: Translate): string {
   const prefix: Record<number, [string, string]> = {
     1: ["প্রথম", "1st"],
@@ -110,7 +92,7 @@ function scoreColor(pct: number): string {
   return "text-rose-600 dark:text-rose-400";
 }
 
-function Podium({ top3, tab }: { top3: RankedRow[]; tab: TabKey }) {
+function Podium({ top3 }: { top3: RankedRow[] }) {
   const t = useT();
   const places = [2, 1, 3].filter((p) => top3.some((r) => r.rank === p));
 
@@ -179,11 +161,11 @@ function Podium({ top3, tab }: { top3: RankedRow[]; tab: TabKey }) {
                 theme.scoreChip
               )}
             >
-              {Math.round(tabValue(tab, row))}
+              {Math.round(row.lastWeekAvg)}
               <span className="text-[10px] font-bold sm:text-xs">%</span>
             </span>
             <span className="mt-0.5 text-[10px] tabular-nums text-zinc-400 dark:text-zinc-500">
-              {tabCount(tab, row)} {t("পরীক্ষা", "exams")}
+              {row.lastWeekCount} {t("পরীক্ষা", "exams")}
             </span>
 
             <span
@@ -206,16 +188,14 @@ function Row({
   row,
   highlight,
   max,
-  tab,
 }: {
   row: RankedRow;
   highlight?: boolean;
   max: number;
-  tab: TabKey;
 }) {
   const t = useT();
-  const value = tabValue(tab, row);
-  const count = tabCount(tab, row);
+  const value = row.lastWeekAvg;
+  const count = row.lastWeekCount;
   const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
 
   return (
@@ -331,18 +311,18 @@ export function Leaderboard({
   currentUserId?: number;
 }) {
   const t = useT();
-  const [tab, setTab] = useState<TabKey>("allTime");
+
+  const participants = rows.filter((r) => r.lastWeekCount > 0);
 
   const ranked = useMemo(() => {
-    const value = (r: LeaderboardRow) => tabValue(tab, r);
-    return [...rows]
-      .sort((a, b) => value(b) - value(a) || a.id - b.id)
+    return [...participants]
+      .sort((a, b) => b.lastWeekAvg - a.lastWeekAvg || a.id - b.id)
       .map((r, i) => ({ ...r, rank: i + 1 }));
-  }, [rows, tab]);
+  }, [participants]);
 
-  const top3 = ranked.filter((r) => r.rank <= 3 && tabValue(tab, r) > 0);
-  const rest = ranked.filter((r) => r.rank > 3 || tabValue(tab, r) === 0);
-  const max = ranked.length > 0 ? Math.max(...ranked.map((r) => tabValue(tab, r))) : 0;
+  const top3 = ranked.slice(0, 3);
+  const rest = ranked.slice(3);
+  const max = ranked.length > 0 ? Math.max(...ranked.map((r) => r.lastWeekAvg)) : 0;
   const me = currentUserId ? ranked.find((r) => r.id === currentUserId) : undefined;
   const topRow = ranked[0];
 
@@ -364,8 +344,8 @@ export function Leaderboard({
                 </h1>
                 <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
                   {t(
-                    "কুইজ পরীক্ষায় গড় স্কোর অনুযায়ী সেরা শিক্ষার্থীদের র‍্যাংকিং।",
-                    "Learners ranked by their average quiz exam score."
+                    "এই সপ্তাহে কুইজ পরীক্ষায় অংশ নেওয়া শিক্ষার্থীদের গড় স্কোর অনুযায়ী র‍্যাংকিং।",
+                    "Learners who took a quiz exam this week, ranked by average score."
                   )}
                 </p>
               </div>
@@ -409,7 +389,7 @@ export function Leaderboard({
                     {topRow ? `#1 · ${topRow.name || topRow.user_name || "—"}` : "—"}
                   </p>
                   <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                    {t("সব শিক্ষার্থীর মধ্যে", "among all learners")}
+                    {t("এই সপ্তাহের সেরা স্কোর", "this week's top score")}
                   </p>
                 </div>
               </div>
@@ -420,9 +400,9 @@ export function Leaderboard({
                     icon={Users}
                     labelEn="Learners"
                     labelBn="শিক্ষার্থী"
-                    value={`${rows.length}`}
-                    subEn="on the leaderboard"
-                    subBn="লিডারবোর্ডে"
+                    value={`${participants.length}`}
+                    subEn="gave an exam this week"
+                    subBn="এই সপ্তাহে পরীক্ষা দিয়েছেন"
                     tint="text-orange-500"
                   />
                 </StaggerItem>
@@ -432,8 +412,8 @@ export function Leaderboard({
                     labelEn="Your rank"
                     labelBn="আপনার র‍্যাংক"
                     value={me ? `#${me.rank}` : "–"}
-                    subEn={me ? `of ${rows.length} total` : "visible after login"}
-                    subBn={me ? `মোট ${rows.length} জনের মধ্যে` : "লগইন করলে দেখা যাবে"}
+                    subEn={me ? `of ${participants.length} total` : "take an exam to rank"}
+                    subBn={me ? `মোট ${participants.length} জনের মধ্যে` : "র‍্যাংক পেতে পরীক্ষা দিন"}
                     tint="text-emerald-500"
                   />
                 </StaggerItem>
@@ -442,9 +422,9 @@ export function Leaderboard({
                     icon={Gauge}
                     labelEn="Your score"
                     labelBn="আপনার স্কোর"
-                    value={me ? `${Math.round(tabValue(tab, me))}%` : "–"}
-                    subEn={me ? tabMetricLabel(tab, t) : "visible after login"}
-                    subBn={me ? tabMetricLabel(tab, t) : "লগইন করলে দেখা যাবে"}
+                    value={me ? `${Math.round(me.lastWeekAvg)}%` : "–"}
+                    subEn={me ? "weekly score" : "take an exam to rank"}
+                    subBn={me ? "সপ্তাহের স্কোর" : "র‍্যাংক পেতে পরীক্ষা দিন"}
                     tint="text-sky-500"
                   />
                 </StaggerItem>
@@ -453,9 +433,9 @@ export function Leaderboard({
                     icon={FileText}
                     labelEn="Exams"
                     labelBn="পরীক্ষা"
-                    value={me ? `${tabCount(tab, me)}` : "–"}
-                    subEn={me ? "exams taken" : "visible after login"}
-                    subBn={me ? "পরীক্ষা নেওয়া হয়েছে" : "লগইন করলে দেখা যাবে"}
+                    value={me ? `${me.lastWeekCount}` : "–"}
+                    subEn={me ? "exams this week" : "take an exam to rank"}
+                    subBn={me ? "এই সপ্তাহে পরীক্ষা" : "র‍্যাংক পেতে পরীক্ষা দিন"}
                     tint="text-violet-500"
                   />
                 </StaggerItem>
@@ -479,16 +459,16 @@ export function Leaderboard({
                 <ul className="space-y-2.5">
                   {[
                     t(
-                      "পরীক্ষায় অংশ নিয়ে স্কোর বাড়ান।",
-                      "Take exam quizzes to build your score."
+                      "প্রতি সপ্তাহে পরীক্ষায় অংশ নিয়ে স্কোর বাড়ান।",
+                      "Take weekly exams to build your score."
+                    ),
+                    t(
+                      "শুধু এই সপ্তাহে পরীক্ষা দেওয়া শিক্ষার্থীরাই র‍্যাংকিংয়ে আসে।",
+                      "Only learners who gave an exam this week are ranked."
                     ),
                     t(
                       "গড় স্কোর অনুযায়ী র‍্যাংক নির্ধারিত হয়।",
                       "Rank is based on your average score."
-                    ),
-                    t(
-                      "সাম্প্রতিক ও সর্বকাল — দুই র‍্যাংকিংই দেখুন।",
-                      "Weekly and all-time rankings are both tracked."
                     ),
                   ].map((line) => (
                     <li key={line} className="flex items-start gap-2">
@@ -516,30 +496,16 @@ export function Leaderboard({
         {/* Main column */}
         <StaggerItem className="order-1 lg:order-2">
           <section>
-            <div className="mb-4 flex flex-wrap items-end justify-between gap-3 px-1">
-              <div className="min-w-0 px-1">
-                <h2 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                  {t("শীর্ষ শিক্ষার্থীরা", "Top Performers")}
-                </h2>
-                <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-500">
-                  {t(
-                    "সাম্প্রতিক বা সব সময়ের — কে এগিয়ে আছে দেখুন।",
-                    "Weekly or all-time — see who leads."
-                  )}
-                </p>
-              </div>
-              <Tabs value={tab} onValueChange={(v) => v && setTab(v as TabKey)} className="w-auto shrink-0">
-                <TabsList className="h-9 gap-1 p-1">
-                  <TabsTrigger value="allTime" className="gap-1.5 rounded-lg px-3 text-xs sm:px-4">
-                    <History className="h-3.5 w-3.5" />
-                    {t("সর্বকাল", "All time")}
-                  </TabsTrigger>
-                  <TabsTrigger value="lastWeek" className="gap-1.5 rounded-lg px-3 text-xs sm:px-4">
-                    <CalendarRange className="h-3.5 w-3.5" />
-                    {t("গত সপ্তাহ", "Last week")}
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
+            <div className="mb-4 px-1">
+              <h2 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                {t("শীর্ষ শিক্ষার্থীরা", "Top Performers")}
+              </h2>
+              <p className="mt-0.5 text-xs text-zinc-400 dark:text-zinc-500">
+                {t(
+                  "গত ৭ দিনে যারা পরীক্ষা দিয়েছেন — সেরা গড় স্কোর অনুযায়ী।",
+                  "Who scored highest this week — ranked by average."
+                )}
+              </p>
             </div>
 
             {ranked.length > 0 ? (
@@ -556,7 +522,7 @@ export function Leaderboard({
                         </h2>
                       </div>
                       <div className="px-5 py-6 sm:px-6">
-                        <Podium top3={top3} tab={tab} />
+                        <Podium top3={top3} />
                       </div>
                     </div>
                   </StaggerItem>
@@ -584,7 +550,6 @@ export function Leaderboard({
                             key={row.id}
                             row={row}
                             max={max}
-                            tab={tab}
                             highlight={row.id === currentUserId}
                           />
                         ))}
@@ -598,12 +563,15 @@ export function Leaderboard({
                 <div className={cn(CARD, "px-6 py-16 text-center")}>
                   <Trophy className="mx-auto mb-3 h-10 w-10 text-zinc-300 dark:text-zinc-700" />
                   <p className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                    {t("এখনো কোনো শিক্ষার্থী নেই", "No learners yet")}
+                    {t(
+                      "এখনো কেউ পরীক্ষা দেয়নি",
+                      "No exams taken this week yet"
+                    )}
                   </p>
                   <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
                     {t(
-                      "কুইজ পরীক্ষায় অংশ নিয়ে শীর্ষে উঠুন!",
-                      "Take a quiz exam to claim the top spot!"
+                      "এই সপ্তাহে কুইজ পরীক্ষায় অংশ নিয়ে শীর্ষে উঠুন!",
+                      "Take a quiz exam this week to claim the top spot!"
                     )}
                   </p>
                 </div>
