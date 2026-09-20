@@ -117,16 +117,35 @@ export const getQuizQuestionsByPage = async (page: number = 1, limit: number = 1
     }
 };
 
-export const getQuizQuestionsByAddedBy = async (addedByUserId: number) => {
+export const getQuizQuestionsByAddedBy = async (
+    addedByUserId: number,
+    page: number = 1,
+    limit: number = 10
+) => {
     try {
-        const questions = await prisma.quizQuestion.findMany({
-            where: { addedByUserId },
-            orderBy: { id: "desc" },
-            include: quizAdminInclude,
-        });
+        const skip = (page - 1) * limit;
+
+        const [questions, total] = await Promise.all([
+            prisma.quizQuestion.findMany({
+                where: { addedByUserId },
+                skip,
+                take: limit,
+                orderBy: { id: "desc" },
+                include: quizAdminInclude,
+            }),
+            prisma.quizQuestion.count({ where: { addedByUserId } }),
+        ]);
+
+        const totalPages = Math.ceil(total / limit);
 
         return {
             data: questions.map((q) => toApiAdminQuestion(q)),
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages,
+            },
             message: "Quiz questions fetched successfully",
             success: true,
         };
