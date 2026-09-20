@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { getAllQuizQuestions, getQuizQuestionsByPage, createQuizQuestion, createQuizQuestionsBulk, updateQuizQuestionsBulk } from "@/services/quiz.service";
 import { quizQuestionSchema, bulkQuizUploadSchema, bulkQuizUpdateSchema } from "@/utils/validation/zod";
 import { parseBulkJsonFile } from "@/utils/bulk-import";
-import { requireAdmin, getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
+import { requireAdmin, requireContributorOrAdmin, getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
 import logger from "@/utils/logger";
 
 export async function GET(request: NextRequest) {
@@ -80,7 +80,7 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-    const forbidden = await requireAdmin();
+    const forbidden = await requireContributorOrAdmin();
     if (forbidden) return forbidden;
 
     const sessionUser = await getApiSessionUser();
@@ -112,7 +112,14 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const result = await createQuizQuestion(parsed.data, sessionUser.id);
+    // Contributors may only submit questions for review. Newly created
+    // questions always start as pending; admins may set the status directly.
+    const createData =
+        sessionUser.role === "contributor"
+            ? { ...parsed.data, isPending: true }
+            : parsed.data;
+
+    const result = await createQuizQuestion(createData, sessionUser.id);
 
     if (!result.success) {
         logger.error(`Quiz question create failed`, {

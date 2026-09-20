@@ -1,29 +1,48 @@
-"use client";
+import type { Metadata, Viewport } from "next";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import AdminShell from "./shell";
 
-import AdminSidebar from "./sidebar";
-import { useState } from "react";
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
-export default function AdminLayout({
+export const metadata: Metadata = {
+  title: "Admin | Zero English",
+  description: "Zero English admin panel for managing users and vocabulary.",
+  manifest: "/manifest.webmanifest",
+  icons: "/assets/logo/favicon.webp",
+  other: {
+    "theme-color": "#f97316",
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
+export default async function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDesktopOpen, setIsDesktopOpen] = useState(true);
+  const session = await getServerSession(authOptions);
+  const role = session?.user?.role;
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  if (role !== "admin") {
+    // Contributors get redirected to their submission area; any other role is
+    // sent home. Either way, /admin is admin-only.
+    redirect(role === "contributor" ? "/contribute" : "/");
+  }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-950 md:flex-row">
-      <AdminSidebar
-        isOpen={isOpen}
-        isDesktopOpen={isDesktopOpen}
-        close={() => setIsOpen(false)}
-        toggleDesktop={() => setIsDesktopOpen((prev) => !prev)}
-        onMenu={() => setIsOpen(true)}
-      />
-      <main className="flex-1 min-w-0 w-full">
-        <div className="h-14 md:hidden" aria-hidden="true" />
-        {children}
-      </main>
-    </div>
+    <AdminShell>{children}</AdminShell>
   );
 }

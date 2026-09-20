@@ -117,6 +117,29 @@ export const getQuizQuestionsByPage = async (page: number = 1, limit: number = 1
     }
 };
 
+export const getQuizQuestionsByAddedBy = async (addedByUserId: number) => {
+    try {
+        const questions = await prisma.quizQuestion.findMany({
+            where: { addedByUserId },
+            orderBy: { id: "desc" },
+            include: quizAdminInclude,
+        });
+
+        return {
+            data: questions.map((q) => toApiAdminQuestion(q)),
+            message: "Quiz questions fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch quiz questions by contributor: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch quiz questions",
+            success: false,
+        };
+    }
+};
+
 export const getQuizQuestionsByType = async (
     quizType: string,
     limit: number = 50
@@ -332,10 +355,24 @@ export const createQuizQuestion = async (
             };
         }
 
+        const questionText = data.questionText.trim();
+        const existing = await prisma.quizQuestion.findFirst({
+            where: { questionText: { equals: questionText, mode: "insensitive" } },
+            select: { id: true },
+        });
+
+        if (existing) {
+            return {
+                data: null,
+                message: `A question with this exact text already exists (question #${existing.id}).`,
+                success: false,
+            };
+        }
+
         const question = await prisma.quizQuestion.create({
             data: {
                 quizTypeId: quizType.id,
-                questionText: data.questionText,
+                questionText: questionText,
                 options: data.options,
                 difficultyLevel: data.difficultyLevel,
                 answer: data.answer,
@@ -392,12 +429,45 @@ export const createQuizQuestionsBulk = async (
             };
         }
 
+        const seenTexts = new Set<string>();
+        for (const q of data) {
+            const normalized = q.questionText.trim().toLowerCase();
+            if (seenTexts.has(normalized)) {
+                return {
+                    data: null,
+                    message: `Duplicate question text found in the file: "${q.questionText.trim()}"`,
+                    success: false,
+                };
+            }
+            seenTexts.add(normalized);
+        }
+
+        const existing = await prisma.quizQuestion.findMany({
+            where: {
+                questionText: {
+                    in: data.map((q) => q.questionText.trim()),
+                    mode: "insensitive",
+                },
+            },
+            select: { id: true, questionText: true },
+        });
+
+        if (existing.length > 0) {
+            return {
+                data: null,
+                message: `Question(s) with the same text already exist: ${existing
+                    .map((e) => `#${e.id} "${e.questionText}"`)
+                    .join(", ")}`,
+                success: false,
+            };
+        }
+
         await prisma.$transaction(
             data.map((q) =>
                 prisma.quizQuestion.create({
                     data: {
                         quizTypeId: nameToId.get(q.quizType)!,
-                        questionText: q.questionText,
+                        questionText: q.questionText.trim(),
                         options: q.options,
                         difficultyLevel: q.difficultyLevel,
                         answer: q.answer,

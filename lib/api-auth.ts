@@ -48,3 +48,18 @@ export async function requireAdmin(): Promise<NextResponse | null> {
     if (user.role !== "admin") return forbiddenResponse();
     return null;
 }
+
+/**
+ * Guard for handlers that accept an admin or a contributor (e.g. question
+ * submission). Returns an error response when unauthenticated (401) or the
+ * role is neither admin nor contributor (403), otherwise null so the handler
+ * can continue.
+ */
+export async function requireContributorOrAdmin(): Promise<NextResponse | null> {
+    const user = await getApiSessionUser();
+    if (!user) return unauthorizedResponse();
+    if (user.role !== "admin" && user.role !== "contributor") {
+        return forbiddenResponse();
+    }
+    return null;
+}

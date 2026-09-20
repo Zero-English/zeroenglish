@@ -1,11 +1,11 @@
 "use client";
 
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, Trophy, Newspaper, LogIn, LogOut } from "lucide-react";
+import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, Trophy, Newspaper, LogIn, LogOut, SquarePen } from "lucide-react";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
 import { useSelectedLevel } from "@/lib/level-store";
@@ -37,13 +37,19 @@ function NavLinks({
   const isLoggedIn = status !== "none";
   // const vocabularyHref = level ? `/vocabulary/${level.toLowerCase()}` : "/vocabulary";
   const vocabularyHref = "/vocabulary"; // Fixed by Mahir because it should go to /vocabulary not /vocabulary/:level
-  const navLinks = [
+  const { data: session } = useSession();
+  const canContribute =
+    session?.user?.role === "admin" || session?.user?.role === "contributor";
+  const navLinks: { href: string; label: string; icon: typeof Home }[] = [
     { href: "/", label: t("হোম", "Home"), icon: Home },
     { href: vocabularyHref, label: t("শব্দভাণ্ডার", "Vocabulary"), icon: LibraryBig },
     { href: "/search", label: t("অনুসন্ধান", "Search"), icon: Search },
     { href: "/quiz", label: t("কুইজ", "Quiz"), icon: BookOpenCheck },
     { href: "/leaderboard", label: t("লিডারবোর্ড", "Leaderboard"), icon: Trophy },
     { href: "/news", label: t("নিউজ", "News"), icon: Newspaper },
+    ...(canContribute
+      ? [{ href: "/contribute", label: t("কন্ট্রিবিউট", "Contribute"), icon: SquarePen }]
+      : []),
     isLoggedIn
       ? { href: "/profile", label: t("প্রোফাইল", "Profile"), icon: User }
       : { href: "/login", label: t("লগইন", "Login"), icon: LogIn },
