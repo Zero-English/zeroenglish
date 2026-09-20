@@ -54,7 +54,7 @@ import logger from "@/utils/logger";
  *                 type: string
  *               role:
  *                 type: string
- *                 enum: [user, admin]
+ *                 enum: [user, admin, contributor]
  *               image:
  *                 type: string
  *     responses:

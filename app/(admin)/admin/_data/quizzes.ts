@@ -6,6 +6,13 @@ export type QuizQuestionItem = {
   difficultyLevel: DifficultyLevelValue;
   answer: string;
   explanation?: string;
+  isPending?: boolean;
+  addedByUserId?: number;
+  addedBy?: {
+    id: number;
+    name: string | null;
+    user_name: string;
+  } | null;
 };
 
 export type QuizTypeValue =
