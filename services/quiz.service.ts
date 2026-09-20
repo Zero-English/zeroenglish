@@ -136,7 +136,7 @@ export const getQuizQuestionsByType = async (
         }
 
         const questions = await prisma.quizQuestion.findMany({
-            where: { quizTypeId: type.id },
+            where: { quizTypeId: type.id, isPending: false },
             orderBy: { id: "asc" },
             include: quizTypeInclude,
         });
@@ -170,6 +170,7 @@ export const getQuizQuestionsByType = async (
 export const getQuickQuizQuestions = async (limit: number = 20) => {
     try {
         const questions = await prisma.quizQuestion.findMany({
+            where: { isPending: false },
             orderBy: { id: "asc" },
             include: quizTypeInclude,
         });
@@ -216,7 +217,7 @@ export const getQuizQuestionsByClass = async (
         }
 
         const questions = await prisma.quizQuestion.findMany({
-            where: { class: { hasSome: [className as Class] } },
+            where: { class: { hasSome: [className as Class] }, isPending: false },
             orderBy: { id: "asc" },
             include: quizTypeInclude,
         });
@@ -250,6 +251,7 @@ export const getQuizQuestionsByClass = async (
 export const getQuizQuestionCountsByClass = async () => {
     try {
         const rows = await prisma.quizQuestion.findMany({
+            where: { isPending: false },
             select: { class: true },
         });
 
@@ -278,8 +280,8 @@ export const getQuizQuestionCountsByClass = async () => {
 export const getQuizQuestionById = async (id: number) => {
     try {
         const question = await prisma.quizQuestion.findUnique({
-            where: { id },
-            include: quizTypeInclude,
+            where: { id, isPending: false },
+            include: quizAdminInclude,
         });
 
         if (!question) {
@@ -291,7 +293,7 @@ export const getQuizQuestionById = async (id: number) => {
         }
 
         return {
-            data: toApiQuestion(question),
+            data: toApiAdminQuestion(question),
             message: "Quiz question fetched successfully",
             success: true,
         };

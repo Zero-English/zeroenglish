@@ -1,4 +1,5 @@
-import { Check, Gauge, Hash, Layers, Lightbulb } from "lucide-react";
+import { Check, Gauge, Layers, Lightbulb, User } from "lucide-react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { QuizBackLink } from "@/components/quiz-back-link";
 
@@ -10,6 +11,11 @@ export interface QuizQuestionViewData {
   difficultyLevel: string;
   answer: string;
   explanation?: string;
+  addedBy?: {
+    id: number;
+    name: string | null;
+    user_name: string | null;
+  } | null;
 }
 
 interface QuizQuestionViewProps {
@@ -64,9 +70,17 @@ export function QuizQuestionView({ question }: QuizQuestionViewProps) {
               {question.quizType}
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-3 py-1 text-[11px] font-semibold text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-              <Hash className="h-3 w-3" />
               #{question.id}
             </span>
+            {question.addedBy ? (
+              <Link
+                href={`/profile/${question.addedBy.id}`}
+                className="inline-flex items-center gap-1.5 rounded-full bg-violet-50 px-3 py-1 text-[11px] font-semibold text-violet-700 transition-colors hover:bg-violet-100 dark:bg-violet-500/15 dark:text-violet-300 dark:hover:bg-violet-500/25"
+              >
+                <User className="h-3 w-3" />
+                {question.addedBy.name || `@${question.addedBy.user_name}`}
+              </Link>
+            ) : null}
           </div>
 
           {/* Question text */}

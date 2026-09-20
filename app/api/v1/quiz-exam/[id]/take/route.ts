@@ -49,6 +49,7 @@ export async function GET(
                 options: true,
                 difficultyLevel: true,
                 answer: true,
+                isPending: true,
               },
             },
           },
@@ -88,22 +89,22 @@ export async function GET(
     // The `answer` field is intentionally NOT included in the response. The
     // client receives a pre-shuffled full option set and cannot tell which
     // option is correct. Scoring is done server-side on submission.
-    const questions = exam.quizQuestions.map((eqq) => ({
-      id: eqq.quizQuestion.id,
-      questionText: eqq.quizQuestion.questionText,
-      options: buildShuffledOptions(
-        eqq.quizQuestion.options,
-        eqq.quizQuestion.answer
-      ),
-      difficultyLevel: eqq.quizQuestion.difficultyLevel,
-    }));
+    const questions = exam.quizQuestions
+      .map((eqq) => eqq.quizQuestion)
+      .filter((q) => q !== null && !q.isPending)
+      .map((q) => ({
+        id: q.id,
+        questionText: q.questionText,
+        options: buildShuffledOptions(q.options, q.answer),
+        difficultyLevel: q.difficultyLevel,
+      }));
 
     return NextResponse.json({
       data: {
         id: exam.id,
         title: exam.title,
         mode: exam.mode,
-        questionCount: exam.questionCount,
+        questionCount: questions.length,
         levels: exam.levels,
         timePerQuestion: exam.timePerQuestion,
         scheduledOpeningTime: exam.scheduledOpeningTime.toISOString(),
