@@ -13,6 +13,19 @@ type QuizQuestionWithType = Prisma.QuizQuestionGetPayload<{
     include: typeof quizTypeInclude;
 }>;
 
+const quizAdminInclude = {
+    quizType: {
+        select: { id: true, name: true },
+    },
+    addedBy: {
+        select: { id: true, name: true, user_name: true },
+    },
+} as const;
+
+type QuizQuestionAdmin = Prisma.QuizQuestionGetPayload<{
+    include: typeof quizAdminInclude;
+}>;
+
 const toApiQuestion = (q: QuizQuestionWithType) => ({
     id: q.id,
     quizType: q.quizType.name,
@@ -21,6 +34,19 @@ const toApiQuestion = (q: QuizQuestionWithType) => ({
     difficultyLevel: q.difficultyLevel,
     answer: q.answer,
     explanation: q.explanation,
+});
+
+const toApiAdminQuestion = (q: QuizQuestionAdmin) => ({
+    ...toApiQuestion(q),
+    isPending: q.isPending,
+    addedByUserId: q.addedByUserId,
+    addedBy: q.addedBy
+        ? {
+              id: q.addedBy.id,
+              name: q.addedBy.name,
+              user_name: q.addedBy.user_name,
+          }
+        : null,
 });
 
 const shuffleArray = <T,>(arr: T[]): T[] => {
@@ -36,11 +62,11 @@ export const getAllQuizQuestions = async () => {
     try {
         const questions = await prisma.quizQuestion.findMany({
             orderBy: { id: "desc" },
-            include: quizTypeInclude,
+            include: quizAdminInclude,
         });
 
         return {
-            data: questions.map((q) => toApiQuestion(q)),
+            data: questions.map((q) => toApiAdminQuestion(q)),
             message: "Quiz questions fetched successfully",
             success: true,
         };
@@ -63,7 +89,7 @@ export const getQuizQuestionsByPage = async (page: number = 1, limit: number = 1
                 skip,
                 take: limit,
                 orderBy: { id: "desc" },
-                include: quizTypeInclude,
+                include: quizAdminInclude,
             }),
             prisma.quizQuestion.count(),
         ]);
@@ -71,7 +97,7 @@ export const getQuizQuestionsByPage = async (page: number = 1, limit: number = 1
         const totalPages = Math.ceil(total / limit);
 
         return {
-            data: questions.map((q) => toApiQuestion(q)),
+            data: questions.map((q) => toApiAdminQuestion(q)),
             pagination: {
                 total,
                 page,
@@ -287,6 +313,7 @@ export const createQuizQuestion = async (
         difficultyLevel: DifficultyLevels;
         answer: string;
         explanation?: string;
+        isPending?: boolean;
     },
     addedByUserId: number,
 ) => {
@@ -311,6 +338,7 @@ export const createQuizQuestion = async (
                 difficultyLevel: data.difficultyLevel,
                 answer: data.answer,
                 explanation: data.explanation ?? "",
+                isPending: data.isPending,
                 addedByUserId,
             },
             include: quizTypeInclude,
@@ -403,6 +431,7 @@ export const updateQuizQuestionById = async (
         difficultyLevel: DifficultyLevels;
         answer: string;
         explanation?: string;
+        isPending?: boolean;
     }>,
 ) => {
     try {
@@ -451,6 +480,57 @@ export const updateQuizQuestionById = async (
         return {
             data: null,
             message: "Failed to update quiz question",
+            success: false,
+        };
+    }
+};
+
+export const updateQuizQuestionsBulk = async (
+    ids: number[],
+    data: {
+        isPending?: boolean;
+        difficultyLevel?: DifficultyLevels;
+        quizType?: string;
+    },
+) => {
+    try {
+        let quizTypeId: number | undefined;
+        if (data.quizType) {
+            const quizTypeRow = await prisma.quizType.findUnique({
+                where: { name: data.quizType },
+                select: { id: true },
+            });
+            if (!quizTypeRow) {
+                return {
+                    data: null,
+                    message: `Quiz type "${data.quizType}" not found`,
+                    success: false,
+                };
+            }
+            quizTypeId = quizTypeRow.id;
+        }
+
+        const updateData: Prisma.QuizQuestionUpdateManyMutationInput = {
+            ...(data.isPending !== undefined ? { isPending: data.isPending } : {}),
+            ...(data.difficultyLevel !== undefined ? { difficultyLevel: data.difficultyLevel } : {}),
+            ...(quizTypeId !== undefined ? { quizTypeId } : {}),
+        };
+
+        const result = await prisma.quizQuestion.updateMany({
+            where: { id: { in: ids } },
+            data: updateData,
+        });
+
+        return {
+            data: { count: result.count },
+            message: `${result.count} question(s) updated successfully`,
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to bulk update quiz questions: ${error}`);
+        return {
+            data: null,
+            message: "Failed to bulk update quiz questions",
             success: false,
         };
     }

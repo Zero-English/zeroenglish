@@ -11,6 +11,7 @@ import {
   X,
   Upload,
   Download,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,6 +59,15 @@ function mapApiQuestion(q: ApiQuizQuestion): QuizQuestionItem {
     difficultyLevel: q.difficultyLevel,
     answer: q.answer,
     explanation: q.explanation ?? "",
+    isPending: q.isPending ?? true,
+    addedByUserId: q.addedByUserId,
+    addedBy: q.addedBy
+      ? {
+          id: q.addedBy.id,
+          name: q.addedBy.name,
+          user_name: q.addedBy.user_name,
+        }
+      : null,
   };
 }
 
@@ -69,6 +79,13 @@ type ApiQuizQuestion = {
   difficultyLevel: DifficultyLevelValue;
   answer: string;
   explanation: string;
+  isPending?: boolean;
+  addedByUserId?: number;
+  addedBy?: {
+    id: number;
+    name: string | null;
+    user_name: string;
+  } | null;
 };
 
 type QuizTypeOption = { value: string; label: string };
@@ -87,9 +104,14 @@ export default function AdminQuizzesPage() {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "pending" | "approved">("all");
+  const [addedByFilter, setAddedByFilter] = useState<string>("all");
   const [sortOrder, setSortOrder] = useState<"desc" | "asc">("desc");
   const [message, setMessage] = useState<string | null>(null);
   const [showMessage, setShowMessage] = useState(false);
+
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [bulkAction, setBulkAction] = useState<"status" | "difficulty" | "type" | null>(null);
 
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<QuizQuestionItem | null>(null);
@@ -161,6 +183,9 @@ export default function AdminQuizzesPage() {
           item.answer,
           quizTypeLabel(item.quizType),
           difficultyLabelMap[item.difficultyLevel],
+          item.addedBy?.name ?? "",
+          item.addedBy?.user_name ?? "",
+          item.isPending ? "pending p" : "approved",
           ...item.options,
         ]
           .join(" ")
@@ -169,11 +194,22 @@ export default function AdminQuizzesPage() {
       }
       if (typeFilter !== "all" && item.quizType !== typeFilter) return false;
       if (difficultyFilter !== "all" && item.difficultyLevel !== difficultyFilter) return false;
+      if (statusFilter !== "all") {
+        const isPending = item.isPending ?? true;
+        if (statusFilter === "pending" && !isPending) return false;
+        if (statusFilter === "approved" && isPending) return false;
+      }
+      if (addedByFilter !== "all") {
+        const addedById = item.addedBy?.id ?? item.addedByUserId;
+        if (addedById === undefined || addedById !== Number(addedByFilter)) {
+          return false;
+        }
+      }
       return true;
     });
     result.sort((a, b) => (sortOrder === "asc" ? a.id - b.id : b.id - a.id));
     return result;
-  }, [questions, search, typeFilter, difficultyFilter, sortOrder]);
+  }, [questions, search, typeFilter, difficultyFilter, statusFilter, addedByFilter, sortOrder]);
 
   const filterTypeOptions = useMemo(() => {
     const seen = new Set(typeOptions.map((t) => t.value));
@@ -187,6 +223,17 @@ export default function AdminQuizzesPage() {
     return [...typeOptions, ...extras];
   }, [typeOptions, questions]);
 
+  const addedByOptions = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const q of questions) {
+      const id = q.addedBy?.id ?? q.addedByUserId;
+      if (id === undefined || map.has(String(id))) continue;
+      const name = q.addedBy?.name ?? `@${q.addedBy?.user_name ?? ""}`;
+      map.set(String(id), name || `@${q.addedBy?.user_name ?? id}`);
+    }
+    return Array.from(map.entries()).map(([value, label]) => ({ value, label }));
+  }, [questions]);
+
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const safePage = Math.min(page, totalPages);
   const pageItems = useMemo(() => {
@@ -196,10 +243,43 @@ export default function AdminQuizzesPage() {
   const start = filtered.length === 0 ? 0 : (safePage - 1) * pageSize + 1;
   const end = Math.min(safePage * pageSize, filtered.length);
 
+  const allOnPageSelected =
+    pageItems.length > 0 && pageItems.every((q) => selected.has(q.id));
+  const someOnPageSelected =
+    pageItems.some((q) => selected.has(q.id)) && !allOnPageSelected;
+
+  function toggleAllOnPage() {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allOnPageSelected) {
+        pageItems.forEach((q) => next.delete(q.id));
+      } else {
+        pageItems.forEach((q) => next.add(q.id));
+      }
+      return next;
+    });
+  }
+
+  function toggleOne(id: number) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function clearSelection() {
+    setSelected(new Set());
+  }
+
   function resetPageAndFilters() {
     setSearch("");
     setTypeFilter("all");
     setDifficultyFilter("all");
+    setStatusFilter("all");
+    setAddedByFilter("all");
+    setSelected(new Set());
     setPage(1);
   }
 
@@ -233,6 +313,7 @@ export default function AdminQuizzesPage() {
       difficultyLevel: data.difficultyLevel,
       answer: data.answer,
       explanation: data.explanation ?? "",
+      isPending: data.isPending ?? true,
     };
 
     try {
@@ -268,6 +349,41 @@ export default function AdminQuizzesPage() {
       }
     } catch {
       notify("Failed to save question");
+    }
+  }
+
+  async function applyBulkUpdate(
+    action: "status" | "difficulty" | "type",
+    value: string
+  ): Promise<boolean> {
+    const ids = Array.from(selected);
+    if (ids.length === 0) return false;
+
+    const update =
+      action === "status"
+        ? { isPending: value === "pending" }
+        : action === "difficulty"
+          ? { difficultyLevel: value }
+          : { quizType: value };
+
+    try {
+      const res = await fetch("/api/v1/quiz", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids, ...update }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        notify(json.message || "Questions updated");
+        setSelected(new Set());
+        fetchQuestions();
+        return true;
+      }
+      notify(json.message || "Failed to update questions");
+      return false;
+    } catch {
+      notify("Failed to update questions");
+      return false;
     }
   }
 
@@ -365,6 +481,45 @@ export default function AdminQuizzesPage() {
         {message}
       </div>
 
+      {selected.size > 0 && (
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-2.5">
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            <span className="font-semibold">{selected.size}</span>{" "}
+            {selected.size === 1 ? "question" : "questions"} selected
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={clearSelection}
+              className="rounded-md px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+            >
+              Clear
+            </button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setBulkAction("status")}
+            >
+              Change Status
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setBulkAction("difficulty")}
+            >
+              Change Difficulty
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setBulkAction("type")}
+            >
+              Change Type
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
         {/* Toolbar / Filters */}
         <div className="border-b border-gray-200 dark:border-gray-800 p-4">
@@ -382,7 +537,7 @@ export default function AdminQuizzesPage() {
               <Button
                 variant="outline"
                 onClick={resetPageAndFilters}
-                disabled={!search && typeFilter === "all" && difficultyFilter === "all"}
+                disabled={!search && typeFilter === "all" && difficultyFilter === "all" && statusFilter === "all" && addedByFilter === "all"}
               >
                 <RotateCcw />
                 Reset
@@ -422,6 +577,38 @@ export default function AdminQuizzesPage() {
                 </SelectContent>
               </Select>
               <Select
+                value={statusFilter}
+                onValueChange={(v) => {
+                  setStatusFilter(v as "all" | "pending" | "approved");
+                  setPage(1);
+                }}
+              >
+                <SelectTrigger className="w-36" aria-label="Filter by status">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All statuses</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select
+                value={addedByFilter}
+                onValueChange={(v) => { setAddedByFilter(v); setPage(1); }}
+              >
+                <SelectTrigger className="w-40" aria-label="Filter by added by">
+                  <SelectValue placeholder="Added By" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All added by</SelectItem>
+                  {addedByOptions.map((u) => (
+                    <SelectItem key={u.value} value={u.value}>
+                      {u.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select
                 value={sortOrder}
                 onValueChange={(v) => { setSortOrder(v as "asc" | "desc"); setPage(1); }}
               >
@@ -442,12 +629,26 @@ export default function AdminQuizzesPage() {
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <th className="w-12 px-4 py-2.5">
+                  <input
+                    type="checkbox"
+                    checked={allOnPageSelected}
+                    ref={(el) => {
+                      if (el) el.indeterminate = someOnPageSelected;
+                    }}
+                    onChange={toggleAllOnPage}
+                    aria-label="Select all on page"
+                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                  />
+                </th>
                 <th className="px-4 py-2.5 font-medium">ID</th>
                 <th className="px-4 py-2.5 font-medium">Question</th>
                 <th className="px-4 py-2.5 font-medium">Options</th>
                 <th className="px-4 py-2.5 font-medium">Answer</th>
                 <th className="px-4 py-2.5 font-medium">Type</th>
                 <th className="px-4 py-2.5 font-medium">Difficulty</th>
+                <th className="px-4 py-2.5 font-medium">Added By</th>
+                <th className="px-4 py-2.5 font-medium">Status</th>
                 <th className="px-4 py-2.5 font-medium text-right">Actions</th>
               </tr>
             </thead>
@@ -458,6 +659,9 @@ export default function AdminQuizzesPage() {
                     key={i}
                     className="border-b border-gray-100 last:border-0 dark:border-gray-800"
                   >
+                    <td className="px-4 py-2.5">
+                      <Skeleton className="h-4 w-4" />
+                    </td>
                     <td className="px-4 py-2.5">
                       <Skeleton className="h-3.5 w-6" />
                     </td>
@@ -480,6 +684,12 @@ export default function AdminQuizzesPage() {
                       <Skeleton className="h-5 w-16 rounded-full" />
                     </td>
                     <td className="px-4 py-2.5">
+                      <Skeleton className="h-4 w-24" />
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                    </td>
+                    <td className="px-4 py-2.5">
                       <div className="flex items-center justify-end gap-1">
                         <Skeleton className="h-7 w-7 rounded-md" />
                         <Skeleton className="h-7 w-7 rounded-md" />
@@ -489,7 +699,7 @@ export default function AdminQuizzesPage() {
                 ))}
               {!loading && pageItems.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan={10} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
                     No quiz questions found.
                   </td>
                 </tr>
@@ -497,8 +707,21 @@ export default function AdminQuizzesPage() {
               {pageItems.map((q) => (
                 <tr
                   key={q.id}
-                  className="border-b border-gray-100 last:border-0 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 transition-colors"
+                  className={`border-b border-gray-100 last:border-0 transition-colors dark:border-gray-800 ${
+                    selected.has(q.id)
+                      ? "bg-primary/5"
+                      : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                  }`}
                 >
+                  <td className="px-4 py-2.5">
+                    <input
+                      type="checkbox"
+                      checked={selected.has(q.id)}
+                      onChange={() => toggleOne(q.id)}
+                      aria-label={`Select question ${q.id}`}
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    />
+                  </td>
                   <td className="px-4 py-2.5 text-gray-400">{q.id}</td>
                   <td className="px-4 py-2.5 max-w-sm">
                     <Link
@@ -536,6 +759,29 @@ export default function AdminQuizzesPage() {
                     <Badge variant={difficultyVariant[q.difficultyLevel]}>
                       {difficultyLabelMap[q.difficultyLevel]}
                     </Badge>
+                  </td>
+                  <td className="px-4 py-2.5 whitespace-nowrap">
+                    {q.addedBy ? (
+                      <span
+                        className="line-clamp-1 font-medium text-gray-700 dark:text-gray-300"
+                        title={`Added by ${q.addedBy.name ?? `@${q.addedBy.user_name}`} (ID ${q.addedByUserId ?? q.addedBy.id})`}
+                      >
+                        {q.addedBy.name ?? `@${q.addedBy.user_name}`}
+                      </span>
+                    ) : (
+                      <span className="text-gray-400 dark:text-gray-500">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2.5">
+                    <span
+                      className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                        q.isPending
+                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+                          : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+                      }`}
+                    >
+                      {q.isPending ? "Pending" : "Approved"}
+                    </span>
                   </td>
                   <td className="px-4 py-2.5">
                     <div className="flex items-center justify-end gap-1">
@@ -636,7 +882,126 @@ export default function AdminQuizzesPage() {
         confirmText="Delete"
         onConfirm={confirmDeleteQuestion}
       />
+
+      {/* Bulk update dialog */}
+      <BulkUpdateDialog
+        open={bulkAction !== null}
+        action={bulkAction}
+        count={selected.size}
+        typeOptions={typeOptions}
+        onOpenChange={(open) => {
+          if (!open) setBulkAction(null);
+        }}
+        onApply={applyBulkUpdate}
+      />
     </div>
+  );
+}
+
+/* ------------------------- Bulk update dialog ------------------------- */
+
+function BulkUpdateDialog({
+  open,
+  action,
+  count,
+  typeOptions,
+  onOpenChange,
+  onApply,
+}: {
+  open: boolean;
+  action: "status" | "difficulty" | "type" | null;
+  count: number;
+  typeOptions: QuizTypeOption[];
+  onOpenChange: (open: boolean) => void;
+  onApply: (
+    action: "status" | "difficulty" | "type",
+    value: string
+  ) => Promise<boolean>;
+}) {
+  const [value, setValue] = useState("");
+  const [applying, setApplying] = useState(false);
+
+  const [lastKey, setLastKey] = useState<string>("");
+  const key = `${open ? "open" : "closed"}:${action ?? "none"}`;
+  if (key !== lastKey) {
+    setLastKey(key);
+    if (open) setValue("");
+  }
+
+  const effectiveAction = action ?? "status";
+
+  const title =
+    effectiveAction === "status"
+      ? "Change status"
+      : effectiveAction === "difficulty"
+        ? "Change difficulty"
+        : "Change type";
+
+  const options: { value: string; label: string }[] =
+    effectiveAction === "status"
+      ? [
+          { value: "approved", label: "Approved" },
+          { value: "pending", label: "Pending" },
+        ]
+      : effectiveAction === "difficulty"
+        ? difficultyOptions
+        : typeOptions;
+
+  async function handleApply() {
+    if (!value) return;
+    setApplying(true);
+    const ok = await onApply(effectiveAction, value);
+    setApplying(false);
+    if (ok) onOpenChange(false);
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>
+            Apply this change to {count} selected{" "}
+            {count === 1 ? "question" : "questions"}. This cannot be undone.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="grid gap-4">
+          <Field>
+            <FieldLabel>{title} to</FieldLabel>
+            <Select
+              value={value}
+              onValueChange={setValue}
+            >
+              <SelectTrigger className="w-full" aria-label={title}>
+                <SelectValue placeholder="Select a value" />
+              </SelectTrigger>
+              <SelectContent>
+                {options.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    {o.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        </div>
+
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={applying}
+          >
+            Cancel
+          </Button>
+          <Button type="button" onClick={handleApply} disabled={!value || applying}>
+            {applying && <Loader2 className="animate-spin" />}
+            {applying ? "Applying..." : "Apply"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -851,6 +1216,27 @@ function QuizFormDialog({
             </Field>
           </div>
 
+          <Field>
+            <FieldLabel>Status</FieldLabel>
+            <Select
+              value={form.isPending ? "pending" : "approved"}
+              onValueChange={(v) =>
+                setForm({ ...form, isPending: v === "pending" })
+              }
+            >
+              <SelectTrigger className="w-full" aria-label="Status">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="approved">Approved</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+              Pending questions are hidden from learners until approved.
+            </p>
+          </Field>
+
           {error && (
             <p className="text-xs text-rose-600 dark:text-rose-400">{error}</p>
           )}
@@ -877,6 +1263,7 @@ function emptyForm(): Omit<QuizQuestionItem, "id"> {
     difficultyLevel: "EASY",
     answer: "",
     explanation: "",
+    isPending: true,
   };
 }
 

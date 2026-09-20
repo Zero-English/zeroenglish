@@ -92,7 +92,9 @@ function EditUserForm({
   const [name, setName] = useState(user.name ?? "");
   const [userName, setUserName] = useState(user.user_name);
   const [email, setEmail] = useState(user.email);
-  const [role, setRole] = useState<"user" | "admin">(user.role ?? "user");
+  const [role, setRole] = useState<"user" | "admin" | "contributor">(
+    user.role ?? "user"
+  );
   const [institutionName, setInstitutionName] = useState(user.institutionName ?? "");
   const [bio, setBio] = useState(user.bio ?? "");
   const [classValue, setClassValue] = useState(user.class ?? "");
@@ -266,13 +268,16 @@ function EditUserForm({
           </label>
           <Select
             value={role}
-            onValueChange={(value) => setRole(value as "user" | "admin")}
+            onValueChange={(value) =>
+              setRole(value as "user" | "admin" | "contributor")
+            }
           >
             <SelectTrigger className="w-full" aria-label="Role">
               <SelectValue placeholder="Select role" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="user">User</SelectItem>
+              <SelectItem value="contributor">Contributor</SelectItem>
               <SelectItem value="admin">Admin</SelectItem>
             </SelectContent>
           </Select>

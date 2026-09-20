@@ -376,7 +376,9 @@ export default function AdminUsersPage() {
                           className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
                             user.role === "admin"
                               ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-400"
-                              : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
+                              : user.role === "contributor"
+                                ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+                                : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
                           }`}
                         >
                           {user.role}

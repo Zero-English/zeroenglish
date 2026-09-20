@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-import { getAllQuizQuestions, getQuizQuestionsByPage, createQuizQuestion, createQuizQuestionsBulk } from "@/services/quiz.service";
-import { quizQuestionSchema, bulkQuizUploadSchema } from "@/utils/validation/zod";
+import { getAllQuizQuestions, getQuizQuestionsByPage, createQuizQuestion, createQuizQuestionsBulk, updateQuizQuestionsBulk } from "@/services/quiz.service";
+import { quizQuestionSchema, bulkQuizUploadSchema, bulkQuizUpdateSchema } from "@/utils/validation/zod";
 import { parseBulkJsonFile } from "@/utils/bulk-import";
 import { requireAdmin, getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
 import logger from "@/utils/logger";
@@ -23,6 +23,59 @@ export async function GET(request: NextRequest) {
     }
 
     const result = await getAllQuizQuestions();
+    return NextResponse.json(result);
+}
+
+export async function PATCH(request: NextRequest) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
+    let body: unknown;
+    try {
+        body = await request.json();
+    } catch {
+        return NextResponse.json(
+            { data: null, message: "Invalid JSON body", success: false },
+            { status: 400 }
+        );
+    }
+
+    const parsed = bulkQuizUpdateSchema.safeParse(body);
+
+    if (!parsed.success) {
+        const firstError = parsed.error.issues[0];
+        const location = firstError?.path?.join(".");
+        const detail = firstError?.message ?? "Invalid data";
+        const message = location
+            ? `Validation failed at "${location}": ${detail}`
+            : `Validation failed: ${detail}`;
+        logger.warn(`Quiz question bulk update rejected: validation failed`, {
+            location,
+            detail,
+        });
+        return NextResponse.json(
+            { data: null, message, success: false },
+            { status: 400 }
+        );
+    }
+
+    const result = await updateQuizQuestionsBulk(parsed.data.ids, {
+        isPending: parsed.data.isPending,
+        difficultyLevel: parsed.data.difficultyLevel,
+        quizType: parsed.data.quizType,
+    });
+
+    if (!result.success) {
+        logger.error(`Quiz question bulk update failed`, {
+            message: result.message,
+        });
+        return NextResponse.json(result, { status: 500 });
+    }
+
+    logger.info(`Quiz question bulk update succeeded`, {
+        count: result.data?.count,
+    });
+
     return NextResponse.json(result);
 }
 
