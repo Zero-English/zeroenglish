@@ -179,6 +179,9 @@ model Word {
   quizQuestions QuizQuestion[]
   relatedCombinedExamResultCorrectWords CombinedExamResult[] @relation("CombinedExamCorrectWords")
   relatedCombinedExamResultIncorrectWords CombinedExamResult[] @relation("CombinedExamIncorrectWords")
+  isPending Boolean @default(true)
+  addedByUserId Int 
+  addedByUser User @relation(references: [id], fields: [addedByUserId], onDelete: Cascade)
 
   @@index([level])
   @@index([category])
@@ -234,6 +237,7 @@ model User {
   userBookmarks  UserBookmark[]
   isPending      Boolean @default(true)
   addedQuestions QuizQuestion[]
+  addedWords Word[]
   relatedCombinedExamResults CombinedExamResult[]
 }
 

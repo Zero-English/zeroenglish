@@ -2,6 +2,15 @@ import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 import type { Levels } from "@/generated/prisma/enums";
 
+// Word/vocab quiz types. Grammar & class quiz results also live in the
+// CombinedExamResult table, so list queries must be restricted to these types.
+export const VOCABULARY_QUIZ_TYPES = [
+    "ENGLISH_TO_BANGLA",
+    "BANGLA_TO_ENGLISH",
+    "SYNONYMS",
+    "ANTONYMS",
+] as const;
+
 export const createCombinedExamResult = async (data: {
     userId: number;
     correctWordIds: number[];
@@ -108,7 +117,10 @@ const wordDetailSelect = {
 export const getCombinedExamResultsByUser = async (userId: number) => {
     try {
         const results = await prisma.combinedExamResult.findMany({
-            where: { userId },
+            where: {
+                userId,
+                quizType: { name: { in: [...VOCABULARY_QUIZ_TYPES] } },
+            },
             orderBy: { createdAt: "desc" },
             include: {
                 correctWords: { select: wordDetailSelect },
