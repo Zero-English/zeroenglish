@@ -27,6 +27,8 @@ import { useQuizHistory } from "@/lib/use-quiz-history";
 import { useQuizExamHistoryStore } from "@/lib/quiz-exam-history-store";
 import { VocabularyExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
 import { QuizPracticeResultsPanel } from "@/components/quiz-practice-results-panel";
+import { MySubmissions } from "@/components/contribute/my-submissions";
+import { useSession } from "next-auth/react";
 import { useT } from "@/components/language-provider";
 import { useAuthStore } from "@/lib/auth-store";
 import { ProfileSettings } from "@/components/profile-settings";
@@ -34,7 +36,7 @@ import { ProfileSettings } from "@/components/profile-settings";
 const ITEMS_PER_PAGE = 10;
 import {
   BookmarkCheck, CheckCircle2, Bookmark, Circle,
-  BookOpen, BookOpenCheck, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Volume2, ClipboardList, Settings,
+  BookOpen, BookOpenCheck, BarChart3, Award, TrendingUp, RefreshCw, X, GraduationCap, Volume2, ClipboardList, Settings, SquarePen,
 } from "lucide-react";
 
 
@@ -259,6 +261,10 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   const activeTab = useActiveTab();
   const normalizedTab = activeTab === "still-learning" ? "quiz" : activeTab;
   const authStatus = useAuthStore((s) => s.status);
+  const { data: session } = useSession();
+  const isContributor =
+    session?.user?.role === "admin" || session?.user?.role === "contributor";
+  const effectiveTab = normalizedTab === "submits" && !isContributor ? "overview" : normalizedTab;
   const [quizSubTab, setQuizSubTab] = useState<"exams" | "vocab" | "still-learning">(
     activeTab === "still-learning" ? "still-learning" : "vocab"
   );
@@ -327,7 +333,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
   };
 
   return (
-    <Tabs value={normalizedTab} onValueChange={setActiveTab}>
+    <Tabs value={effectiveTab} onValueChange={setActiveTab}>
       <div className="overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden">
         <TabsList>
           <TabsTrigger value="overview" className="flex items-center gap-1.5">
@@ -361,6 +367,12 @@ export function ProfileTabs({ words }: { words: Word[] }) {
               </span>
             )}
           </TabsTrigger>
+          {isContributor && (
+            <TabsTrigger value="submits" className="flex items-center gap-1.5">
+              <SquarePen className="h-4 w-4" />
+              {t("অবদান", "Submits")}
+            </TabsTrigger>
+          )}
           {authStatus === "google" && (
             <TabsTrigger value="settings" className="flex items-center gap-1.5">
               <Settings className="h-4 w-4" />
@@ -817,6 +829,12 @@ export function ProfileTabs({ words }: { words: Word[] }) {
           </TabsContent>
         </Tabs>
       </TabsContent>
+
+      {isContributor && (
+        <TabsContent value="submits">
+          <MySubmissions />
+        </TabsContent>
+      )}
 
       {authStatus === "google" && (
         <TabsContent value="settings">

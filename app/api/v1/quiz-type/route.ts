@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { requireContributorOrAdmin } from "@/lib/api-auth";
 import {
     getAllQuizTypes,
     createQuizType,
@@ -69,7 +70,7 @@ async function requireAdmin() {
  *         description: Quiz type created
  */
 export async function GET(_request: NextRequest) {
-    const forbidden = await requireAdmin();
+    const forbidden = await requireContributorOrAdmin();
     if (forbidden) return forbidden;
 
     const result = await getAllQuizTypes();
