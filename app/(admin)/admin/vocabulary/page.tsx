@@ -10,6 +10,7 @@ import {
   RotateCcw,
   Check,
   X,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,6 +50,13 @@ type VocabularyWord = {
   level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
   category: string;
   wordType: string[];
+  isPending: boolean;
+  addedByUserId: number | null;
+  addedBy?: {
+    id: number;
+    name: string | null;
+    user_name: string;
+  } | null;
 };
 
 const levelOptions = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -90,6 +98,15 @@ function mapApiWordToVocabulary(w: ApiWord): VocabularyWord {
     level: w.level,
     category: w.category,
     wordType: w.wordType,
+    isPending: w.isPending ?? true,
+    addedByUserId: w.addedByUserId,
+    addedBy: w.addedBy
+      ? {
+          id: w.addedBy.id,
+          name: w.addedBy.name,
+          user_name: w.addedBy.user_name,
+        }
+      : null,
   };
 }
 
@@ -108,6 +125,13 @@ type ApiWord = {
   wordType: string[];
   createdAt: string;
   updatedAt: string;
+  isPending: boolean;
+  addedByUserId: number | null;
+  addedBy?: {
+    id: number;
+    name: string | null;
+    user_name: string;
+  } | null;
 };
 
 export default function AdminVocabularyPage() {
@@ -119,6 +143,8 @@ export default function AdminVocabularyPage() {
   const [levelFilter, setLevelFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [posFilter, setPosFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "pending" | "approved">("all");
+  const [addedByFilter, setAddedByFilter] = useState<string>("all");
   const [message, setMessage] = useState<string | null>(null);
   const [showMessage, setShowMessage] = useState(false);
 
@@ -129,6 +155,9 @@ export default function AdminVocabularyPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [wordToDelete, setWordToDelete] = useState<VocabularyWord | null>(null);
+
+  const [selected, setSelected] = useState<Set<number>>(new Set());
+  const [bulkAction, setBulkAction] = useState<"status" | null>(null);
 
   const messageTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -170,6 +199,17 @@ export default function AdminVocabularyPage() {
     return Array.from(set).sort();
   }, [words]);
 
+  const addedByOptions = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const w of words) {
+      const id = w.addedBy?.id ?? w.addedByUserId;
+      if (id === undefined || id === null || map.has(String(id))) continue;
+      const name = w.addedBy?.name ?? `@${w.addedBy?.user_name ?? ""}`;
+      map.set(String(id), name || `@${w.addedBy?.user_name ?? id}`);
+    }
+    return Array.from(map.entries()).map(([value, label]) => ({ value, label }));
+  }, [words]);
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return words.filter((w) => {
@@ -183,6 +223,9 @@ export default function AdminVocabularyPage() {
           w.antonyms.join(" "),
           w.category,
           w.wordType.join(" "),
+          w.addedBy?.name ?? "",
+          w.addedBy?.user_name ?? "",
+          w.isPending ? "pending p" : "approved",
         ]
           .join(" ")
           .toLowerCase();
@@ -191,9 +234,20 @@ export default function AdminVocabularyPage() {
       if (levelFilter !== "all" && w.level !== levelFilter) return false;
       if (categoryFilter !== "all" && w.category !== categoryFilter) return false;
       if (posFilter !== "all" && !w.wordType.includes(posFilter)) return false;
+      if (statusFilter !== "all") {
+        const isPending = w.isPending ?? true;
+        if (statusFilter === "pending" && !isPending) return false;
+        if (statusFilter === "approved" && isPending) return false;
+      }
+      if (addedByFilter !== "all") {
+        const addedById = w.addedBy?.id ?? w.addedByUserId;
+        if (addedById === undefined || addedById === null || addedById !== Number(addedByFilter)) {
+          return false;
+        }
+      }
       return true;
     });
-  }, [words, search, levelFilter, categoryFilter, posFilter]);
+  }, [words, search, levelFilter, categoryFilter, posFilter, statusFilter, addedByFilter]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const safePage = Math.min(page, totalPages);
@@ -209,7 +263,40 @@ export default function AdminVocabularyPage() {
     setLevelFilter("all");
     setCategoryFilter("all");
     setPosFilter("all");
+    setStatusFilter("all");
+    setAddedByFilter("all");
+    setSelected(new Set());
     setPage(1);
+  }
+
+  const allOnPageSelected =
+    pageItems.length > 0 && pageItems.every((w) => selected.has(w.id));
+  const someOnPageSelected =
+    pageItems.some((w) => selected.has(w.id)) && !allOnPageSelected;
+
+  function toggleAllOnPage() {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allOnPageSelected) {
+        pageItems.forEach((w) => next.delete(w.id));
+      } else {
+        pageItems.forEach((w) => next.add(w.id));
+      }
+      return next;
+    });
+  }
+
+  function toggleOne(id: number) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function clearSelection() {
+    setSelected(new Set());
   }
 
   function handleDelete(w: VocabularyWord) {
@@ -234,6 +321,31 @@ export default function AdminVocabularyPage() {
     setWordToDelete(null);
   }
 
+  async function applyBulkUpdate(value: string): Promise<boolean> {
+    const ids = Array.from(selected);
+    if (ids.length === 0) return false;
+
+    try {
+      const res = await fetch("/api/v1/words", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids, isPending: value === "pending" }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        notify(json.message || "Words updated");
+        setSelected(new Set());
+        fetchWords();
+        return true;
+      }
+      notify(json.message || "Failed to update words");
+      return false;
+    } catch {
+      notify("Failed to update words");
+      return false;
+    }
+  }
+
   async function handleSave(data: Omit<VocabularyWord, "id">) {
     const body = {
       word: data.word,
@@ -247,6 +359,7 @@ export default function AdminVocabularyPage() {
       level: data.level,
       category: data.category,
       wordType: data.wordType,
+      isPending: data.isPending ?? true,
     };
 
     try {
@@ -361,6 +474,31 @@ export default function AdminVocabularyPage() {
         {message}
       </div>
 
+      {selected.size > 0 && (
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-2.5">
+          <p className="text-sm text-gray-700 dark:text-gray-300">
+            <span className="font-semibold">{selected.size}</span>{" "}
+            {selected.size === 1 ? "word" : "words"} selected
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={clearSelection}
+              className="rounded-md px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+            >
+              Clear
+            </button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setBulkAction("status")}
+            >
+              Change Status
+            </Button>
+          </div>
+        </div>
+      )}
+
       <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
         {/* Toolbar / Filters */}
         <div className="border-b border-gray-200 dark:border-gray-800 p-4">
@@ -382,7 +520,9 @@ export default function AdminVocabularyPage() {
                   !search &&
                   levelFilter === "all" &&
                   categoryFilter === "all" &&
-                  posFilter === "all"
+                  posFilter === "all" &&
+                  statusFilter === "all" &&
+                  addedByFilter === "all"
                 }
               >
                 <RotateCcw />
@@ -438,6 +578,35 @@ export default function AdminVocabularyPage() {
                   ))}
                 </SelectContent>
               </Select>
+              <Select
+                value={statusFilter}
+                onValueChange={(v) => { setStatusFilter(v as "all" | "pending" | "approved"); setPage(1); }}
+              >
+                <SelectTrigger className="w-32" aria-label="Filter by status">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All statuses</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select
+                value={addedByFilter}
+                onValueChange={(v) => { setAddedByFilter(v); setPage(1); }}
+              >
+                <SelectTrigger className="w-40" aria-label="Filter by added by">
+                  <SelectValue placeholder="Added by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All users</SelectItem>
+                  {addedByOptions.map((u) => (
+                    <SelectItem key={u.value} value={u.value}>
+                      {u.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
@@ -447,6 +616,18 @@ export default function AdminVocabularyPage() {
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <th className="w-12 px-4 py-2.5">
+                  <input
+                    type="checkbox"
+                    checked={allOnPageSelected}
+                    ref={(el) => {
+                      if (el) el.indeterminate = someOnPageSelected;
+                    }}
+                    onChange={toggleAllOnPage}
+                    aria-label="Select all on page"
+                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                  />
+                </th>
                 <th className="px-4 py-2.5 font-medium">ID</th>
                 <th className="px-4 py-2.5 font-medium">Word</th>
                 <th className="px-4 py-2.5 font-medium">Meaning (BN)</th>
@@ -457,6 +638,8 @@ export default function AdminVocabularyPage() {
                 <th className="px-4 py-2.5 font-medium">Level</th>
                 <th className="px-4 py-2.5 font-medium">Category</th>
                 <th className="px-4 py-2.5 font-medium">Word Type</th>
+                <th className="px-4 py-2.5 font-medium">Status</th>
+                <th className="px-4 py-2.5 font-medium">Added By</th>
                 <th className="px-4 py-2.5 font-medium text-right">Actions</th>
               </tr>
             </thead>
@@ -510,6 +693,12 @@ export default function AdminVocabularyPage() {
                       </div>
                     </td>
                     <td className="px-4 py-2.5">
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <Skeleton className="h-4 w-20" />
+                    </td>
+                    <td className="px-4 py-2.5">
                       <div className="flex items-center justify-end gap-1">
                         <Skeleton className="h-7 w-7 rounded-md" />
                         <Skeleton className="h-7 w-7 rounded-md" />
@@ -519,7 +708,7 @@ export default function AdminVocabularyPage() {
                 ))}
               {!loading && pageItems.length === 0 && (
                 <tr>
-                  <td colSpan={11} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan={14} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
                     No vocabulary found.
                   </td>
                 </tr>
@@ -527,8 +716,21 @@ export default function AdminVocabularyPage() {
               {pageItems.map((w) => (
                 <tr
                   key={w.id}
-                  className="border-b border-gray-100 last:border-0 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/50 transition-colors"
+                  className={`border-b border-gray-100 last:border-0 transition-colors dark:border-gray-800 ${
+                    selected.has(w.id)
+                      ? "bg-primary/5"
+                      : "hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                  }`}
                 >
+                  <td className="px-4 py-2.5">
+                    <input
+                      type="checkbox"
+                      checked={selected.has(w.id)}
+                      onChange={() => toggleOne(w.id)}
+                      aria-label={`Select word ${w.id}`}
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    />
+                  </td>
                   <td className="px-4 py-2.5 text-gray-400">{w.id}</td>
                   <td className="px-4 py-2.5">
                     <span className="font-semibold text-gray-900 dark:text-white">
@@ -614,6 +816,29 @@ export default function AdminVocabularyPage() {
                         </Badge>
                       ))}
                     </div>
+                  </td>
+                  <td className="px-4 py-2.5">
+                    <span
+                      className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
+                        w.isPending
+                          ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400"
+                          : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
+                      }`}
+                    >
+                      {w.isPending ? "Pending" : "Approved"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2.5 whitespace-nowrap">
+                    {w.addedBy ? (
+                      <span
+                        className="line-clamp-1 font-medium text-gray-700 dark:text-gray-300"
+                        title={`Added by ${w.addedBy.name ?? `@${w.addedBy.user_name}`} (ID ${w.addedByUserId ?? w.addedBy.id})`}
+                      >
+                        {w.addedBy.name ?? `@${w.addedBy.user_name}`}
+                      </span>
+                    ) : (
+                      <span className="text-gray-400 dark:text-gray-500">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-2.5">
                     <div className="flex items-center justify-end gap-1">
@@ -713,7 +938,100 @@ export default function AdminVocabularyPage() {
         confirmText="Delete"
         onConfirm={confirmDeleteWord}
       />
+
+      {/* Bulk status dialog */}
+      <BulkStatusDialog
+        open={bulkAction !== null}
+        count={selected.size}
+        onOpenChange={(open) => {
+          if (!open) setBulkAction(null);
+        }}
+        onApply={applyBulkUpdate}
+      />
     </div>
+  );
+}
+
+/* ------------------------- Bulk status dialog ------------------------- */
+
+function BulkStatusDialog({
+  open,
+  count,
+  onOpenChange,
+  onApply,
+}: {
+  open: boolean;
+  count: number;
+  onOpenChange: (open: boolean) => void;
+  onApply: (value: string) => Promise<boolean>;
+}) {
+  const [value, setValue] = useState("");
+  const [applying, setApplying] = useState(false);
+
+  const [lastKey, setLastKey] = useState<string>("");
+  const key = `${open ? "open" : "closed"}`;
+  if (key !== lastKey) {
+    setLastKey(key);
+    if (open) setValue("");
+  }
+
+  const statusOptions = [
+    { value: "approved", label: "Approved" },
+    { value: "pending", label: "Pending" },
+  ];
+
+  async function handleApply() {
+    if (!value) return;
+    setApplying(true);
+    const ok = await onApply(value);
+    setApplying(false);
+    if (ok) onOpenChange(false);
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Change status</DialogTitle>
+          <DialogDescription>
+            Apply this change to {count} selected {count === 1 ? "word" : "words"}. This
+            cannot be undone.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="grid gap-4">
+          <Field>
+            <FieldLabel>Status to</FieldLabel>
+            <Select value={value} onValueChange={setValue}>
+              <SelectTrigger className="w-full" aria-label="Status">
+                <SelectValue placeholder="Select a status" />
+              </SelectTrigger>
+              <SelectContent>
+                {statusOptions.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    {o.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
+        </div>
+
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={applying}
+          >
+            Cancel
+          </Button>
+          <Button type="button" onClick={handleApply} disabled={!value || applying}>
+            {applying && <Loader2 className="animate-spin" />}
+            {applying ? "Applying..." : "Apply"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -889,6 +1207,27 @@ function WordFormDialog({
             </Field>
           </div>
 
+          <Field>
+            <FieldLabel>Status</FieldLabel>
+            <Select
+              value={form.isPending ? "pending" : "approved"}
+              onValueChange={(v) =>
+                setForm({ ...form, isPending: v === "pending" })
+              }
+            >
+              <SelectTrigger className="w-full" aria-label="Status">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="approved">Approved</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+              Pending words are hidden from learners until approved.
+            </p>
+          </Field>
+
           {error && (
             <p className="text-xs text-rose-600 dark:text-rose-400">{error}</p>
           )}
@@ -920,6 +1259,9 @@ function emptyForm(): Omit<VocabularyWord, "id"> {
     level: "A1",
     category: "Oxford5000",
     wordType: [],
+    isPending: true,
+    addedByUserId: null,
+    addedBy: null,
   };
 }
 

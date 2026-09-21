@@ -1,10 +1,47 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 import type { Word } from "@/lib/data";
+import type { Prisma } from "@/generated/prisma/client";
 
 export type WordLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
 
 const WORD_LEVELS: readonly WordLevel[] = ["A1", "A2", "B1", "B2", "C1", "C2"];
+
+const wordAdminInclude = {
+    addedByUser: {
+        select: { id: true, name: true, user_name: true },
+    },
+} as const;
+
+type WordAdmin = Prisma.WordGetPayload<{
+    include: typeof wordAdminInclude;
+}>;
+
+const toApiAdminWord = (w: WordAdmin) => ({
+    id: w.id,
+    word: w.word,
+    meaningBn: w.meaningBn,
+    synonyms: w.synonyms,
+    antonyms: w.antonyms,
+    definitionEn: w.definitionEn,
+    definitionBn: w.definitionBn,
+    examplesEn: w.examplesEn,
+    examplesBn: w.examplesBn,
+    level: w.level,
+    category: w.category,
+    wordType: w.wordType,
+    createdAt: w.createdAt,
+    updatedAt: w.updatedAt,
+    isPending: w.isPending,
+    addedByUserId: w.addedByUserId,
+    addedBy: w.addedByUser
+        ? {
+              id: w.addedByUser.id,
+              name: w.addedByUser.name,
+              user_name: w.addedByUser.user_name,
+          }
+        : null,
+});
 
 export const isWordLevel = (value: string): value is WordLevel =>
     (WORD_LEVELS as readonly string[]).includes(value);
@@ -218,10 +255,11 @@ export const getAllWords = async () => {
     try {
         const words = await prisma.word.findMany({
             orderBy: { createdAt: "desc" },
+            include: wordAdminInclude,
         });
 
         return {
-            data: words,
+            data: words.map((w) => toApiAdminWord(w)),
             message: "Words fetched successfully",
             success: true,
         };
@@ -244,6 +282,7 @@ export const getWordsByPage = async (page: number = 1, limit: number = 10) => {
                 skip,
                 take: limit,
                 orderBy: { createdAt: "desc" },
+                include: wordAdminInclude,
             }),
             prisma.word.count(),
         ]);
@@ -251,7 +290,7 @@ export const getWordsByPage = async (page: number = 1, limit: number = 10) => {
         const totalPages = Math.ceil(total / limit);
 
         return {
-            data: words,
+            data: words.map((w) => toApiAdminWord(w)),
             pagination: {
                 total,
                 page,
@@ -291,6 +330,7 @@ export const createWord = async (wordData: {
     level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
     category: string;
     wordType: string[];
+    isPending?: boolean;
 }, addedByUserId: number) => {
     try {
         const existingWord = await prisma.word.findUnique({
@@ -318,6 +358,9 @@ export const createWord = async (wordData: {
                 level: wordData.level,
                 category: wordData.category,
                 wordType: wordData.wordType,
+                ...(wordData.isPending !== undefined
+                    ? { isPending: wordData.isPending }
+                    : {}),
                 addedByUserId,
             },
         });
@@ -415,6 +458,7 @@ export const updateWordById = async (
         level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
         category: string;
         wordType: string[];
+        isPending?: boolean;
     }>,
 ) => {
     try {
@@ -460,6 +504,51 @@ export const updateWordById = async (
         return {
             data: null,
             message: "Failed to update word",
+            success: false,
+        };
+    }
+};
+
+export const updateWordsBulk = async (
+    ids: number[],
+    data: {
+        isPending?: boolean;
+    },
+) => {
+    try {
+        const uniqueIds = Array.from(
+            new Set(ids.filter((id) => Number.isInteger(id))),
+        ).slice(0, 1000);
+
+        if (uniqueIds.length === 0) {
+            return {
+                data: null,
+                message: "No words to update",
+                success: false,
+            };
+        }
+
+        const updateData: Prisma.WordUpdateManyMutationInput = {
+            ...(data.isPending !== undefined ? { isPending: data.isPending } : {}),
+        };
+
+        const result = await prisma.word.updateMany({
+            where: { id: { in: uniqueIds } },
+            data: updateData,
+        });
+
+        if (result.count > 0) await incrementVocabVersion();
+
+        return {
+            data: { count: result.count },
+            message: `${result.count} word(s) updated successfully`,
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to bulk update words: ${error}`);
+        return {
+            data: null,
+            message: "Failed to bulk update words",
             success: false,
         };
     }
