@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ListChecks } from "lucide-react";
+import { Eye, ListChecks } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useT } from "@/components/language-provider";
 import {
@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 import { quizTypeI18n, difficultyI18n, levelI18n } from "./types";
+import { SubmissionDialog } from "./submission-dialog";
+import { Button } from "@/components/ui/button";
 
 const CARD =
   "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
@@ -37,7 +39,7 @@ const DIVIDER = "border-b border-black/[0.06] dark:border-white/[0.08]";
 
 const ITEMS_PER_PAGE = 10;
 
-type MyItem =
+export type MyItem =
   | {
       kind: "question";
       id: number;
@@ -45,6 +47,10 @@ type MyItem =
       questionText: string;
       difficultyLevel: string;
       isPending: boolean;
+      options: string[];
+      answer: string;
+      explanation: string;
+      class: string[];
     }
   | {
       kind: "word";
@@ -54,6 +60,13 @@ type MyItem =
       level: string;
       category: string;
       isPending: boolean;
+      synonyms: string[];
+      antonyms: string[];
+      definitionEn: string;
+      definitionBn: string;
+      examplesEn: string[];
+      examplesBn: string[];
+      wordType: string[];
     };
 
 type SubmissionData = {
@@ -69,6 +82,8 @@ export function MySubmissions() {
   const [type, setType] = useState<SubmissionType>("question");
   const [page, setPage] = useState(1);
   const [data, setData] = useState<SubmissionData | null>(null);
+  const [selected, setSelected] = useState<MyItem | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const t = useT();
 
   useEffect(() => {
@@ -89,6 +104,10 @@ export function MySubmissions() {
                   questionText: string;
                   difficultyLevel: string;
                   isPending: boolean;
+                  options: string[];
+                  answer: string;
+                  explanation: string;
+                  class: string[];
                 }>).map((q) => ({ kind: "question", ...q }))
               : (json.data as Array<{
                   id: number;
@@ -97,6 +116,13 @@ export function MySubmissions() {
                   level: string;
                   category: string;
                   isPending: boolean;
+                  synonyms: string[];
+                  antonyms: string[];
+                  definitionEn: string;
+                  definitionBn: string;
+                  examplesEn: string[];
+                  examplesBn: string[];
+                  wordType: string[];
                 }>).map((w) => ({ kind: "word", ...w }));
           setData({
             items,
@@ -129,6 +155,36 @@ export function MySubmissions() {
 
   const pendingLabel = t("অপেক্ষমাণ", "Pending");
   const approvedLabel = t("অনুমোদিত", "Approved");
+
+  function openItem(item: MyItem) {
+    setSelected(item);
+    setDialogOpen(true);
+  }
+
+  function handleSaved(updated: MyItem) {
+    setData((prev) =>
+      prev
+        ? {
+            ...prev,
+            items: prev.items.map((it) =>
+              it.id === updated.id ? { ...updated, isPending: true } : it
+            ),
+          }
+        : prev
+    );
+  }
+
+  function handleDeleted(id: number) {
+    setData((prev) =>
+      prev
+        ? {
+            ...prev,
+            items: prev.items.filter((it) => it.id !== id),
+            total: Math.max(0, prev.total - 1),
+          }
+        : prev
+    );
+  }
 
   return (
     <section className={cn(CARD, "overflow-hidden")}>
@@ -222,31 +278,44 @@ export function MySubmissions() {
                 <li key={item.id} className="py-4 first:pt-0 last:pb-0">
                   {item.kind === "question" ? (
                     <>
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-white/[0.06] dark:text-zinc-400">
-                          #{item.id}
-                        </span>
-                        <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
-                          {t(...quizTypeI18n(item.quizType))}
-                        </span>
-                        <span
-                          className={cn(
-                            "rounded-full px-2 py-0.5 text-[11px] font-semibold",
-                            DIFFICULTY_CHIP[item.difficultyLevel] ??
-                              "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-white/[0.06] dark:text-zinc-400">
+                            #{item.id}
+                          </span>
+                          <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
+                            {t(...quizTypeI18n(item.quizType))}
+                          </span>
+                          <span
+                            className={cn(
+                              "rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                              DIFFICULTY_CHIP[item.difficultyLevel] ??
+                                "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+                            )}
+                          >
+                            {t(...difficultyI18n(item.difficultyLevel))}
+                          </span>
+                          {item.isPending ? (
+                            <span className={cn(CHIP_PENDING, "px-2 py-0.5 text-[11px] font-semibold")}>
+                              {pendingLabel}
+                            </span>
+                          ) : (
+                            <span className={cn(CHIP_APPROVED, "px-2 py-0.5 text-[11px] font-semibold")}>
+                              {approvedLabel}
+                            </span>
                           )}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="shrink-0"
+                          onClick={() => openItem(item)}
                         >
-                          {t(...difficultyI18n(item.difficultyLevel))}
-                        </span>
-                        {item.isPending ? (
-                          <span className={cn(CHIP_PENDING, "px-2 py-0.5 text-[11px] font-semibold")}>
-                            {pendingLabel}
-                          </span>
-                        ) : (
-                          <span className={cn(CHIP_APPROVED, "px-2 py-0.5 text-[11px] font-semibold")}>
-                            {approvedLabel}
-                          </span>
-                        )}
+                          <Eye className="mr-1.5 h-4 w-4" />
+                          {item.isPending
+                            ? t("দেখুন/সম্পাদনা", "View/Edit")
+                            : t("দেখুন", "View")}
+                        </Button>
                       </div>
                       <p className="mt-2 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
                         {item.questionText}
@@ -254,25 +323,38 @@ export function MySubmissions() {
                     </>
                   ) : (
                     <>
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-white/[0.06] dark:text-zinc-400">
-                          #{item.id}
-                        </span>
-                        <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
-                          {t(...levelI18n(item.level))}
-                        </span>
-                        <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
-                          {item.category}
-                        </span>
-                        {item.isPending ? (
-                          <span className={cn(CHIP_PENDING, "px-2 py-0.5 text-[11px] font-semibold")}>
-                            {pendingLabel}
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-white/[0.06] dark:text-zinc-400">
+                            #{item.id}
                           </span>
-                        ) : (
-                          <span className={cn(CHIP_APPROVED, "px-2 py-0.5 text-[11px] font-semibold")}>
-                            {approvedLabel}
+                          <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
+                            {t(...levelI18n(item.level))}
                           </span>
-                        )}
+                          <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
+                            {item.category}
+                          </span>
+                          {item.isPending ? (
+                            <span className={cn(CHIP_PENDING, "px-2 py-0.5 text-[11px] font-semibold")}>
+                              {pendingLabel}
+                            </span>
+                          ) : (
+                            <span className={cn(CHIP_APPROVED, "px-2 py-0.5 text-[11px] font-semibold")}>
+                              {approvedLabel}
+                            </span>
+                          )}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="shrink-0"
+                          onClick={() => openItem(item)}
+                        >
+                          <Eye className="mr-1.5 h-4 w-4" />
+                          {item.isPending
+                            ? t("দেখুন/সম্পাদনা", "View/Edit")
+                            : t("দেখুন", "View")}
+                        </Button>
                       </div>
                       <p className="mt-2 text-sm font-medium leading-relaxed text-zinc-700 dark:text-zinc-300">
                         {item.word}
@@ -344,6 +426,16 @@ export function MySubmissions() {
           </>
         )}
       </div>
+      <SubmissionDialog
+        item={selected}
+        open={dialogOpen}
+        onOpenChange={(open) => {
+          setDialogOpen(open);
+          if (!open) setSelected(null);
+        }}
+        onSaved={handleSaved}
+        onDeleted={handleDeleted}
+      />
     </section>
   );
 }
