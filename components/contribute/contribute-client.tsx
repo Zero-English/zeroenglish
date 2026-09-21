@@ -20,7 +20,6 @@ import {
 import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { cn } from "@/lib/utils";
 import {
@@ -41,6 +40,7 @@ import {
   difficultyLabel,
 } from "./types";
 import { MySubmissions } from "./my-submissions";
+import { VocabularyContributeFlow } from "./vocabulary-contribute-flow";
 
 const CARD =
   "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
@@ -85,6 +85,8 @@ function questionKey(text: string): string {
 }
 
 export function ContributeClient() {
+  const [activeType, setActiveType] = useState<"quiz" | "vocabulary">("quiz");
+
   return (
     <div className="relative min-h-dvh overflow-hidden">
       <div className="relative px-4 py-10 sm:px-6 lg:px-8">
@@ -112,8 +114,15 @@ export function ContributeClient() {
               </TabsList>
               <TabsContent value="contribute">
                 <div className="space-y-4 sm:space-y-6">
-                  <ContributionTypes />
-                  <QuizContributeFlow />
+                  <ContributionTypes
+                    active={activeType}
+                    onChange={setActiveType}
+                  />
+                  {activeType === "vocabulary" ? (
+                    <VocabularyContributeFlow />
+                  ) : (
+                    <QuizContributeFlow />
+                  )}
                 </div>
               </TabsContent>
               <TabsContent value="submissions">
@@ -208,15 +217,19 @@ function HeroStat({
   );
 }
 
-function ContributionTypes() {
-  const [active, setActive] = useState<"quiz" | "vocabulary">("quiz");
-
+function ContributionTypes({
+  active,
+  onChange,
+}: {
+  active: "quiz" | "vocabulary";
+  onChange: (next: "quiz" | "vocabulary") => void;
+}) {
   return (
     <div className={cn(CARD, "overflow-hidden")}>
       <div className={cn("grid grid-cols-1 sm:grid-cols-2")}>
         <button
           type="button"
-          onClick={() => setActive("quiz")}
+          onClick={() => onChange("quiz")}
           className={cn(
             "group flex flex-col gap-3 p-5 sm:p-6 text-left transition-colors",
             "border-l border-t border-black/[0.06] dark:border-white/[0.08]",
@@ -255,27 +268,35 @@ function ContributionTypes() {
 
         <button
           type="button"
-          disabled
-          onClick={() => toast("Vocabulary contribution is coming soon.")}
+          onClick={() => onChange("vocabulary")}
           className={cn(
             "group flex flex-col gap-3 p-5 sm:p-6 text-left transition-colors",
             "border-l border-t border-black/[0.06] dark:border-white/[0.08]",
             "[&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0",
-            "opacity-70 cursor-not-allowed hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
+            active === "vocabulary"
+              ? "bg-violet-500/[0.04] dark:bg-violet-500/[0.08]"
+              : "hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
           )}
         >
           <span className="flex items-center gap-4">
-            <span className={cn(TILE_ICON, "text-violet-500 bg-violet-500/10")}>
+            <span
+              className={cn(
+                TILE_ICON,
+                active === "vocabulary"
+                  ? "bg-violet-500 text-white shadow-[0_1px_2px_rgba(139,92,246,0.3),0_4px_12px_-4px_rgba(139,92,246,0.35)]"
+                  : "text-violet-500 bg-violet-500/10"
+              )}
+            >
               <BookOpen className="h-6 w-6" />
             </span>
             <span className="min-w-0 flex-1">
               <span className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                   Vocabulary
                 </span>
-                <Badge variant="outline" className="rounded-full text-[11px] text-zinc-400">
-                  Coming soon
-                </Badge>
+                <span className={cn(CHIP_APPROVED, "px-2 py-0.5 text-[11px] font-semibold")}>
+                  Active
+                </span>
               </span>
               <span className="mt-1 block text-xs text-zinc-500 dark:text-zinc-400">
                 Add new words with meanings, examples and more.

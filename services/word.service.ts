@@ -313,6 +313,60 @@ export const getWordsByPage = async (page: number = 1, limit: number = 10) => {
     }
 };
 
+export const getWordsByAddedBy = async (
+    addedByUserId: number,
+    page: number = 1,
+    limit: number = 10
+) => {
+    try {
+        const skip = (page - 1) * limit;
+
+        const [words, total] = await Promise.all([
+            prisma.word.findMany({
+                where: { addedByUserId },
+                skip,
+                take: limit,
+                orderBy: { createdAt: "desc" },
+                include: wordAdminInclude,
+            }),
+            prisma.word.count({ where: { addedByUserId } }),
+        ]);
+
+        const totalPages = Math.ceil(total / limit);
+
+        return {
+            data: words.map((w) => toApiAdminWord(w)),
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages,
+            },
+            message: "Words fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch words by contributor: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch words",
+            success: false,
+        };
+    }
+};
+
+export const getExistingWords = async (words: string[]): Promise<string[]> => {
+    const uniqueWords = [...new Set(words.map((w) => w.trim()).filter(Boolean))];
+    if (uniqueWords.length === 0) return [];
+
+    const existing = await prisma.word.findMany({
+        where: { word: { in: uniqueWords, mode: "insensitive" } },
+        select: { word: true },
+    });
+
+    return existing.map((w) => w.word);
+};
+
 const incrementVocabVersion = async (): Promise<void> => {
     await prisma.vocabMeta.upsert({
         where: { id: 1 },
@@ -336,8 +390,8 @@ export const createWord = async (wordData: {
     isPending?: boolean;
 }, addedByUserId: number) => {
     try {
-        const existingWord = await prisma.word.findUnique({
-            where: { word: wordData.word },
+        const existingWord = await prisma.word.findFirst({
+            where: { word: { equals: wordData.word, mode: "insensitive" } },
         });
 
         if (existingWord) {
