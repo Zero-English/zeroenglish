@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
-import { getAllWords, getWordsByPage, createWord, createWordsBulk } from "@/services/word.service";
-import { wordsArraySchema } from "@/utils/validation/zod";
-import { requireAdmin, getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
+import { getAllWords, getWordsByPage, createWord, createWordsBulk, updateWordsBulk, getExistingWords } from "@/services/word.service";
+import { wordsArraySchema, bulkWordUpdateSchema } from "@/utils/validation/zod";
+import { requireAdmin, requireContributorOrAdmin, getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
 import logger from "@/utils/logger";
 
 /**
@@ -47,6 +47,86 @@ export async function GET(request: NextRequest) {
     }
 
     const result = await getAllWords();
+    return NextResponse.json(result);
+}
+
+/**
+ * @openapi
+ * /api/v1/words:
+ *   patch:
+ *     summary: Bulk update words
+ *     description: Updates multiple words at once (e.g. approve or mark as pending).
+ *     tags:
+ *       - Words
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - ids
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *               isPending:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Words updated successfully
+ *       400:
+ *         description: Invalid input
+ */
+export async function PATCH(request: NextRequest) {
+    const forbidden = await requireAdmin();
+    if (forbidden) return forbidden;
+
+    let body: unknown;
+    try {
+        body = await request.json();
+    } catch {
+        return NextResponse.json(
+            { data: null, message: "Invalid JSON body", success: false },
+            { status: 400 }
+        );
+    }
+
+    const parsed = bulkWordUpdateSchema.safeParse(body);
+
+    if (!parsed.success) {
+        const firstError = parsed.error.issues[0];
+        const location = firstError?.path?.join(".");
+        const detail = firstError?.message ?? "Invalid data";
+        const message = location
+            ? `Validation failed at "${location}": ${detail}`
+            : `Validation failed: ${detail}`;
+        logger.warn(`Word bulk update rejected: validation failed`, {
+            location,
+            detail,
+        });
+        return NextResponse.json(
+            { data: null, message, success: false },
+            { status: 400 }
+        );
+    }
+
+    const result = await updateWordsBulk(parsed.data.ids, {
+        isPending: parsed.data.isPending,
+    });
+
+    if (!result.success) {
+        logger.error(`Word bulk update failed`, {
+            message: result.message,
+        });
+        return NextResponse.json(result, { status: 500 });
+    }
+
+    logger.info(`Word bulk update succeeded`, {
+        count: result.data?.count,
+    });
+
     return NextResponse.json(result);
 }
 
@@ -117,7 +197,7 @@ export async function GET(request: NextRequest) {
  *         description: Word already exists
  */
 export async function POST(request: NextRequest) {
-    const forbidden = await requireAdmin();
+    const forbidden = await requireContributorOrAdmin();
     if (forbidden) return forbidden;
 
     const isBulk = request.nextUrl.searchParams.get("bulk") === "true";
@@ -126,13 +206,17 @@ export async function POST(request: NextRequest) {
     if (!sessionUser) return unauthorizedResponse();
 
     if (isBulk) {
-        return handleBulkCreate(request, sessionUser.id);
+        return handleBulkCreate(request, sessionUser.id, sessionUser.role);
     }
 
     return handleSingleCreate(request, sessionUser.id);
 }
 
-async function handleBulkCreate(request: NextRequest, addedByUserId: number) {
+async function handleBulkCreate(
+    request: NextRequest,
+    addedByUserId: number,
+    role: string
+) {
     const startTime = Date.now();
 
     logger.info(`Bulk word import started`);
@@ -237,6 +321,30 @@ async function handleBulkCreate(request: NextRequest, addedByUserId: number) {
         fileName: file.name,
         rowCount: parsed.data.length,
     });
+
+    if (role !== "admin") {
+        const duplicates = await getExistingWords(
+            parsed.data.map((w) => w.word)
+        );
+
+        if (duplicates.length > 0) {
+            logger.warn(`Bulk word import rejected: existing words`, {
+                count: duplicates.length,
+                words: duplicates.slice(0, 20),
+            });
+            return NextResponse.json(
+                {
+                    data: null,
+                    message: `These words already exist in the dictionary: ${duplicates
+                        .slice(0, 10)
+                        .map((w) => `"${w}"`)
+                        .join(", ")}${duplicates.length > 10 ? "…" : ""}. Remove them and try again.`,
+                    success: false,
+                },
+                { status: 400 }
+            );
+        }
+    }
 
     const result = await createWordsBulk(parsed.data, addedByUserId);
 

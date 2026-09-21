@@ -38,6 +38,7 @@ const toApiQuestion = (q: QuizQuestionWithType) => ({
 
 const toApiAdminQuestion = (q: QuizQuestionAdmin) => ({
     ...toApiQuestion(q),
+    class: q.class,
     isPending: q.isPending,
     addedByUserId: q.addedByUserId,
     addedBy: q.addedBy
@@ -522,6 +523,7 @@ export const updateQuizQuestionById = async (
         difficultyLevel: DifficultyLevels;
         answer: string;
         explanation?: string;
+        class?: Class[];
         isPending?: boolean;
     }>,
 ) => {
@@ -536,6 +538,30 @@ export const updateQuizQuestionById = async (
                 message: "Quiz question not found",
                 success: false,
             };
+        }
+
+        if (
+            data.questionText &&
+            data.questionText.trim().toLowerCase() !== existing.questionText.trim().toLowerCase()
+        ) {
+            const duplicate = await prisma.quizQuestion.findFirst({
+                where: {
+                    questionText: {
+                        equals: data.questionText,
+                        mode: "insensitive",
+                    },
+                    NOT: { id },
+                },
+                select: { id: true },
+            });
+
+            if (duplicate) {
+                return {
+                    data: null,
+                    message: `A question with this exact text already exists (question #${duplicate.id}).`,
+                    success: false,
+                };
+            }
         }
 
         const { quizType, ...rest } = data;

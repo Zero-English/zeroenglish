@@ -109,6 +109,18 @@ export const bulkQuizUpdateSchema = z
     }
   );
 
+export const bulkWordUpdateSchema = z
+  .object({
+    ids: z
+      .array(z.number().int().positive())
+      .min(1, "At least one word id is required")
+      .max(1000, "Too many word ids (max 1000)"),
+    isPending: z.boolean().optional(),
+  })
+  .refine((data) => data.isPending !== undefined, {
+    message: "At least one field (isPending) is required",
+  });
+
 export const quizQuestionsArraySchema = z
   .array(quizQuestionSchema)
   .min(1, "At least one question is required")
