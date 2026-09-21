@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getAllWords, getWordsByPage, createWord, createWordsBulk } from "@/services/word.service";
 import { wordsArraySchema } from "@/utils/validation/zod";
-import { requireAdmin } from "@/lib/api-auth";
+import { requireAdmin, getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
 import logger from "@/utils/logger";
 
 /**
@@ -122,14 +122,17 @@ export async function POST(request: NextRequest) {
 
     const isBulk = request.nextUrl.searchParams.get("bulk") === "true";
 
+    const sessionUser = await getApiSessionUser();
+    if (!sessionUser) return unauthorizedResponse();
+
     if (isBulk) {
-        return handleBulkCreate(request);
+        return handleBulkCreate(request, sessionUser.id);
     }
 
-    return handleSingleCreate(request);
+    return handleSingleCreate(request, sessionUser.id);
 }
 
-async function handleBulkCreate(request: NextRequest) {
+async function handleBulkCreate(request: NextRequest, addedByUserId: number) {
     const startTime = Date.now();
 
     logger.info(`Bulk word import started`);
@@ -235,7 +238,7 @@ async function handleBulkCreate(request: NextRequest) {
         rowCount: parsed.data.length,
     });
 
-    const result = await createWordsBulk(parsed.data);
+    const result = await createWordsBulk(parsed.data, addedByUserId);
 
     if (!result.success) {
         logger.error(`Bulk word import failed during database write`, {
@@ -255,7 +258,7 @@ async function handleBulkCreate(request: NextRequest) {
     return NextResponse.json(result, { status: 201 });
 }
 
-async function handleSingleCreate(request: NextRequest) {
+async function handleSingleCreate(request: NextRequest, addedByUserId: number) {
     logger.info(`Single word create started`);
 
     const body = await request.json();
@@ -274,7 +277,7 @@ async function handleSingleCreate(request: NextRequest) {
         );
     }
 
-    const result = await createWord(body);
+    const result = await createWord(body, addedByUserId);
 
     if (!result.success) {
         const status = result.message === "Word already exists" ? 409 : 500;

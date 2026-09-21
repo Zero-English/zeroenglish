@@ -291,7 +291,7 @@ export const createWord = async (wordData: {
     level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
     category: string;
     wordType: string[];
-}) => {
+}, addedByUserId: number) => {
     try {
         const existingWord = await prisma.word.findUnique({
             where: { word: wordData.word },
@@ -318,6 +318,7 @@ export const createWord = async (wordData: {
                 level: wordData.level,
                 category: wordData.category,
                 wordType: wordData.wordType,
+                addedByUserId,
             },
         });
         await incrementVocabVersion();
@@ -352,6 +353,7 @@ export const createWordsBulk = async (
         category?: string;
         wordType?: string[];
     }[],
+    addedByUserId: number,
 ) => {
     try {
         logger.info(
@@ -370,6 +372,7 @@ export const createWordsBulk = async (
             level: w.level ?? "A1",
             category: w.category ?? "Oxford5000",
             wordType: w.wordType ?? [],
+            addedByUserId,
         }));
 
         logger.info(`Creating ${data.length} words in bulk`);
