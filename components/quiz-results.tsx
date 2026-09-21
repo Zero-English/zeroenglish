@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { ArrowLeft, History, BookOpenCheck } from "lucide-react";
 import { useT } from "@/components/language-provider";
-import { VocabularyExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
+import { CombinedExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
 import { QuizPracticeResultsPanel } from "@/components/quiz-practice-results-panel";
 
-export function QuizResults() {
+export function CombinedExamResults() {
   const t = useT();
 
   return (
@@ -51,7 +51,7 @@ export function QuizResults() {
               </span>
             </div>
             <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
-              <VocabularyExamResultsPanel />
+              <CombinedExamResultsPanel />
             </div>
           </div>
 

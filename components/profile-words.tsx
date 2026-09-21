@@ -25,7 +25,7 @@ import { ProfileActivityChart } from "@/components/profile-activity-chart";
 import { QuizExamHistoryPanel } from "@/components/profile-quiz-exam-history";
 import { useQuizHistory } from "@/lib/use-quiz-history";
 import { useQuizExamHistoryStore } from "@/lib/quiz-exam-history-store";
-import { VocabularyExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
+import { CombinedExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
 import { QuizPracticeResultsPanel } from "@/components/quiz-practice-results-panel";
 import { MySubmissions } from "@/components/contribute/my-submissions";
 import { useSession } from "next-auth/react";
@@ -709,7 +709,7 @@ export function ProfileTabs({ words }: { words: Word[] }) {
                   </span>
                 </div>
                 <div className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
-                  <VocabularyExamResultsPanel />
+                  <CombinedExamResultsPanel />
                 </div>
               </div>
               <div>

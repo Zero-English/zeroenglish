@@ -58,7 +58,7 @@ const TIME_OPTIONS = [10, 15, 20, 30, 60] as const;
 const LEVELS_ALL = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
 // Class questions carry a difficulty (EASY/MEDIUM/HARD) rather than a CEFR
-// level, but QuizResults only stores Levels. Map each difficulty to the level
+// level, but CombinedExamResult only stores Levels. Map each difficulty to the level
 // band it represents so class quiz results can live in the same table.
 const DIFFICULTY_TO_LEVEL: Record<GrammarDifficulty, string> = {
   EASY: "A1",

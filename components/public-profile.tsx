@@ -15,7 +15,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { dbResultToHistoryEntry, type DbQuizResult } from "@/lib/quiz-results-api";
+import { dbResultToHistoryEntry, type DbCombinedExamResult } from "@/lib/quiz-results-api";
 import type { QuizType } from "@/lib/quiz-history-store";
 import { cn } from "@/lib/utils";
 import {
@@ -431,13 +431,13 @@ export function PublicProfileView({
   totalWords,
   levelProgress = [],
   dailyData = [],
-  quizResults = [],
+  combinedExamResults = [],
 }: {
   user: PublicProfileUser;
   totalWords: number;
   levelProgress: { level: string; total: number; learned: number }[];
   dailyData: { date: string; count: number }[];
-  quizResults: DbQuizResult[];
+  combinedExamResults: DbCombinedExamResult[];
 }) {
   const t = useT();
   const isAdmin = user.role === "admin";
@@ -445,8 +445,8 @@ export function PublicProfileView({
 
   const progress = totalWords > 0 ? Math.round((user.learnedCount / totalWords) * 100) : 0;
   const quizEntries = useMemo(
-    () => quizResults.map((r) => dbResultToHistoryEntry(r)),
-    [quizResults]
+    () => combinedExamResults.map((r) => dbResultToHistoryEntry(r)),
+    [combinedExamResults]
   );
   const stats = useMemo(() => {
     const total = quizEntries.length;

@@ -12,9 +12,9 @@ import {
   type WordListType,
 } from "@/lib/db";
 import {
-  fetchQuizResultsFromDb,
+  fetchCombinedExamResultsFromDb,
   dbResultDate,
-  type DbQuizResult,
+  type DbCombinedExamResult,
 } from "@/lib/quiz-results-api";
 import type { QuizHistoryEntry } from "@/lib/quiz-history-store";
 import {
@@ -70,7 +70,7 @@ function quizEntryKey(e: QuizHistoryEntry): string {
   ].join("|");
 }
 
-function dbQuizKey(r: DbQuizResult): string {
+function dbCombinedKey(r: DbCombinedExamResult): string {
   return [
     r.title,
     r.scoreInPercent,
@@ -167,7 +167,7 @@ async function deleteRemoteWord(type: WordListType, id: string): Promise<boolean
   }
 }
 
-async function pushQuizResult(entry: QuizHistoryEntry): Promise<number | null> {
+async function pushCombinedExamResult(entry: QuizHistoryEntry): Promise<number | null> {
   const levels = entry.levels.filter((l) => VALID_LEVELS.has(l));
   if (!levels.length) return null;
   const score = quizScore(entry);
@@ -202,18 +202,18 @@ async function pushQuizResult(entry: QuizHistoryEntry): Promise<number | null> {
   }
 }
 
-async function syncQuizResults(
+async function syncCombinedExamResults(
   scope: string,
-  dbResults: DbQuizResult[]
+  dbResults: DbCombinedExamResult[]
 ): Promise<number> {
   if (!Array.isArray(dbResults)) dbResults = [];
-  const byClientId = new Map<string, DbQuizResult>();
-  const byStruct = new Map<string, DbQuizResult>();
+  const byClientId = new Map<string, DbCombinedExamResult>();
+  const byStruct = new Map<string, DbCombinedExamResult>();
   for (const r of dbResults) {
     if (r.clientId) {
       byClientId.set(r.clientId, r);
     } else {
-      const k = dbQuizKey(r);
+      const k = dbCombinedKey(r);
       if (!byStruct.has(k)) byStruct.set(k, r);
     }
   }
@@ -238,7 +238,7 @@ async function syncQuizResults(
       });
       continue;
     }
-    const dbId = await pushQuizResult(e);
+    const dbId = await pushCombinedExamResult(e);
     if (dbId != null) {
       await updateQuizHistoryEntry(scope, e.id, { synced: true, dbId });
     } else {
@@ -337,7 +337,7 @@ async function reconcileType(
 
 async function performSync(scope: string): Promise<void> {
   const [dbResults, dbLearned, dbBookmarks, dbStill] = await Promise.all([
-    fetchQuizResultsFromDb(),
+    fetchCombinedExamResultsFromDb(),
     fetchIds("/api/v1/words/learned"),
     fetchIds("/api/v1/words/bookmarks"),
     fetchIds("/api/v1/words/still-learning"),
@@ -346,7 +346,7 @@ async function performSync(scope: string): Promise<void> {
   let failed = 0;
 
   if (dbResults) {
-    failed += await syncQuizResults(scope, dbResults);
+    failed += await syncCombinedExamResults(scope, dbResults);
   } else {
     failed += 1;
   }

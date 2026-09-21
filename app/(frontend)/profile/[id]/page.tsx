@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getUserById, getUserLearningProgress } from "@/services/user.service";
-import { getQuizResultsByUser } from "@/services/quiz-result.service";
+import { getCombinedExamResultsByUser } from "@/services/quiz-result.service";
 import { getAllWords } from "@/lib/data";
 import { PublicProfileView } from "@/components/public-profile";
 import { BackButton } from "@/components/back-button";
@@ -47,10 +47,10 @@ export default async function PublicProfilePage({
     notFound();
   }
 
-  const [result, progressResult, quizResultsResult, words] = await Promise.all([
+  const [result, progressResult, combinedExamResultsResult, words] = await Promise.all([
     getUserById(userId),
     getUserLearningProgress(userId),
-    getQuizResultsByUser(userId),
+    getCombinedExamResultsByUser(userId),
     getAllWords(),
   ]);
 
@@ -78,9 +78,9 @@ export default async function PublicProfilePage({
   const dailyData =
     progressResult.success && progressResult.data ? progressResult.data.daily : [];
 
-  const quizResults =
-    quizResultsResult.success && Array.isArray(quizResultsResult.data)
-      ? quizResultsResult.data
+  const combinedExamResults =
+    combinedExamResultsResult.success && Array.isArray(combinedExamResultsResult.data)
+      ? combinedExamResultsResult.data
       : [];
 
   return (
@@ -111,7 +111,7 @@ export default async function PublicProfilePage({
             totalWords={words.length}
             levelProgress={levelProgress}
             dailyData={dailyData}
-            quizResults={quizResults}
+            combinedExamResults={combinedExamResults}
           />
         </div>
       </div>

@@ -90,42 +90,42 @@ model QuizExam {
   scheduledOpeningTime DateTime?
   scheduledClosingTime DateTime?
   resultsPublished     Boolean            @default(false)
-  results              QuizResults[]
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
+
+  combinedExamResults CombinedExamResult[]
 }
 
-model QuizResults {
-  id                     Int        @id @default(autoincrement())
-  userId                 Int
-  examId                 Int?
-  clientId               String?
-  title                  String
-  mode                   QuizMode
-  quizTypeId             Int
-  questionCount          Int
-  levels                 Levels[]
-  timePerQuestion        Int
-  timeTotalQuiz          Int
-  correctQuestions       QuizQuestion[] @relation("CorrectQuizQuestion")
-  incorrectQuestions     QuizQuestion[] @relation("IncorrectQuizQuestion")
+model CombinedExamResult {
+  id Int @id @default(autoincrement())
+  userId Int
+  correctWords Word[] @relation("CombinedExamCorrectWords")
+  incorrectWords Word[] @relation("CombinedExamIncorrectWords")
+  correctQuestions QuizQuestion[] @relation("CombinedExamCorrectQuestions")
+  incorrectQuestions QuizQuestion[] @relation("CombinedExamIncorrectQuestions")
+  questionCount Int
+  correctAnswers Int
+  scoreInPercent Int
+  totalScore Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  levels Levels[]
+  timePerQuestion Int
+  quizTypeId Int
+  examId Int?
+  clientId String?
+  exam QuizExam? @relation(fields: [examId], references: [id], onDelete: SetNull)
+  title String
+  mode QuizMode
+  timeTotalQuiz Int
   scheduleEnabled        Boolean    @default(false)
   scheduledOpeningTime   DateTime?
   scheduledClosingTime   DateTime?
-  correctAnswers         Int
-  scoreInPercent         Int
-  totalScore             Int
   status                 QuizResultStatus @default(SUBMITTED)
   isFirstAttempt         Boolean          @default(true)
-  createdAt              DateTime         @default(now())
-  updatedAt              DateTime         @updatedAt
 
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  exam     QuizExam? @relation(fields: [examId], references: [id], onDelete: SetNull)
-  quizType QuizType  @relation(fields: [quizTypeId], references: [id])
-
-  @@index([userId, examId])
-  @@index([quizTypeId])
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+  quizType QuizType @relation(references: [id], fields: [quizTypeId], onDelete: Cascade)
 }
 
 model QuizExamQuestion {
@@ -155,8 +155,8 @@ model QuizQuestion {
   explanation     String @default("")
   addedByUserId   Int
   addedBy         User @relation(fields: [addedByUserId], references: [id], onDelete: Cascade)
-  relaventQuizResultCorrectQuestions QuizResults[] @relation("CorrectQuizQuestion")
-  relaventQuizResultIncorrectQuestions QuizResults[] @relation("IncorrectQuizQuestion")
+  relaventCombinedExamCorrectQuestions CombinedExamResult[] @relation("CombinedExamCorrectQuestions")
+  relaventCombinedExamIncorrectQuestions CombinedExamResult[] @relation("CombinedExamIncorrectQuestions")
 }
 
 model Word {
@@ -177,8 +177,11 @@ model Word {
   relatedBy     UserWord[]
   userBookmarks UserBookmark[]
   quizQuestions QuizQuestion[]
-  relatedVocabularyQuizResultCorrectWords VocabularyExamResult[] @relation("CorrectWords")
-  relatedVocabularyQuizResultInCorrectWords VocabularyExamResult[] @relation("InCorrectWords")
+  relatedCombinedExamResultCorrectWords CombinedExamResult[] @relation("CombinedExamCorrectWords")
+  relatedCombinedExamResultIncorrectWords CombinedExamResult[] @relation("CombinedExamIncorrectWords")
+  isPending Boolean @default(true)
+  addedByUserId Int 
+  addedByUser User @relation(references: [id], fields: [addedByUserId], onDelete: Cascade)
 
   @@index([level])
   @@index([category])
@@ -232,10 +235,10 @@ model User {
   sessions       Session[]
   relatedWords   UserWord[]
   userBookmarks  UserBookmark[]
-  quizResults    QuizResults[]
   isPending      Boolean @default(true)
   addedQuestions QuizQuestion[]
-  vocabularyExamResults VocabularyExamResult[]
+  addedWords Word[]
+  relatedCombinedExamResults CombinedExamResult[]
 }
 
 model Account {
@@ -276,30 +279,14 @@ model QuizType {
   id               Int            @id @default(autoincrement())
   name             String         @unique
   relatedQuestions QuizQuestion[]
-  quizResults      QuizResults[]
-  vocabularyQuizResults VocabularyExamResult[]
+
+  combinedExamResults CombinedExamResult[]
 }
 
 model VocabMeta {
   id        Int      @id @default(1)
   version   Int      @default(1)
   updatedAt DateTime @updatedAt
-}
-
-model VocabularyExamResult {
-  id Int @id @default(autoincrement())
-  userId Int 
-  correctWords Word[] @relation("CorrectWords")
-  incorrectWords Word[] @relation("InCorrectWords")
-  scoreInPercent Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  levels Levels[]
-  timePerWord Int
-  quizTypeId Int
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quizType QuizType @relation(fields: [quizTypeId], references: [id], onDelete: Cascade)
 }
 
 enum Roles {

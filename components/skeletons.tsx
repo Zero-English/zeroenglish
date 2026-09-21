@@ -527,7 +527,7 @@ export function PublicProfileSkeleton() {
   );
 }
 
-export function VocabularyExamResultSkeleton() {
+export function CombinedExamResultSkeleton() {
   return (
     <div className="relative min-h-dvh overflow-hidden">
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
@@ -578,5 +578,3 @@ export function VocabularyExamResultSkeleton() {
 }
 
 export default HomeSkeleton;
-
-export { VocabularyExamResultSkeleton as QuizResultSkeleton };

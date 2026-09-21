@@ -4,7 +4,7 @@ import type { Prisma } from "@/generated/prisma/client";
 import type { Levels, QuizMode } from "@/generated/prisma/enums";
 
 const quizExamListInclude = {
-    _count: { select: { quizQuestions: true, results: true } },
+    _count: { select: { quizQuestions: true, combinedExamResults: true } },
 } as const;
 
 const quizExamDetailInclude = {
@@ -16,7 +16,7 @@ const quizExamDetailInclude = {
             },
         },
     },
-    results: {
+    combinedExamResults: {
         orderBy: { createdAt: "desc" },
         include: {
             user: {
@@ -68,7 +68,7 @@ const toSummaryApi = (exam: QuizExamListPayload) => ({
     resultsPublished: exam.resultsPublished,
     createdAt: exam.createdAt,
     updatedAt: exam.updatedAt,
-    resultCount: exam._count.results,
+    resultCount: exam._count.combinedExamResults,
     linkedQuestionCount: exam._count.quizQuestions,
 });
 
@@ -85,7 +85,7 @@ const toDetailApi = (exam: QuizExamDetailPayload) => ({
     resultsPublished: exam.resultsPublished,
     createdAt: exam.createdAt,
     updatedAt: exam.updatedAt,
-    resultCount: exam.results.length,
+    resultCount: exam.combinedExamResults.length,
     linkedQuestionCount: exam.quizQuestions.length,
     questions: exam.quizQuestions.map((q) => ({
         id: q.questionId,
@@ -95,7 +95,7 @@ const toDetailApi = (exam: QuizExamDetailPayload) => ({
         answer: q.quizQuestion.answer,
         quizType: q.quizQuestion.quizType.name,
     })),
-    results: exam.results.map((r) => ({
+    results: exam.combinedExamResults.map((r) => ({
         id: r.id,
         userId: r.userId,
         clientId: r.clientId,

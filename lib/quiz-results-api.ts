@@ -32,7 +32,7 @@ export interface DbQuizQuestion {
   explanation?: string;
 }
 
-export interface DbQuizResult {
+export interface DbCombinedExamResult {
   id: number;
   userId: number;
   examId: number | null;
@@ -64,13 +64,13 @@ export interface DbQuizResult {
   incorrectQuestions?: DbQuizQuestion[];
 }
 
-export async function fetchQuizResultsFromDb(userId?: number): Promise<DbQuizResult[]> {
+export async function fetchCombinedExamResultsFromDb(userId?: number): Promise<DbCombinedExamResult[]> {
   try {
     const qs = userId != null ? `?userId=${userId}` : "";
     const res = await fetch(`/api/v1/quiz/results${qs}`, { cache: "no-store" });
     if (!res.ok) return [];
     const body = (await res.json()) as {
-      data?: DbQuizResult[];
+      data?: DbCombinedExamResult[];
       success?: boolean;
     };
     if (!body.success || !Array.isArray(body.data)) return [];
@@ -80,19 +80,19 @@ export async function fetchQuizResultsFromDb(userId?: number): Promise<DbQuizRes
   }
 }
 
-export function dbResultDate(r: DbQuizResult): string {
+export function dbResultDate(r: DbCombinedExamResult): string {
   const v = r.createdAt instanceof Date ? r.createdAt.toISOString() : r.createdAt;
   return v.slice(0, 10);
 }
 
-export async function fetchQuizResultById(id: number): Promise<DbQuizResult | null> {
+export async function fetchCombinedExamResultById(id: number): Promise<DbCombinedExamResult | null> {
   try {
     const res = await fetch(`/api/v1/quiz/results/${id}`, {
       cache: "no-store",
     });
     if (!res.ok) return null;
     const body = (await res.json()) as {
-      data?: DbQuizResult | null;
+      data?: DbCombinedExamResult | null;
       success?: boolean;
     };
     if (!body.success || !body.data) return null;
@@ -109,7 +109,7 @@ const DB_TO_CLIENT_QUIZ_TYPE: Record<string, QuizType> = {
   ANTONYMS: "antonym",
 };
 
-export function dbResultToHistoryEntry(r: DbQuizResult): QuizHistoryEntry {
+export function dbResultToHistoryEntry(r: DbCombinedExamResult): QuizHistoryEntry {
   const date = dbResultDate(r);
   const dbType = r.quizType?.name ?? "";
   const quizType = DB_TO_CLIENT_QUIZ_TYPE[dbType] ?? "english_to_bangla";

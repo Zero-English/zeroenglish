@@ -2,7 +2,16 @@ import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 import type { Levels } from "@/generated/prisma/enums";
 
-export const createVocabularyExamResult = async (data: {
+// Word/vocab quiz types. Grammar & class quiz results also live in the
+// CombinedExamResult table, so list queries must be restricted to these types.
+export const VOCABULARY_QUIZ_TYPES = [
+    "ENGLISH_TO_BANGLA",
+    "BANGLA_TO_ENGLISH",
+    "SYNONYMS",
+    "ANTONYMS",
+] as const;
+
+export const createCombinedExamResult = async (data: {
     userId: number;
     correctWordIds: number[];
     incorrectWordIds: number[];
@@ -18,7 +27,7 @@ export const createVocabularyExamResult = async (data: {
 
         if (!quizType) {
             logger.warn(
-                `Vocabulary exam result create rejected: unknown quizType "${data.quizType}"`
+                `Combined exam result create rejected: unknown quizType "${data.quizType}"`
             );
             return {
                 data: null,
@@ -38,7 +47,7 @@ export const createVocabularyExamResult = async (data: {
 
         if (existingWords.length !== wordIds.length) {
             logger.warn(
-                `Vocabulary exam result create rejected: one or more words do not exist`
+                `Combined exam result create rejected: one or more words do not exist`
             );
             return {
                 data: null,
@@ -47,13 +56,20 @@ export const createVocabularyExamResult = async (data: {
             };
         }
 
-        const result = await prisma.vocabularyExamResult.create({
+        const result = await prisma.combinedExamResult.create({
             data: {
                 userId: data.userId,
+                questionCount: data.correctWordIds.length + data.incorrectWordIds.length,
+                correctAnswers: data.correctWordIds.length,
                 scoreInPercent: data.scoreInPercent,
+                totalScore: data.correctWordIds.length,
                 levels: data.levels,
-                timePerWord: data.timePerWord,
+                timePerQuestion: data.timePerWord,
+                timeTotalQuiz: data.timePerWord * (data.correctWordIds.length + data.incorrectWordIds.length),
                 quizTypeId: quizType.id,
+                title: "Vocabulary Exam",
+                mode: "PRACTICE",
+                scheduleEnabled: false,
                 correctWords: {
                     connect: data.correctWordIds.map((id) => ({ id })),
                 },
@@ -70,14 +86,14 @@ export const createVocabularyExamResult = async (data: {
 
         return {
             data: result,
-            message: "Vocabulary exam result recorded successfully",
+            message: "Combined exam result recorded successfully",
             success: true,
         };
     } catch (error) {
-        logger.error(`Failed to create vocabulary exam result: ${error}`);
+        logger.error(`Failed to create Combined exam result: ${error}`);
         return {
             data: null,
-            message: "Failed to create vocabulary exam result",
+            message: "Failed to create Combined exam result",
             success: false,
         };
     }
@@ -98,10 +114,13 @@ const wordDetailSelect = {
     wordType: true,
 } as const;
 
-export const getVocabularyExamResultsByUser = async (userId: number) => {
+export const getCombinedExamResultsByUser = async (userId: number) => {
     try {
-        const results = await prisma.vocabularyExamResult.findMany({
-            where: { userId },
+        const results = await prisma.combinedExamResult.findMany({
+            where: {
+                userId,
+                quizType: { name: { in: [...VOCABULARY_QUIZ_TYPES] } },
+            },
             orderBy: { createdAt: "desc" },
             include: {
                 correctWords: { select: wordDetailSelect },
@@ -112,25 +131,25 @@ export const getVocabularyExamResultsByUser = async (userId: number) => {
 
         return {
             data: results,
-            message: "Vocabulary exam results fetched successfully",
+            message: "Combined exam results fetched successfully",
             success: true,
         };
     } catch (error) {
-        logger.error(`Failed to fetch vocabulary exam results: ${error}`);
+        logger.error(`Failed to fetch Combined exam results: ${error}`);
         return {
             data: null,
-            message: "Failed to fetch vocabulary exam results",
+            message: "Failed to fetch Combined exam results",
             success: false,
         };
     }
 };
 
-export const getVocabularyExamResultById = async (
+export const getCombinedExamResultById = async (
     resultId: number,
     userId?: number
 ) => {
     try {
-        const result = await prisma.vocabularyExamResult.findFirst({
+        const result = await prisma.combinedExamResult.findFirst({
             where: { id: resultId, ...(userId != null ? { userId } : {}) },
             include: {
                 correctWords: { select: wordDetailSelect },
@@ -142,21 +161,21 @@ export const getVocabularyExamResultById = async (
         if (!result) {
             return {
                 data: null,
-                message: "Vocabulary exam result not found",
+                message: "Combined exam result not found",
                 success: false,
             };
         }
 
         return {
             data: result,
-            message: "Vocabulary exam result fetched successfully",
+            message: "Combined exam result fetched successfully",
             success: true,
         };
     } catch (error) {
-        logger.error(`Failed to fetch vocabulary exam result by id: ${error}`);
+        logger.error(`Failed to fetch Combined exam result by id: ${error}`);
         return {
             data: null,
-            message: "Failed to fetch vocabulary exam result",
+            message: "Failed to fetch Combined exam result",
             success: false,
         };
     }

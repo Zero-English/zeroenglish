@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/utils/prisma";
-import { createQuizResult } from "@/services/quiz-result.service";
+import { createCombinedExamResult } from "@/services/quiz-result.service";
 import { quizExamSubmitSchema } from "@/utils/validation/zod";
 import type { QuizExamIncorrectAnswer } from "@/types/quiz-exam";
 import logger from "@/utils/logger";
@@ -177,7 +177,7 @@ export async function POST(
     // Cap attempts for competitive exams so users cannot brute-force the exam
     // by re-submitting until they discover every answer.
     if (exam.mode !== "PRACTICE") {
-      const attempts = await prisma.quizResults.count({
+      const attempts = await prisma.combinedExamResult.count({
         where: {
           userId,
           examId,
@@ -253,7 +253,7 @@ export async function POST(
         ? Math.min(100, Math.round((correctAnswers / questionCount) * 100))
         : 0;
 
-    const result = await createQuizResult({
+    const result = await createCombinedExamResult({
       userId,
       clientId: parsed.data.clientId ?? null,
       examId,

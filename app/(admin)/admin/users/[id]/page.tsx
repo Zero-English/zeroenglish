@@ -13,7 +13,7 @@ import UserActions from "./user-actions";
 import { UserAvatar } from "@/components/UserAvatar";
 import { ProfileActivityChart } from "@/components/profile-activity-chart";
 import { LanguageProvider } from "@/components/language-provider";
-import { getQuizResultsByUser } from "@/services/quiz-result.service";
+import { getCombinedExamResultsByUser } from "@/services/quiz-result.service";
 import { getUserById, getUserDailyActivity } from "@/services/user.service";
 import prisma from "@/utils/prisma";
 
@@ -62,9 +62,9 @@ function deriveStatus(updatedAt: string | null | undefined): "Active" | "Inactiv
 }
 
 async function fetchUserData(userId: number) {
-  const [quizResults, dailyActivity, recentWords, recentBookmarks, recentQuizzes] =
+  const [combinedExamResults, dailyActivity, recentWords, recentBookmarks, recentQuizzes] =
     await Promise.all([
-      getQuizResultsByUser(userId),
+      getCombinedExamResultsByUser(userId),
       getUserDailyActivity(userId),
       prisma.userWord.findMany({
         where: { userId },
@@ -84,7 +84,7 @@ async function fetchUserData(userId: number) {
           word: { select: { word: true } },
         },
       }),
-      prisma.quizResults.findMany({
+      prisma.combinedExamResult.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
         take: 5,
@@ -99,7 +99,7 @@ async function fetchUserData(userId: number) {
       }),
     ]);
 
-  return { quizResults, dailyActivity, recentWords, recentBookmarks, recentQuizzes };
+  return { combinedExamResults, dailyActivity, recentWords, recentBookmarks, recentQuizzes };
 }
 
 function quizLabel(
@@ -115,9 +115,9 @@ function quizLabel(
   );
 }
 
-function buildQuizHistory(quizResults: Awaited<ReturnType<typeof fetchUserData>>["quizResults"]) {
-  if (!quizResults.success || !quizResults.data) return [];
-  return quizResults.data.map((r) => ({
+function buildQuizHistory(combinedExamResults: Awaited<ReturnType<typeof fetchUserData>>["combinedExamResults"]) {
+  if (!combinedExamResults.success || !combinedExamResults.data) return [];
+  return combinedExamResults.data.map((r) => ({
     quiz: `${r.title}`,
     score: r.correctAnswers,
     total: r.questionCount ?? 1,
@@ -126,7 +126,7 @@ function buildQuizHistory(quizResults: Awaited<ReturnType<typeof fetchUserData>>
 }
 
 function buildMonthlyProgress(
-  quizResults: Awaited<ReturnType<typeof fetchUserData>>["quizResults"],
+  combinedExamResults: Awaited<ReturnType<typeof fetchUserData>>["combinedExamResults"],
   dailyActivity: Awaited<ReturnType<typeof fetchUserData>>["dailyActivity"]
 ) {
   const monthlyWords: Record<string, number> = {};
@@ -141,8 +141,8 @@ function buildMonthlyProgress(
   }
 
   const monthlyQuizzes: Record<string, { total: number; count: number }> = {};
-  if (quizResults.success && quizResults.data) {
-    for (const r of quizResults.data) {
+  if (combinedExamResults.success && combinedExamResults.data) {
+    for (const r of combinedExamResults.data) {
       const d = new Date(r.createdAt);
       const key = `${d.getFullYear()}-${d.getMonth()}`;
       if (!monthlyQuizzes[key]) monthlyQuizzes[key] = { total: 0, count: 0 };
@@ -221,18 +221,18 @@ export default async function SingleUserPage({
   if (!user) notFound();
 
   const userId = Number(id);
-  const { quizResults, dailyActivity, recentWords, recentBookmarks, recentQuizzes } =
+  const { combinedExamResults, dailyActivity, recentWords, recentBookmarks, recentQuizzes } =
     await fetchUserData(userId);
 
-  const quizHistory = buildQuizHistory(quizResults);
-  const monthlyProgress = buildMonthlyProgress(quizResults, dailyActivity);
+  const quizHistory = buildQuizHistory(combinedExamResults);
+  const monthlyProgress = buildMonthlyProgress(combinedExamResults, dailyActivity);
   const recentActivity = buildRecentActivity(recentWords, recentBookmarks, recentQuizzes);
 
   const avgQuizScore =
-    quizResults.success && quizResults.data && quizResults.data.length > 0
+    combinedExamResults.success && combinedExamResults.data && combinedExamResults.data.length > 0
       ? Math.round(
-          quizResults.data.reduce((sum, r) => sum + r.scoreInPercent, 0) /
-            quizResults.data.length
+          combinedExamResults.data.reduce((sum, r) => sum + r.scoreInPercent, 0) /
+            combinedExamResults.data.length
         )
       : null;
 

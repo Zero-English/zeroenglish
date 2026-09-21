@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
-import { getVocabularyExamResultById } from "@/services/vocabulary-exam-result.service";
+import { getCombinedExamResultById } from "@/services/vocabulary-exam-result.service";
 import logger from "@/utils/logger";
 
 export const dynamic = "force-dynamic";
@@ -52,13 +52,13 @@ export async function GET(
         );
     }
 
-    const result = await getVocabularyExamResultById(
+    const result = await getCombinedExamResultById(
         resultId,
         user.role === "admin" ? undefined : user.id
     );
 
     if (!result.success) {
-        const status = result.message === "Vocabulary exam result not found" ? 404 : 500;
+        const status = result.message === "Combined exam result not found" ? 404 : 500;
         if (status === 500) {
             logger.error(`Vocabulary exam result fetch by id failed`, {
                 resultId,

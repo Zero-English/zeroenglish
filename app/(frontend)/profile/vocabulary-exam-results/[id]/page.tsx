@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
-import { VocabularyExamResultDetail } from "@/components/vocabulary-exam-result-detail";
+import { CombinedExamResultDetail } from "@/components/vocabulary-exam-result-detail";
 import { BackButton } from "@/components/back-button";
 
 export const dynamic = "force-dynamic";
 
-export default async function VocabularyExamResultDetailPage({
+export default async function CombinedExamResultDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -24,7 +24,7 @@ export default async function VocabularyExamResultDetailPage({
       <div className="relative px-4 py-8 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <BackButton />
-          <VocabularyExamResultDetail resultId={resultId} />
+          <CombinedExamResultDetail resultId={resultId} />
         </div>
       </div>
     </div>
