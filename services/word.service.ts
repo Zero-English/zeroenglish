@@ -91,7 +91,7 @@ export const browseWords = async ({
 }: BrowseWordsParams = {}) => {
     try {
         const skip = (page - 1) * limit;
-        const where: { level?: WordLevel } = {};
+        const where: { level?: WordLevel; isPending?: boolean } = { isPending: false };
         if (level && isWordLevel(level)) where.level = level;
 
         const q = search?.trim();
@@ -183,9 +183,11 @@ export const getWordStats = async () => {
         const [grouped, wordRefs] = await Promise.all([
             prisma.word.groupBy({
                 by: ["level"],
+                where: { isPending: false },
                 _count: { _all: true },
             }),
             prisma.word.findMany({
+                where: { isPending: false },
                 select: { id: true, word: true, level: true, category: true },
                 orderBy: { id: "asc" },
             }),
@@ -215,6 +217,7 @@ export const getWordStats = async () => {
 export const getAllPublicWords = async () => {
     try {
         const words = await prisma.word.findMany({
+            where: { isPending: false },
             orderBy: { id: "asc" },
         });
 
