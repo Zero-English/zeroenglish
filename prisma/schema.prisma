@@ -90,58 +90,10 @@ model QuizExam {
   scheduledOpeningTime DateTime?
   scheduledClosingTime DateTime?
   resultsPublished     Boolean            @default(false)
-  results              QuizResults[]
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
-}
 
-model QuizResults {
-  id                     Int        @id @default(autoincrement())
-  userId                 Int
-  examId                 Int?
-  clientId               String?
-  title                  String
-  mode                   QuizMode
-  quizTypeId             Int
-  questionCount          Int
-  levels                 Levels[]
-  timePerQuestion        Int
-  timeTotalQuiz          Int
-  correctQuestions       QuizQuestion[] @relation("CorrectQuizQuestion")
-  incorrectQuestions     QuizQuestion[] @relation("IncorrectQuizQuestion")
-  scheduleEnabled        Boolean    @default(false)
-  scheduledOpeningTime   DateTime?
-  scheduledClosingTime   DateTime?
-  correctAnswers         Int
-  scoreInPercent         Int
-  totalScore             Int
-  status                 QuizResultStatus @default(SUBMITTED)
-  isFirstAttempt         Boolean          @default(true)
-  createdAt              DateTime         @default(now())
-  updatedAt              DateTime         @updatedAt
-
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  exam     QuizExam? @relation(fields: [examId], references: [id], onDelete: SetNull)
-  quizType QuizType  @relation(fields: [quizTypeId], references: [id])
-
-  @@index([userId, examId])
-  @@index([quizTypeId])
-}
-
-model VocabularyExamResult {
-  id Int @id @default(autoincrement())
-  userId Int 
-  correctWords Word[] @relation("CorrectWords")
-  incorrectWords Word[] @relation("InCorrectWords")
-  scoreInPercent Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  levels Levels[]
-  timePerWord Int
-  quizTypeId Int
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quizType QuizType @relation(fields: [quizTypeId], references: [id], onDelete: Cascade)
+  combinedExamResults CombinedExamResult[]
 }
 
 model CombinedExamResult {
@@ -162,6 +114,7 @@ model CombinedExamResult {
   quizTypeId Int
   examId Int?
   clientId String?
+  exam QuizExam? @relation(fields: [examId], references: [id], onDelete: SetNull)
   title String
   mode QuizMode
   timeTotalQuiz Int
@@ -202,8 +155,6 @@ model QuizQuestion {
   explanation     String @default("")
   addedByUserId   Int
   addedBy         User @relation(fields: [addedByUserId], references: [id], onDelete: Cascade)
-  relaventQuizResultCorrectQuestions QuizResults[] @relation("CorrectQuizQuestion")
-  relaventQuizResultIncorrectQuestions QuizResults[] @relation("IncorrectQuizQuestion")
   relaventCombinedExamCorrectQuestions CombinedExamResult[] @relation("CombinedExamCorrectQuestions")
   relaventCombinedExamIncorrectQuestions CombinedExamResult[] @relation("CombinedExamIncorrectQuestions")
 }
@@ -226,8 +177,6 @@ model Word {
   relatedBy     UserWord[]
   userBookmarks UserBookmark[]
   quizQuestions QuizQuestion[]
-  relatedVocabularyQuizResultCorrectWords VocabularyExamResult[] @relation("CorrectWords")
-  relatedVocabularyQuizResultInCorrectWords VocabularyExamResult[] @relation("InCorrectWords")
   relatedCombinedExamResultCorrectWords CombinedExamResult[] @relation("CombinedExamCorrectWords")
   relatedCombinedExamResultIncorrectWords CombinedExamResult[] @relation("CombinedExamIncorrectWords")
 
@@ -283,10 +232,8 @@ model User {
   sessions       Session[]
   relatedWords   UserWord[]
   userBookmarks  UserBookmark[]
-  quizResults    QuizResults[]
   isPending      Boolean @default(true)
   addedQuestions QuizQuestion[]
-  vocabularyExamResults VocabularyExamResult[]
   relatedCombinedExamResults CombinedExamResult[]
 }
 
@@ -328,8 +275,6 @@ model QuizType {
   id               Int            @id @default(autoincrement())
   name             String         @unique
   relatedQuestions QuizQuestion[]
-  quizResults      QuizResults[]
-  vocabularyQuizResults VocabularyExamResult[]
 
   combinedExamResults CombinedExamResult[]
 }
