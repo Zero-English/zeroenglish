@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowRight, ListChecks } from "lucide-react";
-import Link from "next/link";
+import { ListChecks } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useT } from "@/components/language-provider";
 import {
   Pagination,
   PaginationContent,
@@ -13,7 +13,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
-import { quizTypeLabel, difficultyLabel, levelLabel } from "./types";
+import { quizTypeI18n, difficultyI18n, levelI18n } from "./types";
 
 const CARD =
   "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
@@ -69,6 +69,7 @@ export function MySubmissions() {
   const [type, setType] = useState<SubmissionType>("question");
   const [page, setPage] = useState(1);
   const [data, setData] = useState<SubmissionData | null>(null);
+  const t = useT();
 
   useEffect(() => {
     let cancelled = false;
@@ -126,6 +127,9 @@ export function MySubmissions() {
       ? Math.min((page - 1) * ITEMS_PER_PAGE + items.length, total)
       : 0;
 
+  const pendingLabel = t("অপেক্ষমাণ", "Pending");
+  const approvedLabel = t("অনুমোদিত", "Approved");
+
   return (
     <section className={cn(CARD, "overflow-hidden")}>
       <div
@@ -140,10 +144,10 @@ export function MySubmissions() {
           </div>
           <div>
             <h2 className="font-semibold text-zinc-900 dark:text-zinc-100">
-              My submissions
+              {t("আমার সাবমিশন", "My submissions")}
             </h2>
             <p className="text-xs text-zinc-400 dark:text-zinc-500">
-              Everything you&apos;ve contributed
+              {t("আপনি যা কিছু অবদান রেখেছেন", "Everything you've contributed")}
             </p>
           </div>
         </div>
@@ -152,15 +156,19 @@ export function MySubmissions() {
             <span
               className={cn(CHIP_PENDING, "px-2 py-0.5 text-[11px] font-semibold")}
             >
-              {total} total
+              {t(`${total}টি মোট`, `${total} total`)}
             </span>
           ) : null}
           <div className="grid grid-cols-2 gap-1 rounded-[10px] bg-black/[0.04] p-1 dark:bg-white/[0.06]">
             {(
               [
-                { key: "question", label: "Questions" },
-                { key: "word", label: "Words" },
-              ] as { key: SubmissionType; label: string }[]
+                { key: "question", labelBn: "প্রশ্ন", labelEn: "Questions" },
+                { key: "word", labelBn: "শব্দ", labelEn: "Words" },
+              ] as {
+                key: SubmissionType;
+                labelBn: string;
+                labelEn: string;
+              }[]
             ).map((tab) => (
               <button
                 key={tab.key}
@@ -176,11 +184,10 @@ export function MySubmissions() {
                     : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
                 )}
               >
-                {tab.label}
+                {t(tab.labelBn, tab.labelEn)}
               </button>
             ))}
           </div>
-          
         </div>
       </div>
 
@@ -198,8 +205,14 @@ export function MySubmissions() {
             </span>
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
               {type === "question"
-                ? "You haven't submitted any questions yet."
-                : "You haven't submitted any words yet."}
+                ? t(
+                    "আপনি এখনো কোনো প্রশ্ন জমা দেননি।",
+                    "You haven't submitted any questions yet."
+                  )
+                : t(
+                    "আপনি এখনো কোনো শব্দ জমা দেননি।",
+                    "You haven't submitted any words yet."
+                  )}
             </p>
           </div>
         ) : (
@@ -214,7 +227,7 @@ export function MySubmissions() {
                           #{item.id}
                         </span>
                         <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
-                          {quizTypeLabel(item.quizType)}
+                          {t(...quizTypeI18n(item.quizType))}
                         </span>
                         <span
                           className={cn(
@@ -223,15 +236,15 @@ export function MySubmissions() {
                               "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
                           )}
                         >
-                          {difficultyLabel(item.difficultyLevel)}
+                          {t(...difficultyI18n(item.difficultyLevel))}
                         </span>
                         {item.isPending ? (
                           <span className={cn(CHIP_PENDING, "px-2 py-0.5 text-[11px] font-semibold")}>
-                            Pending
+                            {pendingLabel}
                           </span>
                         ) : (
                           <span className={cn(CHIP_APPROVED, "px-2 py-0.5 text-[11px] font-semibold")}>
-                            Approved
+                            {approvedLabel}
                           </span>
                         )}
                       </div>
@@ -246,18 +259,18 @@ export function MySubmissions() {
                           #{item.id}
                         </span>
                         <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
-                          {levelLabel(item.level)}
+                          {t(...levelI18n(item.level))}
                         </span>
                         <span className="rounded-full bg-black/[0.04] px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
                           {item.category}
                         </span>
                         {item.isPending ? (
                           <span className={cn(CHIP_PENDING, "px-2 py-0.5 text-[11px] font-semibold")}>
-                            Pending
+                            {pendingLabel}
                           </span>
                         ) : (
                           <span className={cn(CHIP_APPROVED, "px-2 py-0.5 text-[11px] font-semibold")}>
-                            Approved
+                            {approvedLabel}
                           </span>
                         )}
                       </div>
@@ -276,7 +289,10 @@ export function MySubmissions() {
             </ul>
 
             <p className="mt-6 mb-4 text-center text-sm text-zinc-400 dark:text-zinc-500">
-              Showing {start}–{end} of {total}
+              {t(
+                `${start}–${end} / মোট ${total}`,
+                `Showing ${start}–${end} of ${total}`
+              )}
             </p>
 
             {totalPages > 1 ? (
