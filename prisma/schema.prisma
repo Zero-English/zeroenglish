@@ -151,7 +151,10 @@ model CombinedExamResult {
   incorrectWords Word[] @relation("CombinedExamIncorrectWords")
   correctQuestions QuizQuestion[] @relation("CombinedExamCorrectQuestions")
   incorrectQuestions QuizQuestion[] @relation("CombinedExamIncorrectQuestions")
+  questionCount Int
+  correctAnswers Int
   scoreInPercent Int
+  totalScore Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   levels Levels[]

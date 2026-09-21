@@ -14,13 +14,13 @@ export const getLeaderboard = async () => {
         const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
         const [allTimeAvgs, lastWeekAvgs, users] = await Promise.all([
-            prisma.quizResults.groupBy({
+            prisma.combinedExamResult.groupBy({
                 by: ["userId"],
                 where: examWhere,
                 _avg: { scoreInPercent: true },
                 _count: { _all: true },
             }),
-            prisma.quizResults.groupBy({
+            prisma.combinedExamResult.groupBy({
                 by: ["userId"],
                 where: { ...examWhere, createdAt: { gte: sevenDaysAgo } },
                 _avg: { scoreInPercent: true },
@@ -114,7 +114,7 @@ export const getUsersByPage = async (page: number = 1, limit: number = 10) => {
             _count: { _all: true },
         });
 
-        const quizAvgs = await prisma.quizResults.groupBy({
+        const quizAvgs = await prisma.combinedExamResult.groupBy({
             by: ["userId"],
             where: { userId: { in: rawUsers.map((u) => u.id) } },
             _avg: { scoreInPercent: true },

@@ -20,7 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Activity, CalendarDays, TrendingDown, TrendingUp } from "lucide-react";
 import { useT } from "@/components/language-provider";
-import { fetchQuizResultsFromDb } from "@/lib/quiz-results-api";
+import { fetchCombinedExamResultsFromDb } from "@/lib/quiz-results-api";
 import { getWordsByType } from "@/lib/db";
 import type { QuizHistoryEntry } from "@/lib/quiz-history-store";
 import { useQuizHistory } from "@/lib/use-quiz-history";
@@ -299,7 +299,7 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
     if (status === "google" || storedUserId != null) {
       [learnedRes, quizSource] = await Promise.all([
         fetchLearnedActivity(r, storedUserId),
-        fetchQuizResultsFromDb(storedUserId),
+        fetchCombinedExamResultsFromDb(storedUserId),
       ]);
     } else {
       const records = await getWordsByType("learned", path);

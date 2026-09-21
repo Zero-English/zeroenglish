@@ -2,10 +2,10 @@ import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import {
-    createQuizResult,
-    getQuizResultsByUser,
+    createCombinedExamResult,
+    getCombinedExamResultsByUser,
 } from "@/services/quiz-result.service";
-import { quizResultSchema } from "@/utils/validation/zod";
+import { combinedExamResultSchema } from "@/utils/validation/zod";
 import logger from "@/utils/logger";
 
 /**
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    const parsed = quizResultSchema.safeParse(body);
+    const parsed = combinedExamResultSchema.safeParse(body);
 
     if (!parsed.success) {
         const firstError = parsed.error.issues[0];
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const result = await createQuizResult({
+    const result = await createCombinedExamResult({
         ...parsed.data,
         userId: session.user.id,
         title: parsed.data.title ?? undefined,
@@ -164,7 +164,7 @@ export async function GET(request: NextRequest) {
         userId = parsed;
     }
 
-    const result = await getQuizResultsByUser(userId);
+    const result = await getCombinedExamResultsByUser(userId);
 
     if (!result.success) {
         return NextResponse.json(result, { status: 500 });

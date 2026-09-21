@@ -17,9 +17,9 @@ import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { useQuizExamHistoryStore, type QuizExamHistoryEntry } from "@/lib/quiz-exam-history-store";
 import type { ExamModeValue } from "@/types/quiz-exam";
 import {
-  fetchQuizResultsFromDb,
+  fetchCombinedExamResultsFromDb,
   dbResultDate,
-  type DbQuizResult,
+  type DbCombinedExamResult,
 } from "@/lib/quiz-results-api";
 import { useT } from "@/components/language-provider";
 import { useAuthStatus } from "@/lib/auth-store";
@@ -89,7 +89,7 @@ const EXAM_STATUS_META: Record<
   },
 };
 
-function dbExamToEntry(r: DbQuizResult): QuizExamHistoryEntry {
+function dbExamToEntry(r: DbCombinedExamResult): QuizExamHistoryEntry {
   return {
     id: `db-${r.id}`,
     examId: r.examId ?? 0,
@@ -258,7 +258,7 @@ export function QuizExamHistoryPanel() {
         return;
       }
       setDbLoaded(false);
-      const results = await fetchQuizResultsFromDb();
+      const results = await fetchCombinedExamResultsFromDb();
       if (cancelled) return;
       setDbEntries(
         results.filter((r) => r.examId != null).map(dbExamToEntry)

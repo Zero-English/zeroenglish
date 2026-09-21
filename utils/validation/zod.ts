@@ -147,14 +147,14 @@ export const quizTypesArraySchema = z
 
 export const quizModeEnumSchema = z.enum(["PRACTICE", "WEEKLY", "BIWEEKLY"]);
 
-export const quizResultStatusEnumSchema = z.enum([
+export const combinedExamResultStatusEnumSchema = z.enum([
   "SUBMITTED",
   "LATE_SUBMITTED",
   "ABANDONED",
   "REATTEMPTED",
 ]);
 
-export const quizResultSchema = z
+export const combinedExamResultSchema = z
   .object({
     clientId: z.string().trim().max(64).nullish(),
     examId: z.number().int().positive("examId must be positive").nullish(),
@@ -181,7 +181,7 @@ export const quizResultSchema = z
       .nonnegative("correctAnswers must be non-negative"),
     scoreInPercent: z.number().int().min(0, "scoreInPercent must be >= 0").max(100, "scoreInPercent must be <= 100"),
     totalScore: z.number().int().nonnegative("totalScore must be non-negative"),
-    status: quizResultStatusEnumSchema.nullish(),
+    status: combinedExamResultStatusEnumSchema.nullish(),
     correctQuestionIds: z
       .array(z.number().int().positive("question id must be positive"))
       .max(200, "Too many question ids")
@@ -192,9 +192,9 @@ export const quizResultSchema = z
       .default([]),
   });
 
-export type QuizResultInput = z.infer<typeof quizResultSchema>;
+export type CombinedExamResultInput = z.infer<typeof combinedExamResultSchema>;
 
-export const vocabularyExamResultSchema = z.object({
+export const combinedExamResultVocabularySchema = z.object({
   correctWordIds: z.array(z.number().int().positive()).default([]),
   incorrectWordIds: z.array(z.number().int().positive()).default([]),
   scoreInPercent: z
@@ -210,8 +210,8 @@ export const vocabularyExamResultSchema = z.object({
   quizType: quizTypeEnumSchema,
 });
 
-export type VocabularyExamResultInput = z.infer<
-  typeof vocabularyExamResultSchema
+export type CombinedExamResultVocabularyInput = z.infer<
+  typeof combinedExamResultVocabularySchema
 >;
 
 const quizExamBaseSchema = z.object({
@@ -278,7 +278,7 @@ export const quizExamSubmitAnswerSchema = z.object({
 export const quizExamSubmitSchema = z.object({
   clientId: z.string().trim().max(64).nullish(),
   timeTotalQuiz: z.number().int().nonnegative().nullish(),
-  status: quizResultStatusEnumSchema.nullish(),
+  status: combinedExamResultStatusEnumSchema.nullish(),
   answers: z.array(quizExamSubmitAnswerSchema).default([]),
 });
 

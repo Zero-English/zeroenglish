@@ -1,1 +1,1 @@
-export { VocabularyExamResultSkeleton as default } from "@/components/skeletons";
+export { CombinedExamResultSkeleton as default } from "@/components/skeletons";

@@ -1,10 +1,10 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
 import {
-    createVocabularyExamResult,
-    getVocabularyExamResultsByUser,
+    createCombinedExamResult,
+    getCombinedExamResultsByUser,
 } from "@/services/vocabulary-exam-result.service";
-import { vocabularyExamResultSchema } from "@/utils/validation/zod";
+import { combinedExamResultVocabularySchema } from "@/utils/validation/zod";
 import logger from "@/utils/logger";
 
 export const dynamic = "force-dynamic";
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const parsed = vocabularyExamResultSchema.safeParse(body);
+    const parsed = combinedExamResultVocabularySchema.safeParse(body);
 
     if (!parsed.success) {
         const firstError = parsed.error.issues[0];
@@ -130,7 +130,7 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    const result = await createVocabularyExamResult({
+    const result = await createCombinedExamResult({
         userId: user.id,
         ...parsed.data,
     });
@@ -153,7 +153,7 @@ export async function GET() {
     const user = await getApiSessionUser();
     if (!user) return unauthorizedResponse();
 
-    const result = await getVocabularyExamResultsByUser(user.id);
+    const result = await getCombinedExamResultsByUser(user.id);
 
     if (!result.success) {
         return NextResponse.json(result, { status: 500 });

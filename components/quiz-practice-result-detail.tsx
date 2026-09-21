@@ -20,10 +20,10 @@ import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { useT } from "@/components/language-provider";
 import { quizTopicMeta } from "@/lib/quiz-sections";
 import {
-  fetchQuizResultById,
+  fetchCombinedExamResultById,
   dbResultDate,
   type DbQuizQuestion,
-  type DbQuizResult,
+  type DbCombinedExamResult,
 } from "@/lib/quiz-results-api";
 
 const LEVEL_COLORS: Record<string, string> = {
@@ -52,7 +52,7 @@ function formatDate(iso: string) {
 }
 
 function resultBadge(
-  r: DbQuizResult
+  r: DbCombinedExamResult
 ): { label: string; labelBn: string; icon: LucideIcon; iconColor: string; bg: string } {
   const type = r.quizType?.name ?? "";
   if (type === "MIXED") {
@@ -200,7 +200,7 @@ function QuestionSection({
 }
 
 export function QuizPracticeResultDetail({ resultId }: { resultId: number }) {
-  const [result, setResult] = useState<DbQuizResult | null>(null);
+  const [result, setResult] = useState<DbCombinedExamResult | null>(null);
   const [loaded, setLoaded] = useState(false);
   const t = useT();
 
@@ -208,7 +208,7 @@ export function QuizPracticeResultDetail({ resultId }: { resultId: number }) {
     let cancelled = false;
     void (async () => {
       setLoaded(false);
-      const data = await fetchQuizResultById(resultId);
+      const data = await fetchCombinedExamResultById(resultId);
       if (cancelled) return;
       setResult(data);
       setLoaded(true);

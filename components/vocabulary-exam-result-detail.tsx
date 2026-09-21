@@ -21,9 +21,9 @@ import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { useT } from "@/components/language-provider";
 import { useSpeak } from "@/lib/use-speak";
 import {
-  fetchVocabularyExamResultById,
-  vocabularyExamResultDate,
-  type DbVocabularyExamResult,
+  fetchCombinedExamResultById,
+  combinedExamResultDate,
+  type DbCombinedExamResult,
   type DbVocabularyWord,
 } from "@/lib/vocabulary-exam-results-api";
 
@@ -173,12 +173,12 @@ function WordSection({
   );
 }
 
-export function VocabularyExamResultDetail({
+export function CombinedExamResultDetail({
   resultId,
 }: {
   resultId: number;
 }) {
-  const [result, setResult] = useState<DbVocabularyExamResult | null>(null);
+  const [result, setResult] = useState<DbCombinedExamResult | null>(null);
   const [loaded, setLoaded] = useState(false);
   const t = useT();
 
@@ -186,7 +186,7 @@ export function VocabularyExamResultDetail({
     let cancelled = false;
     void (async () => {
       setLoaded(false);
-      const data = await fetchVocabularyExamResultById(resultId);
+      const data = await fetchCombinedExamResultById(resultId);
       if (cancelled) return;
       setResult(data);
       setLoaded(true);
@@ -265,7 +265,7 @@ export function VocabularyExamResultDetail({
         </div>
         <p className="flex items-center justify-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500">
           <CalendarDays className="h-3.5 w-3.5" />
-          {formatDate(vocabularyExamResultDate(result))}
+          {formatDate(combinedExamResultDate(result))}
         </p>
 
         <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">

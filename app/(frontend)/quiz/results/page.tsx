@@ -1,4 +1,4 @@
-import { QuizResults } from "@/components/quiz-results";
+import { CombinedExamResults } from "@/components/quiz-results";
 
 export const metadata = {
   title: "Past Exam Results - Review Your Quiz History",
@@ -7,6 +7,6 @@ export const metadata = {
   alternates: { canonical: "/quiz/results" },
 };
 
-export default function QuizResultsPage() {
-  return <QuizResults />;
+export default function CombinedExamResultsPage() {
+  return <CombinedExamResults />;
 }

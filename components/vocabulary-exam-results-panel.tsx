@@ -23,9 +23,9 @@ import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { useT } from "@/components/language-provider";
 import { useAuthStatus } from "@/lib/auth-store";
 import {
-  fetchVocabularyExamResults,
-  vocabularyExamResultDate,
-  type DbVocabularyExamResult,
+  fetchCombinedExamResults,
+  combinedExamResultDate,
+  type DbCombinedExamResult,
 } from "@/lib/vocabulary-exam-results-api";
 
 const QUIZ_TYPE_META: Record<
@@ -90,11 +90,11 @@ function winColor(win: number) {
   return "text-rose-500";
 }
 
-function totalWordCount(r: DbVocabularyExamResult) {
+function totalWordCount(r: DbCombinedExamResult) {
   return r.correctWords.length + r.incorrectWords.length;
 }
 
-function QuizTypeBadge({ r }: { r: DbVocabularyExamResult }) {
+function QuizTypeBadge({ r }: { r: DbCombinedExamResult }) {
   const dbType = r.quizType?.name ?? "";
   const meta = QUIZ_TYPE_META[dbType] ?? {
     label: "Vocabulary Quiz",
@@ -112,7 +112,7 @@ function QuizTypeBadge({ r }: { r: DbVocabularyExamResult }) {
   );
 }
 
-function QuizTypeLabel({ r }: { r: DbVocabularyExamResult }) {
+function QuizTypeLabel({ r }: { r: DbCombinedExamResult }) {
   const t = useT();
   const dbType = r.quizType?.name ?? "";
   const meta = QUIZ_TYPE_META[dbType];
@@ -122,7 +122,7 @@ function QuizTypeLabel({ r }: { r: DbVocabularyExamResult }) {
   return <span>{t(meta.labelBn, meta.label)}</span>;
 }
 
-function ResultItem({ result }: { result: DbVocabularyExamResult }) {
+function ResultItem({ result }: { result: DbCombinedExamResult }) {
   const t = useT();
   const total = totalWordCount(result);
   const correct = result.correctWords.length;
@@ -147,7 +147,7 @@ function ResultItem({ result }: { result: DbVocabularyExamResult }) {
             </h4>
             <p className="mt-0.5 flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500">
               <CalendarDays className="h-3.5 w-3.5" />
-              {formatDate(vocabularyExamResultDate(result))}
+              {formatDate(combinedExamResultDate(result))}
             </p>
           </div>
         </div>
@@ -208,9 +208,9 @@ function ResultItem({ result }: { result: DbVocabularyExamResult }) {
   );
 }
 
-export function VocabularyExamResultsPanel() {
+export function CombinedExamResultsPanel() {
   const { status } = useAuthStatus();
-  const [results, setResults] = useState<DbVocabularyExamResult[]>([]);
+  const [results, setResults] = useState<DbCombinedExamResult[]>([]);
   const [loaded, setLoaded] = useState(false);
   const t = useT();
 
@@ -224,7 +224,7 @@ export function VocabularyExamResultsPanel() {
         setLoaded(true);
         return;
       }
-      const data = await fetchVocabularyExamResults();
+      const data = await fetchCombinedExamResults();
       if (cancelled) return;
       setResults(data);
       setLoaded(true);

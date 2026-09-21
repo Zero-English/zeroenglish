@@ -2,12 +2,12 @@ import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 import type { QuizMode, Levels, QuizResultStatus } from "@/generated/prisma/enums";
 
-export type QuizResultStatusValue = Extract<
+export type CombinedExamResultStatusValue = Extract<
   QuizResultStatus,
   "SUBMITTED" | "LATE_SUBMITTED" | "ABANDONED" | "REATTEMPTED"
 >;
 
-export const createQuizResult = async (data: {
+export const createCombinedExamResult = async (data: {
     userId: number;
     clientId?: string | null;
     examId?: number | null;
@@ -30,13 +30,13 @@ export const createQuizResult = async (data: {
 }) => {
     try {
         if (data.clientId) {
-            const existing = await prisma.quizResults.findFirst({
+            const existing = await prisma.combinedExamResult.findFirst({
                 where: { clientId: data.clientId },
             });
             if (existing) {
                 return {
                     data: existing,
-                    message: "Quiz result already recorded (idempotent)",
+                    message: "Combined exam result already recorded (idempotent)",
                     success: true,
                 };
             }
@@ -55,7 +55,7 @@ export const createQuizResult = async (data: {
         });
 
         if (!quizType) {
-            logger.warn(`Quiz result create rejected: unknown quizType "${data.quizType}"`);
+            logger.warn(`Combined exam result create rejected: unknown quizType "${data.quizType}"`);
             return {
                 data: null,
                 message: `Unknown quizType "${data.quizType}"`,
@@ -106,7 +106,7 @@ export const createQuizResult = async (data: {
                 // A previously completed attempt that was flagged as the official first
                 // attempt (isFirstAttempt = true) marks any later attempt as REATTEMPTED.
                 // Abandoned attempts never carry isFirstAttempt = true.
-                const priorFirst = await tx.quizResults.count({
+                const priorFirst = await tx.combinedExamResult.count({
                     where: {
                         userId: data.userId,
                         examId: data.examId,
@@ -128,7 +128,7 @@ export const createQuizResult = async (data: {
                     status = "SUBMITTED";
                 }
 
-                return tx.quizResults.create({
+                return tx.combinedExamResult.create({
                     data: {
                         ...baseData,
                         status,
@@ -139,7 +139,7 @@ export const createQuizResult = async (data: {
                 });
             }
 
-            return tx.quizResults.create({
+            return tx.combinedExamResult.create({
                 data: {
                     ...baseData,
                     status: "SUBMITTED",
@@ -152,26 +152,26 @@ export const createQuizResult = async (data: {
 
         return {
             data: result,
-            message: "Quiz result recorded successfully",
+            message: "Combined exam result recorded successfully",
             success: true,
         };
     } catch (error) {
         if (data.clientId && typeof error === "object" && error !== null && "code" in error && (error as { code?: string }).code === "P2002") {
-            const existing = await prisma.quizResults.findFirst({
+            const existing = await prisma.combinedExamResult.findFirst({
                 where: { clientId: data.clientId },
             });
             if (existing) {
                 return {
                     data: existing,
-                    message: "Quiz result already recorded (idempotent)",
+                    message: "Combined exam result already recorded (idempotent)",
                     success: true,
                 };
             }
         }
-        logger.error(`Failed to create quiz result: ${error}`);
+        logger.error(`Failed to create Combined exam result: ${error}`);
         return {
             data: null,
-            message: "Failed to create quiz result",
+            message: "Failed to create Combined exam result",
             success: false,
         };
     }
@@ -187,67 +187,84 @@ const quizQuestionDetailSelect = {
     explanation: true,
 } as const;
 
-export const getQuizResultsByUser = async (userId: number) => {
+const wordDetailSelect = {
+    id: true,
+    word: true,
+    meaningBn: true,
+    synonyms: true,
+    antonyms: true,
+    definitionEn: true,
+    definitionBn: true,
+    examplesEn: true,
+    examplesBn: true,
+    level: true,
+    category: true,
+    wordType: true,
+} as const;
+
+export const getCombinedExamResultsByUser = async (userId: number) => {
     try {
-        const results = await prisma.quizResults.findMany({
+        const results = await prisma.combinedExamResult.findMany({
             where: { userId },
             orderBy: { createdAt: "desc" },
             include: {
-                exam: true,
                 quizType: true,
                 correctQuestions: { select: quizQuestionDetailSelect },
                 incorrectQuestions: { select: quizQuestionDetailSelect },
+                correctWords: { select: wordDetailSelect },
+                incorrectWords: { select: wordDetailSelect },
             },
         });
 
         return {
             data: results,
-            message: "Quiz results fetched successfully",
+            message: "Combined exam results fetched successfully",
             success: true,
         };
     } catch (error) {
-        logger.error(`Failed to fetch quiz results: ${error}`);
+        logger.error(`Failed to fetch Combined exam results: ${error}`);
         return {
             data: null,
-            message: "Failed to fetch quiz results",
+            message: "Failed to fetch Combined exam results",
             success: false,
         };
     }
 };
 
-export const getQuizResultById = async (
+export const getCombinedExamResultById = async (
     resultId: number,
     userId?: number
 ) => {
     try {
-        const result = await prisma.quizResults.findFirst({
+        const result = await prisma.combinedExamResult.findFirst({
             where: { id: resultId, ...(userId != null ? { userId } : {}) },
             include: {
-                exam: true,
                 quizType: true,
                 correctQuestions: { select: quizQuestionDetailSelect },
                 incorrectQuestions: { select: quizQuestionDetailSelect },
+                correctWords: { select: wordDetailSelect },
+                incorrectWords: { select: wordDetailSelect },
             },
         });
 
         if (!result) {
             return {
                 data: null,
-                message: "Quiz result not found",
+                message: "Combined exam result not found",
                 success: false,
             };
         }
 
         return {
             data: result,
-            message: "Quiz result fetched successfully",
+            message: "Combined exam result fetched successfully",
             success: true,
         };
     } catch (error) {
-        logger.error(`Failed to fetch quiz result by id: ${error}`);
+        logger.error(`Failed to fetch Combined exam result by id: ${error}`);
         return {
             data: null,
-            message: "Failed to fetch quiz result",
+            message: "Failed to fetch Combined exam result",
             success: false,
         };
     }

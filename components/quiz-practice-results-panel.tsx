@@ -21,9 +21,9 @@ import { useT } from "@/components/language-provider";
 import { useAuthStatus } from "@/lib/auth-store";
 import { quizTopicMeta } from "@/lib/quiz-sections";
 import {
-  fetchQuizResultsFromDb,
+  fetchCombinedExamResultsFromDb,
   dbResultDate,
-  type DbQuizResult,
+  type DbCombinedExamResult,
 } from "@/lib/quiz-results-api";
 
 const VOCAB_QUIZ_TYPES = new Set([
@@ -33,10 +33,10 @@ const VOCAB_QUIZ_TYPES = new Set([
   "ANTONYMS",
 ]);
 
-// Grammar- and class-based practice results are stored in the QuizResults table
-// (word/vocab practice lives in VocabularyExamResult). Vocabulary quiz types are
+// Grammar- and class-based practice results are stored in the CombinedExamResult table
+// (word/vocab practice is written to the same table). Vocabulary quiz types are
 // excluded here so only grammar & class results render in this panel.
-function isGrammarOrClassResult(r: DbQuizResult): boolean {
+function isGrammarOrClassResult(r: DbCombinedExamResult): boolean {
   if (r.examId != null) return false;
   if (r.mode !== "PRACTICE") return false;
   const type = r.quizType?.name ?? "";
@@ -68,7 +68,7 @@ function winColor(win: number) {
 }
 
 function resultBadge(
-  r: DbQuizResult
+  r: DbCombinedExamResult
 ): { icon: LucideIcon; label: string; labelBn: string; iconColor: string; bg: string } {
   const type = r.quizType?.name ?? "";
   if (type === "MIXED") {
@@ -90,7 +90,7 @@ function resultBadge(
   };
 }
 
-function ResultBadgeIcon({ r }: { r: DbQuizResult }) {
+function ResultBadgeIcon({ r }: { r: DbCombinedExamResult }) {
   const badge = resultBadge(r);
   const Icon = badge.icon;
   return (
@@ -100,7 +100,7 @@ function ResultBadgeIcon({ r }: { r: DbQuizResult }) {
   );
 }
 
-function ResultItem({ result }: { result: DbQuizResult }) {
+function ResultItem({ result }: { result: DbCombinedExamResult }) {
   const t = useT();
   const badge = resultBadge(result);
   const correct = result.correctQuestions?.length ?? result.correctAnswers;
@@ -188,7 +188,7 @@ function ResultItem({ result }: { result: DbQuizResult }) {
 
 export function QuizPracticeResultsPanel() {
   const { status } = useAuthStatus();
-  const [results, setResults] = useState<DbQuizResult[]>([]);
+  const [results, setResults] = useState<DbCombinedExamResult[]>([]);
   const [loaded, setLoaded] = useState(false);
   const t = useT();
 
@@ -202,7 +202,7 @@ export function QuizPracticeResultsPanel() {
         setLoaded(true);
         return;
       }
-      const data = await fetchQuizResultsFromDb();
+      const data = await fetchCombinedExamResultsFromDb();
       if (cancelled) return;
       setResults(data.filter(isGrammarOrClassResult));
       setLoaded(true);

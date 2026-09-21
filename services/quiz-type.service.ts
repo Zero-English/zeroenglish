@@ -4,7 +4,7 @@ import { Class } from "@/generated/prisma/enums";
 
 const includeCounts = {
     _count: {
-        select: { relatedQuestions: true, quizResults: true },
+        select: { relatedQuestions: true, combinedExamResults: true },
     },
 } as const;
 
@@ -18,12 +18,12 @@ export type QuizTypeWithCounts = {
 const toApiQuizType = (t: {
     id: number;
     name: string;
-    _count: { relatedQuestions: number; quizResults: number };
+    _count: { relatedQuestions: number; combinedExamResults: number };
 }): QuizTypeWithCounts => ({
     id: t.id,
     name: t.name,
     questionCount: t._count.relatedQuestions,
-    resultCount: t._count.quizResults,
+    resultCount: t._count.combinedExamResults,
 });
 
 export const getAllQuizTypes = async () => {

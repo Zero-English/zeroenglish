@@ -23,7 +23,7 @@ import {
 } from "@/lib/quiz-history-store";
 import { useQuizHistory } from "@/lib/use-quiz-history";
 import {
-  fetchQuizResultsFromDb,
+  fetchCombinedExamResultsFromDb,
   dbResultToHistoryEntry,
 } from "@/lib/quiz-results-api";
 import { useT } from "@/components/language-provider";
@@ -207,7 +207,7 @@ export function QuizHistoryPanel() {
         return;
       }
       setDbLoaded(false);
-      const results = await fetchQuizResultsFromDb();
+      const results = await fetchCombinedExamResultsFromDb();
       if (cancelled) return;
       setDbEntries(
         results

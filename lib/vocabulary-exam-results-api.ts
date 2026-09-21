@@ -15,7 +15,7 @@ export interface DbVocabularyWord {
   wordType: string[];
 }
 
-export interface DbVocabularyExamResult {
+export interface DbCombinedExamResult {
   id: number;
   userId: number;
   scoreInPercent: number;
@@ -29,14 +29,14 @@ export interface DbVocabularyExamResult {
   quizType?: { id: number; name: string } | null;
 }
 
-export async function fetchVocabularyExamResults(): Promise<DbVocabularyExamResult[]> {
+export async function fetchCombinedExamResults(): Promise<DbCombinedExamResult[]> {
   try {
     const res = await fetch("/api/v1/vocabulary-exam-result", {
       cache: "no-store",
     });
     if (!res.ok) return [];
     const body = (await res.json()) as {
-      data?: DbVocabularyExamResult[];
+      data?: DbCombinedExamResult[];
       success?: boolean;
     };
     if (!body.success || !Array.isArray(body.data)) return [];
@@ -46,16 +46,16 @@ export async function fetchVocabularyExamResults(): Promise<DbVocabularyExamResu
   }
 }
 
-export async function fetchVocabularyExamResultById(
+export async function fetchCombinedExamResultById(
   id: number
-): Promise<DbVocabularyExamResult | null> {
+): Promise<DbCombinedExamResult | null> {
   try {
     const res = await fetch(`/api/v1/vocabulary-exam-result/${id}`, {
       cache: "no-store",
     });
     if (!res.ok) return null;
     const body = (await res.json()) as {
-      data?: DbVocabularyExamResult | null;
+      data?: DbCombinedExamResult | null;
       success?: boolean;
     };
     if (!body.success || !body.data) return null;
@@ -65,7 +65,7 @@ export async function fetchVocabularyExamResultById(
   }
 }
 
-export function vocabularyExamResultDate(r: DbVocabularyExamResult): string {
+export function combinedExamResultDate(r: DbCombinedExamResult): string {
   const v = r.createdAt instanceof Date ? r.createdAt.toISOString() : r.createdAt;
   return v.slice(0, 10);
 }
