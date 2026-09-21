@@ -240,7 +240,7 @@ export const updateUserById = async (
         name?: string | null;
         user_name?: string;
         email?: string;
-        role?: "user" | "admin";
+        role?: "user" | "admin" | "contributor";
         image?: string | null;
         institutionName?: string | null;
         bio?: string | null;

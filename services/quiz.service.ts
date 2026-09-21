@@ -13,6 +13,19 @@ type QuizQuestionWithType = Prisma.QuizQuestionGetPayload<{
     include: typeof quizTypeInclude;
 }>;
 
+const quizAdminInclude = {
+    quizType: {
+        select: { id: true, name: true },
+    },
+    addedBy: {
+        select: { id: true, name: true, user_name: true },
+    },
+} as const;
+
+type QuizQuestionAdmin = Prisma.QuizQuestionGetPayload<{
+    include: typeof quizAdminInclude;
+}>;
+
 const toApiQuestion = (q: QuizQuestionWithType) => ({
     id: q.id,
     quizType: q.quizType.name,
@@ -21,6 +34,19 @@ const toApiQuestion = (q: QuizQuestionWithType) => ({
     difficultyLevel: q.difficultyLevel,
     answer: q.answer,
     explanation: q.explanation,
+});
+
+const toApiAdminQuestion = (q: QuizQuestionAdmin) => ({
+    ...toApiQuestion(q),
+    isPending: q.isPending,
+    addedByUserId: q.addedByUserId,
+    addedBy: q.addedBy
+        ? {
+              id: q.addedBy.id,
+              name: q.addedBy.name,
+              user_name: q.addedBy.user_name,
+          }
+        : null,
 });
 
 const shuffleArray = <T,>(arr: T[]): T[] => {
@@ -36,11 +62,11 @@ export const getAllQuizQuestions = async () => {
     try {
         const questions = await prisma.quizQuestion.findMany({
             orderBy: { id: "desc" },
-            include: quizTypeInclude,
+            include: quizAdminInclude,
         });
 
         return {
-            data: questions.map((q) => toApiQuestion(q)),
+            data: questions.map((q) => toApiAdminQuestion(q)),
             message: "Quiz questions fetched successfully",
             success: true,
         };
@@ -63,7 +89,7 @@ export const getQuizQuestionsByPage = async (page: number = 1, limit: number = 1
                 skip,
                 take: limit,
                 orderBy: { id: "desc" },
-                include: quizTypeInclude,
+                include: quizAdminInclude,
             }),
             prisma.quizQuestion.count(),
         ]);
@@ -71,7 +97,7 @@ export const getQuizQuestionsByPage = async (page: number = 1, limit: number = 1
         const totalPages = Math.ceil(total / limit);
 
         return {
-            data: questions.map((q) => toApiQuestion(q)),
+            data: questions.map((q) => toApiAdminQuestion(q)),
             pagination: {
                 total,
                 page,
@@ -83,6 +109,48 @@ export const getQuizQuestionsByPage = async (page: number = 1, limit: number = 1
         };
     } catch (error) {
         logger.error(`Failed to fetch quiz questions: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch quiz questions",
+            success: false,
+        };
+    }
+};
+
+export const getQuizQuestionsByAddedBy = async (
+    addedByUserId: number,
+    page: number = 1,
+    limit: number = 10
+) => {
+    try {
+        const skip = (page - 1) * limit;
+
+        const [questions, total] = await Promise.all([
+            prisma.quizQuestion.findMany({
+                where: { addedByUserId },
+                skip,
+                take: limit,
+                orderBy: { id: "desc" },
+                include: quizAdminInclude,
+            }),
+            prisma.quizQuestion.count({ where: { addedByUserId } }),
+        ]);
+
+        const totalPages = Math.ceil(total / limit);
+
+        return {
+            data: questions.map((q) => toApiAdminQuestion(q)),
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages,
+            },
+            message: "Quiz questions fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch quiz questions by contributor: ${error}`);
         return {
             data: null,
             message: "Failed to fetch quiz questions",
@@ -110,7 +178,7 @@ export const getQuizQuestionsByType = async (
         }
 
         const questions = await prisma.quizQuestion.findMany({
-            where: { quizTypeId: type.id },
+            where: { quizTypeId: type.id, isPending: false },
             orderBy: { id: "asc" },
             include: quizTypeInclude,
         });
@@ -141,6 +209,41 @@ export const getQuizQuestionsByType = async (
     }
 };
 
+export const getQuickQuizQuestions = async (limit: number = 20) => {
+    try {
+        const questions = await prisma.quizQuestion.findMany({
+            where: { isPending: false },
+            orderBy: { id: "asc" },
+            include: quizTypeInclude,
+        });
+
+        // Return a random set of questions drawn from every quiz type and
+        // class, capped at the requested limit. Options are shuffled on the
+        // server too, so the correct answer doesn't always land on the same
+        // letter.
+        const shuffled = questions
+            .map((q) => ({
+                ...toApiQuestion(q),
+                options: shuffleArray(q.options),
+            }))
+            .sort(() => Math.random() - 0.5)
+            .slice(0, limit);
+
+        return {
+            data: shuffled,
+            message: "Quick quiz questions fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch quick quiz questions: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch quick quiz questions",
+            success: false,
+        };
+    }
+};
+
 export const getQuizQuestionsByClass = async (
     className: string,
     limit: number = 50
@@ -156,7 +259,7 @@ export const getQuizQuestionsByClass = async (
         }
 
         const questions = await prisma.quizQuestion.findMany({
-            where: { class: { hasSome: [className as Class] } },
+            where: { class: { hasSome: [className as Class] }, isPending: false },
             orderBy: { id: "asc" },
             include: quizTypeInclude,
         });
@@ -190,6 +293,7 @@ export const getQuizQuestionsByClass = async (
 export const getQuizQuestionCountsByClass = async () => {
     try {
         const rows = await prisma.quizQuestion.findMany({
+            where: { isPending: false },
             select: { class: true },
         });
 
@@ -218,8 +322,8 @@ export const getQuizQuestionCountsByClass = async () => {
 export const getQuizQuestionById = async (id: number) => {
     try {
         const question = await prisma.quizQuestion.findUnique({
-            where: { id },
-            include: quizTypeInclude,
+            where: { id, isPending: false },
+            include: quizAdminInclude,
         });
 
         if (!question) {
@@ -231,7 +335,7 @@ export const getQuizQuestionById = async (id: number) => {
         }
 
         return {
-            data: toApiQuestion(question),
+            data: toApiAdminQuestion(question),
             message: "Quiz question fetched successfully",
             success: true,
         };
@@ -253,6 +357,7 @@ export const createQuizQuestion = async (
         difficultyLevel: DifficultyLevels;
         answer: string;
         explanation?: string;
+        isPending?: boolean;
     },
     addedByUserId: number,
 ) => {
@@ -269,14 +374,29 @@ export const createQuizQuestion = async (
             };
         }
 
+        const questionText = data.questionText.trim();
+        const existing = await prisma.quizQuestion.findFirst({
+            where: { questionText: { equals: questionText, mode: "insensitive" } },
+            select: { id: true },
+        });
+
+        if (existing) {
+            return {
+                data: null,
+                message: `A question with this exact text already exists (question #${existing.id}).`,
+                success: false,
+            };
+        }
+
         const question = await prisma.quizQuestion.create({
             data: {
                 quizTypeId: quizType.id,
-                questionText: data.questionText,
+                questionText: questionText,
                 options: data.options,
                 difficultyLevel: data.difficultyLevel,
                 answer: data.answer,
                 explanation: data.explanation ?? "",
+                isPending: data.isPending,
                 addedByUserId,
             },
             include: quizTypeInclude,
@@ -328,12 +448,45 @@ export const createQuizQuestionsBulk = async (
             };
         }
 
+        const seenTexts = new Set<string>();
+        for (const q of data) {
+            const normalized = q.questionText.trim().toLowerCase();
+            if (seenTexts.has(normalized)) {
+                return {
+                    data: null,
+                    message: `Duplicate question text found in the file: "${q.questionText.trim()}"`,
+                    success: false,
+                };
+            }
+            seenTexts.add(normalized);
+        }
+
+        const existing = await prisma.quizQuestion.findMany({
+            where: {
+                questionText: {
+                    in: data.map((q) => q.questionText.trim()),
+                    mode: "insensitive",
+                },
+            },
+            select: { id: true, questionText: true },
+        });
+
+        if (existing.length > 0) {
+            return {
+                data: null,
+                message: `Question(s) with the same text already exist: ${existing
+                    .map((e) => `#${e.id} "${e.questionText}"`)
+                    .join(", ")}`,
+                success: false,
+            };
+        }
+
         await prisma.$transaction(
             data.map((q) =>
                 prisma.quizQuestion.create({
                     data: {
                         quizTypeId: nameToId.get(q.quizType)!,
-                        questionText: q.questionText,
+                        questionText: q.questionText.trim(),
                         options: q.options,
                         difficultyLevel: q.difficultyLevel,
                         answer: q.answer,
@@ -369,6 +522,7 @@ export const updateQuizQuestionById = async (
         difficultyLevel: DifficultyLevels;
         answer: string;
         explanation?: string;
+        isPending?: boolean;
     }>,
 ) => {
     try {
@@ -417,6 +571,57 @@ export const updateQuizQuestionById = async (
         return {
             data: null,
             message: "Failed to update quiz question",
+            success: false,
+        };
+    }
+};
+
+export const updateQuizQuestionsBulk = async (
+    ids: number[],
+    data: {
+        isPending?: boolean;
+        difficultyLevel?: DifficultyLevels;
+        quizType?: string;
+    },
+) => {
+    try {
+        let quizTypeId: number | undefined;
+        if (data.quizType) {
+            const quizTypeRow = await prisma.quizType.findUnique({
+                where: { name: data.quizType },
+                select: { id: true },
+            });
+            if (!quizTypeRow) {
+                return {
+                    data: null,
+                    message: `Quiz type "${data.quizType}" not found`,
+                    success: false,
+                };
+            }
+            quizTypeId = quizTypeRow.id;
+        }
+
+        const updateData: Prisma.QuizQuestionUpdateManyMutationInput = {
+            ...(data.isPending !== undefined ? { isPending: data.isPending } : {}),
+            ...(data.difficultyLevel !== undefined ? { difficultyLevel: data.difficultyLevel } : {}),
+            ...(quizTypeId !== undefined ? { quizTypeId } : {}),
+        };
+
+        const result = await prisma.quizQuestion.updateMany({
+            where: { id: { in: ids } },
+            data: updateData,
+        });
+
+        return {
+            data: { count: result.count },
+            message: `${result.count} question(s) updated successfully`,
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to bulk update quiz questions: ${error}`);
+        return {
+            data: null,
+            message: "Failed to bulk update quiz questions",
             success: false,
         };
     }

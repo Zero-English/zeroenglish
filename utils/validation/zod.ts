@@ -84,9 +84,30 @@ export const quizQuestionSchema = z.object({
   difficultyLevel: difficultyLevelEnumSchema,
   answer: z.string().trim().min(1, "Answer is required"),
   explanation: z.string().trim().optional().default(""),
+  isPending: z.boolean().optional(),
 });
 
 export type QuizQuestionInput = z.infer<typeof quizQuestionSchema>;
+
+export const bulkQuizUpdateSchema = z
+  .object({
+    ids: z
+      .array(z.number().int().positive())
+      .min(1, "At least one question id is required")
+      .max(1000, "Too many question ids (max 1000)"),
+    isPending: z.boolean().optional(),
+    difficultyLevel: difficultyLevelEnumSchema.optional(),
+    quizType: z.string().trim().min(1, "Quiz type is required").max(50).optional(),
+  })
+  .refine(
+    (data) =>
+      data.isPending !== undefined ||
+      data.difficultyLevel !== undefined ||
+      data.quizType !== undefined,
+    {
+      message: "At least one field (isPending, difficultyLevel, quizType) is required",
+    }
+  );
 
 export const quizQuestionsArraySchema = z
   .array(quizQuestionSchema)
@@ -298,7 +319,7 @@ export const updateUserSchema = z
     name: z.string().trim().max(120).nullable().optional(),
     user_name: z.string().trim().min(1, "Username is required").max(50),
     email: z.string().trim().min(1, "Email is required").email("Invalid email address"),
-    role: z.enum(["user", "admin"]),
+    role: z.enum(["user", "admin", "contributor"]),
     image: z.string().trim().max(500).nullable().optional(),
     institutionName: z.string().trim().max(200).nullable().optional(),
     bio: z.string().trim().max(1000).nullable().optional(),
