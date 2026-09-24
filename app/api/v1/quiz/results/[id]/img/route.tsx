@@ -67,8 +67,10 @@ function formatResultDate(createdAt: unknown): string {
     return safeText(createdAt, "");
 }
 
+
+
 export async function GET(
-    _request: NextRequest,
+    request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
     const user = await getApiSessionUser();
@@ -154,6 +156,10 @@ export async function GET(
             valueColor: "#00C4EE",
         },
     ] as const;
+    const backgroundImageUrl = new URL(
+        "/assets/images/result_format_light_ze.png",
+        request.url
+    ).toString();
 
     try {
         return new ImageResponse(
@@ -166,129 +172,14 @@ export async function GET(
                         flexDirection: "column",
                         position: "relative",
                         overflow: "hidden",
-                        backgroundColor: "#041A21",
+                        backgroundImage: `url(${backgroundImageUrl})`,
+                        backgroundSize: "100% 100%",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
                         padding: "40px 64px",
                         color: "#F8FAF9",
                     }}
                 >
-                    {/* Background Branding Elements */}
-                    <div
-                        style={{
-                            position: "absolute",
-                            top: -100,
-                            right: -100,
-                            width: 450,
-                            height: 450,
-                            borderRadius: 999,
-                            backgroundColor: "rgba(242, 92, 5, 0.12)",
-                        }}
-                    />
-                    <div
-                        style={{
-                            position: "absolute",
-                            bottom: -120,
-                            left: -100,
-                            width: 400,
-                            height: 400,
-                            borderRadius: 999,
-                            backgroundColor: "rgba(0, 168, 135, 0.15)",
-                        }}
-                    />
-
-                    {/* Top Header Row */}
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            position: "relative",
-                        }}
-                    >
-                        {/* Zero English Brand Logo Unit */}
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: 2,
-                            }}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    fontSize: 32,
-                                    fontWeight: 900,
-                                    letterSpacing: -0.5,
-                                }}
-                            >
-                                <span style={{ color: "#00A887" }}>Z</span>
-                                <span style={{ color: "#00A887", position: "relative" }}>
-                                    E
-                                    <div
-                                        style={{
-                                            position: "absolute",
-                                            top: "45%",
-                                            left: 2,
-                                            width: 12,
-                                            height: 4,
-                                            backgroundColor: "#FFB703",
-                                        }}
-                                    />
-                                </span>
-                                <span style={{ color: "#00A887" }}>R</span>
-                                <span style={{ color: "#00A887", position: "relative" }}>
-                                    O
-                                    <div
-                                        style={{
-                                            position: "absolute",
-                                            top: "45%",
-                                            left: "20%",
-                                            width: 14,
-                                            height: 4,
-                                            backgroundColor: "#F25C05",
-                                        }}
-                                    />
-                                </span>
-                                <span style={{ color: "#00A887", marginLeft: 8 }}>E</span>
-                                <span style={{ color: "#00A887" }}>N</span>
-                                <span style={{ color: "#00A887" }}>G</span>
-                                <span style={{ color: "#00A887" }}>L</span>
-                                <span style={{ color: "#00A887" }}>I</span>
-                                <span style={{ color: "#00A887" }}>S</span>
-                                <span style={{ color: "#F25C05" }}>H</span>
-                            </div>
-                            <div
-                                style={{
-                                    fontSize: 10,
-                                    fontWeight: 800,
-                                    letterSpacing: 4,
-                                    color: "#E3F2FD",
-                                    marginTop: -2,
-                                }}
-                            >
-                                LEARN WITHOUT LIMITS
-                            </div>
-                        </div>
-
-                        {/* Pill Badge */}
-                        <div
-                            style={{
-                                padding: "8px 20px",
-                                borderRadius: 999,
-                                border: "1px solid rgba(242, 92, 5, 0.4)",
-                                backgroundColor: "rgba(242, 92, 5, 0.1)",
-                                fontSize: 15,
-                                fontWeight: 700,
-                                letterSpacing: 2,
-                                color: "#F25C05",
-                            }}
-                        >
-                            QUIZ RESULT
-                        </div>
-                    </div>
-
                     {/* Main Content Body */}
                     <div
                         style={{
@@ -357,10 +248,6 @@ export async function GET(
                                         alignItems: "center",
                                         gap: 2,
                                         minWidth: 145,
-                                        padding: "12px 20px",
-                                        borderRadius: 14,
-                                        backgroundColor: "rgba(248, 250, 249, 0.04)",
-                                        border: "1px solid rgba(248, 250, 249, 0.08)",
                                     }}
                                 >
                                     <div
@@ -410,24 +297,6 @@ export async function GET(
                                     {`${accuracy}%`}
                                 </span>
                             </div>
-                            <div
-                                style={{
-                                    width: "100%",
-                                    height: 10,
-                                    display: "flex",
-                                    borderRadius: 999,
-                                    backgroundColor: "rgba(248, 250, 249, 0.1)",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        width: `${accuracy}%`,
-                                        height: "100%",
-                                        borderRadius: 999,
-                                        backgroundColor: tone.color,
-                                    }}
-                                />
-                            </div>
                         </div>
 
                         {/* Level Badges */}
@@ -437,10 +306,6 @@ export async function GET(
                                     <div
                                         key={level}
                                         style={{
-                                            padding: "4px 14px",
-                                            borderRadius: 999,
-                                            backgroundColor: "rgba(0, 168, 135, 0.15)",
-                                            border: "1px solid rgba(0, 168, 135, 0.4)",
                                             fontSize: 13,
                                             fontWeight: 700,
                                             color: "#00C4EE",
@@ -453,7 +318,6 @@ export async function GET(
                         )}
                     </div>
 
-                    {/* Footer Row */}
                     <div
                         style={{
                             display: "flex",
@@ -461,13 +325,8 @@ export async function GET(
                             alignItems: "center",
                             justifyContent: "space-between",
                             position: "relative",
-                            borderTop: "1px solid rgba(248, 250, 249, 0.08)",
-                            paddingTop: 16,
                         }}
                     >
-                        <div style={{ fontSize: 14, color: "#0F9D78", fontWeight: 500 }}>
-                            Learn English vocabulary in Bangla
-                        </div>
                         <div style={{ fontSize: 14, color: "#0F9D78", fontWeight: 500 }}>{date}</div>
                     </div>
                 </div>
