@@ -126,6 +126,7 @@ export async function GET(
         questionCount > 0
             ? Math.round((correctCount / questionCount) * 100)
             : percent;
+    const accuracyPercent = Math.max(0, Math.min(100, accuracy));
 
     const levels = Array.isArray(data.levels) ? data.levels : [];
     const timePerQuestion = data.timePerQuestion ?? 0;
@@ -255,13 +256,14 @@ export async function GET(
                                             fontSize: 28,
                                             fontWeight: 800,
                                             color: stat.valueColor,
+                                            paddingTop: 10
                                         }}
                                     >
                                         {stat.value}
                                     </div>
-                                    <div style={{ fontSize: 13, color: "#E3F2FD", fontWeight: 600 }}>
+                                    {/* <div style={{ fontSize: 13, color: "#E3F2FD", fontWeight: 600 }}>
                                         {stat.label}
-                                    </div>
+                                    </div> */}
                                 </div>
                             ))}
                         </div>
@@ -283,7 +285,7 @@ export async function GET(
                                     justifyContent: "space-between",
                                 }}
                             >
-                                <span
+                                {/* <span
                                     style={{
                                         fontSize: 13,
                                         fontWeight: 700,
@@ -292,10 +294,29 @@ export async function GET(
                                     }}
                                 >
                                     ACCURACY
-                                </span>
+                                </span> */}
                                 <span style={{ fontSize: 14, fontWeight: 800, color: "#F8FAF9" }}>
                                     {`${accuracy}%`}
                                 </span>
+                            </div>
+                            <div
+                                style={{
+                                    width: "100%",
+                                    height: 10,
+                                    display: "flex",
+                                    borderRadius: 999,
+                                    backgroundColor: "rgba(248, 250, 249, 0.3)",
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        width: `${accuracyPercent}%`,
+                                        height: "100%",
+                                        borderRadius: 999,
+                                        backgroundColor: tone.color,
+                                        marginTop: 50
+                                    }}
+                                />
                             </div>
                         </div>
 
