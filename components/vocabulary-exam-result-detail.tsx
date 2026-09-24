@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { useT } from "@/components/language-provider";
 import { useSpeak } from "@/lib/use-speak";
+import { ResultImageDownloadButton } from "@/components/result-image-download-button";
 import {
   fetchCombinedExamResultById,
   combinedExamResultDate,
@@ -313,6 +314,10 @@ export function CombinedExamResultDetail({
               {lv}
             </span>
           ))}
+        </div>
+
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <ResultImageDownloadButton resultId={resultId} />
         </div>
       </StaggerItem>
 
