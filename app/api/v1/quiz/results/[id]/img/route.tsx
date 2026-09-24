@@ -27,9 +27,7 @@ function humanizeQuizType(name: string): string {
         .join(" ");
 }
 
-// The default ImageResponse font only ships Latin glyphs, so any dynamic value
-// that reaches the canvas is reduced to printable ASCII to keep the render
-// from failing on unsupported characters (e.g. Bangla).
+// ASCII-only fallback to prevent render breaks on unsupported dynamic fonts
 function safeText(value: unknown, fallback = ""): string {
     const raw =
         typeof value === "string" && value.trim().length > 0 ? value.trim() : fallback;
@@ -45,15 +43,15 @@ type ScoreTone = {
 
 function scoreTone(percent: number): ScoreTone {
     if (percent >= 90) {
-        return { color: "#34d399", label: "Outstanding!", labelColor: "#6ee7b7" };
+        return { color: "#00A887", label: "Outstanding!", labelColor: "#00C4EE" };
     }
     if (percent >= 70) {
-        return { color: "#38bdf8", label: "Great job!", labelColor: "#7dd3fc" };
+        return { color: "#1E88E5", label: "Great job!", labelColor: "#00C4EE" };
     }
     if (percent >= 50) {
-        return { color: "#fbbf24", label: "Keep going!", labelColor: "#fcd34d" };
+        return { color: "#FFA000", label: "Keep going!", labelColor: "#FFB703" };
     }
-    return { color: "#fb7185", label: "Keep practicing", labelColor: "#fda4af" };
+    return { color: "#EE5219", label: "Keep practicing", labelColor: "#F25C05" };
 }
 
 function formatResultDate(createdAt: unknown): string {
@@ -69,41 +67,6 @@ function formatResultDate(createdAt: unknown): string {
     return safeText(createdAt, "");
 }
 
-/**
- * @openapi
- * /api/v1/quiz/results/{id}/img:
- *   get:
- *     summary: Generate a shareable quiz result image
- *     description: >
- *       Generates a PNG image summarising the current authenticated user's quiz
- *       result (score, correct/incorrect counts and accuracy). Admins may render
- *       any result.
- *     tags:
- *       - Quiz
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: Quiz result id
- *     responses:
- *       401:
- *         description: Unauthorized
- *       400:
- *         description: Invalid result id
- *       404:
- *         description: Quiz result not found
- *       500:
- *         description: Failed to render result image
- *       200:
- *         description: Quiz result image
- *         content:
- *           image/png:
- *             schema:
- *               type: string
- *               format: binary
- */
 export async function GET(
     _request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
@@ -170,25 +133,25 @@ export async function GET(
             key: "questions",
             value: `${questionCount}`,
             label: "Questions",
-            valueColor: "#f8fafc",
+            valueColor: "#F8FAF9",
         },
         {
             key: "correct",
             value: `${correctCount}`,
             label: "Correct",
-            valueColor: "#34d399",
+            valueColor: "#00A887",
         },
         {
             key: "incorrect",
             value: `${incorrectCount}`,
             label: "Incorrect",
-            valueColor: "#fb7185",
+            valueColor: "#F25C05",
         },
         {
             key: "time",
             value: `${timePerQuestion}s`,
             label: "Sec / Question",
-            valueColor: "#f8fafc",
+            valueColor: "#00C4EE",
         },
     ] as const;
 
@@ -203,34 +166,36 @@ export async function GET(
                         flexDirection: "column",
                         position: "relative",
                         overflow: "hidden",
-                        backgroundColor: "#0b1220",
+                        backgroundColor: "#041A21",
                         padding: "40px 64px",
-                        color: "#f8fafc",
+                        color: "#F8FAF9",
                     }}
                 >
+                    {/* Background Branding Elements */}
                     <div
                         style={{
                             position: "absolute",
-                            top: -120,
-                            right: -90,
-                            width: 380,
-                            height: 380,
+                            top: -100,
+                            right: -100,
+                            width: 450,
+                            height: 450,
                             borderRadius: 999,
-                            backgroundColor: "rgba(139, 92, 246, 0.2)",
+                            backgroundColor: "rgba(242, 92, 5, 0.12)",
                         }}
                     />
                     <div
                         style={{
                             position: "absolute",
                             bottom: -120,
-                            left: -90,
-                            width: 340,
-                            height: 340,
+                            left: -100,
+                            width: 400,
+                            height: 400,
                             borderRadius: 999,
-                            backgroundColor: "rgba(14, 165, 233, 0.16)",
+                            backgroundColor: "rgba(0, 168, 135, 0.15)",
                         }}
                     />
 
+                    {/* Top Header Row */}
                     <div
                         style={{
                             display: "flex",
@@ -240,49 +205,91 @@ export async function GET(
                             position: "relative",
                         }}
                     >
+                        {/* Zero English Brand Logo Unit */}
                         <div
                             style={{
                                 display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                gap: 14,
+                                flexDirection: "column",
+                                gap: 2,
                             }}
                         >
                             <div
                                 style={{
-                                    width: 46,
-                                    height: 46,
-                                    borderRadius: 14,
-                                    backgroundColor: "#8b5cf6",
                                     display: "flex",
+                                    flexDirection: "row",
                                     alignItems: "center",
-                                    justifyContent: "center",
-                                    fontSize: 26,
-                                    fontWeight: 700,
-                                    color: "#ffffff",
+                                    fontSize: 32,
+                                    fontWeight: 900,
+                                    letterSpacing: -0.5,
                                 }}
                             >
-                                Z
+                                <span style={{ color: "#00A887" }}>Z</span>
+                                <span style={{ color: "#00A887", position: "relative" }}>
+                                    E
+                                    <div
+                                        style={{
+                                            position: "absolute",
+                                            top: "45%",
+                                            left: 2,
+                                            width: 12,
+                                            height: 4,
+                                            backgroundColor: "#FFB703",
+                                        }}
+                                    />
+                                </span>
+                                <span style={{ color: "#00A887" }}>R</span>
+                                <span style={{ color: "#00A887", position: "relative" }}>
+                                    O
+                                    <div
+                                        style={{
+                                            position: "absolute",
+                                            top: "45%",
+                                            left: "20%",
+                                            width: 14,
+                                            height: 4,
+                                            backgroundColor: "#F25C05",
+                                        }}
+                                    />
+                                </span>
+                                <span style={{ color: "#00A887", marginLeft: 8 }}>E</span>
+                                <span style={{ color: "#00A887" }}>N</span>
+                                <span style={{ color: "#00A887" }}>G</span>
+                                <span style={{ color: "#00A887" }}>L</span>
+                                <span style={{ color: "#00A887" }}>I</span>
+                                <span style={{ color: "#00A887" }}>S</span>
+                                <span style={{ color: "#F25C05" }}>H</span>
                             </div>
-                            <div style={{ fontSize: 26, fontWeight: 700 }}>
-                                Zero English
+                            <div
+                                style={{
+                                    fontSize: 10,
+                                    fontWeight: 800,
+                                    letterSpacing: 4,
+                                    color: "#E3F2FD",
+                                    marginTop: -2,
+                                }}
+                            >
+                                LEARN WITHOUT LIMITS
                             </div>
                         </div>
+
+                        {/* Pill Badge */}
                         <div
                             style={{
-                                padding: "8px 18px",
+                                padding: "8px 20px",
                                 borderRadius: 999,
-                                border: "1px solid rgba(255, 255, 255, 0.2)",
-                                fontSize: 16,
-                                fontWeight: 600,
+                                border: "1px solid rgba(242, 92, 5, 0.4)",
+                                backgroundColor: "rgba(242, 92, 5, 0.1)",
+                                fontSize: 15,
+                                fontWeight: 700,
                                 letterSpacing: 2,
-                                color: "#cbd5e1",
+                                color: "#F25C05",
                             }}
                         >
                             QUIZ RESULT
                         </div>
                     </div>
 
+                    {/* Main Content Body */}
                     <div
                         style={{
                             flex: 1,
@@ -290,7 +297,7 @@ export async function GET(
                             flexDirection: "column",
                             alignItems: "center",
                             justifyContent: "center",
-                            gap: 16,
+                            gap: 12,
                             position: "relative",
                         }}
                     >
@@ -299,33 +306,46 @@ export async function GET(
                                 display: "flex",
                                 flexDirection: "column",
                                 alignItems: "center",
-                                gap: 8,
+                                gap: 4,
                             }}
                         >
-                            <div style={{ fontSize: 20, color: "#94a3b8" }}>{title}</div>
-                            <div style={{ fontSize: 32, color: "#f8fafc" }}>{quizTypeLabel}</div>
+                            <div style={{ fontSize: 18, color: "#E3F2FD", fontWeight: 500 }}>
+                                {title}
+                            </div>
+                            <div style={{ fontSize: 32, fontWeight: 800, color: "#F8FAF9" }}>
+                                {quizTypeLabel}
+                            </div>
                         </div>
 
+                        {/* Big Score Display */}
                         <div
                             style={{
-                                fontSize: 120,
+                                fontSize: 110,
                                 lineHeight: 1,
-                                fontWeight: 700,
+                                fontWeight: 900,
                                 color: tone.color,
                             }}
                         >
                             {`${percent}%`}
                         </div>
-                        <div style={{ fontSize: 22, fontWeight: 600, color: tone.labelColor }}>
+                        <div
+                            style={{
+                                fontSize: 22,
+                                fontWeight: 700,
+                                color: tone.labelColor,
+                                marginTop: -8,
+                            }}
+                        >
                             {tone.label}
                         </div>
 
+                        {/* Stat Cards */}
                         <div
                             style={{
                                 display: "flex",
                                 flexDirection: "row",
-                                gap: 18,
-                                marginTop: 8,
+                                gap: 16,
+                                marginTop: 12,
                             }}
                         >
                             {statCards.map((stat) => (
@@ -335,28 +355,37 @@ export async function GET(
                                         display: "flex",
                                         flexDirection: "column",
                                         alignItems: "center",
-                                        gap: 4,
-                                        minWidth: 150,
-                                        padding: "14px 22px",
-                                        borderRadius: 16,
-                                        backgroundColor: "rgba(255, 255, 255, 0.06)",
-                                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                                        gap: 2,
+                                        minWidth: 145,
+                                        padding: "12px 20px",
+                                        borderRadius: 14,
+                                        backgroundColor: "rgba(248, 250, 249, 0.04)",
+                                        border: "1px solid rgba(248, 250, 249, 0.08)",
                                     }}
                                 >
-                                    <div style={{ fontSize: 30, fontWeight: 700, color: stat.valueColor }}>
+                                    <div
+                                        style={{
+                                            fontSize: 28,
+                                            fontWeight: 800,
+                                            color: stat.valueColor,
+                                        }}
+                                    >
                                         {stat.value}
                                     </div>
-                                    <div style={{ fontSize: 14, color: "#94a3b8" }}>{stat.label}</div>
+                                    <div style={{ fontSize: 13, color: "#E3F2FD", fontWeight: 600 }}>
+                                        {stat.label}
+                                    </div>
                                 </div>
                             ))}
                         </div>
 
+                        {/* Accuracy Progress Bar */}
                         <div
                             style={{
                                 width: "100%",
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: 8,
+                                gap: 6,
                                 marginTop: 8,
                             }}
                         >
@@ -367,20 +396,27 @@ export async function GET(
                                     justifyContent: "space-between",
                                 }}
                             >
-                                <span style={{ fontSize: 14, fontWeight: 600, letterSpacing: 1, color: "#94a3b8" }}>
+                                <span
+                                    style={{
+                                        fontSize: 13,
+                                        fontWeight: 700,
+                                        letterSpacing: 1,
+                                        color: "#00A887",
+                                    }}
+                                >
                                     ACCURACY
                                 </span>
-                                <span style={{ fontSize: 14, fontWeight: 700, color: "#e2e8f0" }}>
+                                <span style={{ fontSize: 14, fontWeight: 800, color: "#F8FAF9" }}>
                                     {`${accuracy}%`}
                                 </span>
                             </div>
                             <div
                                 style={{
                                     width: "100%",
-                                    height: 12,
+                                    height: 10,
                                     display: "flex",
                                     borderRadius: 999,
-                                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                                    backgroundColor: "rgba(248, 250, 249, 0.1)",
                                 }}
                             >
                                 <div
@@ -394,19 +430,20 @@ export async function GET(
                             </div>
                         </div>
 
+                        {/* Level Badges */}
                         {levels.length > 0 && (
-                            <div style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+                            <div style={{ display: "flex", flexDirection: "row", gap: 10, marginTop: 4 }}>
                                 {levels.map((level) => (
                                     <div
                                         key={level}
                                         style={{
-                                            padding: "6px 16px",
+                                            padding: "4px 14px",
                                             borderRadius: 999,
-                                            backgroundColor: "rgba(139, 92, 246, 0.2)",
-                                            border: "1px solid rgba(167, 139, 250, 0.35)",
-                                            fontSize: 14,
+                                            backgroundColor: "rgba(0, 168, 135, 0.15)",
+                                            border: "1px solid rgba(0, 168, 135, 0.4)",
+                                            fontSize: 13,
                                             fontWeight: 700,
-                                            color: "#ddd6fe",
+                                            color: "#00C4EE",
                                         }}
                                     >
                                         {level}
@@ -416,6 +453,7 @@ export async function GET(
                         )}
                     </div>
 
+                    {/* Footer Row */}
                     <div
                         style={{
                             display: "flex",
@@ -423,12 +461,14 @@ export async function GET(
                             alignItems: "center",
                             justifyContent: "space-between",
                             position: "relative",
+                            borderTop: "1px solid rgba(248, 250, 249, 0.08)",
+                            paddingTop: 16,
                         }}
                     >
-                        <div style={{ fontSize: 15, color: "#64748b" }}>
+                        <div style={{ fontSize: 14, color: "#0F9D78", fontWeight: 500 }}>
                             Learn English vocabulary in Bangla
                         </div>
-                        <div style={{ fontSize: 15, color: "#64748b" }}>{date}</div>
+                        <div style={{ fontSize: 14, color: "#0F9D78", fontWeight: 500 }}>{date}</div>
                     </div>
                 </div>
             ),
