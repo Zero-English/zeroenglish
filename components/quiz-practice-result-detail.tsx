@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { useT } from "@/components/language-provider";
 import { quizTopicMeta } from "@/lib/quiz-sections";
+import { ResultImageCard } from "@/components/result-image-card";
 import {
   fetchCombinedExamResultById,
   dbResultDate,
@@ -254,6 +255,11 @@ export function QuizPracticeResultDetail({ resultId }: { resultId: number }) {
 
   return (
     <StaggerContainer className="space-y-6">
+      {/* Result image */}
+      <StaggerItem>
+        <ResultImageCard resultId={resultId} />
+      </StaggerItem>
+
       {/* Summary card */}
       <StaggerItem className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6 sm:p-8 text-center">
         <div className="flex items-center justify-center gap-2 mb-4">

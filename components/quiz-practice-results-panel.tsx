@@ -20,6 +20,7 @@ import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { useT } from "@/components/language-provider";
 import { useAuthStatus } from "@/lib/auth-store";
 import { quizTopicMeta } from "@/lib/quiz-sections";
+import { ResultImageDownloadButton } from "@/components/result-image-download-button";
 import {
   fetchCombinedExamResultsFromDb,
   dbResultDate,
@@ -129,17 +130,24 @@ function ResultItem({ result }: { result: DbCombinedExamResult }) {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 px-3 py-2">
-          <Trophy className="h-4 w-4 text-amber-500" />
-          <span
-            className={cn(
-              "text-lg font-bold tabular-nums",
-              winColor(result.scoreInPercent)
-            )}
-          >
-            {result.scoreInPercent}%
-          </span>
-          <span className="text-xs text-zinc-400">{t("স্কোর", "score")}</span>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 px-3 py-2">
+            <Trophy className="h-4 w-4 text-amber-500" />
+            <span
+              className={cn(
+                "text-lg font-bold tabular-nums",
+                winColor(result.scoreInPercent)
+              )}
+            >
+              {result.scoreInPercent}%
+            </span>
+            <span className="text-xs text-zinc-400">{t("স্কোর", "score")}</span>
+          </div>
+          <ResultImageDownloadButton
+            resultId={result.id}
+            variant="ghost"
+            iconOnly
+          />
         </div>
       </div>
 
