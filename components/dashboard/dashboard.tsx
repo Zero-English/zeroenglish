@@ -457,9 +457,9 @@ function ContinueLearningContent({
   const levelWords = words.filter((w) => w.level === targetLevel);
   const learned = levelWords.filter((w) => learnedIds.has(String(w.id))).length;
   const pct = levelWords.length > 0 ? Math.round((learned / levelWords.length) * 100) : 0;
-  const levelPath = `/vocabulary/${targetLevel.toLowerCase()}`;
-  const href =
-    lastLearned && lastLearned.page > 1 ? `${levelPath}/${lastLearned.page}` : levelPath;
+  // No page segment: the level-pagination store restores the remembered page,
+  // so the URL stays clean and clicking this is a normal client navigation.
+  const href = `/vocabulary/${targetLevel.toLowerCase()}`;
 
   return (
     <>

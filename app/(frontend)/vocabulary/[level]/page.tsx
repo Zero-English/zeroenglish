@@ -135,6 +135,8 @@ export default async function Page({ params, searchParams }: PageProps) {
       <LevelPageContent
         level={upper}
         pageNum={1}
+        // No page segment here, so bank mode resumes the persisted page.
+        urlPage={null}
         serverMode={!session}
         initialWords={pageData.words}
         initialTotal={pageData.total}

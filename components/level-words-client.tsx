@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useMemo, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import type { Word, LevelPageSort } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
@@ -14,11 +13,23 @@ import {
   PaginationContent,
   PaginationItem,
   PaginationLink,
+  PaginationButton,
   PaginationNext,
   PaginationPrevious,
+  PaginationNextButton,
+  PaginationPreviousButton,
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
-import { useLevelFilter, useLevelSort, useLevelCategory, setLevelState } from "@/lib/level-pagination-store";
+import {
+  useLevelFilter,
+  useLevelSort,
+  useLevelCategory,
+  useLevelPage,
+  useLevelPageHydrated,
+  setLevelState,
+  setLevelPage,
+  seedLevelPageFromUrl,
+} from "@/lib/level-pagination-store";
 import { setSelectedLevel } from "@/lib/level-store";
 import { recordLastLearned } from "@/lib/last-learned-store";
 import { useT } from "@/components/language-provider";
@@ -52,8 +63,11 @@ function buildLevelQuery({
   return params.toString();
 }
 
-function useTrackLevel(level: string, page: number) {
+function useTrackLevel(level: string, page: number | null) {
   useEffect(() => {
+    // In bank mode the page is held back as null until the store hydrates, so
+    // the pre-hydration default of 1 never overwrites a real stored page.
+    if (page == null) return;
     const levelKey = level.toUpperCase();
     setSelectedLevel(levelKey as Parameters<typeof setSelectedLevel>[0]);
     recordLastLearned(levelKey, page);
@@ -91,6 +105,13 @@ interface LevelWordsClientProps {
   gradient: string;
   level: string;
   pageNum?: number;
+  /**
+   * Bank mode only: the page carried by an explicit `/vocabulary/<level>/<n>`
+   * segment, or `null` on the bare level URL. It lets a deep link win over the
+   * persisted page once, after which the segment is dropped from the address
+   * bar. Server mode ignores it — those URLs stay real for crawlers.
+   */
+  urlPage?: number | null;
   /**
    * Server mode: `words` is already sliced, filtered and ordered by the server,
    * and the filter controls drive the URL rather than local state.
@@ -221,20 +242,38 @@ function ServerModeList({
   );
 }
 
-function BankModeList({ words, gradient, level, pageNum = 1 }: LevelWordsClientProps) {
+function BankModeList({ words, gradient, level, urlPage }: LevelWordsClientProps) {
   const { isLearned, loaded: learnedLoaded } = useLearnedWords();
   const { isBookmarked, loaded: bookmarkLoaded } = useBookmarkedWords();
   const loaded = learnedLoaded && bookmarkLoaded;
   const t = useT();
-  const router = useRouter();
 
-  const page = pageNum;
-  const basePath = `/vocabulary/${level.toLowerCase()}`;
+  // Paging is client state here: the words are already in the IndexedDB bank,
+  // so navigating to `/vocabulary/<level>/<n>` would throw the page away only to
+  // re-render the same words. The persisted page wins on the bare level URL.
+  const storedPage = useLevelPage(level);
+  const pageHydrated = useLevelPageHydrated();
+  const adoptedUrl = useRef(false);
+
+  useEffect(() => {
+    if (adoptedUrl.current || urlPage == null || !pageHydrated) return;
+    adoptedUrl.current = true;
+    // An explicit segment wins once, so a shared or bookmarked link is honoured.
+    seedLevelPageFromUrl(level, urlPage);
+    // Then drop the segment: the page now lives in the store, and a signed-in
+    // reader navigating to `/vocabulary/a1` would just resume this same page.
+    // Next 16 syncs replaceState with the router and re-syncs usePathname
+    // without re-running the server, so this costs no request. `BankModeList`
+    // only ever renders for a signed-in reader, so crawler URLs are untouched.
+    window.history.replaceState(null, "", `/vocabulary/${level.toLowerCase()}`);
+  }, [urlPage, level, pageHydrated]);
+
   const filter = useLevelFilter(level);
   const sort = useLevelSort(level);
   const category = useLevelCategory(level);
 
-  useTrackLevel(level, page);
+  // Record the page actually on screen so "Continue Learning" stays accurate.
+  useTrackLevel(level, pageHydrated ? storedPage : null);
 
   const categories = useMemo(
     () => Array.from(new Set(words.map((w) => w.category).filter(Boolean))).sort(),
@@ -278,23 +317,25 @@ function BankModeList({ words, gradient, level, pageNum = 1 }: LevelWordsClientP
   }, [words, filter, sort, loaded, isLearned, isBookmarked, category]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
-  const currentPage = Math.min(page, totalPages);
+  const currentPage = Math.min(storedPage, totalPages);
   const start = (currentPage - 1) * ITEMS_PER_PAGE;
   const pageWords = filtered.slice(start, start + ITEMS_PER_PAGE);
 
+  const goToPage = (n: number) => {
+    const target = Math.min(Math.max(1, n), totalPages);
+    setLevelPage(level, target);
+  };
+
   const handleFilterChange = (f: FilterType) => {
     setLevelState(level, { filter: f, page: 1 });
-    router.push(basePath);
   };
 
   const handleSortChange = (s: SortType) => {
     setLevelState(level, { sort: s, page: 1 });
-    router.push(basePath);
   };
 
   const handleCategoryChange = (c: string) => {
     setLevelState(level, { category: c, page: 1 });
-    router.push(basePath);
   };
 
   const getPageItems = () => {
@@ -317,7 +358,7 @@ function BankModeList({ words, gradient, level, pageNum = 1 }: LevelWordsClientP
         onCategoryChange={handleCategoryChange}
       />
 
-      {!loaded ? (
+      {!loaded || !pageHydrated ? (
         <SkeletonList />
       ) : pageWords.length === 0 ? (
         <EmptyState filtered />
@@ -348,8 +389,8 @@ function BankModeList({ words, gradient, level, pageNum = 1 }: LevelWordsClientP
             <Pagination>
               <div className="flex items-center gap-0.5 max-w-full">
                 <PaginationItem>
-                  <PaginationPrevious
-                    href={currentPage - 1 <= 1 ? basePath : `${basePath}/${currentPage - 1}`}
+                  <PaginationPreviousButton
+                    onClick={() => goToPage(currentPage - 1)}
                     aria-disabled={currentPage <= 1}
                     className={cn(
                       currentPage <= 1 ? "pointer-events-none opacity-50" : ""
@@ -361,20 +402,17 @@ function BankModeList({ words, gradient, level, pageNum = 1 }: LevelWordsClientP
                   <PaginationContent>
                     {getPageItems().map((pageNum) => (
                       <PaginationItem key={pageNum}>
-                        <PaginationLink
-                          href={pageNum <= 1 ? basePath : `${basePath}/${pageNum}`}
-                          isActive={pageNum === currentPage}
-                        >
+                        <PaginationButton onClick={() => goToPage(pageNum)} isActive={pageNum === currentPage}>
                           {pageNum}
-                        </PaginationLink>
+                        </PaginationButton>
                       </PaginationItem>
                     ))}
                   </PaginationContent>
                 </div>
 
                 <PaginationItem>
-                  <PaginationNext
-                    href={currentPage + 1 <= 1 ? basePath : `${basePath}/${currentPage + 1}`}
+                  <PaginationNextButton
+                    onClick={() => goToPage(currentPage + 1)}
                     aria-disabled={currentPage >= totalPages}
                     className={cn(
                       currentPage >= totalPages

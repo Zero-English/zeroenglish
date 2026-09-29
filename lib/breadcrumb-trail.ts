@@ -9,6 +9,13 @@ export type Crumb = {
    * `/vocabulary` hub link, which is the one page that should forget it.
    */
   clearLevel?: boolean;
+  /**
+   * Marks the leaf as a vocabulary page crumb whose number lives in client
+   * state. Server output and the schema keep the URL page (that is what a
+   * crawler sees); once a signed-in reader pages in place, the visible crumb
+   * follows the level-pagination store instead of going stale.
+   */
+  livePage?: { level: string; page: number };
 };
 
 export const HOME_CRUMB = { nameBn: "হোম", nameEn: "Home", href: "/" } as const;

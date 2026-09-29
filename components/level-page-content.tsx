@@ -97,6 +97,12 @@ export interface LevelPageContentProps {
    * to read the IndexedDB word bank.
    */
   serverMode?: boolean;
+  /**
+   * The page from an explicit `/vocabulary/<level>/<n>` segment, or `null` on the
+   * bare level URL. Bank mode uses it to honour a deep link and then drop the
+   * segment; server mode ignores it.
+   */
+  urlPage?: number | null;
   initialWords?: Word[];
   initialTotal?: number;
   initialTotalPages?: number;
@@ -229,6 +235,7 @@ export function LevelPageContent({
   level,
   pageNum = 1,
   serverMode = false,
+  urlPage = null,
   initialWords,
   initialTotal,
   initialTotalPages,
@@ -329,7 +336,7 @@ export function LevelPageContent({
         words={allWords}
         gradient={config.gradient}
         level={upper}
-        pageNum={pageNum}
+        urlPage={urlPage}
       />
     </LevelPageFrame>
   );

@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronRight, House } from "lucide-react";
 import { useT } from "@/components/language-provider";
 import { setSelectedLevel } from "@/lib/level-store";
 import { buildTrail, type Crumb } from "@/lib/breadcrumb-trail";
+import { useAuthStatus } from "@/lib/auth-store";
+import { useLevelPage, useLevelPageHydrated } from "@/lib/level-pagination-store";
 import { cn } from "@/lib/utils";
 
 /**
@@ -20,15 +23,37 @@ export function BreadcrumbTrail({
   className?: string;
 }) {
   const t = useT();
-  const trail = buildTrail(items);
+
+  // Logged-out readers page by URL, so the server-rendered crumb stays true.
+  // For guest/Google the page is client state, so follow the store once the
+  // auth identity and the pagination store have both hydrated.
+  const { status } = useAuthStatus();
+  const pathname = usePathname();
+  const pageHydrated = useLevelPageHydrated();
+
+  // Once bank mode has dropped the page segment, a "Page 23" leaf would point at
+  // a URL the reader can no longer reach, so it leaves the trail too.
+  const urlHasPageSegment = /\/\d+\/?$/.test(pathname);
+  const trail = buildTrail(
+    items.filter((c) => !(c.livePage && !urlHasPageSegment))
+  );
   const lastIndex = trail.length - 1;
+
+  const leaf = trail[lastIndex];
+  const storedPage = useLevelPage(leaf?.livePage?.level ?? "");
+  const showLivePage = !!leaf?.livePage && status !== "none" && pageHydrated;
+  const livePageNumber = showLivePage ? storedPage : leaf?.livePage?.page;
 
   return (
     <nav aria-label="Breadcrumb" className={cn("min-w-0", className)}>
       <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
         {trail.map((c, i) => {
           const isLast = i === lastIndex;
-          const label = t(c.nameBn, c.nameEn);
+          const liveLabel =
+            isLast && livePageNumber != null
+              ? t(`পৃষ্ঠা ${livePageNumber}`, `Page ${livePageNumber}`)
+              : null;
+          const label = liveLabel ?? t(c.nameBn, c.nameEn);
           const icon = i === 0 && <House className="mr-1 inline h-3 w-3 align-[-2px]" aria-hidden />;
 
           return (
