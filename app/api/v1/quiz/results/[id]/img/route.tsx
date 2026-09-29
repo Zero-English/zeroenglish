@@ -2,12 +2,14 @@ import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 import { getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
 import { getCombinedExamResultById } from "@/services/quiz-result.service";
+import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 
 export const dynamic = "force-dynamic";
 
 const WIDTH = 1200;
 const HEIGHT = 630;
+const AVATAR_SIZE = 250;
 
 const QUIZ_TYPE_LABELS: Record<string, string> = {
     ENGLISH_TO_BANGLA: "English to Bangla",
@@ -162,6 +164,24 @@ export async function GET(
         request.url
     ).toString();
 
+    let avatarUrl: string | null = null;
+    let avatarInitial = "";
+    try {
+        const owner = await prisma.user.findUnique({
+            where: { id: data.userId },
+            select: { name: true, user_name: true, image: true },
+        });
+        avatarUrl = owner?.image ?? null;
+        avatarInitial = safeText(owner?.name || owner?.user_name, "U")
+            .charAt(0)
+            .toUpperCase();
+    } catch (error) {
+        logger.warn(`Quiz result image render: avatar lookup failed`, {
+            resultId,
+            message: error instanceof Error ? error.message : String(error),
+        });
+    }
+
     try {
         return new ImageResponse(
             (
@@ -181,6 +201,49 @@ export async function GET(
                         color: "#F8FAF9",
                     }}
                 >
+                    {/* Result Owner Avatar */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: 100,
+                            right: 64,
+                            width: AVATAR_SIZE,
+                            height: AVATAR_SIZE,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: AVATAR_SIZE,
+                            overflow: "hidden",
+                            border: "3px solid rgba(248, 250, 249, 0.35)",
+                            backgroundColor: "rgba(0, 196, 238, 0.25)",
+                        }}
+                    >
+                        {avatarUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                                src={avatarUrl}
+                                alt=""
+                                width={AVATAR_SIZE}
+                                height={AVATAR_SIZE}
+                                style={{
+                                    width: AVATAR_SIZE,
+                                    height: AVATAR_SIZE,
+                                    borderRadius: AVATAR_SIZE,
+                                    objectFit: "cover",
+                                }}
+                            />
+                        ) : (
+                            <div
+                                style={{
+                                    fontSize: 32,
+                                    fontWeight: 800,
+                                    color: "#F8FAF9",
+                                }}
+                            >
+                                {avatarInitial}
+                            </div>
+                        )}
+                    </div>
                     {/* Main Content Body */}
                     <div
                         style={{
@@ -295,9 +358,9 @@ export async function GET(
                                 >
                                     ACCURACY
                                 </span> */}
-                                <span style={{ fontSize: 14, fontWeight: 800, color: "#F8FAF9" }}>
-                                    {`${accuracy}%`}
-                                </span>
+                                {/* <span style={{ fontSize: 14, fontWeight: 800, color: "#F8FAF9" }}>
+                                    accuracy{`${accuracy}%`}
+                                </span> */}
                             </div>
                             <div
                                 style={{
@@ -314,7 +377,7 @@ export async function GET(
                                         height: "100%",
                                         borderRadius: 999,
                                         backgroundColor: tone.color,
-                                        marginTop: 50
+                                        marginTop: 75
                                     }}
                                 />
                             </div>

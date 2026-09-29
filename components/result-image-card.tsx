@@ -24,6 +24,8 @@ export function ResultImageCard({ resultId }: { resultId: number }) {
         width={1200}
         height={630}
         unoptimized
+        loading="eager"
+        fetchPriority="high"
         className="w-full h-auto rounded-xl"
       />
     </div>
