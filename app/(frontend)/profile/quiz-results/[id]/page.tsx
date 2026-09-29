@@ -1,8 +1,65 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getCombinedExamResultById } from "@/services/quiz-result.service";
 import { QuizPracticeResultDetail } from "@/components/quiz-practice-result-detail";
 import { BackButton } from "@/components/back-button";
+import { ShareOnFacebookButton } from "@/components/share-on-facebook-button";
+import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const resultId = parseInt(id, 10);
+
+  if (Number.isNaN(resultId) || resultId < 1) {
+    return { title: `Quiz Result Not Found | ${SITE_NAME}` };
+  }
+
+  const result = await getCombinedExamResultById(resultId);
+
+  if (!result.success || !result.data) {
+    return { title: `Quiz Result Not Found | ${SITE_NAME}` };
+  }
+
+  const data = result.data;
+  const score = data.correctQuestions?.length ?? data.correctAnswers;
+  const total = data.questionCount;
+  const title = `I scored ${score}/${total} on Zero English!`;
+  const description = "Test your English vocabulary on Zero English.";
+  const resultUrl = `${SITE_URL}/profile/quiz-results/${data.id}`;
+  const shareImageUrl = `${SITE_URL}/profile/${data.userId}/quiz-results/${data.id}/image`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/profile/quiz-results/${data.id}` },
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: shareImageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+      type: "website",
+      url: resultUrl,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [shareImageUrl],
+    },
+  };
+}
 
 export default async function QuizPracticeResultDetailPage({
   params,
@@ -23,7 +80,10 @@ export default async function QuizPracticeResultDetailPage({
 
       <div className="relative px-4 py-8 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <BackButton />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <BackButton />
+            <ShareOnFacebookButton resultId={resultId} className="mb-6" />
+          </div>
           <QuizPracticeResultDetail resultId={resultId} />
         </div>
       </div>
