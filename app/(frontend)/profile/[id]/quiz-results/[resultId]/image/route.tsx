@@ -15,16 +15,27 @@ export const dynamic = "force-dynamic";
 const BACKGROUND_PATH = "/assets/images/result_bg_format.png";
 
 /**
- * Public, cacheable quiz result card. Social crawlers (Facebook, WhatsApp,
- * X) have no session cookie, so this route is intentionally unauthenticated —
- * it only ever renders aggregate score data for a single result id.
+ * Public, cacheable quiz result card for social sharing.
+ *
+ * Social crawlers (Facebook, WhatsApp, X) send no session cookie, so this
+ * route is intentionally unauthenticated — it only ever renders aggregate
+ * score data for a single result, and only when the result actually belongs
+ * to the user in the path.
  */
 export async function GET(
     request: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: Promise<{ id: string; resultId: string }> }
 ) {
-    const { id } = await params;
-    const resultId = parseInt(id, 10);
+    const { id: userIdParam, resultId: resultIdParam } = await params;
+    const userId = parseInt(userIdParam, 10);
+    const resultId = parseInt(resultIdParam, 10);
+
+    if (Number.isNaN(userId) || userId < 1) {
+        return Response.json(
+            { data: null, message: "Invalid user id", success: false },
+            { status: 400 }
+        );
+    }
 
     if (Number.isNaN(resultId) || resultId < 1) {
         return Response.json(
@@ -33,7 +44,8 @@ export async function GET(
         );
     }
 
-    const result = await getCombinedExamResultById(resultId);
+    // Scoping by userId stops result ids from being read across accounts.
+    const result = await getCombinedExamResultById(resultId, userId);
 
     if (!result.success || !result.data) {
         return Response.json(

@@ -1,5 +1,7 @@
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://zeroenglish.org";
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : (process.env.NEXT_PUBLIC_SITE_URL ?? "https://zeroenglish.org");
 
 export const SITE_NAME = "Zero English";
 

@@ -32,6 +32,7 @@ export async function generateMetadata({
   const title = `I scored ${score}/${total} on Zero English!`;
   const description = "Test your English vocabulary on Zero English.";
   const resultUrl = `${SITE_URL}/profile/quiz-results/${data.id}`;
+  const shareImageUrl = `${SITE_URL}/profile/${data.userId}/quiz-results/${data.id}/image`;
 
   return {
     title,
@@ -42,7 +43,7 @@ export async function generateMetadata({
       description,
       images: [
         {
-          url: `${resultUrl}/image`,
+          url: shareImageUrl,
           width: 1200,
           height: 630,
           alt: title,
@@ -55,7 +56,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title,
       description,
-      images: [`${resultUrl}/image`],
+      images: [shareImageUrl],
     },
   };
 }
