@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getCombinedExamResultById } from "@/services/quiz-result.service";
 import { QuizPracticeResultDetail } from "@/components/quiz-practice-result-detail";
 import { BackButton } from "@/components/back-button";
+import { ShareOnFacebookButton } from "@/components/share-on-facebook-button";
 import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
@@ -69,7 +70,10 @@ export default async function QuizPracticeResultDetailPage({
 
       <div className="relative px-4 py-8 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <BackButton />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <BackButton />
+            <ShareOnFacebookButton resultId={resultId} className="mb-6" />
+          </div>
           <QuizPracticeResultDetail resultId={resultId} />
         </div>
       </div>
