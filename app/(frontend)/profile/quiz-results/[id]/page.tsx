@@ -31,22 +31,31 @@ export async function generateMetadata({
   const total = data.questionCount;
   const title = `I scored ${score}/${total} on Zero English!`;
   const description = "Test your English vocabulary on Zero English.";
+  const resultUrl = `${SITE_URL}/profile/quiz-results/${data.id}`;
 
   return {
     title,
     description,
+    alternates: { canonical: `/profile/quiz-results/${data.id}` },
     openGraph: {
       title,
       description,
       images: [
         {
-          url: `${SITE_URL}/api/results/${data.id}/image`,
+          url: `${resultUrl}/image`,
           width: 1200,
           height: 630,
+          alt: title,
         },
       ],
       type: "website",
-      url: `${SITE_URL}/quiz-results/${data.id}`,
+      url: resultUrl,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${resultUrl}/image`],
     },
   };
 }

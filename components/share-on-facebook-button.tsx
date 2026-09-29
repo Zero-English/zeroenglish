@@ -32,7 +32,7 @@ export function ShareOnFacebookButton({
   const t = useT();
 
   const handleClick = () => {
-    const resultUrl = `${SITE_URL}/quiz-results/${resultId}`;
+    const resultUrl = `${SITE_URL}/profile/quiz-results/${resultId}`;
     const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
       resultUrl
     )}`;
