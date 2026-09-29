@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { LevelPageContent } from "@/components/level-page-content";
-import { getWordsByLevel } from "@/lib/data";
+import { authOptions } from "@/lib/auth";
+import {
+  browsePublicWords,
+  getLevelAggregate,
+  getLevelWordIds,
+  isValidLevel,
+} from "@/lib/data";
+import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/vocabulary-query";
+
+// Reads the request session and queries Prisma directly, so it can never be
+// statically generated or served from the full-route cache.
+export const dynamic = "force-dynamic";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
-const ITEMS_PER_PAGE = 10;
 
 const LEVEL_LABELS: Record<(typeof VALID_LEVELS)[number], { label: string; labelBn: string }> = {
   A1: { label: "Beginner", labelBn: "শিক্ষানবিস" },
@@ -15,61 +26,103 @@ const LEVEL_LABELS: Record<(typeof VALID_LEVELS)[number], { label: string; label
   C2: { label: "Mastery", labelBn: "পারদর্শী" },
 };
 
+type PageProps = {
+  params: Promise<{ level: string; pageNum: string }>;
+  searchParams: Promise<RawSearchParams>;
+};
+
+function parsePageNum(raw: string): number | null {
+  if (!/^\d+$/.test(raw)) return null;
+  const page = Number.parseInt(raw, 10);
+  return page >= 1 ? page : null;
+}
+
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ level: string; pageNum: string }>;
-}): Promise<Metadata> {
+  searchParams,
+}: PageProps): Promise<Metadata> {
   const { level, pageNum } = await params;
   const upper = level.toUpperCase();
-  const page = parseInt(pageNum, 10);
+  const page = parsePageNum(pageNum);
 
-  if (
-    !VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number]) ||
-    Number.isNaN(page) ||
-    page < 1
-  ) {
+  if (!isValidLevel(upper) || page === null) {
     return { title: "Page Not Found", robots: { index: false, follow: false } };
   }
 
-  const words = await getWordsByLevel(upper);
-  const totalPages = Math.max(1, Math.ceil(words.length / ITEMS_PER_PAGE));
+  const { q, sort, category, isFiltered } = parseLevelQuery(await searchParams);
+  const labels = LEVEL_LABELS[upper as (typeof VALID_LEVELS)[number]];
+
+  const { total } = await browsePublicWords({
+    level: upper,
+    page,
+    limit: ITEMS_PER_PAGE,
+    search: q,
+    category,
+    sort,
+  });
+  const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+
   if (page > totalPages) {
     return { title: "Page Not Found", robots: { index: false, follow: false } };
   }
 
-  const labels = LEVEL_LABELS[upper as (typeof VALID_LEVELS)[number]];
-  const canonical = `/vocabulary/${upper.toLowerCase()}/${page}`;
+  const base = `/vocabulary/${upper.toLowerCase()}`;
+  // Page 1 is always the bare level URL, so it must not be a separate document.
+  const canonical = page === 1 ? base : `${base}/${page}`;
+
   return {
     title: `English Vocabulary - Level ${upper} (Page ${page})`,
     description: `Learn essential English words at ${upper} level (${labels.label}). ${labels.labelBn} vocabulary list, page ${page}.`,
     alternates: { canonical },
-    robots: { index: true, follow: true },
+    robots: isFiltered
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
   };
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ level: string; pageNum: string }>;
-}) {
+export default async function Page({ params, searchParams }: PageProps) {
   const { level, pageNum } = await params;
-  const page = parseInt(pageNum, 10);
   const upper = level.toUpperCase();
+  const page = parsePageNum(pageNum);
 
-  if (
-    Number.isNaN(page) ||
-    page < 1 ||
-    !VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number])
-  ) {
-    notFound();
-  }
+  if (!isValidLevel(upper) || page === null) notFound();
 
-  const words = await getWordsByLevel(upper);
-  const totalPages = Math.max(1, Math.ceil(words.length / ITEMS_PER_PAGE));
-  if (page > totalPages) {
-    notFound();
-  }
+  const { q, sort, category } = parseLevelQuery(await searchParams);
 
-  return <LevelPageContent level={level} pageNum={page} />;
+  const [session, pageData, aggregate, wordIds] = await Promise.all([
+    getServerSession(authOptions),
+    browsePublicWords({
+      level: upper,
+      page,
+      limit: ITEMS_PER_PAGE,
+      search: q,
+      category,
+      sort,
+    }),
+    getLevelAggregate(upper),
+    getLevelWordIds(upper),
+  ]);
+
+  if (aggregate.total === 0) notFound();
+  // `browsePublicWords` clamps the page, so a clamp means the page is past the end.
+  if (pageData.page < page) notFound();
+
+  return (
+    <LevelPageContent
+      level={upper}
+      pageNum={page}
+      serverMode={!session}
+      initialWords={pageData.words}
+      initialTotal={pageData.total}
+      initialTotalPages={pageData.totalPages}
+      initialCategories={aggregate.categories}
+      initialCategoryCount={aggregate.categoryCount}
+      initialCategoryLabel={aggregate.categoryLabel}
+      // Only the bank-less render needs the ids to scope local progress.
+      initialWordIds={session ? undefined : wordIds}
+      search={q}
+      sort={sort}
+      category={category}
+    />
+  );
 }

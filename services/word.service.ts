@@ -1,6 +1,7 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
-import type { Word } from "@/lib/data";
+import type { Word, LevelPageSort } from "@/lib/data";
+import { browsePublicWords } from "@/lib/data";
 import type { Prisma } from "@/generated/prisma/client";
 
 export type WordLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
@@ -81,99 +82,38 @@ interface BrowseWordsParams {
     limit?: number;
     level?: string;
     search?: string;
+    category?: string;
+    sort?: LevelPageSort;
 }
 
 export const browseWords = async ({
-    page = 1,
-    limit = 10,
+    page,
+    limit,
     level,
     search,
+    category,
+    sort,
 }: BrowseWordsParams = {}) => {
     try {
-        const skip = (page - 1) * limit;
-        const where: { level?: WordLevel; isPending?: boolean } = { isPending: false };
-        if (level && isWordLevel(level)) where.level = level;
-
-        const q = search?.trim();
-
-        if (q) {
-            const query = q.toLowerCase();
-            const rows = await prisma.word.findMany({
-                where,
-                orderBy: { id: "asc" },
-            });
-
-            const scored = rows
-                .map((row) => {
-                    let score = 0;
-                    const word = row.word.toLowerCase();
-                    const meaning = row.meaningBn.join(" ").toLowerCase();
-                    const definitionEn = row.definitionEn.toLowerCase();
-                    const definitionBn = row.definitionBn.toLowerCase();
-
-                    if (word === query) score += 100;
-                    else if (word.startsWith(query)) score += 50;
-                    else if (word.includes(query)) score += 20;
-
-                    if (meaning === query) score += 80;
-                    else if (meaning.startsWith(query)) score += 40;
-                    else if (meaning.includes(query)) score += 15;
-
-                    if (definitionEn.includes(query)) score += 5;
-                    if (definitionBn.includes(query)) score += 5;
-
-                    return { row, score };
-                })
-                .filter(({ score }) => score > 0)
-                .sort((a, b) => b.score - a.score);
-
-            const total = scored.length;
-            const totalPages = Math.max(1, Math.ceil(total / limit));
-
-            return {
-                data: scored
-                    .slice(skip, skip + limit)
-                    .map(({ row }) => toPublicWord(row)),
-                pagination: {
-                    total,
-                    page,
-                    limit,
-                    totalPages,
-                },
-                message: "Words fetched successfully",
-                success: true,
-            };
-        }
-
-        const [words, total] = await Promise.all([
-            prisma.word.findMany({
-                where,
-                skip,
-                take: limit,
-                orderBy: { id: "asc" },
-            }),
-            prisma.word.count({ where }),
-        ]);
-
-        const totalPages = Math.max(1, Math.ceil(total / limit));
+        const result = await browsePublicWords({ page, limit, level, search, category, sort });
 
         return {
-            data: words.map(toPublicWord),
+            data: result.words,
             pagination: {
-                total,
-                page,
-                limit,
-                totalPages,
+                total: result.total,
+                page: result.page,
+                limit: result.limit,
+                totalPages: result.totalPages,
             },
             message: "Words fetched successfully",
-            success: true,
+            success: true as const,
         };
     } catch (error) {
         logger.error(`Failed to browse words: ${error}`);
         return {
             data: null,
             message: "Failed to fetch words",
-            success: false,
+            success: false as const,
         };
     }
 };

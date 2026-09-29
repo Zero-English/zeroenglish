@@ -6,6 +6,8 @@ import { motion } from "motion/react";
 import { ArrowRight, BookOpenCheck, Flame, Gauge, Layers, LibraryBig, Sparkles, Target } from "lucide-react";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useCachedWords } from "@/lib/use-cached-words";
+import { useAuthStatus } from "@/lib/auth-store";
+import type { VocabularyFacets } from "@/lib/data";
 import { useDailyGoal } from "@/lib/use-daily-goal";
 import { setSelectedLevel } from "@/lib/level-store";
 import { useT } from "@/components/language-provider";
@@ -159,9 +161,23 @@ interface CategoryGroup {
   levels: LevelStatRow[];
 }
 
-export function VocabularyClient() {
+export interface VocabularyClientProps {
+  /** True when the server found no NextAuth session. */
+  serverMode?: boolean;
+  /** Server-computed rollup, used when the word bank is not loaded. */
+  facets?: VocabularyFacets;
+}
+
+export function VocabularyClient({ serverMode = false, facets }: VocabularyClientProps) {
+  // "Continue as Guest" is localStorage-only, so the hydrated local identity
+  // overrides the server's verdict and keeps those users on the word bank.
+  const { status, hydrated } = useAuthStatus();
+  const isServerMode = serverMode && !(hydrated && status !== "none");
+
   const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
-  const { words: cachedWords, loading: cacheLoading } = useCachedWords();
+  const { words: cachedWords, loading: cacheLoading } = useCachedWords({
+    enabled: !isServerMode,
+  });
   const { todayLearned, streak, dailyGoal, loaded: goalLoaded } = useDailyGoal();
   const t = useT();
 
@@ -179,6 +195,7 @@ export function VocabularyClient() {
   );
 
   const categoryLabel = useMemo(() => {
+    if (isServerMode) return facets?.categoryLabel ?? "Oxford 5000";
     const cats = new Set(wordRefs.map((r) => r.category || "Oxford5000"));
     if (cats.has("Oxford3000") || cats.has("Oxford5000")) return "Oxford 5000";
     if (wordRefs.length === 0) return "Oxford 5000";
@@ -189,9 +206,25 @@ export function VocabularyClient() {
     }
     const dominant = Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0]?.[0];
     return dominant ? formatCategoryLabel(dominant) : "Oxford 5000";
-  }, [wordRefs]);
+  }, [isServerMode, facets, wordRefs]);
 
   const categories = useMemo<CategoryGroup[]>(() => {
+    if (isServerMode) {
+      // Per-level learned counts need the word bank to map learned ids onto
+      // levels, so they stay unknown here; totals come straight from the server.
+      return (facets?.groups ?? []).map((group) => ({
+        label: group.label,
+        total: group.total,
+        learned: 0,
+        levels: group.levels.map((l) => ({
+          level: l.level,
+          config: LEVEL_CARD_CONFIG[l.level],
+          total: l.total,
+          learned: 0,
+        })),
+      }));
+    }
+
     const map = new Map<string, { label: string; total: number; learned: number; levels: LevelStatRow[] }>();
     for (const ref of wordRefs) {
       const cat = ref.category || "Oxford 5000";
@@ -221,13 +254,21 @@ export function VocabularyClient() {
         ...entry,
         levels: entry.levels.filter((l) => l.total > 0),
       }));
-  }, [wordRefs, learnedIds]);
+  }, [isServerMode, facets, wordRefs, learnedIds]);
 
-  const totalWords = wordRefs.length;
-  const totalLearned = wordRefs.filter((ref) => learnedIds.has(String(ref.id))).length;
+  const totalWords = isServerMode ? (facets?.totalWords ?? 0) : wordRefs.length;
+  // Learned ids are only ever created from publicly visible words, so the size
+  // of the set is the overall learned count even without the bank.
+  const totalLearned = isServerMode
+    ? learnedIds.size
+    : wordRefs.filter((ref) => learnedIds.has(String(ref.id))).length;
   const overallPct = totalWords > 0 ? Math.round((totalLearned / totalWords) * 100) : 0;
-  const levelCount = new Set(wordRefs.map((r) => r.level || "A1")).size;
+  const levelCount = isServerMode
+    ? (facets?.levelCount ?? 0)
+    : new Set(wordRefs.map((r) => r.level || "A1")).size;
   const loaded = !cacheLoading && learnedLoaded;
+  /** Per-level progress is only derivable with the full bank. */
+  const levelBreakdownKnown = !isServerMode && loaded;
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
@@ -313,7 +354,7 @@ export function VocabularyClient() {
                         icon={LibraryBig}
                         labelEn="Words"
                         labelBn="শব্দ"
-                        value={cacheLoading ? "…" : `${totalWords}`}
+                        value={`${totalWords}`}
                         subEn="across all categories"
                         subBn="সব বিভাগ মিলিয়ে"
                         tint="text-orange-500"
@@ -324,7 +365,7 @@ export function VocabularyClient() {
                         icon={Layers}
                         labelEn="Categories"
                         labelBn="বিভাগ"
-                        value={cacheLoading ? "…" : `${categories.length}`}
+                        value={`${categories.length}`}
                         subEn="word groups"
                         subBn="শব্দের দল"
                         tint="text-sky-500"
@@ -335,7 +376,7 @@ export function VocabularyClient() {
                         icon={Gauge}
                         labelEn="Levels"
                         labelBn="লেভেল"
-                        value={cacheLoading ? "…" : `${levelCount}`}
+                        value={`${levelCount}`}
                         subEn="active levels"
                         subBn="সক্রিয় লেভেল"
                         tint="text-amber-500"
@@ -346,7 +387,7 @@ export function VocabularyClient() {
                         icon={Sparkles}
                         labelEn="Learned"
                         labelBn="শেখা হয়েছে"
-                        value={cacheLoading || !learnedLoaded ? "…" : `${overallPct}%`}
+                        value={`${overallPct}%`}
                         subEn={`${totalLearned} / ${totalWords}`}
                         subBn={`${totalLearned} / ${totalWords}`}
                         tint="text-emerald-500"
@@ -461,7 +502,7 @@ export function VocabularyClient() {
                                   {group.label}
                                 </span>
                                 <span className="text-xs text-zinc-400 dark:text-zinc-500">
-                                  {cacheLoading ? "\u00A0" : t(`${group.total}টি শব্দ · ${group.levels.length}টি লেভেল`, `${group.total} words · ${group.levels.length} levels`)}
+                                  {t(`${group.total}টি শব্দ · ${group.levels.length}টি লেভেল`, `${group.total} words · ${group.levels.length} levels`)}
                                 </span>
                               </div>
                               <span className={cn("text-xs font-semibold tabular-nums", s.text)}>
@@ -472,7 +513,7 @@ export function VocabularyClient() {
                             <StaggerContainer className="flex flex-col">
                               {group.levels.map(({ level: lv, config: c, total, learned }, li) => {
                                 const levelPct = total > 0 ? Math.round((learned / total) * 100) : 0;
-                                const ready = loaded;
+                                const ready = levelBreakdownKnown;
                                 return (
                                   <StaggerItem
                                     key={lv}
@@ -494,9 +535,9 @@ export function VocabularyClient() {
                                       {t(c.labelBn, c.label)}
                                     </p>
                                         <p className="mt-0.5 truncate text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
-                                          {cacheLoading
-                                            ? "\u00A0"
-                                            : t(`${total}টি শব্দ · ${learned}টি শেখা`, `${total} words · ${learned} learned`)}
+                                          {ready
+                                            ? t(`${total}টি শব্দ · ${learned}টি শেখা`, `${total} words · ${learned} learned`)
+                                            : t(`${total}টি শব্দ`, `${total} words`)}
                                         </p>
                                       </div>
                                       <div className="relative hidden h-11 w-11 shrink-0 sm:block">

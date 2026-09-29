@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo } from "react";
 import { motion } from "motion/react";
-import { type Word } from "@/lib/data";
-import { mainCategoryLabel } from "@/lib/category";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { setSelectedLevel } from "@/lib/level-store";
 import { useT } from "@/components/language-provider";
@@ -36,7 +35,16 @@ interface LevelHeroProps {
   border: string;
   solid: string;
   stroke: string;
-  words: Word[];
+  /** Total words in the level, independent of how many are on screen. */
+  totalCount: number;
+  /** Number of distinct categories in the level. */
+  categoryCount: number;
+  categoryLabel: string;
+  /**
+   * Ids belonging to this level, used to scope locally stored learned words.
+   * In server mode this is the only way to know which learned ids are in level.
+   */
+  levelWordIds: number[];
 }
 
 export function LevelHero({
@@ -47,15 +55,29 @@ export function LevelHero({
   text,
   bg,
   border,
-  words,
+  totalCount,
+  categoryCount,
+  categoryLabel,
+  levelWordIds,
 }: LevelHeroProps) {
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
-  const learned = words.filter((w) => learnedIds.has(String(w.id))).length;
-  const pct = words.length > 0 ? Math.round((learned / words.length) * 100) : 0;
-  const remaining = Math.max(0, words.length - learned);
-  const category = mainCategoryLabel(words);
-  const categories = new Set(words.map((w) => w.category).filter(Boolean)).size;
+
+  const learnedIdsSet = useMemo(() => new Set(levelWordIds), [levelWordIds]);
+  const learned = useMemo(
+    () => {
+      if (!loaded) return 0;
+      let count = 0;
+      for (const id of learnedIds) {
+        if (learnedIdsSet.has(Number(id))) count++;
+      }
+      return count;
+    },
+    [learnedIds, learnedIdsSet, loaded]
+  );
+
+  const pct = totalCount > 0 ? Math.round((learned / totalCount) * 100) : 0;
+  const remaining = Math.max(0, totalCount - learned);
 
   return (
     <section className="relative">
@@ -90,7 +112,7 @@ export function LevelHero({
                     {level}
                   </span>
                   <p className="text-xs font-medium text-zinc-400 dark:text-zinc-500">
-                    {category}
+                    {categoryLabel}
                   </p>
                 </div>
                 <h1 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
@@ -117,7 +139,7 @@ export function LevelHero({
                     {loaded ? (
                       <>
                         {learned}
-                        <span className="font-normal text-zinc-400"> / {words.length}</span>
+                        <span className="font-normal text-zinc-400"> / {totalCount}</span>
                       </>
                     ) : (
                       "…"
@@ -135,8 +157,8 @@ export function LevelHero({
                   labelEn="Words learned"
                   labelBn="শব্দ শেখা হয়েছে"
                   value={loaded ? `${learned}` : "…"}
-                  subEn={`of ${words.length} total`}
-                  subBn={`মোট ${words.length}টির মধ্যে`}
+                  subEn={`of ${totalCount} total`}
+                  subBn={`মোট ${totalCount}টির মধ্যে`}
                   tint="text-orange-500"
                 />
                 <StatRow
@@ -161,7 +183,7 @@ export function LevelHero({
                   icon={Sparkles}
                   labelEn="Categories"
                   labelBn="বিষয়"
-                  value={`${categories}`}
+                  value={`${categoryCount}`}
                   subEn="topics in this level"
                   subBn={`${level} লেভেলে যত বিষয়`}
                   tint="text-emerald-500"

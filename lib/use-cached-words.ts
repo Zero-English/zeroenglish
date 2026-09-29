@@ -123,10 +123,11 @@ function loadWords(force = false): Promise<void> {
   return currentLoad;
 }
 
-export function useCachedWords() {
+export function useCachedWords({ enabled = true }: { enabled?: boolean } = {}) {
   useEffect(() => {
+    if (!enabled) return;
     void loadWords();
-  }, []);
+  }, [enabled]);
 
   const snap = useSyncExternalStore(
     (onStoreChange) => {
@@ -153,5 +154,7 @@ export function useCachedWords() {
     [snap.words]
   );
 
-  return { ...snap, refresh, getWordsByLevel };
+  // When disabled the hook reports "idle" so callers that only branch on
+  // `loading` do not get stuck on a skeleton they can never leave.
+  return { ...snap, enabled, loading: enabled && snap.loading, refresh, getWordsByLevel };
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { browseWords } from "@/services/word.service";
+import { isLevelPageSort } from "@/lib/data";
 
 /**
  * @openapi
@@ -33,6 +34,17 @@ import { browseWords } from "@/services/word.service";
  *         schema:
  *           type: string
  *         description: Optional text search across word, meaning, and definitions
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Optional category filter
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           enum: [default, az, za]
+ *         description: Sort order
  *     responses:
  *       200:
  *         description: Paginated list of public words
@@ -50,7 +62,10 @@ export async function GET(request: NextRequest) {
     );
     const level = searchParams.get("level") || undefined;
     const search = searchParams.get("search") || undefined;
+    const category = searchParams.get("category") || undefined;
+    const rawSort = searchParams.get("sort") || "";
+    const sort = isLevelPageSort(rawSort) ? rawSort : undefined;
 
-    const result = await browseWords({ page, limit, level, search });
+    const result = await browseWords({ page, limit, level, search, category, sort });
     return NextResponse.json(result);
 }

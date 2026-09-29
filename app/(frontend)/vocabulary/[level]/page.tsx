@@ -1,5 +1,19 @@
 import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { notFound } from "next/navigation";
 import { LevelPageContent } from "@/components/level-page-content";
+import { authOptions } from "@/lib/auth";
+import {
+  browsePublicWords,
+  getLevelAggregate,
+  getLevelWordIds,
+  isValidLevel,
+} from "@/lib/data";
+import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/vocabulary-query";
+
+// Reads the request session and queries Prisma directly, so it can never be
+// statically generated or served from the full-route cache.
+export const dynamic = "force-dynamic";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 
@@ -12,31 +26,77 @@ const LEVEL_LABELS: Record<(typeof VALID_LEVELS)[number], { label: string; label
   C2: { label: "Mastery", labelBn: "পারদর্শী" },
 };
 
+type PageProps = {
+  params: Promise<{ level: string }>;
+  searchParams: Promise<RawSearchParams>;
+};
+
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ level: string }>;
-}): Promise<Metadata> {
+  searchParams,
+}: PageProps): Promise<Metadata> {
   const { level } = await params;
   const upper = level.toUpperCase();
 
-  if (!VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number])) {
+  if (!isValidLevel(upper)) {
     return { title: "Level Not Found", robots: { index: false, follow: false } };
   }
 
+  const { isFiltered } = parseLevelQuery(await searchParams);
   const labels = LEVEL_LABELS[upper as (typeof VALID_LEVELS)[number]];
+
   return {
     title: `English Vocabulary - Level ${upper} (${labels.label})`,
     description: `Learn essential English words at ${upper} level (${labels.label}). ${labels.labelBn} vocabulary list with Bangla meanings, examples, synonyms and antonyms.`,
+    // Filter variants always point back at the clean level URL.
     alternates: { canonical: `/vocabulary/${upper.toLowerCase()}` },
+    robots: isFiltered
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
   };
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ level: string }>;
-}) {
+export default async function Page({ params, searchParams }: PageProps) {
   const { level } = await params;
-  return <LevelPageContent level={level} />;
+  const upper = level.toUpperCase();
+
+  if (!isValidLevel(upper)) notFound();
+
+  const { q, sort, category } = parseLevelQuery(await searchParams);
+
+  const [session, pageData, aggregate, wordIds] = await Promise.all([
+    getServerSession(authOptions),
+    browsePublicWords({
+      level: upper,
+      page: 1,
+      limit: ITEMS_PER_PAGE,
+      search: q,
+      category,
+      sort,
+    }),
+    getLevelAggregate(upper),
+    getLevelWordIds(upper),
+  ]);
+
+  // An empty level is a genuine 404; an empty *filter* result is not.
+  if (aggregate.total === 0) notFound();
+
+  return (
+    <LevelPageContent
+      level={upper}
+      pageNum={1}
+      serverMode={!session}
+      initialWords={pageData.words}
+      initialTotal={pageData.total}
+      initialTotalPages={pageData.totalPages}
+      initialCategories={aggregate.categories}
+      initialCategoryCount={aggregate.categoryCount}
+      initialCategoryLabel={aggregate.categoryLabel}
+      // Only the bank-less render needs the ids to scope local progress.
+      initialWordIds={session ? undefined : wordIds}
+      search={q}
+      sort={sort}
+      category={category}
+    />
+  );
 }
