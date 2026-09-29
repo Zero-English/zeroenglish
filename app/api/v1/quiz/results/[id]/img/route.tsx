@@ -158,7 +158,7 @@ export async function GET(
         },
     ] as const;
     const backgroundImageUrl = new URL(
-        "/assets/images/result_format_light_ze.png",
+        "/assets/images/result_bg_format.png",
         request.url
     ).toString();
 
@@ -344,11 +344,12 @@ export async function GET(
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
-                            justifyContent: "space-between",
+                            justifyContent: "flex-end",
+                            width: "100%",
                             position: "relative",
                         }}
                     >
-                        <div style={{ fontSize: 14, color: "#0F9D78", fontWeight: 500 }}>{date}</div>
+                        <div style={{ fontSize: 14, color: "#000000", fontWeight: 500}}>{date}</div>
                     </div>
                 </div>
             ),
