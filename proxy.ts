@@ -2,10 +2,17 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { ALLOWED_SITE_ORIGINS } from "@/lib/site-domains";
+import prisma from "@/utils/prisma";
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX ?? "300", 10) || 300;
 const RATE_LIMIT_BUCKET_CAP = 100_000;
+
+// Unmatched path used to hand a 404 back to the router, so the global
+// not-found page is served with a real 404 status instead of a streamed 200.
+const NOT_FOUND_PATH = "/__not-found__";
+
+const QUIZ_QUESTION_PATH = /^\/quiz\/question\/([^/]+)\/?$/;
 
 // Fixed-window in-memory rate limiter keyed by client IP. Suitable for the
 // single-process Node deployment; per-instance limits on multi-replica setups.
@@ -46,6 +53,33 @@ function rateLimited(request: NextRequest): NextResponse | null {
     return null;
 }
 
+function notFound(request: NextRequest): NextResponse {
+    return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url));
+}
+
+// `notFound()` inside a page can only produce a 404 status when nothing has
+// streamed yet, and every frontend route sits under a `loading.tsx` boundary.
+// So the existence check has to happen here, before the router renders.
+async function isMissingQuizQuestion(request: NextRequest): Promise<boolean> {
+    const match = request.nextUrl.pathname.match(QUIZ_QUESTION_PATH);
+    if (!match) return false;
+
+    if (!/^\d+$/.test(match[1])) return true;
+    const questionId = Number.parseInt(match[1], 10);
+    if (questionId < 1) return true;
+
+    try {
+        const question = await prisma.quizQuestion.findFirst({
+            where: { id: questionId, isPending: false },
+            select: { id: true },
+        });
+        return !question;
+    } catch {
+        // Never 404 a real question because the database is unreachable.
+        return false;
+    }
+}
+
 export async function proxy(request: NextRequest) {
     const origin = request.headers.get("origin");
 
@@ -57,6 +91,8 @@ export async function proxy(request: NextRequest) {
         const limited = rateLimited(request);
         if (limited) return limited;
     }
+
+    if (await isMissingQuizQuestion(request)) return notFound(request);
 
     let response: NextResponse;
 
@@ -100,5 +136,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/api/v1/:path*", "/admin/:path*"],
+    matcher: ["/api/v1/:path*", "/admin/:path*", "/quiz/question/:path*"],
 };

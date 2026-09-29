@@ -8,6 +8,12 @@
 
 **Severity legend:** 🔴 Critical · 🟠 High Priority · 🟡 Medium Priority · 🟢 Low Priority
 
+> ### 🔄 RE-AUDIT UPDATE (28 September 2026)
+> A full re-audit was performed after fixes were committed to the `seo/fixes` branch (6 commits, 50 files; T7 and T8 added on 29 September, not yet committed).
+> **Production is still unchanged — every finding in this report remains live.** However, **12 of the issues now have fixes implemented in code awaiting deployment** (vocabulary SSR, structured data, sitemap, profile noindex, breadcrumbs, real 404s, `lang="bn"`, and more).
+> See **§35 Re-Audit Status** at the end of this report for the fix-by-fix status table, deployment evidence, and revised priorities.
+
+
 ---
 
 ## Table of Contents
@@ -45,6 +51,7 @@
 32. 90-Day Growth Plan
 33. Content Roadmap
 34. Final Deliverables (A–T)
+35. Re-Audit Status (28 September 2026)
 
 ---
 
@@ -123,7 +130,7 @@ Each issue: **Problem → URL → Why it matters → Severity → Solution → E
 - **Solution:** Server-render (SSR/SSG) the 10 words per page — metadata is already server-rendered per page via `generateMetadata`, so render the words in the server component too. With `revalidate`, this costs nothing.
 - **Example:** In `app/(frontend)/vocabulary/[level]/page.tsx`, fetch the page's words server-side (same data source `getWordsByLevel` uses in `sitemap.ts`) and pass them into `LevelPageContent` as props so the table is in the HTML.
 
-**Resolution (29 Sep 2026): fixed.** All 511 vocabulary URLs are now `force-dynamic` and query Prisma directly in the server component. Server mode serves the 10-word page slice plus `q` / `sort` / `category` query parameters with full parity; logged-out and guest users see server HTML, while Google-authenticated users and "Continue as Guest" users keep the IndexedDB bank client-side. The mode is decided server-side by `getServerSession` and overridden client-side after hydration by `useAuthStatus()`, with the two render trees kept as separate hook-stable components. Filter variants emit `noindex, follow` with a canonical clean URL. A related defect was fixed at the same time: `getAllWords` / `getWordsByLevel` were missing `isPending: false` and would have published unapproved contributor submissions. **Note:** `notFound()` on these routes renders correctly but still returns HTTP 200 because of streaming `loading.tsx` boundaries — pre-existing, and tracked separately.
+**Resolution (29 Sep 2026): fixed.** All 511 vocabulary URLs are now `force-dynamic` and query Prisma directly in the server component. Server mode serves the 10-word page slice plus `q` / `sort` / `category` query parameters with full parity; logged-out and guest users see server HTML, while Google-authenticated users and "Continue as Guest" users keep the IndexedDB bank client-side. The mode is decided server-side by `getServerSession` and overridden client-side after hydration by `useAuthStatus()`, with the two render trees kept as separate hook-stable components. Filter variants emit `noindex, follow` with a canonical clean URL. A related defect was fixed at the same time: `getAllWords` / `getWordsByLevel` were missing `isPending: false` and would have published unapproved contributor submissions. **Note:** `notFound()` on these routes renders correctly but still returns HTTP 200 because of streaming `loading.tsx` boundaries — pre-existing, and tracked separately. (That separate tracking is now partly closed: T7 below fixes the same class of bug for quiz question URLs via a proxy check, and the same limitation still applies to `/news/[slug]`, `/profile/*` and invalid vocabulary levels.)
 
 ### T2. `robots.txt` blocks the API that the page content depends on 🔴
 
@@ -191,12 +198,16 @@ Each issue: **Problem → URL → Why it matters → Severity → Solution → E
 - **Severity:** 🟡 Medium
 - **Solution:** `notFound()` instead of a 200 "Not Found" render (the pattern already exists in `news/[slug]/page.tsx`).
 
+**Resolution (29 Sep 2026): fixed, but not where the audit assumed.** `notFound()` was already in `app/(frontend)/quiz/question/[id]/page.tsx` and it was **not** enough: per the Next.js streaming contract, once a `loading.tsx` boundary flushes the shell the status is locked at 200, and this route is wrapped by three of them (`app/(frontend)/loading.tsx` → `quiz/loading.tsx` → `quiz/question/[id]/loading.tsx`). A real 404 therefore cannot be produced by the page. The check was moved into `proxy.ts`, which Next documents as the supported place to answer before rendering: `/quiz/question/:path*` was added to the matcher, a non-numeric or `< 1` id is rejected without touching the database, and a numeric id is resolved with a single indexed `prisma.quizQuestion.findFirst({ where: { id, isPending: false } })` — the same visibility rule `getQuizQuestionById` applies, so a pending-but-unapproved question is a 404 too. On a miss the request is rewritten to an unmatched path, so Next skips rendering and serves `app/global-not-found.tsx` (the same branded 404 the audit verified for `/blog`) with a genuine **404** status. The rewrite fails **open**: any database error falls through to the normal render, so an outage can never 404 a real question. A second defect was fixed alongside: the frontend had no `not-found.tsx` at all, so every in-segment `notFound()` (question pages, `/news/[slug]`, `/profile/*`, invalid vocabulary levels) was rendering Next's unstyled default inside the site chrome. `app/(frontend)/not-found.tsx` now renders the branded `NotFoundContent`. **Verified locally:** `/quiz/question/673` (an approved question) → 200 with title "Quiz Question #673"; `/quiz/question/1`, `/672` and `/99999` (nonexistent) and `/abc` (non-numeric) → **404**, each carrying the branded not-found body. The pending-question path could not be exercised — every row below id 673 in this database is either absent or still pending — but it shares the one query and therefore the same code path.
+
 ### T8. `html lang="en"` on Bangla-default pages 🟠
 
 - **Problem:** `<html lang="en">` (verified in homepage HTML) while default visible content is Bangla ("শূন্য থেকে ইংরেজি আয়ত্ত…").
 - **Why it matters:** Screen readers announce the wrong language; Google may mismatch page language to Bangla queries; wrong accessibility signal.
 - **Severity:** 🟠 High
 - **Solution:** `lang="bn"` as default (or set dynamically with the language provider server-side).
+
+**Resolution (29 Sep 2026): fixed.** `components/html-shell.tsx` now emits `lang="bn"`, matching `getServerSnapshot()` in `components/language-provider.tsx` (which already returns `"bn"` and already syncs `document.documentElement.lang` on toggle, so the client-side language switch is unaffected). `data-lang="bn"` was added alongside it: `app/globals.css` keys the Bangla webfont off `html[data-lang="bn"]`, and that attribute was previously only ever set by a post-hydration effect, so every server-rendered page shipped Bengali text in Inter and swapped fonts after hydration. **Deliberately not changed:** `app/global-not-found.tsx` keeps `lang="en"` — that page's copy is genuinely English, not untranslated Bengali — and the English-only 404 in the new `app/(frontend)/not-found.tsx` carries its own `lang="en"` wrapper for the same reason. `og:locale` is still `en_US` in the shell defaults and is **not** addressed here; it belongs to the page-specific Open Graph pass (T5.1/T5.3), not to this issue. **Verified locally:** `curl -s localhost:3000/ | grep '<html'` → `<html lang="bn" data-lang="bn" …>`.
 
 ### T9. www and legacy domain use temporary redirects 🟡
 
@@ -1065,13 +1076,13 @@ Solid engineering foundation (fast TTFB, clean URLs, valid robots/sitemap, corre
 3. 🔴 4.1 MB homepage with all words + leaderboard PII — §3 T3
 4. 🔴 Zero structured data site-wide — §3 T4, §18
 5. 🔴 No content pages for any priority keyword — §5, §19
-6. 🔴 `<html lang="en">` on a Bangla-default site — §3 T8
+6. 🔴 `<html lang="en">` on a Bangla-default site — §3 T8 *(fixed in code 29 Sep 2026, awaiting deploy)*
 
 ## C. Technical SEO Problems
 
 T1–T13 in §3: SSR gap, robots/API conflict, homepage weight, no schema, incomplete sitemap + fake lastmod, indexable profiles, soft-404 questions, wrong lang, 307 permanent-redirect cases, case-variant 200, missing canonical on `/contribute`, empty quiz page. Verified-good: HTTPS/HSTS, compression, TTFB, 404s, trailing-slash normalization, canonicals on 15/16 main pages, noindex on `/profile`, `/quiz/question/*`, `/docs`.
 
-**Fixed so far (29 September 2026):** T1 (SSR gap), T2 (resolved by T1; robots deliberately left tight), T4 (structured data), T5 (sitemap + lastmod), T6 (indexable profiles), T13 (documented, deferred). **Still open:** T3 (homepage weight + PII), T7 (soft-404 status codes), T8 (`html lang="en"`), T9/T10 (redirects), T11 (canonical on `/contribute`), plus the content and E-E-A-T sections.
+**Fixed so far (29 September 2026):** T1 (SSR gap), T2 (resolved by T1; robots deliberately left tight), T4 (structured data), T5 (sitemap + lastmod), T6 (indexable profiles), T7 (soft-404 → real 404 status via a proxy existence check, plus a branded in-app 404 for every frontend `notFound()`), T8 (`lang="bn"` + `data-lang="bn"`), T13 (documented, deferred). **Still open:** T3 (homepage weight + PII), T9/T10 (redirects), T11 (canonical on `/contribute`), plus the content and E-E-A-T sections.
 
 ## D. Content Problems
 
@@ -1143,6 +1154,84 @@ Prioritized groups in §19. Top five: Oxford 3000 Bangla guide · vocabulary-wit
 3. **Own the entity layer:** consistent one-sentence description, Organization schema, sameAs, domain email, methodology page — building toward Knowledge Panel and AI-citation trust.
 4. **Own the practice loop:** every content page ends in a quiz; every quiz links back to the list — the engagement signal competitors' static articles can't match.
 5. **Measure honestly:** GSC impressions/queries monthly, CWV after each perf fix, one new guide per week, social → content → internal links. No shortcuts: no bought links, no fake reviews, no keyword stuffing, and never at the learner's expense.
+
+---
+
+## 35. Re-Audit Status (28 September 2026)
+
+### Method
+
+1. **Production re-crawl** of 12 checkpoints: homepage, `robots.txt`, `sitemap.xml`, `/vocabulary`, `/vocabulary/a1`, `/about`, `/profile/1`, `/quiz/question/1`, `/contribute`, `www` redirect, `/about` OG, JSON-LD presence.
+2. **Source diff** of the new `seo/fixes` branch vs. the `audit/seo` branch: 6 commits (`b410895 vocabulary hybrid render` → `8a4d14b logged out word fillter`) plus 3 further uncommitted files from the 29 September pass (`proxy.ts`, `components/html-shell.tsx`, new `app/(frontend)/not-found.tsx`) — 50 code files changed, +2,253 / −452 lines.
+3. **Local verification** of the 29 September fixes against a running dev server, since production cannot show them yet: `<html lang="bn" data-lang="bn">` present in server HTML; `/quiz/question/673` (approved) → 200, and `/quiz/question/1`, `/672`, `/99999`, `/abc` → 404, every 404 carrying the branded not-found body; `/vocabulary/a1`, `/news` and `/quiz` unaffected.
+
+### Headline
+
+1. **Production is 100% unchanged.** Every finding in §3–§27 remains live as of this re-audit.
+2. **Twelve issues already have fixes implemented in code** on `seo/fixes` (6 pushed commits; T7 and T8 in the working tree) but **not deployed**.
+3. **Revised #1 priority: deploy the branch**, then run the verification checklist — most P0/P1 technical items flip green at once.
+
+### Production evidence (original audit → re-audit)
+
+| Check | First audit | Re-audit | Changed? |
+|---|---|---|---|
+| Homepage HTML size | 4,101,359 B | **4,101,616 B** | ❌ no |
+| `apple` occurrences on home | 8 | 8 | ❌ no |
+| Google avatar URLs (PII) on home | 3+ | **58** | ⚠️ worse |
+| `<html lang>` | `en` | `en` | ❌ no — T8 now fixed in code, expect `bn` after deploy |
+| Site `<title>` | Everything You Need… | Everything You Need… | ❌ no |
+| `/vocabulary/a1` H1 / words | 0 / 0 | 0 / 0 | ❌ no |
+| `/vocabulary` hub → level links | 0 | 0 | ❌ no |
+| JSON-LD (home, about, a1) | 0 | 0 | ❌ no |
+| `/about` `og:title` | homepage default | homepage default | ❌ no |
+| sitemap `<loc>` count | 520 | 520 (still missing about/privacy/quiz hubs) | ❌ no |
+| robots `Allow: /api/v1/words/` | absent | absent | ❌ no |
+| `/profile/1` robots | index, follow | index, follow | ❌ no |
+| `www` → apex | 307 | 307 | ❌ no |
+| `/quiz/question/1` | 200 + noindex | 200 + noindex | ❌ no — T7 now fixed in code, expect **404** after deploy |
+| `/contribute` canonical | missing | missing | ❌ no |
+
+### Code status — `seo/fixes` branch (6 commits pushed + 3 working-tree files, **NOT deployed**)
+
+| Audit item | Code status | Evidence in repo |
+|---|---|---|
+| T1 vocabulary SSR | ✅ Implemented | `force-dynamic` + `browsePublicWords` → `initialWords` on both `[level]` and `[pageNum]`; H1 in `level-hero`; server filter bar for logged-out users |
+| T4 structured data | ✅ Implemented | `components/seo/site-schema.tsx` (Organization + WebSite with SearchAction) rendered in layout; `FAQPage` on `/about` (`lib/site-faq.ts`); `Article` on `/news/[slug]`; `DefinedTermSet` on level pages (schema matches visible content); shared `JsonLd` component |
+| T5 sitemap | ✅ Implemented (1 gap) | adds `/about`, `/privacy`, `/quiz/grammar`, `/quiz/class`, `/quiz/quick`; honest lastmod (static routes omit it; vocab pages use real per-level DB date). **Missing: `/quiz/vocabulary`** |
+| T6.1 profile noindex | ✅ Implemented | `robots: { index: false }` in `profile/[id]` |
+| T6.2 quiz soft-404 | ✅ Implemented | `notFound()` in `quiz/question/[id]`; **status code still needed a second fix** — every frontend route is under a `loading.tsx` boundary, so the streamed response cannot carry a 404. `proxy.ts` now matches `/quiz/question/:path*`, rejects non-numeric/`< 1` ids without a DB hit, resolves numeric ids with `prisma.quizQuestion.findFirst({ id, isPending: false })`, fails open on DB error, and rewrites misses to the global not-found route. New `app/(frontend)/not-found.tsx` gives every in-segment `notFound()` the branded 404 |
+| Breadcrumbs (audit §16) | ✅ New | `components/breadcrumb*.tsx` on vocabulary hub, level, pagination, quiz pages |
+| Parameter-URL hygiene | ✅ Bonus fix (beyond audit) | filtered variants (`?q=`/`?sort=`/`?category=`) get `noindex` + canonical to clean URL |
+| T2 robots `Allow` | ❌ **Open** | `app/robots.ts` unchanged |
+| T3 homepage weight + PII | ❌ **Open** | `getAllWords()` + full `getLeaderboard()` still in `page.tsx` |
+| T5.1 / T5.3 titles & OG | ❌ Open | layout metadata unchanged; no page-level `openGraph`; **plus** a conflicting second default title in `html-shell.tsx` |
+| T5.4 `lang="bn"` | ✅ Implemented | `components/html-shell.tsx` → `lang="bn"` + `data-lang="bn"` (the latter makes `globals.css` apply the Bangla font in server HTML instead of after hydration) |
+| T6.3 contribute canonical | ❌ Open | no `alternates` (re-verified live) |
+| T6.4 permanent 301s | ❓ Verify in hosting config | live `www`/old domain still 307 |
+| T10 case-variant 308 | ❌ Not addressed | canonical still handles it (low risk) |
+| §6–§11 content & E-E-A-T copy | ❌ Open | About still lacks methodology + Oxford attribution (re-verified in `about-client.tsx`) |
+
+### New watch items (introduced by the fixes themselves)
+
+1. **`force-dynamic` on level pages** — full-route cache is gone; every request queries DB + session. Original audit measured 0.46 s TTFB prerendered. Re-measure after deploy; if it degrades, serve logged-out visitors via ISR.
+2. **Two competing title defaults** — `app/(frontend)/layout.tsx` ("Everything You Need…") vs `components/html-shell.tsx` ("Learn English Vocabulary in Bangla…"). The layout wins today (live proof). Consolidate before adding more page titles.
+3. **SearchAction schema asserts behavior** — `site-schema.tsx` advertises `/search?q={query}`; confirm the search page honors `q`, or remove `potentialAction`.
+4. **Homepage PII grew** — 58 Google avatar URLs live (was 3+): urgency of T3 increased.
+5. **`/quiz/vocabulary`** missing from the new sitemap — one-line gap.
+6. **The proxy now opens a database connection** for `/quiz/question/*` (added for T7). It is a single indexed primary-key lookup, it runs ahead of render only on that path, and it is fail-open, but it is a new dependency on the request hot path — worth watching for cold-start latency after deploy.
+7. **The 200-vs-404 streaming limitation is not site-wide fixed.** The proxy covers quiz question URLs only. `/news/[slug]`, `/profile/*` and invalid vocabulary URLs still return a streamed 200 with `noindex` for missing content. That is Google's documented noindex behaviour and does not cause indexation, so it is low priority — but it is the reason those routes can still be labelled "soft 404".
+
+### Revised priorities after re-audit
+
+1. 🔴 **Deploy `seo/fixes`** → run the verification checklist (solutions playbook §13) → request re-indexing in GSC. This single action closes T1, T4, T5 (mostly), T6.1, T6.2, T7, T8 + breadcrumbs.
+2. 🔴 **T3 homepage slimming** — the largest remaining open P0 (4.1 MB + user PII).
+3. 🟠 **60-minute code batch:** robots `Allow: /api/v1/words/` · add `/quiz/vocabulary` to sitemap · contribute canonical · new title/description · remove duplicate title default in `html-shell.tsx`.
+4. 🟠 Page-specific Open Graph (including `og:locale`, still `en_US` — see T8) + Vercel permanent 301s (www + legacy domain).
+5. 🟠 **Content:** copy bank (S8) + E-E-A-T (S10: About methodology, Oxford attribution, C2 decision).
+6. 🟡 **Cornerstone guides (S9)** — Oxford 3000 Bangla first; the biggest GEO upside still untouched.
+7. 🟡 Post-deploy monitoring: level-page TTFB, Rich Results Test, GSC coverage/index count.
+
+
 
 ---
 
