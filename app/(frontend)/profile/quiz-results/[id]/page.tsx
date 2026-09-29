@@ -1,8 +1,51 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getCombinedExamResultById } from "@/services/quiz-result.service";
 import { QuizPracticeResultDetail } from "@/components/quiz-practice-result-detail";
 import { BackButton } from "@/components/back-button";
+import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const resultId = parseInt(id, 10);
+
+  if (Number.isNaN(resultId) || resultId < 1) {
+    return { title: `Quiz Result Not Found | ${SITE_NAME}` };
+  }
+
+  const result = await getCombinedExamResultById(resultId);
+  const data = result.success ? result.data : null;
+  const correct = data?.correctQuestions?.length ?? data?.correctAnswers ?? 0;
+  const total = data?.questionCount ?? correct;
+  const title = `I scored ${correct}/${total} on Zero English!`;
+  const description = "Can you beat my score?";
+  const image = `${SITE_URL}/api/quiz-result-image/${resultId}`;
+
+  return {
+    title: `${title} | ${SITE_NAME}`,
+    description,
+    alternates: { canonical: `/profile/quiz-results/${resultId}` },
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      siteName: SITE_NAME,
+      images: [{ url: image, alt: title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+  };
+}
 
 export default async function QuizPracticeResultDetailPage({
   params,
