@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Zero English",
+  title: "Privacy Policy",
   description:
     "Privacy policy for Zero English - how we collect, use, and protect your data.",
   alternates: { canonical: "/privacy" },

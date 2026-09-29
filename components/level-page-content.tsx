@@ -1,7 +1,12 @@
 "use client";
 
+import type { ComponentProps, ReactNode } from "react";
 import Link from "next/link";
 import { useCachedWords } from "@/lib/use-cached-words";
+import { useAuthStatus } from "@/lib/auth-store";
+import { mainCategoryLabel } from "@/lib/category";
+import { getLevelMeta, isLevelLive } from "@/lib/level-copy";
+import type { Word, LevelPageSort } from "@/lib/data";
 import { LevelHero } from "@/components/level-hero";
 import { LevelWordsClient } from "@/components/level-words-client";
 import { useT } from "@/components/language-provider";
@@ -87,7 +92,46 @@ const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
 export interface LevelPageContentProps {
   level: string;
   pageNum?: number;
+  /**
+   * True when the server found no NextAuth session. The server still renders the
+   * full word list in that case; this only decides whether the page is allowed
+   * to read the IndexedDB word bank.
+   */
+  serverMode?: boolean;
+  /**
+   * The page from an explicit `/vocabulary/<level>/<n>` segment, or `null` on the
+   * bare level URL. Bank mode uses it to honour a deep link and then drop the
+   * segment; server mode ignores it.
+   */
+  urlPage?: number | null;
+  initialWords?: Word[];
+  initialTotal?: number;
+  /**
+   * Unfiltered size of the whole level. The hero and the progress ring are
+   * about the level, not the current filter, so they must never be given
+   * `initialTotal` when a `?q=` or `?category=` filter is active.
+   */
+  levelTotal?: number;
+  initialTotalPages?: number;
+  initialCategories?: string[];
+  initialCategoryCount?: number;
+  initialCategoryLabel?: string;
+  initialWordIds?: number[];
+  search?: string;
+  sort?: LevelPageSort;
+  category?: string;
 }
+
+type HeroStats = Pick<
+  ComponentProps<typeof LevelHero>,
+  | "totalCount"
+  | "categoryCount"
+  | "categoryLabel"
+  | "introEn"
+  | "introBn"
+  | "topics"
+  | "levelWordIds"
+>;
 
 function NotFoundScreen() {
   const t = useT();
@@ -146,10 +190,10 @@ function OfflineScreen({ onRetry }: { onRetry: () => void }) {
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
       <div className="max-w-md mx-auto text-center mt-24">
         <div className="text-6xl mb-6">📡</div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
           {t("সংযোগ পাওয়া যাচ্ছে না", "You're offline")}
         </h1>
-        <p className="text-zinc-500 dark:text-zinc-400 mb-8">
+        <p className="text-zinc-500 dark:text-zinc-400 mt-2 mb-8">
           {t(
             "এই শব্দভাণ্ডারটি এখনও ডাউনলোড হয়নি। প্রথমে অনলাইনে বেতার-শব্দভাণ্ডার পৃষ্ঠাটি খুলুন, তারপর আবার চেষ্টা করুন।",
             "This vocabulary hasn't been downloaded yet. Open the vocabulary page once while online to download it, then try again."
@@ -164,19 +208,192 @@ function OfflineScreen({ onRetry }: { onRetry: () => void }) {
   );
 }
 
-export function LevelPageContent({ level, pageNum = 1 }: LevelPageContentProps) {
-  const { words, loading, error, refresh, getWordsByLevel } = useCachedWords();
+function LevelPageFrame({
+  config,
+  level,
+  stats,
+  children,
+}: {
+  config: LevelConfig;
+  level: string;
+  stats: HeroStats;
+  children: ReactNode;
+}) {
+  return (
+    <div className="relative min-h-dvh overflow-hidden">
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
+      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cuc3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
+
+      <LevelHero
+        level={level}
+        label={config.label}
+        labelBn={config.labelBn}
+        gradient={config.gradient}
+        text={config.text}
+        bg={config.bg}
+        border={config.border}
+        solid={config.solid}
+        stroke={config.stroke}
+        {...stats}
+      />
+
+      <div className="relative px-4 pb-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A level that exists but is not finished. Rendering a 1-word table under a
+ * "Mastery" heading is worse than saying plainly that the list is being
+ * written, so that is what this shows instead.
+ */
+function LevelInProgressScreen({
+  level,
+  labelBn,
+  label,
+  total,
+}: {
+  level: string;
+  labelBn: string;
+  label: string;
+  total: number;
+}) {
+  const t = useT();
+  return (
+    <div className="relative min-h-dvh overflow-hidden px-6 py-16">
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
+      <div className="max-w-xl mx-auto text-center mt-20">
+        <div className="text-6xl mb-6">🚧</div>
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+          {t(`${level} · ${labelBn} লিস্ট তৈরি হচ্ছে`, `${level} · ${label} list is being built`)}
+        </h1>
+        <p className="text-zinc-500 dark:text-zinc-400 mb-4">
+          {t(
+            `এই লেভেলে এখন ${total}টি শব্দ আছে। যথেষ্ট শব্দ জমা হওয়ার আগে এটিকে শেখার জন্য খোলা হচ্ছে না, তাই এখনো সার্চ ইঞ্জিন থেকে বাদ দেওয়া হয়েছে।`,
+            `This level has ${total} entries so far. It is not open for study, and it is kept out of search results, until it holds enough words to be worth your time.`
+          )}
+        </p>
+        <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-8">
+          {t(
+            "ততক্ষণ নিচের লেভেলগুলোতে শুরু করুন।",
+            "Start from one of the levels below in the meantime."
+          )}
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Button asChild>
+            <Link href={`/vocabulary/${(VALID_LEVELS[VALID_LEVELS.indexOf(level as (typeof VALID_LEVELS)[number]) - 1] ?? "A1").toLowerCase()}`}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              {t("আগের লেভেল", "Previous level")}
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/vocabulary">{t("সব লেভেল", "All levels")}</Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+export function LevelPageContent({
+  level,
+  pageNum = 1,
+  serverMode = false,
+  urlPage = null,
+  initialWords,
+  initialTotal,
+  levelTotal,
+  initialTotalPages,
+  initialCategories,
+  initialCategoryCount,
+  initialCategoryLabel,
+  initialWordIds,
+  search = "",
+  sort = "default",
+  category = "all",
+}: LevelPageContentProps) {
+  // The server can only see a real NextAuth session. "Continue as Guest" lives
+  // in localStorage, so the local identity gets the final say once hydrated —
+  // that is what keeps guest-mode users on the cached word bank.
+  const { status, hydrated } = useAuthStatus();
+  const isServerMode = serverMode && !(hydrated && status !== "none");
+
+  const {
+    words: bankWords,
+    loading,
+    error,
+    refresh,
+    getWordsByLevel,
+  } = useCachedWords({ enabled: !isServerMode });
 
   const upper = level.toUpperCase();
   const valid = VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number]);
-  const allWords = valid ? getWordsByLevel(upper) : [];
   const config = valid
     ? levelConfig[upper as (typeof VALID_LEVELS)[number]]
     : null;
+  const meta = getLevelMeta(upper);
 
-  if (!valid) return <NotFoundScreen />;
+  if (!valid || !config) return <NotFoundScreen />;
 
-  if (!loading && error === "offline" && words.length === 0) {
+  if (isServerMode) {
+    if (!initialWords) return <NotFoundScreen />;
+
+    const totalCount = initialTotal ?? initialWords.length;
+    // The hero describes the level, so it needs the unfiltered count even when
+    // the list below it has been narrowed by a search or category filter.
+    const levelSize = levelTotal ?? totalCount;
+    const totalPages =
+      initialTotalPages ?? Math.max(1, Math.ceil(totalCount / 10));
+    const categories = initialCategories ?? [];
+
+    if (meta && !isLevelLive(levelSize)) {
+      return (
+        <LevelInProgressScreen
+          level={upper}
+          label={meta.label}
+          labelBn={meta.labelBn}
+          total={levelSize}
+        />
+      );
+    }
+
+    return (
+      <LevelPageFrame
+        config={config}
+        level={upper}
+        stats={{
+          totalCount: levelSize,
+          categoryCount: initialCategoryCount ?? categories.length,
+          categoryLabel: initialCategoryLabel ?? mainCategoryLabel([]),
+          introEn: meta?.introEn ?? "",
+          introBn: meta?.introBn ?? "",
+          topics: meta?.topics ?? [],
+          levelWordIds: initialWordIds ?? [],
+        }}
+      >
+        <LevelWordsClient
+          words={initialWords}
+          gradient={config.gradient}
+          level={upper}
+          pageNum={pageNum}
+          serverMode
+          totalCount={totalCount}
+          totalPages={totalPages}
+          categories={categories}
+          search={search}
+          sort={sort}
+          category={category}
+        />
+      </LevelPageFrame>
+    );
+  }
+
+  const allWords: Word[] = getWordsByLevel(upper);
+
+  if (!loading && error === "offline" && bankWords.length === 0) {
     return <OfflineScreen onRetry={refresh} />;
   }
 
@@ -184,33 +401,32 @@ export function LevelPageContent({ level, pageNum = 1 }: LevelPageContentProps) 
     return <LoadingScreen />;
   }
 
-  if (words.length === 0 || allWords.length === 0) {
+  if (bankWords.length === 0 || allWords.length === 0) {
     return <NotFoundScreen />;
   }
 
   return (
-    <div className="relative min-h-dvh overflow-hidden">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
-
-      <LevelHero
-        level={upper}
-        label={config!.label}
-        labelBn={config!.labelBn}
-        gradient={config!.gradient}
-        text={config!.text}
-        bg={config!.bg}
-        border={config!.border}
-        solid={config!.solid}
-        stroke={config!.stroke}
+    <LevelPageFrame
+      config={config}
+      level={upper}
+      stats={{
+        totalCount: allWords.length,
+        categoryCount: new Set(
+          allWords.map((w) => w.category).filter(Boolean)
+        ).size,
+        categoryLabel: mainCategoryLabel(allWords),
+        introEn: meta?.introEn ?? "",
+        introBn: meta?.introBn ?? "",
+        topics: meta?.topics ?? [],
+        levelWordIds: allWords.map((w) => w.id),
+      }}
+    >
+      <LevelWordsClient
         words={allWords}
+        gradient={config.gradient}
+        level={upper}
+        urlPage={urlPage}
       />
-
-      <div className="relative px-4 pb-12 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">
-          <LevelWordsClient words={allWords} gradient={config!.gradient} level={upper} pageNum={pageNum} />
-        </div>
-      </div>
-    </div>
+    </LevelPageFrame>
   );
 }

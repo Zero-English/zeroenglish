@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
-import HtmlShell from "@/components/html-shell";
+import HtmlShell, { shellMetadata } from "@/components/html-shell";
 
 export const metadata: Metadata = {
-  title: "You're Offline",
+  ...shellMetadata,
+  title: "You're Offline | Zero English",
   description: "No internet connection",
-  manifest: "/manifest.webmanifest",
-  icons: "/assets/logo/favicon.webp",
-  other: {
-    "theme-color": "#f97316",
-  },
   robots: {
     index: false,
     follow: false,

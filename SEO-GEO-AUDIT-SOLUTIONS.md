@@ -1,12 +1,36 @@
 # Zero English — Production-Ready SEO + GEO Solutions Playbook
 
 **Companion to:** `SEO-GEO-AUDIT-REPORT.md` (audit date: 28 September 2026)
-**Status:** Recommendations only — **no code, config, database, or CMS content has been changed.** Every snippet below is a *proposed* change you (or a developer) apply manually.
+**Status:** **Partially applied.** Code, config and database changes have been made as of 29 September 2026 — see the table below. Everything not listed is still a *proposed* change you (or a developer) apply manually.
 **Goal:** Copy-paste-ready fixes, in dependency order, with verification steps.
+
+## Application status (29 September 2026)
+
+| Solution | Audit ref | State | Notes |
+|---|---|---|---|
+| S1 | T2 | **Not applied — deliberately** | Resolved transitively by S2. `app/robots.ts` stays tight on purpose; see the T2 resolution note in the audit report. |
+| S2 | T1 | **Applied** | All 511 vocabulary URLs server-rendered via Prisma; hybrid server/client mode; `isPending: false` leak fixed. |
+| S3 | T3 | Not applied | Open. |
+| S4 | T5 | **Applied** | 520 → 525 URLs; fake `lastmod` eliminated (per-level `MAX(updatedAt)` + omitted on static routes); `changefreq` corrected. |
+| S6 | T6 | **Applied, wider than scoped** | Noindexed `/profile/[id]` plus the two `/profile/*-results/[id]` routes the audit missed. |
+| S7.1 | T4 | **Applied** | `Organization` + `WebSite` site-wide. |
+| S7.2 | T4 | **Applied** | `BreadcrumbList` + a visible trail on the vocabulary hubs. |
+| S7.3 | T4 | **Applied** | `FAQPage` on `/about`, built from the array the page renders so it cannot drift. |
+| S7.4 | T4 | **Applied** | `Article` on `/news/[slug]`. |
+| — | T4 | **Applied (extra)** | `DefinedTermSet` on the 6 level hubs, enabled by S2. |
+| S5, S8–S12 | various | Not applied | Open. |
+| — | T13 | Documented, deferred | `/quiz/vocabulary` renders nothing for crawlers; see the audit report. |
+
+**Known follow-ups:** the `sameAs` and `contactPoint` values in S7.1 were taken from the audit and still need verifying. `notFound()` on vocabulary routes renders the correct page but returns HTTP 200 because of streaming `loading.tsx` boundaries — pre-existing, unfixed.
 
 **Labels used:**
 - 🔴 P0 (blocking) · 🟠 P1 (high) · 🟡 P2 (medium) · 🟢 P3 (low)
 - **[NO-CODE]** = editable in CMS/admin/dashboard only · **[DEV]** = requires a code change · **[CONFIG]** = hosting/DNS/dashboard setting
+
+> ### 🔄 IMPLEMENTATION STATUS (re-audit: 28 September 2026)
+> A re-audit checked production **and** the `seo/fixes` branch. **Nothing is deployed yet**, but several solutions below are **already implemented in code awaiting release** — notably S2 (vocabulary SSR), S7 (all four schema types), S4 (sitemap), and parts of S6.
+> **See §13 at the end of this playbook** for the solution-by-solution status table, the deploy-first checklist, and the revised remaining-work order. Don't re-implement what already exists on that branch.
+
 
 ---
 
@@ -823,6 +847,80 @@ Paste into: Organization schema `description` (S7.1), Facebook page bio, GitHub 
 - ❌ No schema for content that isn't on the page
 - ❌ No deleting short pages that fully satisfy their intent
 - ❌ No SEO change that makes a page worse for a learner — learner first, always
+
+---
+
+## S13. Implementation Status (re-audit — 28 September 2026)
+
+Verified against **production** (12-endpoint re-crawl) and the **`seo/fixes` branch** (6 commits after `audit/seo`, diff: 49 files, +2,240/−452). **Nothing below is deployed** — live site still matches the original audit on every check.
+
+| Solution | Status | Evidence / gap |
+|---|---|---|
+| S1 robots allow | ❌ Open | `app/robots.ts` unchanged (still `Disallow: /api`, no Allow) |
+| S2 vocabulary SSR | ✅ In code (undeployed) | `[level]` + `[pageNum]` server-fetch `browsePublicWords` → `initialWords`; H1 lives in `level-hero`; logged-out server filter bar added; `force-dynamic` |
+| S3 homepage slimming | ❌ Open | `getAllWords()` + full `getLeaderboard()` still in `page.tsx`; live home = 4,101,616 B with **58** Google avatar URLs (was 3+) |
+| S4 sitemap | ✅ Mostly in code | adds `/about`, `/privacy`, `/quiz/grammar`, `/quiz/class`, `/quiz/quick`; honest lastmod (static routes omit it; vocab pages get real per-level DB date). **Gap: `/quiz/vocabulary` still missing** (+ optional `/contribute`) |
+| S5.1 title/description | ❌ Open | layout still "Everything You Need to Master English"; **plus** a second conflicting default in `components/html-shell.tsx` ("Learn English Vocabulary in Bangla…") — consolidate to one |
+| S5.3 page-specific OG | ❌ Open | no `openGraph` in `about` / level metadata — inner pages still share homepage OG |
+| S5.4 `lang` | ❌ Open | `html-shell.tsx` still `lang="en"` |
+| S6.1 profile noindex | ✅ In code | `robots: { index: false, follow: true }` in `profile/[id]/page.tsx` |
+| S6.2 soft-404 | ✅ In code | `notFound()` in `quiz/question/[id]/page.tsx` (live still returns 200) |
+| S6.3 contribute canonical | ❌ Open | no `alternates` (live re-verified: canonical absent) |
+| S6.4 permanent 301s | ❓ Config — verify | not expressible in repo; check Vercel: `www` and `zeroenglish.tahmidhasan.net` still **307** live |
+| S7.1 Organization + WebSite | ✅ In code | `components/seo/site-schema.tsx` rendered in frontend layout — matches playbook nearly verbatim (incl. canonical description sentence) |
+| S7.2 Breadcrumbs | ✅ In code | `components/breadcrumb*.tsx` on vocabulary hub, level, pagination, quiz pages |
+| S7.3 FAQPage | ✅ In code | `about/page.tsx` + `lib/site-faq.ts` (bilingual entries) |
+| S7.4 Article | ✅ In code | `news/[slug]/page.tsx`; **bonus:** `DefinedTermSet` schema on level pages, schema/content-matched |
+| S8 copy bank | ❌ Open | CMS copy unchanged (hero, level intros, guest states, C2 notice) |
+| S9 new pages | ❌ Open | no `/guides` yet |
+| S10 E-E-A-T | ❌ Open | About still lacks methodology + Oxford non-affiliation note (re-verified in `about-client.tsx`) |
+| S11 style guide | — process | n/a |
+| S12 rollout | ⚠️ Revised | order changed — see below |
+
+**Bonus fix beyond the audit:** filtered level URLs (`?q=` / `?sort=` / `?category=`) now get `noindex` + canonical back to the clean URL — prevents parameter duplicate-content (new in `generateMetadata` on level pages).
+
+### Deploy-first checklist (S12 revised — do this before any other work)
+
+The `seo/fixes` branch already implements S2, S4 (mostly), S6.1, S6.2, and all of S7. **Deploy it first, then verify:**
+
+```text
+[ ] Deploy seo/fixes to production (Vercel)
+[ ] curl -s https://zeroenglish.org/vocabulary/a1 | grep -c "<h1"          → 1 (was 0)
+[ ] curl -s https://zeroenglish.org/vocabulary/a1 | grep -ci "apple"       → > 0 (was 0)
+[ ] curl -s https://zeroenglish.org/vocabulary | grep -o 'href="/vocabulary/a1"'  → present (was 0)
+[ ] curl -s https://zeroenglish.org/ | grep -c 'application/ld+json'       → ≥ 2 (was 0)
+[ ] curl -s https://zeroenglish.org/about | grep -c 'FAQPage'              → 1
+[ ] curl -s https://zeroenglish.org/sitemap.xml | grep -c '<loc>'          → 525 (was 520)
+[ ] curl -s https://zeroenglish.org/profile/1 | grep 'noindex'             → present (was index)
+[ ] curl -s -o /dev/null -w '%{http_code}' https://zeroenglish.org/quiz/question/1 → 404 (was 200)
+[ ] Rich Results Test on / , /about , /vocabulary/a1                        → 0 errors
+[ ] PageSpeed/field check: level-page TTFB (now force-dynamic — watch it)
+[ ] GSC → request re-indexing of /vocabulary/a1 and / (force Google to re-crawl rendered HTML)
+```
+
+### Remaining work order (after deploy)
+
+| # | Item | Effort |
+|---|---|---|
+| 1 | S1 robots `Allow: /api/v1/words/` | 2 min |
+| 2 | S4 gap: add `/quiz/vocabulary` to `staticRoutes` (+ `/contribute` if public) | 5 min |
+| 3 | S6.3 contribute canonical | 5 min |
+| 4 | S5.1 + S5.4 title/description + `lang="bn"` — **also remove the conflicting duplicate title in `html-shell.tsx`** | 1 h |
+| 5 | S3 homepage slimming (still the largest open P0: 4.1 MB + 58 avatar URLs) | 2–4 h |
+| 6 | S5.3 page-specific Open Graph on main templates | 2 h |
+| 7 | S6.4 Vercel permanent 301s for `www` + legacy domain | 10 min (config) |
+| 8 | S8 copy bank (hero, level intros, guest states, C2 notice) | 2–4 h |
+| 9 | S10 About methodology + Oxford attribution + domain email | 3 h |
+| 10 | S9 cornerstone guides (Oxford 3000 first) | 2–3 days each |
+| 11 | Post-deploy: confirm `/search?q=` actually reads the query (or drop the SearchAction in `site-schema.tsx`) | 15 min |
+
+### New watch items introduced by the fixes
+
+1. **`force-dynamic` on level pages** — no more full-route cache; every hit queries DB + session. Previously measured TTFB was 0.46 s prerendered. Re-measure after deploy; if TTFB degrades, serve logged-out requests via ISR/stale-while-revalidate.
+2. **Two competing title defaults** — `app/(frontend)/layout.tsx` ("Everything You Need…") vs `components/html-shell.tsx` ("Learn English Vocabulary in Bangla…"). The layout wins today (live proof); keep one source of truth before adding more page titles.
+3. **SearchAction schema asserts behavior** — `site-schema.tsx` advertises `/search?q={query}`; confirm the search page honors `q`, otherwise remove `potentialAction` (schema must not promise what the page doesn't do).
+4. **`/quiz/vocabulary` missing** from the new sitemap — one-line gap in `staticRoutes`.
+5. **Leaderboard PII grew** (58 avatar URLs live) — reinforces S3 as the top open code item.
 
 ---
 

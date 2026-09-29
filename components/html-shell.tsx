@@ -5,7 +5,13 @@ import { Geist, Geist_Mono, Hind_Siliguri, Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionProvider from "@/components/session-provider";
-import { SITE_URL, SITE_NAME, SITE_DEFAULT_DESCRIPTION } from "@/lib/site-config";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_OG_IMAGE,
+  SITE_DEFAULT_DESCRIPTION,
+  SITE_DEFAULT_TITLE,
+} from "@/lib/site-config";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -25,40 +31,46 @@ const geistMono = Geist_Mono({
     subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+/**
+ * Metadata every route group that renders `HtmlShell` needs: the absolute URL
+ * base for relative `canonical`/`og:image` values, the manifest, icons and the
+ * theme colour. Each layout spreads this and then overrides only what is
+ * actually different for that group, so there is a single place to change any
+ * of it.
+ *
+ * Title, description, openGraph and twitter are deliberately *not* set here:
+ * those are per-page values, and setting them on the shell leaked the homepage
+ * copy onto every page. Each group sets its own default title and inherits the
+ * per-page values from its children.
+ */
+export const shellMetadata: Metadata = {
     metadataBase: new URL(SITE_URL),
-    title: "Learn English Vocabulary in Bangla | Zero English",
-    description: SITE_DEFAULT_DESCRIPTION,
     manifest: "/manifest.webmanifest",
     icons: "/assets/logo/favicon.webp",
-    openGraph: {
-        title: "Learn English Vocabulary in Bangla | Zero English",
-        description: SITE_DEFAULT_DESCRIPTION,
-        locale: "en_US",
-        url: SITE_URL,
-        siteName: SITE_NAME,
-        images: [
-            {
-                url: "/assets/logo/open-graph.png",
-                width: 1254,
-                height: 1254,
-                alt: "Zero English - Learn English Vocabulary in Bangla",
-            },
-        ],
-        type: "website",
-    },
-    twitter: {
-        card: "summary_large_image",
-        title: "Learn English Vocabulary in Bangla | Zero English",
-        description: SITE_DEFAULT_DESCRIPTION,
-        images: ["/assets/logo/open-graph.png"],
-    },
     other: {
         "theme-color": "#f97316",
     },
-    robots: {
-        index: true,
-        follow: true,
+};
+
+/** Default social card used by any page that does not ship its own image. */
+export const defaultSocialImage = SITE_OG_IMAGE;
+
+export const defaultSiteMetadata: Metadata = {
+    title: SITE_DEFAULT_TITLE,
+    description: SITE_DEFAULT_DESCRIPTION,
+    openGraph: {
+        title: SITE_DEFAULT_TITLE,
+        description: SITE_DEFAULT_DESCRIPTION,
+        url: SITE_URL,
+        siteName: SITE_NAME,
+        type: "website",
+        images: [SITE_OG_IMAGE],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: SITE_DEFAULT_TITLE,
+        description: SITE_DEFAULT_DESCRIPTION,
+        images: [SITE_OG_IMAGE.url],
     },
 };
 
@@ -69,7 +81,8 @@ export default function RootLayout({
 }>) {
     return (
         <html
-            lang="en"
+            lang="bn"
+            data-lang="bn"
             className={cn(
                 "h-full",
                 "antialiased",

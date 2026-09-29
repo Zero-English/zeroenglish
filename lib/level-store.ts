@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { createLocalStorage } from "./state-storage";
+import { createScopedLocalStorage } from "./state-storage";
+import { identityNamespace } from "./auth-store";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 export type SelectedLevel = (typeof VALID_LEVELS)[number] | null;
@@ -21,7 +22,7 @@ export const useLevelStore = create<LevelState>()(
     }),
     {
       name: "selected-level",
-      storage: createLocalStorage<{ level?: string | null }>(),
+      storage: createScopedLocalStorage<{ level?: string | null }>(identityNamespace),
       skipHydration: true,
       partialize: (state) => ({
         level: state.level ? (state.level.toUpperCase() as string) : null,

@@ -39,6 +39,10 @@ type PaginationLinkProps = {
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
   React.ComponentProps<"a"> & { href: string }
 
+/**
+ * A real anchor. Used by the server-rendered (logged-out) pages, where the
+ * pagination links have to be crawlable and navigate.
+ */
 function PaginationLink({
   className,
   isActive,
@@ -58,6 +62,37 @@ function PaginationLink({
         data-active={isActive}
         {...props}
       />
+    </Button>
+  )
+}
+
+type PaginationButtonProps = {
+  isActive?: boolean
+} & Omit<React.ComponentProps<typeof Button>, "variant" | "asChild">
+
+/**
+ * A plain button, for when the page being shown is client state rather than a
+ * URL — the cached word bank already has every word, so navigating would throw
+ * the page away only to re-render the same list.
+ */
+function PaginationButton({
+  className,
+  isActive,
+  size = "icon",
+  children,
+  ...props
+}: PaginationButtonProps) {
+  return (
+    <Button
+      type="button"
+      variant={isActive ? "outline" : "ghost"}
+      size={size}
+      className={cn(className)}
+      data-slot="pagination-link"
+      data-active={isActive}
+      {...props}
+    >
+      {children}
     </Button>
   )
 }
@@ -98,6 +133,46 @@ function PaginationNext({
   )
 }
 
+function PaginationPreviousButton({
+  className,
+  text = "Previous",
+  ...props
+}: Omit<React.ComponentProps<typeof PaginationButton>, "type"> & {
+  text?: string
+}) {
+  return (
+    <PaginationButton
+      aria-label="Go to previous page"
+      size="default"
+      className={cn("pl-2!", className)}
+      {...props}
+    >
+      <ChevronLeftIcon data-icon="inline-start" />
+      <span className="hidden sm:block">{text}</span>
+    </PaginationButton>
+  )
+}
+
+function PaginationNextButton({
+  className,
+  text = "Next",
+  ...props
+}: Omit<React.ComponentProps<typeof PaginationButton>, "type"> & {
+  text?: string
+}) {
+  return (
+    <PaginationButton
+      aria-label="Go to next page"
+      size="default"
+      className={cn("pr-2!", className)}
+      {...props}
+    >
+      <span className="hidden sm:block">{text}</span>
+      <ChevronRightIcon data-icon="inline-end" />
+    </PaginationButton>
+  )
+}
+
 function PaginationEllipsis({
   className,
   ...props
@@ -121,10 +196,13 @@ function PaginationEllipsis({
 
 export {
   Pagination,
+  PaginationButton,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
+  PaginationNextButton,
   PaginationPrevious,
+  PaginationPreviousButton,
 }

@@ -255,12 +255,12 @@ export function SearchClient() {
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-bold tracking-tight mb-3 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-              {t("অনুসন্ধান", "Search")}
+              {t("ইংরেজি শব্দ খুঁজুন", "Search English Words")}
             </h1>
-            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 max-w-xl">
+            <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 max-w-2xl">
               {t(
-                "যেকোনো ইংরেজি শব্দ খুঁজুন এবং সরাসরি এর বাংলা অর্থ, উদাহরণ, সমার্থক ও বিপরীত শব্দ দেখুন।",
-                "Look up any English word and jump straight to its Bangla meaning, examples, synonyms and antonyms."
+                "ইংরেজি বানান বা বাংলা অর্থ দিয়ে খুঁজুন। পাওয়া ফলাফলে থাকে ইংরেজি সংজ্ঞা, উদাহরণ বাক্য, প্রতিশব্দ, বিপরীত শব্দ এবং কোন CEFR লেভেলে শব্দটি পড়ে।",
+                "Search by English spelling or by Bangla meaning. Each result shows the English definition, example sentences, synonyms, antonyms and the CEFR level the word belongs to."
               )}
             </p>
           </div>

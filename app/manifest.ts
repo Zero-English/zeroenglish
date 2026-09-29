@@ -1,11 +1,14 @@
 import type { MetadataRoute } from "next";
+import { SITE_BRAND_DESCRIPTION_EN, SITE_DEFAULT_TITLE } from "@/lib/site-config";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Learn English Vocabulary in Bangla | Zero English",
+    // Reuses the shared brand strings instead of restating them, so the installed
+    // app and the search result cannot drift apart. The old description also
+    // claimed "A1 to C2 levels covered", which contradicts the C2 list.
+    name: SITE_DEFAULT_TITLE,
     short_name: "Zero English",
-    description:
-      "Master essential English words with Bangla meanings and example sentences. Learn at your own pace — A1 to C2 levels covered.",
+    description: SITE_BRAND_DESCRIPTION_EN,
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

@@ -13,32 +13,38 @@ import {ActivityTracker} from "@/components/activity-tracker";
 import { LoginRequiredDrawer } from "@/components/login-required-drawer";
 import { SessionAdopter } from "@/components/session-adopter";
 import { PopupHost } from "@/components/popup/popup-host";
-import { SITE_URL, SITE_NAME } from "@/lib/site-config";
+import { SiteSchema } from "@/components/seo/site-schema";
+import { shellMetadata } from "@/components/html-shell";
+import {
+  SITE_NAME,
+  SITE_DEFAULT_TITLE,
+  SITE_TITLE_TEMPLATE,
+  SITE_BRAND_DESCRIPTION_EN,
+} from "@/lib/site-config";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: "Everything You Need to Master English | Zero English",
-  description:
-    "Master English in one place with Zero English — learn grammar, vocabulary, composition, quizzes, and more through a complete English learning experience.",
-  manifest: "/manifest.webmanifest",
-  icons: "/assets/logo/favicon.webp",
+  ...shellMetadata,
+  // Pages supply only the part that differs; the brand is appended for them.
+  title: {
+    default: SITE_DEFAULT_TITLE,
+    template: SITE_TITLE_TEMPLATE,
+  },
+  // Describes only what the site actually does today. The previous copy
+  // promised "grammar" and "composition" lessons that do not exist.
+  description: SITE_BRAND_DESCRIPTION_EN,
+  // No `alternates` and no `openGraph.url` here on purpose. A canonical in a
+  // layout is inherited by every page that does not override it, so a
+  // layout-level `canonical: "/"` makes the entire site canonicalise to the
+  // homepage. Likewise a fixed `openGraph.url` makes every share preview point
+  // back at `/`. Both belong to the individual pages, and each one that is
+  // indexable now sets them.
   openGraph: {
-    title: "Everything You Need to Master English | Zero English",
-    description:
-      "Master English in one place with Zero English — learn grammar, vocabulary, composition, quizzes, and more through a complete English learning experience.",
-    images: [
-      {
-        url: "/assets/logo/open-graph.png",
-        width: 1254,
-        height: 1254,
-        alt: "Zero English | Everything You Need to Master English",
-      },
-    ],
     type: "website",
     siteName: SITE_NAME,
+    locale: "bn_BD",
   },
-  other: {
-    "theme-color": "#000000",
+  twitter: {
+    card: "summary_large_image",
   },
   robots: {
     index: true,
@@ -58,6 +64,7 @@ export default function FrontendLayout({
 }>) {
   return (
     <HtmlShell>
+      <SiteSchema />
       <TopLoader />
       <AppHydration />
       <SidebarProvider>

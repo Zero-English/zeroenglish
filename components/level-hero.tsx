@@ -1,14 +1,12 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { type Word } from "@/lib/data";
-import { mainCategoryLabel } from "@/lib/category";
 import { useLearnedWords } from "@/lib/use-learned-words";
-import { setSelectedLevel } from "@/lib/level-store";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, GraduationCap, Target, Sparkles, CircleDashed } from "lucide-react";
+import { GraduationCap, Target, Sparkles, CircleDashed } from "lucide-react";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 
 const CARD =
@@ -36,7 +34,20 @@ interface LevelHeroProps {
   border: string;
   solid: string;
   stroke: string;
-  words: Word[];
+  /** Total words in the level, independent of how many are on screen. */
+  totalCount: number;
+  /** Number of distinct categories in the level. */
+  categoryCount: number;
+  categoryLabel: string;
+  /** Unique per-level intro copy and topic chips. */
+  introEn: string;
+  introBn: string;
+  topics: { en: string; bn: string }[];
+  /**
+   * Ids belonging to this level, used to scope locally stored learned words.
+   * In server mode this is the only way to know which learned ids are in level.
+   */
+  levelWordIds: number[];
 }
 
 export function LevelHero({
@@ -47,28 +58,37 @@ export function LevelHero({
   text,
   bg,
   border,
-  words,
+  totalCount,
+  categoryCount,
+  categoryLabel,
+  introEn,
+  introBn,
+  topics,
+  levelWordIds,
 }: LevelHeroProps) {
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
-  const learned = words.filter((w) => learnedIds.has(String(w.id))).length;
-  const pct = words.length > 0 ? Math.round((learned / words.length) * 100) : 0;
-  const remaining = Math.max(0, words.length - learned);
-  const category = mainCategoryLabel(words);
-  const categories = new Set(words.map((w) => w.category).filter(Boolean)).size;
+
+  const learnedIdsSet = useMemo(() => new Set(levelWordIds), [levelWordIds]);
+  const learned = useMemo(
+    () => {
+      if (!loaded) return 0;
+      let count = 0;
+      for (const id of learnedIds) {
+        if (learnedIdsSet.has(Number(id))) count++;
+      }
+      return count;
+    },
+    [learnedIds, learnedIdsSet, loaded]
+  );
+
+  const pct = totalCount > 0 ? Math.round((learned / totalCount) * 100) : 0;
+  const remaining = Math.max(0, totalCount - learned);
+  const count = totalCount.toLocaleString("en-US");
 
   return (
     <section className="relative">
       <div className="relative mx-auto max-w-4xl pt-8 pb-6 px-4 sm:px-6 lg:px-0">
-        <Link
-          href="/vocabulary"
-          onClick={() => setSelectedLevel(null)}
-          className="group inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 active:text-zinc-600 dark:hover:text-zinc-300 dark:active:text-zinc-300 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-          {t("লেভেল তালিকায় ফিরুন", "Back to levels")}
-        </Link>
-
         <StaggerContainer className="relative mt-4">
           <StaggerItem>
             <div className={cn(CARD, "overflow-hidden")}>
@@ -90,14 +110,23 @@ export function LevelHero({
                     {level}
                   </span>
                   <p className="text-xs font-medium text-zinc-400 dark:text-zinc-500">
-                    {category}
+                    {categoryLabel}
                   </p>
                 </div>
                 <h1 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                  {level}
+                  {t(
+                    `${level} ইংরেজি শব্দভাণ্ডার`,
+                    `${level} English Vocabulary`
+                  )}
                   <span className="mx-2 text-zinc-300 dark:text-zinc-600">·</span>
                   {t(labelBn, label)}
                 </h1>
+                <p className="mt-1 text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                  {t(
+                    `${count}টি শব্দ, প্রতিটির বাংলা অর্থ ও উদাহরণ বাক্যসহ`,
+                    `${count} words with Bangla meanings and example sentences`
+                  )}
+                </p>
               </div>
 
               <div className="flex items-center gap-4 border-y border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4">
@@ -117,7 +146,7 @@ export function LevelHero({
                     {loaded ? (
                       <>
                         {learned}
-                        <span className="font-normal text-zinc-400"> / {words.length}</span>
+                        <span className="font-normal text-zinc-400"> / {totalCount}</span>
                       </>
                     ) : (
                       "…"
@@ -135,8 +164,8 @@ export function LevelHero({
                   labelEn="Words learned"
                   labelBn="শব্দ শেখা হয়েছে"
                   value={loaded ? `${learned}` : "…"}
-                  subEn={`of ${words.length} total`}
-                  subBn={`মোট ${words.length}টির মধ্যে`}
+                  subEn={`of ${count} total`}
+                  subBn={`মোট ${count}টির মধ্যে`}
                   tint="text-orange-500"
                 />
                 <StatRow
@@ -161,11 +190,52 @@ export function LevelHero({
                   icon={Sparkles}
                   labelEn="Categories"
                   labelBn="বিষয়"
-                  value={`${categories}`}
+                  value={`${categoryCount}`}
                   subEn="topics in this level"
                   subBn={`${level} লেভেলে যত বিষয়`}
                   tint="text-emerald-500"
                 />
+              </div>
+
+              {/* Unique copy per level. Without this all six pages ship the
+                  same hero and read as one thin template. */}
+              <div className="border-t border-black/[0.06] px-5 py-5 dark:border-white/[0.08] sm:px-6">
+                <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                  {t(introBn, introEn)}
+                </p>
+
+                {topics.length > 0 && (
+                  <ul className="mt-3 flex flex-wrap gap-1.5">
+                    {topics.map((topic) => (
+                      <li
+                        key={topic.en}
+                        className="rounded-full bg-black/[0.04] px-2.5 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-white/[0.06] dark:text-zinc-400"
+                      >
+                        {t(topic.bn, topic.en)}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">
+                  {t(
+                    `সব শব্দ একসঙ্গে দেখতে `,
+                    `See every word at once: `
+                  )}
+                  <Link
+                    href="/vocabulary"
+                    className="font-medium text-orange-600 hover:underline dark:text-orange-400"
+                  >
+                    {t("শব্দভাণ্ডার", "Vocabulary")}
+                  </Link>
+                  {t(" · পরে পরীক্ষা করতে ", " · test yourself with ")}
+                  <Link
+                    href="/quiz/vocabulary"
+                    className="font-medium text-orange-600 hover:underline dark:text-orange-400"
+                  >
+                    {t("কুইজ", "a vocabulary quiz")}
+                  </Link>
+                </p>
               </div>
             </div>
           </StaggerItem>

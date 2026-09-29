@@ -3,7 +3,6 @@
 import Link from "next/link";
 import type { Word } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
-import { mainCategoryLabel } from "@/lib/category";
 import { Button } from "@/components/ui/button";
 import {
   LibraryBig,
@@ -23,6 +22,7 @@ import { useT } from "@/components/language-provider";
 import { LatestPostsHome, type LatestPost } from "@/components/news/latest-posts-home";
 import type { LeaderboardRow } from "@/components/leaderboard";
 import { TopLearnersHome } from "@/components/top-learners-home";
+import { isLevelLive, VALID_LEVELS } from "@/lib/level-copy";
 
 const LEVEL_CONFIG: Record<
   string,
@@ -84,25 +84,25 @@ const LEVEL_CONFIG: Record<
   },
 };
 
-const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
+const fmt = (n: number) => n.toLocaleString("en-US");
 
 const FEATURES = [
   {
     href: "/vocabulary",
     icon: LibraryBig,
-    titleEn: "Vocabulary",
-    titleBn: "শব্দভাণ্ডার",
-    descriptionEn: "Browse the full word list, filter by level, and track what you've learned.",
-    descriptionBn: "সব শব্দ ব্রাউজ করুন, লেভেল অনুযায়ী ফিল্টার করুন এবং যা শিখেছেন তা ট্র্যাক করুন।",
+    titleEn: "Word lists",
+    titleBn: "শব্দতালিকা",
+    descriptionEn: "Every word, grouped by CEFR level and topic. Mark what you know and what you are still learning.",
+    descriptionBn: "সব শব্দ CEFR লেভেল ও বিষয় অনুযায়ী সাজানো। যা জানেন আর যা শিখছেন তা আলাদা করে চিহ্নিত করুন।",
     iconClass: "text-orange-500 bg-orange-100 dark:bg-orange-950/60",
   },
   {
     href: "/quiz",
     icon: BookOpenCheck,
-    titleEn: "Daily Quiz",
-    titleBn: "দৈনিক কুইজ",
-    descriptionEn: "Test yourself with quick quizzes and build a daily learning streak.",
-    descriptionBn: "দ্রুত কুইজ দিয়ে নিজেকে পরীক্ষা করুন এবং প্রতিদিনের ধারা গড়ে তুলুন।",
+    titleEn: "Quizzes",
+    titleBn: "কুইজ",
+    descriptionEn: "Vocabulary and grammar questions with instant feedback, an explanation for every answer, and a saved score history.",
+    descriptionBn: "শব্দভাণ্ডার ও ব্যাকরণের প্রশ্ন, সঙ্গে সঙ্গে ফলাফল ও প্রতিটি উত্তরের ব্যাখ্যা। ফলাফল সংরক্ষিত থাকে।",
     iconClass: "text-sky-500 bg-sky-100 dark:bg-sky-950/60",
   },
   {
@@ -110,8 +110,8 @@ const FEATURES = [
     icon: Search,
     titleEn: "Search",
     titleBn: "অনুসন্ধান",
-    descriptionEn: "Look up any word instantly — meaning, definition, and examples in one place.",
-    descriptionBn: "যেকোনো শব্দ তাৎক্ষণিক খুঁজুন — অর্থ, সংজ্ঞা ও উদাহরণ এক জায়গায়।",
+    descriptionEn: "Look up any word you meet somewhere else and read its Bangla meaning, definition, examples and synonyms.",
+    descriptionBn: "যেকোনো শব্দ খুঁজে বাংলা অর্থ, সংজ্ঞা, উদাহরণ ও প্রতিশব্দ একসঙ্গে দেখুন।",
     iconClass: "text-emerald-500 bg-emerald-100 dark:bg-emerald-950/60",
   },
 ];
@@ -167,9 +167,7 @@ export function HomeContent({
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
 
-  const category = mainCategoryLabel(words);
-
-  const levelStats = LEVELS.map((level) => {
+  const levelStats = VALID_LEVELS.map((level) => {
     const items = words.filter((w) => w.level === level);
     const learned = items.filter((w) => learnedIds.has(String(w.id))).length;
     return { level, label: LEVEL_CONFIG[level].label, total: items.length, learned };
@@ -177,6 +175,7 @@ export function HomeContent({
 
   const totalLearned = levelStats.reduce((sum, s) => sum + s.learned, 0);
   const overallPct = words.length > 0 ? Math.round((totalLearned / words.length) * 100) : 0;
+  const liveLevelCount = levelStats.filter((s) => isLevelLive(s.total)).length;
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
@@ -193,23 +192,26 @@ export function HomeContent({
             <div className="relative">
               <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5">
                 <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-                {t("যা গুরুত্বপূর্ণ, তা শিখুন", "Learn what matters")}
+                {t(
+                  `${fmt(words.length)}টি ইংরেজি শব্দ, বাংলা অর্থসহ`,
+                  `${fmt(words.length)} English words with Bangla meanings`
+                )}
               </div>
 
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
               <span className="bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-                {t("শূন্য থেকে ইংরেজি আয়ত্ত,", "Everything")}
+                {t("ইংরেজি শব্দ ও বাংলা অর্থ,", "English words with Bangla meanings,")}
               </span>
               <br />
               <span className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 bg-clip-text text-transparent">
-                {t("সবকিছু এক প্ল্যাটফর্মে।", "you need to master English.")}
+                {t("A1 থেকে C1 লেভেলে।", "graded from A1 to C1.")}
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto mb-8">
+            <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto mb-8">
               {t(
-                `${category} শব্দ বাংলা অর্থসহ। প্রতিদিন ৫০টি নতুন শব্দ শিখুন, নিজের লেভেল বেছে নিন, আর আত্মবিশ্বাসটা বাড়তে দেখুন — শব্দে শব্দে, এক ধাপ থেকে আরেক ধাপে।`,
-                `${category} words with Bangla meanings. Learn 50 new words a day, pick your level, and watch your confidence build — one word, one step at a time.`
+                `অক্সফোর্ড ৩০০০ ও ৫০০০ তালিকা থেকে বাছাই করা ${fmt(words.length)}টি ইংরেজি শব্দ। প্রতিটি শব্দের বাংলা অর্থ, ইংরেজি সংজ্ঞা, উদাহরণ বাক্য, প্রতিশব্দ ও বিপরীত শব্দ দেওয়া আছে। অ্যাকাউন্ট ছাড়াই শেখা শুরু করা যায়।`,
+                `${fmt(words.length)} English words selected from the Oxford 3000 and 5000 lists. Every entry has a Bangla meaning, an English definition, example sentences, synonyms and antonyms. You can start without an account.`
               )}
             </p>
 
@@ -239,9 +241,9 @@ export function HomeContent({
                 </span>
                 <div className="text-left">
                   <p className="text-xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums leading-none">
-                    {words.length}
+                    {fmt(words.length)}
                   </p>
-                  <p className="text-xs text-zinc-400 mt-1">{t("শব্দশক্তি", "Word Power")}</p>
+                  <p className="text-xs text-zinc-400 mt-1">{t("ইংরেজি শব্দ", "English words")}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
@@ -249,10 +251,16 @@ export function HomeContent({
                   <Layers className="h-4 w-4" />
                 </span>
                 <div className="text-left">
+                  {/* Counts only the levels that are actually study-ready. A
+                      "6 CEFR levels" badge would contradict the C2 card right
+                      below it, which is explicitly marked as still being
+                      written. */}
                   <p className="text-xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums leading-none">
-                    {LEVELS.length}
+                    {liveLevelCount}
                   </p>
-                  <p className="text-xs text-zinc-400 mt-1">{t("লেভেলের সিঁড়ি", "Level Ladder")}</p>
+                  <p className="text-xs text-zinc-400 mt-1">
+                    {t("খোলা CEFR লেভেল", "CEFR levels open")}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-sm px-4 py-2.5">
@@ -263,7 +271,7 @@ export function HomeContent({
                   <p className="text-xl font-bold text-orange-500 tabular-nums leading-none">
                     {loaded ? `${overallPct}%` : "· · ·"}
                   </p>
-                  <p className="text-xs text-zinc-400 mt-1">{t("আপনার চড়াই", "Your Climb")}</p>
+                  <p className="text-xs text-zinc-400 mt-1">{t("আপনার অগ্রগতি", "Your progress")}</p>
                 </div>
               </div>
             </div>
@@ -274,28 +282,26 @@ export function HomeContent({
             <div className="flex items-end justify-between mb-5">
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                  {t("আপনার লেভেল বেছে নিন", "Pick your level")}
+                  {t("লেভেল অনুযায়ী শব্দতালিকা", "Word lists by level")}
                 </h2>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  {t("প্রতিটি লেভেল আপনার এগিয়ে যাওয়ার জন্য প্রয়োজনীয় শব্দ কভার করে।", "Each level covers the words you need to move forward.")}
+                  {t(
+                    "প্রতিটি লেভেলে সেই স্তরের সাধারণ শব্দগুলো সাজানো আছে। যেটি এখনো তৈরি হচ্ছে তার নিচে লেখা আছে।",
+                    "Each level holds the words common at that stage. Levels still being written say so underneath."
+                  )}
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              {levelStats.map(({ level, label, total, learned }) => {
+              {levelStats.map(({ level, total, learned }) => {
                 const c = LEVEL_CONFIG[level];
                 const pct = total > 0 ? Math.round((learned / total) * 100) : 0;
-                return (
-                  <Link
-                    key={level}
-                    href={`/vocabulary/${level.toLowerCase()}`}
-                    className={cn(
-                      "group relative overflow-hidden rounded-3xl border-2 p-5 sm:p-6 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98]",
-                      c.border,
-                      c.bg
-                    )}
-                  >
+                // A level with almost nothing in it is not worth linking to yet.
+                const inProgress = !isLevelLive(total);
+
+                const body = (
+                  <>
                     <div
                       className={cn(
                         "absolute inset-0 rounded-3xl bg-gradient-to-br opacity-0 group-hover:opacity-10 dark:group-hover:opacity-15 transition-opacity duration-300",
@@ -316,26 +322,58 @@ export function HomeContent({
                       </div>
 
                       <div className="space-y-1.5">
-                        <div className="flex items-baseline justify-between text-sm">
-                          <span className="text-zinc-500 dark:text-zinc-400 font-medium">
-                            {t(`${total}টি শব্দ`, `${total} words`)}
-                          </span>
-                          <span className="text-zinc-400 dark:text-zinc-500 tabular-nums">
-                            {loaded ? t(`${learned}টি শেখা`, `${learned} learned`) : `\u00A0`}
-                          </span>
-                        </div>
-                        <div className="h-1.5 w-full rounded-full bg-zinc-200/70 dark:bg-zinc-800 overflow-hidden">
-                          {loaded ? (
-                            <div
-                              className={cn("h-full rounded-full transition-all duration-500", c.solid)}
-                              style={{ width: `${pct}%` }}
-                            />
-                          ) : (
-                            <div className="h-full w-1/3 rounded-full bg-zinc-300/70 dark:bg-zinc-700 animate-pulse" />
-                          )}
-                        </div>
+                        {inProgress ? (
+                          <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">
+                            {t("লিস্ট তৈরি হচ্ছে", "List in progress")}
+                          </p>
+                        ) : (
+                          <>
+                            <div className="flex items-baseline justify-between text-sm">
+                              <span className="text-zinc-500 dark:text-zinc-400 font-medium">
+                                {t(`${fmt(total)}টি শব্দ`, `${fmt(total)} words`)}
+                              </span>
+                              <span className="text-zinc-400 dark:text-zinc-500 tabular-nums">
+                                {loaded ? t(`${learned}টি শেখা`, `${learned} learned`) : `\u00A0`}
+                              </span>
+                            </div>
+                            <div className="h-1.5 w-full rounded-full bg-zinc-200/70 dark:bg-zinc-800 overflow-hidden">
+                              {loaded ? (
+                                <div
+                                  className={cn("h-full rounded-full transition-all duration-500", c.solid)}
+                                  style={{ width: `${pct}%` }}
+                                />
+                              ) : (
+                                <div className="h-full w-1/3 rounded-full bg-zinc-300/70 dark:bg-zinc-700 animate-pulse" />
+                              )}
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
+                  </>
+                );
+
+                const shell = cn(
+                  "group relative overflow-hidden rounded-3xl border-2 p-5 sm:p-6 backdrop-blur-sm transition-all duration-300",
+                  c.border,
+                  c.bg
+                );
+
+                return inProgress ? (
+                  <div
+                    key={level}
+                    className={cn(shell, "opacity-70")}
+                    aria-disabled="true"
+                  >
+                    {body}
+                  </div>
+                ) : (
+                  <Link
+                    key={level}
+                    href={`/vocabulary/${level.toLowerCase()}`}
+                    className={cn(shell, "hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98]")}
+                  >
+                    {body}
                   </Link>
                 );
               })}
@@ -345,10 +383,10 @@ export function HomeContent({
           <section className="mb-14">
             <div className="mb-5">
               <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                {t("আপনার জন্য যা যা দরকার", "Everything you need")}
+                {t("খুঁজুন, পড়ুন, পরীক্ষা করুন", "Find it, read it, test it")}
               </h2>
               <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                {t("তিনটি সহজ টুল আপনাকে শেখা চালিয়ে যেতে সাহায্য করবে।", "Three simple tools to keep you learning.")}
+                {t("তিনটি কাজ, তিনটি পাতা।", "Three jobs, three pages.")}
               </p>
             </div>
 
@@ -446,12 +484,12 @@ export function HomeContent({
               />
               <div className="relative">
                 <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-                  {t("আজই প্রথম শব্দটি শিখুন", "Learn your first word today")}
+                  {t("আপনার লেভেল দেখুন", "See your level")}
                 </h2>
                 <p className="mt-3 text-sm sm:text-base text-orange-50/90 max-w-xl mx-auto">
                   {t(
-                    "৫০০০-এর বেশি শব্দ বাংলা অর্থসহ — আপনার লেভেল বেছে নিন, দিনে দিনে এগোন আর অগ্রগতি ট্র্যাক করুন।",
-                    "5,000+ words with Bangla meanings — pick your level, grow day by day, and track your progress."
+                    `${fmt(words.length)}টি ইংরেজি শব্দ লেভেল ও বিষয় অনুযায়ী সাজানো। অ্যাকাউন্ট ছাড়াই খোলা যায়।`,
+                    `${fmt(words.length)} English words, sorted by level and topic. Open any of them without an account.`
                   )}
                 </p>
                 <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
@@ -460,7 +498,7 @@ export function HomeContent({
                     className="h-11 gap-2 rounded-xl bg-white px-6 text-sm font-medium text-rose-600 hover:bg-orange-50 shadow-lg shadow-black/10"
                   >
                     <Link href="/vocabulary">
-                      {t("শেখা শুরু করুন", "Start Learning")}
+                      {t("শব্দতালিকা দেখুন", "Browse the word lists")}
                       <ArrowRight className="size-4" />
                     </Link>
                   </Button>

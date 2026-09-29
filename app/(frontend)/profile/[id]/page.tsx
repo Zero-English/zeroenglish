@@ -17,7 +17,7 @@ export async function generateMetadata({
   const userId = parseInt(id, 10);
 
   if (Number.isNaN(userId) || userId < 1) {
-    return { title: "Profile Not Found" };
+    return { title: "Profile Not Found", robots: { index: false, follow: true } };
   }
 
   const result = await getUserById(userId);
@@ -27,11 +27,14 @@ export async function generateMetadata({
       : null;
 
   return {
-    title: displayName ? `${displayName} | Profile | Zero English` : "Profile | Zero English",
+    title: displayName ? `${displayName} | Profile` : "Profile",
     description: displayName
       ? `Public profile of ${displayName} on Zero English — track learned words and quiz progress.`
       : "Public profile on Zero English.",
     alternates: { canonical: `/profile/${userId}` },
+    // Thin, per-user pages. `follow` is kept so the leaderboard links to them
+    // still pass crawl equity onward.
+    robots: { index: false, follow: true },
   };
 }
 

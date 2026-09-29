@@ -35,8 +35,9 @@ function NavLinks({
   const { level } = useSelectedLevel();
   const t = useT();
   const isLoggedIn = status !== "none";
-  // const vocabularyHref = level ? `/vocabulary/${level.toLowerCase()}` : "/vocabulary";
-  const vocabularyHref = "/vocabulary"; // Fixed by Mahir because it should go to /vocabulary not /vocabulary/:level
+  // Link to the level store remembers. Paging is restored from the
+  // level-pagination store, so the href carries no page segment.
+  const vocabularyHref = isLoggedIn && level ? `/vocabulary/${level.toLowerCase()}` : "/vocabulary";
   const { data: session } = useSession();
   const canContribute =
     session?.user?.role === "admin" || session?.user?.role === "contributor";
@@ -58,7 +59,10 @@ function NavLinks({
   return (
     <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
       {navLinks.map((link) => {
-        const isActive = pathname === link.href;
+        // Prefix match so `/vocabulary/a1/2` still highlights `/vocabulary/a1`.
+        // "/" needs an exact match or it would swallow every route.
+        const isActive =
+          link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
         return (
           <Link
             key={link.href}
@@ -175,7 +179,7 @@ export function Sidebar() {
               onClick={close}
               className="flex items-center space-x-2"
             >
-              <Image src={logo} alt="Logo" className="h-5 w-auto dark:brightness-0 dark:invert" />
+              <Image src={logo} alt="Zero English" className="h-5 w-auto dark:brightness-0 dark:invert" />
             </Link>
           </div>
           <div className="flex flex-col flex-1 overflow-hidden">

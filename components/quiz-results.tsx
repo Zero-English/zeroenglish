@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLeft, History, BookOpenCheck } from "lucide-react";
+import { History, BookOpenCheck } from "lucide-react";
 import { useT } from "@/components/language-provider";
 import { CombinedExamResultsPanel } from "@/components/vocabulary-exam-results-panel";
 import { QuizPracticeResultsPanel } from "@/components/quiz-practice-results-panel";
@@ -16,14 +15,6 @@ export function CombinedExamResults() {
 
       <div className="mx-auto max-w-5xl">
         <div className="mb-8">
-          <Link
-            href="/quiz"
-            className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300 transition-colors group mb-6"
-          >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5 group-active:-translate-x-0.5" />
-            {t("কুইজে ফিরে যান", "Back to Quiz")}
-          </Link>
-
           <div className="animate-fade-up">
             <div className="flex items-center gap-2 mb-3">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-800 text-xs font-bold tracking-wide text-indigo-700 dark:text-indigo-300 uppercase">

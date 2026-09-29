@@ -1,4 +1,5 @@
 import { QuizClassClient } from "@/components/quiz-class-client";
+import { QuizBreadcrumb, QUIZ_CRUMBS } from "@/components/quiz-breadcrumb";
 
 export const metadata = {
   title: "Class Based Quizzes - English Practice for Every Class",
@@ -14,5 +15,10 @@ export default async function QuizClassPage({
 }) {
   const params = await searchParams;
   const cls = typeof params.class === "string" ? params.class : undefined;
-  return <QuizClassClient selectedClassValue={cls} />;
+  return (
+    <>
+      <QuizBreadcrumb leaf={QUIZ_CRUMBS.class} />
+      <QuizClassClient selectedClassValue={cls} />
+    </>
+  );
 }

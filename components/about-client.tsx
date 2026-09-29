@@ -7,140 +7,36 @@ import {
   Rocket,
   Target,
   Users,
-  Sparkles,
   ArrowRight,
   Mail,
   Globe,
   Share2,
-  Eye,
+  Sparkles,
+  ShieldCheck,
   Compass,
-  Accessibility,
-  Layers,
+  ListChecks,
   ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/components/language-provider";
+import { FAQS } from "@/lib/site-faq";
+import {
+  buildAboutCards,
+  buildAboutSources,
+  ABOUT_METHOD_STEPS,
+  ATTRIBUTION_BN,
+  ATTRIBUTION_EN,
+  buildAboutStats,
+  LAST_REVIEWED,
+  type AboutFacts,
+} from "@/lib/about-content";
+import { SITE_CONTACT_EMAIL } from "@/lib/site-config";
 
-const STATS = [
-  { value: "5,000+", labelBn: "অক্সফোর্ড শব্দ", labelEn: "Oxford words" },
-  { value: "6", labelBn: "CEFR লেভেল", labelEn: "CEFR levels" },
-  { value: "2", labelBn: "ভাষা", labelEn: "Languages" },
-  { value: "100%", labelBn: "বিনামূল্যে", labelEn: "Free to learn" },
-];
-
-const MISSION_VISION = [
-  {
-    icon: Target,
-    eyebrowBn: "আমাদের লক্ষ্য",
-    eyebrowEn: "Our Mission",
-    titleBn: "শূন্য থেকে আত্মবিশ্বাস",
-    titleEn: "From zero to confidence",
-    descBn:
-      "প্রতিটি বাংলাভাষী শিক্ষার্থী যেন নিজের গতিতে, নিজের ভাষায় ইংরেজি আয়ত্ত করতে পারে — শব্দে শব্দে, ধাপে ধাপে, কোনো ভয় ছাড়াই।",
-    descEn:
-      "To help every Bangla-speaking learner master English at their own pace and in their own language — word by word, step by step, without fear.",
-  },
-  {
-    icon: Eye,
-    eyebrowBn: "আমাদের স্বপ্ন",
-    eyebrowEn: "Our Vision",
-    titleBn: "ভাষা আর বাধা নয়",
-    titleEn: "Language without barriers",
-    descBn:
-      "এমন একটি জগৎ যেখানে ইংরেজি শেখা সবার নাগালে — প্রযুক্তির সাহায্যে শিক্ষা হোক সবার জন্য সহজলভ্য ও আনন্দময়।",
-    descEn:
-      "A world where English is within everyone's reach — using technology to make education accessible and joyful for all.",
-  },
-  {
-    icon: Compass,
-    eyebrowBn: "আমাদের পদ্ধতি",
-    eyebrowEn: "Our Approach",
-    titleBn: "ধাপে ধাপে, মজায় মজায়",
-    titleEn: "Step by step, with joy",
-    descBn:
-      "অক্সফোর্ড ৫০০০ তালিকা, CEFR লেভেল, বাংলা অর্থ ও কুইজ — সব মিলিয়ে একটি সহজ, কার্যকরী ও মজার শেখার পদ্ধতি।",
-    descEn:
-      "Oxford 5000, CEFR levels, Bangla meanings and quizzes — a simple, effective and fun learning method all in one place.",
-  },
-];
-
-const VALUES = [
-  {
-    icon: Accessibility,
-    titleBn: "সবার জন্য উন্মুক্ত",
-    titleEn: "Open to everyone",
-    descBn:
-      "১০০% বিনামূল্যে — যেকোনো ডিভাইসে, যেকোনো জায়গায় শেখা শুরু করুন।",
-    descEn: "100% free — start learning on any device, anywhere.",
-  },
-  {
-    icon: Layers,
-    titleBn: "গোছানো ও নির্ভরযোগ্য",
-    titleEn: "Structured & reliable",
-    descBn:
-      "A1 থেকে C2 — ধাপে ধাপে গোছানো পথচলা, যেন কেউ হারিয়ে না যায়।",
-    descEn: "A1 to C2 — a clearly structured path so nobody gets lost.",
-  },
-  {
-    icon: Sparkles,
-    titleBn: "আনন্দময় অভিজ্ঞতা",
-    titleEn: "Joyful experience",
-    descBn:
-      "কুইজ, পরীক্ষা ও অগ্রগতির আয়না — শেখা যেন বাধ্যবাধকতা না হয়ে হয় আনন্দ।",
-    descEn: "Quizzes, exams and progress tracking make learning a joy, not a chore.",
-  },
-];
-
-const FAQS = [
-  {
-    qBn: "জিরো ইংলিশ কী?",
-    qEn: "What is Zero English?",
-    aBn:
-      "জিরো ইংলিশ একটি দ্বিভাষিক ইংরেজি শেখার প্ল্যাটফর্ম — বাংলা অর্থসহ অক্সফোর্ড ৫০০০ শব্দের তালিকা থেকে A1 থেকে C2 লেভেল পর্যন্ত শেখানো হয়।",
-    aEn:
-      "Zero English is a bilingual English learning platform that teaches the Oxford 5000 word list with Bangla meanings, from A1 to C2 levels.",
-  },
-  {
-    qBn: "এটি কি সত্যিই বিনামূল্যে?",
-    qEn: "Is it really free?",
-    aBn:
-      "হ্যাঁ। সব শব্দ, কুইজ ও পরীক্ষা — সবকিছুই বিনামূল্যে। আমরা এখনো শুরুতে আছি, তাই প্রথম থেকেই সবকিছু সবার জন্য উন্মুক্ত রেখেছি।",
-    aEn:
-      "Yes. All words, quizzes and exams are completely free. We're still early, so we've kept everything open from day one.",
-  },
-  {
-    qBn: "কোন লেভেলগুলো কভার করা হয়?",
-    qEn: "Which levels are covered?",
-    aBn:
-      "A1, A2, B1, B2, C1 ও C2 — ছয়টি CEFR লেভেলই। আপনি যেকোনো লেভেল থেকে শুরু করে ধীরে ধীরে এগিয়ে যেতে পারেন।",
-    aEn:
-      "All six CEFR levels: A1, A2, B1, B2, C1 and C2. Start from any level and progress step by step.",
-  },
-  {
-    qBn: "কীভাবে শেখা শুরু করব?",
-    qEn: "How do I start learning?",
-    aBn:
-      "শব্দভান্ডার পেজ থেকে আপনার লেভেল বেছে নিন, অ্যাকাউন্ট খুলুন (ঐচ্ছিক) এবং দৈনিক ৫০টি শব্দের লক্ষ্য রাখুন। কুইজ দিয়ে নিজেকে যাচাই করুন।",
-    aEn:
-      "Pick your level from the vocabulary page, create an account (optional), and aim for 50 words a day. Test yourself with quizzes.",
-  },
-  {
-    qBn: "আমার অগ্রগতি কি ট্র্যাক হবে?",
-    qEn: "Will my progress be tracked?",
-    aBn:
-      "হ্যাঁ — শেখা শব্দ, বুকমার্ক ও কুইজের ফলাফল সংরক্ষিত হয় এবং প্রোফাইল থেকে সারাংশ ও অগ্রগতি চার্ট দেখা যায়।",
-    aEn:
-      "Yes — learned words, bookmarks and quiz results are saved, with a summary and progress chart in your profile.",
-  },
-  {
-    qBn: "অফলাইনে শেখা যাবে?",
-    qEn: "Can I learn offline?",
-    aBn:
-      "জিরো ইংলিশ একটি PWA — ওয়েব অ্যাপ হিসেবে ইন্সটল করলে অফলাইনেও শেখা চালিয়ে যেতে পারেন, প্রগতি ডিভাইসে সংরক্ষিত হয়।",
-    aEn:
-      "Zero English is a PWA — install it as an app and keep learning offline, with progress saved on your device.",
-  },
-];
+const CARD_ICON = {
+  target: Target,
+  compass: Compass,
+  shield: ShieldCheck,
+} as const;
 
 function FaqItem({
   faq,
@@ -180,8 +76,12 @@ function FaqItem({
   );
 }
 
-export function AboutClient() {
+export function AboutClient({ facts }: { facts: AboutFacts }) {
   const t = useT();
+
+  // Derived here from the same object the page's `Dataset` schema reads, so a
+  // number on screen and a number in structured data can never disagree.
+  const stats = buildAboutStats(facts);
 
   return (
     <div className="relative overflow-hidden">
@@ -189,10 +89,10 @@ export function AboutClient() {
 
       <div className="relative px-4 py-14 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <section className="text-center mb-14 animate-fade-up">
+          <section className="mb-14">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5">
               <Rocket className="h-3.5 w-3.5 text-orange-500" />
-              {t("একটি স্টার্টআপ", "A Startup")}
+              {t("একটি স্বতন্ত্র প্রকল্প", "An independent project")}
             </div>
 
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
@@ -201,57 +101,26 @@ export function AboutClient() {
               </span>
               <br />
               <span className="bg-gradient-to-r from-orange-500 via-rose-500 to-pink-500 bg-clip-text text-transparent">
-                {t("শূন্য থেকে শুরু।", "from zero.")}
+                {t("কীভাবে কাজ করে।", "and how it works.")}
               </span>
             </h1>
 
             <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto">
               {t(
-                "জিরো ইংলিশ একটি উদীয়মান স্টার্টআপ, যার লক্ষ্য বাংলাভাষী শিক্ষার্থীদের জন্য ইংরেজি শব্দভাণ্ডার শেখা সহজ, মজার ও কার্যকর করা।",
-                "Zero English is a growing startup on a mission to make English vocabulary learning simple, fun and effective for Bangla-speaking learners."
+                "এই পাতায় আমরা কী তৈরি করেছি, একটি শব্দের এন্ট্রি কীভাবে তৈরি হয়, কোন তালিকা থেকে শব্দ নেওয়া হয়, এবং কী কী এখনো হয়নি — সব লিখে দেওয়া আছে।",
+                "This page states what exists, how a word entry is put together, which lists the words come from, and what is not finished yet."
               )}
             </p>
           </section>
 
           <section className="mb-14">
-            <div className="mb-5">
-              <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                {t("আমরা কেন এখানে", "Why we're here")}
-              </h2>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                {t("ইংরেজি যেন আর কারও সামর্থ্যের বাইরে না থাকে।", "English should never be out of anyone's reach.")}
-              </p>
-            </div>
-            <div className="prose prose-neutral dark:prose-invert space-y-4 text-zinc-600 dark:text-zinc-400">
-              <p>
-                {t(
-                  "আমরা বিশ্বাস করি, ভাষা শেখা সবার হাতের নাগালে হওয়া উচিত। কিন্তু অনেক শিক্ষার্থীর জন্য ইংরেজি একটি বাধা হয়ে থাকে — জটিল পদ্ধতি, উপযোগী সরঞ্জামের অভাব এবং অনুপ্রেরণার ঘাটতির কারণে।",
-                  "We believe language learning should be within everyone's reach. But for many learners English becomes a barrier — because of complicated methods, a lack of the right tools, and no motivation."
-                )}
-              </p>
-              <p>
-                {t(
-                  "জিরো ইংলিশ সেই ফাঁক পূরণ করার জন্যই শুরু হওয়া একটি স্টার্টআপ। আমরা অক্সফোর্ড ৫০০০ শব্দের তালিকা বাংলা অর্থসহ বিন্যস্ত করেছি, যেন শিক্ষার্থীরা ধাপে ধাপে, নিজের গতিতে এগিয়ে যেতে পারে।",
-                  "Zero English is a startup built to fill that gap. We've organized the Oxford 5000 word list with Bangla meanings, so learners can progress step by step, at their own pace."
-                )}
-              </p>
-              <p>
-                {t(
-                  "আমরা এখনও শুরুতে আছি, কিন্তু আমাদের স্বপ্ন বড় — বাংলাভাষী লক্ষ লক্ষ মানুষের জন্য ইংরেজি শেখাকে আনন্দময় করে তোলা।",
-                  "We're still early, but our dream is big — making English learning joyful for millions of Bangla speakers."
-                )}
-              </p>
-            </div>
-          </section>
-
-          <section className="mb-14">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              {STATS.map((stat) => (
+              {stats.map((stat) => (
                 <div
                   key={stat.labelEn}
                   className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 text-center"
                 >
-                  <div className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+                  <div className="text-2xl sm:text-3xl font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
                     {stat.value}
                   </div>
                   <div className="mt-1 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
@@ -260,48 +129,92 @@ export function AboutClient() {
                 </div>
               ))}
             </div>
+            <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">
+              {t(
+                `সংখ্যাগুলো এই মুহূর্তে ডাটাবেস থেকে গোনা। শেষ দেখা: ${LAST_REVIEWED}।`,
+                `Counted from the database at request time. Last reviewed: ${LAST_REVIEWED}.`
+              )}
+            </p>
+          </section>
+
+          <section className="mb-14">
+            <div className="mb-8 text-center">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-4">
+                <ListChecks className="h-3.5 w-3.5 text-orange-500" />
+                {t("আমাদের পদ্ধতি", "Our method")}
+              </div>
+              <h2 className="text-xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-3">
+                {t("একটি শব্দের এন্ট্রি কীভাবে তৈরি হয়", "How a word entry is made")}
+              </h2>
+              <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto">
+                {t(
+                  "প্রতিটি এন্ট্রির জন্য ছয়টি ধাপ। শুধু এই ছয় ধাপই আমাদের প্রক্রিয়া, এর বেশি কিছু নয়।",
+                  "Six steps per entry. That is the whole process, not a summary of a longer one."
+                )}
+              </p>
+            </div>
+
+            <ol className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+              {ABOUT_METHOD_STEPS.map((step, i) => (
+                <li
+                  key={step.titleEn}
+                  className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-950/60 text-xs font-bold tabular-nums text-orange-600 dark:text-orange-400">
+                      {i + 1}
+                    </span>
+                    <div className="min-w-0">
+                      <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                        {t(step.titleBn, step.titleEn)}
+                      </h3>
+                      <p className="mt-1 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+                        {t(step.descBn, step.descEn)}
+                      </p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </section>
 
           <section className="mb-14">
             <div className="mb-8 text-center">
               <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-4">
                 <Target className="h-3.5 w-3.5 text-orange-500" />
-                {t("কেন আমরা আছি", "Our Purpose")}
+                {t("পরিষ্কার উত্তর", "Plain answers")}
               </div>
               <h2 className="text-xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-3">
-                {t("লক্ষ্য, স্বপ্ন ও পদ্ধতি", "Mission, Vision & Approach")}
+                {t("যা আছে, যা নেই", "What is there, what is not")}
               </h2>
-              <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto">
-                {t(
-                  "তিনটি স্তম্ভ আমাদের প্রতিটি পদক্ষেপকে পরিচালিত করে।",
-                  "Three pillars guide every step we take."
-                )}
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-              {MISSION_VISION.map(
-                ({ icon: Icon, eyebrowBn, eyebrowEn, titleBn, titleEn, descBn, descEn }) => (
-                  <div
-                    key={eyebrowEn}
-                    className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6"
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-500">
-                        <Icon className="h-5 w-5" />
+              {buildAboutCards(facts).map(
+                ({ icon, eyebrowBn, eyebrowEn, titleBn, titleEn, descBn, descEn }) => {
+                  const Icon = CARD_ICON[icon];
+                  return (
+                    <div
+                      key={eyebrowEn}
+                      className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6"
+                    >
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-500">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                          {t(eyebrowBn, eyebrowEn)}
+                        </span>
                       </div>
-                      <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                        {t(eyebrowBn, eyebrowEn)}
-                      </span>
+                      <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+                        {t(titleBn, titleEn)}
+                      </h3>
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                        {t(descBn, descEn)}
+                      </p>
                     </div>
-                    <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">
-                      {t(titleBn, titleEn)}
-                    </h3>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                      {t(descBn, descEn)}
-                    </p>
-                  </div>
-                )
+                  );
+                }
               )}
             </div>
           </section>
@@ -309,30 +222,67 @@ export function AboutClient() {
           <section className="mb-14">
             <div className="mb-5">
               <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                {t("আমাদের মূল্যবোধ", "What we stand for")}
+                {t("তথ্যকোথা ও উৎস", "Sources and attribution")}
               </h2>
               <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-                {t("তিনটি নীতি আমাদের প্রতিটি সিদ্ধান্তকে পরিচালিত করে।", "Three principles guide every decision we make.")}
+                {t(
+                  "কোন তালিকা থেকে কতটি নেওয়া হয়েছে।",
+                  "Which lists the words came from, and how many from each."
+                )}
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-              {VALUES.map(({ icon: Icon, titleBn, titleEn, descBn, descEn }) => (
+              {buildAboutSources(facts).map((source) => (
                 <div
-                  key={titleEn}
+                  key={source.titleEn}
                   className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-950/60 text-orange-500 mb-4">
-                    <Icon className="h-5 w-5" />
-                  </div>
                   <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-1.5">
-                    {t(titleBn, titleEn)}
+                    {t(source.titleBn, source.titleEn)}
                   </h3>
                   <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                    {t(descBn, descEn)}
+                    {t(source.descBn, source.descEn)}
                   </p>
                 </div>
               ))}
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-zinc-50/70 dark:bg-zinc-900/40 p-5">
+              <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                {t(ATTRIBUTION_BN, ATTRIBUTION_EN)}
+              </p>
+            </div>
+          </section>
+
+          <section className="mb-14">
+            <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6">
+              <div className="flex flex-wrap items-start gap-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
+                  <Mail className="h-5 w-5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+                    {t("ভুল খুঁজে পেলে জানান", "Found a mistake? Tell us")}
+                  </h2>
+                  <p className="mt-1.5 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+                    {t(
+                      "ভুল বাংলা অর্থ, ভুল লেভেল বা ভুল উদাহরণ — ইমেইলে শব্দটির নাম, পাতার ঠিকানা এবং কী ভুল বলে মনে হচ্ছে তা লিখে দিন। ঠিক করার পর সংশোধিত এন্ট্রিতে পরিবর্তনের তারিখ যোগ করা হয়।",
+                      "A wrong Bangla meaning, a wrongly assigned level or a bad example: email us the word, the page URL and what looks wrong. Once fixed, the entry carries the date of the change."
+                    )}
+                  </p>
+                  <a
+                    href={`mailto:${SITE_CONTACT_EMAIL}`}
+                    className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-orange-600 hover:underline dark:text-orange-400"
+                  >
+                    <Mail className="h-4 w-4" />
+                    {SITE_CONTACT_EMAIL}
+                  </a>
+                  <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">
+                    {t("সর্বশেষ পর্যালোচনা", "Last reviewed")}: {LAST_REVIEWED}
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -532,14 +482,15 @@ export function AboutClient() {
 
           <section className="rounded-3xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-8 text-center">
             <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-3">
-              {t("আপনার যাত্রা শুরু হোক", "Start your journey")}
+              {t("এখন পড়া শুরু করুন", "Start reading now")}
             </h2>
             <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto mb-6">
               {t(
-                "আমাদের সাথে প্রতিদিন একটু করে ইংরেজি শিখুন। শূন্য থেকে শুরু করুন, ধাপে ধাপে এগিয়ে যান।",
-                "Learn a little English with us every day. Start from zero and progress step by step."
+                "A1 থেকে C1 পর্যন্ত পাঁচটি লেভেল খোলা। অ্যাকাউন্ট ছাড়াই শুরু করা যায়।",
+                "Five levels are open, from A1 to C1. No account is needed to start."
               )}
             </p>
+
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Button
                 asChild
