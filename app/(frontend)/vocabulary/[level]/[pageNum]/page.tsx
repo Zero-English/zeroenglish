@@ -11,21 +11,11 @@ import {
 } from "@/lib/data";
 import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/vocabulary-query";
 import { Breadcrumb } from "@/components/breadcrumb";
+import { getLevelMeta, isLevelLive, levelMetaDescription } from "@/lib/level-copy";
 
 // Reads the request session and queries Prisma directly, so it can never be
 // statically generated or served from the full-route cache.
 export const dynamic = "force-dynamic";
-
-const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
-
-const LEVEL_LABELS: Record<(typeof VALID_LEVELS)[number], { label: string; labelBn: string }> = {
-  A1: { label: "Beginner", labelBn: "শিক্ষানবিস" },
-  A2: { label: "Elementary", labelBn: "প্রাথমিক" },
-  B1: { label: "Intermediate", labelBn: "মাঝারি" },
-  B2: { label: "Upper Intermediate", labelBn: "উচ্চ-মাঝারি" },
-  C1: { label: "Advanced", labelBn: "উন্নত" },
-  C2: { label: "Mastery", labelBn: "পারদর্শী" },
-};
 
 type PageProps = {
   params: Promise<{ level: string; pageNum: string }>;
@@ -51,16 +41,24 @@ export async function generateMetadata({
   }
 
   const { q, sort, category, isFiltered } = parseLevelQuery(await searchParams);
-  const labels = LEVEL_LABELS[upper as (typeof VALID_LEVELS)[number]];
+  const meta = getLevelMeta(upper);
+  if (!meta) {
+    return { title: "Page Not Found", robots: { index: false, follow: false } };
+  }
 
-  const { total } = await browsePublicWords({
-    level: upper,
-    page,
-    limit: ITEMS_PER_PAGE,
-    search: q,
-    category,
-    sort,
-  });
+  // The description quotes the unfiltered level size, and a level that is still
+  // being written must stay out of the index at every page depth.
+  const [{ total }, aggregate] = await Promise.all([
+    browsePublicWords({
+      level: upper,
+      page,
+      limit: ITEMS_PER_PAGE,
+      search: q,
+      category,
+      sort,
+    }),
+    getLevelAggregate(upper),
+  ]);
   const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
 
   if (page > totalPages) {
@@ -70,14 +68,17 @@ export async function generateMetadata({
   const base = `/vocabulary/${upper.toLowerCase()}`;
   // Page 1 is always the bare level URL, so it must not be a separate document.
   const canonical = page === 1 ? base : `${base}/${page}`;
+  const live = isLevelLive(aggregate.total);
 
   return {
-    title: `English Vocabulary - Level ${upper} (Page ${page})`,
-    description: `Learn essential English words at ${upper} level (${labels.label}). ${labels.labelBn} vocabulary list, page ${page}.`,
+    title:
+      page === 1 ? meta.h1En : `${meta.h1En} — Page ${page} of ${totalPages}`,
+    description: levelMetaDescription(upper, aggregate.total),
     alternates: { canonical },
-    robots: isFiltered
-      ? { index: false, follow: true }
-      : { index: true, follow: true },
+    robots:
+      isFiltered || !live
+        ? { index: false, follow: true }
+        : { index: true, follow: true },
   };
 }
 
@@ -87,6 +88,11 @@ export default async function Page({ params, searchParams }: PageProps) {
   const page = parsePageNum(pageNum);
 
   if (!isValidLevel(upper) || page === null) notFound();
+
+  // Level labels live in lib/level-copy, shared with the bare level page and
+  // the hero, so the breadcrumb cannot drift from the H1.
+  const meta = getLevelMeta(upper);
+  if (!meta) notFound();
 
   const { q, sort, category } = parseLevelQuery(await searchParams);
 
@@ -127,8 +133,8 @@ export default async function Page({ params, searchParams }: PageProps) {
           items={[
             { nameBn: "শব্দভাণ্ডার", nameEn: "Vocabulary", href: "/vocabulary" },
             {
-              nameBn: `${upper} · ${LEVEL_LABELS[upper].labelBn}`,
-              nameEn: `${upper} · ${LEVEL_LABELS[upper].label}`,
+              nameBn: `${upper} · ${meta.labelBn}`,
+              nameEn: `${upper} · ${meta.label}`,
               href: `/vocabulary/${level}`,
             },
             {

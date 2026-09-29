@@ -12,22 +12,12 @@ import {
 import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/vocabulary-query";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Breadcrumb } from "@/components/breadcrumb";
-import { SITE_NAME, SITE_URL } from "@/lib/site-config";
+import { SITE_URL } from "@/lib/site-config";
+import { getLevelMeta, isLevelLive, levelMetaDescription } from "@/lib/level-copy";
 
 // Reads the request session and queries Prisma directly, so it can never be
 // statically generated or served from the full-route cache.
 export const dynamic = "force-dynamic";
-
-const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
-
-const LEVEL_LABELS: Record<(typeof VALID_LEVELS)[number], { label: string; labelBn: string }> = {
-  A1: { label: "Beginner", labelBn: "শিক্ষানবিস" },
-  A2: { label: "Elementary", labelBn: "প্রাথমিক" },
-  B1: { label: "Intermediate", labelBn: "মাঝারি" },
-  B2: { label: "Upper Intermediate", labelBn: "উচ্চ-মাঝারি" },
-  C1: { label: "Advanced", labelBn: "উন্নত" },
-  C2: { label: "Mastery", labelBn: "পারদর্শী" },
-};
 
 type PageProps = {
   params: Promise<{ level: string }>;
@@ -46,16 +36,28 @@ export async function generateMetadata({
   }
 
   const { isFiltered } = parseLevelQuery(await searchParams);
-  const labels = LEVEL_LABELS[upper as (typeof VALID_LEVELS)[number]];
+
+  // The word count has to come from the database rather than being hardcoded,
+  // because the description quotes it and the page noindexes a level that is
+  // still too small to be worth indexing.
+  const aggregate = await getLevelAggregate(upper);
+  const live = isLevelLive(aggregate.total);
+  const meta = getLevelMeta(upper);
+  const levelSlug = upper.toLowerCase();
+
+  if (!meta) {
+    return { title: "Level Not Found", robots: { index: false, follow: false } };
+  }
 
   return {
-    title: `English Vocabulary - Level ${upper} (${labels.label})`,
-    description: `Learn essential English words at ${upper} level (${labels.label}). ${labels.labelBn} vocabulary list with Bangla meanings, examples, synonyms and antonyms.`,
+    title: `${meta.h1En}`,
+    description: levelMetaDescription(upper, aggregate.total),
     // Filter variants always point back at the clean level URL.
-    alternates: { canonical: `/vocabulary/${upper.toLowerCase()}` },
-    robots: isFiltered
-      ? { index: false, follow: true }
-      : { index: true, follow: true },
+    alternates: { canonical: `/vocabulary/${levelSlug}` },
+    robots:
+      isFiltered || !live
+        ? { index: false, follow: true }
+        : { index: true, follow: true },
   };
 }
 
@@ -65,7 +67,10 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   if (!isValidLevel(upper)) notFound();
 
-  const labels = LEVEL_LABELS[upper as (typeof VALID_LEVELS)[number]];
+  // Level labels live in lib/level-copy so the page, the hero and the metadata
+  // can never disagree about what a level is called.
+  const meta = getLevelMeta(upper);
+  if (!meta) notFound();
 
   const { q, sort, category } = parseLevelQuery(await searchParams);
 
@@ -98,10 +103,10 @@ export default async function Page({ params, searchParams }: PageProps) {
       {
         "@type": "DefinedTermSet",
         "@id": setId,
-        name: `${upper} ${labels.label} English Vocabulary`,
+        name: `${upper} ${meta.label} English Vocabulary`,
         alternateName: `${upper} লেভেল ইংরেজি শব্দভাণ্ডার`,
         inLanguage: "en",
-        description: `CEFR ${upper} (${labels.label}) English word list with Bangla meanings, ${aggregate.total} words.`,
+        description: `CEFR ${upper} (${meta.label}) English word list with Bangla meanings, ${aggregate.total} words.`,
         url: `${SITE_URL}/vocabulary/${levelSlug}`,
         numberOfTerms: aggregate.total,
         publisher: { "@id": `${SITE_URL}/#organization` },
@@ -125,8 +130,8 @@ export default async function Page({ params, searchParams }: PageProps) {
           items={[
             { nameBn: "শব্দভাণ্ডার", nameEn: "Vocabulary", href: "/vocabulary" },
             {
-              nameBn: `${upper} · ${labels.labelBn}`,
-              nameEn: `${upper} · ${labels.label}`,
+              nameBn: `${upper} · ${meta.labelBn}`,
+              nameEn: `${upper} · ${meta.label}`,
               href: `/vocabulary/${levelSlug}`,
             },
           ]}

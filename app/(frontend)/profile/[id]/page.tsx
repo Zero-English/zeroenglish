@@ -27,7 +27,7 @@ export async function generateMetadata({
       : null;
 
   return {
-    title: displayName ? `${displayName} | Profile | Zero English` : "Profile | Zero English",
+    title: displayName ? `${displayName} | Profile` : "Profile",
     description: displayName
       ? `Public profile of ${displayName} on Zero English — track learned words and quiz progress.`
       : "Public profile on Zero English.",

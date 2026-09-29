@@ -179,7 +179,7 @@ export function Sidebar() {
               onClick={close}
               className="flex items-center space-x-2"
             >
-              <Image src={logo} alt="Logo" className="h-5 w-auto dark:brightness-0 dark:invert" />
+              <Image src={logo} alt="Zero English" className="h-5 w-auto dark:brightness-0 dark:invert" />
             </Link>
           </div>
           <div className="flex flex-col flex-1 overflow-hidden">

@@ -3,7 +3,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, PenLine } from "lucide-react";
 import { useT } from "@/components/language-provider";
 
 export function BlogArticle({
@@ -32,6 +32,15 @@ export function BlogArticle({
   const description = t(descriptionBn, descriptionEn);
   const content = t(contentBn, contentEn);
 
+  const date = new Date(createdAt);
+  // "29 September 2026" / "২৯ সেপ্টেম্বর ২০২৬". An unambiguous written date beats a
+  // locale-dependent numeric one for both readers and parsers.
+  const displayDate = new Intl.DateTimeFormat(
+    t(titleBn, titleEn) === titleBn ? "bn-BD" : "en-GB",
+    { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }
+  ).format(date);
+  const isoDate = date.toISOString().slice(0, 10);
+
   return (
     <article>
       {imageUrl && (
@@ -54,10 +63,19 @@ export function BlogArticle({
             {description}
           </p>
         )}
-        <p className="mt-4 inline-flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400">
-          <CalendarDays className="h-4 w-4" />
-          {new Date(createdAt).toLocaleDateString()}
-        </p>
+        {/* Byline and a spelled-out date. `toLocaleDateString()` alone renders
+            as "9/29/2026" in en-US, which is ambiguous, and it carried no
+            author at all, both of which the Article schema claimed. */}
+        <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-zinc-500 dark:text-zinc-400">
+          <span className="inline-flex items-center gap-1.5">
+            <CalendarDays className="h-4 w-4" />
+            <time dateTime={isoDate}>{displayDate}</time>
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <PenLine className="h-4 w-4" />
+            {t("লেখা: জিরো ইংলিশ সম্পাদকীয় দল", "Written by the Zero English editorial team")}
+          </span>
+        </div>
       </header>
 
       <div className="blog-article prose prose-zinc max-w-none dark:prose-invert">

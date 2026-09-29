@@ -17,14 +17,14 @@ export async function generateMetadata({
     Number.isNaN(questionId) ? null : await getQuizQuestionById(questionId);
 
   if (!result?.success || !result.data) {
-    return { title: `Quiz Question Not Found | ${SITE_NAME}` };
+    return { title: "Quiz Question Not Found" };
   }
 
   const question = result.data;
   const excerpt = question.questionText.slice(0, 155);
 
   return {
-    title: `Quiz Question #${question.id} | ${SITE_NAME}`,
+    title: `Quiz Question #${question.id}`,
     description: excerpt,
     alternates: { canonical: `/quiz/question/${question.id}` },
     openGraph: {

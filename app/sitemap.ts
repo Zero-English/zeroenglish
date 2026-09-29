@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 import { getLevelAggregate, getLevelLastModified } from "@/lib/data";
 import { getPublishedBlogsByPage } from "@/services/blog.service";
 import { SITE_URL } from "@/lib/site-config";
+import { isLevelLive, VALID_LEVELS } from "@/lib/level-copy";
 
 const BASE_URL = SITE_URL;
-const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 const ITEMS_PER_PAGE = 10;
 
 /**
@@ -37,6 +37,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getLevelAggregate(level),
       getLevelLastModified(level),
     ]);
+    // A level that is still being written is `noindex` on the page itself, so
+    // listing it here would ask crawlers to index a page that then tells them
+    // not to. Levels below the threshold are left out until they are ready.
+    if (!isLevelLive(aggregate.total)) continue;
+
     const totalPages = Math.ceil(aggregate.total / ITEMS_PER_PAGE);
     if (totalPages < 1) continue; // skip empty levels
 

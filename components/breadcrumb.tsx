@@ -22,9 +22,15 @@ export function Breadcrumb({
   const trail = buildTrail(items);
   const labels = schemaLabels(trail);
 
+  // The list is given an @id derived from the deepest crumb, so a page's
+  // WebPage schema can point at the exact list it renders with
+  // `breadcrumb: { "@id": ... }` instead of a dangling reference.
+  const trailId = `${SITE_URL}${trail[trail.length - 1].href}#breadcrumb`;
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
+    "@id": trailId,
     itemListElement: trail.map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,

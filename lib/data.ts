@@ -1,6 +1,7 @@
 import { cache } from "react";
 import prisma, { withPrismaRetry } from "@/utils/prisma";
-import { formatCategoryLabel } from "@/lib/category";
+import { formatCategoryLabel, mainCategoryLabel } from "@/lib/category";
+import { isLevelLive } from "@/lib/level-copy";
 import type { Prisma } from "@/generated/prisma/client";
 import type { Levels } from "@/generated/prisma/enums";
 
@@ -263,20 +264,15 @@ const getLevelCategoryStats = cache(
 export const getLevelAggregate = cache(
   async (level: string): Promise<LevelAggregate> => {
     const stats = await getLevelCategoryStats(level);
-    const hasOxford = stats.some(
-      (s) => s.category === "Oxford3000" || s.category === "Oxford5000"
-    );
 
     return {
       level: level.toUpperCase(),
       total: stats.reduce((sum, s) => sum + s.count, 0),
       categoryCount: stats.length,
       categories: stats.map((s) => s.category).sort(),
-      categoryLabel: hasOxford
-        ? "Oxford 5000"
-        : stats[0]
-          ? formatCategoryLabel(stats[0].category)
-          : "Oxford 5000",
+      categoryLabel: mainCategoryLabel(
+        stats.map((s) => ({ category: s.category }))
+      ),
     };
   }
 );
@@ -324,6 +320,55 @@ export const getLevelStats = cache(async () => {
   );
   const counts = new Map(grouped.map((row) => [row.level, row._count._all]));
   return VALID_LEVELS.map((level) => ({ level, count: counts.get(level) ?? 0 }));
+});
+
+/**
+ * The numbers the About page and its `Dataset` schema quote.
+ *
+ * These are counted at request time rather than hardcoded, because a stat that
+ * drifts away from the database is worse than no stat at all. The same
+ * `isPending: false` filter as the public word queries is applied, so pending
+ * submissions are never counted as published content.
+ */
+export const getAboutFacts = cache(async () => {
+  const [levelStats, categories, wordTotal, approvedQuestions, users, blogs] =
+    await withPrismaRetry(() =>
+      Promise.all([
+        getLevelStats(),
+        prisma.word.groupBy({
+          by: ["category"],
+          where: PUBLIC_WORD_WHERE,
+          _count: { _all: true },
+        }),
+        prisma.word.count({ where: PUBLIC_WORD_WHERE }),
+        prisma.quizQuestion.count({ where: { isPending: false } }),
+        prisma.user.count(),
+        prisma.blog.count({ where: { published: true } }),
+      ])
+    );
+
+  const categoryCounts = new Map(
+    categories.map((row) => [row.category, row._count._all])
+  );
+  const oxford3000 = categoryCounts.get("Oxford3000") ?? 0;
+  const oxford5000 = categoryCounts.get("Oxford5000") ?? 0;
+
+  return {
+    wordTotal,
+    approvedQuestions,
+    users,
+    publishedBlogs: blogs,
+    levelCounts: levelStats,
+    oxford3000,
+    oxford5000,
+    // Words whose category is neither Oxford list, e.g. the single `Random`
+    // entry. Stated explicitly on /about rather than left as an unexplained
+    // gap in the arithmetic.
+    unsourced: Math.max(0, wordTotal - oxford3000 - oxford5000),
+    // Same threshold the level pages and sitemap use, so "live levels" means
+    // one thing across the site.
+    liveLevels: levelStats.filter((s) => isLevelLive(s.count)).length,
+  };
 });
 
 export type VocabularyFacetLevel = {
@@ -384,8 +429,6 @@ export const getVocabularyFacets = cache(async (): Promise<VocabularyFacets> => 
     levelTotals.add(row.level);
   }
 
-  const hasOxford =
-    byCategory.has("Oxford3000") || byCategory.has("Oxford5000");
   const sortedGroups = Array.from(byCategory.entries())
     .sort((a, b) => b[1].total - a[1].total)
     .map(([category, entry]) => ({
@@ -404,9 +447,9 @@ export const getVocabularyFacets = cache(async (): Promise<VocabularyFacets> => 
     totalWords,
     categoryCount: byCategory.size,
     levelCount: levelTotals.size,
-    categoryLabel: hasOxford
-      ? "Oxford 5000"
-      : sortedGroups[0]?.label ?? "Oxford 5000",
+    categoryLabel: mainCategoryLabel(
+      Array.from(byCategory.keys()).map((category) => ({ category }))
+    ),
     groups: sortedGroups,
   };
 });

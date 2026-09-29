@@ -12,7 +12,7 @@ import { useDailyGoal } from "@/lib/use-daily-goal";
 import { setSelectedLevel } from "@/lib/level-store";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
-import { formatCategoryLabel } from "@/lib/category";
+import { formatCategoryLabel, mainCategoryLabel } from "@/lib/category";
 import type { WordRef } from "@/types/api";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 
@@ -195,17 +195,8 @@ export function VocabularyClient({ serverMode = false, facets }: VocabularyClien
   );
 
   const categoryLabel = useMemo(() => {
-    if (isServerMode) return facets?.categoryLabel ?? "Oxford 5000";
-    const cats = new Set(wordRefs.map((r) => r.category || "Oxford5000"));
-    if (cats.has("Oxford3000") || cats.has("Oxford5000")) return "Oxford 5000";
-    if (wordRefs.length === 0) return "Oxford 5000";
-    const counts = new Map<string, number>();
-    for (const ref of wordRefs) {
-      const cat = ref.category || "Oxford5000";
-      counts.set(cat, (counts.get(cat) ?? 0) + 1);
-    }
-    const dominant = Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0]?.[0];
-    return dominant ? formatCategoryLabel(dominant) : "Oxford 5000";
+    if (isServerMode) return facets?.categoryLabel ?? mainCategoryLabel([]);
+    return mainCategoryLabel(wordRefs);
   }, [isServerMode, facets, wordRefs]);
 
   const categories = useMemo<CategoryGroup[]>(() => {
@@ -227,7 +218,7 @@ export function VocabularyClient({ serverMode = false, facets }: VocabularyClien
 
     const map = new Map<string, { label: string; total: number; learned: number; levels: LevelStatRow[] }>();
     for (const ref of wordRefs) {
-      const cat = ref.category || "Oxford 5000";
+      const cat = ref.category || "Oxford5000";
       const entry = map.get(cat) ?? {
         label: formatCategoryLabel(cat),
         total: 0,

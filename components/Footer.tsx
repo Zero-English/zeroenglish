@@ -88,10 +88,14 @@ const socialLinks = [
                 className="h-6 w-auto dark:brightness-0 dark:invert"
               />
             </Link>
+            {/* "comprehensive learning platform" / "সম্পূর্ণ লার্নিং প্ল্যাটফর্ম"
+                overclaimed: the site is a word list plus quizzes, not a course
+                platform. Same positioning as the homepage and the Organization
+                description, so the brand reads identically in every footer. */}
             <p className="text-sm leading-relaxed text-muted-foreground">
               {t(
-                "আপনার নিজের গতিতে আমাদের সম্পূর্ণ লার্নিং প্ল্যাটফর্ম দিয়ে ইংরেজি শব্দভাণ্ডার আয়ত্ত করুন।",
-                "Master English vocabulary at your own pace with our comprehensive learning platform."
+                "A1 থেকে C1 পর্যন্ত ৫,০০০টির বেশি ইংরেজি শব্দ, বাংলা অর্থ ও উদাহরণ সহ। আপনার নিজের গতিতে পড়ুন, চিহ্নিত করুন আর কুইজ দিয়ে যাচাই করুন।",
+                "5,000+ English words from A1 to C1 with Bangla meanings and examples. Read at your own pace, mark what you know, and check yourself with quizzes."
               )}
             </p>
             <div className="flex space-x-3">

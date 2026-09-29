@@ -6,9 +6,9 @@ import { Leaderboard } from "@/components/leaderboard";
 import { BackButton } from "@/components/back-button";
 
 export const metadata: Metadata = {
-    title: "Leaderboard",
+    title: "Weekly Quiz Leaderboard",
     description:
-        "Learners who took a quiz exam this week, ranked by their average score.",
+        "See who scored highest on this week's Zero English quizzes, ranked by average score across every exam they took.",
     alternates: { canonical: "/leaderboard" },
 };
 

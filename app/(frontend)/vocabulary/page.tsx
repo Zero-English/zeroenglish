@@ -10,9 +10,9 @@ import { authOptions } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Vocabulary | Zero English",
+  title: "English Vocabulary List by CEFR Level",
   description:
-    "Browse the complete vocabulary word list with Bangla meanings. Filter by level, search, bookmark, and track what you've learned.",
+    "Browse the full English word list with Bangla meanings, grouped by CEFR level and topic. Mark words as learned or still learning, and follow your progress across A1 to C1.",
   alternates: { canonical: "/vocabulary" },
 };
 

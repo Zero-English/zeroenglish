@@ -18,7 +18,7 @@ export async function generateMetadata({
   const result = await getPublishedBlogBySlug(slug);
 
   if (!result.success || !result.data) {
-    return { title: "News | Zero English" };
+    return { title: "News" };
   }
 
   const blog = result.data;
@@ -31,8 +31,12 @@ export async function generateMetadata({
       title: blog.metaTitle,
       description: blog.metaDescription,
       type: "article",
+      url: `${SITE_URL}/news/${blog.slug}`,
+      siteName: SITE_NAME,
+      locale: "bn_BD",
       publishedTime: blog.createdAt.toISOString(),
       modifiedTime: blog.updatedAt.toISOString(),
+      authors: [SITE_NAME],
       images: blog.featuredMedia
         ? [{ url: blog.featuredMedia.url, alt: blog.featuredMedia.altText || undefined }]
         : [],
@@ -56,23 +60,39 @@ export default async function NewsArticlePage({
     "@context": "https://schema.org",
     "@type": "Article",
     "@id": `${SITE_URL}/news/${blog.slug}#article`,
+    mainEntityOfPage: { "@id": `${SITE_URL}/news/${blog.slug}#webpage` },
     headline: blog.titleBn,
+    alternativeHeadline: blog.titleEn || undefined,
     description: blog.metaDescription,
     datePublished: blog.createdAt.toISOString(),
     dateModified: blog.updatedAt.toISOString(),
     inLanguage: "bn",
-    author: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
-    publisher: {
-      "@type": "Organization",
-      name: SITE_NAME,
-      logo: { "@type": "ImageObject", url: `${SITE_URL}/assets/logo/open-graph.png` },
-    },
+    // The page now shows a byline, so the schema has to agree with it. The
+    // Organization is referenced by @id so this node is the same entity the
+    // site-wide Organization and the /about Person nodes describe.
+    author: { "@id": `${SITE_URL}/#organization` },
+    publisher: { "@id": `${SITE_URL}/#organization` },
     image: blog.featuredMedia ? [blog.featuredMedia.url] : undefined,
-    mainEntityOfPage: `${SITE_URL}/news/${blog.slug}`,
+    isAccessibleForFree: true,
+    about: { "@id": `${SITE_URL}/#organization` },
+  };
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${SITE_URL}/news/${blog.slug}#webpage`,
+    url: `${SITE_URL}/news/${blog.slug}`,
+    name: blog.metaTitle,
+    description: blog.metaDescription,
+    inLanguage: "bn",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    breadcrumb: { "@id": `${SITE_URL}/news/${blog.slug}#breadcrumb` },
+    primaryImageOfPage: blog.featuredMedia?.url,
   };
 
   return (
     <div className="px-4 py-10 sm:px-6 lg:px-8">
+      <JsonLd data={webPageSchema} />
       <JsonLd data={articleSchema} />
       <div className="mx-auto max-w-3xl">
         <Breadcrumb

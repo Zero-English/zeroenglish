@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import Link from "next/link";
 import { motion } from "motion/react";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useT } from "@/components/language-provider";
@@ -38,6 +39,10 @@ interface LevelHeroProps {
   /** Number of distinct categories in the level. */
   categoryCount: number;
   categoryLabel: string;
+  /** Unique per-level intro copy and topic chips. */
+  introEn: string;
+  introBn: string;
+  topics: { en: string; bn: string }[];
   /**
    * Ids belonging to this level, used to scope locally stored learned words.
    * In server mode this is the only way to know which learned ids are in level.
@@ -56,6 +61,9 @@ export function LevelHero({
   totalCount,
   categoryCount,
   categoryLabel,
+  introEn,
+  introBn,
+  topics,
   levelWordIds,
 }: LevelHeroProps) {
   const { learnedIds, loaded } = useLearnedWords();
@@ -76,6 +84,7 @@ export function LevelHero({
 
   const pct = totalCount > 0 ? Math.round((learned / totalCount) * 100) : 0;
   const remaining = Math.max(0, totalCount - learned);
+  const count = totalCount.toLocaleString("en-US");
 
   return (
     <section className="relative">
@@ -105,10 +114,19 @@ export function LevelHero({
                   </p>
                 </div>
                 <h1 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                  {level}
+                  {t(
+                    `${level} ইংরেজি শব্দভাণ্ডার`,
+                    `${level} English Vocabulary`
+                  )}
                   <span className="mx-2 text-zinc-300 dark:text-zinc-600">·</span>
                   {t(labelBn, label)}
                 </h1>
+                <p className="mt-1 text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                  {t(
+                    `${count}টি শব্দ, প্রতিটির বাংলা অর্থ ও উদাহরণ বাক্যসহ`,
+                    `${count} words with Bangla meanings and example sentences`
+                  )}
+                </p>
               </div>
 
               <div className="flex items-center gap-4 border-y border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4">
@@ -146,8 +164,8 @@ export function LevelHero({
                   labelEn="Words learned"
                   labelBn="শব্দ শেখা হয়েছে"
                   value={loaded ? `${learned}` : "…"}
-                  subEn={`of ${totalCount} total`}
-                  subBn={`মোট ${totalCount}টির মধ্যে`}
+                  subEn={`of ${count} total`}
+                  subBn={`মোট ${count}টির মধ্যে`}
                   tint="text-orange-500"
                 />
                 <StatRow
@@ -177,6 +195,47 @@ export function LevelHero({
                   subBn={`${level} লেভেলে যত বিষয়`}
                   tint="text-emerald-500"
                 />
+              </div>
+
+              {/* Unique copy per level. Without this all six pages ship the
+                  same hero and read as one thin template. */}
+              <div className="border-t border-black/[0.06] px-5 py-5 dark:border-white/[0.08] sm:px-6">
+                <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                  {t(introBn, introEn)}
+                </p>
+
+                {topics.length > 0 && (
+                  <ul className="mt-3 flex flex-wrap gap-1.5">
+                    {topics.map((topic) => (
+                      <li
+                        key={topic.en}
+                        className="rounded-full bg-black/[0.04] px-2.5 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-white/[0.06] dark:text-zinc-400"
+                      >
+                        {t(topic.bn, topic.en)}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">
+                  {t(
+                    `সব শব্দ একসঙ্গে দেখতে `,
+                    `See every word at once: `
+                  )}
+                  <Link
+                    href="/vocabulary"
+                    className="font-medium text-orange-600 hover:underline dark:text-orange-400"
+                  >
+                    {t("শব্দভাণ্ডার", "Vocabulary")}
+                  </Link>
+                  {t(" · পরে পরীক্ষা করতে ", " · test yourself with ")}
+                  <Link
+                    href="/quiz/vocabulary"
+                    className="font-medium text-orange-600 hover:underline dark:text-orange-400"
+                  >
+                    {t("কুইজ", "a vocabulary quiz")}
+                  </Link>
+                </p>
               </div>
             </div>
           </StaggerItem>

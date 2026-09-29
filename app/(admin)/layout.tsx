@@ -1,5 +1,6 @@
 import type { Metadata,Viewport  } from "next";
-import HtmlShell from "@/components/html-shell";
+import HtmlShell, { shellMetadata } from "@/components/html-shell";
+import { SITE_TITLE_TEMPLATE } from "@/lib/site-config";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -8,13 +9,12 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Admin | Zero English",
-  description: "Zero English admin panel for managing users and vocabulary.",
-  manifest: "/manifest.webmanifest",
-  icons: "/assets/logo/favicon.webp",
-  other: {
-    "theme-color": "#f97316",
+  ...shellMetadata,
+  title: {
+    default: `Admin${SITE_TITLE_TEMPLATE.replace("%s ", "")}`,
+    template: SITE_TITLE_TEMPLATE,
   },
+  description: "Zero English admin panel for managing users and vocabulary.",
   robots: {
     index: false,
     follow: false,
