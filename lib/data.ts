@@ -282,6 +282,24 @@ export const getLevelAggregate = cache(
 );
 
 /**
+ * The most recent edit to any public word in a level. Used for the sitemap's
+ * `lastmod`, which must reflect real content changes rather than build time.
+ * Returns null when a level has no words, so callers can omit the field
+ * instead of inventing a date.
+ */
+export const getLevelLastModified = cache(
+  async (level: string): Promise<Date | null> => {
+    const res = await withPrismaRetry(() =>
+      prisma.word.aggregate({
+        _max: { updatedAt: true },
+        where: { ...PUBLIC_WORD_WHERE, level: level.toUpperCase() as Levels },
+      })
+    );
+    return res._max.updatedAt ?? null;
+  }
+);
+
+/**
  * Just the ids for a level. Lets the client scope its locally stored
  * learned/bookmarked set to this level without downloading the word bank.
  */
