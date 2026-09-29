@@ -138,7 +138,7 @@ export async function GET(
             key: "questions",
             value: `${questionCount}`,
             label: "Questions",
-            valueColor: "#F8FAF9",
+            valueColor: "#000000",
         },
         {
             key: "correct",
@@ -198,7 +198,7 @@ export async function GET(
                         backgroundPosition: "center",
                         backgroundRepeat: "no-repeat",
                         padding: "40px 64px",
-                        color: "#F8FAF9",
+                        color: "#000000",
                     }}
                 >
                     {/* Result Owner Avatar */}
@@ -237,7 +237,7 @@ export async function GET(
                                 style={{
                                     fontSize: 32,
                                     fontWeight: 800,
-                                    color: "#F8FAF9",
+                                    color: "#000000",
                                 }}
                             >
                                 {avatarInitial}
@@ -264,10 +264,10 @@ export async function GET(
                                 gap: 4,
                             }}
                         >
-                            <div style={{ fontSize: 18, color: "#E3F2FD", fontWeight: 500 }}>
+                            <div style={{ fontSize: 18, color: "#000000", fontWeight: 500 }}>
                                 {title}
                             </div>
-                            <div style={{ fontSize: 32, fontWeight: 800, color: "#F8FAF9" }}>
+                            <div style={{ fontSize: 32, fontWeight: 800, color: "#000000" }}>
                                 {quizTypeLabel}
                             </div>
                         </div>
