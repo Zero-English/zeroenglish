@@ -239,7 +239,7 @@ export function HomeContent({
                 </span>
                 <div className="text-left">
                   <p className="text-xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums leading-none">
-                    {words.length}
+                    {/* {words.length} */} 5000+
                   </p>
                   <p className="text-xs text-zinc-400 mt-1">{t("শব্দশক্তি", "Word Power")}</p>
                 </div>

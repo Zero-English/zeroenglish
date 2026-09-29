@@ -13,6 +13,7 @@ import {ActivityTracker} from "@/components/activity-tracker";
 import { LoginRequiredDrawer } from "@/components/login-required-drawer";
 import { SessionAdopter } from "@/components/session-adopter";
 import { PopupHost } from "@/components/popup/popup-host";
+import { SiteSchema } from "@/components/seo/site-schema";
 import { SITE_URL, SITE_NAME } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -58,6 +59,7 @@ export default function FrontendLayout({
 }>) {
   return (
     <HtmlShell>
+      <SiteSchema />
       <TopLoader />
       <AppHydration />
       <SidebarProvider>

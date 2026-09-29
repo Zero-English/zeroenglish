@@ -10,6 +10,8 @@ import {
   isValidLevel,
 } from "@/lib/data";
 import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/vocabulary-query";
+import { JsonLd } from "@/components/seo/json-ld";
+import { SITE_NAME, SITE_URL } from "@/lib/site-config";
 
 // Reads the request session and queries Prisma directly, so it can never be
 // statically generated or served from the full-route cache.
@@ -62,6 +64,8 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   if (!isValidLevel(upper)) notFound();
 
+  const labels = LEVEL_LABELS[upper as (typeof VALID_LEVELS)[number]];
+
   const { q, sort, category } = parseLevelQuery(await searchParams);
 
   const [session, pageData, aggregate, wordIds] = await Promise.all([
@@ -81,22 +85,56 @@ export default async function Page({ params, searchParams }: PageProps) {
   // An empty level is a genuine 404; an empty *filter* result is not.
   if (aggregate.total === 0) notFound();
 
+  const levelSlug = upper.toLowerCase();
+  const setId = `${SITE_URL}/vocabulary/${levelSlug}#termset`;
+
+  // Only the 10 words on this page become DefinedTerms, so the schema
+  // describes exactly what the HTML shows. numberOfTerms stays the true
+  // level total from the same filtered aggregate the hero renders.
+  const definedTermSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "DefinedTermSet",
+        "@id": setId,
+        name: `${upper} ${labels.label} English Vocabulary`,
+        alternateName: `${upper} লেভেল ইংরেজি শব্দভাণ্ডার`,
+        inLanguage: "en",
+        description: `CEFR ${upper} (${labels.label}) English word list with Bangla meanings, ${aggregate.total} words.`,
+        url: `${SITE_URL}/vocabulary/${levelSlug}`,
+        numberOfTerms: aggregate.total,
+        publisher: { "@id": `${SITE_URL}/#organization` },
+        // No per-word route exists, so terms are inline nodes with no @id
+        // rather than non-resolvable fragment URLs.
+        hasDefinedTerm: pageData.words.map((w) => ({
+          name: w.word,
+          description: w.definitionEn,
+          inLanguage: "en",
+          inDefinedTermSet: { "@id": setId },
+        })),
+      },
+    ],
+  };
+
   return (
-    <LevelPageContent
-      level={upper}
-      pageNum={1}
-      serverMode={!session}
-      initialWords={pageData.words}
-      initialTotal={pageData.total}
-      initialTotalPages={pageData.totalPages}
-      initialCategories={aggregate.categories}
-      initialCategoryCount={aggregate.categoryCount}
-      initialCategoryLabel={aggregate.categoryLabel}
-      // Only the bank-less render needs the ids to scope local progress.
-      initialWordIds={session ? undefined : wordIds}
-      search={q}
-      sort={sort}
-      category={category}
-    />
+    <>
+      <JsonLd data={definedTermSchema} />
+      <LevelPageContent
+        level={upper}
+        pageNum={1}
+        serverMode={!session}
+        initialWords={pageData.words}
+        initialTotal={pageData.total}
+        initialTotalPages={pageData.totalPages}
+        initialCategories={aggregate.categories}
+        initialCategoryCount={aggregate.categoryCount}
+        initialCategoryLabel={aggregate.categoryLabel}
+        // Only the bank-less render needs the ids to scope local progress.
+        initialWordIds={session ? undefined : wordIds}
+        search={q}
+        sort={sort}
+        category={category}
+      />
+    </>
   );
 }

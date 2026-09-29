@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Newspaper } from "lucide-react";
 import { getPublishedBlogBySlug } from "@/services/blog.service";
 import { BlogArticle } from "@/components/news/blog-article";
+import { JsonLd } from "@/components/seo/json-ld";
+import { SITE_NAME, SITE_URL } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
 
@@ -50,8 +52,28 @@ export default async function NewsArticlePage({
 
   const blog = result.data;
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "@id": `${SITE_URL}/news/${blog.slug}#article`,
+    headline: blog.titleBn,
+    description: blog.metaDescription,
+    datePublished: blog.createdAt.toISOString(),
+    dateModified: blog.updatedAt.toISOString(),
+    inLanguage: "bn",
+    author: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/assets/logo/open-graph.png` },
+    },
+    image: blog.featuredMedia ? [blog.featuredMedia.url] : undefined,
+    mainEntityOfPage: `${SITE_URL}/news/${blog.slug}`,
+  };
+
   return (
     <div className="px-4 py-10 sm:px-6 lg:px-8">
+      <JsonLd data={articleSchema} />
       <div className="mx-auto max-w-3xl">
         <Link
           href="/news"

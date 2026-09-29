@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { AboutClient } from "@/components/about-client";
+import { JsonLd } from "@/components/seo/json-ld";
+import { FAQS } from "@/lib/site-faq";
+import { SITE_URL } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "About Us | Zero English",
@@ -9,5 +12,24 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  return <AboutClient />;
+  // Built from the same FAQS array the page renders, so the schema can
+  // never drift out of sync with the visible content.
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${SITE_URL}/about#faq`,
+    inLanguage: "bn",
+    mainEntity: FAQS.map((faq) => ({
+      "@type": "Question",
+      name: faq.qBn,
+      acceptedAnswer: { "@type": "Answer", text: faq.aBn },
+    })),
+  };
+
+  return (
+    <>
+      <JsonLd data={faqSchema} />
+      <AboutClient />
+    </>
+  );
 }
