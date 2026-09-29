@@ -20,29 +20,32 @@ export async function generateMetadata({
   }
 
   const result = await getCombinedExamResultById(resultId);
-  const data = result.success ? result.data : null;
-  const correct = data?.correctQuestions?.length ?? data?.correctAnswers ?? 0;
-  const total = data?.questionCount ?? correct;
-  const title = `I scored ${correct}/${total} on Zero English!`;
-  const description = "Can you beat my score?";
-  const image = `${SITE_URL}/api/quiz-result-image/${resultId}`;
+
+  if (!result.success || !result.data) {
+    return { title: `Quiz Result Not Found | ${SITE_NAME}` };
+  }
+
+  const data = result.data;
+  const score = data.correctQuestions?.length ?? data.correctAnswers;
+  const total = data.questionCount;
+  const title = `I scored ${score}/${total} on Zero English!`;
+  const description = "Test your English vocabulary on Zero English.";
 
   return {
-    title: `${title} | ${SITE_NAME}`,
+    title,
     description,
-    alternates: { canonical: `/profile/quiz-results/${resultId}` },
     openGraph: {
       title,
       description,
-      type: "article",
-      siteName: SITE_NAME,
-      images: [{ url: image, alt: title }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [image],
+      images: [
+        {
+          url: `${SITE_URL}/api/results/${data.id}/image`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+      type: "website",
+      url: `${SITE_URL}/quiz-results/${data.id}`,
     },
   };
 }
