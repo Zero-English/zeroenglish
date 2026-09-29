@@ -11,6 +11,7 @@ import {
 } from "@/lib/data";
 import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/vocabulary-query";
 import { JsonLd } from "@/components/seo/json-ld";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { SITE_NAME, SITE_URL } from "@/lib/site-config";
 
 // Reads the request session and queries Prisma directly, so it can never be
@@ -119,6 +120,18 @@ export default async function Page({ params, searchParams }: PageProps) {
   return (
     <>
       <JsonLd data={definedTermSchema} />
+      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-0">
+        <Breadcrumb
+          items={[
+            { nameBn: "শব্দভাণ্ডার", nameEn: "Vocabulary", href: "/vocabulary" },
+            {
+              nameBn: `${upper} · ${labels.labelBn}`,
+              nameEn: `${upper} · ${labels.label}`,
+              href: `/vocabulary/${levelSlug}`,
+            },
+          ]}
+        />
+      </div>
       <LevelPageContent
         level={upper}
         pageNum={1}

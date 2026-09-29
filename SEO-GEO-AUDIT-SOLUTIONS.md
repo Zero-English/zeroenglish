@@ -1,8 +1,27 @@
 # Zero English — Production-Ready SEO + GEO Solutions Playbook
 
 **Companion to:** `SEO-GEO-AUDIT-REPORT.md` (audit date: 28 September 2026)
-**Status:** Recommendations only — **no code, config, database, or CMS content has been changed.** Every snippet below is a *proposed* change you (or a developer) apply manually.
+**Status:** **Partially applied.** Code, config and database changes have been made as of 29 September 2026 — see the table below. Everything not listed is still a *proposed* change you (or a developer) apply manually.
 **Goal:** Copy-paste-ready fixes, in dependency order, with verification steps.
+
+## Application status (29 September 2026)
+
+| Solution | Audit ref | State | Notes |
+|---|---|---|---|
+| S1 | T2 | **Not applied — deliberately** | Resolved transitively by S2. `app/robots.ts` stays tight on purpose; see the T2 resolution note in the audit report. |
+| S2 | T1 | **Applied** | All 511 vocabulary URLs server-rendered via Prisma; hybrid server/client mode; `isPending: false` leak fixed. |
+| S3 | T3 | Not applied | Open. |
+| S4 | T5 | **Applied** | 520 → 525 URLs; fake `lastmod` eliminated (per-level `MAX(updatedAt)` + omitted on static routes); `changefreq` corrected. |
+| S6 | T6 | **Applied, wider than scoped** | Noindexed `/profile/[id]` plus the two `/profile/*-results/[id]` routes the audit missed. |
+| S7.1 | T4 | **Applied** | `Organization` + `WebSite` site-wide. |
+| S7.2 | T4 | **Applied** | `BreadcrumbList` + a visible trail on the vocabulary hubs. |
+| S7.3 | T4 | **Applied** | `FAQPage` on `/about`, built from the array the page renders so it cannot drift. |
+| S7.4 | T4 | **Applied** | `Article` on `/news/[slug]`. |
+| — | T4 | **Applied (extra)** | `DefinedTermSet` on the 6 level hubs, enabled by S2. |
+| S5, S8–S12 | various | Not applied | Open. |
+| — | T13 | Documented, deferred | `/quiz/vocabulary` renders nothing for crawlers; see the audit report. |
+
+**Known follow-ups:** the `sameAs` and `contactPoint` values in S7.1 were taken from the audit and still need verifying. `notFound()` on vocabulary routes renders the correct page but returns HTTP 200 because of streaming `loading.tsx` boundaries — pre-existing, unfixed.
 
 **Labels used:**
 - 🔴 P0 (blocking) · 🟠 P1 (high) · 🟡 P2 (medium) · 🟢 P3 (low)

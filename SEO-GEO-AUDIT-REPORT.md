@@ -123,6 +123,8 @@ Each issue: **Problem → URL → Why it matters → Severity → Solution → E
 - **Solution:** Server-render (SSR/SSG) the 10 words per page — metadata is already server-rendered per page via `generateMetadata`, so render the words in the server component too. With `revalidate`, this costs nothing.
 - **Example:** In `app/(frontend)/vocabulary/[level]/page.tsx`, fetch the page's words server-side (same data source `getWordsByLevel` uses in `sitemap.ts`) and pass them into `LevelPageContent` as props so the table is in the HTML.
 
+**Resolution (29 Sep 2026): fixed.** All 511 vocabulary URLs are now `force-dynamic` and query Prisma directly in the server component. Server mode serves the 10-word page slice plus `q` / `sort` / `category` query parameters with full parity; logged-out and guest users see server HTML, while Google-authenticated users and "Continue as Guest" users keep the IndexedDB bank client-side. The mode is decided server-side by `getServerSession` and overridden client-side after hydration by `useAuthStatus()`, with the two render trees kept as separate hook-stable components. Filter variants emit `noindex, follow` with a canonical clean URL. A related defect was fixed at the same time: `getAllWords` / `getWordsByLevel` were missing `isPending: false` and would have published unapproved contributor submissions. **Note:** `notFound()` on these routes renders correctly but still returns HTTP 200 because of streaming `loading.tsx` boundaries — pre-existing, and tracked separately.
+
 ### T2. `robots.txt` blocks the API that the page content depends on 🔴
 
 - **Problem:** `Disallow: /api` while all word content is loaded from `/api/v1/words/all`.
@@ -130,6 +132,8 @@ Each issue: **Problem → URL → Why it matters → Severity → Solution → E
 - **Why it matters:** When Googlebot renders a page, subresource fetches obey robots.txt. It **cannot fetch the words**, so the rendered DOM stays empty even for Google's JS renderer. This compounds T1.
 - **Severity:** 🔴 Critical
 - **Solution:** Prefer fixing T1 (server rendering) so robots can stay tight. If content must come from the API, explicitly **allow** the public data endpoint.
+
+**Resolution (29 Sep 2026): resolved transitively by T1 — `app/robots.ts` deliberately left unchanged.** All 511 vocabulary URLs now render their words from Prisma in the server component and issue zero `/api/*` requests, so the conflict this issue described no longer exists for any page that matters. Do **not** "fix" this by allowing `/api/v1/words/` in robots.txt: `/api/v1/words/all` is the entire word bank in one JSON document, and allowing it would (a) make that large blob a crawlable, indexable URL and (b) benefit only Googlebot, since GPTBot/ClaudeBot/PerplexityBot do not execute JavaScript and would be unaffected by an XHR allow-rule. The audit's preferred path — fix T1, keep robots tight — is the one taken. See also T13 for the one remaining page that still depends on a blocked API.
 - **Example implementation:**
 
   ```
@@ -160,6 +164,8 @@ Each issue: **Problem → URL → Why it matters → Severity → Solution → E
 - **Solution:** Add JSON-LD in the layout (Organization, WebSite) + per-page (BreadcrumbList, Article for news, FAQPage on About).
 - **Example:** a `<script type="application/ld+json">` with `{"@type":"Organization","name":"Zero English","url":"https://zeroenglish.org","sameAs":["https://facebook.com/zeroenglishorg"]}`.
 
+**Resolution (29 Sep 2026): fixed.** `Organization` + `WebSite` now render site-wide via `components/seo/site-schema.tsx`; `FAQPage` on `/about` (built from the same array the page renders, so it cannot drift); `Article` on `/news/[slug]`; `BreadcrumbList` on the vocabulary hubs; and `DefinedTermSet` on the 6 level pages. `DefinedTerm` nodes deliberately carry no `@id`, because no per-word route exists and fragment IDs would not resolve. No `aggregateRating`, `review`, or `Course` schema was added — there is no genuine data to support them.
+
 ### T5. Sitemap is incomplete and lastmod is fake 🟠
 
 - **Problem:** 520 URLs, but **missing**: `/about`, `/privacy`, `/contribute`, `/quiz/grammar`, `/quiz/class`, `/quiz/quick`, `/quiz/vocabulary`. Every entry has the identical `lastmod: 2026-09-22T04:10:07.782Z` (generated from `new Date()` at build time).
@@ -167,12 +173,16 @@ Each issue: **Problem → URL → Why it matters → Severity → Solution → E
 - **Severity:** 🟠 High
 - **Solution:** Add all indexable routes to `staticRoutes` in `app/sitemap.ts`; use real content update dates (blog already uses `updatedAt` correctly).
 
+**Resolution (29 Sep 2026): fixed.** 520 → 525 URLs. The fake `lastmod` class is eliminated: the 519 build-time timestamps are gone, vocabulary pages now carry a per-level `MAX(updatedAt)` from the words table (new `getLevelLastModified` in `lib/data.ts`), and the 13 static routes emit **no** `lastmod` at all rather than an invented one. `changefreq` on the 511 word pages moved from `daily` to `weekly`. Added `/about`, `/privacy`, `/quiz/grammar`, `/quiz/class`, `/quiz/quick`. Deliberately excluded `/contribute` (redirects to `/login` for anonymous users) and `/quiz/vocabulary` (see T13).
+
 ### T6. `/profile/*` pages are indexable 🟠
 
 - **Problem:** `/profile/1` returns `index, follow` with title "Tahmid Hasan | Profile | Zero English".
 - **Why it matters:** Hundreds of thin personal pages dilute crawl quality and expose user names in SERPs (privacy + thin-content risk).
 - **Severity:** 🟠 High
 - **Solution:** `robots: { index: false }` in `app/(frontend)/profile/[id]/page.tsx` metadata (the same pattern is already correctly used by `/profile` itself, which has `noindex, nofollow`).
+
+**Resolution (29 Sep 2026): fixed, and the scope was wider than reported.** `/profile/[id]` now emits `noindex, follow` in both the success and not-found branches. Two further routes were found indexable with **no robots key at all** and have also been noindexed: `/profile/quiz-results/[id]` and `/profile/vocabulary-exam-results/[id]` — per-user exam results, a greater privacy exposure than the public profiles this issue named. `follow` (not `nofollow`) is used throughout so the ~6 `/profile/[id]` links on the indexable `/leaderboard` still pass crawl equity onward.
 
 ### T7. Soft-404 on quiz question URLs 🟡
 
@@ -204,6 +214,15 @@ Each issue: **Problem → URL → Why it matters → Severity → Solution → E
 
 - **Problem:** No `<link rel="canonical">` on `/contribute` (all other main pages have one).
 - **Severity:** 🟡 Medium — add `alternates: { canonical: "/contribute" }`.
+
+### T13. `/quiz/vocabulary` is indexable but renders no server content 🟡
+
+- **Problem:** `app/(frontend)/quiz/vocabulary/page.tsx` is a pure client component with no server data fetch and no `getServerSession`. `components/quiz-vocabulary-client.tsx` calls `useCachedWords()` with no `enabled` gate, so it always requests `/api/v1/words/all` — which `robots.txt` blocks. The page has a self-referencing canonical and no `robots` directive, so it inherits `index: true` from the `(frontend)` layout. It is not in the sitemap and was not in the original audit.
+- **URL:** `https://zeroenglish.org/quiz/vocabulary`
+- **Why it matters:** Unlike T1, no crawler can ever populate this page — not even Google's JS renderer, because the fetch is robots-blocked. It is a functional interactive tool with nothing to index.
+- **Severity:** 🟡 Medium
+- **Solution:** Either add `robots: { index: false, follow: true }` (a quiz is an interactive tool; there is genuinely nothing to show a crawler), or server-render the quiz level list and counts via the same Prisma pattern used for the vocabulary pages. The first is a one-line change; the second is feature-sized.
+- **Status:** Documented, deliberately deferred (29 September 2026). Not added to the sitemap, so it is not advertised until a decision is made.
 
 ### T12. Verified as ✅ (no action needed)
 
@@ -1050,7 +1069,9 @@ Solid engineering foundation (fast TTFB, clean URLs, valid robots/sitemap, corre
 
 ## C. Technical SEO Problems
 
-T1–T12 in §3: SSR gap, robots/API conflict, homepage weight, no schema, incomplete sitemap + fake lastmod, indexable profiles, soft-404 questions, wrong lang, 307 permanent-redirect cases, case-variant 200, missing canonical on `/contribute`. Verified-good: HTTPS/HSTS, compression, TTFB, 404s, trailing-slash normalization, canonicals on 15/16 main pages, noindex on `/profile`, `/quiz/question/*`, `/docs`.
+T1–T13 in §3: SSR gap, robots/API conflict, homepage weight, no schema, incomplete sitemap + fake lastmod, indexable profiles, soft-404 questions, wrong lang, 307 permanent-redirect cases, case-variant 200, missing canonical on `/contribute`, empty quiz page. Verified-good: HTTPS/HSTS, compression, TTFB, 404s, trailing-slash normalization, canonicals on 15/16 main pages, noindex on `/profile`, `/quiz/question/*`, `/docs`.
+
+**Fixed so far (29 September 2026):** T1 (SSR gap), T2 (resolved by T1; robots deliberately left tight), T4 (structured data), T5 (sitemap + lastmod), T6 (indexable profiles), T13 (documented, deferred). **Still open:** T3 (homepage weight + PII), T7 (soft-404 status codes), T8 (`html lang="en"`), T9/T10 (redirects), T11 (canonical on `/contribute`), plus the content and E-E-A-T sections.
 
 ## D. Content Problems
 

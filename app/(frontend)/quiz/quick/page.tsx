@@ -1,4 +1,5 @@
 import { QuickQuizClient } from "@/components/quiz-quick-client";
+import { QuizBreadcrumb, QUIZ_CRUMBS } from "@/components/quiz-breadcrumb";
 
 export const metadata = {
   title: "Quick Quiz | 20 Questions in 20 Seconds Each | Zero English",
@@ -8,5 +9,10 @@ export const metadata = {
 };
 
 export default function QuizQuickPage() {
-  return <QuickQuizClient />;
+  return (
+    <>
+      <QuizBreadcrumb leaf={QUIZ_CRUMBS.quick} />
+      <QuickQuizClient />
+    </>
+  );
 }

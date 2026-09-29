@@ -1,4 +1,5 @@
 import { CombinedExamResults } from "@/components/quiz-results";
+import { QuizBreadcrumb, QUIZ_CRUMBS } from "@/components/quiz-breadcrumb";
 
 export const metadata = {
   title: "Past Exam Results - Review Your Quiz History",
@@ -8,5 +9,10 @@ export const metadata = {
 };
 
 export default function CombinedExamResultsPage() {
-  return <CombinedExamResults />;
+  return (
+    <>
+      <QuizBreadcrumb leaf={QUIZ_CRUMBS.results} />
+      <CombinedExamResults />
+    </>
+  );
 }

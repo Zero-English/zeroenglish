@@ -10,6 +10,7 @@ import {
   isValidLevel,
 } from "@/lib/data";
 import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/vocabulary-query";
+import { Breadcrumb } from "@/components/breadcrumb";
 
 // Reads the request session and queries Prisma directly, so it can never be
 // statically generated or served from the full-route cache.
@@ -108,10 +109,28 @@ export default async function Page({ params, searchParams }: PageProps) {
   if (pageData.page < page) notFound();
 
   return (
-    <LevelPageContent
-      level={upper}
-      pageNum={page}
-      serverMode={!session}
+    <>
+      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-0">
+        <Breadcrumb
+          items={[
+            { nameBn: "শব্দভাণ্ডার", nameEn: "Vocabulary", href: "/vocabulary" },
+            {
+              nameBn: `${upper} · ${LEVEL_LABELS[upper].labelBn}`,
+              nameEn: `${upper} · ${LEVEL_LABELS[upper].label}`,
+              href: `/vocabulary/${level}`,
+            },
+            {
+              nameBn: `পৃষ্ঠা ${page}`,
+              nameEn: `Page ${page}`,
+              href: `/vocabulary/${level}/${pageNum}`,
+            },
+          ]}
+        />
+      </div>
+      <LevelPageContent
+        level={upper}
+        pageNum={page}
+        serverMode={!session}
       initialWords={pageData.words}
       initialTotal={pageData.total}
       initialTotalPages={pageData.totalPages}
@@ -121,8 +140,9 @@ export default async function Page({ params, searchParams }: PageProps) {
       // Only the bank-less render needs the ids to scope local progress.
       initialWordIds={session ? undefined : wordIds}
       search={q}
-      sort={sort}
-      category={category}
-    />
+        sort={sort}
+        category={category}
+      />
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import { QuizExamClient } from "@/components/quiz-exam-client";
+import { QuizBreadcrumb, QUIZ_CRUMBS } from "@/components/quiz-breadcrumb";
 
 export const metadata = {
   title: "Quiz Exams - Scheduled Vocabulary Exams",
@@ -8,5 +9,10 @@ export const metadata = {
 };
 
 export default function QuizExamPage() {
-  return <QuizExamClient />;
+  return (
+    <>
+      <QuizBreadcrumb leaf={QUIZ_CRUMBS.exam} />
+      <QuizExamClient />
+    </>
+  );
 }

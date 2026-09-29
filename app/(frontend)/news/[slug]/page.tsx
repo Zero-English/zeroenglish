@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Newspaper } from "lucide-react";
+import { Newspaper } from "lucide-react";
 import { getPublishedBlogBySlug } from "@/services/blog.service";
 import { BlogArticle } from "@/components/news/blog-article";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_NAME, SITE_URL } from "@/lib/site-config";
 
@@ -75,13 +75,17 @@ export default async function NewsArticlePage({
     <div className="px-4 py-10 sm:px-6 lg:px-8">
       <JsonLd data={articleSchema} />
       <div className="mx-auto max-w-3xl">
-        <Link
-          href="/news"
-          className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to News
-        </Link>
+        <Breadcrumb
+          className="mb-8"
+          items={[
+            { nameBn: "সংবাদ", nameEn: "News", href: "/news" },
+            {
+              nameBn: blog.titleBn,
+              nameEn: blog.titleEn || blog.titleBn,
+              href: `/news/${blog.slug}`,
+            },
+          ]}
+        />
 
         <BlogArticle
           titleBn={blog.titleBn}

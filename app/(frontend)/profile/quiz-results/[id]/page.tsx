@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { QuizPracticeResultDetail } from "@/components/quiz-practice-result-detail";
 import { BackButton } from "@/components/back-button";
 
 export const dynamic = "force-dynamic";
+
+// Per-user exam results. Never indexable, but `follow` is kept so in-app links
+// still pass crawl equity.
+export const metadata: Metadata = {
+  robots: { index: false, follow: true },
+};
 
 export default async function QuizPracticeResultDetailPage({
   params,

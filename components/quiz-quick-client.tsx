@@ -9,7 +9,6 @@ import { useQuizChrome } from "@/lib/quiz-chrome";
 import { useAuthStore } from "@/lib/auth-store";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { requestLogin } from "@/lib/login-required";
-import { QuizBackLink } from "@/components/quiz-back-link";
 import {
   Zap,
   Check,
@@ -411,7 +410,6 @@ export function QuickQuizClient() {
       <div className="relative min-h-dvh overflow-hidden px-4 py-10 sm:px-6">
         <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
         <div className="max-w-xl mx-auto">
-          <QuizBackLink className="animate-fade-up mb-8" />
           <div className="animate-pulse space-y-6">
             <div className="h-5 w-40 rounded-lg bg-zinc-200/70 dark:bg-zinc-800/70" />
             <div className="h-44 rounded-3xl bg-zinc-200/70 dark:bg-zinc-800/70" />
@@ -498,8 +496,6 @@ function QuickIntro({
       <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
 
       <div className="max-w-2xl mx-auto">
-        <QuizBackLink className="animate-fade-up mb-8" />
-
         <div className="animate-fade-up text-center mb-12">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-xs font-medium text-rose-600 dark:text-rose-300 mb-4">
             <Zap className="h-3.5 w-3.5" />
@@ -588,7 +584,6 @@ function QuickStateCard({
     <div className="relative min-h-dvh overflow-hidden px-6 py-16">
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
       <div className="max-w-2xl mx-auto">
-        <QuizBackLink className="animate-fade-up mb-8" />
         <div className="animate-fade-up mx-auto max-w-xl rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-10 text-center">
           <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-4">
             {icon}

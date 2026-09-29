@@ -1,4 +1,5 @@
 import { QuizVocabularyClient } from "@/components/quiz-vocabulary-client";
+import { QuizBreadcrumb, QUIZ_CRUMBS } from "@/components/quiz-breadcrumb";
 
 export const metadata = {
   title: "Vocabulary Practice Quizzes - Test Your Knowledge",
@@ -8,5 +9,10 @@ export const metadata = {
 };
 
 export default function QuizVocabularyPage() {
-  return <QuizVocabularyClient />;
+  return (
+    <>
+      <QuizBreadcrumb leaf={QUIZ_CRUMBS.vocabulary} />
+      <QuizVocabularyClient />
+    </>
+  );
 }

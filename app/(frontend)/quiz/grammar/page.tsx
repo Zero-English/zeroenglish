@@ -1,4 +1,5 @@
 import { QuizGrammarClient } from "@/components/quiz-grammar-client";
+import { QuizBreadcrumb, QUIZ_CRUMBS } from "@/components/quiz-breadcrumb";
 
 export const metadata = {
   title: "Grammar Topic Quizzes - Practise English Grammar",
@@ -14,5 +15,10 @@ export default async function QuizGrammarPage({
 }) {
   const params = await searchParams;
   const topic = typeof params.topic === "string" ? params.topic : undefined;
-  return <QuizGrammarClient selectedTopicSlug={topic} />;
+  return (
+    <>
+      <QuizBreadcrumb leaf={QUIZ_CRUMBS.grammar} />
+      <QuizGrammarClient selectedTopicSlug={topic} />
+    </>
+  );
 }

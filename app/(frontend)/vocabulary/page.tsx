@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { VocabularyClient } from "@/components/vocabulary-client";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { getVocabularyFacets } from "@/lib/data";
 import { authOptions } from "@/lib/auth";
 
@@ -21,5 +22,14 @@ export default async function VocabularyPage() {
     getVocabularyFacets(),
   ]);
 
-  return <VocabularyClient serverMode={!session} facets={facets} />;
+  return (
+    <>
+      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-0">
+        <Breadcrumb
+          items={[{ nameBn: "শব্দভাণ্ডার", nameEn: "Vocabulary", href: "/vocabulary" }]}
+        />
+      </div>
+      <VocabularyClient serverMode={!session} facets={facets} />
+    </>
+  );
 }
