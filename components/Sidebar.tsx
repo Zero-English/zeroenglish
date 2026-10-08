@@ -4,14 +4,26 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "motion/react";
-import { PanelLeft, Home, Search, User, BookOpenCheck, LibraryBig, Trophy, Newspaper, LogIn, LogOut, SquarePen } from "lucide-react";
+import { motion } from "motion/react";
+import {
+  Home,
+  Search,
+  User,
+  BookOpenCheck,
+  LibraryBig,
+  Trophy,
+  Newspaper,
+  LogIn,
+  LogOut,
+  SquarePen,
+} from "lucide-react";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
 import { useSelectedLevel } from "@/lib/level-store";
 import { useT } from "@/components/language-provider";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -21,26 +33,20 @@ import logo from "../public/assets/logo/main-logo.webp";
 
 const spring = { type: "spring", stiffness: 420, damping: 32, mass: 0.9 } as const;
 
-function NavLinks({
-  isOpen: showLabels,
-  onNavigate,
-  activeId,
-}: {
-  isOpen: boolean;
-  onNavigate?: () => void;
-  activeId: string;
-}) {
+export function Sidebar() {
+  const hidden = useQuizChrome((s) => s.hidden);
   const pathname = usePathname();
+  const { isOpen, close } = useSidebar();
   const { status } = useAuthStatus();
   const { level } = useSelectedLevel();
   const t = useT();
+  const logout = useAuthStore((s) => s.logout);
   const isLoggedIn = status !== "none";
-  // Link to the level store remembers. Paging is restored from the
-  // level-pagination store, so the href carries no page segment.
   const vocabularyHref = isLoggedIn && level ? `/vocabulary/${level.toLowerCase()}` : "/vocabulary";
   const { data: session } = useSession();
   const canContribute =
     session?.user?.role === "admin" || session?.user?.role === "contributor";
+
   const navLinks: { href: string; label: string; icon: typeof Home }[] = [
     { href: "/", label: t("হোম", "Home"), icon: Home },
     { href: vocabularyHref, label: t("শব্দভাণ্ডার", "Vocabulary"), icon: LibraryBig },
@@ -56,78 +62,6 @@ function NavLinks({
       : { href: "/login", label: t("লগইন", "Login"), icon: LogIn },
   ];
 
-  return (
-    <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto">
-      {navLinks.map((link) => {
-        // Prefix match so `/vocabulary/a1/2` still highlights `/vocabulary/a1`.
-        // "/" needs an exact match or it would swallow every route.
-        const isActive =
-          link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            onClick={onNavigate}
-            className="relative flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors gap-3 whitespace-nowrap text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300 dark:hover:text-white"
-          >
-            {isActive && (
-              <motion.span
-                layoutId={activeId}
-                transition={spring}
-                className="absolute inset-0 rounded-md border bg-primary/15"
-              />
-            )}
-            <link.icon className={cn("h-5 w-5 shrink-0 relative", isActive && "text-primary")} />
-            <AnimatePresence initial={false}>
-              {showLabels && (
-                <motion.span
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: "auto" }}
-                  exit={{ opacity: 0, width: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className={cn("relative truncate", isActive && "text-primary font-semibold")}
-                >
-                  {link.label}
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </Link>
-        );
-      })}
-    </nav>
-  );
-}
-
-function LogoutButton({
-  showLabels,
-  onLogout,
-}: {
-  showLabels: boolean;
-  onLogout: () => void;
-}) {
-  const t = useT();
-  return (
-    <div className="border-t border-gray-200 dark:border-gray-800 p-3">
-      <button
-        type="button"
-        onClick={onLogout}
-        className="flex items-center w-full px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors gap-3 whitespace-nowrap"
-      >
-        <LogOut className="h-5 w-5 shrink-0" />
-        {showLabels && <span className="truncate">{t("লগ আউট", "Log out")}</span>}
-      </button>
-    </div>
-  );
-}
-
-export function Sidebar() {
-  const hidden = useQuizChrome((s) => s.hidden);
-  const { isOpen, isDesktopOpen, close, toggleDesktop } = useSidebar();
-  const { status } = useAuthStatus();
-  const t = useT();
-  const logout = useAuthStore((s) => s.logout);
-  const isLoggedIn = status !== "none";
-
   const handleLogout = async () => {
     close();
     logout();
@@ -142,38 +76,88 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <motion.aside
-        initial={false}
-        animate={{ width: isDesktopOpen ? 256 : 72 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="hidden md:flex sticky top-0 z-30 h-screen md:shrink-0 flex-col bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800 overflow-hidden"
+      {/* Desktop Floating Bottom Dock */}
+      <aside
+        aria-label="Floating Navigation Dock"
+        className="hidden md:flex fixed bottom-5 inset-x-0 mx-auto w-max z-40 pointer-events-none"
       >
-        <div className="flex items-center justify-between p-4 border-b">
-          <button
-            onClick={toggleDesktop}
-            aria-label={isDesktopOpen ? "Collapse sidebar" : "Expand sidebar"}
-            className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            <PanelLeft className="h-5 w-5" />
-          </button>
-        </div>
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <NavLinks isOpen={isDesktopOpen} activeId="sidebar-active-desktop" />
+        <div className="pointer-events-auto flex flex-row items-center gap-1.5 p-2 rounded-2xl border border-border/80 bg-background/85 dark:bg-card/75 backdrop-blur-xl shadow-2xl shadow-black/15 dark:shadow-black/35">
+          {/* Dock Navigation Items */}
+          <nav className="flex flex-row items-center gap-1">
+            {navLinks.map((link) => {
+              const isActive =
+                link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "group relative flex size-11 items-center justify-center rounded-xl transition-all",
+                    isActive
+                      ? "text-primary font-semibold"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/70 active:scale-95"
+                  )}
+                  aria-label={link.label}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="dock-active-pill-bottom"
+                      transition={spring}
+                      className="absolute inset-0 rounded-xl bg-primary/15 border border-primary/20 shadow-xs"
+                    />
+                  )}
+                  <motion.div
+                    whileHover={{ scale: 1.2, y: -4 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    className="relative z-10"
+                  >
+                    <link.icon className="size-5 shrink-0" />
+                  </motion.div>
+
+                  {/* Dock Tooltip positioned above */}
+                  <span className="pointer-events-none absolute bottom-full mb-3 hidden group-hover:flex items-center rounded-md bg-popover px-2.5 py-1 text-xs font-medium text-popover-foreground shadow-md border border-border whitespace-nowrap z-50 animate-in fade-in-0 zoom-in-95">
+                    {link.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Logout Dock Item */}
           {isLoggedIn && (
-            <LogoutButton showLabels={isDesktopOpen} onLogout={handleLogout} />
+            <>
+              <Separator orientation="vertical" className="h-6 mx-1 bg-border/80" />
+              <button
+                type="button"
+                onClick={handleLogout}
+                aria-label={t("লগ আউট", "Log out")}
+                className="group relative flex size-11 items-center justify-center rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 active:scale-95 transition-all"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.2, y: -4 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <LogOut className="size-5 shrink-0" />
+                </motion.div>
+                <span className="pointer-events-none absolute bottom-full mb-3 hidden group-hover:flex items-center rounded-md bg-popover px-2.5 py-1 text-xs font-medium text-destructive shadow-md border border-border whitespace-nowrap z-50 animate-in fade-in-0 zoom-in-95">
+                  {t("লগ আউট", "Log out")}
+                </span>
+              </button>
+            </>
           )}
         </div>
-      </motion.aside>
+      </aside>
 
-      {/* Mobile drawer (shadcn Sheet) */}
+      {/* Mobile Drawer (shadcn Sheet) */}
       <Sheet open={isOpen} onOpenChange={(open) => { if (!open) close(); }}>
         <SheetContent
           side="left"
-          className="w-64 gap-0 p-0 bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800"
+          className="w-64 gap-0 p-0 bg-sidebar text-sidebar-foreground border-r border-sidebar-border"
         >
           <SheetTitle className="sr-only">{t("নেভিগেশন মেনু", "Navigation Menu")}</SheetTitle>
-          <div className="flex items-center p-4 border-b h-16">
+          <div className="flex items-center p-4 border-b border-sidebar-border h-14">
             <Link
               href="/"
               onClick={close}
@@ -183,9 +167,47 @@ export function Sidebar() {
             </Link>
           </div>
           <div className="flex flex-col flex-1 overflow-hidden">
-            <NavLinks isOpen onNavigate={close} activeId="sidebar-active-mobile" />
+            <nav className="flex-1 px-3 py-3 space-y-1 overflow-y-auto">
+              {navLinks.map((link) => {
+                const isActive =
+                  link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={close}
+                    className={cn(
+                      "relative flex items-center px-3 py-2 rounded-md text-xs font-medium transition-colors gap-3 whitespace-nowrap",
+                      isActive
+                        ? "text-sidebar-accent-foreground font-semibold bg-sidebar-accent shadow-xs"
+                        : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/60"
+                    )}
+                  >
+                    <link.icon
+                      className={cn(
+                        "size-4 shrink-0 relative transition-colors",
+                        isActive ? "text-primary" : "text-sidebar-foreground/70"
+                      )}
+                    />
+                    <span className={cn("relative truncate", isActive && "text-foreground font-semibold")}>
+                      {link.label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </nav>
             {isLoggedIn && (
-              <LogoutButton showLabels onLogout={handleLogout} />
+              <div className="p-3">
+                <Separator className="mb-3" />
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex items-center w-full px-3 py-2 rounded-md text-xs font-medium text-sidebar-foreground/70 hover:text-destructive hover:bg-destructive/10 transition-colors gap-3 whitespace-nowrap"
+                >
+                  <LogOut className="size-4 shrink-0" />
+                  <span className="truncate">{t("লগ আউট", "Log out")}</span>
+                </button>
+              </div>
             )}
           </div>
         </SheetContent>

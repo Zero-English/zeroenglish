@@ -199,7 +199,7 @@ export function PopupHost() {
                   type="button"
                   onClick={() => dismiss(popup.id)}
                   aria-label="Close popup"
-                  className="absolute -top-3 -right-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-700 shadow-md transition-colors hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+                  className="absolute -top-3 -right-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full bg-background text-foreground border border-border shadow-md transition-colors hover:bg-muted"
                 >
                   <X className="h-4 w-4" />
                 </button>

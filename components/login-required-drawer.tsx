@@ -72,14 +72,14 @@ export function LoginRequiredDrawer() {
       <DrawerContent className="mx-auto max-w-lg rounded-t-3xl">
         <div className="px-6 pb-8 pt-2">
           <div className="mb-5 flex justify-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 text-white shadow-lg shadow-orange-500/30">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
               <LogIn className="h-6 w-6" />
             </div>
           </div>
-          <DrawerTitle className="text-center text-base font-bold sm:text-lg">
+          <DrawerTitle className="text-center text-base font-semibold sm:text-lg">
             {t("লগইন প্রয়োজন", "Login required")}
           </DrawerTitle>
-          <DrawerDescription className="mt-1.5 text-center text-xs sm:text-sm leading-relaxed">
+          <DrawerDescription className="mt-1.5 text-center text-xs sm:text-sm text-muted-foreground leading-relaxed">
             {t(
               "শেখা, বুকমার্ক এবং কুইজের অগ্রগতি সংরক্ষণ করতে একটি প্রোফাইল তৈরি করুন।",
               "Create a profile to save your learned words, bookmarks, and quiz progress."
@@ -88,7 +88,8 @@ export function LoginRequiredDrawer() {
           <div className="mt-5 space-y-2">
             <Button
               size="lg"
-              className="w-full gap-2 bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-500/20"
+              variant="default"
+              className="w-full gap-2"
               onClick={() => void handleGoogle()}
               disabled={busy}
             >
@@ -105,7 +106,7 @@ export function LoginRequiredDrawer() {
               {t("অতিথি হিসেবে চালিয়ে যান", "Continue as Guest")}
             </Button>
             <DrawerClose asChild>
-              <Button size="lg" variant="ghost" className="w-full" disabled={busy}>
+              <Button size="lg" variant="ghost" className="w-full text-muted-foreground" disabled={busy}>
                 {t("পরে", "Maybe later")}
               </Button>
             </DrawerClose>

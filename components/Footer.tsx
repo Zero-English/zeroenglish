@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, ArrowRight } from "lucide-react";
 import { useT } from "@/components/language-provider";
+import { Separator } from "@/components/ui/separator";
 import logo from "../public/assets/logo/main-logo.webp";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 
@@ -55,19 +56,19 @@ export default function FFooter() {
   ];
 
   function FacebookIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-      className={className}
-    >
-      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-    </svg>
-  );
-}
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+        className={className}
+      >
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+      </svg>
+    );
+  }
 
-const socialLinks = [
+  const socialLinks = [
     { icon: Mail, href: "mailto:zeroenglishweb@gmail.com", label: "Email" },
     { icon: FacebookIcon, href: "https://facebook.com/zeroenglishorg", label: "Facebook" },
   ];
@@ -75,40 +76,36 @@ const socialLinks = [
   if (hidden) return null;
 
   return (
-    <footer className="border-t border-border bg-muted/40 text-muted-foreground mt-auto">
+    <footer className="border-t border-border bg-card/40 text-muted-foreground mt-auto">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand Column */}
-          <div className="lg:col-span-2 space-y-5 max-w-sm">
+          <div className="lg:col-span-2 space-y-4 max-w-sm">
             <Link href="/" className="inline-flex items-center space-x-2">
               <Image
                 src={logo}
                 alt="Zero English"
-                className="h-6 w-auto dark:brightness-0 dark:invert"
+                className="h-5 w-auto dark:brightness-0 dark:invert"
               />
             </Link>
-            {/* "comprehensive learning platform" / "সম্পূর্ণ লার্নিং প্ল্যাটফর্ম"
-                overclaimed: the site is a word list plus quizzes, not a course
-                platform. Same positioning as the homepage and the Organization
-                description, so the brand reads identically in every footer. */}
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className="text-xs/relaxed text-muted-foreground">
               {t(
                 "A1 থেকে C1 পর্যন্ত ৫,০০০টির বেশি ইংরেজি শব্দ, বাংলা অর্থ ও উদাহরণ সহ। আপনার নিজের গতিতে পড়ুন, চিহ্নিত করুন আর কুইজ দিয়ে যাচাই করুন।",
                 "5,000+ English words from A1 to C1 with Bangla meanings and examples. Read at your own pace, mark what you know, and check yourself with quizzes."
               )}
             </p>
-            <div className="flex space-x-3">
+            <div className="flex space-x-2 pt-1">
               {socialLinks.map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
                   target={href.startsWith("http") ? "_blank" : undefined}
                   rel={href.startsWith("http") ? "noreferrer" : undefined}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:text-primary"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background text-muted-foreground shadow-2xs transition-colors hover:bg-accent hover:text-accent-foreground"
                   aria-label={label}
                 >
-                  <Icon className="size-4" />
+                  <Icon className="size-3.5" />
                 </a>
               ))}
             </div>
@@ -117,17 +114,17 @@ const socialLinks = [
           {/* Links Columns */}
           {footerColumns.map((column) => (
             <div key={column.categoryEn} className="lg:col-span-1">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground mb-5">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-foreground mb-4">
                 {t(column.categoryBn, column.categoryEn)}
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-2.5">
                 {column.links.map((link) => (
                   <li key={`${column.categoryEn}-${link.labelEn}`}>
                     <Link
                       href={link.href}
-                      className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors active:text-foreground hover:text-foreground"
+                      className="group inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground active:text-foreground"
                     >
-                      <ArrowRight className="size-3.5 shrink-0 text-muted-foreground/50 transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
+                      <ArrowRight className="size-3 shrink-0 text-muted-foreground/50 transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
                       {t(link.labelBn, link.labelEn)}
                     </Link>
                   </li>
@@ -138,17 +135,17 @@ const socialLinks = [
         </div>
 
         {/* Divider */}
-        <div className="border-t border-border mt-12 mb-8"></div>
+        <Separator className="mt-10 mb-6" />
 
         {/* Bottom Footer */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-muted-foreground">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-muted-foreground">
           <p>
             {t(
               `© ${currentYear} জিরো ইংলিশ। সর্বস্বত্ব সংরক্ষিত।`,
               `© ${currentYear} Zero English. All rights reserved.`
             )}
           </p>
-          <div className="flex space-x-6">
+          <div className="flex space-x-5">
             <Link href="/privacy" className="hover:text-foreground active:text-foreground transition-colors">
               {t("গোপনীয়তা", "Privacy")}
             </Link>

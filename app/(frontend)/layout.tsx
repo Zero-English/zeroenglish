@@ -69,15 +69,15 @@ export default function FrontendLayout({
       <AppHydration />
       <SidebarProvider>
         <LanguageProvider>
-          <div className="flex flex-col min-h-screen md:flex-row">
+          <div className="flex flex-col min-h-screen bg-background text-foreground">
+            <Header />
+            <ActivityTracker />
+            <main className="flex-1 min-w-0 w-full pb-14 md:pb-20">
+              {children}
+            </main>
             <Sidebar />
-            <div className="flex flex-col flex-1 min-w-0">
-              <Header />
-              <ActivityTracker />
-              <main className="flex-1 min-w-0 w-full">{children}</main>
-              <MobileBottomNav />
-              <Footer />
-            </div>
+            <MobileBottomNav />
+            <Footer />
             <LoginRequiredDrawer />
             <SessionAdopter />
             <PopupHost />

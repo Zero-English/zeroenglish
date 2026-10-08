@@ -1,7 +1,6 @@
 import * as React from "react"
-import Link from "next/link"
+import { cn } from "cn"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
@@ -24,7 +23,7 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex items-center gap-0.5 list-none", className)}
+      className={cn("flex items-center gap-0.5", className)}
       {...props}
     />
   )
@@ -37,12 +36,8 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 type PaginationLinkProps = {
   isActive?: boolean
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a"> & { href: string }
+  React.ComponentProps<"a">
 
-/**
- * A real anchor. Used by the server-rendered (logged-out) pages, where the
- * pagination links have to be crawlable and navigate.
- */
 function PaginationLink({
   className,
   isActive,
@@ -56,7 +51,7 @@ function PaginationLink({
       size={size}
       className={cn(className)}
     >
-      <Link
+      <a
         aria-current={isActive ? "page" : undefined}
         data-slot="pagination-link"
         data-active={isActive}
@@ -68,32 +63,25 @@ function PaginationLink({
 
 type PaginationButtonProps = {
   isActive?: boolean
-} & Omit<React.ComponentProps<typeof Button>, "variant" | "asChild">
+} & Pick<React.ComponentProps<typeof Button>, "size"> &
+  React.ComponentProps<"button">
 
-/**
- * A plain button, for when the page being shown is client state rather than a
- * URL — the cached word bank already has every word, so navigating would throw
- * the page away only to re-render the same list.
- */
 function PaginationButton({
   className,
   isActive,
   size = "icon",
-  children,
   ...props
 }: PaginationButtonProps) {
   return (
     <Button
-      type="button"
       variant={isActive ? "outline" : "ghost"}
       size={size}
-      className={cn(className)}
-      data-slot="pagination-link"
+      aria-current={isActive ? "page" : undefined}
+      data-slot="pagination-button"
       data-active={isActive}
+      className={cn(className)}
       {...props}
-    >
-      {children}
-    </Button>
+    />
   )
 }
 
@@ -115,6 +103,24 @@ function PaginationPrevious({
   )
 }
 
+function PaginationPreviousButton({
+  className,
+  text = "Previous",
+  ...props
+}: React.ComponentProps<typeof PaginationButton> & { text?: string }) {
+  return (
+    <PaginationButton
+      aria-label="Go to previous page"
+      size="default"
+      className={cn("pl-2!", className)}
+      {...props}
+    >
+      <ChevronLeftIcon data-icon="inline-start" />
+      <span className="hidden sm:block">{text}</span>
+    </PaginationButton>
+  )
+}
+
 function PaginationNext({
   className,
   text = "Next",
@@ -133,33 +139,11 @@ function PaginationNext({
   )
 }
 
-function PaginationPreviousButton({
-  className,
-  text = "Previous",
-  ...props
-}: Omit<React.ComponentProps<typeof PaginationButton>, "type"> & {
-  text?: string
-}) {
-  return (
-    <PaginationButton
-      aria-label="Go to previous page"
-      size="default"
-      className={cn("pl-2!", className)}
-      {...props}
-    >
-      <ChevronLeftIcon data-icon="inline-start" />
-      <span className="hidden sm:block">{text}</span>
-    </PaginationButton>
-  )
-}
-
 function PaginationNextButton({
   className,
   text = "Next",
   ...props
-}: Omit<React.ComponentProps<typeof PaginationButton>, "type"> & {
-  text?: string
-}) {
+}: React.ComponentProps<typeof PaginationButton> & { text?: string }) {
   return (
     <PaginationButton
       aria-label="Go to next page"
@@ -187,8 +171,7 @@ function PaginationEllipsis({
       )}
       {...props}
     >
-      <MoreHorizontalIcon
-      />
+      <MoreHorizontalIcon />
       <span className="sr-only">More pages</span>
     </span>
   )
@@ -196,13 +179,13 @@ function PaginationEllipsis({
 
 export {
   Pagination,
-  PaginationButton,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
+  PaginationButton,
   PaginationNext,
-  PaginationNextButton,
   PaginationPrevious,
+  PaginationNextButton,
   PaginationPreviousButton,
 }
