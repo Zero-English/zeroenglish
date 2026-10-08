@@ -7,6 +7,24 @@ datasource db {
   provider = "postgresql"
 } 
 
+model GrammarRules {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  grammarCategoryId Int
+  grammarCategory QuizType @relation(fields: [grammarCategoryId], references: [id], onDelete: Cascade)
+  level Levels
+  prerequisites GrammarRules[] @relation("GrammarPrerequisites")
+  prerequisitesFor GrammarRules[] @relation("GrammarPrerequisites")
+  examples String[]
+  status grammarRuleStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdByUserId Int
+  createdBy User @relation(fields: [createdByUserId], references: [id], onDelete: Cascade)
+  commonMistakes String[]
+}
+
 model Blog {
   id              Int      @id @default(autoincrement())
   titleEn         String
@@ -239,6 +257,7 @@ model User {
   isPending      Boolean @default(true)
   addedQuestions QuizQuestion[]
   addedWords Word[]
+  addedGrammarRules GrammarRules[]
   relatedCombinedExamResults CombinedExamResult[]
   createdTemplates VisualTemplate[] @relation("CreatedTemplates")
 }
@@ -281,7 +300,7 @@ model QuizType {
   id               Int            @id @default(autoincrement())
   name             String         @unique
   relatedQuestions QuizQuestion[]
-
+  relatedGrammarRules GrammarRules[]
   combinedExamResults CombinedExamResult[]
 }
 
@@ -357,6 +376,12 @@ enum Gender {
   NOT_SET
 }
 
+enum grammarRuleStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum TemplateType {
   QUIZ_POSTER
   CONTRIBUTOR_CERTIFICATE
@@ -389,4 +414,4 @@ model VisualTemplate {
 
   @@index([type, isActive])
   @@index([backgroundMediaId])
-}
+}
