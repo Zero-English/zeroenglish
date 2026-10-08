@@ -15,6 +15,7 @@ import { FieldPanel } from "./field-panel";
 import { PropertyPanel } from "./property-panel";
 import { MediaModal } from "./media-modal";
 import { PreviewModal } from "./preview-modal";
+import { CanvasContextMenu } from "./canvas-context-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -122,6 +123,20 @@ export function CanvasEditor({
   const [mobileFieldsOpen, setMobileFieldsOpen] = useState(false);
   const [mobilePropsOpen, setMobilePropsOpen] = useState(false);
 
+  // Right-click context menu state
+  const [contextMenu, setContextMenu] = useState<{
+    position: { x: number; y: number } | null;
+    targetType: "element" | "canvas";
+    activeObject: fabric.FabricObject | null;
+  }>({
+    position: null,
+    targetType: "canvas",
+    activeObject: null,
+  });
+
+  const activeObjectRef = useRef<fabric.FabricObject | null>(null);
+  activeObjectRef.current = activeObject;
+
   // Resizable desktop sidebar panel widths
   const [leftPanelWidth, setLeftPanelWidth] = useState(288);
   const [rightPanelWidth, setRightPanelWidth] = useState(300);
@@ -206,6 +221,36 @@ export function CanvasEditor({
         if (containerRef.current) {
           containerRef.current.style.cursor = "grab";
         }
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === "d" || e.key === "D")) {
+        // Quick Duplicate
+        e.preventDefault();
+        handleDuplicate();
+      } else if (e.key === "Delete" || e.key === "Backspace") {
+        // Quick Delete
+        if (activeObjectRef.current) {
+          e.preventDefault();
+          handleDelete();
+        }
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === "a" || e.key === "A")) {
+        // Quick Select All
+        e.preventDefault();
+        handleSelectAll();
+      } else if ((e.ctrlKey || e.metaKey) && e.key === "]") {
+        // Bring to front
+        e.preventDefault();
+        handleBringToFront();
+      } else if ((e.ctrlKey || e.metaKey) && e.key === "[") {
+        // Send to back
+        e.preventDefault();
+        handleSendToBack();
+      } else if (!e.ctrlKey && !e.metaKey && e.key === "]") {
+        // Bring forward
+        e.preventDefault();
+        handleBringForward();
+      } else if (!e.ctrlKey && !e.metaKey && e.key === "[") {
+        // Send backward
+        e.preventDefault();
+        handleSendBackward();
       } else if (e.key === "h" || e.key === "H") {
         setToolMode("hand");
       } else if (e.key === "v" || e.key === "V") {
@@ -429,6 +474,8 @@ export function CanvasEditor({
       selection: toolModeRef.current === "select",
       skipTargetFind: toolModeRef.current === "hand",
       defaultCursor: toolModeRef.current === "hand" ? "grab" : "default",
+      fireRightClick: true,
+      stopContextMenu: true,
     });
 
     fabricCanvas.current = canvas;
@@ -438,6 +485,31 @@ export function CanvasEditor({
       const isHand = toolModeRef.current === "hand" || isSpacePressed.current || (opt.e as MouseEvent).button === 1;
       if (isHand) {
         startPanning((opt.e as MouseEvent).clientX, (opt.e as MouseEvent).clientY);
+      }
+    });
+
+    // Context menu right-click detection on Fabric objects
+    canvas.on("contextmenu", (opt) => {
+      const mouseEvent = opt.e as MouseEvent;
+      if (mouseEvent) {
+        mouseEvent.preventDefault();
+        const target = opt.target || canvas.getActiveObject() || null;
+        if (target && target.selectable !== false) {
+          canvas.setActiveObject(target);
+          canvas.renderAll();
+          setActiveObject(target);
+          setContextMenu({
+            position: { x: mouseEvent.clientX, y: mouseEvent.clientY },
+            targetType: "element",
+            activeObject: target,
+          });
+        } else {
+          setContextMenu({
+            position: { x: mouseEvent.clientX, y: mouseEvent.clientY },
+            targetType: "canvas",
+            activeObject: null,
+          });
+        }
       }
     });
 
@@ -832,6 +904,128 @@ export function CanvasEditor({
     fabricCanvas.current.sendObjectBackwards(activeObject);
     fabricCanvas.current.renderAll();
     saveHistoryState();
+  };
+
+  const handleBringToFront = () => {
+    if (!activeObject || !fabricCanvas.current) return;
+    fabricCanvas.current.bringObjectToFront(activeObject);
+    fabricCanvas.current.renderAll();
+    saveHistoryState();
+  };
+
+  const handleSendToBack = () => {
+    if (!activeObject || !fabricCanvas.current) return;
+    fabricCanvas.current.sendObjectToBack(activeObject);
+    fabricCanvas.current.renderAll();
+    saveHistoryState();
+  };
+
+  const handleCenterHorizontally = () => {
+    if (!activeObject || !fabricCanvas.current) return;
+    fabricCanvas.current.centerObjectH(activeObject);
+    activeObject.setCoords();
+    fabricCanvas.current.renderAll();
+    setPropVersion((v) => v + 1);
+    saveHistoryState();
+  };
+
+  const handleCenterVertically = () => {
+    if (!activeObject || !fabricCanvas.current) return;
+    fabricCanvas.current.centerObjectV(activeObject);
+    activeObject.setCoords();
+    fabricCanvas.current.renderAll();
+    setPropVersion((v) => v + 1);
+    saveHistoryState();
+  };
+
+  const handleToggleLock = () => {
+    if (!activeObject || !fabricCanvas.current) return;
+    const isLocked = Boolean(activeObject.lockMovementX);
+    activeObject.set({
+      lockMovementX: !isLocked,
+      lockMovementY: !isLocked,
+      lockRotation: !isLocked,
+      lockScalingX: !isLocked,
+      lockScalingY: !isLocked,
+      hasControls: isLocked,
+    });
+    fabricCanvas.current.renderAll();
+    setPropVersion((v) => v + 1);
+    saveHistoryState();
+    toast.info(isLocked ? "Element unlocked" : "Element position locked");
+  };
+
+  const handleQuickColor = (color: string) => {
+    if (!activeObject || !fabricCanvas.current) return;
+    activeObject.set("fill", color);
+    fabricCanvas.current.renderAll();
+    setPropVersion((v) => v + 1);
+    saveHistoryState();
+  };
+
+  const handleQuickOpacity = (opacity: number) => {
+    if (!activeObject || !fabricCanvas.current) return;
+    activeObject.set("opacity", opacity);
+    fabricCanvas.current.renderAll();
+    setPropVersion((v) => v + 1);
+    saveHistoryState();
+  };
+
+  const handleSelectAll = () => {
+    if (!fabricCanvas.current) return;
+    const objs = fabricCanvas.current.getObjects().filter((o) => o.selectable !== false);
+    if (objs.length > 0) {
+      fabricCanvas.current.discardActiveObject();
+      const sel = new fabric.ActiveSelection(objs, { canvas: fabricCanvas.current });
+      fabricCanvas.current.setActiveObject(sel);
+      fabricCanvas.current.renderAll();
+      setActiveObject(sel);
+    }
+  };
+
+  const handleClearAll = () => {
+    if (!fabricCanvas.current) return;
+    const objs = [...fabricCanvas.current.getObjects()];
+    if (objs.length === 0) return;
+    objs.forEach((o) => fabricCanvas.current?.remove(o));
+    setActiveObject(null);
+    fabricCanvas.current.renderAll();
+    saveHistoryState();
+    toast.success("Canvas elements cleared (Ctrl+Z to undo)");
+  };
+
+  const handleCanvasContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!fabricCanvas.current) {
+      setContextMenu({
+        position: { x: e.clientX, y: e.clientY },
+        targetType: "canvas",
+        activeObject: null,
+      });
+      return;
+    }
+
+    const targetInfo = fabricCanvas.current.findTarget(e.nativeEvent);
+    const target = targetInfo?.target || fabricCanvas.current.getActiveObject() || null;
+
+    if (target && target.selectable !== false) {
+      fabricCanvas.current.setActiveObject(target);
+      fabricCanvas.current.renderAll();
+      setActiveObject(target);
+      setContextMenu({
+        position: { x: e.clientX, y: e.clientY },
+        targetType: "element",
+        activeObject: target,
+      });
+    } else {
+      setContextMenu({
+        position: { x: e.clientX, y: e.clientY },
+        targetType: "canvas",
+        activeObject: null,
+      });
+    }
   };
 
   const handleDuplicate = async () => {
@@ -1285,6 +1479,7 @@ export function CanvasEditor({
             ref={containerRef}
             onMouseDown={handlePanMouseDown}
             onTouchStart={handlePanTouchStart}
+            onContextMenu={handleCanvasContextMenu}
             className={`flex-1 overflow-hidden bg-[radial-gradient(#d4d4d8_1px,transparent_1px)] dark:bg-[radial-gradient(#27272a_1px,transparent_1px)] [background-size:16px_16px] relative select-none flex items-center justify-center ${
               toolMode === "hand" ? "cursor-grab" : ""
             }`}
@@ -1304,6 +1499,7 @@ export function CanvasEditor({
           >
             {/* Freely Translatable Artboard with Zero Browser Scrollbars */}
             <div
+              onContextMenu={handleCanvasContextMenu}
               style={{
                 transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0)`,
                 willChange: "transform",
@@ -1454,6 +1650,59 @@ export function CanvasEditor({
         template={currentTemplateDefinition()}
         type={type}
       />
+
+      {/* Right-Click Quick Access Context Menu */}
+      <CanvasContextMenu
+        position={contextMenu.position}
+        onClose={() => setContextMenu({ position: null, targetType: "canvas", activeObject: null })}
+        targetType={contextMenu.targetType}
+        activeObject={contextMenu.activeObject || activeObject}
+        canvasWidth={width}
+        canvasHeight={height}
+        canvasBg={backgroundColor}
+        hasBgImage={Boolean(backgroundMediaUrl)}
+        zoom={zoom}
+        onBringForward={handleBringForward}
+        onSendBackward={handleSendBackward}
+        onBringToFront={handleBringToFront}
+        onSendToBack={handleSendToBack}
+        onCenterHorizontally={handleCenterHorizontally}
+        onCenterVertically={handleCenterVertically}
+        onDuplicate={handleDuplicate}
+        onDelete={handleDelete}
+        onToggleLock={handleToggleLock}
+        onQuickColor={handleQuickColor}
+        onQuickOpacity={handleQuickOpacity}
+        onOpenProperties={() => {
+          if (window.innerWidth < 1024) {
+            setMobilePropsOpen(true);
+          }
+        }}
+        onChangeCanvasBg={(bg) => {
+          setBackgroundColor(bg);
+          if (fabricCanvas.current) {
+            fabricCanvas.current.backgroundColor = bg;
+            fabricCanvas.current.renderAll();
+            saveHistoryState();
+          }
+        }}
+        onOpenMediaModal={(mode) => {
+          setMediaModalMode(mode);
+          setMediaModalOpen(true);
+        }}
+        onRemoveBgImage={handleRemoveBgImage}
+        onAddText={addStaticText}
+        onAddShape={addShape}
+        onAddLine={addLine}
+        onAddQRCode={addQRCode}
+        onFitZoom={() => calculateFitZoom()}
+        onResetZoom={() => applyZoom(1.0)}
+        onZoomIn={() => applyZoom(zoom + 0.1)}
+        onZoomOut={() => applyZoom(zoom - 0.1)}
+        onSelectAll={handleSelectAll}
+        onClearAll={handleClearAll}
+      />
     </div>
   );
 }
+
