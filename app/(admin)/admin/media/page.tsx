@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   Search,
   Upload,
@@ -11,6 +12,7 @@ import {
   Loader2,
   Copy,
   Check,
+  LayoutTemplate,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -364,6 +366,17 @@ export default function AdminMediaPage() {
                   >
                     {copiedUrl === item.id ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
                   </Button>
+                  <Link href={`/admin/templates/new?mediaId=${item.id}`}>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      aria-label="Create Template from this media"
+                      title="Create Template"
+                    >
+                      <LayoutTemplate className="h-4 w-4 text-primary" />
+                    </Button>
+                  </Link>
                   <Button
                     variant="secondary"
                     size="sm"

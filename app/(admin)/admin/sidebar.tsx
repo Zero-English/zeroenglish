@@ -10,7 +10,7 @@ import {
   BookOpen,
   Brain,
   ClipboardList,
-  Image,
+  Image as ImageIcon,
   Newspaper,
   Menu,
   UserRound,
@@ -18,8 +18,11 @@ import {
   LogOut,
   ChevronDown,
   Megaphone,
+  LayoutTemplate,
 } from "lucide-react";
 import { UserAvatar } from "@/components/UserAvatar";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,11 +36,13 @@ import {
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/vocabulary", label: "Vocabulary", icon: BookOpen },
-  { href: "/admin/media", label: "Media", icon: Image },
+  { href: "/admin/templates", label: "Templates", icon: LayoutTemplate },
+  { href: "/admin/media", label: "Media", icon: ImageIcon },
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/quizzes", label: "Quizzes", icon: Brain },
   { href: "/admin/exams", label: "Exams", icon: ClipboardList },
@@ -54,21 +59,27 @@ function NavLinks({
   const pathname = usePathname();
 
   return (
-    <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+    <nav className="flex-1 px-2.5 py-2 space-y-0.5 overflow-y-auto">
       {navItems.map((item) => {
-        const isActive = pathname.startsWith(item.href);
+        const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
         return (
           <Link
             key={item.href}
             href={item.href}
             onClick={onNavigate}
-            className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors gap-3 whitespace-nowrap ${
+            className={cn(
+              "flex items-center px-2.5 py-2 rounded-md text-xs font-medium transition-colors gap-2.5 whitespace-nowrap",
               isActive
-                ? "bg-primary/10 text-primary"
-                : "text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:text-gray-300 dark:hover:text-white"
-            }`}
+                ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
+                : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
+            )}
           >
-            <item.icon className="h-5 w-5 shrink-0" />
+            <item.icon
+              className={cn(
+                "size-4 shrink-0 transition-colors",
+                isActive ? "text-primary" : "text-sidebar-foreground/70"
+              )}
+            />
             <AnimatePresence initial={false}>
               {showLabels && (
                 <motion.span
@@ -105,11 +116,10 @@ function ProfileMenu({
         <button
           type="button"
           aria-label="Account menu"
-          className={`flex items-center rounded-md text-sm font-medium transition-colors gap-3 whitespace-nowrap ${
-            showLabel
-              ? "px-3 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-800"
-              : "justify-center px-2 py-2 w-full hover:bg-gray-100 dark:hover:bg-gray-800"
-          }`}
+          className={cn(
+            "flex items-center rounded-md text-xs font-medium transition-colors gap-2.5 whitespace-nowrap outline-none hover:bg-sidebar-accent/60",
+            showLabel ? "px-2.5 py-2 w-full text-left" : "justify-center p-2 w-full"
+          )}
         >
           <UserAvatar
             id={user?.id ?? 0}
@@ -117,52 +127,50 @@ function ProfileMenu({
             userName={user?.name}
             image={user?.image}
             size="sm"
-            className="shrink-0"
+            className="size-6 text-[10px] shrink-0"
           />
-          {showLabel ? (
-            <span className="flex-1 min-w-0 text-left">
-              <span className="block truncate text-sm font-semibold text-gray-900 dark:text-white">
-                {user?.name || "Admin"}
+          {showLabel && (
+            <>
+              <span className="flex-1 min-w-0">
+                <span className="block truncate text-xs font-medium text-sidebar-foreground">
+                  {user?.name || "Admin"}
+                </span>
+                <span className="block truncate text-[10px] text-muted-foreground">
+                  {user?.email || "admin@zeroenglish.com"}
+                </span>
               </span>
-              <span className="block truncate text-xs font-normal text-gray-500 dark:text-gray-400">
-                {user?.email || "admin@zeroenglish.com"}
-              </span>
-            </span>
-          ) : null}
-          {showLabel ? (
-            <ChevronDown className="h-4 w-4 shrink-0 text-gray-400" />
-          ) : null}
+              <ChevronDown className="size-3.5 shrink-0 text-muted-foreground" />
+            </>
+          )}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        sideOffset={8}
-        className="w-56"
-      >
-        <DropdownMenuLabel className="font-normal">
-          <p className="text-sm font-semibold text-gray-900 dark:text-white">
-            {user?.name || "Admin"}
-          </p>
-          <p className="truncate text-xs font-normal text-gray-500 dark:text-gray-400">
+      <DropdownMenuContent align="end" sideOffset={8} className="w-52">
+        <DropdownMenuLabel className="font-normal px-2 py-1.5">
+          <p className="text-xs font-medium text-foreground">{user?.name || "Admin"}</p>
+          <p className="truncate text-[10px] text-muted-foreground">
             {user?.email || "admin@zeroenglish.com"}
           </p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href={`/admin/users/${user?.id ?? ""}`}>
-            <UserRound className="h-4 w-4" />
+          <Link href={`/admin/users/${user?.id ?? ""}`} className="cursor-pointer gap-2 text-xs">
+            <UserRound className="size-3.5" />
             My Profile
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/profile">
-            <ExternalLink className="h-4 w-4" />
+          <Link href="/" className="cursor-pointer gap-2 text-xs">
+            <ExternalLink className="size-3.5" />
             View Site
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onSelect={onLogout}>
-          <LogOut className="h-4 w-4" />
+        <DropdownMenuItem
+          variant="destructive"
+          onSelect={onLogout}
+          className="cursor-pointer gap-2 text-xs text-destructive focus:text-destructive"
+        >
+          <LogOut className="size-3.5" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -183,6 +191,11 @@ export default function AdminSidebar({
   toggleDesktop: () => void;
   onMenu: () => void;
 }) {
+  const pathname = usePathname();
+  const isStudio =
+    pathname?.includes("/admin/templates/new") ||
+    (pathname?.includes("/admin/templates/") && pathname?.includes("/edit"));
+
   const handleLogout = () => {
     close();
     void signOut({ callbackUrl: "/admin" });
@@ -190,65 +203,80 @@ export default function AdminSidebar({
 
   return (
     <>
-      {/* Floating mobile menu button */}
-      <button
-        type="button"
-        onClick={onMenu}
-        aria-label="Open admin menu"
-        className="md:hidden fixed top-3 left-3 z-40 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-white/95 shadow-sm backdrop-blur dark:border-gray-800 dark:bg-gray-900/95"
-      >
-        <Menu className="h-5 w-5" />
-      </button>
+      {/* Mobile top hamburger trigger (hidden on studio editor to preserve back button) */}
+      {!isStudio && (
+        <Button
+          variant="outline"
+          size="icon-sm"
+          onClick={onMenu}
+          aria-label="Open admin menu"
+          className="md:hidden fixed top-3 left-3 z-40 bg-background/95 backdrop-blur shadow-xs"
+        >
+          <Menu className="size-4" />
+        </Button>
+      )}
 
-      {/* Desktop sidebar */}
+      {/* Desktop simple sidebar */}
       <motion.aside
         initial={false}
-        animate={{ width: isDesktopOpen ? 256 : 72 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="hidden md:flex sticky top-0 z-30 h-screen md:shrink-0 flex-col bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800 overflow-hidden"
+        animate={{ width: isDesktopOpen ? 220 : 56 }}
+        transition={{ type: "spring", stiffness: 350, damping: 32 }}
+        className="hidden md:flex sticky top-0 z-30 h-screen md:shrink-0 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border overflow-hidden select-none"
       >
+        {/* Header / Brand */}
         <div
-          className={`flex items-center h-16 border-b border-gray-200 dark:border-gray-800 ${
-            isDesktopOpen ? "justify-between px-4" : "justify-center px-2"
-          }`}
+          className={cn(
+            "flex items-center h-14 border-b border-sidebar-border px-3",
+            isDesktopOpen ? "justify-between" : "justify-center"
+          )}
         >
           {isDesktopOpen && (
-            <div className="flex items-center gap-2 whitespace-nowrap overflow-hidden">
-              <span className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="text-xs font-bold tracking-tight text-foreground truncate">
                 Zero English
               </span>
-              <span className="text-xs font-medium text-primary">Admin</span>
+              <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 font-normal">
+                Admin
+              </Badge>
             </div>
           )}
-          <button
+          <Button
+            variant="ghost"
+            size="icon-xs"
             onClick={toggleDesktop}
             aria-label={isDesktopOpen ? "Collapse sidebar" : "Expand sidebar"}
-            className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="text-muted-foreground hover:text-foreground hover:bg-sidebar-accent"
           >
-            <PanelLeft className="h-5 w-5" />
-          </button>
+            <PanelLeft className="size-3.5" />
+          </Button>
         </div>
+
+        {/* Navigation list */}
         <NavLinks isOpen={isDesktopOpen} />
-        <div className="p-3 border-t border-gray-200 dark:border-gray-800">
+
+        {/* Profile / Actions footer */}
+        <div className="p-2 border-t border-sidebar-border mt-auto">
           <ProfileMenu isOpen={isDesktopOpen} onLogout={handleLogout} />
         </div>
       </motion.aside>
 
-      {/* Mobile drawer (shadcn Sheet) */}
+      {/* Mobile Drawer (shadcn Sheet) */}
       <Sheet open={isOpen} onOpenChange={(open) => { if (!open) close(); }}>
         <SheetContent
           side="left"
-          className="w-64 gap-0 p-0 bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800"
+          className="w-60 gap-0 p-0 bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col"
         >
           <SheetTitle className="sr-only">Admin Navigation</SheetTitle>
-          <div className="flex items-center gap-2 px-4 h-16 border-b border-gray-200 dark:border-gray-800">
-            <span className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+          <div className="flex items-center gap-2 px-4 h-14 border-b border-sidebar-border">
+            <span className="text-xs font-bold tracking-tight text-foreground">
               Zero English
             </span>
-            <span className="text-xs font-medium text-primary">Admin</span>
+            <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 font-normal">
+              Admin
+            </Badge>
           </div>
           <NavLinks isOpen onNavigate={close} />
-          <div className="mt-auto border-t border-gray-200 p-3 dark:border-gray-800">
+          <div className="mt-auto border-t border-sidebar-border p-2">
             <ProfileMenu isOpen onLogout={handleLogout} />
           </div>
         </SheetContent>

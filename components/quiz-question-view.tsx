@@ -2,6 +2,7 @@ import { Check, Gauge, Layers, Lightbulb, User } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { QuizBackLink } from "@/components/quiz-back-link";
+import { QuizPosterModal } from "@/components/template-engine/quiz-poster-modal";
 
 export interface QuizQuestionViewData {
   id: number;
@@ -50,7 +51,10 @@ export function QuizQuestionView({ question }: QuizQuestionViewProps) {
   return (
     <div className="px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
-        <QuizBackLink className="mb-6" />
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <QuizBackLink />
+          <QuizPosterModal quizId={question.id} />
+        </div>
 
         {/* Question card */}
         <div className="rounded-3xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-5 sm:p-8">

@@ -38,7 +38,10 @@ const adapter = new PrismaPg(pool);
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
-const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter });
+const prisma =
+    globalForPrisma.prisma && (globalForPrisma.prisma as any).visualTemplate
+        ? globalForPrisma.prisma
+        : new PrismaClient({ adapter });
 
 if (process.env.NODE_ENV !== "production") {
     globalForPrisma.prisma = prisma;
