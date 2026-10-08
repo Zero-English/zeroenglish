@@ -387,7 +387,7 @@ export default function AdminBlogEditorPage() {
 
           <aside className="lg:col-span-1">
             <div className="space-y-4 lg:sticky lg:top-16">
-              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm bg-card">
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                   <h2 className="text-base font-semibold text-gray-900 dark:text-white">
                     Featured image
@@ -443,7 +443,7 @@ export default function AdminBlogEditorPage() {
                 )}
               </section>
 
-              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm bg-card">
                 <div className="flex items-center justify-between gap-2">
                   <h2 className="text-base font-semibold text-gray-900 dark:text-white">Post</h2>
                   <Badge variant={blog.published ? "pos" : "level"}>
@@ -482,7 +482,7 @@ export default function AdminBlogEditorPage() {
                 </dl>
               </section>
 
-              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm bg-card">
                 <h2 className="mb-3 text-base font-semibold text-gray-900 dark:text-white">
                   SEO &amp; settings
                 </h2>
@@ -541,7 +541,7 @@ export default function AdminBlogEditorPage() {
                 </div>
               </section>
 
-              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <section className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm bg-card">
                 <h2 className="mb-3 text-base font-semibold text-gray-900 dark:text-white">
                   Danger zone
                 </h2>

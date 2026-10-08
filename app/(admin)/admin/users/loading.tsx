@@ -5,14 +5,14 @@ export default function UsersListLoading() {
     <div className="p-3 lg:p-4">
       <Skeleton className="mb-6 h-4 w-44" />
 
-      <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-        <div className="border-b border-gray-200 dark:border-gray-800 px-4 py-3">
+      <div className="rounded-xl border border-border bg-card shadow-sm">
+        <div className="border-b border-border px-4 py-3">
           <Skeleton className="h-4 w-24" />
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <tr className="border-b border-border text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                 {Array.from({ length: 11 }).map((_, i) => (
                   <th key={i} className="px-4 py-2.5">
                     <Skeleton className="h-3 w-14" />

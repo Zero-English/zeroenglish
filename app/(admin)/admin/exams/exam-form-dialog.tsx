@@ -267,7 +267,7 @@ export function ExamFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] max-w-3xl overflow-y-auto">
+      <DialogContent className="max-h-[92vh] w-full max-w-[95vw] sm:max-w-3xl md:max-w-4xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{editing ? "Edit exam" : "Create exam"}</DialogTitle>
           <DialogDescription>
@@ -353,7 +353,7 @@ export function ExamFormDialog({
           </Field>
 
           {/* Scheduling */}
-          <div className="rounded-lg border border-gray-200 dark:border-gray-800 p-3">
+          <div className="rounded-lg border border-border p-3">
             <label className="flex items-center gap-2 text-sm font-medium">
               <Checkbox
                 checked={form.scheduleEnabled}

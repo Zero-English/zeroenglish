@@ -499,9 +499,9 @@ export default function AdminVocabularyPage() {
         </div>
       )}
 
-      <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
+      <div className="rounded-xl border border-border bg-card shadow-sm">
         {/* Toolbar / Filters */}
-        <div className="border-b border-gray-200 dark:border-gray-800 p-4">
+        <div className="border-b border-border p-4">
           <div className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-2">
               <div className="relative min-w-56 flex-1">
@@ -615,7 +615,7 @@ export default function AdminVocabularyPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <tr className="border-b border-border text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                 <th className="w-12 px-4 py-2.5">
                   <input
                     type="checkbox"
@@ -1082,7 +1082,7 @@ function WordFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+      <DialogContent className="max-h-[90vh] w-full max-w-[95vw] sm:max-w-2xl md:max-w-3xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{editing ? "Edit word" : "Add word"}</DialogTitle>
           <DialogDescription>

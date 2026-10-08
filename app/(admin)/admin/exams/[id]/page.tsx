@@ -128,7 +128,7 @@ export default async function SingleExamPage({
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+            className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm bg-card"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <stat.icon className="h-5 w-5" />
@@ -144,7 +144,7 @@ export default async function SingleExamPage({
       </section>
 
       <div className="mt-6 grid gap-5 lg:grid-cols-2">
-        <section className="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <section className="rounded-xl border border-border shadow-sm bg-card">
           <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
             <h2 className="text-base font-semibold text-gray-900 dark:text-white">
               Configuration
@@ -209,7 +209,7 @@ export default async function SingleExamPage({
           </dl>
         </section>
 
-        <section className="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <section className="rounded-xl border border-border shadow-sm bg-card">
           <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
             <h2 className="text-base font-semibold text-gray-900 dark:text-white">
               Linked Questions
@@ -222,7 +222,7 @@ export default async function SingleExamPage({
           ) : (
             <div className="max-h-96 overflow-y-auto">
               <table className="w-full text-left text-sm">
-                <thead className="sticky top-0 bg-white dark:bg-gray-900">
+                <thead className="sticky top-0 bg-card">
                   <tr className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500 dark:border-gray-800 dark:text-gray-400">
                     <th className="px-4 py-2.5 font-medium">ID</th>
                     <th className="px-4 py-2.5 font-medium">Question</th>
@@ -272,7 +272,7 @@ export default async function SingleExamPage({
         </section>
       </div>
 
-      <section className="mt-6 rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <section className="mt-6 rounded-xl border border-border shadow-sm bg-card">
         <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800">
           <h2 className="text-base font-semibold text-gray-900 dark:text-white">
             Results

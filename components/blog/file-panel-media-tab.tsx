@@ -84,7 +84,7 @@ function MediaLibraryTab({ blockId }: { blockId: string }) {
                 key={item.id}
                 type="button"
                 onClick={() => pick(item)}
-                className="group overflow-hidden rounded-lg border border-gray-200 bg-gray-50 text-left transition-colors hover:border-primary/50 focus:border-primary focus:outline-none dark:border-gray-800 dark:bg-gray-900"
+                className="group overflow-hidden rounded-lg border border-gray-200 bg-gray-50 text-left transition-colors hover:border-primary/50 focus:border-primary focus:outline-none bg-card"
                 title={item.name}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}

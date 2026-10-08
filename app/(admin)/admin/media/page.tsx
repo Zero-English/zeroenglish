@@ -346,7 +346,7 @@ export default function AdminMediaPage() {
           {media.map((item) => (
             <div
               key={item.id}
-              className="group overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 shadow-sm"
+              className="group overflow-hidden rounded-xl border border-gray-200 bg-white bg-card shadow-sm"
             >
               <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-800">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -417,7 +417,7 @@ export default function AdminMediaPage() {
 
       {/* Pagination */}
       {!loading && total > PAGE_LIMIT && (
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 dark:border-gray-800 pt-4">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
           <span className="text-xs text-gray-500 dark:text-gray-400">
             Showing {start}–{end} of {total}
           </span>
@@ -445,7 +445,7 @@ export default function AdminMediaPage() {
                 onChange={handleFileChange}
               />
               {selectedFile ? (
-                <div className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 dark:border-gray-800 dark:bg-gray-900">
+                <div className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 bg-card">
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
                       {selectedFile.name}

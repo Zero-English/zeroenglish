@@ -24,7 +24,7 @@ export default function UserDetailLoading() {
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
-            className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm"
+            className="rounded-xl border border-border bg-card p-5 shadow-sm"
           >
             <Skeleton className="h-10 w-10 rounded-lg" />
             <Skeleton className="mt-4 h-8 w-16" />
@@ -34,8 +34,8 @@ export default function UserDetailLoading() {
       </div>
 
       {/* calendar */}
-      <div className="mt-8 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 px-5 py-4">
+      <div className="mt-8 rounded-xl border border-border bg-card shadow-sm">
+        <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div className="space-y-2">
             <Skeleton className="h-4 w-40" />
             <Skeleton className="h-3 w-56" />
