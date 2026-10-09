@@ -6,7 +6,7 @@ const revision =
   spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf-8" }).stdout?.trim() || null;
 
 const withSerwist = withSerwistInit({
-  swSrc: "app/sw.ts",
+  swSrc: "src/app/sw.ts",
   swDest: "public/sw.js",
   cacheOnNavigation: false,
   reloadOnOnline: true,
