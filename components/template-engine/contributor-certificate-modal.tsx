@@ -10,7 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Award, Download, Share2, Copy, Check, Loader2, Sparkles } from "lucide-react";
+import { Award, Download, Share2, Copy, Check, Sparkles } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { toast } from "sonner";
 
 interface ContributorCertificateModalProps {
@@ -170,7 +171,7 @@ export function ContributorCertificateModal({
         <div className="flex-1 w-full bg-zinc-950/95 rounded-2xl border border-zinc-800 p-4 sm:p-6 flex items-center justify-center overflow-auto mt-3 relative shadow-2xl">
           {loading && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-10 text-amber-400">
-              <Loader2 className="size-10 animate-spin" />
+              <Classic className="size-10" />
               <span className="text-xs font-medium text-white">Rendering certificate...</span>
             </div>
           )}

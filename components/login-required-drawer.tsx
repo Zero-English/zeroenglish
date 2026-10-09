@@ -16,7 +16,8 @@ import {
   useLoginRequiredStore,
   closeLoginRequired,
 } from "@/lib/login-required";
-import { Loader2, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
+import { Classic } from "@/components/classic";
 
 function GoogleIcon() {
   return (
@@ -93,7 +94,7 @@ export function LoginRequiredDrawer() {
               onClick={() => void handleGoogle()}
               disabled={busy}
             >
-              {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoogleIcon />}
+              {busy ? <Classic className="h-4 w-4" /> : <GoogleIcon />}
               {t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
             </Button>
             <Button

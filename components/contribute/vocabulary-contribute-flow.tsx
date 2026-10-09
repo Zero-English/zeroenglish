@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import {
-  Loader2,
   FileJson,
   Upload,
   ListChecks,
@@ -12,6 +11,7 @@ import {
   Check,
   SquarePen,
 } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { toast } from "sonner";
 import { useT } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
@@ -466,7 +466,7 @@ export function VocabularyContributeFlow() {
                 <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-black/[0.1] bg-black/[0.02] p-8 text-center dark:border-white/[0.12] dark:bg-white/[0.03]">
                   <span className={cn(TILE_ICON, "text-violet-500 bg-violet-500/10")}>
                     {importing ? (
-                      <Loader2 className="h-6 w-6 animate-spin" />
+                      <Classic className="h-6 w-6" />
                     ) : (
                       <FileJson className="h-6 w-6" />
                     )}

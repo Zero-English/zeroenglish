@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import { Camera, Loader2, Plus, X } from "lucide-react";
+import { Camera, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -321,7 +321,7 @@ export function ProfileSettings() {
                 onClick={uploadAvatar}
                 disabled={uploadingPhoto}
               >
-                {uploadingPhoto && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                {uploadingPhoto && <Classic className="h-3.5 w-3.5" />}
                 {uploadingPhoto
                   ? t("আপলোড হচ্ছে...", "Uploading...")
                   : t("আপলোড করুন", "Upload")}
@@ -483,7 +483,7 @@ export function ProfileSettings() {
 
         <div className="flex justify-end">
           <Button type="submit" disabled={saving || !loadedProfile}>
-            {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+            {saving && <Classic className="h-4 w-4" />}
             {saving ? t("সংরক্ষণ হচ্ছে...", "Saving...") : t("সংরক্ষণ করুন", "Save Changes")}
           </Button>
         </div>

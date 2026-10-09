@@ -10,7 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Sparkles, Download, Share2, Copy, Check, Loader2, Image as ImageIcon } from "lucide-react";
+import { Sparkles, Download, Share2, Copy, Check, Image as ImageIcon } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { toast } from "sonner";
 
 interface QuizPosterModalProps {
@@ -165,7 +166,7 @@ export function QuizPosterModal({ quizId, trigger }: QuizPosterModalProps) {
         <div className="flex-1 w-full bg-zinc-950/95 rounded-2xl border border-zinc-800 p-4 sm:p-6 flex items-center justify-center overflow-auto mt-3 relative shadow-2xl">
           {loading && (
             <div className="absolute inset-0 bg-black/60 backdrop-blur-xs flex flex-col items-center justify-center gap-2 z-10 text-sky-400">
-              <Loader2 className="size-10 animate-spin" />
+              <Classic className="size-10" />
               <span className="text-xs font-medium text-white">Rendering poster...</span>
             </div>
           )}

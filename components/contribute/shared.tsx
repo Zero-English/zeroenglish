@@ -1,6 +1,7 @@
 "use client";
 
-import { Loader2, Pencil, Upload } from "lucide-react";
+import { Pencil, Upload } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { useT } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -79,7 +80,7 @@ export function SubmitButton({
         onClick={onClick}
       >
         {submitting ? (
-          <Loader2 className="size-4 animate-spin" />
+          <Classic className="size-4" />
         ) : (
           <Upload className="size-4" />
         )}

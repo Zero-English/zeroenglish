@@ -4,7 +4,8 @@ import { useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/lib/auth-store";
-import { ShieldCheck, LogOut, Loader2 } from "lucide-react";
+import { ShieldCheck, LogOut } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { useT } from "@/components/language-provider";
 import { toast } from "sonner";
 
@@ -102,7 +103,7 @@ export function BindAccount() {
                         disabled={binding}
                     >
                         {binding ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <Classic className="h-4 w-4" />
                         ) : (
                             <GoogleIcon />
                         )}

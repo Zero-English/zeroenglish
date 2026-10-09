@@ -8,9 +8,9 @@ import {
   Plus,
   Trash2,
   Eye,
-  Loader2,
   Newspaper,
 } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -143,7 +143,7 @@ export default function AdminBlogsPage() {
           {loading ? "Loading..." : `Manage blogs (${total} blog${total === 1 ? "" : "s"})`}
         </p>
         <Button onClick={() => void handleCreate()} disabled={creating}>
-          {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus />}
+          {creating ? <Classic className="h-4 w-4" /> : <Plus />}
           {creating ? "Creating..." : "New Blog"}
         </Button>
       </header>

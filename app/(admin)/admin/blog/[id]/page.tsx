@@ -11,12 +11,12 @@ import {
   Globe,
   ImagePlus,
   Images,
-  Loader2,
   Save,
   Sparkles,
   Trash2,
   X,
 } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -302,7 +302,7 @@ export default function AdminBlogEditorPage() {
                 disabled={publishing}
               >
                 {publishing ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Classic className="h-4 w-4" />
                 ) : (
                   <Globe className="h-4 w-4" />
                 )}
@@ -313,7 +313,7 @@ export default function AdminBlogEditorPage() {
                     : "Publish"}
               </Button>
               <Button size="sm" onClick={() => void handleSave()} disabled={saving}>
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                {saving ? <Classic className="h-4 w-4" /> : <Save className="h-4 w-4" />}
                 {saving ? "Saving..." : "Save"}
               </Button>
             </div>
