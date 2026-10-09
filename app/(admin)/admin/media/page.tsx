@@ -9,11 +9,11 @@ import {
   Trash2,
   ImageIcon,
   FileImage,
-  Loader2,
   Copy,
   Check,
   LayoutTemplate,
 } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -346,7 +346,7 @@ export default function AdminMediaPage() {
           {media.map((item) => (
             <div
               key={item.id}
-              className="group overflow-hidden rounded-xl border border-gray-200 bg-white bg-card shadow-sm"
+              className="group overflow-hidden rounded-xl border border-border bg-card"
             >
               <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-800">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -512,7 +512,7 @@ export default function AdminMediaPage() {
               Cancel
             </Button>
             <Button onClick={() => void handleUpload()} disabled={uploading || !selectedFile}>
-              {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload />}
+              {uploading ? <Classic className="h-4 w-4" /> : <Upload />}
               {uploading ? "Uploading..." : "Upload"}
             </Button>
           </DialogFooter>
@@ -578,7 +578,7 @@ export default function AdminMediaPage() {
               Cancel
             </Button>
             <Button onClick={() => void handleSaveEdit()} disabled={savingEdit}>
-              {savingEdit && <Loader2 className="h-4 w-4 animate-spin" />}
+              {savingEdit && <Classic className="h-4 w-4" />}
               {savingEdit ? "Saving..." : "Save"}
             </Button>
           </DialogFooter>

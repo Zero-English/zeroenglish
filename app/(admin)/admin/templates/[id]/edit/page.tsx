@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { CanvasEditor } from "../../editor/canvas-editor";
-import { Loader2 } from "lucide-react";
+import { Classic } from "@/components/classic";
 
 export default function EditTemplatePage() {
   const params = useParams();
@@ -55,7 +55,7 @@ export default function EditTemplatePage() {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-primary" />
+        <Classic className="size-8 text-primary" />
       </div>
     );
   }

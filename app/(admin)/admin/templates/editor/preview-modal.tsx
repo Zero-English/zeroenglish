@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { TemplateDefinition, TemplateType } from "@/lib/template-engine/types";
-import { Eye, Download, RefreshCw, Loader2, Sparkles } from "lucide-react";
+import { Eye, Download, RefreshCw, Sparkles } from "lucide-react";
+import { Classic } from "@/components/classic";
 
 interface PreviewModalProps {
   open: boolean;
@@ -153,7 +154,7 @@ export function PreviewModal({
         <div className="flex-1 w-full bg-zinc-950/95 rounded-2xl border border-zinc-800/90 p-4 sm:p-6 flex items-center justify-center overflow-auto mt-3 relative shadow-2xl">
           {loading ? (
             <div className="flex flex-col items-center justify-center gap-3 text-zinc-400">
-              <Loader2 className="size-10 animate-spin text-primary" />
+              <Classic className="size-10 text-primary" />
               <span className="text-sm font-medium text-zinc-300">Rendering high-res preview...</span>
             </div>
           ) : previewBlobUrl ? (

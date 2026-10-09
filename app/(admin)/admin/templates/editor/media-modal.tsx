@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Image as ImageIcon, Loader2, Upload, Plus, Check } from "lucide-react";
+import { Search, Image as ImageIcon, Upload, Plus, Check } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { toast } from "sonner";
 
 interface MediaItem {
@@ -136,7 +137,7 @@ export function MediaModal({
               className="gap-1.5 text-xs h-8"
             >
               {uploading ? (
-                <Loader2 className="size-3.5 animate-spin" />
+                <Classic className="size-3.5" />
               ) : (
                 <Upload className="size-3.5" />
               )}
@@ -160,7 +161,7 @@ export function MediaModal({
         <div className="flex-1 overflow-y-auto mt-4 min-h-[380px] pr-1">
           {loading ? (
             <div className="flex flex-col items-center justify-center h-64 gap-2 text-muted-foreground">
-              <Loader2 className="size-8 animate-spin text-primary" />
+              <Classic className="size-8 text-primary" />
               <span className="text-xs">Loading media assets...</span>
             </div>
           ) : filtered.length === 0 ? (

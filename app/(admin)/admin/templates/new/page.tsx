@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CanvasEditor } from "../editor/canvas-editor";
 import { TemplateType } from "@/lib/template-engine/types";
-import { Loader2 } from "lucide-react";
+import { Classic } from "@/components/classic";
 
 export default function NewTemplatePage() {
   const router = useRouter();
@@ -75,7 +75,7 @@ export default function NewTemplatePage() {
   if (loading || !initialData) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-primary" />
+        <Classic className="size-8 text-primary" />
       </div>
     );
   }

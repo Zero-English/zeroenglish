@@ -12,11 +12,11 @@ import {
   CloudBackup,
   CloudOff,
   GraduationCap,
-  Loader2Icon,
   RefreshCw,
   ShieldCheck,
   Clock3,
 } from "lucide-react";
+import { Classic } from "@/components/classic";
 
 function formatLastSynced(ts: number): string {
   const d = new Date(ts);
@@ -126,7 +126,7 @@ export function SyncStatus() {
             )}
           >
             {syncing ? (
-              <Loader2Icon className="h-3 w-3 animate-spin" />
+              <Classic className="h-3 w-3" />
             ) : allSynced ? (
               <CheckCircle2 className="h-3 w-3" />
             ) : (
@@ -170,7 +170,7 @@ export function SyncStatus() {
             </p>
           ) : syncing ? (
             <p className="flex items-center gap-1.5 text-xs font-medium text-sky-600 dark:text-sky-400">
-              <Loader2Icon className="h-3.5 w-3.5 animate-spin" />
+              <Classic className="h-3.5 w-3.5" />
               {t("আপনার ডেটা সিঙ্ক হচ্ছে...", "Syncing your data...")}
             </p>
           ) : pending > 0 ? (

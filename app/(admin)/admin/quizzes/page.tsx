@@ -11,8 +11,8 @@ import {
   X,
   Upload,
   Download,
-  Loader2,
 } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -996,7 +996,7 @@ function BulkUpdateDialog({
             Cancel
           </Button>
           <Button type="button" onClick={handleApply} disabled={!value || applying}>
-            {applying && <Loader2 className="animate-spin" />}
+            {applying && <Classic className="h-4 w-4" />}
             {applying ? "Applying..." : "Apply"}
           </Button>
         </DialogFooter>

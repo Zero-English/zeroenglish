@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 import { AnimatePresence, motion } from "motion/react";
 import {
   PanelLeft,
@@ -19,6 +21,9 @@ import {
   ChevronDown,
   Megaphone,
   LayoutTemplate,
+  Sun,
+  Moon,
+  Laptop,
 } from "lucide-react";
 import { UserAvatar } from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
@@ -28,7 +33,12 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -109,6 +119,12 @@ function ProfileMenu({
 }) {
   const { data: session } = useSession();
   const user = session?.user;
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <DropdownMenu>
@@ -164,6 +180,36 @@ function ProfileMenu({
             View Site
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="cursor-pointer gap-2 text-xs">
+            {mounted && resolvedTheme === "dark" ? (
+              <Moon className="size-3.5 text-muted-foreground" />
+            ) : (
+              <Sun className="size-3.5 text-muted-foreground" />
+            )}
+            <span>Theme</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="w-36">
+            <DropdownMenuRadioGroup
+              value={mounted ? theme : "system"}
+              onValueChange={(val) => setTheme(val)}
+            >
+              <DropdownMenuRadioItem value="light" className="cursor-pointer gap-2 text-xs">
+                <Sun className="size-3.5 text-muted-foreground" />
+                <span>Light</span>
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="dark" className="cursor-pointer gap-2 text-xs">
+                <Moon className="size-3.5 text-muted-foreground" />
+                <span>Dark</span>
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="system" className="cursor-pointer gap-2 text-xs">
+                <Laptop className="size-3.5 text-muted-foreground" />
+                <span>System</span>
+              </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"

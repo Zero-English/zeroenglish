@@ -53,7 +53,6 @@ import {
   ZoomOut,
   Sparkles,
   ArrowLeft,
-  Loader2,
   Upload,
   MousePointer,
   Hand,
@@ -61,6 +60,7 @@ import {
   Layers,
   Tag,
 } from "lucide-react";
+import { Classic } from "@/components/classic";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -1267,7 +1267,7 @@ export function CanvasEditor({
             className="text-xs gap-1.5 h-8 px-2.5 sm:px-3.5"
           >
             {saving ? (
-              <Loader2 className="size-3.5 animate-spin" />
+              <Classic className="size-3.5" />
             ) : (
               <Save className="size-3.5" />
             )}

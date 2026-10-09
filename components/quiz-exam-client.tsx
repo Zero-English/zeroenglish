@@ -18,9 +18,9 @@ import {
   ArrowLeft,
   Link2,
   LogIn,
-  Loader2,
   type LucideIcon,
 } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
@@ -689,7 +689,7 @@ function ExamListView() {
                 disabled={authBusy}
               >
                 {authBusy ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Classic className="h-4 w-4" />
                 ) : (
                   <GoogleIcon />
                 )}
@@ -1169,7 +1169,7 @@ function ExamResultsView({
         <div className="animate-fade-up-3 flex flex-col sm:flex-row gap-3 justify-center">
           {saveState === "saving" && (
             <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Classic className="h-4 w-4" />
               {t(
                 "ফলাফল ডেটাবেসে সংরক্ষণ করা হচ্ছে...",
                 "Saving your result to the database..."
@@ -1180,7 +1180,7 @@ function ExamResultsView({
           {saveState === "error" && (
             <div className="flex flex-col items-center gap-3 rounded-2xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40 p-4">
               <p className="text-sm font-medium text-red-600 dark:text-red-400 flex items-center gap-1.5">
-                <Loader2 className="h-4 w-4" />
+                <Classic className="h-4 w-4" />
                 {t(
                   "ফলাফল সংরক্ষণ করা যায়নি। ইন্টারনেট সংযোগ সংরক্ষণের জন্য প্রয়োজন।",
                   "Your result couldn't be saved. An internet connection is required to save exam results."

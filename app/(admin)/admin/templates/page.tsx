@@ -28,7 +28,6 @@ import {
   Trash2,
   Copy,
   Eye,
-  Loader2,
   Sparkles,
   Layers,
   Search,
@@ -44,6 +43,7 @@ import {
   Star,
   RefreshCw,
 } from "lucide-react";
+import { Classic } from "@/components/classic";
 import { TemplateType } from "@/lib/template-engine/types";
 import { toast } from "sonner";
 
@@ -443,7 +443,7 @@ export default function TemplatesListPage() {
         {/* Templates Content Display */}
         {loading ? (
           <div className="flex flex-col items-center justify-center h-80 gap-3 text-muted-foreground">
-            <Loader2 className="size-8 animate-spin text-primary" />
+            <Classic className="size-8 text-primary" />
             <p className="text-xs font-medium">Loading templates studio...</p>
           </div>
         ) : filteredTemplates.length === 0 ? (

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Plus, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
+import { Classic } from "@/components/classic";
 import {
   Dialog,
   DialogContent,
@@ -352,7 +353,7 @@ function EditUserForm({
           Cancel
         </Button>
         <Button type="submit" disabled={loading}>
-          {loading && <Loader2 className="animate-spin" />}
+          {loading && <Classic className="h-4 w-4" />}
           {loading ? "Saving..." : "Save Changes"}
         </Button>
       </DialogFooter>
