@@ -12,6 +12,7 @@ import { BackButton } from "@/components/back-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PaginationNav } from "@/components/pagination-nav";
 import EditUserDialog from "./edit-user-dialog";
+import { SendUserEmailDialog } from "./send-user-email-dialog";
 
 const PAGE_SIZES = [10, 20, 50];
 
@@ -33,6 +34,8 @@ export default function AdminUsersPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [editTarget, setEditTarget] = useState<ApiUser | null>(null);
   const [editOpen, setEditOpen] = useState(false);
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
+  const [emailRecipients, setEmailRecipients] = useState<ApiUser[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -107,11 +110,14 @@ export default function AdminUsersPage() {
   }
 
   function emailUser(user: ApiUser) {
-    showMessage(`Email draft opened for ${user.user_name} (${user.email})`);
+    setEmailRecipients([user]);
+    setEmailDialogOpen(true);
   }
 
   function bulkEmail() {
-    showMessage(`Email draft opened for ${selectedList.length} selected user(s)`);
+    if (selectedList.length === 0) return;
+    setEmailRecipients(selectedList);
+    setEmailDialogOpen(true);
   }
 
   const start = total === 0 ? 0 : (page - 1) * pageSize + 1;
@@ -423,6 +429,12 @@ export default function AdminUsersPage() {
           );
           showMessage(`Updated user ${updated.user_name}`);
         }}
+      />
+
+      <SendUserEmailDialog
+        open={emailDialogOpen}
+        onOpenChange={setEmailDialogOpen}
+        recipients={emailRecipients}
       />
     </div>
   );

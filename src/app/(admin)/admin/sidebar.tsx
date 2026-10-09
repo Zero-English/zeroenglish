@@ -24,6 +24,7 @@ import {
   Sun,
   Moon,
   Laptop,
+  Mail,
 } from "lucide-react";
 import { UserAvatar } from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
@@ -56,6 +57,7 @@ const navItems = [
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
   { href: "/admin/quizzes", label: "Quizzes", icon: Brain },
   { href: "/admin/exams", label: "Exams", icon: ClipboardList },
+  { href: "/admin/emails", label: "Emails", icon: Mail },
   { href: "/admin/popup", label: "Popup", icon: Megaphone },
 ];
 
