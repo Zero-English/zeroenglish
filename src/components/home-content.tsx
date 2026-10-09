@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import type { Word } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +22,7 @@ import { LatestPostsHome, type LatestPost } from "@/components/news/latest-posts
 import type { LeaderboardRow } from "@/components/leaderboard";
 import { TopLearnersHome } from "@/components/top-learners-home";
 import { isLevelLive, VALID_LEVELS } from "@/lib/level-copy";
+import type { LevelStatItem } from "@/components/home-or-dashboard";
 
 const LEVEL_CONFIG: Record<
   string,
@@ -156,26 +156,28 @@ const QUIZ_MODES = [
 ];
 
 export function HomeContent({
-  words,
+  levelStats,
   posts,
   leaderboard,
 }: {
-  words: Word[];
+  levelStats: LevelStatItem[];
   posts: LatestPost[];
   leaderboard: LeaderboardRow[];
 }) {
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
 
-  const levelStats = VALID_LEVELS.map((level) => {
-    const items = words.filter((w) => w.level === level);
-    const learned = items.filter((w) => learnedIds.has(String(w.id))).length;
-    return { level, label: LEVEL_CONFIG[level].label, total: items.length, learned };
+  const countMap = new Map(levelStats.map((s) => [s.level.toUpperCase(), s.count]));
+  const totalWords = levelStats.reduce((sum, s) => sum + s.count, 0);
+
+  const displayStats = VALID_LEVELS.map((level) => {
+    const total = countMap.get(level) ?? 0;
+    return { level, label: LEVEL_CONFIG[level].label, total, learned: 0 };
   });
 
-  const totalLearned = levelStats.reduce((sum, s) => sum + s.learned, 0);
-  const overallPct = words.length > 0 ? Math.round((totalLearned / words.length) * 100) : 0;
-  const liveLevelCount = levelStats.filter((s) => isLevelLive(s.total)).length;
+  const totalLearned = learnedIds.size;
+  const overallPct = totalWords > 0 ? Math.round((totalLearned / totalWords) * 100) : 0;
+  const liveLevelCount = displayStats.filter((s) => isLevelLive(s.total)).length;
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
@@ -193,8 +195,8 @@ export function HomeContent({
               <div className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/70 dark:bg-zinc-900/70 px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-5">
                 <Sparkles className="h-3.5 w-3.5 text-orange-500" />
                 {t(
-                  `${fmt(words.length)}টি ইংরেজি শব্দ, বাংলা অর্থসহ`,
-                  `${fmt(words.length)} English words with Bangla meanings`
+                  `${fmt(totalWords)}টি ইংরেজি শব্দ, বাংলা অর্থসহ`,
+                  `${fmt(totalWords)} English words with Bangla meanings`
                 )}
               </div>
 
@@ -210,8 +212,8 @@ export function HomeContent({
 
             <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto mb-8">
               {t(
-                `অক্সফোর্ড ৩০০০ ও ৫০০০ তালিকা থেকে বাছাই করা ${fmt(words.length)}টি ইংরেজি শব্দ। প্রতিটি শব্দের বাংলা অর্থ, ইংরেজি সংজ্ঞা, উদাহরণ বাক্য, প্রতিশব্দ ও বিপরীত শব্দ দেওয়া আছে। অ্যাকাউন্ট ছাড়াই শেখা শুরু করা যায়।`,
-                `${fmt(words.length)} English words selected from the Oxford 3000 and 5000 lists. Every entry has a Bangla meaning, an English definition, example sentences, synonyms and antonyms. You can start without an account.`
+                `অক্সফোর্ড ৩০০০ ও ৫০০০ তালিকা থেকে বাছাই করা ${fmt(totalWords)}টি ইংরেজি শব্দ। প্রতিটি শব্দের বাংলা অর্থ, ইংরেজি সংজ্ঞা, উদাহরণ বাক্য, প্রতিশব্দ ও বিপরীত শব্দ দেওয়া আছে। অ্যাকাউন্ট ছাড়াই শেখা শুরু করা যায়।`,
+                `${fmt(totalWords)} English words selected from the Oxford 3000 and 5000 lists. Every entry has a Bangla meaning, an English definition, example sentences, synonyms and antonyms. You can start without an account.`
               )}
             </p>
 
@@ -241,7 +243,7 @@ export function HomeContent({
                 </span>
                 <div className="text-left">
                   <p className="text-xl font-bold text-zinc-900 dark:text-zinc-100 tabular-nums leading-none">
-                    {fmt(words.length)}
+                    {fmt(totalWords)}
                   </p>
                   <p className="text-xs text-zinc-400 mt-1">{t("ইংরেজি শব্দ", "English words")}</p>
                 </div>
@@ -294,7 +296,7 @@ export function HomeContent({
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              {levelStats.map(({ level, total, learned }) => {
+              {displayStats.map(({ level, total, learned }) => {
                 const c = LEVEL_CONFIG[level];
                 const pct = total > 0 ? Math.round((learned / total) * 100) : 0;
                 // A level with almost nothing in it is not worth linking to yet.
@@ -488,8 +490,8 @@ export function HomeContent({
                 </h2>
                 <p className="mt-3 text-sm sm:text-base text-orange-50/90 max-w-xl mx-auto">
                   {t(
-                    `${fmt(words.length)}টি ইংরেজি শব্দ লেভেল ও বিষয় অনুযায়ী সাজানো। অ্যাকাউন্ট ছাড়াই খোলা যায়।`,
-                    `${fmt(words.length)} English words, sorted by level and topic. Open any of them without an account.`
+                    `${fmt(totalWords)}টি ইংরেজি শব্দ লেভেল ও বিষয় অনুযায়ী সাজানো। অ্যাকাউন্ট ছাড়াই খোলা যায়।`,
+                    `${fmt(totalWords)} English words, sorted by level and topic. Open any of them without an account.`
                   )}
                 </p>
                 <div className="mt-7 flex flex-wrap items-center justify-center gap-3">

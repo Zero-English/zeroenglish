@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { LevelPageContent } from "@/components/level-page-content";
-import { authOptions } from "@/lib/auth";
 import {
   browsePublicWords,
   getLevelAggregate,
@@ -15,9 +13,8 @@ import { Breadcrumb } from "@/components/breadcrumb";
 import { SITE_URL } from "@/lib/site-config";
 import { getLevelMeta, isLevelLive, levelMetaDescription } from "@/lib/level-copy";
 
-// Reads the request session and queries Prisma directly, so it can never be
-// statically generated or served from the full-route cache.
-export const dynamic = "force-dynamic";
+// Cached at the edge via ISR for 24 hours.
+export const revalidate = 86400;
 
 type PageProps = {
   params: Promise<{ level: string }>;
@@ -74,8 +71,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const { q, sort, category } = parseLevelQuery(await searchParams);
 
-  const [session, pageData, aggregate, wordIds] = await Promise.all([
-    getServerSession(authOptions),
+  const [pageData, aggregate, wordIds] = await Promise.all([
     browsePublicWords({
       level: upper,
       page: 1,
@@ -142,7 +138,7 @@ export default async function Page({ params, searchParams }: PageProps) {
         pageNum={1}
         // No page segment here, so bank mode resumes the persisted page.
         urlPage={null}
-        serverMode={!session}
+        serverMode={true}
         initialWords={pageData.words}
         initialTotal={pageData.total}
         initialTotalPages={pageData.totalPages}
@@ -150,7 +146,7 @@ export default async function Page({ params, searchParams }: PageProps) {
         initialCategoryCount={aggregate.categoryCount}
         initialCategoryLabel={aggregate.categoryLabel}
         // Only the bank-less render needs the ids to scope local progress.
-        initialWordIds={session ? undefined : wordIds}
+        initialWordIds={wordIds}
         search={q}
         sort={sort}
         category={category}

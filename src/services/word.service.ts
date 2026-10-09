@@ -194,6 +194,30 @@ export const getVocabVersion = async () => {
     }
 };
 
+export const getWordsByIds = async (ids: number[]) => {
+    try {
+        const unique = Array.from(new Set(ids.filter((id) => Number.isInteger(id)))).slice(0, 100);
+        if (unique.length === 0) return { data: [], message: "No IDs provided", success: true };
+        const words = await prisma.word.findMany({
+            where: { id: { in: unique }, isPending: false },
+        });
+        const wordMap = new Map(words.map((w) => [w.id, toPublicWord(w)]));
+        const ordered = unique.map((id) => wordMap.get(id)).filter(Boolean) as Word[];
+        return {
+            data: ordered,
+            message: "Words fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch words by IDs: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch words",
+            success: false,
+        };
+    }
+};
+
 export const getAllWords = async () => {
     try {
         const words = await prisma.word.findMany({

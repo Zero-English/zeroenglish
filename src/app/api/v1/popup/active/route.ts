@@ -15,5 +15,9 @@ import { getActivePopups } from "@/services/popup.service";
  */
 export async function GET() {
     const result = await getActivePopups();
-    return NextResponse.json(result);
+    return NextResponse.json(result, {
+        headers: {
+            "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+        },
+    });
 }

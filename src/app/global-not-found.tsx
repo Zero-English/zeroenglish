@@ -1,22 +1,23 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Hind_Siliguri, Geist_Mono } from "next/font/google";
 import Image from "next/image";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NotFoundContent } from "@/components/not-found/not-found-content";
 import { HardNavLink } from "@/components/not-found/hard-nav-link";
 import logo from "@/public/assets/logo/main-logo.webp";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const hindSiliguri = Hind_Siliguri({
+  subsets: ["bengali", "latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-sans",
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -33,8 +34,8 @@ export const dynamic = "force-dynamic";
 export default function GlobalNotFound() {
   return (
     <html
-      lang="en"
-      className={`h-full ${geistSans.variable} ${geistMono.variable} font-sans antialiased ${inter.variable}`}
+      lang="bn"
+      className={`h-full ${hindSiliguri.variable} ${geistMono.variable} font-sans antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-background text-foreground">

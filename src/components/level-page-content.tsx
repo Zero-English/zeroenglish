@@ -2,15 +2,13 @@
 
 import type { ComponentProps, ReactNode } from "react";
 import Link from "next/link";
-import { useCachedWords } from "@/lib/use-cached-words";
-import { useAuthStatus } from "@/lib/auth-store";
 import { mainCategoryLabel } from "@/lib/category";
 import { getLevelMeta, isLevelLive } from "@/lib/level-copy";
 import type { Word, LevelPageSort } from "@/lib/data";
 import { LevelHero } from "@/components/level-hero";
 import { LevelWordsClient } from "@/components/level-words-client";
 import { useT } from "@/components/language-provider";
-import { ArrowLeft, RefreshCw } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -92,25 +90,10 @@ const levelConfig: Record<(typeof VALID_LEVELS)[number], LevelConfig> = {
 export interface LevelPageContentProps {
   level: string;
   pageNum?: number;
-  /**
-   * True when the server found no NextAuth session. The server still renders the
-   * full word list in that case; this only decides whether the page is allowed
-   * to read the IndexedDB word bank.
-   */
   serverMode?: boolean;
-  /**
-   * The page from an explicit `/vocabulary/<level>/<n>` segment, or `null` on the
-   * bare level URL. Bank mode uses it to honour a deep link and then drop the
-   * segment; server mode ignores it.
-   */
   urlPage?: number | null;
   initialWords?: Word[];
   initialTotal?: number;
-  /**
-   * Unfiltered size of the whole level. The hero and the progress ring are
-   * about the level, not the current filter, so they must never be given
-   * `initialTotal` when a `?q=` or `?category=` filter is active.
-   */
   levelTotal?: number;
   initialTotalPages?: number;
   initialCategories?: string[];
@@ -160,95 +143,6 @@ function NotFoundScreen() {
   );
 }
 
-function LoadingScreen() {
-  return (
-    <div className="relative min-h-dvh overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="mx-auto max-w-4xl">
-        <div className="space-y-4">
-          <div className="h-5 w-32 rounded-lg bg-zinc-200/80 dark:bg-zinc-800 animate-pulse" />
-          <div className="h-16 w-56 rounded-2xl bg-zinc-200/80 dark:bg-zinc-800 animate-pulse" />
-          <div className="h-4 w-72 rounded-lg bg-zinc-200/80 dark:bg-zinc-800 animate-pulse" />
-        </div>
-        <div className="mt-10 space-y-4">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-32 rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 animate-pulse"
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function OfflineScreen({ onRetry }: { onRetry: () => void }) {
-  const t = useT();
-  return (
-    <div className="relative min-h-dvh overflow-hidden px-6 py-16">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="max-w-md mx-auto text-center mt-24">
-        <div className="text-6xl mb-6">📡</div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-          {t("সংযোগ পাওয়া যাচ্ছে না", "You're offline")}
-        </h1>
-        <p className="text-zinc-500 dark:text-zinc-400 mt-2 mb-8">
-          {t(
-            "এই শব্দভাণ্ডারটি এখনও ডাউনলোড হয়নি। প্রথমে অনলাইনে বেতার-শব্দভাণ্ডার পৃষ্ঠাটি খুলুন, তারপর আবার চেষ্টা করুন।",
-            "This vocabulary hasn't been downloaded yet. Open the vocabulary page once while online to download it, then try again."
-          )}
-        </p>
-        <Button onClick={onRetry}>
-          <RefreshCw className="mr-2 h-4 w-4" />
-          {t("আবার চেষ্টা করুন", "Try again")}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function LevelPageFrame({
-  config,
-  level,
-  stats,
-  children,
-}: {
-  config: LevelConfig;
-  level: string;
-  stats: HeroStats;
-  children: ReactNode;
-}) {
-  return (
-    <div className="relative min-h-dvh overflow-hidden">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cuc3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
-
-      <LevelHero
-        level={level}
-        label={config.label}
-        labelBn={config.labelBn}
-        gradient={config.gradient}
-        text={config.text}
-        bg={config.bg}
-        border={config.border}
-        solid={config.solid}
-        stroke={config.stroke}
-        {...stats}
-      />
-
-      <div className="relative px-4 pb-12 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">{children}</div>
-      </div>
-    </div>
-  );
-}
-
-/**
- * A level that exists but is not finished. Rendering a 1-word table under a
- * "Mastery" heading is worse than saying plainly that the list is being
- * written, so that is what this shows instead.
- */
 function LevelInProgressScreen({
   level,
   labelBn,
@@ -297,13 +191,46 @@ function LevelInProgressScreen({
   );
 }
 
+function LevelPageFrame({
+  config,
+  level,
+  stats,
+  children,
+}: {
+  config: LevelConfig;
+  level: string;
+  stats: HeroStats;
+  children: ReactNode;
+}) {
+  return (
+    <div className="relative min-h-dvh overflow-hidden">
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
+      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cuc3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
+
+      <LevelHero
+        level={level}
+        label={config.label}
+        labelBn={config.labelBn}
+        gradient={config.gradient}
+        text={config.text}
+        bg={config.bg}
+        border={config.border}
+        solid={config.solid}
+        stroke={config.stroke}
+        {...stats}
+      />
+
+      <div className="relative px-4 pb-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl">{children}</div>
+      </div>
+    </div>
+  );
+}
 
 export function LevelPageContent({
   level,
   pageNum = 1,
-  serverMode = false,
-  urlPage = null,
-  initialWords,
+  initialWords = [],
   initialTotal,
   levelTotal,
   initialTotalPages,
@@ -315,20 +242,6 @@ export function LevelPageContent({
   sort = "default",
   category = "all",
 }: LevelPageContentProps) {
-  // The server can only see a real NextAuth session. "Continue as Guest" lives
-  // in localStorage, so the local identity gets the final say once hydrated —
-  // that is what keeps guest-mode users on the cached word bank.
-  const { status, hydrated } = useAuthStatus();
-  const isServerMode = serverMode && !(hydrated && status !== "none");
-
-  const {
-    words: bankWords,
-    loading,
-    error,
-    refresh,
-    getWordsByLevel,
-  } = useCachedWords({ enabled: !isServerMode });
-
   const upper = level.toUpperCase();
   const valid = VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number]);
   const config = valid
@@ -338,71 +251,21 @@ export function LevelPageContent({
 
   if (!valid || !config) return <NotFoundScreen />;
 
-  if (isServerMode) {
-    if (!initialWords) return <NotFoundScreen />;
+  const totalCount = initialTotal ?? initialWords.length;
+  const levelSize = levelTotal ?? totalCount;
+  const totalPages =
+    initialTotalPages ?? Math.max(1, Math.ceil(totalCount / 10));
+  const categories = initialCategories ?? [];
 
-    const totalCount = initialTotal ?? initialWords.length;
-    // The hero describes the level, so it needs the unfiltered count even when
-    // the list below it has been narrowed by a search or category filter.
-    const levelSize = levelTotal ?? totalCount;
-    const totalPages =
-      initialTotalPages ?? Math.max(1, Math.ceil(totalCount / 10));
-    const categories = initialCategories ?? [];
-
-    if (meta && !isLevelLive(levelSize)) {
-      return (
-        <LevelInProgressScreen
-          level={upper}
-          label={meta.label}
-          labelBn={meta.labelBn}
-          total={levelSize}
-        />
-      );
-    }
-
+  if (meta && !isLevelLive(levelSize)) {
     return (
-      <LevelPageFrame
-        config={config}
+      <LevelInProgressScreen
         level={upper}
-        stats={{
-          totalCount: levelSize,
-          categoryCount: initialCategoryCount ?? categories.length,
-          categoryLabel: initialCategoryLabel ?? mainCategoryLabel([]),
-          introEn: meta?.introEn ?? "",
-          introBn: meta?.introBn ?? "",
-          topics: meta?.topics ?? [],
-          levelWordIds: initialWordIds ?? [],
-        }}
-      >
-        <LevelWordsClient
-          words={initialWords}
-          gradient={config.gradient}
-          level={upper}
-          pageNum={pageNum}
-          serverMode
-          totalCount={totalCount}
-          totalPages={totalPages}
-          categories={categories}
-          search={search}
-          sort={sort}
-          category={category}
-        />
-      </LevelPageFrame>
+        label={meta.label}
+        labelBn={meta.labelBn}
+        total={levelSize}
+      />
     );
-  }
-
-  const allWords: Word[] = getWordsByLevel(upper);
-
-  if (!loading && error === "offline" && bankWords.length === 0) {
-    return <OfflineScreen onRetry={refresh} />;
-  }
-
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
-  if (bankWords.length === 0 || allWords.length === 0) {
-    return <NotFoundScreen />;
   }
 
   return (
@@ -410,22 +273,27 @@ export function LevelPageContent({
       config={config}
       level={upper}
       stats={{
-        totalCount: allWords.length,
-        categoryCount: new Set(
-          allWords.map((w) => w.category).filter(Boolean)
-        ).size,
-        categoryLabel: mainCategoryLabel(allWords),
+        totalCount: levelSize,
+        categoryCount: initialCategoryCount ?? categories.length,
+        categoryLabel: initialCategoryLabel ?? mainCategoryLabel([]),
         introEn: meta?.introEn ?? "",
         introBn: meta?.introBn ?? "",
         topics: meta?.topics ?? [],
-        levelWordIds: allWords.map((w) => w.id),
+        levelWordIds: initialWordIds ?? [],
       }}
     >
       <LevelWordsClient
-        words={allWords}
+        words={initialWords}
         gradient={config.gradient}
         level={upper}
-        urlPage={urlPage}
+        pageNum={pageNum}
+        serverMode
+        totalCount={totalCount}
+        totalPages={totalPages}
+        categories={categories}
+        search={search}
+        sort={sort}
+        category={category}
       />
     </LevelPageFrame>
   );

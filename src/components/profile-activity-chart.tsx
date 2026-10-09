@@ -431,7 +431,7 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
   const scrollMinWidth = Math.max(520, active.data.length * (granularity === "day" ? 36 : 52));
 
   return (
-    <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80">
+    <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60 p-5 sm:p-6 transition-all duration-300 hover:border-black/[0.12] dark:hover:border-white/[0.15]">
       <div className="flex items-center gap-2 mb-4">
         <div className="p-2 rounded-xl bg-indigo-100 dark:bg-indigo-900/30">
           <Activity className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />

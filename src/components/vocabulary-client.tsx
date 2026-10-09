@@ -5,15 +5,11 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight, BookOpenCheck, Flame, Gauge, Layers, LibraryBig, Sparkles, Target } from "lucide-react";
 import { useLearnedWords } from "@/lib/use-learned-words";
-import { useCachedWords } from "@/lib/use-cached-words";
-import { useAuthStatus } from "@/lib/auth-store";
 import type { VocabularyFacets } from "@/lib/data";
 import { useDailyGoal } from "@/lib/use-daily-goal";
 import { setSelectedLevel } from "@/lib/level-store";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
-import { formatCategoryLabel, mainCategoryLabel } from "@/lib/category";
-import type { WordRef } from "@/types/api";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 
 const RING_RADIUS = 22;
@@ -112,8 +108,6 @@ const LEVEL_CARD_CONFIG: Record<string, LevelConfig> = {
   },
 };
 
-const LEVELS = Object.keys(LEVEL_CARD_CONFIG);
-
 const CATEGORY_STYLES = [
   {
     chip: "bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300",
@@ -151,120 +145,46 @@ interface LevelStatRow {
   level: string;
   config: LevelConfig;
   total: number;
-  learned: number;
 }
 
 interface CategoryGroup {
   label: string;
   total: number;
-  learned: number;
   levels: LevelStatRow[];
 }
 
 export interface VocabularyClientProps {
-  /** True when the server found no NextAuth session. */
   serverMode?: boolean;
-  /** Server-computed rollup, used when the word bank is not loaded. */
   facets?: VocabularyFacets;
 }
 
-export function VocabularyClient({ serverMode = false, facets }: VocabularyClientProps) {
-  // "Continue as Guest" is localStorage-only, so the hydrated local identity
-  // overrides the server's verdict and keeps those users on the word bank.
-  const { status, hydrated } = useAuthStatus();
-  const isServerMode = serverMode && !(hydrated && status !== "none");
-
+export function VocabularyClient({ facets }: VocabularyClientProps) {
   const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
-  const { words: cachedWords, loading: cacheLoading } = useCachedWords({
-    enabled: !isServerMode,
-  });
   const { todayLearned, streak, dailyGoal, loaded: goalLoaded } = useDailyGoal();
   const t = useT();
 
   const goalPct = dailyGoal > 0 ? Math.min(100, Math.round((todayLearned / dailyGoal) * 100)) : 0;
-
-  const wordRefs = useMemo<WordRef[]>(
-    () =>
-      cachedWords.map((w) => ({
-        id: w.id,
-        word: w.word,
-        level: w.level,
-        category: w.category,
-      })),
-    [cachedWords]
-  );
-
-  const categoryLabel = useMemo(() => {
-    if (isServerMode) return facets?.categoryLabel ?? mainCategoryLabel([]);
-    return mainCategoryLabel(wordRefs);
-  }, [isServerMode, facets, wordRefs]);
+  const categoryLabel = facets?.categoryLabel ?? "Oxford 5000";
 
   const categories = useMemo<CategoryGroup[]>(() => {
-    if (isServerMode) {
-      // Per-level learned counts need the word bank to map learned ids onto
-      // levels, so they stay unknown here; totals come straight from the server.
-      return (facets?.groups ?? []).map((group) => ({
-        label: group.label,
-        total: group.total,
-        learned: 0,
-        levels: group.levels.map((l) => ({
-          level: l.level,
-          config: LEVEL_CARD_CONFIG[l.level],
-          total: l.total,
-          learned: 0,
-        })),
-      }));
-    }
+    return (facets?.groups ?? []).map((group) => ({
+      label: group.label,
+      total: group.total,
+      levels: group.levels.map((l) => ({
+        level: l.level,
+        config: LEVEL_CARD_CONFIG[l.level] ?? LEVEL_CARD_CONFIG.A1,
+        total: l.total,
+      })),
+    }));
+  }, [facets]);
 
-    const map = new Map<string, { label: string; total: number; learned: number; levels: LevelStatRow[] }>();
-    for (const ref of wordRefs) {
-      const cat = ref.category || "Oxford5000";
-      const entry = map.get(cat) ?? {
-        label: formatCategoryLabel(cat),
-        total: 0,
-        learned: 0,
-        levels: LEVELS.map((lv) => ({
-          level: lv,
-          config: LEVEL_CARD_CONFIG[lv],
-          total: 0,
-          learned: 0,
-        })),
-      };
-      entry.total++;
-      if (learnedIds.has(String(ref.id))) entry.learned++;
-      const levelRow = entry.levels.find((l) => l.level === ref.level);
-      if (levelRow) {
-        levelRow.total++;
-        if (learnedIds.has(String(ref.id))) levelRow.learned++;
-      }
-      map.set(cat, entry);
-    }
-    return Array.from(map.values())
-      .sort((a, b) => b.total - a.total)
-      .map((entry) => ({
-        ...entry,
-        levels: entry.levels.filter((l) => l.total > 0),
-      }));
-  }, [isServerMode, facets, wordRefs, learnedIds]);
-
-  const totalWords = isServerMode ? (facets?.totalWords ?? 0) : wordRefs.length;
-  // Learned ids are only ever created from publicly visible words, so the size
-  // of the set is the overall learned count even without the bank.
-  const totalLearned = isServerMode
-    ? learnedIds.size
-    : wordRefs.filter((ref) => learnedIds.has(String(ref.id))).length;
+  const totalWords = facets?.totalWords ?? 0;
+  const totalLearned = learnedIds.size;
   const overallPct = totalWords > 0 ? Math.round((totalLearned / totalWords) * 100) : 0;
-  const levelCount = isServerMode
-    ? (facets?.levelCount ?? 0)
-    : new Set(wordRefs.map((r) => r.level || "A1")).size;
-  const loaded = !cacheLoading && learnedLoaded;
-  /** Per-level progress is only derivable with the full bank. */
-  const levelBreakdownKnown = !isServerMode && loaded;
+  const levelCount = facets?.levelCount ?? 0;
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
-      {/* <div className="fixed inset-0 -z-10 bg-[radial-gradient(120%_120%_at_50%_-10%,#ffffff_0%,#f5f5f7_45%,#ececf0_100%)] dark:bg-[radial-gradient(120%_120%_at_50%_-10%,#18181b_0%,#101012_45%,#09090b_100%)]" /> */}
-
       <div className="relative px-4 py-10 sm:px-6 lg:px-8">
         <StaggerContainer className="mx-auto max-w-6xl">
           <div className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
@@ -308,14 +228,14 @@ export function VocabularyClient({ serverMode = false, facets }: VocabularyClien
                           strokeLinecap="round"
                           strokeDasharray={RING_LENGTH}
                           initial={{ strokeDashoffset: RING_LENGTH }}
-                          animate={{ strokeDashoffset: RING_LENGTH * (1 - (loaded ? overallPct : 0) / 100) }}
+                          animate={{ strokeDashoffset: RING_LENGTH * (1 - (learnedLoaded ? overallPct : 0) / 100) }}
                           transition={{ duration: 0.9, ease: "easeOut" }}
                           className="stroke-orange-500"
                         />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
                         <span className="text-xs font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-                          {loaded ? `${overallPct}%` : "…"}
+                          {learnedLoaded ? `${overallPct}%` : "…"}
                         </span>
                       </div>
                     </div>
@@ -324,7 +244,7 @@ export function VocabularyClient({ serverMode = false, facets }: VocabularyClien
                         {t("সামগ্রিক অগ্রগতি", "Overall progress")}
                       </p>
                       <p className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-                        {loaded ? (
+                        {learnedLoaded ? (
                           <>
                             {totalLearned}
                             <span className="font-normal text-zinc-400"> / {totalWords}</span>
@@ -481,14 +401,12 @@ export function VocabularyClient({ serverMode = false, facets }: VocabularyClien
 
                   <StaggerContainer className="space-y-4 sm:space-y-6">
                     {categories.map((group, gi) => {
-                      const pct = group.total > 0 ? Math.round((group.learned / group.total) * 100) : 0;
                       const s = CATEGORY_STYLES[gi % CATEGORY_STYLES.length];
                       return (
                         <StaggerItem key={group.label}>
                           <div className={cn(CARD, "overflow-hidden")}>
                             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4">
                               <div className="flex items-center gap-2 min-w-0">
-                                {/* <span className={cn("h-2 w-2 shrink-0 rounded-full", s.dot)} /> */}
                                 <span className={cn("rounded-full border px-3 py-1 text-xs font-semibold", s.chip)}>
                                   {group.label}
                                 </span>
@@ -496,15 +414,10 @@ export function VocabularyClient({ serverMode = false, facets }: VocabularyClien
                                   {t(`${group.total}টি শব্দ · ${group.levels.length}টি লেভেল`, `${group.total} words · ${group.levels.length} levels`)}
                                 </span>
                               </div>
-                              <span className={cn("text-xs font-semibold tabular-nums", s.text)}>
-                                {loaded ? `${pct}% ${t("শেখা", "learned")}` : "\u00A0"}
-                              </span>
                             </div>
 
                             <StaggerContainer className="flex flex-col">
-                              {group.levels.map(({ level: lv, config: c, total, learned }, li) => {
-                                const levelPct = total > 0 ? Math.round((learned / total) * 100) : 0;
-                                const ready = levelBreakdownKnown;
+                              {group.levels.map(({ level: lv, config: c, total }, li) => {
                                 return (
                                   <StaggerItem
                                     key={lv}
@@ -518,56 +431,22 @@ export function VocabularyClient({ serverMode = false, facets }: VocabularyClien
                                         c.hoverBg
                                       )}
                                     >
-{/* <span className={cn("h-1.5 w-1.5 shrink-0 rounded-full", c.dot)} /> */}
-                                  <div className="min-w-0 flex-1">
-                                    <p className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                                      <span className={c.text}>{lv}</span>
-                                      <span className="mx-1.5 text-zinc-300 dark:text-zinc-600">·</span>
-                                      {t(c.labelBn, c.label)}
-                                    </p>
+                                      <div className="min-w-0 flex-1">
+                                        <p className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                          <span className={c.text}>{lv}</span>
+                                          <span className="mx-1.5 text-zinc-300 dark:text-zinc-600">·</span>
+                                          {t(c.labelBn, c.label)}
+                                        </p>
                                         <p className="mt-0.5 truncate text-xs text-zinc-400 dark:text-zinc-500 tabular-nums">
-                                          {ready
-                                            ? t(`${total}টি শব্দ · ${learned}টি শেখা`, `${total} words · ${learned} learned`)
-                                            : t(`${total}টি শব্দ`, `${total} words`)}
+                                          {t(`${total}টি শব্দ`, `${total} words`)}
                                         </p>
                                       </div>
-                                      <div className="relative hidden h-11 w-11 shrink-0 sm:block">
-                                        <svg viewBox="0 0 52 52" className="h-11 w-11 -rotate-90">
-                                          <circle
-                                            cx="26"
-                                            cy="26"
-                                            r={RING_RADIUS}
-                                            fill="none"
-                                            strokeWidth="4"
-                                            className="stroke-black/[0.06] dark:stroke-white/[0.08]"
-                                          />
-                                          <motion.circle
-                                            cx="26"
-                                            cy="26"
-                                            r={RING_RADIUS}
-                                            fill="none"
-                                            strokeWidth="4"
-                                            strokeLinecap="round"
-                                            strokeDasharray={RING_LENGTH}
-                                            initial={{ strokeDashoffset: RING_LENGTH }}
-                                            animate={{ strokeDashoffset: RING_LENGTH * (1 - (ready ? levelPct : 0) / 100) }}
-                                            transition={{ duration: 0.9, ease: "easeOut" }}
-                                            className={c.stroke}
-                                          />
-                                        </svg>
-                                        <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-zinc-700 dark:text-zinc-200 tabular-nums">
-                                          {ready ? levelPct : "–"}
-                                        </span>
-                                      </div>
-                                      <span className={cn("shrink-0 text-xs font-semibold tabular-nums sm:hidden", c.text)}>
-                                        {ready ? `${levelPct}%` : "–"}
-                                      </span>
                                       <ArrowRight className="h-4 w-4 shrink-0 text-zinc-300 dark:text-zinc-600 transition-all group-hover:translate-x-0.5 group-hover:text-orange-500 group-active:translate-x-0.5 group-active:text-orange-500" />
-</Link>
-                              </StaggerItem>
-                            );
-                          })}
-                        </StaggerContainer>
+                                    </Link>
+                                  </StaggerItem>
+                                );
+                              })}
+                            </StaggerContainer>
                           </div>
                         </StaggerItem>
                       );

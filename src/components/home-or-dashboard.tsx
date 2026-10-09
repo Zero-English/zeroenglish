@@ -1,26 +1,30 @@
 "use client";
 
-import type { Word } from "@/lib/data";
 import { useAuthStatus } from "@/lib/auth-store";
 import { HomeContent } from "@/components/home-content";
 import { Dashboard } from "@/components/dashboard/dashboard";
 import type { LatestPost } from "@/components/news/latest-posts";
 import type { LeaderboardRow } from "@/components/leaderboard";
 
+export interface LevelStatItem {
+  level: string;
+  count: number;
+}
+
 export function HomeOrDashboard({
-  words,
+  levelStats,
   posts,
   leaderboard,
 }: {
-  words: Word[];
+  levelStats: LevelStatItem[];
   posts: LatestPost[];
   leaderboard: LeaderboardRow[];
 }) {
   const { status, hydrated } = useAuthStatus();
 
   if (hydrated && status !== "none") {
-    return <Dashboard words={words} posts={posts} leaderboard={leaderboard} />;
+    return <Dashboard levelStats={levelStats} posts={posts} leaderboard={leaderboard} />;
   }
 
-  return <HomeContent words={words} posts={posts} leaderboard={leaderboard} />;
+  return <HomeContent levelStats={levelStats} posts={posts} leaderboard={leaderboard} />;
 }
