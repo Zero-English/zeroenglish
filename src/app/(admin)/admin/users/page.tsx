@@ -5,11 +5,9 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Mail,
   Pencil,
-  Trash2,
 } from "lucide-react";
 import type { ApiUser, UserListResponse } from "./types";
 import { UserAvatar } from "@/components/UserAvatar";
-import { ConfirmDialog } from "@/components/confirm-dialog";
 import { BackButton } from "@/components/back-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PaginationNav } from "@/components/pagination-nav";
@@ -33,9 +31,6 @@ export default function AdminUsersPage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [message, setMessage] = useState<string | null>(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<ApiUser | null>(null);
-  const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<ApiUser | null>(null);
   const [editOpen, setEditOpen] = useState(false);
 
@@ -115,54 +110,8 @@ export default function AdminUsersPage() {
     showMessage(`Email draft opened for ${user.user_name} (${user.email})`);
   }
 
-  function deleteUser(user: ApiUser) {
-    setUserToDelete(user);
-    setDeleteDialogOpen(true);
-  }
-
-  async function confirmDeleteUser() {
-    if (!userToDelete) return;
-    const res = await fetch(`/api/v1/user/${userToDelete.id}`, {
-      method: "DELETE",
-    });
-    const body = (await res.json()) as { success: boolean; message?: string };
-    if (!res.ok || !body.success) {
-      showMessage(body.message || "Failed to delete user");
-      setUserToDelete(null);
-      return;
-    }
-    setUsers((prev) => prev.filter((u) => u.id !== userToDelete.id));
-    setTotal((prev) => Math.max(0, prev - 1));
-    setUserToDelete(null);
-    showMessage(`Deleted user ${userToDelete.user_name}`);
-  }
-
   function bulkEmail() {
     showMessage(`Email draft opened for ${selectedList.length} selected user(s)`);
-  }
-
-  function bulkDelete() {
-    setBulkDeleteDialogOpen(true);
-  }
-
-  async function confirmBulkDelete() {
-    if (selectedList.length === 0) return;
-    const ids = selectedList.map((u) => u.id);
-    const res = await fetch(`/api/v1/user`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ids }),
-    });
-    const body = (await res.json()) as { success: boolean; message?: string };
-    if (!res.ok || !body.success) {
-      showMessage(body.message || "Failed to delete users");
-      setSelected(new Set());
-      return;
-    }
-    setUsers((prev) => prev.filter((u) => !ids.includes(u.id)));
-    setTotal((prev) => Math.max(0, prev - ids.length));
-    setSelected(new Set());
-    showMessage(`Deleted ${ids.length} selected user(s)`);
   }
 
   const start = total === 0 ? 0 : (page - 1) * pageSize + 1;
@@ -203,19 +152,11 @@ export default function AdminUsersPage() {
               <Mail className="h-3.5 w-3.5" />
               Email
             </button>
-            <button
-              type="button"
-              onClick={bulkDelete}
-              className="inline-flex items-center gap-1.5 rounded-md border border-rose-200 px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 dark:border-rose-800 dark:text-rose-400 dark:hover:bg-rose-900/30 transition-colors"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-              Delete
-            </button>
           </div>
         </div>
       )}
 
-      <div className="rounded-xl border border-border bg-card shadow-sm">
+      <div className="rounded-md border border-border bg-card">
         <div className="border-b border-border px-4 py-3">
           <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
             All Users
@@ -424,15 +365,6 @@ export default function AdminUsersPage() {
                           >
                             <Mail className="h-3.5 w-3.5" />
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => deleteUser(user)}
-                            title="Delete"
-                            aria-label={`Delete ${user.user_name}`}
-                            className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-rose-200 text-rose-600 hover:bg-rose-50 dark:border-rose-800 dark:text-rose-400 dark:hover:bg-rose-900/30 transition-colors"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
                         </div>
                       </td>
                     </tr>
@@ -480,24 +412,6 @@ export default function AdminUsersPage() {
           />
         </div>
       </div>
-
-      <ConfirmDialog
-        open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        title="Delete User"
-        description={`Are you sure you want to delete ${userToDelete?.user_name}? This action cannot be undone.`}
-        confirmText="Delete User"
-        onConfirm={confirmDeleteUser}
-      />
-
-      <ConfirmDialog
-        open={bulkDeleteDialogOpen}
-        onOpenChange={setBulkDeleteDialogOpen}
-        title="Delete Selected Users"
-        description={`Are you sure you want to delete ${selectedList.length} selected user(s)? This action cannot be undone.`}
-        confirmText="Delete All"
-        onConfirm={confirmBulkDelete}
-      />
 
       <EditUserDialog
         user={editTarget}
