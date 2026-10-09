@@ -198,7 +198,7 @@ export default function AdminQuizTypesPage() {
         {message}
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="rounded-xl border border-border shadow-sm bg-card">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>

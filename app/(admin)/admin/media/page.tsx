@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   Search,
   Upload,
@@ -11,6 +12,7 @@ import {
   Loader2,
   Copy,
   Check,
+  LayoutTemplate,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -344,7 +346,7 @@ export default function AdminMediaPage() {
           {media.map((item) => (
             <div
               key={item.id}
-              className="group overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 shadow-sm"
+              className="group overflow-hidden rounded-xl border border-gray-200 bg-white bg-card shadow-sm"
             >
               <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-800">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -364,6 +366,17 @@ export default function AdminMediaPage() {
                   >
                     {copiedUrl === item.id ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
                   </Button>
+                  <Link href={`/admin/templates/new?mediaId=${item.id}`}>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      aria-label="Create Template from this media"
+                      title="Create Template"
+                    >
+                      <LayoutTemplate className="h-4 w-4 text-primary" />
+                    </Button>
+                  </Link>
                   <Button
                     variant="secondary"
                     size="sm"
@@ -404,7 +417,7 @@ export default function AdminMediaPage() {
 
       {/* Pagination */}
       {!loading && total > PAGE_LIMIT && (
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-gray-200 dark:border-gray-800 pt-4">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
           <span className="text-xs text-gray-500 dark:text-gray-400">
             Showing {start}–{end} of {total}
           </span>
@@ -432,7 +445,7 @@ export default function AdminMediaPage() {
                 onChange={handleFileChange}
               />
               {selectedFile ? (
-                <div className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 dark:border-gray-800 dark:bg-gray-900">
+                <div className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 bg-card">
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
                       {selectedFile.name}

@@ -215,8 +215,8 @@ export default function AdminUsersPage() {
         </div>
       )}
 
-      <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-        <div className="border-b border-gray-200 dark:border-gray-800 px-4 py-3">
+      <div className="rounded-xl border border-border bg-card shadow-sm">
+        <div className="border-b border-border px-4 py-3">
           <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
             All Users
           </h2>
@@ -224,7 +224,7 @@ export default function AdminUsersPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <tr className="border-b border-border text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                 <th className="w-12 px-4 py-2.5">
                   <input
                     type="checkbox"

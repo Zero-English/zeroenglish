@@ -67,6 +67,7 @@ model Media {
   blogs Blog[]
   popupLandscape Popup[] @relation("PopupLandscape")
   popupPortrait  Popup[] @relation("PopupPortrait")
+  templates      VisualTemplate[] @relation("TemplateBackground")
 
   @@index([createdAt])
 }
@@ -258,6 +259,7 @@ model User {
   addedWords Word[]
   addedGrammarRules GrammarRules[]
   relatedCombinedExamResults CombinedExamResult[]
+  createdTemplates VisualTemplate[] @relation("CreatedTemplates")
 }
 
 model Account {
@@ -378,4 +380,38 @@ enum grammarRuleStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum TemplateType {
+  QUIZ_POSTER
+  CONTRIBUTOR_CERTIFICATE
+  VOCABULARY_POSTER
+  LEADERBOARD_POSTER
+  ACHIEVEMENT
+  COURSE_CERTIFICATE
+  EVENT_POSTER
+  SOCIAL_POST
+  ANNOUNCEMENT
+}
+
+model VisualTemplate {
+  id                 Int          @id @default(autoincrement())
+  name               String
+  description        String?      @default("")
+  type               TemplateType @default(QUIZ_POSTER)
+  width              Int          @default(1080)
+  height             Int          @default(1350)
+  isDefault          Boolean      @default(false)
+  isActive           Boolean      @default(true)
+  elements           Json         @default("[]")
+  backgroundMediaId  Int?
+  backgroundMedia    Media?       @relation("TemplateBackground", fields: [backgroundMediaId], references: [id], onDelete: SetNull)
+  backgroundColor    String?      @default("#ffffff")
+  createdById        Int?
+  createdBy          User?        @relation("CreatedTemplates", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@index([type, isActive])
+  @@index([backgroundMediaId])
 }

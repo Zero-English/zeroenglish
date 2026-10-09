@@ -7,6 +7,7 @@ import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { ContributionCalendar } from "@/components/contribution-calendar";
 import { useT } from "@/components/language-provider";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { ContributorCertificateModal } from "@/components/template-engine/contributor-certificate-modal";
 import {
   Pagination,
   PaginationContent,
@@ -263,20 +264,24 @@ function IdentityTile({
         </div>
 
         {/* Name + badges */}
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <h1 className="truncate text-lg font-bold text-zinc-900 dark:text-zinc-100 sm:text-xl">
-            {displayName}
-          </h1>
-          {isAdmin ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-px text-[11px] font-semibold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
-              <ShieldCheck className="h-3 w-3" />
-              {t("অ্যাডমিন", "Admin")}
-            </span>
-          ) : (
-            <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-px text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-              {t("ব্যবহারকারী", "User")}
-            </span>
-          )}
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="truncate text-lg font-bold text-zinc-900 dark:text-zinc-100 sm:text-xl">
+              {displayName}
+            </h1>
+            {isAdmin ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-px text-[11px] font-semibold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                <ShieldCheck className="h-3 w-3" />
+                {t("অ্যাডমিন", "Admin")}
+              </span>
+            ) : (
+              <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-px text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                {t("ব্যবহারকারী", "User")}
+              </span>
+            )}
+          </div>
+
+          <ContributorCertificateModal userId={user.id} userName={displayName} />
         </div>
         {/* <p className="mt-0.5 truncate text-sm text-zinc-500 dark:text-zinc-400">
           {user.userName ? `@${user.userName}` : t("Zero English ব্যবহারকারী", "Zero English user")}

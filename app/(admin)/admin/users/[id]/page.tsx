@@ -308,7 +308,7 @@ export default async function SingleUserPage({
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm"
+            className="rounded-xl border border-border bg-card p-4 shadow-sm"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <stat.icon className="h-4 w-4" />
@@ -330,8 +330,8 @@ export default async function SingleUserPage({
       </div>
 
       <div className="mt-6 grid gap-5 lg:grid-cols-2">
-        <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-          <div className="border-b border-gray-200 dark:border-gray-800 px-5 py-4">
+        <section className="rounded-xl border border-border bg-card shadow-sm">
+          <div className="border-b border-border px-5 py-4">
             <h2 className="text-base font-semibold text-gray-900 dark:text-white">
               Profile
             </h2>
@@ -398,8 +398,8 @@ export default async function SingleUserPage({
           )}
         </section>
 
-        <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-          <div className="border-b border-gray-200 dark:border-gray-800 px-5 py-4">
+        <section className="rounded-xl border border-border bg-card shadow-sm">
+          <div className="border-b border-border px-5 py-4">
             <h2 className="text-base font-semibold text-gray-900 dark:text-white">
               Recent Activity
             </h2>
@@ -434,8 +434,8 @@ export default async function SingleUserPage({
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-2">
-        <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-          <div className="border-b border-gray-200 dark:border-gray-800 px-5 py-4">
+        <section className="rounded-xl border border-border bg-card shadow-sm">
+          <div className="border-b border-border px-5 py-4">
             <h2 className="text-base font-semibold text-gray-900 dark:text-white">
               Quiz History
             </h2>
@@ -448,7 +448,7 @@ export default async function SingleUserPage({
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 dark:border-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  <tr className="border-b border-border text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                     <th className="px-5 py-3 font-medium">Quiz</th>
                     <th className="px-5 py-3 font-medium">Score</th>
                     <th className="px-5 py-3 font-medium">Date</th>
@@ -487,8 +487,8 @@ export default async function SingleUserPage({
           )}
         </section>
 
-        <section className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-          <div className="border-b border-gray-200 dark:border-gray-800 px-5 py-4">
+        <section className="rounded-xl border border-border bg-card shadow-sm">
+          <div className="border-b border-border px-5 py-4">
             <h2 className="text-base font-semibold text-gray-900 dark:text-white">
               Monthly Progress
             </h2>

@@ -330,7 +330,7 @@ export default function AdminExamsPage() {
         </div>
       )}
 
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="rounded-xl border border-border shadow-sm bg-card">
         {/* Toolbar / Filters */}
         <div className="border-b border-gray-200 p-4 dark:border-gray-800">
           <div className="flex flex-col gap-3">

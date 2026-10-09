@@ -71,7 +71,7 @@ export function MediaPickerDialog({
                   key={item.id}
                   type="button"
                   onClick={() => onSelect(item)}
-                  className="group overflow-hidden rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900 transition-colors hover:border-primary/50 focus:border-primary focus:outline-none"
+                  className="group overflow-hidden rounded-lg border border-gray-200 bg-gray-50 bg-card transition-colors hover:border-primary/50 focus:border-primary focus:outline-none"
                   title={item.name}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
