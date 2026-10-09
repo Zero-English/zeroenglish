@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { LevelPageContent } from "@/components/level-page-content";
-import { authOptions } from "@/lib/auth";
 import {
   browsePublicWords,
   getLevelAggregate,
@@ -13,9 +11,8 @@ import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/voc
 import { Breadcrumb } from "@/components/breadcrumb";
 import { getLevelMeta, isLevelLive, levelMetaDescription } from "@/lib/level-copy";
 
-// Reads the request session and queries Prisma directly, so it can never be
-// statically generated or served from the full-route cache.
-export const dynamic = "force-dynamic";
+// Cached at the edge via ISR for 24 hours.
+export const revalidate = 86400;
 
 type PageProps = {
   params: Promise<{ level: string; pageNum: string }>;
@@ -96,35 +93,22 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const { q, sort, category } = parseLevelQuery(await searchParams);
 
-  // The JWT strategy means this is a cookie read, not a database round-trip, so
-  // it is safe to resolve before the queries.
-  const session = await getServerSession(authOptions);
+  const [pageData, aggregate, wordIds] = await Promise.all([
+    browsePublicWords({
+      level: upper,
+      page,
+      limit: ITEMS_PER_PAGE,
+      search: q,
+      category,
+      sort,
+    }),
+    getLevelAggregate(upper),
+    getLevelWordIds(upper),
+  ]);
 
-  // Signed-in readers render from the IndexedDB bank, which derives the total,
-  // the categories and the stats from its own copy of the level. None of that
-  // is read from these props in bank mode, so querying Prisma would only
-  // produce data the client throws away. Crawlers and logged-out visitors —
-  // the paths that actually need the HTML — still take the full query.
-  const [pageData, aggregate, wordIds] = session
-    ? [null, null, undefined]
-    : await Promise.all([
-        browsePublicWords({
-          level: upper,
-          page,
-          limit: ITEMS_PER_PAGE,
-          search: q,
-          category,
-          sort,
-        }),
-        getLevelAggregate(upper),
-        getLevelWordIds(upper),
-      ]);
-
-  if (pageData && aggregate) {
-    if (aggregate.total === 0) notFound();
-    // `browsePublicWords` clamps the page, so a clamp means the page is past the end.
-    if (pageData.page < page) notFound();
-  }
+  if (aggregate.total === 0) notFound();
+  // `browsePublicWords` clamps the page, so a clamp means the page is past the end.
+  if (pageData.page < page) notFound();
 
   return (
     <>
@@ -150,13 +134,13 @@ export default async function Page({ params, searchParams }: PageProps) {
         level={upper}
         pageNum={page}
         urlPage={page}
-        serverMode={!session}
-        initialWords={pageData?.words}
-        initialTotal={pageData?.total}
-        initialTotalPages={pageData?.totalPages}
-        initialCategories={aggregate?.categories}
-        initialCategoryCount={aggregate?.categoryCount}
-        initialCategoryLabel={aggregate?.categoryLabel}
+        serverMode={true}
+        initialWords={pageData.words}
+        initialTotal={pageData.total}
+        initialTotalPages={pageData.totalPages}
+        initialCategories={aggregate.categories}
+        initialCategoryCount={aggregate.categoryCount}
+        initialCategoryLabel={aggregate.categoryLabel}
         // Only the bank-less render needs the ids to scope local progress.
         initialWordIds={wordIds}
         search={q}

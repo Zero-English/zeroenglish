@@ -15,7 +15,6 @@ import {
   Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Word } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { useLanguage, useT } from "@/components/language-provider";
 import { useAuthStore } from "@/lib/auth-store";
@@ -25,6 +24,7 @@ import { useDailyGoal } from "@/lib/use-daily-goal";
 import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
 import type { LeaderboardRow } from "@/components/leaderboard";
 import { TopLearners } from "@/components/top-learners";
+import type { LevelStatItem } from "@/components/home-or-dashboard";
 
 const CARD =
   "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
@@ -159,11 +159,11 @@ function getGreeting(): GreetingText {
 }
 
 export function Dashboard({
-  words,
+  levelStats = [],
   posts,
   leaderboard,
 }: {
-  words: Word[];
+  levelStats?: LevelStatItem[];
   posts: LatestPost[];
   leaderboard: LeaderboardRow[];
 }) {
@@ -176,7 +176,7 @@ export function Dashboard({
 
   const greeting = getGreeting();
   const totalLearned = learnedIds.size;
-  const totalWords = words.length;
+  const totalWords = levelStats.reduce((sum, s) => sum + s.count, 0) || 5000;
   const overallPct = totalWords > 0 ? Math.round((totalLearned / totalWords) * 100) : 0;
   const goalPct =
     dailyGoal > 0 ? Math.min(100, Math.round((todayLearned / dailyGoal) * 100)) : 0;
@@ -330,7 +330,7 @@ export function Dashboard({
                       lastLearned={lastLearnedHydrated ? lastLearned : null}
                       loaded={learnedLoaded}
                       learnedIds={learnedIds}
-                      words={words}
+                      levelStats={levelStats}
                     />
                   </div>
 
@@ -443,20 +443,21 @@ function ContinueLearningContent({
   lastLearned,
   loaded,
   learnedIds,
-  words,
+  levelStats,
 }: {
   lastLearned: LastLearnedEntry | null;
   loaded: boolean;
   learnedIds: Set<string>;
-  words: Word[];
+  levelStats: LevelStatItem[];
 }) {
   const t = useT();
 
   const targetLevel = lastLearned?.level ?? "A1";
   const meta = LEVEL_META[targetLevel] ?? LEVEL_META.A1;
-  const levelWords = words.filter((w) => w.level === targetLevel);
-  const learned = levelWords.filter((w) => learnedIds.has(String(w.id))).length;
-  const pct = levelWords.length > 0 ? Math.round((learned / levelWords.length) * 100) : 0;
+  const countMap = new Map(levelStats.map((s) => [s.level.toUpperCase(), s.count]));
+  const levelTotal = countMap.get(targetLevel.toUpperCase()) || 1000;
+  const learned = learnedIds.size;
+  const pct = levelTotal > 0 ? Math.min(100, Math.round((learned / levelTotal) * 100)) : 0;
   // No page segment: the level-pagination store restores the remembered page,
   // so the URL stays clean and clicking this is a normal client navigation.
   const href = `/vocabulary/${targetLevel.toLowerCase()}`;
@@ -492,7 +493,7 @@ function ContinueLearningContent({
             )}
           </div>
           <span className="shrink-0 text-xs font-medium tabular-nums text-zinc-500 dark:text-zinc-400">
-            {loaded ? `${learned}/${levelWords.length}` : "\u00A0"}
+            {loaded ? `${learned}/${levelTotal}` : "\u00A0"}
           </span>
         </div>
       </div>

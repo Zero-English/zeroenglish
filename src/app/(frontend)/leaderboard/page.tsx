@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import { getLeaderboard } from "@/services/user.service";
 import { Leaderboard } from "@/components/leaderboard";
 import { BackButton } from "@/components/back-button";
@@ -12,11 +10,10 @@ export const metadata: Metadata = {
     alternates: { canonical: "/leaderboard" },
 };
 
-export const dynamic = "force-dynamic";
+// Cached for 5 minutes via ISR
+export const revalidate = 300;
 
 export default async function LeaderboardPage() {
-    const session = await getServerSession(authOptions);
-    const userId = typeof session?.user?.id === "number" ? session.user.id : undefined;
     const result = await getLeaderboard();
     const rows = result.success && result.data ? result.data : [];
 
@@ -26,7 +23,7 @@ export default async function LeaderboardPage() {
                 <div className="mx-auto max-w-6xl">
                     <BackButton />
                     <div className="mt-4">
-                        <Leaderboard rows={rows} currentUserId={userId} />
+                        <Leaderboard rows={rows} />
                     </div>
                 </div>
             </div>

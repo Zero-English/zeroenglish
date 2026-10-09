@@ -1,7 +1,6 @@
 "use client";
 
 import Dexie, { type EntityTable, type Table } from "dexie";
-import type { Word } from "@/lib/data";
 import type { ActivityEntry } from "@/lib/db";
 
 export interface ProgressEntry {
@@ -51,7 +50,6 @@ function scopeFromLegacy(scope: string): string {
 }
 
 const db = new Dexie("ZeroEnglishDB") as Dexie & {
-  words: EntityTable<Word, "id">;
   progress: Table<ProgressEntry, [string, string, string]>;
   activity: Table<ActivityRow, [string, string]>;
   quizHistory: Table<QuizHistoryRow, [string, string]>;
@@ -128,11 +126,6 @@ function scopeFromNamespace(ns: string): string {
   return `${GOOGLE_SCOPE_PREFIX}${ns}`;
 }
 
-/**
- * v3: adds the identity-scoped quizHistory table (practice quiz results) and
- * migrates every persisted quiz-history zustand entry (from the legacy global
- * key and from each zero_english:{ns} scoped bucket) into IndexedDB.
- */
 db.version(3)
   .stores({
     words: "id, word, level, category",
@@ -186,7 +179,6 @@ db.version(3)
       }
     };
 
-    // Legacy global key (pre-namespace).
     const legacyRaw = window.localStorage.getItem("quiz-history");
     if (legacyRaw) {
       try {
@@ -200,7 +192,6 @@ db.version(3)
       keysToClean.push("quiz-history");
     }
 
-    // Per-identity scoped buckets: zero_english:{ns} -> { [storeName]: {state,version} }.
     for (const key of localStorageKeys) {
       if (!key.startsWith("zero_english:")) continue;
       const ns = key.slice("zero_english:".length);
@@ -238,19 +229,10 @@ db.version(3)
     }
 
     if (rows.length > 0) {
-      // The migration only ever sees local data, so a re-run never happens for
-      // rows already present (a fresh upgrade starts from an empty table when
-      // idempotency could not hold, overwriting identical rows is harmless).
       await tx.table("quizHistory").bulkPut(rows);
     }
   });
 
-/**
- * v4: the public Word shape changed (meaning_bn -> meaningBn, parts_of_speech
- * -> wordType, ...), so any words cached by earlier app versions are stale.
- * The words table is a pure cache that is re-downloaded on next load, so we
- * drop it (and the recorded version) to force a fresh fetch from the API.
- */
 db.version(4)
   .stores({
     words: "id, word, level, category",
@@ -262,6 +244,26 @@ db.version(4)
   .upgrade(async (tx) => {
     await tx.table("words").clear();
     await tx.table("metadata").where("key").equals("vocabularyVersion").delete();
+  });
+
+/**
+ * v5: Words data is no longer stored in IndexedDB.
+ * Drops the words table entirely to ensure zero client-side dictionary storage.
+ */
+db.version(5)
+  .stores({
+    words: null,
+    progress: "[scope+wordId+type], [scope+type], scope, synced",
+    activity: "[scope+date], scope",
+    quizHistory: "[scope+id], scope, synced",
+    metadata: "key",
+  })
+  .upgrade(async (tx) => {
+    try {
+      await tx.table("metadata").where("key").equals("vocabularyVersion").delete();
+    } catch {
+      // ignore
+    }
   });
 
 export default db;

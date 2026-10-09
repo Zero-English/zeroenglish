@@ -1,7 +1,7 @@
 import "@/app/globals.css";
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Geist, Geist_Mono, Hind_Siliguri, Inter } from "next/font/google";
+import { Hind_Siliguri, Geist_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import SessionProvider from "@/components/session-provider";
@@ -13,22 +13,17 @@ import {
   SITE_DEFAULT_TITLE,
 } from "@/lib/site-config";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
 const hindSiliguri = Hind_Siliguri({
-  subsets: ["bengali"],
+  subsets: ["bengali", "latin"],
   weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-bangla",
-});
-
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 /**
@@ -86,11 +81,9 @@ export default function RootLayout({
             className={cn(
                 "h-full",
                 "antialiased",
-                geistSans.variable,
-                geistMono.variable,
-                "font-sans",
-                inter.variable,
                 hindSiliguri.variable,
+                geistMono.variable,
+                "font-sans"
             )}
             suppressHydrationWarning
         >

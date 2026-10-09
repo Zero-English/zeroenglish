@@ -12,9 +12,6 @@ const withSerwist = withSerwistInit({
   reloadOnOnline: true,
   disable: process.env.NODE_ENV === "development",
   additionalPrecacheEntries: [
-    { url: "/", revision },
-    { url: "/vocabulary", revision },
-    { url: "/quiz", revision },
     { url: "/offline", revision },
   ],
 });

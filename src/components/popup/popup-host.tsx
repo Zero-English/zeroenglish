@@ -131,7 +131,7 @@ export function PopupHost() {
     return () => {
       cancelled = true;
     };
-  }, [pathname]);
+  }, []);
 
   const visiblePopups = useMemo(() => {
     if (!hydrated) return [];

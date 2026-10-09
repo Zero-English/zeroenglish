@@ -3,7 +3,7 @@ import { getPublishedBlogsByPage } from "@/services/blog.service";
 import { BlogCard } from "@/components/news/blog-card";
 import { NewsPagination } from "@/components/news/news-pagination";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export async function generateMetadata({
   searchParams,

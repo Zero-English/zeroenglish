@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
 import { UserAvatar } from "@/components/UserAvatar";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
+import { useAuthStore } from "@/lib/auth-store";
 
 export interface LeaderboardRow {
   id: number;
@@ -312,6 +313,9 @@ export function Leaderboard({
 }) {
   const t = useT();
 
+  const authUserId = useAuthStore((s) => s.userId);
+  const effectiveUserId = currentUserId ?? (authUserId ? Number(authUserId) : undefined);
+
   const participants = rows.filter((r) => r.lastWeekCount > 0);
 
   const ranked = useMemo(() => {
@@ -323,7 +327,7 @@ export function Leaderboard({
   const top3 = ranked.slice(0, 3);
   const rest = ranked.slice(3);
   const max = ranked.length > 0 ? Math.max(...ranked.map((r) => r.lastWeekAvg)) : 0;
-  const me = currentUserId ? ranked.find((r) => r.id === currentUserId) : undefined;
+  const me = effectiveUserId ? ranked.find((r) => r.id === effectiveUserId) : undefined;
   const topRow = ranked[0];
 
   return (
@@ -550,7 +554,7 @@ export function Leaderboard({
                             key={row.id}
                             row={row}
                             max={max}
-                            highlight={row.id === currentUserId}
+                            highlight={row.id === effectiveUserId}
                           />
                         ))}
                       </div>

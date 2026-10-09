@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import { VocabularyClient } from "@/components/vocabulary-client";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { getVocabularyFacets } from "@/lib/data";
-import { authOptions } from "@/lib/auth";
 
-// The level cards are built from a database rollup, so this page is never
-// eligible for static or full-route caching.
-export const dynamic = "force-dynamic";
+// Cached at the edge via ISR for 24 hours. Client auth hydration seamlessly takes over in browser.
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: "English Vocabulary List by CEFR Level",
@@ -17,10 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function VocabularyPage() {
-  const [session, facets] = await Promise.all([
-    getServerSession(authOptions),
-    getVocabularyFacets(),
-  ]);
+  const facets = await getVocabularyFacets();
 
   return (
     <>
@@ -29,7 +23,7 @@ export default async function VocabularyPage() {
           items={[{ nameBn: "শব্দভাণ্ডার", nameEn: "Vocabulary", href: "/vocabulary" }]}
         />
       </div>
-      <VocabularyClient serverMode={!session} facets={facets} />
+      <VocabularyClient serverMode={true} facets={facets} />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getAllWords } from "@/lib/data";
+import { getLevelStats } from "@/lib/data";
 import { HomeOrDashboard } from "@/components/home-or-dashboard";
 import { getPublishedBlogsByPage } from "@/services/blog.service";
 import { getLeaderboard } from "@/services/user.service";
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const words = await getAllWords();
+  const levelStats = await getLevelStats();
 
   const postsResult = await getPublishedBlogsByPage(1, 3);
   const posts = (postsResult.success && postsResult.data ? postsResult.data : []).map((b) => ({
@@ -51,5 +51,5 @@ export default async function Home() {
   const leaderboardResult = await getLeaderboard();
   const leaderboard = leaderboardResult.success && leaderboardResult.data ? leaderboardResult.data : [];
 
-  return <HomeOrDashboard words={words} posts={posts} leaderboard={leaderboard} />;
+  return <HomeOrDashboard levelStats={levelStats} posts={posts} leaderboard={leaderboard} />;
 }

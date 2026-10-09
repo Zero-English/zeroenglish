@@ -68,7 +68,7 @@ export function DailyGoalCard() {
   }
 
   return (
-    <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.02] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
+    <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60 p-6 transition-all duration-300 hover:border-black/[0.12] dark:hover:border-white/[0.15]">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <Target className="h-5 w-5 text-zinc-500" />
