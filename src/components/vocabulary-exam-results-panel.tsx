@@ -129,7 +129,7 @@ function ResultItem({ result }: { result: DbCombinedExamResult }) {
   const incorrect = result.incorrectWords.length;
 
   return (
-    <StaggerItem className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
+    <StaggerItem className="relative overflow-hidden rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md p-4 sm:p-5 transition-all duration-200 shadow-xs">
       <Link
         href={`/profile/vocabulary-exam-results/${result.id}`}
         className="absolute inset-0 z-0"
@@ -142,33 +142,33 @@ function ResultItem({ result }: { result: DbCombinedExamResult }) {
         <div className="flex items-center gap-3">
           <QuizTypeBadge r={result} />
           <div>
-            <h4 className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100">
+            <h4 className="text-sm sm:text-base font-semibold text-foreground">
               <QuizTypeLabel r={result} />
             </h4>
-            <p className="mt-0.5 flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500">
+            <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
               <CalendarDays className="h-3.5 w-3.5" />
               {formatDate(combinedExamResultDate(result))}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 px-3 py-2">
+        <div className="flex items-center gap-2 rounded-xl bg-muted/60 border border-border/60 px-3 py-1.5">
           <Trophy className="h-4 w-4 text-amber-500" />
           <span
             className={cn(
-              "text-lg font-bold tabular-nums",
+              "text-base font-bold tabular-nums",
               winColor(result.scoreInPercent)
             )}
           >
             {result.scoreInPercent}%
           </span>
-          <span className="text-xs text-zinc-400">{t("স্কোর", "score")}</span>
+          <span className="text-xs text-muted-foreground">{t("স্কোর", "score")}</span>
         </div>
       </div>
 
-      <div className="pointer-events-none relative mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-zinc-100 dark:border-zinc-800 pt-4">
+      <div className="pointer-events-none relative mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-border/60 pt-3">
         <div className="flex items-center gap-2">
-          <ListChecks className="h-4 w-4 text-zinc-400" />
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">
+          <ListChecks className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">
             {t(`${total}টি শব্দ`, `${total} words`)}
           </span>
         </div>
@@ -183,8 +183,8 @@ function ResultItem({ result }: { result: DbCombinedExamResult }) {
         {result.quizType?.name !== "SYNONYMS" &&
           result.quizType?.name !== "ANTONYMS" && (
             <div className="flex items-center gap-2">
-              <Clock3 className="h-4 w-4 text-zinc-400" />
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              <Clock3 className="h-4 w-4 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">
                 {result.timePerWord}
                 {t(" সেকেন্ড / শব্দ", "s / word")}
               </span>
@@ -195,7 +195,7 @@ function ResultItem({ result }: { result: DbCombinedExamResult }) {
             <span
               key={lv}
               className={cn(
-                "rounded-md px-2 py-0.5 text-[11px] font-medium",
+                "rounded-md px-2 py-0.5 text-[11px] font-medium border",
                 LEVEL_COLORS[lv]
               )}
             >
@@ -250,7 +250,7 @@ export function CombinedExamResultsPanel() {
 
   if (!loaded) {
     return (
-      <div className="flex items-center justify-center py-20 text-zinc-400">
+      <div className="flex items-center justify-center py-20 text-muted-foreground">
         <GraduationCap className="size-6 animate-pulse" />
       </div>
     );
@@ -282,7 +282,7 @@ export function CombinedExamResultsPanel() {
 
   return (
     <div>
-      <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-6">
+      <p className="text-sm text-muted-foreground mb-6">
         {t(
           `${stats.total}টি কুইজ · ${stats.totalWords}টি শব্দের উত্তর দেওয়া হয়েছে`,
           `${stats.total} practice exams ${stats.total !== 1 ? "zes" : ""} · ${stats.totalWords} words answered`
@@ -298,17 +298,17 @@ export function CombinedExamResultsPanel() {
                 return (
                   <StaggerItem
                     key={s.label}
-                    className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.02] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80"
+                    className="rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md p-4 sm:p-5 transition-all duration-200 shadow-xs"
                   >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className={cn("p-2 rounded-xl", s.bg)}>
-                        <Icon className={cn("h-5 w-5", s.tint)} />
+                    <div className="flex items-center gap-3 mb-2.5">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-muted text-foreground">
+                        <Icon className="h-4 w-4" />
                       </div>
-                      <span className="text-sm text-zinc-500 dark:text-zinc-400">
+                      <span className="text-xs sm:text-sm font-medium text-muted-foreground">
                         {s.label}
                       </span>
                     </div>
-                    <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                    <div className="text-2xl font-bold text-foreground tabular-nums">
                       {s.value}
                     </div>
                   </StaggerItem>
@@ -317,7 +317,7 @@ export function CombinedExamResultsPanel() {
             </StaggerContainer>
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4">
             <StaggerContainer className="contents">
               {results.map((result, idx) => (
                 <ResultItem key={result.id ?? idx} result={result} />

@@ -310,6 +310,30 @@ export const getLevelWordIds = cache(async (level: string): Promise<number[]> =>
   return rows.map((row) => row.id);
 });
 
+export const getLevelWordIdMap = cache(async (): Promise<Record<string, number[]>> => {
+  const rows = await withPrismaRetry(() =>
+    prisma.word.findMany({
+      where: PUBLIC_WORD_WHERE,
+      select: { id: true, level: true },
+      orderBy: { id: "asc" },
+    })
+  );
+  const map: Record<string, number[]> = {
+    A1: [],
+    A2: [],
+    B1: [],
+    B2: [],
+    C1: [],
+    C2: [],
+  };
+  for (const row of rows) {
+    if (map[row.level]) {
+      map[row.level].push(row.id);
+    }
+  }
+  return map;
+});
+
 export const getLevelStats = cache(async () => {
   const grouped = await withPrismaRetry(() =>
     prisma.word.groupBy({

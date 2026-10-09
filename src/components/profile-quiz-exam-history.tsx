@@ -172,7 +172,7 @@ function QuizExamHistoryItem({ entry }: { entry: QuizExamHistoryEntry }) {
       : null;
 
   return (
-    <StaggerItem className="relative overflow-hidden rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6 transition-all duration-200 hover:scale-[1.01] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.01] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80">
+    <StaggerItem className="relative overflow-hidden rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md p-4 sm:p-5 transition-all duration-200 shadow-xs">
       <div
         className={cn(
           "absolute inset-y-4 left-0 w-1 rounded-full bg-gradient-to-b opacity-60",
@@ -181,22 +181,21 @@ function QuizExamHistoryItem({ entry }: { entry: QuizExamHistoryEntry }) {
       />
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
-          <div className={cn("p-2.5 rounded-xl", meta.bg)}>
-            <Icon className={cn("h-5 w-5", meta.tint)} />
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-muted text-foreground">
+            <Icon className="h-4 w-4" />
           </div>
           <div className="min-w-0">
-            <h4 className="truncate text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100">
+            <h4 className="truncate text-sm sm:text-base font-semibold text-foreground">
               {entry.title}
             </h4>
-            <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-zinc-400 dark:text-zinc-500">
-              <span className={cn("font-medium", meta.tint)}>
+            <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
+              <span className="font-medium text-foreground/90">
                 {t(meta.labelBn, meta.label)}
               </span>
               {statusMeta && (
                 <span
                   className={cn(
-                    "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold",
-                    statusMeta.classes
+                    "inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-medium bg-muted text-muted-foreground border border-border/60"
                   )}
                 >
                   {t(statusMeta.labelBn, statusMeta.label)}
@@ -212,16 +211,16 @@ function QuizExamHistoryItem({ entry }: { entry: QuizExamHistoryEntry }) {
         <ExamWinRing win={win} />
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-zinc-100 dark:border-zinc-800 pt-4">
+      <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-border/60 pt-3">
         <div className="flex items-center gap-2">
-          <ListChecks className="h-4 w-4 text-zinc-400" />
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">
+          <ListChecks className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">
             {t(`${entry.numberOfQuestions}টি প্রশ্ন`, `${entry.numberOfQuestions} Questions`)}
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <Clock3 className="h-4 w-4 text-zinc-400" />
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">
+          <Clock3 className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">
             {entry.timePerQuestion}
             {t(" সেকেন্ড / প্রশ্ন", "s / question")}
           </span>
@@ -230,7 +229,7 @@ function QuizExamHistoryItem({ entry }: { entry: QuizExamHistoryEntry }) {
           {entry.levels.map((lv) => (
             <span
               key={lv}
-              className={cn("rounded-md px-2 py-0.5 text-[11px] font-medium", EXAM_LEVEL_COLORS[lv])}
+              className={cn("rounded-md px-2 py-0.5 text-[11px] font-medium border", EXAM_LEVEL_COLORS[lv])}
             >
               {lv}
             </span>
@@ -327,15 +326,15 @@ export function QuizExamHistoryPanel() {
             return (
               <StaggerItem
                 key={s.label}
-                className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-zinc-300/80 dark:hover:border-zinc-700/80 active:scale-[1.02] active:shadow-lg active:border-zinc-300/80 dark:active:border-zinc-700/80"
+                className="rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md p-4 sm:p-5 transition-all duration-200 shadow-xs"
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className={cn("p-2 rounded-xl", s.bg)}>
-                    <Icon className={cn("h-5 w-5", s.tint)} />
+                <div className="flex items-center gap-3 mb-2.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-muted text-foreground">
+                    <Icon className="h-4 w-4" />
                   </div>
-                  <span className="text-sm text-zinc-500 dark:text-zinc-400">{s.label}</span>
+                  <span className="text-xs sm:text-sm font-medium text-muted-foreground">{s.label}</span>
                 </div>
-                <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{s.value}</div>
+                <div className="text-2xl font-bold text-foreground tabular-nums">{s.value}</div>
               </StaggerItem>
             );
           })}
