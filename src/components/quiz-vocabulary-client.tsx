@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
@@ -21,12 +21,16 @@ import {
   X,
   Bookmark,
   BookmarkCheck,
+  BookOpen,
+  GraduationCap,
+  Globe,
   type LucideIcon,
 } from "lucide-react";
 import { Word } from "@/lib/data";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
-import { useQuizStore, resetQuizState } from "@/lib/quiz-store";
+import { useLearnedWords } from "@/lib/use-learned-words";
+import { useQuizStore, resetQuizState, type WordSourceOption } from "@/lib/quiz-store";
 import { useQuizChrome } from "@/lib/quiz-chrome";
 import { incrementQuizzesDone, addCorrectAnswers } from "@/lib/db";
 import { useAuthPath, useAuthStatus } from "@/lib/auth-store";
@@ -116,6 +120,30 @@ const LEVEL_CONFIG: Record<
 };
 
 const QUANTITY_OPTIONS = [5, 10, 15, 20, 25, 30] as const;
+
+function getSuggestedQuantities(maxCount: number | null): number[] {
+  if (maxCount === null) {
+    return [5, 10, 15, 20, 25, 30];
+  }
+  if (maxCount <= 1) {
+    return [];
+  }
+  if (maxCount <= 5) {
+    const opts: number[] = [];
+    for (let i = 1; i < maxCount; i++) {
+      opts.push(i);
+    }
+    return opts;
+  }
+  if (maxCount <= 10) {
+    const opts = [3, 5, 8].filter((n) => n < maxCount);
+    return opts.length > 0 ? opts : [5];
+  }
+  const standardMilestones = [5, 10, 15, 20, 25, 30, 40, 50, 100];
+  const filtered = standardMilestones.filter((m) => m < maxCount);
+  return filtered.length > 0 ? filtered : [5];
+}
+
 const TIME_OPTIONS = [10, 15, 20, 30, 60] as const;
 
 const QUIZ_TYPE_CONFIG: Record<
@@ -224,6 +252,7 @@ function exitQuizFullscreen(): void {
 export function QuizVocabularyClient() {
   const step = useQuizStore((s) => s.step);
   const quizType = useQuizStore((s) => s.quizType);
+  const wordSource = useQuizStore((s) => s.wordSource);
   const selectedLevels = useQuizStore((s) => s.selectedLevels);
   const quantity = useQuizStore((s) => s.quantity);
   const useAllQuestions = useQuizStore((s) => s.useAllQuestions);
@@ -238,7 +267,35 @@ export function QuizVocabularyClient() {
   const incorrectAnswers = useQuizStore((s) => s.incorrectAnswers);
 
   const { addStillLearning, loaded: stillLearningLoaded } = useStillLearningWords();
+  const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
+  const { bookmarkedIds, loaded: bookmarkedLoaded } = useBookmarkedWords();
   const t = useT();
+
+  const learnedCount = learnedLoaded ? learnedIds.size : 0;
+  const bookmarkedCount = bookmarkedLoaded ? bookmarkedIds.size : 0;
+
+  const activeWordIds = useMemo(() => {
+    if (wordSource === "learned") {
+      return Array.from(learnedIds)
+        .map(Number)
+        .filter((n) => !isNaN(n) && n > 0);
+    }
+    if (wordSource === "bookmarked") {
+      return Array.from(bookmarkedIds)
+        .map(Number)
+        .filter((n) => !isNaN(n) && n > 0);
+    }
+    return undefined;
+  }, [wordSource, learnedIds, bookmarkedIds]);
+
+  const activeExcludeWordIds = useMemo(() => {
+    if (wordSource === "unlearned") {
+      return Array.from(learnedIds)
+        .map(Number)
+        .filter((n) => !isNaN(n) && n > 0);
+    }
+    return undefined;
+  }, [wordSource, learnedIds]);
 
   // On a fresh page mount, never show a previously finished quiz's results
   // screen. Drop the transient progress (the quiz settings are preserved in
@@ -310,10 +367,27 @@ export function QuizVocabularyClient() {
     if (step !== "settings" || !quizType) return;
     const requestId = ++poolRequestRef.current;
     setCountLoading(true);
+
+    if (
+      (wordSource === "learned" || wordSource === "bookmarked") &&
+      (!activeWordIds || activeWordIds.length === 0)
+    ) {
+      setPoolCount(0);
+      setCountLoading(false);
+      return;
+    }
+
     const params = new URLSearchParams({
       quizType,
       levels: selectedLevels.join(","),
     });
+    if (activeWordIds && activeWordIds.length > 0) {
+      params.set("wordIds", activeWordIds.join(","));
+    }
+    if (activeExcludeWordIds && activeExcludeWordIds.length > 0) {
+      params.set("excludeWordIds", activeExcludeWordIds.join(","));
+    }
+
     fetch(`/api/v1/quiz/pool?${params.toString()}`)
       .then((res) => res.json())
       .then((json: { success?: boolean; data?: { maxCount?: number } }) => {
@@ -332,7 +406,14 @@ export function QuizVocabularyClient() {
           setCountLoading(false);
         }
       });
-  }, [step, quizType, selectedLevels]);
+  }, [
+    step,
+    quizType,
+    selectedLevels,
+    activeWordIds,
+    activeExcludeWordIds,
+    wordSource,
+  ]);
 
   const handleQuizTypeSelect = (type: QuizType) => {
     setCountLoading(true);
@@ -365,6 +446,19 @@ export function QuizVocabularyClient() {
   const handleStartQuiz = async () => {
     if (!quizType || starting) return;
     if (requestLogin()) return;
+
+    if (
+      (wordSource === "learned" || wordSource === "bookmarked") &&
+      (!activeWordIds || activeWordIds.length === 0)
+    ) {
+      toast.error(
+        wordSource === "learned"
+          ? t("আপনার কোনো শেখা শব্দ নেই। প্রথমে শব্দ শিখুন।", "You have no learned words. Learn some words first.")
+          : t("আপনার কোনো বুকমার্ক করা শব্দ নেই। প্রথমে শব্দ বুকমার্ক করুন।", "You have no bookmarked words. Bookmark some words first.")
+      );
+      return;
+    }
+
     setStarting(true);
     try {
       const res = await fetch("/api/v1/quiz/generate", {
@@ -375,6 +469,8 @@ export function QuizVocabularyClient() {
           levels: selectedLevels,
           quantity,
           useAllQuestions,
+          wordIds: activeWordIds,
+          excludeWordIds: activeExcludeWordIds,
         }),
       });
       const json = (await res.json()) as {
@@ -391,8 +487,8 @@ export function QuizVocabularyClient() {
         toast.error(
           json.message ||
             t(
-              "এই লেভেলে কুইজের জন্য কোনো শব্দ নেই। অন্য লেভেল বা ধরন বেছে নিন।",
-              "No words available for this quiz. Pick a different level or quiz type."
+              "এই ফিল্টারে কুইজের জন্য কোনো শব্দ নেই। অন্য লেভেল বা উৎস বেছে নিন।",
+              "No words available for this quiz filter. Pick a different level or word source."
             )
         );
         return;
@@ -509,13 +605,22 @@ export function QuizVocabularyClient() {
   }, [timeLeft, noTimeLimit, step]);
 
   if (step === "select") {
-    return <QuizTypeSelect onSelect={handleQuizTypeSelect} />;
+    return (
+      <QuizTypeSelect
+        onSelect={handleQuizTypeSelect}
+        learnedCount={learnedCount}
+        bookmarkedCount={bookmarkedCount}
+      />
+    );
   }
 
   if (step === "settings") {
     return (
       <SettingsView
         quizType={quizType ?? "english_to_bangla"}
+        wordSource={wordSource}
+        learnedCount={learnedCount}
+        bookmarkedCount={bookmarkedCount}
         levels={selectedLevels}
         quantity={quantity}
         useAllQuestions={useAllQuestions}
@@ -524,6 +629,7 @@ export function QuizVocabularyClient() {
         maxCount={poolCount}
         countLoading={countLoading}
         starting={starting}
+        onWordSourceChange={(src) => useQuizStore.setState({ wordSource: src })}
         onLevelChange={toggleLevel}
         onQuantityChange={(q) => useQuizStore.setState({ quantity: q })}
         onUseAllChange={(v) => useQuizStore.setState({ useAllQuestions: v })}
@@ -577,8 +683,12 @@ const ICON_CHIP =
 
 function QuizTypeSelect({
   onSelect,
+  learnedCount,
+  bookmarkedCount,
 }: {
   onSelect: (type: QuizType) => void;
+  learnedCount: number;
+  bookmarkedCount: number;
 }) {
   const t = useT();
   return (
@@ -608,7 +718,6 @@ function QuizTypeSelect({
           {t("সব কুইজ", "All Quizzes")}
         </Link>
       </div>
-
       <div className={cn(CARD, "overflow-hidden")}>
         <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
           {QUIZ_TYPE_ORDER.map((type) => {
@@ -668,6 +777,9 @@ function QuizTypeSelect({
 
 function SettingsView({
   quizType,
+  wordSource,
+  learnedCount,
+  bookmarkedCount,
   levels,
   quantity,
   useAllQuestions,
@@ -676,6 +788,7 @@ function SettingsView({
   maxCount,
   countLoading,
   starting,
+  onWordSourceChange,
   onLevelChange,
   onQuantityChange,
   onUseAllChange,
@@ -685,6 +798,9 @@ function SettingsView({
   onBack,
 }: {
   quizType: QuizType;
+  wordSource: WordSourceOption;
+  learnedCount: number;
+  bookmarkedCount: number;
   levels: LevelOption[];
   quantity: number;
   useAllQuestions: boolean;
@@ -693,6 +809,7 @@ function SettingsView({
   maxCount: number | null;
   countLoading: boolean;
   starting: boolean;
+  onWordSourceChange: (src: WordSourceOption) => void;
   onLevelChange: (lv: LevelOption) => void;
   onQuantityChange: (q: number) => void;
   onUseAllChange: (all: boolean) => void;
@@ -711,6 +828,27 @@ function SettingsView({
     "bg-sky-600 text-white border-sky-600 shadow-sm dark:bg-sky-500 dark:border-sky-500";
   const idleStyle =
     "border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 hover:bg-black/[0.05] dark:hover:bg-white/[0.08]";
+
+  const suggestedQuantities = useMemo(
+    () => getSuggestedQuantities(maxCount),
+    [maxCount]
+  );
+
+  useEffect(() => {
+    if (
+      typeof maxCount === "number" &&
+      maxCount > 0 &&
+      quantity > maxCount &&
+      !useAllQuestions
+    ) {
+      onQuantityChange(maxCount);
+    }
+  }, [maxCount, quantity, useAllQuestions, onQuantityChange]);
+
+  const hasNoWords =
+    (wordSource === "learned" && learnedCount === 0) ||
+    (wordSource === "bookmarked" && bookmarkedCount === 0) ||
+    (!countLoading && maxCount === 0);
 
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-3xl mx-auto space-y-4 sm:space-y-5">
@@ -746,6 +884,113 @@ function SettingsView({
       </div>
 
       <div className="space-y-4 sm:space-y-5">
+        {/* Word Source Card */}
+        <div className={cn(CARD, "p-4 sm:p-5")}>
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 mb-2.5">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <BookOpen className="h-3.5 w-3.5" />
+            </div>
+            {t("শব্দের উৎস", "Word Source")}
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <button
+              onClick={() => onWordSourceChange("all")}
+              className={cn(
+                "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer flex items-center gap-1.5",
+                wordSource === "all" ? activeStyle : idleStyle
+              )}
+            >
+              {wordSource === "all" && <span className="font-bold">✓</span>}
+              {t("সব শব্দ", "All Words")}
+            </button>
+
+            <button
+              onClick={() => onWordSourceChange("unlearned")}
+              className={cn(
+                "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer flex items-center gap-1.5",
+                wordSource === "unlearned" ? activeStyle : idleStyle
+              )}
+            >
+              {wordSource === "unlearned" && <span className="font-bold">✓</span>}
+              <span>{t("বাকি শব্দ", "Unlearned")}</span>
+            </button>
+
+            <button
+              onClick={() => onWordSourceChange("learned")}
+              className={cn(
+                "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer flex items-center gap-1.5",
+                wordSource === "learned" ? activeStyle : idleStyle
+              )}
+            >
+              {wordSource === "learned" && <span className="font-bold">✓</span>}
+              <span>{t("শেখা শব্দ", "Learned")}</span>
+              <span
+                className={cn(
+                  "text-[10px] sm:text-[11px] px-1.5 py-0.2 rounded-full font-bold tabular-nums",
+                  wordSource === "learned"
+                    ? "bg-white/20 text-white"
+                    : "bg-black/[0.05] dark:bg-white/[0.08] text-zinc-500 dark:text-zinc-400"
+                )}
+              >
+                {learnedCount}
+              </span>
+            </button>
+
+            <button
+              onClick={() => onWordSourceChange("bookmarked")}
+              className={cn(
+                "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer flex items-center gap-1.5",
+                wordSource === "bookmarked" ? activeStyle : idleStyle
+              )}
+            >
+              {wordSource === "bookmarked" && <span className="font-bold">✓</span>}
+              <span>{t("বুকমার্ক", "Bookmarked")}</span>
+              <span
+                className={cn(
+                  "text-[10px] sm:text-[11px] px-1.5 py-0.2 rounded-full font-bold tabular-nums",
+                  wordSource === "bookmarked"
+                    ? "bg-white/20 text-white"
+                    : "bg-black/[0.05] dark:bg-white/[0.08] text-zinc-500 dark:text-zinc-400"
+                )}
+              >
+                {bookmarkedCount}
+              </span>
+            </button>
+          </div>
+          <p className="text-[11px] text-zinc-400 dark:text-zinc-500 mt-2">
+            {wordSource === "all" &&
+              t(
+                "সম্পূর্ণ শব্দভাণ্ডার ডিকশনারি থেকে প্রশ্ন তৈরি হবে",
+                "Questions generated from the complete vocabulary dictionary"
+              )}
+            {wordSource === "unlearned" &&
+              t(
+                "যে শব্দগুলো এখনও শেখা হয়নি সেখান থেকে প্রশ্ন তৈরি হবে",
+                "Questions drawn from words you haven't marked as learned yet"
+              )}
+            {wordSource === "learned" &&
+              (learnedCount > 0
+                ? t(
+                    `আপনার চিহ্নিত ${learnedCount}টি শেখা শব্দ থেকে অনুশীলন হবে`,
+                    `Practicing from your ${learnedCount} learned word${learnedCount > 1 ? "s" : ""}`
+                  )
+                : t(
+                    "আপনার কোনো শেখা শব্দ যুক্ত নেই। প্রথমে শব্দ পড়ুন ও শেখা হিসেবে চিহ্নিত করুন।",
+                    "No learned words found yet. Mark words as learned while studying to quiz them here."
+                  ))}
+            {wordSource === "bookmarked" &&
+              (bookmarkedCount > 0
+                ? t(
+                    `আপনার বুকমার্ক করা ${bookmarkedCount}টি সংরক্ষিত শব্দ থেকে অনুশীলন হবে`,
+                    `Practicing from your ${bookmarkedCount} bookmarked word${bookmarkedCount > 1 ? "s" : ""}`
+                  )
+                : t(
+                    "আপনার কোনো বুকমার্ক করা শব্দ নেই। যেকোনো শব্দে বুকমার্ক আইকনে ক্লিক করুন।",
+                    "No bookmarked words yet. Bookmark words to practice them in a dedicated quiz."
+                  ))}
+          </p>
+        </div>
+
         {/* Level Scope Card */}
         <div className={cn(CARD, "p-4 sm:p-5")}>
           <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 mb-2.5">
@@ -796,7 +1041,7 @@ function SettingsView({
             {t("প্রশ্নের সংখ্যা", "Number of Questions")}
           </div>
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            {QUANTITY_OPTIONS.map((q) => (
+            {suggestedQuantities.map((q) => (
               <button
                 key={q}
                 onClick={() => {
@@ -813,8 +1058,9 @@ function SettingsView({
             ))}
             <button
               onClick={() => onUseAllChange(true)}
+              disabled={maxCount === 0}
               className={cn(
-                "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer",
+                "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed",
                 useAllQuestions ? activeStyle : idleStyle
               )}
             >
@@ -829,7 +1075,11 @@ function SettingsView({
               onChange={(e) => {
                 const val = parseInt(e.target.value);
                 if (!isNaN(val) && val > 0) {
-                  onQuantityChange(val);
+                  const clamped =
+                    typeof maxCount === "number" && maxCount > 0
+                      ? Math.min(val, maxCount)
+                      : val;
+                  onQuantityChange(clamped);
                   onUseAllChange(false);
                 }
               }}
@@ -894,12 +1144,14 @@ function SettingsView({
         <div className="pt-1">
           <Button
             onClick={onStart}
-            disabled={starting || countLoading}
-            className="w-full h-11 text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-700 active:bg-sky-700 text-white shadow-md shadow-sky-500/20 cursor-pointer"
+            disabled={starting || countLoading || hasNoWords}
+            className="w-full h-11 text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-700 active:bg-sky-700 text-white shadow-md shadow-sky-500/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {starting
               ? t("তৈরি হচ্ছে…", "Preparing…")
-              : t("কুইজ শুরু করুন", "Start Quiz")}
+              : hasNoWords
+                ? t("কোনো শব্দ পাওয়া যায়নি", "No words available")
+                : t("কুইজ শুরু করুন", "Start Quiz")}
           </Button>
           <p className="text-center text-[11px] text-zinc-400 dark:text-zinc-500 mt-2">
             {useAllQuestions

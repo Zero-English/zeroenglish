@@ -977,6 +977,7 @@ function ClassResultsView({
 }) {
   const t = useT();
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+  const incorrectCount = total - score;
 
   let resultColor: string;
   let resultLabel: string;
@@ -995,31 +996,42 @@ function ClassResultsView({
   }
 
   return (
-    <div className={cn(CARD, "p-6 sm:p-8 space-y-6")}>
+    <div className={cn(CARD, "p-5 sm:p-6 space-y-6")}>
       <div className="text-center">
-        <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
           {t("কুইজ সমাপ্ত!", "Quiz Completed!")}
         </h3>
-        <p className={cn("text-base sm:text-lg font-bold mt-1", resultColor)}>
+        <p className={cn("text-xs sm:text-sm font-semibold mt-0.5", resultColor)}>
           {resultLabel}
         </p>
       </div>
 
-      {/* Score Hero */}
-      <div className="rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-6 text-center">
-        <div className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-900 dark:text-zinc-100 tabular-nums">
-          {percentage}%
+      {/* 3-stat summary tiles */}
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+        <div className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-3 text-center">
+          <div className="text-lg sm:text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 tabular-nums">
+            {percentage}%
+          </div>
+          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">
+            {t("স্কোর", "Score")}
+          </div>
         </div>
-        <p className="mt-2 text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400">
-          <span className="font-bold text-emerald-600 dark:text-emerald-400">
+        <div className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-3 text-center">
+          <div className="text-lg sm:text-xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 tabular-nums">
             {score}
-          </span>{" "}
-          {t("টির মধ্যে সঠিক", "correct out of")}{" "}
-          <span className="font-bold text-zinc-700 dark:text-zinc-300">
-            {total}
-          </span>{" "}
-          {t("টি প্রশ্ন", "questions")}
-        </p>
+          </div>
+          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">
+            {t("সঠিক", "Correct")}
+          </div>
+        </div>
+        <div className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-3 text-center">
+          <div className="text-lg sm:text-xl font-bold tracking-tight text-rose-600 dark:text-rose-400 tabular-nums">
+            {incorrectCount}
+          </div>
+          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">
+            {t("ভুল", "Wrong")}
+          </div>
+        </div>
       </div>
 
       {/* Wrong Answers Deck */}
@@ -1068,20 +1080,20 @@ function ClassResultsView({
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
         <Button
           onClick={onRestart}
-          size="lg"
-          className="w-full sm:w-auto px-8 bg-orange-600 hover:bg-orange-700 text-white shadow-md shadow-orange-500/20 cursor-pointer"
+          size="sm"
+          className="w-full sm:w-auto px-5 bg-orange-600 hover:bg-orange-700 text-white shadow-md shadow-orange-500/20 cursor-pointer text-xs font-semibold"
         >
-          <RotateCcw className="h-4 w-4 mr-2" />
+          <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
           {t("আবার খেলুন", "Play Again")}
         </Button>
         <Button
           asChild
           variant="outline"
-          size="lg"
-          className="w-full sm:w-auto px-8 border-black/[0.08] dark:border-white/[0.1] cursor-pointer"
+          size="sm"
+          className="w-full sm:w-auto px-5 border-black/[0.08] dark:border-white/[0.1] cursor-pointer text-xs font-semibold"
         >
           <Link href="/quiz/class">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
             {t("সব শ্রেণির কুইজ", "All Class Quizzes")}
           </Link>
         </Button>

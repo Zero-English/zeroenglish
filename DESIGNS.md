@@ -111,6 +111,7 @@ To create a clean, cohesive, and modern tactile surface across catalogs, Zero En
 - **`/quiz`**: Primary Quiz Mode catalog (6 modes).
 - **`/quiz/vocabulary`**: 2x2 Vocabulary Mode selector (English to Bengali, Bengali to English, Synonyms, Antonyms).
 - **`/quiz/grammar`**: Grammar Topics catalog (Tenses, Prepositions, Voice Change, Articles, Narration, etc.).
+- **`/quiz/class`**: Academic & Standardized Class catalog (18 classes: Primary, SSC, HSC, IELTS, TOEFL, BCS, Job).
 - **Dashboard Hub**: Quick Action exploration tiles.
 
 ### 2.5 Semantic Iconography System

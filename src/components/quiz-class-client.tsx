@@ -11,13 +11,15 @@ import {
 import { useT } from "@/components/language-provider";
 import { quizClassMeta, type QuizClassOption } from "@/lib/quiz-sections";
 import { useQuizMeta } from "@/lib/quiz-meta";
-import { ClassCard } from "@/components/quiz-catalog";
 import { QuizClassPracticeSession } from "@/components/quiz-class-practice";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { cn } from "@/lib/utils";
 
 const CARD =
   "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
+
+const ICON_CHIP =
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-black/[0.04] dark:bg-white/[0.06] ring-1 ring-inset ring-black/[0.05] dark:ring-white/[0.08]";
 
 function resolveSelectedClass(
   classes: string[],
@@ -76,30 +78,36 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
             <StaggerContainer>
               <StaggerItem>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-                  <div className="space-y-1">
-                    <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                      {t("শ্রেণি ভিত্তিক কুইজ", "Class Based Quizzes")}
-                    </h1>
-                    <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-                      {t(
-                        "প্রাথমিক থেকে বিশ্ববিদ্যালয়, SSC, HSC, IELTS ও BCS উপযোগী কুইজ অনুশীলন।",
-                        "Practice English tailored for school, university, SSC, HSC, IELTS and BCS."
-                      )}
-                    </p>
+                  <div className="flex items-center gap-3">
+                    <div className={cn(ICON_CHIP, "text-orange-500")}>
+                      <GraduationCap className="size-4.5" />
+                    </div>
+                    <div>
+                      <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                        {t("শ্রেণি ভিত্তিক কুইজ", "Class Based Quizzes")}
+                      </h1>
+                      <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
+                        {t(
+                          "প্রাথমিক থেকে বিশ্ববিদ্যালয়, SSC, HSC, IELTS ও BCS উপযোগী কুইজ অনুশীলন।",
+                          "Practice English tailored for school, university, SSC, HSC, IELTS and BCS."
+                        )}
+                      </p>
+                    </div>
                   </div>
-                  {classes.length > 0 && (
-                    <span className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.06] px-3 py-1 text-xs font-semibold text-zinc-600 dark:text-zinc-300 tabular-nums">
-                      <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-                      {t(`${classes.length}টি শ্রেণি`, `${classes.length} classes`)}
-                    </span>
-                  )}
+                  <Link
+                    href="/quiz"
+                    className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/60 dark:bg-zinc-900/60 hover:bg-black/[0.03] dark:hover:bg-white/[0.05] px-3 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300 transition-colors"
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" />
+                    {t("সব কুইজ", "All Quizzes")}
+                  </Link>
                 </div>
               </StaggerItem>
 
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 animate-pulse">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 animate-pulse">
                   {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={i} className="h-20 rounded-2xl bg-zinc-200/70 dark:bg-zinc-800/70" />
+                    <div key={i} className="h-44 rounded-2xl bg-zinc-200/70 dark:bg-zinc-800/70" />
                   ))}
                 </div>
               ) : error ? (
@@ -121,17 +129,63 @@ export function QuizClassClient({ selectedClassValue }: { selectedClassValue?: s
                   </p>
                 </div>
               ) : (
-                <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-                  {classes.map((value, i) => (
-                    <StaggerItem key={value}>
-                      <ClassCard
-                        cls={quizClassMeta(value)}
-                        index={i}
-                        questionCount={classCounts[value] ?? 0}
-                      />
-                    </StaggerItem>
-                  ))}
-                </StaggerContainer>
+                <div className={cn(CARD, "overflow-hidden")}>
+                  <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
+                    {classes.map((value) => {
+                      const cls = quizClassMeta(value);
+                      const Icon = cls.icon;
+                      const count = classCounts[value] ?? 0;
+                      const hasQuestions = count > 0;
+                      return (
+                        <StaggerItem
+                          key={value}
+                          className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0"
+                        >
+                          <Link
+                            href={`/quiz/class?class=${encodeURIComponent(cls.value)}`}
+                            className={cn(
+                              "group flex h-full w-full flex-col text-left gap-3 p-5 sm:p-6 transition-colors",
+                              "hover:bg-black/[0.02] active:bg-black/[0.02] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04]"
+                            )}
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div
+                                className={cn(
+                                  "flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-gradient-to-br text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_2px_8px_-2px_rgba(16,24,40,0.15)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_-2px_rgba(0,0,0,0.5)]",
+                                  cls.gradient
+                                )}
+                              >
+                                <Icon className="h-6 w-6" />
+                              </div>
+
+                              {hasQuestions ? (
+                                <span className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
+                                  {t(`${count}টি প্রশ্ন`, `${count} questions`)}
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                                  {t("শীঘ্রই আসছে", "Coming soon")}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="min-w-0">
+                              <h3 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                                {t(cls.labelBn, cls.label)}
+                              </h3>
+                              <p className="mt-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+                                {t(
+                                  `${cls.labelBn} শ্রেণির উপযোগী স্পেশাল প্রশ্নসেট ও অনুশীলন।`,
+                                  `Specialized question set and practice designed for ${cls.label}.`
+                                )}
+                              </p>
+                            </div>
+                          </Link>
+                        </StaggerItem>
+                      );
+                    })}
+                  </StaggerContainer>
+                </div>
               )}
             </StaggerContainer>
           )}
