@@ -15,6 +15,7 @@ import { getQuizExamById } from "@/services/quiz-exam.service";
 import { Badge } from "@/components/ui/badge";
 import { UserAvatar } from "@/components/UserAvatar";
 import { PublishToggle } from "./publish-toggle";
+import { ExamEmailAction } from "./exam-email-action";
 import { examModeLabelMap } from "../../_data/exams";
 import { difficultyLabelMap, quizTypeLabelMap } from "../../_data/quizzes";
 
@@ -120,6 +121,11 @@ export default async function SingleExamPage({
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <ExamEmailAction
+            examId={exam.id}
+            examTitle={exam.title}
+            totalResults={exam.results.length}
+          />
           <PublishToggle examId={exam.id} published={exam.resultsPublished} />
         </div>
       </header>

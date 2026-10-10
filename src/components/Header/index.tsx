@@ -328,10 +328,10 @@ export function Header() {
           <div className="mx-auto flex h-7 max-w-7xl items-center justify-between gap-3 px-4 md:px-8">
             <Link
               href={banner.href}
-              className="flex items-center gap-1.5 font-medium text-foreground transition-colors hover:text-primary truncate"
+              className="flex items-center gap-1.5 font-medium transition-colors hover:text-primary text-foreground"
             >
               <Sparkles className="size-3 text-primary shrink-0" />
-              <span className="truncate">{lang === 'en' ? banner.text.en : banner.text.bn}</span>
+              <span className="text-zinc-600 dark:text-zinc-300">{lang === 'en' ? banner.text.en : banner.text.bn}</span>
             </Link>
             <div className="flex items-center gap-3 shrink-0">
               <div className="hidden sm:flex items-center gap-3">

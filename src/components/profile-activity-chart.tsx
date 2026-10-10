@@ -55,14 +55,15 @@ const METRICS = [
 
 type Metric = (typeof METRICS)[number]["value"];
 
-function pseudo(seed: number) {
-  const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453123;
-  return x - Math.floor(x);
-}
-
-function randInt(seed: number, max: number) {
-  return Math.floor(pseudo(seed) * (max + 1));
-}
+const RANGE_DAYS: Record<RangeKey, number> = {
+  today: 1,
+  yesterday: 1,
+  "7d": 7,
+  "14d": 14,
+  "30d": 30,
+  "90d": 90,
+  "1y": 365,
+};
 
 function hourLabel(h: number) {
   const ampm = h >= 12 ? "PM" : "AM";
@@ -70,43 +71,67 @@ function hourLabel(h: number) {
   return `${hr} ${ampm}`;
 }
 
-function hourlySeries(daysAgo: number): ActivityPoint[] {
-  const points: ActivityPoint[] = [];
-  for (let h = 0; h < 24; h++) {
-    const seed = daysAgo * 1000 + h;
-    const learned = randInt(seed, h >= 9 && h <= 17 ? 4 : 1);
-    points.push({ label: hourLabel(h), learned, quiz: 0 });
-  }
-  return points;
+function dateKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-function dailySeries(days: number, endOffset: number): ActivityPoint[] {
-  const points: ActivityPoint[] = [];
+type LearnedPoint = { label: string; learned: number };
+
+function emptyHourlySeries(): LearnedPoint[] {
+  return Array.from({ length: 24 }, (_, h) => ({
+    label: hourLabel(h),
+    learned: 0,
+  }));
+}
+
+function emptyDailySeries(days: number, endOffset: number): LearnedPoint[] {
+  const out: LearnedPoint[] = [];
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - (i + endOffset));
-    const seed = i * 17 + days * 3;
-    const learned = randInt(seed, 5) + (i % 7 === 1 ? 2 : 0);
-    points.push({
+    out.push({
       label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-      learned,
-      quiz: 0,
+      learned: 0,
     });
   }
-  return points;
+  return out;
 }
 
-const dummyGraphData = {
-  today: { title: "today", titleBn: "আজ", data: hourlySeries(0), previous: hourlySeries(1) },
-  yesterday: { title: "yesterday", titleBn: "গতকাল", data: hourlySeries(1), previous: hourlySeries(2) },
-  "7d": { title: "the last 7 days", titleBn: "শেষ ৭ দিনে", data: dailySeries(7, 0), previous: dailySeries(7, 7) },
-  "14d": { title: "the last 14 days", titleBn: "শেষ ১৪ দিনে", data: dailySeries(14, 0), previous: dailySeries(14, 14) },
-  "30d": { title: "the last 30 days", titleBn: "শেষ ৩০ দিনে", data: dailySeries(30, 0), previous: dailySeries(30, 30) },
-  "90d": { title: "the last 90 days", titleBn: "শেষ ৯০ দিনে", data: dailySeries(90, 0), previous: dailySeries(90, 90) },
-  "1y": { title: "the last 1 year", titleBn: "শেষ ১ বছরে", data: dailySeries(365, 0), previous: dailySeries(365, 365) },
-} satisfies Record<RangeKey, GraphData>;
+function buildZeroGraphData(): Record<RangeKey, GraphData> {
+  const build = (r: RangeKey): GraphData => {
+    const isHourly = r === "today" || r === "yesterday";
+    const days = RANGE_DAYS[r] ?? 7;
+    const currentOffset = r === "today" ? 0 : r === "yesterday" ? 1 : 0;
+    const prevOffset = r === "today" ? 1 : r === "yesterday" ? 2 : days;
 
-type LearnedPoint = { label: string; learned: number };
+    const curPoints: ActivityPoint[] = isHourly
+      ? emptyHourlySeries().map((p) => ({ ...p, quiz: 0 }))
+      : emptyDailySeries(days, currentOffset).map((p) => ({ ...p, quiz: 0 }));
+
+    const prevPoints: ActivityPoint[] = isHourly
+      ? emptyHourlySeries().map((p) => ({ ...p, quiz: 0 }))
+      : emptyDailySeries(days, prevOffset).map((p) => ({ ...p, quiz: 0 }));
+
+    const meta = RANGE_OPTIONS.find((o) => o.value === r);
+
+    return {
+      title: meta?.label.toLowerCase() ?? r,
+      titleBn: meta?.labelBn ?? r,
+      data: curPoints,
+      previous: prevPoints,
+    };
+  };
+
+  return {
+    today: build("today"),
+    yesterday: build("yesterday"),
+    "7d": build("7d"),
+    "14d": build("14d"),
+    "30d": build("30d"),
+    "90d": build("90d"),
+    "1y": build("1y"),
+  };
+}
 
 interface QuizLike {
   createdAt: string | Date;
@@ -143,8 +168,10 @@ function localHourlySeries(
   for (const r of records) {
     if (!r.timestamp) continue;
     const d = new Date(r.timestamp);
+    if (isNaN(d.getTime())) continue;
     if (dateKey(d) !== tKey) continue;
-    byHour[d.getHours()] += 1;
+    const h = d.getHours();
+    if (h >= 0 && h < 24) byHour[h] += 1;
   }
   return byHour.map((learned, h) => ({ label: hourLabel(h), learned }));
 }
@@ -157,7 +184,9 @@ function localDailySeries(
   const counts = new Map<string, number>();
   for (const r of records) {
     if (!r.timestamp) continue;
-    const k = dateKey(new Date(r.timestamp));
+    const d = new Date(r.timestamp);
+    if (isNaN(d.getTime())) continue;
+    const k = dateKey(d);
     counts.set(k, (counts.get(k) ?? 0) + 1);
   }
   const out: LearnedPoint[] = [];
@@ -223,24 +252,12 @@ const chartConfig = {
   quiz: { label: "Quiz win rate", color: "#0ea5e9" },
 } satisfies ChartConfig;
 
-const RANGE_DAYS: Record<RangeKey, number> = {
-  today: 1,
-  yesterday: 1,
-  "7d": 7,
-  "14d": 14,
-  "30d": 30,
-  "90d": 90,
-  "1y": 365,
-};
-
-function dateKey(d: Date): string {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-}
-
 function buildQuizMap(results: QuizLike[]): Map<string, number> {
   const byDate = new Map<string, { sum: number; count: number }>();
   for (const r of results) {
-    const date = dateKey(createdDate(r));
+    const d = createdDate(r);
+    if (isNaN(d.getTime())) continue;
+    const date = dateKey(d);
     const rec = byDate.get(date) ?? { sum: 0, count: 0 };
     rec.sum += r.scoreInPercent;
     rec.count += 1;
@@ -266,6 +283,7 @@ function buildHourlyQuizMap(results: QuizLike[], daysAgo: number): Map<number, n
   const byHour = new Map<number, { sum: number; count: number }>();
   for (const r of results) {
     const d = createdDate(r);
+    if (isNaN(d.getTime())) continue;
     if (dateKey(d) !== targetKey) continue;
     const h = d.getHours();
     const rec = byHour.get(h) ?? { sum: 0, count: 0 };
@@ -281,7 +299,8 @@ function buildHourlyQuizMap(results: QuizLike[], daysAgo: number): Map<number, n
 export function ProfileActivityChart({ userId }: { userId?: number }) {
   const [range, setRange] = useState<RangeKey>("7d");
   const [metric, setMetric] = useState<Metric>("all");
-  const [activity, setActivity] = useState<Record<RangeKey, GraphData>>(dummyGraphData);
+  const [activity, setActivity] = useState<Record<RangeKey, GraphData>>(buildZeroGraphData);
+  const [loaded, setLoaded] = useState(false);
   const t = useT();
   const { status } = useAuthStatus();
   const path = useAuthStore((s) => s.path);
@@ -291,32 +310,45 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
 
   const loadActivity = useCallback(async (r: RangeKey) => {
     const isHourly = r === "today" || r === "yesterday";
-    const days = r === "today" || r === "yesterday" ? 1 : (RANGE_DAYS[r] ?? 7);
+    const days = isHourly ? 1 : (RANGE_DAYS[r] ?? 7);
+    const currentOffset = r === "today" ? 0 : r === "yesterday" ? 1 : 0;
+    const previousOffset = r === "today" ? 1 : r === "yesterday" ? 2 : days;
 
-    let learnedRes: { current: LearnedPoint[]; previous: LearnedPoint[] } | null;
-    let quizSource: QuizLike[];
+    let learnedRes: { current: LearnedPoint[]; previous: LearnedPoint[] } | null = null;
+    let quizSource: QuizLike[] = [];
 
-    if (status === "google" || storedUserId != null) {
-      [learnedRes, quizSource] = await Promise.all([
-        fetchLearnedActivity(r, storedUserId),
-        fetchCombinedExamResultsFromDb(storedUserId),
-      ]);
-    } else {
-      const records = await getWordsByType("learned", path);
-      learnedRes = localLearnedSeries(r, records);
-      quizSource = quizFromLocal(quizEntries);
+    try {
+      if (status === "google" || storedUserId != null) {
+        const [lRes, qRes] = await Promise.all([
+          fetchLearnedActivity(r, storedUserId),
+          fetchCombinedExamResultsFromDb(storedUserId),
+        ]);
+        learnedRes = lRes;
+        quizSource = qRes ?? [];
+      } else {
+        const records = await getWordsByType("learned", path);
+        learnedRes = localLearnedSeries(r, records);
+        quizSource = quizFromLocal(quizEntries);
+      }
+    } catch (err) {
+      console.error("Failed to load activity real data:", err);
     }
 
     const qmap = buildQuizMap(quizSource);
 
     setActivity((prev) => {
       const base = prev[r];
+      const fallbackCurrent = isHourly
+        ? emptyHourlySeries()
+        : emptyDailySeries(days, currentOffset);
+      const fallbackPrevious = isHourly
+        ? emptyHourlySeries()
+        : emptyDailySeries(days, previousOffset);
+
+      const curLearned = learnedRes?.current?.length ? learnedRes.current : fallbackCurrent;
+      const prevLearned = learnedRes?.previous?.length ? learnedRes.previous : fallbackPrevious;
 
       if (isHourly) {
-        const basePoints = learnedRes ? learnedRes.current : base.data;
-        const prevPoints = learnedRes ? learnedRes.previous : base.previous;
-        const currentOffset = r === "today" ? 0 : 1;
-        const previousOffset = r === "today" ? 1 : 2;
         const currentMap = buildHourlyQuizMap(quizSource, currentOffset);
         const previousMap = buildHourlyQuizMap(quizSource, previousOffset);
         return {
@@ -324,36 +356,40 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
           [r]: {
             title: base.title,
             titleBn: base.titleBn,
-            data: basePoints.map((p, i) => ({ ...p, quiz: currentMap.get(i) ?? 0 })),
-            previous: prevPoints.map((p, i) => ({ ...p, quiz: previousMap.get(i) ?? 0 })),
+            data: curLearned.map((p, i) => ({
+              label: p.label,
+              learned: p.learned || 0,
+              quiz: currentMap.get(i) ?? 0,
+            })),
+            previous: prevLearned.map((p, i) => ({
+              label: p.label,
+              learned: p.learned || 0,
+              quiz: previousMap.get(i) ?? 0,
+            })),
           },
         };
       }
 
-      if (!learnedRes) {
-        const current = base.data.map((p, i) => {
-          const d = new Date();
-          d.setDate(d.getDate() - (days - 1) + i);
-          return { ...p, quiz: quizForDate(qmap, d) };
-        });
-        const previous = base.previous.map((p, i) => {
-          const d = new Date();
-          d.setDate(d.getDate() - (2 * days - 1) + i);
-          return { ...p, quiz: quizForDate(qmap, d) };
-        });
-        return { ...prev, [r]: { ...base, data: current, previous } };
-      }
-
-      const current = learnedRes.current.map((pt, i) => {
+      const current: ActivityPoint[] = curLearned.map((pt, i) => {
         const d = new Date();
         d.setDate(d.getDate() - (days - 1) + i);
-        return { ...pt, quiz: quizForDate(qmap, d) };
+        return {
+          label: pt.label,
+          learned: pt.learned || 0,
+          quiz: quizForDate(qmap, d),
+        };
       });
-      const previous = learnedRes.previous.map((pt, i) => {
+
+      const previous: ActivityPoint[] = prevLearned.map((pt, i) => {
         const d = new Date();
         d.setDate(d.getDate() - (2 * days - 1) + i);
-        return { ...pt, quiz: quizForDate(qmap, d) };
+        return {
+          label: pt.label,
+          learned: pt.learned || 0,
+          quiz: quizForDate(qmap, d),
+        };
       });
+
       return {
         ...prev,
         [r]: {
@@ -364,6 +400,8 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
         },
       };
     });
+
+    setLoaded(true);
   }, [status, path, quizEntries, storedUserId]);
 
   useEffect(() => {
@@ -416,7 +454,7 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
       quizAvg: currentQuiz,
       bestQuiz: curQuizValues.length ? Math.max(...curQuizValues) : 0,
       worstQuiz: curQuizValues.length ? Math.min(...curQuizValues) : 0,
-      avgLearned: currentLearned / active.data.length,
+      avgLearned: active.data.length > 0 ? currentLearned / active.data.length : 0,
       learnedChange: previousLearned > 0 ? ((currentLearned - previousLearned) / previousLearned) * 100 : null,
       quizChange: previousQuiz > 0 ? ((currentQuiz - previousQuiz) / previousQuiz) * 100 : null,
     };
@@ -431,21 +469,21 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
   const scrollMinWidth = Math.max(520, active.data.length * (granularity === "day" ? 36 : 52));
 
   return (
-    <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60 p-5 sm:p-6 transition-all duration-300 hover:border-black/[0.12] dark:hover:border-white/[0.15]">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="p-2 rounded-xl bg-indigo-100 dark:bg-indigo-900/30">
-          <Activity className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+    <div className="rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md shadow-xs p-5 sm:p-6">
+      <div className="flex items-center gap-2.5 mb-4">
+        <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-xl bg-muted text-foreground">
+          <Activity className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">{t("কার্যকলাপ", "Activity")}</h3>
-          <p className="text-xs text-zinc-400 dark:text-zinc-500">
+          <h3 className="text-xs sm:text-sm font-semibold text-foreground">{t("কার্যকলাপ", "Activity")}</h3>
+          <p className="text-[10px] sm:text-[11px] text-muted-foreground">
             {t("কার্যকলাপ অ্যানালিটিক্স", "Activity analytics")}
           </p>
         </div>
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 dark:border-zinc-700/80 bg-zinc-50 dark:bg-zinc-900/40 p-1">
+        <div className="inline-flex items-center gap-1 rounded-lg border border-border/80 bg-muted/60 p-1">
           {METRICS.map((m) => (
             <button
               key={m.value}
@@ -453,8 +491,8 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
               className={cn(
                 "px-2.5 py-1 rounded-md text-xs font-medium transition-all cursor-pointer",
                 metric === m.value
-                  ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm"
-                  : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300"
+                  ? "bg-background text-foreground shadow-2xs"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
               {t(m.labelBn, m.label)}
@@ -479,16 +517,16 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
 
       <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          <p className="text-xs text-muted-foreground">
             {metric === "quiz"
               ? t("এই সময়ে কুইজে জয়ের হার", "Quiz win rate in the")
               : t("এই সময়ে শেখা শব্দ", "Words learned in the")}{" "}
             {t(active.titleBn, active.title)}
           </p>
-          <p className="mt-1 flex items-baseline gap-2 text-3xl font-bold tabular-nums tracking-tight text-zinc-900 dark:text-zinc-100">
+          <p className="mt-1 flex items-baseline gap-2 text-3xl font-bold tabular-nums tracking-tight text-foreground">
             {headline}
             {metric === "all" && (
-              <span className="text-sm font-semibold text-zinc-400 dark:text-zinc-500">
+              <span className="text-sm font-semibold text-muted-foreground">
                 {t("· কুইজে জয়ের হার", "· Quiz win")} {stats.quizAvg.toFixed(0)}%
               </span>
             )}
@@ -499,10 +537,10 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
             className={cn(
               "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold",
               change === null
-                ? "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
+                ? "bg-muted text-muted-foreground"
                 : change >= 0
-                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
-                  : "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300"
+                  ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20"
+                  : "bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/20"
             )}
           >
             {change === null ? (
@@ -518,7 +556,7 @@ export function ProfileActivityChart({ userId }: { userId?: number }) {
               </>
             )}
           </span>
-          <span className="text-xs text-zinc-400 dark:text-zinc-500">
+          <span className="text-xs text-muted-foreground">
             {metric === "quiz"
               ? t(`সেরা ${stats.bestQuiz}% · খারাপ ${stats.worstQuiz}%`, `best ${stats.bestQuiz}% · worst ${stats.worstQuiz}%`)
               : t(

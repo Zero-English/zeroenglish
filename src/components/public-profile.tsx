@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { UserAvatar } from "@/components/UserAvatar";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
@@ -447,6 +447,17 @@ export function PublicProfileView({
   const t = useT();
   const isAdmin = user.role === "admin";
   const [quizPage, setQuizPage] = useState(1);
+  const activeQuizPageRef = useRef<HTMLLIElement | null>(null);
+
+  useEffect(() => {
+    if (activeQuizPageRef.current) {
+      activeQuizPageRef.current.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+  }, [quizPage]);
 
   const progress = totalWords > 0 ? Math.round((user.learnedCount / totalWords) * 100) : 0;
   const quizEntries = useMemo(
@@ -663,18 +674,22 @@ export function PublicProfileView({
                         </p>
                         {totalPagesQ > 1 && (
                           <Pagination>
-                            <div className="flex items-center gap-0.5 max-w-full">
-                              <PaginationItem>
+                            <div className="relative flex items-center justify-center max-w-full w-full gap-1 sm:gap-1.5">
+                              <div className="shrink-0 z-10 bg-background/95 backdrop-blur-xs">
                                 <PaginationPrevious
                                   href="#"
                                   onClick={(e) => { e.preventDefault(); if (currentPageQ > 1) setQuizPage(currentPageQ - 1); }}
                                   className={cn(currentPageQ <= 1 ? "pointer-events-none opacity-50" : "")}
                                 />
-                              </PaginationItem>
-                              <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                                <PaginationContent>
+                              </div>
+                              <div className="min-w-0 flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden py-1 px-1">
+                                <PaginationContent className="flex items-center justify-center gap-0.5 w-max min-w-full">
                                   {Array.from({ length: totalPagesQ }, (_, i) => i + 1).map((p) => (
-                                    <PaginationItem key={p}>
+                                    <PaginationItem
+                                      key={p}
+                                      ref={p === currentPageQ ? activeQuizPageRef : undefined}
+                                      className="shrink-0"
+                                    >
                                       <PaginationLink
                                         href="#"
                                         onClick={(e) => { e.preventDefault(); setQuizPage(p); }}
@@ -686,13 +701,13 @@ export function PublicProfileView({
                                   ))}
                                 </PaginationContent>
                               </div>
-                              <PaginationItem>
+                              <div className="shrink-0 z-10 bg-background/95 backdrop-blur-xs">
                                 <PaginationNext
                                   href="#"
                                   onClick={(e) => { e.preventDefault(); if (currentPageQ < totalPagesQ) setQuizPage(currentPageQ + 1); }}
                                   className={cn(currentPageQ >= totalPagesQ ? "pointer-events-none opacity-50" : "")}
                                 />
-                              </PaginationItem>
+                              </div>
                             </div>
                           </Pagination>
                         )}

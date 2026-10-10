@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -16,6 +17,17 @@ interface PaginationProps {
 }
 
 export function WordPagination({ currentPage, totalPages, level }: PaginationProps) {
+  const activeRef = useRef<HTMLLIElement | null>(null);
+
+  useEffect(() => {
+    if (activeRef.current) {
+      activeRef.current.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+  }, [currentPage]);
 
   const getPageItems = () => {
     const items: number[] = [];
@@ -42,19 +54,23 @@ export function WordPagination({ currentPage, totalPages, level }: PaginationPro
 
   return (
     <Pagination>
-      <div className="flex items-center gap-0.5 max-w-full">
-        <PaginationItem>
+      <div className="relative flex items-center justify-center max-w-full w-full gap-1 sm:gap-1.5">
+        <div className="shrink-0 z-10 bg-background/95 backdrop-blur-xs">
           <PaginationPrevious
             href={hasPrevious ? createPageUrl(currentPage - 1) : "#"}
             onClick={(e) => !hasPrevious && e.preventDefault()}
             className={!hasPrevious ? "pointer-events-none opacity-50" : ""}
           />
-        </PaginationItem>
+        </div>
 
-        <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          <PaginationContent>
+        <div className="min-w-0 flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden py-1 px-1">
+          <PaginationContent className="flex items-center justify-center gap-0.5 w-max min-w-full">
             {pageItems.map((pageNum) => (
-              <PaginationItem key={pageNum}>
+              <PaginationItem
+                key={pageNum}
+                ref={pageNum === currentPage ? activeRef : undefined}
+                className="shrink-0"
+              >
                 <PaginationLink
                   href={createPageUrl(pageNum)}
                   isActive={pageNum === currentPage}
@@ -66,13 +82,13 @@ export function WordPagination({ currentPage, totalPages, level }: PaginationPro
           </PaginationContent>
         </div>
 
-        <PaginationItem>
+        <div className="shrink-0 z-10 bg-background/95 backdrop-blur-xs">
           <PaginationNext
             href={hasNext ? createPageUrl(currentPage + 1) : "#"}
             onClick={(e) => !hasNext && e.preventDefault()}
             className={!hasNext ? "pointer-events-none opacity-50" : ""}
           />
-        </PaginationItem>
+        </div>
       </div>
     </Pagination>
   );

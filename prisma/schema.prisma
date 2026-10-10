@@ -415,3 +415,56 @@ model VisualTemplate {
   @@index([type, isActive])
   @@index([backgroundMediaId])
 }
+
+model EmailConfig {
+  id         Int      @id @default(1)
+  smtpHost   String   @default("smtp.gmail.com")
+  smtpPort   Int      @default(465)
+  smtpUser   String   @default("")
+  smtpPass   String   @default("")
+  smtpSecure Boolean  @default(true)
+  fromName   String   @default("Zero English")
+  fromEmail  String   @default("")
+  replyTo    String?  @default("")
+  isEnabled  Boolean  @default(true)
+  updatedAt  DateTime @updatedAt
+}
+
+model EmailTemplate {
+  id                 Int      @id @default(autoincrement())
+  key                String   @unique
+  name               String
+  description        String?  @default("")
+  subject            String
+  bodyHtml           String
+  bodyText           String?  @default("")
+  variables          String[] @default([])
+  isActive           Boolean  @default(true)
+  autoTriggerEnabled Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([key, isActive])
+}
+
+enum EmailStatus {
+  SENT
+  FAILED
+  PENDING
+}
+
+model EmailLog {
+  id              Int         @id @default(autoincrement())
+  recipientEmail  String
+  recipientUserId Int?
+  templateKey     String?
+  subject         String
+  status          EmailStatus @default(SENT)
+  errorMessage    String?
+  metadata        Json?       @default("{}")
+  sentAt          DateTime    @default(now())
+
+  @@index([recipientEmail])
+  @@index([status, sentAt])
+  @@index([templateKey])
+}

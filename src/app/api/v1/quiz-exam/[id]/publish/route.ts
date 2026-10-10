@@ -93,5 +93,17 @@ export async function PATCH(
         return NextResponse.json(result, { status });
     }
 
+    // If publishing results, automatically trigger leaderboard wishing emails in background
+    if (parsed.data.published) {
+        try {
+            const { EmailService } = await import("@/services/email.service");
+            EmailService.sendExamLeaderboardWishes(examId).catch((err) => {
+                logger.error("Auto leaderboard email dispatch failed:", err);
+            });
+        } catch (err) {
+            logger.error("Failed to invoke EmailService on exam publish:", err);
+        }
+    }
+
     return NextResponse.json(result);
 }
