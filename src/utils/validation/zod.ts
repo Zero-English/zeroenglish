@@ -65,11 +65,15 @@ export const quizGenerateSchema = z.object({
   levels: z.array(quizLevelOptionEnumSchema).max(7).default([]),
   quantity: z.number().int().positive("quantity must be positive").max(200),
   useAllQuestions: z.boolean().default(false),
+  wordIds: z.array(z.number().int().positive()).optional(),
+  excludeWordIds: z.array(z.number().int().positive()).optional(),
 });
 
 export const quizPoolSchema = z.object({
   quizType: quizTypeNameEnumSchema,
   levels: z.array(quizLevelOptionEnumSchema).max(7).default([]),
+  wordIds: z.array(z.number().int().positive()).optional(),
+  excludeWordIds: z.array(z.number().int().positive()).optional(),
 });
 
 export type QuizGenerateInput = z.infer<typeof quizGenerateSchema>;

@@ -59,6 +59,101 @@ Every CEFR level has a designated semantic color scheme mapped across cards, bad
   $$\text{stiffness: 420},\ \text{damping: 32},\ \text{mass: 0.9}$$
 - **SVG Circular Progress**: Dynamic stroke-dashoffset interpolation with ease-out timing curves for visual celebration upon completion.
 
+### 2.4 The "One Frame Grid" Pattern & Minimalist Typography Standard
+
+To create a clean, cohesive, and modern tactile surface across catalogs, Zero English utilizes the **One Frame Grid Pattern** instead of fragmented floating cards:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        "One Frame Grid" Anatomy                        │
+│                                                                        │
+│ ┌────────────────────────────────────────────────────────────────────┐ │
+│ │ 🔲 Header (text-lg font-semibold) + Subtitle (text-xs text-zinc-500)│ │
+│ └────────────────────────────────────────────────────────────────────┘ │
+│ ┌──────────────────────────────────┬─────────────────────────────────┐ │
+│ │ Cell 1: [Icon] Title + Subtitle  │ Cell 2: [Icon] Title + Subtitle │ │
+│ │ • Border: Top-Left (None)        │ • Border: Left Divider          │ │
+│ ├──────────────────────────────────┼─────────────────────────────────┤ │
+│ │ Cell 3: [Icon] Title + Subtitle  │ Cell 4: [Icon] Title + Subtitle │ │
+│ │ • Border: Top Divider            │ • Border: Top & Left Dividers   │ │
+│ └──────────────────────────────────┴─────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+#### A. Architecture & Tailwind Implementation
+- **Outer Shell**: Single unified container with glassmorphic backdrop:
+  ```tsx
+  <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/60 overflow-hidden">
+  ```
+- **Inner 2-Column Responsive Stagger Grid**:
+  ```tsx
+  <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
+  ```
+- **Internal Cell Divider Rules**: Subtly separates internal cells without double borders on the perimeter across both 1-column mobile and 2-column desktop layouts:
+  ```tsx
+  className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0"
+  ```
+  - *Mobile (`< sm`, 1 column)*: Stacked cards are separated by a single clean `border-t`, suppressing the first card with `first:border-t-0` and having no left/right side borders.
+  - *Desktop (`>= sm`, 2 columns)*: The left column (`odd`) suppresses left border with `sm:[&:nth-child(odd)]:border-l-0`, the right column receives `sm:border-l`, and the top row (first 2 items) suppresses top border with `sm:[&:nth-child(-n+2)]:border-t-0`.
+- **Micro-Interaction State**:
+  ```tsx
+  className="hover:bg-black/[0.02] active:bg-black/[0.02] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04] transition-colors"
+  ```
+
+#### B. Minimalist Typography Guidelines
+- **Strict Prohibition of Bloated Text**: Avoid oversized headings (`text-3xl`, `text-4xl`, `text-5xl`) in standard section headers and option cards.
+- **Section Headers**: `text-lg sm:text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100`
+- **Subtitles & Descriptions**: `text-xs sm:text-sm text-zinc-500 dark:text-zinc-400`
+- **Action / Option Labels**: `text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100`
+- **Icon Chips**: Standardized to `h-9 w-9` or `h-10 w-10` with `rounded-[10px]` and subtle ring borders. Feature mode chips scale up to `h-12 w-12 rounded-[14px]` with inner gradient highlights.
+
+#### C. Applied Locations
+- **`/quiz`**: Primary Quiz Mode catalog (6 modes).
+- **`/quiz/vocabulary`**: 2x2 Vocabulary Mode selector (English to Bengali, Bengali to English, Synonyms, Antonyms).
+- **`/quiz/grammar`**: Grammar Topics catalog (Tenses, Prepositions, Voice Change, Articles, Narration, etc.).
+- **`/quiz/class`**: Academic & Standardized Class catalog (18 classes: Primary, SSC, HSC, IELTS, TOEFL, BCS, Job).
+- **Dashboard Hub**: Quick Action exploration tiles.
+
+### 2.5 Semantic Iconography System
+
+Every card across all quiz surfaces has a dedicated, meaningful icon matching the conceptual domain of the topic or exam:
+
+| Domain / Card | Concept / Card Meaning | Assigned Icon | Visual Metaphor |
+| :--- | :--- | :--- | :--- |
+| **Scheduled Exam** | Fixed timed event & countdown | `CalendarClock` | Scheduled calendar test window |
+| **Quick Quiz** | High-speed 20s blitz | `Zap` | Lightning fast test speed |
+| **English to Bangla** | Bilingual vocabulary translation | `Languages` | Multilingual translation bridge |
+| **Bangla to English** | Reverse word translation | `ArrowRightLeft` | Bidirectional translation switch |
+| **Synonyms** | Words with identical meaning | `Equal` | Equivalence sign ($$=$$) |
+| **Antonyms** | Words with opposite polarity | `Contrast` | High-contrast opposing polarities |
+| **Mixed / Blitz** | Random mixture of categories | `Shuffle` | Randomized deck shuffle |
+| **Tenses** | Past, present, and future time | `Clock` | Chronological time progression |
+| **Articles** | Grammatical determiners (a, an, the) | `PenLine` | Editorial pencil writing marker |
+| **Voice Change** | Active to passive voice transition | `Volume2` | Audio / vocal inflection |
+| **Narration** | Direct & indirect speech quotes | `Quote` | Speech quote marks |
+| **Prepositions** | Spatial / directional placement | `Compass` | Spatial direction & navigation |
+| **Parts of Speech** | Sentence component classification | `LayoutGrid` | Categorized modular building blocks |
+| **Verb Conjugation** | Right form of verbs | `CheckSquare` | Verified correct grammatical form |
+| **Subject-Verb Agreement**| Grammatical balance & alignment | `Scale` | Balanced weights & symmetry |
+| **Modal Auxiliaries** | Can, could, may, might, must | `Key` | Unlocking capability & permission |
+| **Conditionals** | If / then conditional branching | `GitFork` | Logical condition branching |
+| **Sentence Transformation**| Syntactic structure conversion | `RefreshCw` | Structural reformation cycle |
+| **Spelling** | Orthographic accuracy | `SpellCheck` | Spellcheck dictionary verification |
+| **Idioms & Phrases** | Figurative expressions | `MessageSquareQuote`| Expressive conversational speech |
+| **Academic: Pre-Primary** | Early childhood fundamentals | `Baby` | Early learning stage |
+| **Academic: Primary (1–5)**| Primary school foundation | `Backpack` / `Pencil` / `BookOpen` / `School` | Elementary learning tools |
+| **Academic: Middle (6–8)** | Peer group & library study | `UsersRound` / `Library` / `BookMarked` | Structured reading & study |
+| **Academic: SSC** | Secondary Certificate Award | `Award` | Secondary school certificate milestone |
+| **Academic: HSC** | Higher Secondary Graduation | `GraduationCap` | College / Higher secondary graduation |
+| **Standardized: IELTS** | Global English proficiency test | `Globe2` | Worldwide international standard |
+| **Standardized: TOEFL** | Academic listening & speaking | `Headphones` | Audio & listening comprehension |
+| **Higher Ed: University** | Higher education academy | `Landmark` | Classical university institution |
+| **Higher Ed: Masters** | Postgraduate master thesis | `Scroll` | Academic diploma scroll |
+| **Certification: Diploma** | Technical credential badge | `FileBadge2` | Verified professional diploma badge |
+| **Civil Service: BCS** | Government service commission | `ShieldCheck` | Official state civil service insignia |
+| **Professional: JOB** | Career employment exams | `Briefcase` | Workplace & professional recruitment |
+| **Past Results** | Historical scores & analytics | `BarChart3` | Performance analytics graph |
+
 ---
 
 ## 3. Deep Analysis: Home Page & Dashboard Component
