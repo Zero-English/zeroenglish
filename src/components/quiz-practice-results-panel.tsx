@@ -13,6 +13,7 @@ import {
   BookOpenCheck,
   BarChart3,
   Award,
+  ArrowRight,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,9 @@ import {
   dbResultDate,
   type DbCombinedExamResult,
 } from "@/lib/quiz-results-api";
+
+const CARD =
+  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
 
 const VOCAB_QUIZ_TYPES = new Set([
   "ENGLISH_TO_BANGLA",
@@ -44,12 +48,12 @@ function isGrammarOrClassResult(r: DbCombinedExamResult): boolean {
 }
 
 const LEVEL_COLORS: Record<string, string> = {
-  A1: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300",
-  A2: "bg-sky-50 text-sky-700 dark:bg-sky-950/40 dark:text-sky-300",
-  B1: "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300",
-  B2: "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300",
-  C1: "bg-violet-50 text-violet-700 dark:bg-violet-950/40 dark:text-violet-300",
-  C2: "bg-fuchsia-50 text-fuchsia-700 dark:bg-fuchsia-950/40 dark:text-fuchsia-300",
+  A1: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border-emerald-500/20",
+  A2: "bg-sky-50 text-sky-700 dark:bg-sky-950/40 dark:text-sky-300 border-sky-500/20",
+  B1: "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border-amber-500/20",
+  B2: "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border-rose-500/20",
+  C1: "bg-violet-50 text-violet-700 dark:bg-violet-950/40 dark:text-violet-300 border-violet-500/20",
+  C2: "bg-fuchsia-50 text-fuchsia-700 dark:bg-fuchsia-950/40 dark:text-fuchsia-300 border-fuchsia-500/20",
 };
 
 function formatDate(iso: string) {
@@ -76,8 +80,8 @@ function resultBadge(
       icon: GraduationCap,
       label: r.title || "Class Quiz",
       labelBn: r.title || "শ্রেণি কুইজ",
-      iconColor: "text-white",
-      bg: "bg-gradient-to-br from-violet-500 to-fuchsia-500",
+      iconColor: "text-violet-600 dark:text-violet-400",
+      bg: "bg-violet-500/10",
     };
   }
   const meta = quizTopicMeta(type);
@@ -85,8 +89,8 @@ function resultBadge(
     icon: BookOpenCheck,
     label: meta.label,
     labelBn: meta.labelBn,
-    iconColor: meta.text,
-    bg: meta.bg,
+    iconColor: "text-emerald-600 dark:text-emerald-400",
+    bg: "bg-emerald-500/10",
   };
 }
 
@@ -94,8 +98,8 @@ function ResultBadgeIcon({ r }: { r: DbCombinedExamResult }) {
   const badge = resultBadge(r);
   const Icon = badge.icon;
   return (
-    <div className={cn("p-2.5 rounded-xl", badge.bg)}>
-      <Icon className={cn("h-5 w-5", badge.iconColor)} />
+    <div className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px]", badge.bg, badge.iconColor)}>
+      <Icon className="h-4.5 w-4.5" />
     </div>
   );
 }
@@ -107,7 +111,7 @@ function ResultItem({ result }: { result: DbCombinedExamResult }) {
   const incorrect = result.incorrectQuestions?.length ?? 0;
 
   return (
-    <StaggerItem className="relative overflow-hidden rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md p-4 sm:p-5 transition-all duration-200 shadow-xs">
+    <StaggerItem className="group relative overflow-hidden rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.015] dark:bg-white/[0.02] hover:bg-black/[0.03] dark:hover:bg-white/[0.04] p-3.5 sm:p-4 transition-all duration-150">
       <Link
         href={`/profile/quiz-results/${result.id}`}
         className="absolute inset-0 z-0"
@@ -116,64 +120,65 @@ function ResultItem({ result }: { result: DbCombinedExamResult }) {
           `View result #${result.id}`
         )}
       />
-      <div className="pointer-events-none relative flex flex-wrap items-start justify-between gap-4">
+      <div className="pointer-events-none relative flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <ResultBadgeIcon r={result} />
           <div>
-            <h4 className="text-sm sm:text-base font-semibold text-foreground">
+            <h4 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
               {t(badge.labelBn, badge.label)}
             </h4>
-            <p className="mt-0.5 flex items-center gap-1.5 text-xs text-muted-foreground">
-              <CalendarDays className="h-3.5 w-3.5" />
+            <p className="mt-0.5 flex items-center gap-1 text-[11px] text-zinc-400 dark:text-zinc-500">
+              <CalendarDays className="h-3 w-3" />
               {formatDate(dbResultDate(result))}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 rounded-xl bg-muted/60 border border-border/60 px-3 py-1.5">
-          <Trophy className="h-4 w-4 text-amber-500" />
+
+        <div className="flex items-center gap-2 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] px-2.5 py-0.5">
+          <Trophy className="h-3.5 w-3.5 text-amber-500" />
           <span
             className={cn(
-              "text-base font-bold tabular-nums",
+              "text-xs font-bold tabular-nums",
               winColor(result.scoreInPercent)
             )}
           >
             {result.scoreInPercent}%
           </span>
-          <span className="text-xs text-muted-foreground">{t("স্কোর", "score")}</span>
         </div>
       </div>
 
-      <div className="pointer-events-none relative mt-4 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-border/60 pt-3">
-        <div className="flex items-center gap-2">
-          <ListChecks className="h-4 w-4 text-muted-foreground" />
-          <span className="text-xs text-muted-foreground">
+      <div className="pointer-events-none relative mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-black/[0.04] dark:border-white/[0.06] pt-2.5 text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="flex items-center gap-1.5">
+          <ListChecks className="h-3.5 w-3.5 text-zinc-400" />
+          <span className="tabular-nums">
             {t(
               `${result.questionCount}টি প্রশ্ন`,
               `${result.questionCount} question${result.questionCount !== 1 ? "s" : ""}`
             )}
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-          <span className="text-xs text-emerald-600 dark:text-emerald-400">{correct}</span>
+        <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
+          <CheckCircle2 className="h-3.5 w-3.5" />
+          <span className="tabular-nums">{correct}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <XCircle className="h-4 w-4 text-rose-500" />
-          <span className="text-xs text-rose-600 dark:text-rose-400">{incorrect}</span>
+        <div className="flex items-center gap-1 text-rose-600 dark:text-rose-400 font-medium">
+          <XCircle className="h-3.5 w-3.5" />
+          <span className="tabular-nums">{incorrect}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <Clock3 className="h-4 w-4 text-muted-foreground" />
-          <span className="text-xs text-muted-foreground">
-            {result.timePerQuestion}
-            {t(" সেকেন্ড / প্রশ্ন", "s / question")}
-          </span>
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5">
+        {result.timePerQuestion > 0 && (
+          <div className="flex items-center gap-1 text-zinc-400">
+            <Clock3 className="h-3.5 w-3.5" />
+            <span className="tabular-nums">
+              {result.timePerQuestion}s / {t("প্রশ্ন", "q")}
+            </span>
+          </div>
+        )}
+        <div className="flex flex-wrap items-center gap-1 ml-auto">
           {result.levels.map((lv) => (
             <span
               key={lv}
               className={cn(
-                "rounded-md px-2 py-0.5 text-[11px] font-medium border",
+                "rounded-md px-1.5 py-0.2 text-[10px] font-semibold border",
                 LEVEL_COLORS[lv]
               )}
             >
@@ -228,7 +233,7 @@ export function QuizPracticeResultsPanel() {
 
   if (!loaded) {
     return (
-      <div className="flex items-center justify-center py-20 text-muted-foreground">
+      <div className="flex items-center justify-center py-16 text-zinc-400">
         <GraduationCap className="size-6 animate-pulse" />
       </div>
     );
@@ -239,54 +244,56 @@ export function QuizPracticeResultsPanel() {
       icon: BookOpenCheck,
       label: t("নেওয়া কুইজ", "Quizzes Taken"),
       value: stats.total,
-      tint: "text-indigo-600 dark:text-indigo-400",
-      bg: "bg-indigo-100 dark:bg-indigo-900/30",
+      tint: "text-emerald-600 dark:text-emerald-400",
+      bg: "bg-emerald-500/10",
     },
     {
       icon: BarChart3,
       label: t("গড় স্কোর", "Avg. Score"),
       value: `${stats.avg}%`,
       tint: "text-sky-600 dark:text-sky-400",
-      bg: "bg-sky-100 dark:bg-sky-900/30",
+      bg: "bg-sky-500/10",
     },
     {
       icon: Award,
       label: t("সেরা স্কোর", "Best Score"),
       value: `${stats.best}%`,
-      tint: "text-emerald-600 dark:text-emerald-400",
-      bg: "bg-emerald-100 dark:bg-emerald-900/30",
+      tint: "text-amber-600 dark:text-amber-400",
+      bg: "bg-amber-500/10",
     },
   ];
 
   return (
-    <div>
-      <p className="text-sm text-muted-foreground mb-6">
-        {t(
-          `${stats.total}টি কুইজ · ${stats.totalQuestions}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
-          `${stats.total} practice quiz${stats.total !== 1 ? "zes" : ""} · ${stats.totalQuestions} questions answered`
-        )}
-      </p>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          {t(
+            `${stats.total}টি কুইজ · ${stats.totalQuestions}টি প্রশ্নের উত্তর দেওয়া হয়েছে`,
+            `${stats.total} practice quizzes · ${stats.totalQuestions} questions answered`
+          )}
+        </p>
+      </div>
 
       {stats.total > 0 ? (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+          <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
             <StaggerContainer className="contents">
               {summary.map((s) => {
                 const Icon = s.icon;
                 return (
                   <StaggerItem
                     key={s.label}
-                    className="rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md p-4 sm:p-5 transition-all duration-200 shadow-xs"
+                    className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-3 sm:p-3.5 flex flex-col justify-between"
                   >
-                    <div className="flex items-center gap-3 mb-2.5">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-muted text-foreground">
-                        <Icon className="h-4 w-4" />
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <div className={cn("flex h-7 w-7 items-center justify-center rounded-lg", s.bg, s.tint)}>
+                        <Icon className="h-3.5 w-3.5" />
                       </div>
-                      <span className="text-xs sm:text-sm font-medium text-muted-foreground">
+                      <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 truncate">
                         {s.label}
                       </span>
                     </div>
-                    <div className="text-2xl font-bold text-foreground tabular-nums">
+                    <div className="text-lg sm:text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 tabular-nums">
                       {s.value}
                     </div>
                   </StaggerItem>
@@ -295,7 +302,7 @@ export function QuizPracticeResultsPanel() {
             </StaggerContainer>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 gap-2.5 sm:gap-3">
             <StaggerContainer className="contents">
               {results.map((result, idx) => (
                 <ResultItem key={result.id ?? idx} result={result} />
@@ -304,20 +311,36 @@ export function QuizPracticeResultsPanel() {
           </div>
         </>
       ) : (
-        <div className="text-center py-16">
-          <Trophy className="h-12 w-12 mx-auto text-zinc-300 dark:text-zinc-600 mb-4" />
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-1">
+        <div className="text-center py-12 space-y-2">
+          <Trophy className="h-10 w-10 mx-auto text-zinc-300 dark:text-zinc-700" />
+          <p className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
             {t(
               "এখনো কোনো গ্রামার বা শ্রেণি কুইজের ফলাফল নেই।",
               "No grammar or class quiz results yet."
             )}
           </p>
-          <p className="text-zinc-400 dark:text-zinc-500 text-xs">
+          <p className="text-[11px] text-zinc-400 dark:text-zinc-500 max-w-sm mx-auto">
             {t(
               "কুইজ পেজ থেকে একটি গ্রামার বা শ্রেণি ভিত্তিক কুইজ নিন, আপনার ফলাফল এখানে দেখা যাবে।",
               "Take a grammar or class quiz from the Quiz page and your results will appear here."
             )}
           </p>
+          <div className="pt-2 flex flex-wrap justify-center gap-2">
+            <Link
+              href="/quiz/grammar"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-3.5 py-1.5 shadow-sm transition-colors"
+            >
+              {t("গ্রামার কুইজ", "Grammar Quizzes")}
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+            <Link
+              href="/quiz/class"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs px-3.5 py-1.5 shadow-sm transition-colors"
+            >
+              {t("শ্রেণি কুইজ", "Class Quizzes")}
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
         </div>
       )}
     </div>

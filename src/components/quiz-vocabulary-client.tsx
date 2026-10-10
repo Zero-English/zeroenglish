@@ -4,7 +4,25 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSpeak } from "@/lib/use-speak";
-import { Languages, ArrowLeftRight, ArrowRight, ArrowLeft, Shuffle, Layers, Volume2, Star, Sparkles, Gauge, ListOrdered, Check, X, Bookmark, BookmarkCheck, type LucideIcon } from "lucide-react";
+import {
+  Languages,
+  ArrowRightLeft,
+  ArrowRight,
+  ArrowLeft,
+  Equal,
+  Contrast,
+  Layers,
+  Volume2,
+  Star,
+  Sparkles,
+  Gauge,
+  ListOrdered,
+  Check,
+  X,
+  Bookmark,
+  BookmarkCheck,
+  type LucideIcon,
+} from "lucide-react";
 import { Word } from "@/lib/data";
 import { useStillLearningWords } from "@/lib/use-still-learning-words";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
@@ -20,6 +38,7 @@ import {
 import { requestLogin } from "@/lib/login-required";
 import Link from "next/link";
 import { useT } from "@/components/language-provider";
+import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { toast } from "sonner";
 
@@ -101,51 +120,66 @@ const TIME_OPTIONS = [10, 15, 20, 30, 60] as const;
 
 const QUIZ_TYPE_CONFIG: Record<
   QuizType,
-  { label: string; labelBn: string; desc: string; descBn: string; icon: LucideIcon; gradient: string; bg: string; border: string; text: string }
+  {
+    label: string;
+    labelBn: string;
+    desc: string;
+    descBn: string;
+    icon: LucideIcon;
+    gradient: string;
+    accent: string;
+    pill: string;
+    badge: string;
+    badgeBn: string;
+  }
 > = {
   english_to_bangla: {
     label: "English to Bangla",
     labelBn: "ইংরেজি থেকে বাংলা",
-    desc: "Pick the correct Bangla meaning",
-    descBn: "সঠিক বাংলা অর্থটি বেছে নিন",
+    desc: "Pick the correct Bangla meaning for the given English word.",
+    descBn: "প্রদত্ত ইংরেজি শব্দের সঠিক বাংলা অর্থটি বেছে নিন।",
     icon: Languages,
     gradient: "from-sky-500 to-blue-500",
-    bg: "bg-sky-50 dark:bg-sky-950/40",
-    border: "border-sky-200 dark:border-sky-800",
-    text: "text-sky-700 dark:text-sky-300",
+    accent: "bg-sky-100/80 text-sky-600 dark:bg-sky-500/15 dark:text-sky-300",
+    pill: "bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300",
+    badge: "Popular",
+    badgeBn: "জনপ্রিয়",
   },
   bangla_to_english: {
     label: "Bangla to English",
     labelBn: "বাংলা থেকে ইংরেজি",
-    desc: "Pick the correct English word",
-    descBn: "সঠিক ইংরেজি শব্দটি বেছে নিন",
-    icon: ArrowLeftRight,
+    desc: "Pick the correct English word for the given Bangla meaning.",
+    descBn: "প্রদত্ত বাংলা অর্থের সঠিক ইংরেজি শব্দটি বেছে নিন।",
+    icon: ArrowRightLeft,
     gradient: "from-indigo-500 to-violet-500",
-    bg: "bg-indigo-50 dark:bg-indigo-950/40",
-    border: "border-indigo-200 dark:border-indigo-800",
-    text: "text-indigo-700 dark:text-indigo-300",
+    accent: "bg-indigo-100/80 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300",
+    pill: "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400",
+    badge: "Word Match",
+    badgeBn: "শব্দ মেলান",
   },
   synonym: {
     label: "Synonyms",
     labelBn: "সমার্থক শব্দ",
-    desc: "Find the word with the same meaning",
-    descBn: "একই অর্থের শব্দটি খুঁজুন",
-    icon: Shuffle,
+    desc: "Find the word with the closest matching meaning.",
+    descBn: "একই ও সমার্থক অর্থের শব্দটি খুঁজে বের করুন।",
+    icon: Equal,
     gradient: "from-emerald-500 to-teal-500",
-    bg: "bg-emerald-50 dark:bg-emerald-950/40",
-    border: "border-emerald-200 dark:border-emerald-800",
-    text: "text-emerald-700 dark:text-emerald-300",
+    accent: "bg-emerald-100/80 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300",
+    pill: "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400",
+    badge: "Synonym",
+    badgeBn: "সমার্থক",
   },
   antonym: {
     label: "Antonyms",
     labelBn: "বিপরীত শব্দ",
-    desc: "Find the word with the opposite meaning",
-    descBn: "বিপরীত অর্থের শব্দটি খুঁজুন",
-    icon: Layers,
+    desc: "Find the word with the opposite meaning.",
+    descBn: "বিপরীত ও বিপরীতার্থক অর্থের শব্দটি খুঁজুন।",
+    icon: Contrast,
     gradient: "from-rose-500 to-pink-500",
-    bg: "bg-rose-50 dark:bg-rose-950/40",
-    border: "border-rose-200 dark:border-rose-800",
-    text: "text-rose-700 dark:text-rose-300",
+    accent: "bg-rose-100/80 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300",
+    pill: "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400",
+    badge: "Antonym",
+    badgeBn: "বিপরীত",
   },
 };
 
@@ -535,6 +569,12 @@ export function QuizVocabularyClient() {
   return null;
 }
 
+const CARD =
+  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
+
+const ICON_CHIP =
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-black/[0.04] dark:bg-white/[0.06] ring-1 ring-inset ring-black/[0.05] dark:ring-white/[0.08]";
+
 function QuizTypeSelect({
   onSelect,
 }: {
@@ -542,108 +582,85 @@ function QuizTypeSelect({
 }) {
   const t = useT();
   return (
-    <div className="relative min-h-dvh flex flex-col items-center justify-center overflow-hidden px-6 py-16">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="absolute inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
-
-      <div className="w-full max-w-3xl">
-        <div className="animate-fade-up text-center mb-12">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-4">
-            <Sparkles className="h-3.5 w-3.5" />
-            {t("শব্দভাণ্ডার অনুশীলন", "Vocabulary Practice")}
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-3 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-            {t("আপনার কুইজ বেছে নিন", "Choose a Quiz")}
-          </h1>
-          <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
-            {t("শব্দভাণ্ডারের কুইজের ধরন বেছে নিয়ে অনুশীলন শুরু করুন।", "Pick a vocabulary quiz type to start practising.")}
-          </p>
-        </div>
-
-        <div className="animate-fade-up-1 mb-16">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              <Sparkles className="h-3.5 w-3.5" />
-              {t("প্র্যাকটিস কুইজ", "Practice Quizzes")}
-            </span>
+    <div className="px-4 py-8 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className={cn(ICON_CHIP, "text-sky-500")}>
+            <Languages className="size-4.5" />
           </div>
+          <div>
+            <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+              {t("শব্দভাণ্ডার অনুশীলন", "Vocabulary Practice")}
+            </h1>
+            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
+              {t(
+                "শব্দভাণ্ডার মজবুত করতে একটি মোড বেছে নিয়ে অনুশীলন শুরু করুন।",
+                "Pick a practice mode and sharpen your word recall."
+              )}
+            </p>
+          </div>
+        </div>
+        <Link
+          href="/quiz"
+          className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/60 dark:bg-zinc-900/60 hover:bg-black/[0.03] dark:hover:bg-white/[0.05] px-3 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300 transition-colors"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          {t("সব কুইজ", "All Quizzes")}
+        </Link>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-          {QUIZ_TYPE_ORDER.map((type, i) => {
-            const c = QUIZ_TYPE_CONFIG[type];
-            const Icon = c.icon;
-            const featured = type === "english_to_bangla";
+      <div className={cn(CARD, "overflow-hidden")}>
+        <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
+          {QUIZ_TYPE_ORDER.map((type) => {
+            const card = QUIZ_TYPE_CONFIG[type];
+            const Icon = card.icon;
+            const isFeatured = type === "english_to_bangla";
             return (
-              <button
+              <StaggerItem
                 key={type}
-                onClick={() => onSelect(type)}
-                className={`group relative flex flex-col text-left overflow-hidden rounded-3xl border backdrop-blur-sm transition-all duration-300 cursor-pointer ${
-                  featured
-                    ? "sm:col-span-2 border-2 " + c.border + " " + c.bg
-                    : "border-2 " + c.border + " " + c.bg
-                } hover:scale-[1.02] hover:-translate-y-1 active:scale-[1.02] active:-translate-y-1`}
-                style={{ animationDelay: `${i * 0.08}s` }}
+                className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0"
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${c.gradient} opacity-0 group-hover:opacity-5 dark:group-hover:opacity-10 transition-opacity duration-300`} />
-
-                <div className="relative flex items-center justify-between p-6">
-                  <div className="flex items-center gap-3">
-                    <div className={`flex-shrink-0 h-14 w-14 rounded-2xl bg-gradient-to-br ${c.gradient} flex items-center justify-center shadow-lg shadow-black/10`}>
-                      <Icon className="h-7 w-7 text-white" />
-                    </div>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-700 px-3 py-1 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
-                      {t("প্র্যাকটিস", "Practice")}
-                    </span>
-                  </div>
-
-                  {featured && (
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-700 px-3 py-1 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
-                      <Star className="h-3 w-3 fill-amber-400 text-amber-500" />
-                      {t("সবচেয়ে জনপ্রিয়", "Most Popular")}
-                    </span>
+                <button
+                  onClick={() => onSelect(type)}
+                  className={cn(
+                    "group flex h-full w-full flex-col text-left gap-3 p-5 sm:p-6 transition-colors cursor-pointer",
+                    "hover:bg-black/[0.02] active:bg-black/[0.02] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04]"
                   )}
-                </div>
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div
+                      className={cn(
+                        "flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_2px_8px_-2px_rgba(16,24,40,0.15)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_-2px_rgba(0,0,0,0.5)]",
+                        card.accent
+                      )}
+                    >
+                      <Icon className="h-6 w-6" />
+                    </div>
 
-                <div className={`relative flex-1 px-6 pb-6 ${featured ? "sm:pt-0" : "pt-1"}`}>
-                  <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-                    {t(c.labelBn, c.label)}
-                  </h3>
-                  <p className={`text-sm font-medium mt-1 ${c.text}`}>{t(c.descBn, c.desc)}</p>
-
-                  <div className={`flex flex-wrap items-center gap-2 mt-4 ${featured ? "" : ""}`}>
-                    {type === "english_to_bangla" && (
-                      <span className="text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-                        {t("শব্দ থেকে অর্থ", "Word to Meaning")}
-                      </span>
-                    )}
-                    {type === "bangla_to_english" && (
-                      <span className="text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-                        {t("অর্থ থেকে শব্দ", "Meaning to Word")}
-                      </span>
-                    )}
-                    {type === "synonym" && (
-                      <span className="text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-                        {t("একই অর্থ", "Same meaning")}
-                      </span>
-                    )}
-                    {type === "antonym" && (
-                      <span className="text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-                        {t("বিপরীত অর্থ", "Opposite meaning")}
-                      </span>
-                    )}
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-                      {t("শুরু", "Start")}
-                      <ArrowRight className="inline-block h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                    <span
+                      className={cn(
+                        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold",
+                        card.pill
+                      )}
+                    >
+                      {isFeatured && <Star className="h-3 w-3 fill-amber-400 text-amber-500" />}
+                      {t(card.badgeBn, card.badge)}
                     </span>
                   </div>
-                </div>
 
-                <div className={`absolute bottom-0 left-6 right-6 h-0.5 rounded-full bg-gradient-to-r ${c.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-              </button>
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                      {t(card.labelBn, card.label)}
+                    </h3>
+                    <p className="mt-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+                      {t(card.descBn, card.desc)}
+                    </p>
+                  </div>
+                </button>
+              </StaggerItem>
             );
           })}
-        </div>
-        </div>
+        </StaggerContainer>
       </div>
     </div>
   );
@@ -685,203 +702,224 @@ function SettingsView({
   onBack: () => void;
 }) {
   const qt = QUIZ_TYPE_CONFIG[quizType];
-  const c = LEVEL_CONFIG[levels.includes("Random") ? "Random" : (levels[0] ?? "A1")];
   const QuizIcon = qt.icon;
   const t = useT();
   const countLabel =
     countLoading || maxCount === null ? "…" : String(maxCount);
+
+  const activeStyle =
+    "bg-sky-600 text-white border-sky-600 shadow-sm dark:bg-sky-500 dark:border-sky-500";
+  const idleStyle =
+    "border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 hover:bg-black/[0.05] dark:hover:bg-white/[0.08]";
+
   return (
-    <div className="relative min-h-dvh overflow-hidden px-4 py-10 sm:px-6 sm:py-14">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
+    <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-3xl mx-auto space-y-4 sm:space-y-5">
+      <button
+        onClick={onBack}
+        className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer"
+      >
+        <ArrowLeft className="h-3.5 w-3.5" />
+        {t("কুইজের ধরনে ফিরে যান", "Back to quiz types")}
+      </button>
 
-      <div className="max-w-2xl mx-auto">
-        <button
-          onClick={onBack}
-          className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300 transition-colors group mb-8"
-        >
-          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5 group-active:-translate-x-0.5" />
-          {t("কুইজের ধরনে ফিরে যান", "Back to quiz types")}
-        </button>
-
-        <div className="animate-fade-up">
-          <div className={`relative overflow-hidden rounded-3xl border ${qt.border} ${qt.bg} backdrop-blur-sm p-6 sm:p-8 mb-8`}>
-            <div className={`absolute inset-0 bg-gradient-to-br ${qt.gradient} opacity-10`} />
-            <div className="relative flex items-center gap-4">
-              <div
-                className={`flex-shrink-0 h-14 w-14 rounded-2xl bg-gradient-to-br ${qt.gradient} flex items-center justify-center shadow-lg shadow-black/10`}
-              >
-                <QuizIcon className="h-7 w-7 text-white" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                  {t(qt.labelBn, qt.label)}
-                </h2>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                  {t(qt.descBn, qt.desc)} ·{" "}
-                  {t(`${countLabel}টি শব্দ পাওয়া যায়`, `${countLabel} words available`)}
-                </p>
-              </div>
-            </div>
+      {/* Selected Mode Banner */}
+      <div className={cn(CARD, "p-4 sm:p-5")}>
+        <div className="flex items-center gap-3">
+          <div
+            className={cn(
+              "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br text-white shadow-sm",
+              qt.gradient
+            )}
+          >
+            <QuizIcon className="h-4.5 w-4.5" />
           </div>
-
-          <div className="space-y-6">
-            <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-5 sm:p-6">
-              <h3 className="flex items-center gap-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
-                <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${qt.bg}`}>
-                  <Layers className={`h-3.5 w-3.5 ${qt.text}`} />
-                </span>
-                {t("লেভেলের পরিধি", "Level Scope")}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {LEVEL_SCOPE_OPTIONS.map((lv) => {
-                  const lc = LEVEL_CONFIG[lv];
-                  const active = levels.includes(lv);
-                  const lcStyle = active
-                    ? `${lc.border} ${lc.bg} ${lc.text} border-2 shadow-sm`
-                    : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600";
-                  return (
-                    <button
-                      key={lv}
-                      onClick={() => onLevelChange(lv)}
-                      className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer flex items-center gap-1.5 ${lcStyle}`}
-                    >
-                      {active && <span className="font-bold">✓</span>}
-                      {lv === "Random" ? t("সব লেভেল", "All Levels") : `${t("লেভেল", "Level")} ${lv}`}
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-3">
-                {levels.length === 0 || levels.includes("Random")
-                  ? t("সব লেভেল বেছে নেওয়া হয়েছে — প্রতিটি লেভেল থেকে প্রশ্ন আসবে", "All levels selected — questions from every level")
-                  : t(`${levels.length}টি লেভেল বেছে নেওয়া হয়েছে`, `${levels.length} level${levels.length > 1 ? "s" : ""} selected`)}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-5 sm:p-6">
-              <h3 className="flex items-center gap-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
-                <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${qt.bg}`}>
-                  <ListOrdered className={`h-3.5 w-3.5 ${qt.text}`} />
-                </span>
-                {t("প্রশ্নের সংখ্যা", "Number of Questions")}
-              </h3>
-              <div className="flex flex-wrap items-center gap-2">
-                {QUANTITY_OPTIONS.map((q) => (
-                  <button
-                    key={q}
-                    onClick={() => {
-                      onQuantityChange(q);
-                      onUseAllChange(false);
-                    }}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
-                      !useAllQuestions && quantity === q
-                        ? `${c.border} ${c.bg} ${c.text} border-2 shadow-sm`
-                        : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600"
-                    }`}
-                  >
-                    {q}
-                  </button>
-                ))}
-                <button
-                  onClick={() => onUseAllChange(true)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
-                    useAllQuestions
-                      ? `${c.border} ${c.bg} ${c.text} border-2 shadow-sm`
-                      : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600"
-                  }`}
-                >
-                  {t(`সব (${countLabel})`, `All (${countLabel})`)}
-                </button>
-                <input
-                  type="number"
-                  min={1}
-                  max={maxCount ?? undefined}
-                  placeholder={t("কাস্টম", "Custom")}
-                  value={quantity}
-                  onChange={(e) => {
-                    const val = parseInt(e.target.value);
-                    if (!isNaN(val) && val > 0) {
-                      onQuantityChange(val);
-                      onUseAllChange(false);
-                    }
-                  }}
-                  className="w-20 px-3 py-2 rounded-xl text-sm font-medium border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                />
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-5 sm:p-6">
-              <h3 className="flex items-center gap-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
-                <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${qt.bg}`}>
-                  <Gauge className={`h-3.5 w-3.5 ${qt.text}`} />
-                </span>
-                {t("প্রতি প্রশ্নে সময়", "Time per Question")}
-              </h3>
-              <div className="flex flex-wrap items-center gap-2">
-                {TIME_OPTIONS.map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => {
-                      onTimeChange(t);
-                      onNoTimeLimitChange(false);
-                    }}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
-                      !noTimeLimit && timePerQuestion === t
-                        ? `${c.border} ${c.bg} ${c.text} border-2 shadow-sm`
-                        : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600"
-                    }`}
-                  >
-                    {t}s
-                  </button>
-                ))}
-                <button
-                  onClick={() => onNoTimeLimitChange(true)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
-                    noTimeLimit
-                      ? `${c.border} ${c.bg} ${c.text} border-2 shadow-sm`
-                      : "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600"
-                  }`}
-                >
-                  {t("সময়সীমা নেই", "No limit")}
-                </button>
-                <input
-                  type="number"
-                  min={1}
-                  placeholder={t("কাস্টম", "Custom")}
-                  value={timePerQuestion}
-                  onChange={(e) => {
-                    const val = parseInt(e.target.value);
-                    if (!isNaN(val) && val > 0) {
-                      onTimeChange(val);
-                      onNoTimeLimitChange(false);
-                    }
-                  }}
-                  className="w-20 px-3 py-2 rounded-xl text-sm font-medium border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                />
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <Button
-                onClick={onStart}
-                disabled={starting || countLoading}
-                className={`w-full h-12 text-base font-semibold bg-gradient-to-r ${qt.gradient} hover:opacity-90 active:opacity-90`}
-              >
-                {starting
-                  ? t("তৈরি হচ্ছে…", "Preparing…")
-                  : t("কুইজ শুরু করুন", "Start Quiz")}
-              </Button>
-              <p className="text-center text-xs text-zinc-400 dark:text-zinc-500 mt-3">
-                {useAllQuestions
-                  ? t(`${countLabel}টি প্রশ্ন · সব লেভেল`, `${countLabel} question${maxCount !== 1 ? "s" : ""} · all levels`)
-                  : t(
-                      `${quantity}টি প্রশ্ন · ${levels.length === 0 || levels.includes("Random") ? "সব লেভেল" : levels.join(", ")}`,
-                      `${quantity} question${quantity !== 1 ? "s" : ""} · ${levels.length === 0 || levels.includes("Random") ? "all levels" : levels.join(", ")}`
-                    )}
-              </p>
-            </div>
+          <div>
+            <h2 className="text-sm sm:text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+              {t(qt.labelBn, qt.label)}
+            </h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              {t(qt.descBn, qt.desc)} ·{" "}
+              {t(`${countLabel}টি শব্দ পাওয়া যায়`, `${countLabel} words available`)}
+            </p>
           </div>
+        </div>
+      </div>
+
+      <div className="space-y-4 sm:space-y-5">
+        {/* Level Scope Card */}
+        <div className={cn(CARD, "p-4 sm:p-5")}>
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 mb-2.5">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+              <Layers className="h-3.5 w-3.5" />
+            </div>
+            {t("লেভেলের পরিধি", "Level Scope")}
+          </div>
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            {LEVEL_SCOPE_OPTIONS.map((lv) => {
+              const active = levels.includes(lv);
+              return (
+                <button
+                  key={lv}
+                  onClick={() => onLevelChange(lv)}
+                  className={cn(
+                    "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer flex items-center gap-1",
+                    active ? activeStyle : idleStyle
+                  )}
+                >
+                  {active && <span className="font-bold">✓</span>}
+                  {lv === "Random"
+                    ? t("সব লেভেল", "All Levels")
+                    : `${t("লেভেল", "Level")} ${lv}`}
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-[11px] text-zinc-400 dark:text-zinc-500 mt-2">
+            {levels.length === 0 || levels.includes("Random")
+              ? t(
+                  "সব লেভেল অন্তর্ভুক্ত — প্রতিটি লেভেল থেকে প্রশ্ন আসবে",
+                  "All levels included — questions drawn across all bands"
+                )
+              : t(
+                  `${levels.length}টি লেভেল নির্বাচিত`,
+                  `${levels.length} level${levels.length > 1 ? "s" : ""} selected`
+                )}
+          </p>
+        </div>
+
+        {/* Number of Questions Card */}
+        <div className={cn(CARD, "p-4 sm:p-5")}>
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 mb-2.5">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+              <ListOrdered className="h-3.5 w-3.5" />
+            </div>
+            {t("প্রশ্নের সংখ্যা", "Number of Questions")}
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            {QUANTITY_OPTIONS.map((q) => (
+              <button
+                key={q}
+                onClick={() => {
+                  onQuantityChange(q);
+                  onUseAllChange(false);
+                }}
+                className={cn(
+                  "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer tabular-nums",
+                  !useAllQuestions && quantity === q ? activeStyle : idleStyle
+                )}
+              >
+                {q}
+              </button>
+            ))}
+            <button
+              onClick={() => onUseAllChange(true)}
+              className={cn(
+                "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer",
+                useAllQuestions ? activeStyle : idleStyle
+              )}
+            >
+              {t(`সব (${countLabel})`, `All (${countLabel})`)}
+            </button>
+            <input
+              type="number"
+              min={1}
+              max={maxCount ?? undefined}
+              placeholder={t("কাস্টম", "Custom")}
+              value={quantity}
+              onChange={(e) => {
+                const val = parseInt(e.target.value);
+                if (!isNaN(val) && val > 0) {
+                  onQuantityChange(val);
+                  onUseAllChange(false);
+                }
+              }}
+              className="w-20 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            />
+          </div>
+        </div>
+
+        {/* Time per Question Card */}
+        <div className={cn(CARD, "p-4 sm:p-5")}>
+          <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 mb-2.5">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <Gauge className="h-3.5 w-3.5" />
+            </div>
+            {t("প্রতি প্রশ্নে সময়", "Time per Question")}
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            {TIME_OPTIONS.map((tVal) => (
+              <button
+                key={tVal}
+                onClick={() => {
+                  onTimeChange(tVal);
+                  onNoTimeLimitChange(false);
+                }}
+                className={cn(
+                  "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer tabular-nums",
+                  !noTimeLimit && timePerQuestion === tVal
+                    ? activeStyle
+                    : idleStyle
+                )}
+              >
+                {tVal}s
+              </button>
+            ))}
+            <button
+              onClick={() => onNoTimeLimitChange(true)}
+              className={cn(
+                "px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer",
+                noTimeLimit ? activeStyle : idleStyle
+              )}
+            >
+              {t("সময়সীমা নেই", "No limit")}
+            </button>
+            <input
+              type="number"
+              min={1}
+              placeholder={t("কাস্টম", "Custom")}
+              value={timePerQuestion}
+              onChange={(e) => {
+                const val = parseInt(e.target.value);
+                if (!isNaN(val) && val > 0) {
+                  onTimeChange(val);
+                  onNoTimeLimitChange(false);
+                }
+              }}
+              className="w-20 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            />
+          </div>
+        </div>
+
+        {/* Start Button */}
+        <div className="pt-1">
+          <Button
+            onClick={onStart}
+            disabled={starting || countLoading}
+            className="w-full h-11 text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-700 active:bg-sky-700 text-white shadow-md shadow-sky-500/20 cursor-pointer"
+          >
+            {starting
+              ? t("তৈরি হচ্ছে…", "Preparing…")
+              : t("কুইজ শুরু করুন", "Start Quiz")}
+          </Button>
+          <p className="text-center text-[11px] text-zinc-400 dark:text-zinc-500 mt-2">
+            {useAllQuestions
+              ? t(
+                  `${countLabel}টি প্রশ্ন · সব লেভেল`,
+                  `${countLabel} question${maxCount !== 1 ? "s" : ""} · all levels`
+                )
+              : t(
+                  `${quantity}টি প্রশ্ন · ${
+                    levels.length === 0 || levels.includes("Random")
+                      ? "সব লেভেল"
+                      : levels.join(", ")
+                  }`,
+                  `${quantity} question${quantity !== 1 ? "s" : ""} · ${
+                    levels.length === 0 || levels.includes("Random")
+                      ? "all levels"
+                      : levels.join(", ")
+                  }`
+                )}
+          </p>
         </div>
       </div>
     </div>
@@ -916,121 +954,139 @@ function QuizView({
   const speak = useSpeak();
   const t = useT();
   const progress = ((currentIndex + 1) / totalQuestions) * 100;
-  const prompt = quizType === "bangla_to_english" ? firstMeaning(question.word.meaningBn) : question.word.word;
+  const prompt =
+    quizType === "bangla_to_english"
+      ? firstMeaning(question.word.meaningBn)
+      : question.word.word;
   const qt = QUIZ_TYPE_CONFIG[quizType];
-  const lc = LEVEL_CONFIG[question.word.level];
+  const lc = LEVEL_CONFIG[question.word.level as QuizLevel];
   const letters = ["A", "B", "C", "D"];
   const [exitOpen, setExitOpen] = useState(false);
   const { toggleBookmark, isBookmarked } = useBookmarkedWords();
   const bookmarked = isBookmarked(question.word.id);
 
   return (
-    <div className="relative min-h-dvh overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-
-      <div className="max-w-xl mx-auto">
-        {/* Top bar */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            <span className="font-semibold text-zinc-700 dark:text-zinc-300">{currentIndex + 1}</span>
-            <span className="mx-1 text-zinc-300 dark:text-zinc-600">/</span>
-            {totalQuestions}
+    <div className="px-4 py-6 sm:px-6 max-w-2xl mx-auto">
+      <div className={cn(CARD, "p-5 sm:p-7 relative overflow-hidden")}>
+        {/* Top bar HUD */}
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.06] px-3 py-1 text-xs font-semibold tabular-nums text-zinc-700 dark:text-zinc-300">
+              {currentIndex + 1} / {totalQuestions}
+            </span>
+            <span className="text-xs font-medium text-zinc-400 dark:text-zinc-500 hidden sm:inline">
+              {t(qt.labelBn, qt.label)}
+            </span>
           </div>
 
-          <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-3">
             {!noTimeLimit && (
               <span
                 className={cn(
-                  "font-mono font-semibold",
+                  "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold tabular-nums",
                   timeLeft <= 5
-                    ? "text-red-500"
+                    ? "bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300 animate-pulse"
                     : timeLeft <= 10
-                    ? "text-amber-500"
-                    : "text-zinc-500 dark:text-zinc-400"
+                      ? "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"
+                      : "bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-300"
                 )}
               >
+                <Gauge className="h-3 w-3" />
                 {timeLeft}s
               </span>
             )}
-            <span className="text-zinc-500 dark:text-zinc-400">
-              {t("স্কোর", "Score")}{" "}
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400">{score}</span>
+            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
+              {t("স্কোর:", "Score:")} {score}
             </span>
             <button
               onClick={() => setExitOpen(true)}
-              className="p-2 -m-2 rounded-xl text-zinc-400 hover:text-red-500 active:text-red-500 transition-colors hover:bg-zinc-100 active:bg-zinc-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-800 cursor-pointer"
+              className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-500 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
               title={t("কুইজ থেকে বেরিয়ে যান", "Exit quiz")}
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
           </div>
         </div>
 
-        {/* Progress bar */}
-        <div className="h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full mb-10 overflow-hidden">
+        {/* Progress track */}
+        <div className="h-1.5 w-full bg-black/[0.04] dark:bg-white/[0.06] rounded-full mb-6 overflow-hidden">
           <div
-            className={cn("h-full rounded-full transition-all duration-500 ease-out bg-gradient-to-r", qt.gradient)}
+            className={cn(
+              "h-full rounded-full transition-all duration-300 ease-out bg-gradient-to-r",
+              qt.gradient
+            )}
             style={{ width: `${progress}%` }}
           />
         </div>
 
-        {/* Word */}
-        <div className="animate-fade-up text-center">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-xs text-zinc-400 dark:text-zinc-500">{question.word.wordType.join(", ")}</span>
+        {/* Word prompt header */}
+        <div className="text-center mb-6">
+          <div className="flex items-center justify-center gap-2 mb-1.5">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              {question.word.wordType.join(", ")}
+            </span>
             <span className="text-xs text-zinc-300 dark:text-zinc-600">·</span>
-            <span className={cn("text-xs font-semibold", lc.text)}>{question.word.level}</span>
+            <span className={cn("text-[11px] font-bold", lc.text)}>
+              {question.word.level}
+            </span>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight inline-flex items-center gap-3 justify-center mb-8">
-            {prompt}
+          <div className="flex items-center justify-center gap-2.5">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+              {prompt}
+            </h2>
             {quizType !== "bangla_to_english" && (
               <button
                 onClick={() => speak(question.word.word)}
-                className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300 transition-colors hover:bg-zinc-100 active:bg-zinc-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-800 cursor-pointer"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
                 title={t("উচ্চারণ শুনুন", "Listen to pronunciation")}
               >
-                <Volume2 className="h-6 w-6 sm:h-7 sm:w-7" />
+                <Volume2 className="h-4.5 w-4.5" />
               </button>
             )}
             <button
               onClick={() => toggleBookmark(question.word.id)}
               className={cn(
-                "p-2 rounded-xl transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 cursor-pointer",
+                "p-1.5 rounded-lg transition-colors cursor-pointer",
                 bookmarked
-                  ? "text-amber-500 hover:text-amber-600 active:text-amber-600"
-                  : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300"
+                  ? "text-amber-500 hover:text-amber-600"
+                  : "text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-black/[0.04] dark:hover:bg-white/[0.06]"
               )}
-              title={bookmarked ? t("বুকমার্ক সরান", "Remove bookmark") : t("বুকমার্ক করুন", "Bookmark")}
+              title={
+                bookmarked
+                  ? t("বুকমার্ক সরান", "Remove bookmark")
+                  : t("বুকমার্ক করুন", "Bookmark")
+              }
             >
               {bookmarked ? (
-                <BookmarkCheck className="h-6 w-6 sm:h-7 sm:w-7" />
+                <BookmarkCheck className="h-4.5 w-4.5" />
               ) : (
-                <Bookmark className="h-6 w-6 sm:h-7 sm:w-7" />
+                <Bookmark className="h-4.5 w-4.5" />
               )}
             </button>
-          </h2>
+          </div>
         </div>
 
         {/* Options */}
         <div className="space-y-2.5">
           {question.options.map((option, i) => {
             const isCorrectOption = option.correct;
-            const isWrongPick = isAnswered && option.text === selectedAnswer && !isCorrectOption;
+            const isWrongPick =
+              isAnswered && option.text === selectedAnswer && !isCorrectOption;
 
             let optionStyle =
-              "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:bg-zinc-50 dark:active:bg-zinc-900/60";
+              "border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.04] dark:hover:bg-white/[0.08]";
 
             if (isAnswered) {
               if (isCorrectOption) {
                 optionStyle =
-                  "border-emerald-400 dark:border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 ring-2 ring-emerald-400/30";
+                  "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 ring-1 ring-emerald-500";
               } else if (isWrongPick) {
                 optionStyle =
-                  "border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-950/40 ring-2 ring-red-400/30";
+                  "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-200 ring-1 ring-rose-500";
               } else {
                 optionStyle =
-                  "border-zinc-200 dark:border-zinc-700 bg-white/40 dark:bg-zinc-950/30 opacity-50";
+                  "border-black/[0.04] dark:border-white/[0.04] opacity-40";
               }
             }
 
@@ -1039,18 +1095,21 @@ function QuizView({
                 key={i}
                 onClick={() => onOptionClick(option)}
                 disabled={isAnswered}
-                className={`w-full flex items-center gap-3 text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer disabled:cursor-default ${optionStyle}`}
+                className={cn(
+                  "w-full flex items-center gap-3 text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer disabled:cursor-default",
+                  optionStyle
+                )}
               >
                 <span
                   className={cn(
-                    "flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold",
+                    "flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold",
                     isAnswered
                       ? isCorrectOption
                         ? "bg-emerald-500 text-white"
                         : isWrongPick
-                        ? "bg-red-500 text-white"
-                        : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"
-                      : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"
+                          ? "bg-rose-500 text-white"
+                          : "bg-black/[0.04] dark:bg-white/[0.06] text-zinc-400"
+                      : "bg-black/[0.05] dark:bg-white/[0.08] text-zinc-600 dark:text-zinc-300"
                   )}
                 >
                   {isAnswered && (isCorrectOption || isWrongPick) ? (
@@ -1060,20 +1119,10 @@ function QuizView({
                       <X className="h-3.5 w-3.5" />
                     )
                   ) : (
-                    letters[i] ?? ""
+                    (letters[i] ?? "")
                   )}
                 </span>
-
-                <span
-                  className={cn(
-                    "flex-1 text-sm sm:text-base leading-relaxed",
-                    isCorrectOption && isAnswered
-                      ? "text-emerald-800 dark:text-emerald-200 font-medium"
-                      : isWrongPick
-                      ? "text-red-800 dark:text-red-200 font-medium"
-                      : "text-zinc-700 dark:text-zinc-300"
-                  )}
-                >
+                <span className="flex-1 text-sm sm:text-base font-medium leading-relaxed">
                   {option.text}
                 </span>
               </button>
@@ -1083,26 +1132,35 @@ function QuizView({
 
         {/* Next button */}
         {isAnswered && (
-          <div className="mt-7 flex justify-center animate-fade-up">
-            <Button onClick={onNext} size="lg" className="px-10">
-              {currentIndex >= totalQuestions - 1 ? t("ফলাফল দেখুন", "See Results") : t("পরের প্রশ্ন", "Next Question")}
+          <div className="mt-6 flex justify-end">
+            <Button
+              onClick={onNext}
+              size="lg"
+              className="px-8 bg-sky-600 hover:bg-sky-700 text-white shadow-md shadow-sky-500/20 cursor-pointer"
+            >
+              {currentIndex >= totalQuestions - 1
+                ? t("ফলাফল দেখুন", "See Results")
+                : t("পরের প্রশ্ন", "Next Question")}
             </Button>
           </div>
         )}
-      </div>
 
-      <ConfirmDialog
-        open={exitOpen}
-        onOpenChange={setExitOpen}
-        variant="warning"
-        title={t("কুইজটি ছেড়ে যাবেন?", "Exit the quiz?")}
-        description={t("আপনার অগ্রগতি সংরক্ষিত হবে না। আপনি কি নিশ্চিতভাবে প্রস্থান করতে চান?", "Your progress won't be saved. Are you sure you want to exit?")}
-        confirmText={t("প্রস্থান করুন", "Exit")}
-        cancelText={t("চালিয়ে যান", "Keep going")}
-        onConfirm={() => {
-          resetQuizState();
-        }}
-      />
+        <ConfirmDialog
+          open={exitOpen}
+          onOpenChange={setExitOpen}
+          variant="warning"
+          title={t("কুইজটি ছেড়ে যাবেন?", "Exit the quiz?")}
+          description={t(
+            "আপনার অগ্রগতি সংরক্ষিত হবে না। আপনি কি নিশ্চিতভাবে প্রস্থান করতে চান?",
+            "Your progress won't be saved. Are you sure you want to exit?"
+          )}
+          confirmText={t("প্রস্থান করুন", "Exit")}
+          cancelText={t("চালিয়ে যান", "Keep going")}
+          onConfirm={() => {
+            resetQuizState();
+          }}
+        />
+      </div>
     </div>
   );
 }
@@ -1208,84 +1266,84 @@ function ResultsView({
   let resultLabel: string;
   if (percentage >= 90) {
     resultColor = "text-emerald-500";
-    resultLabel = t("চমৎকার!", "Excellent!");
+    resultLabel = t("চমৎকার ফলাফল!", "Excellent Mastery!");
   } else if (percentage >= 70) {
     resultColor = "text-sky-500";
-    resultLabel = t("দারুণ হয়েছে!", "Great Job!");
+    resultLabel = t("দারুণ অগ্রগতি!", "Great Progress!");
   } else if (percentage >= 50) {
     resultColor = "text-amber-500";
     resultLabel = t("ভালো চেষ্টা!", "Good Effort!");
   } else {
     resultColor = "text-rose-500";
-    resultLabel = t("অনুশীলন চালিয়ে যান!", "Keep Practicing!");
+    resultLabel = t("আরও অনুশীলন প্রয়োজন!", "Keep Practicing!");
   }
 
   return (
-    <div className="relative min-h-dvh overflow-hidden px-6 py-16">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
-
-      <div className="max-w-2xl mx-auto">
-        <div className="animate-fade-up text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-2 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-            {t("কুইজ শেষ!", "Quiz Complete!")}
-          </h1>
-          <p className={`text-2xl font-bold mt-2 ${resultColor}`}>
+    <div className="px-4 py-6 sm:px-6 max-w-xl mx-auto">
+      <div className={cn(CARD, "p-5 sm:p-7 space-y-5")}>
+        <div className="text-center">
+          <h3 className="text-lg sm:text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+            {t("কুইজ সমাপ্ত!", "Quiz Completed!")}
+          </h3>
+          <p className={cn("text-sm sm:text-base font-bold mt-1", resultColor)}>
             {resultLabel}
           </p>
         </div>
 
-        <div className="animate-fade-up-1 mb-10">
-          <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-8 text-center">
-            <div className="text-6xl sm:text-7xl font-black bg-gradient-to-br from-zinc-700 to-zinc-400 dark:from-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent mb-2">
-              {percentage}%
-            </div>
-            <p className="text-lg text-zinc-500 dark:text-zinc-400">
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                {score}
-              </span>{" "}
-              {t("টির মধ্যে সঠিক", "correct out of")}{" "}
-              <span className="font-semibold text-zinc-700 dark:text-zinc-300">
-                {total}
-              </span>{" "}
-              {t("প্রশ্ন", "questions")}
-            </p>
+        {/* Score Hero */}
+        <div className="rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-5 text-center">
+          <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 tabular-nums">
+            {percentage}%
           </div>
+          <p className="mt-1.5 text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400">
+            <span className="font-bold text-emerald-600 dark:text-emerald-400">
+              {score}
+            </span>{" "}
+            {t("টির মধ্যে সঠিক", "correct out of")}{" "}
+            <span className="font-bold text-zinc-700 dark:text-zinc-300">
+              {total}
+            </span>{" "}
+            {t("টি প্রশ্ন", "questions")}
+          </p>
         </div>
 
+        {/* Incorrect Words Deck */}
         {incorrectAnswers.length > 0 && (
-          <div className="animate-fade-up-2 mb-10">
-            <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4 flex items-center gap-2">
-              <span>{t(`পুনরায় দেখার শব্দ (${incorrectAnswers.length})`, `Words to Review (${incorrectAnswers.length})`)}</span>
-            </h3>
-            <div className="space-y-3">
+          <div className="space-y-2.5">
+            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              {t(
+                `পুনরায় দেখার শব্দ (${incorrectAnswers.length})`,
+                `Words to Review (${incorrectAnswers.length})`
+              )}
+            </h4>
+            <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
               {incorrectAnswers.map((item, i) => (
                 <div
                   key={i}
-                  className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-4 sm:p-5"
+                  className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/50 dark:bg-zinc-950/40 p-3 text-xs space-y-1"
                 >
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm">
                       {item.word.word}
                     </span>
-                    <span className="text-xs text-zinc-400 dark:text-zinc-500 bg-zinc-100 dark:bg-zinc-800 rounded-md px-2 py-0.5">
+                    <span className="rounded-md bg-black/[0.04] dark:bg-white/[0.06] px-1.5 py-0.5 text-[10px] font-semibold text-zinc-500 dark:text-zinc-400">
                       {item.word.wordType.join(", ")}
                     </span>
                   </div>
-                  <div className="mt-2 text-sm space-y-1">
-                    <p className="text-emerald-600 dark:text-emerald-400">
-                      {t("সঠিক:", "Correct:")} {item.correctMeaning}
-                    </p>
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
                     {item.userAnswer !== "Time's up!" && (
-                      <p className="text-red-500 dark:text-red-400">
+                      <span className="rounded-md bg-rose-500/10 text-rose-700 dark:text-rose-300 px-2 py-0.5 font-medium">
                         {t("আপনার উত্তর:", "Your answer:")} {item.userAnswer}
-                      </p>
+                      </span>
                     )}
                     {item.userAnswer === "Time's up!" && (
-                      <p className="text-amber-500 dark:text-amber-400">
-                        {t("সময় শেষ হয়ে গেছে", "Time ran out")}
-                      </p>
+                      <span className="rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 px-2 py-0.5 font-medium">
+                        {t("সময় শেষ", "Time expired")}
+                      </span>
                     )}
+                    <span className="rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 font-medium">
+                      {t("সঠিক অর্থ:", "Correct:")} {item.correctMeaning}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -1293,15 +1351,35 @@ function ResultsView({
           </div>
         )}
 
-        <div className="animate-fade-up-3 flex flex-col sm:flex-row gap-3 justify-center">
-          <Button onClick={onRestart} size="lg" className="px-8">
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-1">
+          <Button
+            onClick={onRestart}
+            size="lg"
+            className="w-full sm:w-auto px-6 h-10 text-xs sm:text-sm bg-sky-600 hover:bg-sky-700 text-white shadow-md shadow-sky-500/20 cursor-pointer"
+          >
             {t("আবার চেষ্টা করুন", "Try Again")}
           </Button>
-          <Link href="/">
-            <Button variant="outline" size="lg" className="w-full sm:w-auto px-8">
-              {t("হোমে ফিরে যান", "Back to Home")}
-            </Button>
-          </Link>
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full sm:w-auto px-6 h-10 text-xs sm:text-sm border-black/[0.08] dark:border-white/[0.1] cursor-pointer"
+          >
+            <Link href="/quiz">
+              {t("সব কুইজ", "All Quizzes")}
+            </Link>
+          </Button>
+          <Button
+            asChild
+            variant="ghost"
+            size="lg"
+            className="w-full sm:w-auto px-6 h-10 text-xs sm:text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
+          >
+            <Link href="/">
+              {t("হোম", "Home")}
+            </Link>
+          </Button>
         </div>
       </div>
     </div>
