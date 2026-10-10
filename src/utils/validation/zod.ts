@@ -513,3 +513,50 @@ export const popupUpdateSchema = popupBaseSchema
 
 export type PopupInput = z.infer<typeof popupSchema>;
 export type PopupUpdateInput = z.infer<typeof popupUpdateSchema>;
+
+export const grammarRuleStatusEnumSchema = z.enum(["PENDING", "APPROVED", "REJECTED"]);
+
+export const grammarRuleSchema = z
+  .object({
+    title: z.string().trim().min(1, "Title is required").max(300, "Title must be 300 characters or fewer"),
+    description: z
+      .string()
+      .trim()
+      .min(1, "Description is required")
+      .max(10000, "Description must be 10000 characters or fewer"),
+    grammarCategoryId: z.number().int().positive("grammarCategoryId must be positive"),
+    level: levelEnumSchema,
+    examples: z
+      .array(z.string().trim().min(1).max(1000))
+      .max(100, "Too many examples (max 100)")
+      .default([]),
+    commonMistakes: z
+      .array(z.string().trim().min(1).max(1000))
+      .max(100, "Too many common mistakes (max 100)")
+      .default([]),
+    prerequisites: z
+      .array(z.number().int().positive("prerequisite id must be positive"))
+      .max(100, "Too many prerequisites (max 100)")
+      .default([]),
+    status: grammarRuleStatusEnumSchema.optional(),
+  })
+  .strict();
+
+export const grammarRuleUpdateSchema = grammarRuleSchema.partial();
+
+export const grammarRulesArraySchema = z
+  .array(grammarRuleSchema)
+  .min(1, "At least one grammar rule is required")
+  .max(10_000, "Too many grammar rules in one file (max 10000)");
+
+export const grammarRuleStatusUpdateSchema = z.object({
+  ids: z
+    .array(z.number().int().positive("id must be positive"))
+    .min(1, "At least one id is required")
+    .max(1000, "Too many ids (max 1000)"),
+  status: grammarRuleStatusEnumSchema,
+});
+
+export type GrammarRuleInput = z.infer<typeof grammarRuleSchema>;
+export type GrammarRuleUpdateInput = z.infer<typeof grammarRuleUpdateSchema>;
+export type GrammarRuleStatusUpdateInput = z.infer<typeof grammarRuleStatusUpdateSchema>;
