@@ -543,6 +543,9 @@ export const grammarRuleSchema = z
   .strict();
 
 export const grammarRuleUpdateSchema = grammarRuleSchema.partial();
+export const grammarRuleContributorUpdateSchema = grammarRuleSchema
+  .omit({ status: true })
+  .strict();
 
 export const grammarRulesArraySchema = z
   .array(grammarRuleSchema)
@@ -559,4 +562,7 @@ export const grammarRuleStatusUpdateSchema = z.object({
 
 export type GrammarRuleInput = z.infer<typeof grammarRuleSchema>;
 export type GrammarRuleUpdateInput = z.infer<typeof grammarRuleUpdateSchema>;
+export type GrammarRuleContributorUpdateInput = z.infer<
+  typeof grammarRuleContributorUpdateSchema
+>;
 export type GrammarRuleStatusUpdateInput = z.infer<typeof grammarRuleStatusUpdateSchema>;

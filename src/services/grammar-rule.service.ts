@@ -1,7 +1,11 @@
 ﻿import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 import type { Prisma } from "@/generated/prisma/client";
-import type { GrammarRuleInput, GrammarRuleUpdateInput } from "@/utils/validation/zod";
+import type {
+    GrammarRuleContributorUpdateInput,
+    GrammarRuleInput,
+    GrammarRuleUpdateInput,
+} from "@/utils/validation/zod";
 
 const grammarRuleAdminInclude = {
     grammarCategory: {
@@ -391,6 +395,117 @@ export const updateGrammarRuleById = async (
         };
     } catch (error) {
         logger.error(`Failed to update grammar rule: ${error}`);
+        return {
+            data: null,
+            message: "Failed to update grammar rule",
+            success: false,
+        };
+    }
+};
+
+export const updatePendingGrammarRuleByContributor = async (
+    id: number,
+    createdByUserId: number,
+    data: GrammarRuleContributorUpdateInput,
+) => {
+    try {
+        const existing = await prisma.grammarRules.findUnique({
+            where: { id },
+            select: { id: true, createdByUserId: true, status: true },
+        });
+        if (!existing) return notFound();
+        if (existing.createdByUserId !== createdByUserId) {
+            return {
+                data: null,
+                message: "You can only edit your own grammar rules",
+                success: false,
+            };
+        }
+        if (existing.status !== "PENDING") {
+            return {
+                data: null,
+                message: "Grammar rule is no longer pending",
+                success: false,
+            };
+        }
+
+        const categoryExists = await prisma.quizType.findUnique({
+            where: { id: data.grammarCategoryId },
+            select: { id: true },
+        });
+        if (!categoryExists) {
+            return {
+                data: null,
+                message: "Grammar category (QuizType) not found",
+                success: false,
+            };
+        }
+
+        const prereqError = await validatePrerequisites(data.prerequisites, id);
+        if (prereqError) {
+            return {
+                data: null,
+                message: prereqError,
+                success: false,
+            };
+        }
+
+        const uniquePrereqs = [...new Set(data.prerequisites)];
+        const updated = await prisma.$transaction(async (tx) => {
+            const claimed = await tx.grammarRules.updateMany({
+                where: { id, createdByUserId, status: "PENDING" },
+                data: {
+                    title: data.title,
+                    description: data.description,
+                    grammarCategoryId: data.grammarCategoryId,
+                    level: data.level,
+                    examples: data.examples,
+                    commonMistakes: data.commonMistakes,
+                    status: "PENDING",
+                },
+            });
+            if (claimed.count === 0) return null;
+
+            return tx.grammarRules.update({
+                where: { id },
+                data: {
+                    prerequisites: {
+                        set: uniquePrereqs.map((prerequisiteId) => ({
+                            id: prerequisiteId,
+                        })),
+                    },
+                },
+                include: grammarRuleAdminInclude,
+            });
+        });
+
+        if (!updated) {
+            const current = await prisma.grammarRules.findUnique({
+                where: { id },
+                select: { createdByUserId: true, status: true },
+            });
+            if (!current) return notFound();
+            if (current.createdByUserId !== createdByUserId) {
+                return {
+                    data: null,
+                    message: "You can only edit your own grammar rules",
+                    success: false,
+                };
+            }
+            return {
+                data: null,
+                message: "Grammar rule is no longer pending",
+                success: false,
+            };
+        }
+
+        return {
+            data: toApiGrammarRule(updated),
+            message: "Grammar rule updated successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to update contributor grammar rule: ${error}`);
         return {
             data: null,
             message: "Failed to update grammar rule",

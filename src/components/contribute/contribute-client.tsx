@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Brain,
   BookOpen,
+  BookOpenCheck,
   FileJson,
   Upload,
   ListChecks,
@@ -41,6 +42,10 @@ import {
 } from "./types";
 import { MySubmissions } from "./my-submissions";
 import { VocabularyContributeFlow } from "./vocabulary-contribute-flow";
+import {
+  GrammarRuleContributeFlow,
+  MyGrammarRuleSubmissions,
+} from "./grammar-rule-contribute";
 import { ReviewPanelCard, MobileQueueBar } from "./review-panel";
 import { ModeSwitch, SubmitButton, type ManualMode } from "./shared";
 
@@ -78,7 +83,12 @@ function questionKey(text: string): string {
 }
 
 export function ContributeClient() {
-  const [activeType, setActiveType] = useState<"quiz" | "vocabulary">("quiz");
+  const [activeType, setActiveType] = useState<
+    "quiz" | "vocabulary" | "grammar"
+  >("quiz");
+  const [submissionType, setSubmissionType] = useState<"content" | "grammar">(
+    "content",
+  );
   const t = useT();
 
   return (
@@ -114,13 +124,49 @@ export function ContributeClient() {
                   />
                   {activeType === "vocabulary" ? (
                     <VocabularyContributeFlow />
+                  ) : activeType === "grammar" ? (
+                    <GrammarRuleContributeFlow />
                   ) : (
                     <QuizContributeFlow />
                   )}
                 </div>
               </TabsContent>
               <TabsContent value="submissions">
-                <MySubmissions />
+                <div className="space-y-3">
+                  <div className="inline-flex gap-1 rounded-[10px] bg-black/[0.04] p-1 dark:bg-white/[0.06]">
+                    <button
+                      type="button"
+                      onClick={() => setSubmissionType("content")}
+                      aria-pressed={submissionType === "content"}
+                      className={cn(
+                        "rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+                        submissionType === "content"
+                          ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-white"
+                          : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200",
+                      )}
+                    >
+                      {t("প্রশ্ন ও শব্দ", "Questions & words")}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSubmissionType("grammar")}
+                      aria-pressed={submissionType === "grammar"}
+                      className={cn(
+                        "rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+                        submissionType === "grammar"
+                          ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-white"
+                          : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200",
+                      )}
+                    >
+                      {t("ব্যাকরণ নিয়ম", "Grammar rules")}
+                    </button>
+                  </div>
+                  {submissionType === "grammar" ? (
+                    <MyGrammarRuleSubmissions />
+                  ) : (
+                    <MySubmissions />
+                  )}
+                </div>
               </TabsContent>
             </Tabs>
           </StaggerItem>
@@ -222,8 +268,8 @@ function ContributionTypes({
   active,
   onChange,
 }: {
-  active: "quiz" | "vocabulary";
-  onChange: (next: "quiz" | "vocabulary") => void;
+  active: "quiz" | "vocabulary" | "grammar";
+  onChange: (next: "quiz" | "vocabulary" | "grammar") => void;
 }) {
   const t = useT();
   const options = [
@@ -255,11 +301,25 @@ function ContributionTypes({
       activeBg: "bg-violet-500/[0.04] dark:bg-violet-500/[0.08]",
       radioActive: "border-violet-500 bg-violet-500 text-white",
     },
+    {
+      key: "grammar" as const,
+      icon: BookOpenCheck,
+      title: t("ব্যাকরণ নিয়ম", "Grammar Rules"),
+      desc: t(
+        "উদাহরণ ও সাধারণ ভুলসহ ব্যাকরণের নিয়ম জমা দিন।",
+        "Submit grammar rules with examples and common mistakes."
+      ),
+      activeTile:
+        "bg-emerald-500 text-white shadow-[0_1px_2px_rgba(16,185,129,0.3),0_4px_12px_-4px_rgba(16,185,129,0.35)]",
+      inactiveTile: "text-emerald-600 bg-emerald-500/10",
+      activeBg: "bg-emerald-500/[0.04] dark:bg-emerald-500/[0.08]",
+      radioActive: "border-emerald-500 bg-emerald-500 text-white",
+    },
   ];
 
   return (
     <div className={cn(CARD, "p-2.5 sm:p-3")}>
-      <div className="grid gap-2.5 sm:grid-cols-2">
+      <div className="grid gap-2.5 sm:grid-cols-3">
         {options.map(
           ({
             key,
