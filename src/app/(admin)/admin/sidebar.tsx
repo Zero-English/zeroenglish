@@ -21,6 +21,7 @@ import {
   ChevronDown,
   Megaphone,
   LayoutTemplate,
+  BookType,
   Sun,
   Moon,
   Laptop,
@@ -52,6 +53,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/vocabulary", label: "Vocabulary", icon: BookOpen },
+  { href: "/admin/grammar", label: "Grammar", icon: BookType },
   { href: "/admin/templates", label: "Templates", icon: LayoutTemplate },
   { href: "/admin/media", label: "Media", icon: ImageIcon },
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
