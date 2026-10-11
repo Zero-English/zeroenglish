@@ -28,21 +28,21 @@ import { ReviewPanelCard, MobileQueueBar } from "./review-panel";
 import { ModeSwitch, SubmitButton, type ManualMode } from "./shared";
 
 const CARD =
-  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
+  "rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md shadow-xs";
 
 const ICON_CHIP =
-  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-black/[0.04] dark:bg-white/[0.06] ring-1 ring-inset ring-black/[0.05] dark:ring-white/[0.08]";
+  "flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground";
 
 const TILE_ICON =
-  "flex h-12 w-12 items-center justify-center rounded-[14px] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_2px_8px_-2px_rgba(16,24,40,0.15)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_-2px_rgba(0,0,0,0.5)]";
+  "flex size-11 items-center justify-center rounded-xl bg-muted text-muted-foreground";
 
 const BTN_VIOLET =
-  "shrink-0 gap-2 rounded-xl bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white px-5 h-10 text-sm font-medium shadow-[0_1px_2px_rgba(139,92,246,0.3),0_4px_12px_-4px_rgba(139,92,246,0.35)] transition-colors";
+  "shrink-0 gap-2 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground px-5 h-10 text-sm font-semibold shadow-xs transition-colors";
 
 const CHIP_PENDING =
-  "rounded-full bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300";
+  "rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20";
 
-const DIVIDER = "border-b border-black/[0.06] dark:border-white/[0.08]";
+const DIVIDER = "border-b border-border/60";
 
 function wordKey(word: string): string {
   return word.trim().toLowerCase();
