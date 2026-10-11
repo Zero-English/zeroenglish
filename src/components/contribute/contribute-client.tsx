@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Brain,
   BookOpen,
+  BookOpenCheck,
   FileJson,
   Upload,
   ListChecks,
@@ -44,6 +45,10 @@ import {
 } from "./types";
 import { MySubmissions } from "./my-submissions";
 import { VocabularyContributeFlow } from "./vocabulary-contribute-flow";
+import {
+  GrammarRuleContributeFlow,
+  MyGrammarRuleSubmissions,
+} from "./grammar-rule-contribute";
 import { ReviewPanelCard, MobileQueueBar } from "./review-panel";
 import { ModeSwitch, SubmitButton, type ManualMode } from "./shared";
 
@@ -81,7 +86,12 @@ function questionKey(text: string): string {
 }
 
 export function ContributeClient() {
-  const [activeTab, setActiveTab] = useState<"quiz" | "vocabulary" | "submissions" | "guidelines">("quiz");
+  const [activeTab, setActiveTab] = useState<
+    "quiz" | "vocabulary" | "grammar" | "submissions" | "guidelines"
+  >("quiz");
+  const [submissionType, setSubmissionType] = useState<"content" | "grammar">(
+    "content"
+  );
   const [mobileView, setMobileView] = useState<"menu" | "detail">("menu");
   const { data: session } = useSession();
   const user = session?.user;
@@ -103,9 +113,16 @@ export function ContributeClient() {
       color: "text-violet-500 bg-violet-500/10",
     },
     {
+      id: "grammar" as const,
+      label: t("ব্যাকরণ নিয়ম", "Grammar Rules"),
+      desc: t("উদাহরণ ও সাধারণ ভুলসহ ব্যাকরণের নিয়ম জমা দিন", "Submit grammar rules with examples & common mistakes"),
+      icon: BookOpenCheck,
+      color: "text-emerald-500 bg-emerald-500/10",
+    },
+    {
       id: "submissions" as const,
       label: t("আমার সাবমিশন", "My Submissions"),
-      desc: t("জমা দেওয়া প্রশ্ন ও শব্দের স্ট্যাটাস এবং হিস্ট্রি", "Track approval status and edit drafts"),
+      desc: t("জমা দেওয়া প্রশ্ন, শব্দ ও ব্যাকরণের হিস্ট্রি", "Track approval status and edit drafts"),
       icon: ListChecks,
       color: "text-sky-500 bg-sky-500/10",
     },
@@ -114,7 +131,7 @@ export function ContributeClient() {
       label: t("গাইডলাইন ও ধাপ", "Guidelines & Workflow"),
       desc: t("উচ্চমানের কনটেন্ট তৈরি ও অনুমোদনের নিয়মাবলী", "Content standards and admin review process"),
       icon: ShieldCheck,
-      color: "text-emerald-500 bg-emerald-500/10",
+      color: "text-amber-500 bg-amber-500/10",
     },
   ];
 
@@ -393,7 +410,42 @@ export function ContributeClient() {
               {/* Tab Views */}
               {activeTab === "quiz" && <QuizContributeFlow />}
               {activeTab === "vocabulary" && <VocabularyContributeFlow />}
-              {activeTab === "submissions" && <MySubmissions />}
+              {activeTab === "grammar" && <GrammarRuleContributeFlow />}
+              {activeTab === "submissions" && (
+                <div className="space-y-4">
+                  <div className="inline-flex gap-1 rounded-xl bg-muted/80 p-1 border border-border/60">
+                    <button
+                      type="button"
+                      onClick={() => setSubmissionType("content")}
+                      className={cn(
+                        "rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer",
+                        submissionType === "content"
+                          ? "bg-background text-foreground shadow-2xs"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {t("প্রশ্ন ও শব্দ", "Questions & Words")}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSubmissionType("grammar")}
+                      className={cn(
+                        "rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer",
+                        submissionType === "grammar"
+                          ? "bg-background text-foreground shadow-2xs"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {t("ব্যাকরণ নিয়ম", "Grammar Rules")}
+                    </button>
+                  </div>
+                  {submissionType === "grammar" ? (
+                    <MyGrammarRuleSubmissions />
+                  ) : (
+                    <MySubmissions />
+                  )}
+                </div>
+              )}
               {activeTab === "guidelines" && <ContributorGuidelines />}
             </div>
           </div>
