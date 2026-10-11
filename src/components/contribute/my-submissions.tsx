@@ -29,10 +29,10 @@ import { Button } from "@/components/ui/button";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 
 const CARD =
-  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
+  "rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md shadow-xs";
 
 const ICON_CHIP =
-  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-black/[0.04] dark:bg-white/[0.06] ring-1 ring-inset ring-black/[0.05] dark:ring-white/[0.08]";
+  "flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground";
 
 const LEVEL_CONFIG: Record<string, { bg: string; text: string; border: string }> = {
   A1: { bg: "bg-emerald-50 dark:bg-emerald-950/40", text: "text-emerald-700 dark:text-emerald-300", border: "border-emerald-200 dark:border-emerald-800/60" },
@@ -264,12 +264,12 @@ export function MySubmissions() {
       {/* Main Submissions Deck */}
       <div className={cn(CARD, "overflow-hidden")}>
         {/* Navigation Switcher Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:px-6 sm:py-4 border-b border-black/[0.06] dark:border-white/[0.08] bg-black/[0.01] dark:bg-white/[0.02]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:px-6 sm:py-4 border-b border-border/60 bg-muted/30">
           <div className="flex items-center gap-2.5">
-            <span className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+            <span className="text-xs font-semibold text-foreground">
               {t("ধরন নির্বাচন করুন:", "Content Type:")}
             </span>
-            <div className="inline-flex rounded-xl bg-black/[0.04] p-1 dark:bg-white/[0.06] border border-black/[0.04] dark:border-white/[0.06]">
+            <div className="inline-flex rounded-xl bg-muted p-1 border border-border/60">
               {(
                 [
                   { key: "question", labelBn: "কুইজ প্রশ্ন", labelEn: "Questions", icon: FileQuestion },
@@ -294,8 +294,8 @@ export function MySubmissions() {
                     className={cn(
                       "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer",
                       isActive
-                        ? "bg-white text-zinc-900 shadow-xs dark:bg-zinc-800 dark:text-white"
-                        : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                        ? "bg-card text-foreground shadow-xs font-semibold"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
                     )}
                   >
                     <TabIcon className="size-3.5" />
@@ -306,7 +306,7 @@ export function MySubmissions() {
             </div>
           </div>
 
-          <div className="text-xs text-zinc-400 dark:text-zinc-500">
+          <div className="text-xs text-muted-foreground">
             {total > 0
               ? t(
                   `মোট ${total}টি ${type === "question" ? "প্রশ্ন" : "শব্দ"}`,
@@ -326,16 +326,16 @@ export function MySubmissions() {
             </div>
           ) : items.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-12 text-center">
-              <span className={cn(ICON_CHIP, "h-12 w-12 rounded-2xl text-zinc-400")}>
+              <span className={cn(ICON_CHIP, "size-12 rounded-2xl text-muted-foreground")}>
                 <ListChecks className="size-6" />
               </span>
               <div>
-                <h4 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                <h4 className="text-sm font-semibold text-foreground">
                   {type === "question"
                     ? t("কোনো প্রশ্ন পাওয়া যায়নি", "No questions submitted yet")
                     : t("কোনো শব্দ পাওয়া যায়নি", "No words submitted yet")}
                 </h4>
-                <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-1 max-w-sm">
+                <p className="text-xs text-muted-foreground mt-1 max-w-sm">
                   {t(
                     "আপনি কন্ট্রিবিউটর হিসেবে নতুন প্রশ্ন বা শব্দ জমা দিলে এখানে তা পর্যালোচনা এবং সম্পাদনা করতে পারবেন।",
                     "When you submit new questions or words as a contributor, they will appear here for tracking and editing."
@@ -356,8 +356,8 @@ export function MySubmissions() {
                     <StaggerItem
                       key={item.id}
                       className={cn(
-                        "group relative overflow-hidden rounded-2xl border p-4 sm:p-5 transition-all duration-200 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_8px_24px_-12px_rgba(16,24,40,0.08)]",
-                        "bg-white/70 dark:bg-zinc-900/60 hover:border-black/[0.12] dark:hover:border-white/[0.15]"
+                        "group relative overflow-hidden rounded-2xl border border-border/80 p-4 sm:p-5 transition-all duration-200 backdrop-blur-md shadow-xs",
+                        "bg-card/80 hover:border-border hover:bg-card"
                       )}
                     >
                       {/* Left status accent border */}

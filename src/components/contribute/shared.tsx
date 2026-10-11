@@ -21,7 +21,7 @@ export function ModeSwitch({
     { key: "bulk", labelBn: "বাল্ক আপলোড", labelEn: "Bulk upload" },
   ];
   return (
-    <div className="grid grid-cols-2 gap-1 rounded-[10px] bg-black/[0.04] p-1 dark:bg-white/[0.06]">
+    <div className="grid grid-cols-2 gap-1 rounded-xl bg-muted p-1 border border-border/60">
       {tabs.map((tab) => {
         const active = mode === tab.key;
         return (
@@ -31,10 +31,10 @@ export function ModeSwitch({
             onClick={() => onChange(tab.key)}
             aria-pressed={active}
             className={cn(
-              "inline-flex items-center justify-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors",
+              "inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer",
               active
-                ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-white"
-                : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                ? "bg-card text-foreground shadow-xs font-semibold"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/70"
             )}
           >
             {tab.key === "bulk" ? (
@@ -73,8 +73,8 @@ export function SubmitButton({
     <div className={className}>
       <Button
         className={cn(
-          "w-full gap-2 rounded-xl bg-orange-500 px-5 text-sm font-medium text-white shadow-[0_1px_2px_rgba(234,88,12,0.3),0_4px_12px_-4px_rgba(234,88,12,0.35)] transition-colors hover:bg-orange-600 active:bg-orange-700",
-          "h-10"
+          "w-full gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-xs transition-colors hover:bg-primary/90",
+          "h-10 cursor-pointer"
         )}
         disabled={count === 0 || submitting}
         onClick={onClick}
@@ -91,7 +91,7 @@ export function SubmitButton({
               `Submit ${count} ${nounPluralEn} for review`
             )}
       </Button>
-      <p className="mt-2.5 text-center text-xs text-zinc-400">{note}</p>
+      <p className="mt-2 text-center text-xs text-muted-foreground">{note}</p>
     </div>
   );
 }
