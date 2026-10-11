@@ -5,7 +5,6 @@ import { ProfileGuard } from "@/components/profile-guard";
 import { ProfileAuthBanner } from "@/components/profile-auth-banner";
 import { ProfileHeader } from "@/components/profile-header";
 import { ProfileSyncTrigger } from "@/components/profile-sync-trigger";
-import { BackButton } from "@/components/back-button";
 
 export const metadata: Metadata = {
   title: "My Profile",
@@ -25,7 +24,7 @@ export default async function ProfilePage() {
       <div className="relative px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="max-w-6xl mx-auto w-full min-w-0">
           <ProfileSyncTrigger />
-          <ProfileHeader />
+          {/* <ProfileHeader /> */}
 
           <ProfileGuard>
             <ProfileAuthBanner />

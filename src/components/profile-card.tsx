@@ -234,8 +234,8 @@ export function ProfileBentoIdentity({
         )}
       </div>
 
-      <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between flex-wrap gap-2">
-        <SyncStatus />
+      <div className="hidden lg:block mt-4 pt-3 border-t border-border/60">
+        <SyncStatus className="mt-0 pt-0 border-t-0" />
       </div>
     </div>
   );
