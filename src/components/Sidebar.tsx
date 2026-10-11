@@ -124,7 +124,7 @@ export function Sidebar() {
             })}
           </nav>
 
-          {/* Logout Dock Item */}
+          {/* Logout Dock Item
           {isLoggedIn && (
             <>
               <Separator orientation="vertical" className="h-6 mx-1 bg-border/80" />
@@ -146,7 +146,7 @@ export function Sidebar() {
                 </span>
               </button>
             </>
-          )}
+          )} */}
         </div>
       </aside>
 

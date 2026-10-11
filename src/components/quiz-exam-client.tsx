@@ -313,10 +313,15 @@ function sortExams(exams: QuizExamPublicItem[]): QuizExamPublicItem[] {
     const bc = new Date(b.scheduledClosingTime ?? "").getTime();
     const aOpen = Number.isFinite(ao) && Number.isFinite(ac) && now >= ao && now < ac;
     const bOpen = Number.isFinite(bo) && Number.isFinite(bc) && now >= bo && now < bc;
-    if (aOpen !== bOpen) return aOpen ? -1 : 1;
-    return (aOpen ? ac : ao) - (bOpen ? bc : bo);
+    if (aOpen && !bOpen) return -1;
+    if (!aOpen && bOpen) return 1;
+    if (aOpen && bOpen) return ac - bc;
+    return ao - bo;
   });
 }
+
+const CARD =
+  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
 
 function ExamCardItem({
   exam,
@@ -344,23 +349,33 @@ function ExamCardItem({
   return (
     <div
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-3xl border-2 backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 active:scale-[1.02] active:-translate-y-1",
-        meta.border,
-        meta.bg
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60 transition-all duration-300 hover:scale-[1.015] hover:-translate-y-0.5"
       )}
-      style={{ animationDelay: `${index * 0.08}s` }}
+      style={{ animationDelay: `${index * 0.05}s` }}
     >
-      <div className="relative flex items-center justify-between p-6 pb-4">
-        <div className={cn("flex-shrink-0 h-14 w-14 rounded-2xl bg-gradient-to-br flex items-center justify-center shadow-lg shadow-black/10", meta.gradient)}>
-          <Icon className="h-7 w-7 text-white" />
+      <div
+        className={cn(
+          "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-[0.04] dark:group-hover:opacity-[0.08] transition-opacity duration-300",
+          meta.gradient
+        )}
+      />
+
+      <div className="relative flex items-center justify-between p-5 sm:p-6 pb-3">
+        <div
+          className={cn(
+            "flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-gradient-to-br text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_4px_12px_-2px_rgba(16,24,40,0.2)]",
+            meta.gradient
+          )}
+        >
+          <Icon className="h-6 w-6" />
         </div>
-        <div className="flex flex-col items-end gap-2">
+        <div className="flex flex-col items-end gap-1.5">
           <span
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold",
+              "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-semibold",
               isOpen
-                ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
-                : "bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
+                ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"
+                : "bg-sky-50 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300"
             )}
           >
             <span
@@ -369,59 +384,57 @@ function ExamCardItem({
                 isOpen ? "bg-emerald-500 animate-pulse" : "bg-sky-400"
               )}
             />
-            {isOpen ? t("খোলা আছে", "Open") : t("আসন্ন", "Upcoming")}
+            {isOpen ? t("খোলা আছে (Live)", "Live / Open") : t("আসন্ন (Upcoming)", "Upcoming")}
           </span>
-          <span className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold", meta.bg, meta.text)}>
+          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-400 dark:text-zinc-500 tabular-nums">
             <Timer className="h-3 w-3" />
-            {Math.floor(exam.timePerQuestion)}s / {t("প্রশ্ন", "question")}
+            {Math.floor(exam.timePerQuestion)}s / {t("প্রশ্ন", "q")}
           </span>
         </div>
       </div>
 
-      <div className="relative flex-1 px-6 pb-6">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+      <div className="relative flex flex-1 flex-col px-5 sm:px-6 pb-5">
+        <h3 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
           {exam.title}
         </h3>
-        <p className={cn("text-sm font-medium mt-1", meta.text)}>
+        <p className={cn("text-xs sm:text-sm font-medium mt-0.5", meta.text)}>
           {t(meta.labelBn, meta.label)}
         </p>
 
-        <div className="flex flex-wrap items-center gap-2 mt-4">
-          <span className="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
-            <ListChecks className="h-3 w-3" />
+        <div className="flex flex-wrap items-center gap-1.5 mt-3">
+          <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-black/[0.03] dark:bg-white/[0.05] text-zinc-600 dark:text-zinc-300">
+            <ListChecks className="h-3 w-3 text-orange-500" />
             {exam.questionCount} {t("প্রশ্ন", "questions")}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+          <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-black/[0.03] dark:bg-white/[0.05] text-zinc-600 dark:text-zinc-300">
             {exam.levels.join(", ")}
           </span>
         </div>
 
         <div
           className={cn(
-            "mt-4 rounded-2xl border px-3 py-2.5 flex items-center gap-2",
+            "mt-4 rounded-xl border px-3 py-2 flex items-center gap-2 text-xs",
             isOpen
-              ? "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900"
-              : "bg-sky-50 dark:bg-sky-950/30 border-sky-200 dark:border-sky-900"
+              ? "bg-amber-50/70 border-amber-200 dark:bg-amber-950/20 dark:border-amber-800"
+              : "bg-sky-50/70 border-sky-200 dark:bg-sky-950/20 dark:border-sky-800"
           )}
         >
           {isOpen ? (
-            <Hourglass className="h-4 w-4 text-amber-500" />
+            <Hourglass className="h-3.5 w-3.5 text-amber-500 shrink-0" />
           ) : (
-            <CalendarClock className="h-4 w-4 text-sky-500" />
+            <CalendarClock className="h-3.5 w-3.5 text-sky-500 shrink-0" />
           )}
           <span
             className={cn(
-              "text-xs font-semibold",
+              "font-semibold",
               isOpen ? "text-amber-700 dark:text-amber-300" : "text-sky-700 dark:text-sky-300"
             )}
           >
-            {isOpen
-              ? t("শেষ হতে বাকি:", "Closes in:")
-              : t("শুরু হতে বাকি:", "Opens in:")}
+            {isOpen ? t("শেষ হতে বাকি:", "Closes in:") : t("শুরু হতে বাকি:", "Opens in:")}
           </span>
           <span
             className={cn(
-              "ml-auto text-sm font-bold tabular-nums",
+              "ml-auto font-bold tabular-nums",
               isOpen ? "text-amber-800 dark:text-amber-200" : "text-sky-800 dark:text-sky-200"
             )}
           >
@@ -429,18 +442,23 @@ function ExamCardItem({
           </span>
         </div>
 
-        <div className="mt-5">
+        <div className="mt-4 pt-2">
           <Button
             onClick={() => void onStart(exam)}
             disabled={loading || !isOpen}
             size="lg"
-            className="w-full px-8"
+            className={cn(
+              "w-full h-11 text-sm font-semibold shadow-md transition-all cursor-pointer",
+              isOpen
+                ? "bg-orange-600 hover:bg-orange-700 text-white shadow-orange-500/20"
+                : "bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+            )}
           >
             {loading
               ? t("লোড হচ্ছে...", "Loading...")
               : isOpen
                 ? t("পরীক্ষা শুরু করুন", "Start Exam")
-                : t("নির্ধারিত", "Scheduled")}
+                : t("নির্ধারিত সময়ে শুরু হবে", "Scheduled")}
           </Button>
         </div>
       </div>
@@ -483,10 +501,6 @@ function ExamListView() {
     };
   }, []);
 
-  // Identity adoption after the OAuth round-trip (login or guest bind) is
-  // handled globally by SessionAdopter; the auth prompt below is only shown
-  // while the store is still "none"/"guest", so it disappears automatically
-  // once the identity reaches "google".
   const promptOpen =
     authPrompt !== null && (status === "none" || status === "guest");
 
@@ -587,130 +601,133 @@ function ExamListView() {
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center overflow-hidden px-6 py-8">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="absolute inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
-
-      <div className="w-full max-w-4xl">
-        <div className="animate-fade-up text-center mb-12">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-4">
-            <Sparkles className="h-3.5 w-3.5" />
-            {t("নির্ধারিত পরীক্ষা", "Scheduled Exams")}
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-3 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-            {t("কুইজ পরীক্ষা", "Quiz Exams")}
-          </h1>
-          <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-md mx-auto">
-            {t(
-              "খোলা ও আসন্ন পরীক্ষাগুলো দেখুন, শেষ হবার আগেই সেগুলো নিন।",
-              "See open and upcoming exams, and take them before they close."
+    <div className="relative min-h-dvh overflow-hidden">
+      <div className="relative px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div className="space-y-1">
+              <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                {t("কুইজ পরীক্ষা", "Quiz Exams")}
+              </h1>
+              <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
+                {t(
+                  "সাপ্তাহিক ও নির্ধারিত সময়সূচীর লাইভ পরীক্ষায় অংশ নিন এবং আপনার দক্ষতা যাচাই করুন।",
+                  "Join live scheduled tests, timed drills, and test your vocabulary mastery."
+                )}
+              </p>
+            </div>
+            {exams && exams.length > 0 && (
+              <span className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.06] px-3 py-1 text-xs font-semibold text-zinc-600 dark:text-zinc-300 tabular-nums">
+                <Sparkles className="h-3.5 w-3.5 text-orange-500" />
+                {t(`${exams.length}টি পরীক্ষা`, `${exams.length} exams`)}
+              </span>
             )}
-          </p>
+          </div>
+
+          {exams === null ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[0, 1].map((i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-zinc-200/60 dark:bg-zinc-800/40 animate-pulse h-56"
+                />
+              ))}
+            </div>
+          ) : exams.length === 0 ? (
+            <div className={cn(CARD, "p-8 sm:p-10 text-center")}>
+              <div className="inline-flex items-center justify-center h-13 w-13 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-4">
+                <Clock3 className="h-6 w-6 text-zinc-400" />
+              </div>
+              <h3 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 mb-1">
+                {t("বর্তমানে কোনো নির্ধারিত পরীক্ষা নেই", "No exams are scheduled right now")}
+              </h3>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
+                {t(
+                  "নির্ধারিত পরীক্ষা আসন্ন হলে সেগুলো এখানে কাউন্টডাউনসহ দেখা যাবে।",
+                  "Upcoming scheduled exams will appear here with a live countdown."
+                )}
+              </p>
+              <Link href="/quiz" className="inline-flex mt-6">
+                <Button variant="outline" className="border-black/[0.08] dark:border-white/[0.1] cursor-pointer">
+                  <ArrowLeft className="h-4 w-4 mr-1.5" />
+                  {t("কুইজে ফিরে যান", "Back to Quiz")}
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+              {(exams ?? []).map((exam, i) => (
+                <ExamCardItem
+                  key={exam.id}
+                  exam={exam}
+                  index={i}
+                  loading={loadingId === exam.id}
+                  onStart={(e) => void handleStart(e)}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        {exams === null ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[0, 1].map((i) => (
-              <div
-                key={i}
-                className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-950/40 animate-pulse h-56"
-              />
-            ))}
-          </div>
-        ) : exams.length === 0 ? (
-          <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-10 text-center animate-fade-up">
-            <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-4">
-              <Clock3 className="h-7 w-7 text-zinc-400" />
-            </div>
-            <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">
-              {t("বর্তমানে কোনো নির্ধারিত পরীক্ষা নেই", "No exams are scheduled right now")}
-            </h3>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
-              {t(
-                "নির্ধারিত পরীক্ষা আসন্ন হলে সেগুলো এখানে কাউন্টডাউনসহ দেখা যাবে।",
-                "Upcoming scheduled exams will appear here with a countdown."
-              )}
-            </p>
-            <Link href="/quiz" className="inline-flex mt-6">
-              <Button variant="outline">
-                <ArrowLeft className="h-4 w-4" />
-                {t("কুইজে ফিরে যান", "Back to Quiz")}
-              </Button>
-            </Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-            {(exams ?? []).map((exam, i) => (
-              <ExamCardItem
-                key={exam.id}
-                exam={exam}
-                index={i}
-                loading={loadingId === exam.id}
-                onStart={(e) => void handleStart(e)}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      <Drawer open={promptOpen} onOpenChange={(open) => { if (!open) setAuthPrompt(null); }}>
-        <DrawerContent className="mx-auto max-w-lg rounded-t-3xl">
-          <div className="px-6 pb-8 pt-2">
-            <div className="mb-5 flex justify-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 text-white shadow-lg shadow-orange-500/30">
-                {authPrompt === "bind" ? (
-                  <Link2 className="h-6 w-6" />
-                ) : (
-                  <LogIn className="h-6 w-6" />
-                )}
-              </div>
-            </div>
-            <DrawerTitle className="text-center text-base font-bold sm:text-lg">
-              {authPrompt === "bind"
-                ? t("অতিথি অ্যাকাউন্ট যুক্ত করুন", "Bind your guest account")
-                : t("পরীক্ষা দেওয়ার জন্য সাইন-ইন দরকার", "Sign in to take the exam")}
-            </DrawerTitle>
-            <DrawerDescription className="mt-1.5 text-center text-xs sm:text-sm leading-relaxed">
-              {authPrompt === "bind"
-                ? t(
-                    "পরীক্ষায় অংশ নেওয়ার আগে আপনার Google অ্যাকাউন্ট যুক্ত করতে হবে। আপনার অতিথি অগ্রগতি স্বয়ংক্রিয়ভাবে নতুন অ্যাকাউন্টে সিঙ্ক হবে।",
-                    "You need to link a Google account before taking the exam. Your guest progress will be synced to the new account automatically."
-                  )
-                : t(
-                    "পরীক্ষায় অংশ নেওয়ার জন্য একটি Google অ্যাকাউন্ট দিয়ে সাইন-ইন করতে হবে।",
-                    "You need to sign in with a Google account to take the exam."
+        <Drawer open={promptOpen} onOpenChange={(open) => { if (!open) setAuthPrompt(null); }}>
+          <DrawerContent className="mx-auto max-w-lg rounded-t-3xl">
+            <div className="px-6 pb-8 pt-2">
+              <div className="mb-5 flex justify-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 text-white shadow-lg shadow-orange-500/30">
+                  {authPrompt === "bind" ? (
+                    <Link2 className="h-6 w-6" />
+                  ) : (
+                    <LogIn className="h-6 w-6" />
                   )}
-            </DrawerDescription>
-            <div className="mt-5 space-y-2">
-              <Button
-                size="lg"
-                className="w-full gap-2 bg-orange-600 hover:bg-orange-700 active:bg-orange-700 text-white shadow-lg shadow-orange-500/20"
-                onClick={() => void handleAuthAction()}
-                disabled={authBusy}
-              >
-                {authBusy ? (
-                  <Classic className="h-4 w-4" />
-                ) : (
-                  <GoogleIcon />
-                )}
+                </div>
+              </div>
+              <DrawerTitle className="text-center text-base font-bold sm:text-lg">
                 {authPrompt === "bind"
-                  ? t("Google অ্যাকাউন্ট যুক্ত করুন", "Link Google account")
-                  : t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
-              </Button>
-              <DrawerClose asChild>
+                  ? t("অতিথি অ্যাকাউন্ট যুক্ত করুন", "Bind your guest account")
+                  : t("পরীক্ষা দেওয়ার জন্য সাইন-ইন দরকার", "Sign in to take the exam")}
+              </DrawerTitle>
+              <DrawerDescription className="mt-1.5 text-center text-xs sm:text-sm leading-relaxed">
+                {authPrompt === "bind"
+                  ? t(
+                      "পরীক্ষায় অংশ নেওয়ার আগে আপনার Google অ্যাকাউন্ট যুক্ত করতে হবে। আপনার অতিথি অগ্রগতি স্বয়ংক্রিয়ভাবে নতুন অ্যাকাউন্টে সিঙ্ক হবে।",
+                      "You need to link a Google account before taking the exam. Your guest progress will be synced to the new account automatically."
+                    )
+                  : t(
+                      "পরীক্ষায় অংশ নেওয়ার জন্য একটি Google অ্যাকাউন্ট দিয়ে সাইন-ইন করতে হবে।",
+                      "You need to sign in with a Google account to take the exam."
+                    )}
+              </DrawerDescription>
+              <div className="mt-5 space-y-2">
                 <Button
                   size="lg"
-                  variant="ghost"
-                  className="w-full"
+                  className="w-full gap-2 bg-orange-600 hover:bg-orange-700 active:bg-orange-700 text-white shadow-lg shadow-orange-500/20 cursor-pointer"
+                  onClick={() => void handleAuthAction()}
                   disabled={authBusy}
                 >
-                  {t("পরে যুক্ত করুন", "Maybe later")}
+                  {authBusy ? (
+                    <Classic className="h-4 w-4" />
+                  ) : (
+                    <GoogleIcon />
+                  )}
+                  {authPrompt === "bind"
+                    ? t("Google অ্যাকাউন্ট যুক্ত করুন", "Link Google account")
+                    : t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
                 </Button>
-              </DrawerClose>
+                <DrawerClose asChild>
+                  <Button
+                    size="lg"
+                    variant="ghost"
+                    className="w-full cursor-pointer"
+                    disabled={authBusy}
+                  >
+                    {t("পরে যুক্ত করুন", "Maybe later")}
+                  </Button>
+                </DrawerClose>
+              </div>
             </div>
-          </div>
-        </DrawerContent>
-      </Drawer>
+          </DrawerContent>
+        </Drawer>
+      </div>
     </div>
   );
 }
@@ -817,108 +834,121 @@ function ExamQuizView({
   }, []);
 
   return (
-    <div className="relative min-h-dvh flex flex-col overflow-hidden px-6 py-8">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
-
-      <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col justify-center">
-        <div className="mb-6 flex items-center justify-between gap-3">
-          <span className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-            {t("প্রশ্ন", "Question")} {currentIndex + 1} / {totalQuestions}
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 text-sm font-semibold text-zinc-700 dark:text-zinc-300 tabular-nums">
-            <Timer className="h-4 w-4 text-amber-500" />
-            {timeLeft}s
-          </span>
-          <span className="text-zinc-500 dark:text-zinc-400">
-            {t("উত্তর", "Answered")}{" "}
-            <span className="font-semibold text-violet-600 dark:text-violet-400">{answeredCount}</span>
-          </span>
-          <button
-            onClick={() => setExitOpen(true)}
-            className="p-2 -m-2 rounded-xl text-zinc-400 hover:text-red-500 active:text-red-500 transition-colors hover:bg-zinc-100 active:bg-zinc-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-800 cursor-pointer"
-            title={t("পরীক্ষা থেকে বেরিয়ে যান", "Exit exam")}
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <div className="h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full mb-10 overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-500 ease-out bg-gradient-to-r from-violet-500 to-purple-500"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-
-        <div className="animate-fade-up">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-xs rounded-md bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 text-zinc-500 dark:text-zinc-400">
-              {t("বহুনির্বাচনী প্রশ্ন", "Multiple Choice")}
+    <div className="relative min-h-dvh flex flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
+      <div className="w-full max-w-3xl mx-auto">
+        <div className={cn(CARD, "p-5 sm:p-7 relative overflow-hidden")}>
+          {/* Top HUD */}
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <span className="inline-flex items-center gap-1 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.06] px-3 py-1 text-xs font-semibold tabular-nums text-zinc-700 dark:text-zinc-300">
+              {t("প্রশ্ন", "Question")} {currentIndex + 1} / {totalQuestions}
             </span>
-          </div>
 
-          <h2 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight inline-flex items-center gap-3 justify-center text-center mb-8">
-            <span>{question.questionText}</span>
-            <button
-              onClick={() => speak(question.questionText)}
-              className="p-2 rounded-xl text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 active:text-zinc-600 dark:active:text-zinc-300 transition-colors hover:bg-zinc-100 active:bg-zinc-100 dark:hover:bg-zinc-800 dark:active:bg-zinc-800 cursor-pointer"
-              title={t("উচ্চারণ শুনুন", "Listen to pronunciation")}
-            >
-              <Volume2 className="h-6 w-6 sm:h-7 sm:w-7" />
-            </button>
-          </h2>
-        </div>
-
-        <div className="space-y-2.5 pt-4">
-          {question.options.map((option, i) => {
-            const isSelected = isAnswered && option === selectedAnswer;
-
-            const optionStyle = isSelected
-              ? "border-violet-400 dark:border-violet-600 bg-violet-50 dark:bg-violet-950/40 ring-2 ring-violet-400/30"
-              : "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 active:border-zinc-300 dark:active:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60 active:bg-zinc-50 dark:active:bg-zinc-900/60";
-
-            return (
-              <button
-                key={i}
-                onClick={() => handleOptionClick(option)}
-                disabled={isAnswered}
-                className={`w-full flex items-center gap-3 text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer disabled:cursor-default ${optionStyle}`}
+            <div className="flex items-center gap-3">
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold tabular-nums",
+                  timeLeft <= 5
+                    ? "bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300 animate-pulse"
+                    : timeLeft <= 10
+                      ? "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"
+                      : "bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-300"
+                )}
               >
-                <span
-                  className={cn(
-                    "flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold",
-                    isSelected
-                      ? "bg-violet-500 text-white"
-                      : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"
-                  )}
-                >
-                  {letters[i] ?? ""}
-                </span>
+                <Timer className="h-3 w-3" />
+                {timeLeft}s
+              </span>
 
-                <span
-                  className={cn(
-                    "flex-1 text-sm sm:text-base leading-relaxed",
-                    isSelected
-                      ? "text-violet-800 dark:text-violet-200 font-medium"
-                      : "text-zinc-700 dark:text-zinc-300"
-                  )}
-                >
-                  {option}
-                </span>
+              <span className="text-xs font-semibold text-violet-600 dark:text-violet-400 tabular-nums">
+                {t("উত্তর:", "Answered:")} {answeredCount}
+              </span>
+
+              <button
+                onClick={() => setExitOpen(true)}
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-500 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
+                title={t("পরীক্ষা থেকে বেরিয়ে যান", "Exit exam")}
+              >
+                <X className="h-4 w-4" />
               </button>
-            );
-          })}
-        </div>
-
-        {isAnswered && (
-          <div className="mt-7 flex justify-center animate-fade-up">
-            <Button onClick={handleNext} size="lg" className="px-10">
-              {currentIndex >= totalQuestions - 1
-                ? t("ফলাফল দেখুন", "See Results")
-                : t("পরের প্রশ্ন", "Next Question")}
-            </Button>
+            </div>
           </div>
-        )}
+
+          {/* Progress bar */}
+          <div className="h-1.5 bg-black/[0.04] dark:bg-white/[0.06] rounded-full mb-6 overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-300 ease-out bg-gradient-to-r from-violet-500 to-purple-500"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          {/* Question Text */}
+          <div className="mb-6 text-center">
+            <div className="inline-flex items-center justify-center gap-2">
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                {question.questionText}
+              </h2>
+              <button
+                onClick={() => speak(question.questionText)}
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-black/[0.04] dark:bg-white/[0.06] transition-colors cursor-pointer"
+                title={t("উচ্চারণ শুনুন", "Pronounce")}
+              >
+                <Volume2 className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Options */}
+          <div className="space-y-2.5">
+            {question.options.map((option, i) => {
+              const isSelected = isAnswered && option === selectedAnswer;
+
+              const optionStyle = isSelected
+                ? "border-violet-500 bg-violet-50 dark:bg-violet-950/40 text-violet-800 dark:text-violet-200 ring-1 ring-violet-500"
+                : "border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.04] dark:hover:bg-white/[0.08]";
+
+              return (
+                <button
+                  key={i}
+                  onClick={() => handleOptionClick(option)}
+                  disabled={isAnswered}
+                  className={cn(
+                    "w-full flex items-center gap-3 text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer disabled:cursor-default",
+                    optionStyle
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold",
+                      isSelected
+                        ? "bg-violet-500 text-white"
+                        : "bg-black/[0.05] dark:bg-white/[0.08] text-zinc-600 dark:text-zinc-300"
+                    )}
+                  >
+                    {letters[i] ?? ""}
+                  </span>
+
+                  <span className="flex-1 text-sm sm:text-base font-medium leading-relaxed">
+                    {option}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Next button */}
+          {isAnswered && (
+            <div className="mt-6 flex justify-end">
+              <Button
+                onClick={handleNext}
+                size="lg"
+                className="px-8 bg-violet-600 hover:bg-violet-700 text-white shadow-md shadow-violet-500/20 cursor-pointer"
+              >
+                {currentIndex >= totalQuestions - 1
+                  ? t("ফলাফল দেখুন", "See Results")
+                  : t("পরের প্রশ্ন", "Next Question")}
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
       <ConfirmDialog
@@ -969,9 +999,6 @@ function ExamResultsView({
   const [saveState, setSaveState] = useState<"saving" | "saved" | "error">("saving");
   const attemptingRef = useRef(false);
 
-  // Exam results are graded server-side, so the upload is mandatory: the
-  // attempt is finalized only after the submit POST succeeds (retry is
-  // offered otherwise).
   const record = useCallback(async () => {
     if (attemptingRef.current) return;
     if (useQuizExamStore.getState().resultsRecorded) {
@@ -1053,8 +1080,7 @@ function ExamResultsView({
     } finally {
       attemptingRef.current = false;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [examId, total, path]);
+  }, [examId, total, path, addHistoryEntry]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -1066,148 +1092,137 @@ function ExamResultsView({
   let resultLabel: string;
   if (percentage >= 90) {
     resultColor = "text-emerald-500";
-    resultLabel = t("চমৎকার!", "Excellent!");
+    resultLabel = t("চমৎকার ফলাফল!", "Outstanding Exam Result!");
   } else if (percentage >= 70) {
     resultColor = "text-sky-500";
-    resultLabel = t("দারুণ হয়েছে!", "Great Job!");
+    resultLabel = t("দারুণ দক্ষতা!", "Great Performance!");
   } else if (percentage >= 50) {
     resultColor = "text-amber-500";
     resultLabel = t("ভালো চেষ্টা!", "Good Effort!");
   } else {
     resultColor = "text-rose-500";
-    resultLabel = t("অনুশীলন চালিয়ে যান!", "Keep Practicing!");
+    resultLabel = t("আরও প্রস্তুতি নিন!", "Needs Improvement!");
   }
 
   return (
-    <div className="relative min-h-dvh overflow-hidden px-6 py-16">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
+    <div className="relative min-h-dvh overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div className={cn(CARD, "p-6 sm:p-8 space-y-6")}>
+          <div className="text-center">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+              {t("পরীক্ষা সমাপ্ত!", "Exam Completed!")}
+            </h1>
+            <p className={cn("text-base sm:text-lg font-bold mt-1", resultColor)}>
+              {resultLabel}
+            </p>
+          </div>
 
-      <div className="max-w-2xl mx-auto">
-        <div className="animate-fade-up text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-2 bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
-            {t("পরীক্ষা শেষ!", "Exam Complete!")}
-          </h1>
-          <p className={`text-2xl font-bold mt-2 ${resultColor}`}>
-            {resultLabel}
-          </p>
-        </div>
-
-        <div className="animate-fade-up-1 mb-10">
-          <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-8 text-center">
-            <div className="text-6xl sm:text-7xl font-black bg-gradient-to-br from-zinc-700 to-zinc-400 dark:from-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent mb-2">
+          {/* Score Box */}
+          <div className="rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-6 text-center">
+            <div className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-900 dark:text-zinc-100 tabular-nums">
               {percentage}%
             </div>
-            <p className="text-lg text-zinc-500 dark:text-zinc-400">
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+            <p className="mt-2 text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              <span className="font-bold text-emerald-600 dark:text-emerald-400">
                 {score}
               </span>{" "}
               {t("টির মধ্যে সঠিক", "correct out of")}{" "}
-              <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+              <span className="font-bold text-zinc-700 dark:text-zinc-300">
                 {total}
               </span>{" "}
-              {t("প্রশ্ন", "questions")}
+              {t("টি প্রশ্ন", "questions")}
             </p>
           </div>
-        </div>
 
-        {incorrectAnswers.length > 0 && (
-          <div className="animate-fade-up-2 mb-10">
-            <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
-              {t(
-                `সঠিক নয় এমন প্রশ্ন (${incorrectAnswers.length})`,
-                `Questions to Review (${incorrectAnswers.length})`
-              )}
-            </h3>
+          {/* Missed questions review */}
+          {incorrectAnswers.length > 0 && (
             <div className="space-y-3">
-              {incorrectAnswers.map((item, i) => (
-                <div
-                  key={i}
-                  className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-4 sm:p-5"
-                >
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                      <Link
-                        href={`/quiz/question/${item.questionId}`}
-                        className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
-                      >
-                        {item.questionText}
-                      </Link>
-                    </span>
-                  </div>
-                  <div className="mt-2 text-sm space-y-1">
-                    {item.correctAnswer != null && (
-                      <p className="text-emerald-600 dark:text-emerald-400">
-                        {t("সঠিক:", "Correct:")} {item.correctAnswer}
-                      </p>
-                    )}
-                    {item.correctAnswer == null && (
-                      <p className="text-amber-500 dark:text-amber-400">
-                        {t(
-                          "পরীক্ষা শেষ হওয়ার পরে সঠিক উত্তর প্রকাশ করা হবে।",
-                          "Correct answers are revealed after the exam closes."
-                        )}
-                      </p>
-                    )}
-                    {item.userAnswer != null && (
-                      <p className="text-red-500 dark:text-red-400">
-                        {t("আপনার উত্তর:", "Your answer:")} {item.userAnswer}
-                      </p>
-                    )}
-                    {item.userAnswer == null && (
-                      <p className="text-amber-500 dark:text-amber-400">
-                        {t("উত্তর দেওয়া হয়নি", "Unanswered")}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className="animate-fade-up-3 flex flex-col sm:flex-row gap-3 justify-center">
-          {saveState === "saving" && (
-            <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-              <Classic className="h-4 w-4" />
-              {t(
-                "ফলাফল ডেটাবেসে সংরক্ষণ করা হচ্ছে...",
-                "Saving your result to the database..."
-              )}
-            </div>
-          )}
-
-          {saveState === "error" && (
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40 p-4">
-              <p className="text-sm font-medium text-red-600 dark:text-red-400 flex items-center gap-1.5">
-                <Classic className="h-4 w-4" />
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 {t(
-                  "ফলাফল সংরক্ষণ করা যায়নি। ইন্টারনেট সংযোগ সংরক্ষণের জন্য প্রয়োজন।",
-                  "Your result couldn't be saved. An internet connection is required to save exam results."
+                  `সঠিক নয় এমন প্রশ্ন (${incorrectAnswers.length})`,
+                  `Questions to Review (${incorrectAnswers.length})`
                 )}
-              </p>
-              <Button size="lg" className="px-8" onClick={() => void record()}>
-                {t("আবার চেষ্টা করুন", "Retry")}
-              </Button>
+              </h3>
+              <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1">
+                {incorrectAnswers.map((item, i) => (
+                  <div
+                    key={i}
+                    className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/50 dark:bg-zinc-950/40 p-3.5 text-xs space-y-1.5"
+                  >
+                    <Link
+                      href={`/quiz/question/${item.questionId}`}
+                      className="font-semibold text-zinc-900 dark:text-zinc-100 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+                    >
+                      {item.questionText}
+                    </Link>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {item.correctAnswer != null && (
+                        <span className="rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 font-medium">
+                          {t("সঠিক:", "Correct:")} {item.correctAnswer}
+                        </span>
+                      )}
+                      {item.correctAnswer == null && (
+                        <span className="rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 px-2 py-0.5 font-medium">
+                          {t("পরীক্ষা শেষে প্রকাশ করা হবে", "Revealed after exam")}
+                        </span>
+                      )}
+                      {item.userAnswer != null && (
+                        <span className="rounded-md bg-rose-500/10 text-rose-700 dark:text-rose-300 px-2 py-0.5 font-medium">
+                          {t("আপনার উত্তর:", "Your answer:")} {item.userAnswer}
+                        </span>
+                      )}
+                      {item.userAnswer == null && (
+                        <span className="rounded-md bg-zinc-500/10 text-zinc-700 dark:text-zinc-300 px-2 py-0.5 font-medium">
+                          {t("উত্তর দেওয়া হয়নি", "Unanswered")}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
-          {saveState === "saved" && (
-            <>
+          {/* Save Status & Actions */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+            {saveState === "saving" && (
+              <div className="flex items-center gap-2 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+                <Classic className="h-4 w-4" />
+                {t("সংরক্ষণ করা হচ্ছে...", "Saving your result...")}
+              </div>
+            )}
+
+            {saveState === "error" && (
               <Button
-                onClick={() => resetQuizExamState()}
-                size="lg"
-                className="px-8"
+                onClick={() => void record()}
+                className="w-full sm:w-auto px-6 bg-orange-600 hover:bg-orange-700 text-white cursor-pointer"
               >
-                {t("পরীক্ষার তালিকায় ফিরুন", "Back to Exam List")}
+                {t("আবার সংরক্ষণ করুন", "Retry saving")}
               </Button>
-              <Link href="/">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto px-8">
-                  {t("হোমে ফিরে যান", "Back to Home")}
+            )}
+
+            {saveState === "saved" && (
+              <>
+                <Button
+                  onClick={() => resetQuizExamState()}
+                  size="lg"
+                  className="w-full sm:w-auto px-8 bg-orange-600 hover:bg-orange-700 text-white shadow-md shadow-orange-500/20 cursor-pointer"
+                >
+                  {t("পরীক্ষার তালিকায় ফিরুন", "Back to Exam List")}
                 </Button>
-              </Link>
-            </>
-          )}
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto px-8 border-black/[0.08] dark:border-white/[0.1] cursor-pointer"
+                >
+                  <Link href="/quiz">
+                    {t("কুইজ মেনু", "Quiz Hub")}
+                  </Link>
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

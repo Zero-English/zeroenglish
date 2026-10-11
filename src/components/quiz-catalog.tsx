@@ -20,6 +20,9 @@ import {
 } from "@/lib/quiz-sections";
 import { useQuizMeta } from "@/lib/quiz-meta";
 
+const CARD =
+  "group relative flex flex-col text-left overflow-hidden rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60 transition-all duration-300 hover:scale-[1.015] hover:-translate-y-0.5 active:scale-[0.99]";
+
 export function GrammarTopicCard({
   topic,
   questionCount,
@@ -36,52 +39,50 @@ export function GrammarTopicCard({
   return (
     <Link
       href={`/quiz/grammar?topic=${encodeURIComponent(topic.name)}`}
-      className={`group relative flex flex-col text-left overflow-hidden rounded-3xl border-2 ${topic.border} ${topic.bg} backdrop-blur-sm transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 active:scale-[1.02] active:-translate-y-1`}
-      style={{ animationDelay: `${index * 0.08}s` }}
+      className={CARD}
+      style={{ animationDelay: `${index * 0.05}s` }}
     >
       <div
-        className={`absolute inset-0 bg-gradient-to-br ${topic.gradient} opacity-0 group-hover:opacity-5 dark:group-hover:opacity-10 transition-opacity duration-300`}
+        className={`absolute inset-0 bg-gradient-to-br ${topic.gradient} opacity-0 group-hover:opacity-[0.04] dark:group-hover:opacity-[0.08] transition-opacity duration-300`}
       />
 
-      <div className="relative flex items-center justify-between p-6 pb-4">
+      <div className="relative flex items-center justify-between p-5 sm:p-6 pb-3">
         <div
-          className={`flex-shrink-0 h-12 w-12 rounded-2xl bg-gradient-to-br ${topic.gradient} flex items-center justify-center shadow-lg shadow-black/10`}
+          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-gradient-to-br ${topic.gradient} text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_4px_12px_-2px_rgba(16,24,40,0.2)]`}
         >
-          <Icon className="h-6 w-6 text-white" />
+          <Icon className="h-6 w-6" />
         </div>
         {hasQuestions ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-700 px-3 py-1 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.06] px-3 py-1 text-[11px] font-semibold text-zinc-600 dark:text-zinc-300">
             {t(
               `${questionCount}টি প্রশ্ন`,
               `${questionCount} question${questionCount !== 1 ? "s" : ""}`
             )}
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-700 px-3 py-1 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] px-3 py-1 text-[11px] font-semibold text-zinc-400 dark:text-zinc-500">
             {t("শীঘ্রই আসছে", "Coming soon")}
           </span>
         )}
       </div>
 
-      <div className="relative flex-1 px-6 pb-6 pt-1">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+      <div className="relative flex flex-1 flex-col px-5 sm:px-6 pb-5 pt-1">
+        <h3 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
           {t(topic.labelBn, topic.label)}
         </h3>
-        <p className={`text-sm font-medium mt-1 ${topic.text}`}>
+        <p className={`text-xs sm:text-sm font-medium mt-1 leading-relaxed ${topic.text}`}>
           {t(topic.descBn, topic.desc)}
         </p>
 
-        <div className="flex flex-wrap items-center gap-2 mt-4">
-          <span className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            {t("শুরু", "Start")}
-            <ArrowRight className="inline-block h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+        <div className="mt-auto flex items-center justify-between pt-4 border-t border-black/[0.04] dark:border-white/[0.06]">
+          <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+            {t("অনুশীলন শুরু", "Start Practice")}
+          </span>
+          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black/[0.04] text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
+            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
           </span>
         </div>
       </div>
-
-      <div
-        className={`absolute bottom-0 left-6 right-6 h-0.5 rounded-full bg-gradient-to-r ${topic.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-      />
     </Link>
   );
 }
@@ -101,21 +102,21 @@ export function ClassCard({
   return (
     <Link
       href={`/quiz/class?class=${encodeURIComponent(cls.value)}`}
-      className={`group relative flex items-center gap-3 overflow-hidden rounded-2xl border-2 ${cls.border} ${cls.bg} backdrop-blur-sm p-3.5 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[1.02] active:-translate-y-0.5`}
-      style={{ animationDelay: `${index * 0.04}s` }}
+      className="group relative flex items-center gap-3.5 overflow-hidden rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60 p-4 sm:p-5 transition-all duration-300 hover:scale-[1.015] hover:-translate-y-0.5 active:scale-[0.99]"
+      style={{ animationDelay: `${index * 0.03}s` }}
     >
       <div
-        className={`absolute inset-0 bg-gradient-to-br ${cls.gradient} opacity-0 group-hover:opacity-5 dark:group-hover:opacity-10 transition-opacity duration-300`}
+        className={`absolute inset-0 bg-gradient-to-br ${cls.gradient} opacity-0 group-hover:opacity-[0.04] dark:group-hover:opacity-[0.08] transition-opacity duration-300`}
       />
 
       <div
-        className={`relative flex-shrink-0 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${cls.gradient} shadow-md shadow-black/10`}
+        className={`relative flex h-11 w-11 shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br ${cls.gradient} text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_4px_12px_-2px_rgba(16,24,40,0.2)]`}
       >
-        <Icon className="h-5 w-5 text-white" />
+        <Icon className="h-5 w-5" />
       </div>
 
       <div className="relative min-w-0 flex-1">
-        <span className="block truncate text-sm font-bold text-zinc-900 dark:text-zinc-100">
+        <span className="block truncate text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
           {t(cls.labelBn, cls.label)}
         </span>
         {questionCount != null && (
@@ -130,7 +131,9 @@ export function ClassCard({
         )}
       </div>
 
-      <ArrowRight className="relative h-4 w-4 shrink-0 text-zinc-300 dark:text-zinc-600 transition-transform duration-300 group-hover:translate-x-1" />
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black/[0.04] text-zinc-400 dark:bg-white/[0.06] dark:text-zinc-500 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
+        <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+      </span>
     </Link>
   );
 }

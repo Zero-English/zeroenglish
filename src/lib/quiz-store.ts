@@ -9,6 +9,7 @@ import type { QuizType } from "@/lib/quiz-history-store";
 
 export type Step = "select" | "settings" | "quiz" | "results";
 export type LevelOption = "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Random";
+export type WordSourceOption = "all" | "learned" | "unlearned" | "bookmarked";
 
 export interface Question {
   word: Word;
@@ -25,6 +26,7 @@ export interface QuizState {
   step: Step;
   quizType: QuizType | null;
   selectedLevels: LevelOption[];
+  wordSource: WordSourceOption;
   quantity: number;
   useAllQuestions: boolean;
   timePerQuestion: number;
@@ -44,6 +46,7 @@ const initialState: QuizState = {
   step: "select",
   quizType: null,
   selectedLevels: [],
+  wordSource: "all",
   quantity: 10,
   useAllQuestions: false,
   timePerQuestion: 15,
@@ -63,6 +66,7 @@ type QuizPersistedSettings = Pick<
   QuizState,
   | "quizType"
   | "selectedLevels"
+  | "wordSource"
   | "quantity"
   | "useAllQuestions"
   | "timePerQuestion"
@@ -82,6 +86,7 @@ export const useQuizStore = create<QuizState>()(
       partialize: (state) => ({
         quizType: state.quizType,
         selectedLevels: state.selectedLevels,
+        wordSource: state.wordSource,
         quantity: state.quantity,
         useAllQuestions: state.useAllQuestions,
         timePerQuestion: state.timePerQuestion,
@@ -93,6 +98,7 @@ export const useQuizStore = create<QuizState>()(
           ...current,
           quizType: p.quizType ?? current.quizType,
           selectedLevels: p.selectedLevels ?? current.selectedLevels,
+          wordSource: p.wordSource ?? current.wordSource,
           quantity: p.quantity ?? current.quantity,
           useAllQuestions: p.useAllQuestions ?? current.useAllQuestions,
           timePerQuestion: p.timePerQuestion ?? current.timePerQuestion,

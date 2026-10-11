@@ -561,6 +561,9 @@ export function GrammarPracticeSession({
   );
 }
 
+const CARD =
+  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
+
 function GrammarSettingsView({
   topic,
   difficultyOptions,
@@ -595,37 +598,39 @@ function GrammarSettingsView({
   onStart: () => void;
 }) {
   const t = useT();
-  const countLabel =
-    availableCount > 0 ? String(availableCount) : "…";
-  const activeStyle = `${topic.border} ${topic.bg} ${topic.text} border-2 shadow-sm`;
+  const countLabel = availableCount > 0 ? String(availableCount) : "…";
+  const activeStyle =
+    "bg-indigo-600 text-white border-indigo-600 shadow-sm dark:bg-indigo-500 dark:border-indigo-500";
   const idleStyle =
-    "border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600";
+    "border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 hover:bg-black/[0.05] dark:hover:bg-white/[0.08]";
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-5 sm:p-6">
-        <h3 className="flex items-center gap-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
-          <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${topic.bg}`}>
-            <Gauge className={`h-3.5 w-3.5 ${topic.text}`} />
-          </span>
-          {t("কঠিনতার মাত্রা", "Difficulty")}
-        </h3>
+    <div className="space-y-4 sm:space-y-6">
+      {/* Difficulty Card */}
+      <div className={cn(CARD, "p-5 sm:p-6")}>
+        <div className="flex items-center gap-2 text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 mb-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+            <Gauge className="h-4 w-4" />
+          </div>
+          {t("কঠিনতার মাত্রা", "Difficulty Level")}
+        </div>
         <div className="flex flex-wrap gap-2">
           {difficultyOptions.map((d) => {
             const active = difficulties.includes(d);
             const label =
               d === "EASY"
-                ? t("সহজ", "Easy")
+                ? t("সহজ (Easy)", "Easy")
                 : d === "MEDIUM"
-                  ? t("মাঝারি", "Medium")
-                  : t("কঠিন", "Hard");
+                  ? t("মাঝারি (Medium)", "Medium")
+                  : t("কঠিন (Hard)", "Hard");
             return (
               <button
                 key={d}
                 onClick={() => onDifficultyChange(d)}
-                className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={cn(
+                  "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer flex items-center gap-1.5",
                   active ? activeStyle : idleStyle
-                }`}
+                )}
               >
                 {active && <span className="font-bold">✓</span>}
                 {label}
@@ -633,40 +638,43 @@ function GrammarSettingsView({
             );
           })}
         </div>
-        <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-3">
+        <p className="text-[11px] text-zinc-400 dark:text-zinc-500 mt-2.5">
           {difficulties.length === 0
-            ? t("সব কঠিনতার মাত্রা বেছে নেওয়া হয়েছে", "All difficulties selected")
+            ? t("সব কঠিনতার মাত্রা অন্তর্ভুক্ত", "All difficulty levels included")
             : t(
-                `${difficulties.length}টি মাত্রা বেছে নেওয়া হয়েছে`,
-                `${difficulties.length} difficulty${difficulties.length > 1 ? "ies" : "y"} selected`
+                `${difficulties.length}টি মাত্রা নির্বাচিত`,
+                `${difficulties.length} difficulty level${difficulties.length > 1 ? "s" : ""} selected`
               )}
         </p>
       </div>
 
-      <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-5 sm:p-6">
-        <h3 className="flex items-center gap-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
-          <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${topic.bg}`}>
-            <ListOrdered className={`h-3.5 w-3.5 ${topic.text}`} />
-          </span>
+      {/* Number of Questions Card */}
+      <div className={cn(CARD, "p-5 sm:p-6")}>
+        <div className="flex items-center gap-2 text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 mb-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+            <ListOrdered className="h-4 w-4" />
+          </div>
           {t("প্রশ্নের সংখ্যা", "Number of Questions")}
-        </h3>
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           {QUANTITY_OPTIONS.map((q) => (
             <button
               key={q}
               onClick={() => onQuantityChange(q)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
+              className={cn(
+                "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer tabular-nums",
                 !useAllQuestions && quantity === q ? activeStyle : idleStyle
-              }`}
+              )}
             >
               {q}
             </button>
           ))}
           <button
             onClick={() => onUseAllChange(true)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
+            className={cn(
+              "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer",
               useAllQuestions ? activeStyle : idleStyle
-            }`}
+            )}
           >
             {t(`সব (${countLabel})`, `All (${countLabel})`)}
           </button>
@@ -683,35 +691,38 @@ function GrammarSettingsView({
                 onUseAllChange(false);
               }
             }}
-            className="w-20 px-3 py-2 rounded-xl text-sm font-medium border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            className="w-20 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
       </div>
 
-      <div className="rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-5 sm:p-6">
-        <h3 className="flex items-center gap-2 text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
-          <span className={`flex h-6 w-6 items-center justify-center rounded-lg ${topic.bg}`}>
-            <Timer className={`h-3.5 w-3.5 ${topic.text}`} />
-          </span>
+      {/* Time per Question Card */}
+      <div className={cn(CARD, "p-5 sm:p-6")}>
+        <div className="flex items-center gap-2 text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 mb-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <Timer className="h-4 w-4" />
+          </div>
           {t("প্রতি প্রশ্নে সময়", "Time per Question")}
-        </h3>
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           {TIME_OPTIONS.map((tm) => (
             <button
               key={tm}
               onClick={() => onTimeChange(tm)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
+              className={cn(
+                "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer tabular-nums",
                 !noTimeLimit && timePerQuestion === tm ? activeStyle : idleStyle
-              }`}
+              )}
             >
               {tm}s
             </button>
           ))}
           <button
             onClick={() => onNoTimeLimitChange(true)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all cursor-pointer ${
+            className={cn(
+              "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer",
               noTimeLimit ? activeStyle : idleStyle
-            }`}
+            )}
           >
             {t("সময়সীমা নেই", "No limit")}
           </button>
@@ -727,22 +738,23 @@ function GrammarSettingsView({
                 onNoTimeLimitChange(false);
               }
             }}
-            className="w-20 px-3 py-2 rounded-xl text-sm font-medium border border-zinc-200 dark:border-zinc-700 bg-transparent text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            className="w-20 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium border border-black/[0.08] dark:border-white/[0.1] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
       </div>
 
+      {/* Start Button */}
       <div className="pt-2">
         <Button
           onClick={onStart}
           disabled={starting || availableCount === 0}
-          className={`w-full h-12 text-base font-semibold bg-gradient-to-r ${topic.gradient} hover:opacity-90`}
+          className="w-full h-12 text-sm sm:text-base font-semibold bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20 cursor-pointer"
         >
           {starting
             ? t("তৈরি হচ্ছে…", "Preparing…")
             : t("কুইজ শুরু করুন", "Start Quiz")}
         </Button>
-        <p className="text-center text-xs text-zinc-400 dark:text-zinc-500 mt-3">
+        <p className="text-center text-xs text-zinc-400 dark:text-zinc-500 mt-2.5">
           {useAllQuestions
             ? t(
                 `${countLabel}টি প্রশ্ন · সব কঠিনতার মাত্রা`,
@@ -755,14 +767,6 @@ function GrammarSettingsView({
                 }`
               )}
         </p>
-        {availableCount === 0 && (
-          <p className="text-center text-xs font-medium text-amber-600 dark:text-amber-400 mt-2">
-            {t(
-              "নির্বাচিত কঠিনতার মাত্রায় কোনো প্রশ্ন নেই।",
-              "No questions available for the selected difficulty."
-            )}
-          </p>
-        )}
       </div>
     </div>
   );
@@ -804,64 +808,64 @@ function GrammarQuizView({
   const letters = ["A", "B", "C", "D", "E", "F"];
 
   return (
-    <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
-      {/* Top bar */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="text-sm text-zinc-500 dark:text-zinc-400">
-          <span className="font-semibold text-zinc-700 dark:text-zinc-300">
-            {currentIndex + 1}
+    <div className={cn(CARD, "p-5 sm:p-7 relative overflow-hidden")}>
+      {/* Top bar HUD */}
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.06] px-3 py-1 text-xs font-semibold tabular-nums text-zinc-700 dark:text-zinc-300">
+            {currentIndex + 1} / {totalQuestions}
           </span>
-          <span className="mx-1 text-zinc-300 dark:text-zinc-600">/</span>
-          {totalQuestions}
+          <span className="text-xs font-medium text-zinc-400 dark:text-zinc-500 hidden sm:inline">
+            {t(topic.labelBn, topic.label)}
+          </span>
         </div>
-        <div className="flex items-center gap-4 text-sm">
+
+        <div className="flex items-center gap-3">
           {!noTimeLimit && (
             <span
               className={cn(
-                "font-mono font-semibold",
+                "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold tabular-nums",
                 timeLeft <= 5
-                  ? "text-red-500"
+                  ? "bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300 animate-pulse"
                   : timeLeft <= 10
-                    ? "text-amber-500"
-                    : "text-zinc-500 dark:text-zinc-400"
+                    ? "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"
+                    : "bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-300"
               )}
             >
+              <Timer className="h-3 w-3" />
               {timeLeft}s
             </span>
           )}
-          <span className="text-zinc-500 dark:text-zinc-400">
-            {t("স্কোর", "Score")}{" "}
-            <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-              {score}
-            </span>
+          <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
+            {t("স্কোর:", "Score:")} {score}
           </span>
           <button
             onClick={() => onExitOpenChange(true)}
-            className="p-2 -m-2 rounded-xl text-zinc-400 hover:text-red-500 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-500 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
             title={t("কুইজ থেকে বেরিয়ে যান", "Exit quiz")}
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full mb-10 overflow-hidden">
+      {/* Progress track */}
+      <div className="h-1.5 w-full bg-black/[0.04] dark:bg-white/[0.06] rounded-full mb-6 overflow-hidden">
         <div
           className={cn(
-            "h-full rounded-full transition-all duration-500 ease-out bg-gradient-to-r",
+            "h-full rounded-full transition-all duration-300 ease-out bg-gradient-to-r",
             topic.gradient
           )}
           style={{ width: `${progress}%` }}
         />
       </div>
 
-      {/* Question */}
-      <div className="animate-fade-up mb-8">
-        <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400 dark:text-zinc-500 mb-2">
-          {t(topic.labelBn, topic.label)} · {question.difficultyLevel}
-        </p>
-        <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
+      {/* Question Content */}
+      <div className="mb-6">
+        <span className="inline-flex items-center gap-1 rounded-md bg-black/[0.03] dark:bg-white/[0.05] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-2">
+          {question.difficultyLevel}
+        </span>
+        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 leading-snug">
           {question.questionText}
         </h2>
       </div>
@@ -874,18 +878,18 @@ function GrammarQuizView({
             isAnswered && option.text === selectedAnswer && !isCorrectOption;
 
           let optionStyle =
-            "border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-950/60 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-900/60";
+            "border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.04] dark:hover:bg-white/[0.08]";
 
           if (isAnswered) {
             if (isCorrectOption) {
               optionStyle =
-                "border-emerald-400 dark:border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40 ring-2 ring-emerald-400/30";
+                "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 ring-1 ring-emerald-500";
             } else if (isWrongPick) {
               optionStyle =
-                "border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-950/40 ring-2 ring-red-400/30";
+                "border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-200 ring-1 ring-rose-500";
             } else {
               optionStyle =
-                "border-zinc-200 dark:border-zinc-700 bg-white/40 dark:bg-zinc-950/30 opacity-50";
+                "border-black/[0.04] dark:border-white/[0.04] opacity-40";
             }
           }
 
@@ -901,14 +905,14 @@ function GrammarQuizView({
             >
               <span
                 className={cn(
-                  "flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold",
+                  "flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold",
                   isAnswered
                     ? isCorrectOption
                       ? "bg-emerald-500 text-white"
                       : isWrongPick
-                        ? "bg-red-500 text-white"
-                        : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"
-                    : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"
+                        ? "bg-rose-500 text-white"
+                        : "bg-black/[0.04] dark:bg-white/[0.06] text-zinc-400"
+                    : "bg-black/[0.05] dark:bg-white/[0.08] text-zinc-600 dark:text-zinc-300"
                 )}
               >
                 {isAnswered && (isCorrectOption || isWrongPick) ? (
@@ -921,16 +925,7 @@ function GrammarQuizView({
                   (letters[i] ?? "")
                 )}
               </span>
-              <span
-                className={cn(
-                  "flex-1 text-sm sm:text-base leading-relaxed",
-                  isAnswered && isCorrectOption
-                    ? "text-emerald-800 dark:text-emerald-200 font-medium"
-                    : isWrongPick
-                      ? "text-red-800 dark:text-red-200 font-medium"
-                      : "text-zinc-700 dark:text-zinc-300"
-                )}
-              >
+              <span className="flex-1 text-sm sm:text-base font-medium leading-relaxed">
                 {option.text}
               </span>
             </button>
@@ -940,8 +935,12 @@ function GrammarQuizView({
 
       {/* Next button */}
       {isAnswered && (
-        <div className="mt-7 flex justify-center animate-fade-up">
-          <Button onClick={onNext} size="lg" className="px-10">
+        <div className="mt-6 flex justify-end">
+          <Button
+            onClick={onNext}
+            size="lg"
+            className="px-8 bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-500/20 cursor-pointer"
+          >
             {currentIndex >= totalQuestions - 1
               ? t("ফলাফল দেখুন", "See Results")
               : t("পরের প্রশ্ন", "Next Question")}
@@ -981,105 +980,97 @@ function GrammarResultsView({
 }) {
   const t = useT();
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+  const incorrectCount = total - score;
 
   let resultColor: string;
   let resultLabel: string;
   if (percentage >= 90) {
     resultColor = "text-emerald-500";
-    resultLabel = t("চমৎকার!", "Excellent!");
+    resultLabel = t("চমৎকার ফলাফল!", "Excellent Mastery!");
   } else if (percentage >= 70) {
     resultColor = "text-sky-500";
-    resultLabel = t("দারুণ হয়েছে!", "Great Job!");
+    resultLabel = t("দারুণ অগ্রগতি!", "Great Progress!");
   } else if (percentage >= 50) {
     resultColor = "text-amber-500";
     resultLabel = t("ভালো চেষ্টা!", "Good Effort!");
   } else {
     resultColor = "text-rose-500";
-    resultLabel = t("অনুশীলন চালিয়ে যান!", "Keep Practicing!");
+    resultLabel = t("আরও অনুশীলন প্রয়োজন!", "Keep Practicing!");
   }
 
   return (
-    <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-6 sm:p-10">
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-          {t("কুইজ শেষ!", "Quiz Complete!")}
+    <div className={cn(CARD, "p-5 sm:p-6 space-y-6")}>
+      <div className="text-center">
+        <h3 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+          {t("কুইজ সমাপ্ত!", "Quiz Completed!")}
         </h3>
-        <p className={`text-xl font-bold mt-2 ${resultColor}`}>{resultLabel}</p>
+        <p className={cn("text-xs sm:text-sm font-semibold mt-0.5", resultColor)}>
+          {resultLabel}
+        </p>
       </div>
 
-      <div className="mb-8">
-        <div
-          className={cn(
-            "relative overflow-hidden rounded-3xl border-2 backdrop-blur-sm p-8 text-center",
-            topic.border,
-            topic.bg
-          )}
-        >
-          <div
-            className={cn(
-              "absolute inset-0 bg-gradient-to-br opacity-10",
-              topic.gradient
-            )}
-          />
-          <div className="relative">
-            <div
-              className={cn(
-                "inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gradient-to-br text-white shadow-lg shadow-black/10",
-                topic.gradient
-              )}
-            >
-              <Sparkles className="h-7 w-7" />
-            </div>
-            <div className="mt-4 text-5xl sm:text-6xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
-              {percentage}%
-            </div>
-            <p className="mt-2 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                {score}
-              </span>{" "}
-              {t("টির মধ্যে সঠিক", "correct out of")}{" "}
-              <span className="font-semibold text-zinc-700 dark:text-zinc-300">
-                {total}
-              </span>{" "}
-              {t("প্রশ্ন", "questions")}
-            </p>
+      {/* 3-stat summary tiles */}
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+        <div className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-3 text-center">
+          <div className="text-lg sm:text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 tabular-nums">
+            {percentage}%
+          </div>
+          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">
+            {t("স্কোর", "Score")}
+          </div>
+        </div>
+        <div className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-3 text-center">
+          <div className="text-lg sm:text-xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 tabular-nums">
+            {score}
+          </div>
+          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">
+            {t("সঠিক", "Correct")}
+          </div>
+        </div>
+        <div className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-3 text-center">
+          <div className="text-lg sm:text-xl font-bold tracking-tight text-rose-600 dark:text-rose-400 tabular-nums">
+            {incorrectCount}
+          </div>
+          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">
+            {t("ভুল", "Wrong")}
           </div>
         </div>
       </div>
 
+      {/* Wrong Answers Deck */}
       {incorrectAnswers.length > 0 && (
-        <div className="mb-8">
-          <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-4">
+        <div className="space-y-3">
+          <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             {t(
-              `ভুল উত্তরগুলো (${incorrectAnswers.length})`,
-              `Incorrect Answers (${incorrectAnswers.length})`
+              `ভুল উত্তর পর্যালোচনা (${incorrectAnswers.length})`,
+              `Review Incorrect Answers (${incorrectAnswers.length})`
             )}
-          </h3>
-          <div className="space-y-3">
+          </h4>
+          <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1">
             {incorrectAnswers.map(({ question, correctAnswer, userAnswer }, i) => (
               <div
                 key={i}
-                className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-950/50 backdrop-blur-sm p-4"
+                className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/50 dark:bg-zinc-950/40 p-3.5 text-xs space-y-1.5"
               >
                 <Link
                   href={`/quiz/question/${question.id}`}
-                  className="inline text-sm font-semibold text-zinc-900 dark:text-zinc-100 hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
+                  className="font-semibold text-zinc-900 dark:text-zinc-100 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
                 >
                   {question.questionText}
                 </Link>
-                <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                <div className="flex flex-wrap gap-2 pt-1">
                   {userAnswer !== "Time's up!" && (
-                    <span className="rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 px-2 py-1 text-red-700 dark:text-red-300">
+                    <span className="rounded-md bg-rose-500/10 text-rose-700 dark:text-rose-300 px-2 py-0.5 font-medium">
                       {t("আপনার উত্তর:", "Your answer:")} {userAnswer}
                     </span>
                   )}
                   {userAnswer === "Time's up!" && (
-                    <span className="rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 px-2 py-1 text-amber-700 dark:text-amber-300">
-                      {t("সময় শেষ হয়ে গেছে", "Time ran out")}
+                    <span className="rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 px-2 py-0.5 font-medium">
+                      {t("সময় শেষ", "Time expired")}
                     </span>
                   )}
-                  <span className="rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 px-2 py-1 text-emerald-700 dark:text-emerald-300">
-                    {t("সঠিক উত্তর:", "Correct answer:")} {correctAnswer}
+                  <span className="rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 font-medium">
+                    {t("সঠিক উত্তর:", "Correct:")} {correctAnswer}
                   </span>
                 </div>
               </div>
@@ -1088,15 +1079,25 @@ function GrammarResultsView({
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <Button onClick={onRestart} size="lg" className="px-8">
-          <RotateCcw />
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        <Button
+          onClick={onRestart}
+          size="sm"
+          className="w-full sm:w-auto px-5 bg-orange-600 hover:bg-orange-700 text-white shadow-md shadow-orange-500/20 cursor-pointer text-xs font-semibold"
+        >
+          <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
           {t("আবার খেলুন", "Play Again")}
         </Button>
-        <Button asChild variant="outline" size="lg" className="px-8">
+        <Button
+          asChild
+          variant="outline"
+          size="sm"
+          className="w-full sm:w-auto px-5 border-black/[0.08] dark:border-white/[0.1] cursor-pointer text-xs font-semibold"
+        >
           <Link href="/quiz/grammar">
-            <ArrowLeft />
-            {t("সব গ্রামার টপিক", "All grammar topics")}
+            <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
+            {t("সব গ্রামার টপিক", "All Grammar Topics")}
           </Link>
         </Button>
       </div>

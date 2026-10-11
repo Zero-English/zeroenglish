@@ -343,8 +343,7 @@ export function Dashboard({
                           href={href}
                           className={cn(
                             "group flex flex-col gap-3 p-5 sm:p-6 transition-colors",
-                            "border-l border-t border-black/[0.06] dark:border-white/[0.08]",
-                            "[&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0",
+                            "border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0",
                             "hover:bg-black/[0.02] dark:hover:bg-white/[0.04]"
                           )}
                         >

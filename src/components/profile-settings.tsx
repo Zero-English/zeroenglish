@@ -259,11 +259,11 @@ export function ProfileSettings() {
   }
 
   return (
-    <div className="rounded-2xl border border-zinc-200/70 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/60 backdrop-blur-sm p-5 sm:p-6">
-      <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+    <div className="rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md p-5 sm:p-6 shadow-xs">
+      <h2 className="text-base font-semibold text-foreground mb-1">
         {t("প্রোফাইল সেটিংস", "Profile Settings")}
       </h2>
-      <p className="text-xs text-zinc-400 dark:text-zinc-500 mb-6">
+      <p className="text-xs text-muted-foreground mb-6">
         {t("তোমার প্রোফাইল তথ্য সম্পাদনা করো।", "Edit your profile information.")}
       </p>
 

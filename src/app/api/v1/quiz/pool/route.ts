@@ -17,8 +17,27 @@ export async function GET(request: NextRequest) {
     const levels = levelsParam
         ? levelsParam.split(",").map((lv) => lv.trim()).filter(Boolean)
         : [];
+    const wordIdsParam = searchParams.get("wordIds");
+    const wordIds = wordIdsParam
+        ? wordIdsParam
+              .split(",")
+              .map((id) => Number(id.trim()))
+              .filter((n) => !Number.isNaN(n) && n > 0)
+        : undefined;
+    const excludeWordIdsParam = searchParams.get("excludeWordIds");
+    const excludeWordIds = excludeWordIdsParam
+        ? excludeWordIdsParam
+              .split(",")
+              .map((id) => Number(id.trim()))
+              .filter((n) => !Number.isNaN(n) && n > 0)
+        : undefined;
 
-    const parsed = quizPoolSchema.safeParse({ quizType, levels });
+    const parsed = quizPoolSchema.safeParse({
+        quizType,
+        levels,
+        wordIds,
+        excludeWordIds,
+    });
 
     if (!parsed.success) {
         const firstError = parsed.error.issues[0];

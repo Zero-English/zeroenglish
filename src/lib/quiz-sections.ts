@@ -10,11 +10,41 @@ import {
   BookOpenCheck,
   Landmark,
   Briefcase,
-  ArrowLeftRight,
+  ArrowRightLeft,
   Shuffle,
   Layers,
   Sparkles,
   CheckCircle2,
+  Equal,
+  Contrast,
+  MessageSquareQuote,
+  Compass,
+  Clock,
+  Hourglass,
+  Volume2,
+  Quote,
+  LayoutGrid,
+  Scale,
+  CheckSquare,
+  Key,
+  GitFork,
+  SpellCheck,
+  RefreshCw,
+  PenLine,
+  Baby,
+  Backpack,
+  Pencil,
+  BookOpen,
+  Library,
+  Award,
+  Globe2,
+  Headphones,
+  Scroll,
+  FileBadge2,
+  ShieldCheck,
+  CalendarClock,
+  Zap,
+  BarChart3,
 } from "lucide-react";
 
 export interface QuizSectionCardStyle {
@@ -111,11 +141,12 @@ const GRAMMAR_STYLE: {
 ];
 
 function grammarStyle(i: number) {
+  const item = GRAMMAR_STYLE[i % GRAMMAR_STYLE.length];
   return {
-    gradient: GRAMMAR_STYLE[i].gradient,
-    bg: GRAMMAR_STYLE[i].colors.bg,
-    border: GRAMMAR_STYLE[i].colors.border,
-    text: GRAMMAR_STYLE[i].colors.text,
+    gradient: item.gradient,
+    bg: item.colors.bg,
+    border: item.colors.border,
+    text: item.colors.text,
   };
 }
 
@@ -143,7 +174,7 @@ const QUIZ_TOPIC_DEFS: {
     labelBn: "বাংলা থেকে ইংরেজি",
     desc: "Pick the correct English word.",
     descBn: "সঠিক ইংরেজি শব্দটি বেছে নিন।",
-    icon: ArrowLeftRight,
+    icon: ArrowRightLeft,
     styleIndex: 1,
   },
   {
@@ -151,8 +182,8 @@ const QUIZ_TOPIC_DEFS: {
     label: "Synonyms",
     labelBn: "সমার্থক শব্দ",
     desc: "Find the word with the same meaning.",
-    descBn: "একই অর্থের শব্দটি খুঁজুন।",
-    icon: Shuffle,
+    descBn: "একই অর্থের সমার্থক শব্দটি খুঁজুন।",
+    icon: Equal,
     styleIndex: 2,
   },
   {
@@ -161,7 +192,7 @@ const QUIZ_TOPIC_DEFS: {
     labelBn: "বিপরীত শব্দ",
     desc: "Find the word with the opposite meaning.",
     descBn: "বিপরীত অর্থের শব্দটি খুঁজুন।",
-    icon: Layers,
+    icon: Contrast,
     styleIndex: 3,
   },
   {
@@ -170,7 +201,7 @@ const QUIZ_TOPIC_DEFS: {
     labelBn: "মিশ্র",
     desc: "A mix of every quiz type in one set.",
     descBn: "সব ধরনের প্রশ্ন একসাথে।",
-    icon: Sparkles,
+    icon: Shuffle,
     styleIndex: 4,
   },
   {
@@ -179,7 +210,7 @@ const QUIZ_TOPIC_DEFS: {
     labelBn: "ইডিয়ম ও বাক্যাংশ",
     desc: "Common idioms and everyday phrases.",
     descBn: "প্রচলিত ইডিয়ম ও দৈনন্দিন বাক্যাংশ।",
-    icon: BookOpenText,
+    icon: MessageSquareQuote,
     styleIndex: 5,
   },
   {
@@ -188,7 +219,7 @@ const QUIZ_TOPIC_DEFS: {
     labelBn: "পদান্বয়ী অব্যয়",
     desc: "Learn the right preposition in context.",
     descBn: "প্রসঙ্গ অনুযায়ী সঠিক পদান্বয়ী অব্যয় শিখুন।",
-    icon: MapPin,
+    icon: Compass,
     styleIndex: 6,
   },
   {
@@ -199,6 +230,105 @@ const QUIZ_TOPIC_DEFS: {
     descBn: "বাক্যটি সত্য না মিথ্যা — তা সিদ্ধান্ত নিন।",
     icon: CheckCircle2,
     styleIndex: 7,
+  },
+  {
+    name: "TENSES",
+    label: "Tenses",
+    labelBn: "টেন্স বা কাল",
+    desc: "Master past, present, and future verb tenses.",
+    descBn: "অতীত, বর্তমান ও ভবিষ্যৎ কাল সম্পর্কিত প্রশ্নাবলী।",
+    icon: Clock,
+    styleIndex: 0,
+  },
+  {
+    name: "ARTICLES",
+    label: "Articles",
+    labelBn: "আর্টিকেল",
+    desc: "Practice using 'a', 'an', and 'the' accurately.",
+    descBn: "A, An ও The এর সঠিক ব্যবহার অনুশীলন।",
+    icon: PenLine,
+    styleIndex: 1,
+  },
+  {
+    name: "VOICE_CHANGE",
+    label: "Voice Change",
+    labelBn: "বাচ্য পরিবর্তন",
+    desc: "Transform active and passive voice sentences.",
+    descBn: "Active ও Passive ভয়েস পরিবর্তন সংক্রান্ত কুইজ।",
+    icon: Volume2,
+    styleIndex: 2,
+  },
+  {
+    name: "NARRATION",
+    label: "Narration",
+    labelBn: "উক্তি পরিবর্তন",
+    desc: "Convert direct to indirect speech correctly.",
+    descBn: "Direct ও Indirect Narration রূপান্তর।",
+    icon: Quote,
+    styleIndex: 3,
+  },
+  {
+    name: "PARTS_OF_SPEECH",
+    label: "Parts of Speech",
+    labelBn: "পদ প্রকরণ",
+    desc: "Identify nouns, verbs, adjectives, adverbs, and more.",
+    descBn: "Noun, Verb, Adjective সহ সকল পার্টস অব স্পিচ।",
+    icon: LayoutGrid,
+    styleIndex: 4,
+  },
+  {
+    name: "RIGHT_FORM_OF_VERBS",
+    label: "Right Form of Verbs",
+    labelBn: "ভার্বের সঠিক রূপ",
+    desc: "Apply correct verb forms according to context and rules.",
+    descBn: "নিয়মানুযায়ী ভার্বের সঠিক রূপ প্রয়োগ।",
+    icon: CheckSquare,
+    styleIndex: 5,
+  },
+  {
+    name: "SUBJECT_VERB_AGREEMENT",
+    label: "Subject-Verb Agreement",
+    labelBn: "সাবজেক্ট-ভার্ব সঙ্গতি",
+    desc: "Ensure subjects and verbs match in number and person.",
+    descBn: "সাবজেক্ট ও ভার্বের যথাযথ সামঞ্জস্য বিধান।",
+    icon: Scale,
+    styleIndex: 6,
+  },
+  {
+    name: "MODALS",
+    label: "Modal Auxiliaries",
+    labelBn: "মোডাল অক্সিলিয়ারি",
+    desc: "Practice can, could, may, might, should, and must.",
+    descBn: "Can, May, Should, Must ইত্যাদি মোডাল ভার্ব।",
+    icon: Key,
+    styleIndex: 7,
+  },
+  {
+    name: "CONDITIONALS",
+    label: "Conditionals",
+    labelBn: "শর্তাধীন বাক্য",
+    desc: "Master zero, first, second, and third conditionals.",
+    descBn: "If-শর্তযুক্ত বাক্যের সঠিক গঠন ও প্রয়োগ।",
+    icon: GitFork,
+    styleIndex: 0,
+  },
+  {
+    name: "TRANSFORMATION",
+    label: "Transformation",
+    labelBn: "বাক্য রূপান্তর",
+    desc: "Transform simple, complex, and compound sentences.",
+    descBn: "Simple, Complex ও Compound বাক্য রূপান্তর।",
+    icon: RefreshCw,
+    styleIndex: 1,
+  },
+  {
+    name: "SPELLING",
+    label: "Spelling Test",
+    labelBn: "বানান পরীক্ষা",
+    desc: "Test correct English spellings and commonly confused words.",
+    descBn: "সঠিক ইংরেজি বানান ও বিভ্রান্তিকর শব্দ যাচাই।",
+    icon: SpellCheck,
+    styleIndex: 2,
   },
 ];
 
@@ -266,23 +396,23 @@ const SCHOOL_CLASSES: {
   labelBn: string;
   icon: LucideIcon;
 }[] = [
-  { value: "PrePrimary", label: "Pre-Primary", labelBn: "প্রি-প্রাইমারি", icon: School },
-  { value: "Class1", label: "Class 1", labelBn: "প্রথম শ্রেণি", icon: School },
-  { value: "Class2", label: "Class 2", labelBn: "দ্বিতীয় শ্রেণি", icon: School },
-  { value: "Class3", label: "Class 3", labelBn: "তৃতীয় শ্রেণি", icon: School },
+  { value: "PrePrimary", label: "Pre-Primary", labelBn: "প্রি-প্রাইমারি", icon: Baby },
+  { value: "Class1", label: "Class 1", labelBn: "প্রথম শ্রেণি", icon: Backpack },
+  { value: "Class2", label: "Class 2", labelBn: "দ্বিতীয় শ্রেণি", icon: Pencil },
+  { value: "Class3", label: "Class 3", labelBn: "তৃতীয় শ্রেণি", icon: BookOpen },
   { value: "Class4", label: "Class 4", labelBn: "চতুর্থ শ্রেণি", icon: School },
-  { value: "Class5", label: "Class 5", labelBn: "পঞ্চম শ্রেণি", icon: School },
+  { value: "Class5", label: "Class 5", labelBn: "পঞ্চম শ্রেণি", icon: BookOpenCheck },
   { value: "Class6", label: "Class 6", labelBn: "ষষ্ঠ শ্রেণি", icon: UsersRound },
-  { value: "Class7", label: "Class 7", labelBn: "সপ্তম শ্রেণি", icon: UsersRound },
-  { value: "Class8", label: "Class 8", labelBn: "অষ্টম শ্রেণি", icon: UsersRound },
-  { value: "SSC", label: "SSC", labelBn: "এসএসসি", icon: GraduationCap },
+  { value: "Class7", label: "Class 7", labelBn: "সপ্তম শ্রেণি", icon: Library },
+  { value: "Class8", label: "Class 8", labelBn: "অষ্টম শ্রেণি", icon: BookMarked },
+  { value: "SSC", label: "SSC", labelBn: "এসএসসি", icon: Award },
   { value: "HSC", label: "HSC", labelBn: "এইচএসসি", icon: GraduationCap },
-  { value: "IELTS", label: "IELTS", labelBn: "আইইএলটিএস", icon: Languages },
-  { value: "TOEFL", label: "TOEFL", labelBn: "টোফেল", icon: Languages },
-  { value: "University", label: "University", labelBn: "বিশ্ববিদ্যালয়", icon: BookMarked },
-  { value: "Masters", label: "Masters", labelBn: "মাস্টার্স", icon: BookMarked },
-  { value: "Diploma", label: "Diploma", labelBn: "ডিপ্লোমা", icon: BookOpenCheck },
-  { value: "BCS", label: "BCS", labelBn: "বিসিএস", icon: Landmark },
+  { value: "IELTS", label: "IELTS", labelBn: "আইইএলটিএস", icon: Globe2 },
+  { value: "TOEFL", label: "TOEFL", labelBn: "টোফেল", icon: Headphones },
+  { value: "University", label: "University", labelBn: "বিশ্ববিদ্যালয়", icon: Landmark },
+  { value: "Masters", label: "Masters", labelBn: "মাস্টার্স", icon: Scroll },
+  { value: "Diploma", label: "Diploma", labelBn: "ডিপ্লোমা", icon: FileBadge2 },
+  { value: "BCS", label: "BCS", labelBn: "বিসিএস", icon: ShieldCheck },
   { value: "JOB", label: "Job", labelBn: "চাকরি", icon: Briefcase },
 ];
 
@@ -299,6 +429,32 @@ export const QUIZ_CLASS_META: Record<string, QuizClassOption> = Object.fromEntri
   ])
 );
 
+/**
+ * Dynamically resolves an appropriate semantic icon based on keyword matching
+ * when an unseeded topic name is encountered.
+ */
+function resolveSemanticIcon(name: string): LucideIcon {
+  const upper = name.toUpperCase();
+  if (upper.includes("TENSE") || upper.includes("TIME")) return Clock;
+  if (upper.includes("ARTICLE")) return PenLine;
+  if (upper.includes("VOICE")) return Volume2;
+  if (upper.includes("NARRAT") || upper.includes("SPEECH")) return Quote;
+  if (upper.includes("SYNONYM") || upper.includes("SAME")) return Equal;
+  if (upper.includes("ANTONYM") || upper.includes("OPPOSITE")) return Contrast;
+  if (upper.includes("PREPOSITION") || upper.includes("POSITION")) return Compass;
+  if (upper.includes("IDIOM") || upper.includes("PHRASE")) return MessageSquareQuote;
+  if (upper.includes("SPELL")) return SpellCheck;
+  if (upper.includes("VERB")) return CheckSquare;
+  if (upper.includes("TRANSFORM")) return RefreshCw;
+  if (upper.includes("PART")) return LayoutGrid;
+  if (upper.includes("AGREE")) return Scale;
+  if (upper.includes("CONDIT")) return GitFork;
+  if (upper.includes("MODAL")) return Key;
+  if (upper.includes("MIX") || upper.includes("RANDOM")) return Shuffle;
+  if (upper.includes("TRUE") || upper.includes("FALSE")) return CheckCircle2;
+  return BookOpenCheck;
+}
+
 function fallbackTopicStyle(): QuizSectionCardStyle {
   const knownCount = Object.keys(QUIZ_TOPIC_META).length;
   return {
@@ -308,19 +464,20 @@ function fallbackTopicStyle(): QuizSectionCardStyle {
 
 /**
  * Resolves display metadata for a backend quiz type name. Falls back to a
- * generated style for types created at runtime that are not in the seeded set.
+ * generated style and semantic icon for types created at runtime.
  */
 export function quizTopicMeta(name: string): QuizTopic {
   const known = QUIZ_TOPIC_META[name];
   if (known) return known;
   const style = fallbackTopicStyle();
+  const icon = resolveSemanticIcon(name);
   return {
     name,
     label: humanizeTopicName(name),
     labelBn: humanizeTopicName(name),
     desc: "Practice this topic with a dedicated question set.",
     descBn: "নির্দিষ্ট প্রশ্নসেট দিয়ে এই টপিকটি অনুশীলন করুন।",
-    icon: BookOpenCheck,
+    icon,
     ...style,
   };
 }

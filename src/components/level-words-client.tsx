@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import type { Word, LevelPageSort } from "@/lib/data";
 import { WordCard } from "@/components/word-card";
@@ -115,6 +115,18 @@ export function LevelWordsClient({
     return qs ? `${path}?${qs}` : path;
   };
 
+  const activeRef = useRef<HTMLLIElement | null>(null);
+
+  useEffect(() => {
+    if (activeRef.current) {
+      activeRef.current.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    }
+  }, [currentPage]);
+
   const categories = serverCategories ?? Array.from(new Set(words.map((w) => w.category).filter(Boolean))).sort();
   const hasFilters = Boolean(search.trim()) || sort !== "default" || category !== "all";
 
@@ -155,19 +167,23 @@ export function LevelWordsClient({
 
           {totalPages > 1 ? (
             <Pagination>
-              <div className="flex items-center gap-0.5 max-w-full">
-                <PaginationItem>
+              <div className="relative flex items-center justify-center max-w-full w-full gap-1 sm:gap-1.5">
+                <div className="shrink-0 z-10 bg-background/95 backdrop-blur-xs">
                   <PaginationPrevious
                     href={pageHref(currentPage - 1)}
                     aria-disabled={currentPage <= 1}
                     className={cn(currentPage <= 1 ? "pointer-events-none opacity-50" : "")}
                   />
-                </PaginationItem>
+                </div>
 
-                <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                  <PaginationContent>
+                <div className="min-w-0 flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden py-1 px-1">
+                  <PaginationContent className="flex items-center justify-center gap-0.5 w-max min-w-full">
                     {pageItems.map((n) => (
-                      <PaginationItem key={n}>
+                      <PaginationItem
+                        key={n}
+                        ref={n === currentPage ? activeRef : undefined}
+                        className="shrink-0"
+                      >
                         <PaginationLink href={pageHref(n)} isActive={n === currentPage}>
                           {n}
                         </PaginationLink>
@@ -176,7 +192,7 @@ export function LevelWordsClient({
                   </PaginationContent>
                 </div>
 
-                <PaginationItem>
+                <div className="shrink-0 z-10 bg-background/95 backdrop-blur-xs">
                   <PaginationNext
                     href={pageHref(currentPage + 1)}
                     aria-disabled={currentPage >= totalPages}
@@ -184,7 +200,7 @@ export function LevelWordsClient({
                       currentPage >= totalPages ? "pointer-events-none opacity-50" : ""
                     )}
                   />
-                </PaginationItem>
+                </div>
               </div>
             </Pagination>
           ) : null}

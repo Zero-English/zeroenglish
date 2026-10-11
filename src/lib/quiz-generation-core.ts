@@ -30,6 +30,8 @@ export interface QuizGenerationInput {
   levels: QuizLevelOption[];
   quantity: number;
   useAllQuestions: boolean;
+  wordIds?: number[];
+  excludeWordIds?: number[];
 }
 
 export interface QuizGenerationResult {
@@ -83,10 +85,23 @@ function preferLevelCategoryPeers(pool: Word[], word: Word): Word[] {
   return [...shuffleArray(peers), ...shuffleArray(rest)];
 }
 
-function getPool(words: Word[], levels: QuizLevelOption[]): Word[] {
-  const validWords = words.filter(
+function getPool(
+  words: Word[],
+  levels: QuizLevelOption[],
+  wordIds?: number[],
+  excludeWordIds?: number[]
+): Word[] {
+  let validWords = words.filter(
     (w) => w.meaningBn.length > 0 && w.meaningBn[0] !== "..."
   );
+  if (Array.isArray(wordIds) && wordIds.length > 0) {
+    const idSet = new Set(wordIds);
+    validWords = validWords.filter((w) => idSet.has(w.id));
+  }
+  if (Array.isArray(excludeWordIds) && excludeWordIds.length > 0) {
+    const excludeSet = new Set(excludeWordIds);
+    validWords = validWords.filter((w) => !excludeSet.has(w.id));
+  }
   const picked = levels.filter((lv) => lv !== "Random");
   if (levels.length === 0 || picked.length === 0) return validWords;
   return validWords.filter((w) =>
@@ -97,9 +112,11 @@ function getPool(words: Word[], levels: QuizLevelOption[]): Word[] {
 function getQuizPool(
   words: Word[],
   levels: QuizLevelOption[],
-  type: QuizTypeName
+  type: QuizTypeName,
+  wordIds?: number[],
+  excludeWordIds?: number[]
 ): Word[] {
-  const pool = getPool(words, levels);
+  const pool = getPool(words, levels, wordIds, excludeWordIds);
   if (type === "synonym") return pool.filter((w) => w.synonyms.length > 0);
   if (type === "antonym") return pool.filter((w) => w.antonyms.length > 0);
   return pool;
@@ -110,15 +127,20 @@ export function generateQuestions(
   levels: QuizLevelOption[],
   qty: number,
   all: boolean,
-  type: QuizTypeName
+  type: QuizTypeName,
+  wordIds?: number[],
+  excludeWordIds?: number[]
 ): GeneratedQuizQuestion[] {
-  const pool = getQuizPool(words, levels, type);
+  const pool = getQuizPool(words, levels, type, wordIds, excludeWordIds);
   const shuffled = shuffleArray(pool);
   const count = all ? shuffled.length : Math.min(qty, shuffled.length);
   const selected = shuffled.slice(0, count);
 
+  // Distractors can draw from the full valid dictionary when the filtered pool is small
+  const distractorBase = words.length >= 10 ? words : pool;
+
   return selected.map((word) => {
-    const candidates = preferLevelCategoryPeers(pool, word).slice(0, 6);
+    const candidates = preferLevelCategoryPeers(distractorBase, word).slice(0, 8);
     let options: QuizQuestionOption[];
 
     if (type === "bangla_to_english") {
@@ -166,7 +188,9 @@ export function generateQuestions(
 export function getQuizPoolCount(
   words: Word[],
   levels: QuizLevelOption[],
-  type: QuizTypeName
+  type: QuizTypeName,
+  wordIds?: number[],
+  excludeWordIds?: number[]
 ): number {
-  return getQuizPool(words, levels, type).length;
+  return getQuizPool(words, levels, type, wordIds, excludeWordIds).length;
 }

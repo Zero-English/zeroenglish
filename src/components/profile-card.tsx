@@ -3,25 +3,45 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { Globe, ShieldCheck, Settings, Building2, GraduationCap, User, Link2, Sparkles } from "lucide-react";
+import {
+  Globe,
+  ShieldCheck,
+  Settings,
+  Building2,
+  GraduationCap,
+  User as UserIcon,
+  Link2,
+  Sparkles,
+  Award,
+  ArrowRight,
+} from "lucide-react";
 import { UserAvatar } from "@/components/UserAvatar";
 import { useAuthStore } from "@/lib/auth-store";
 import { useProfileStore, type ProfileData } from "@/lib/profile-store";
 import { SyncStatus } from "@/components/sync-status";
 import { useT } from "@/components/language-provider";
 import { setActiveTab } from "@/lib/profile-tab-store";
+import { useLearnedWords } from "@/lib/use-learned-words";
 import { cn } from "@/lib/utils";
 
 const CARD =
-  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
+  "rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md shadow-xs";
 
-export function ProfileCard() {
+export function ProfileBentoIdentity({
+  totalWords = 0,
+}: {
+  totalWords?: number;
+}) {
   const status = useAuthStore((s) => s.status);
   const { data: session } = useSession();
   const t = useT();
   const profile = useProfileStore((s) => s.profile);
   const setProfile = useProfileStore((s) => s.setProfile);
   const [error, setError] = useState(false);
+  const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
+
+  const totalLearned = learnedIds.size;
+  const overallPct = totalWords > 0 ? Math.min(100, Math.round((totalLearned / totalWords) * 100)) : 0;
 
   useEffect(() => {
     if (status !== "google") return;
@@ -44,129 +64,179 @@ export function ProfileCard() {
     };
   }, [status, setProfile]);
 
-  if (status !== "google" || !session?.user) return null;
+  const user = session?.user;
+  const isGoogle = status === "google" && !!user;
+  const isAdmin = user?.role === "admin";
+  const displayName = isGoogle ? user.name || "Learner" : t("অতিথি শিক্ষার্থী", "Guest Learner");
+  const displayEmail = isGoogle ? user.email || user.name : t("ডিভাইস লোকাল প্রোফাইল", "Device Local Account");
 
-  const user = session.user;
-  const isAdmin = user.role === "admin";
-  const hasDetails =
-    profile &&
-    (profile.institutionName ||
-      profile.class ||
-      (profile.gender && profile.gender !== "NOT_SET") ||
-      profile.bio ||
-      profile.socialLinks.length > 0);
+  const circumference = 2 * Math.PI * 34;
+  const offset = circumference * (1 - overallPct / 100);
 
   return (
-    <div className={cn(CARD, "mb-6 p-5 sm:p-6 transition-all duration-300 hover:border-black/[0.12] dark:hover:border-white/[0.15]")}>
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <UserAvatar
-              id={user.id ?? 0}
-              name={user.name}
-              userName={user.name}
-              image={user.image}
-              size="lg"
-            />
-          </div>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <h2 className="truncate text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100">
-                {user.name || "User"}
-              </h2>
-              {isAdmin ? (
-                <Link
-                  href="/admin"
-                  className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-semibold text-violet-700 hover:bg-violet-200 dark:bg-violet-900/40 dark:text-violet-300 dark:hover:bg-violet-900/60 transition-colors"
-                >
-                  <ShieldCheck className="h-3 w-3" />
-                  {t("অ্যাডমিন", "Admin")}
-                </Link>
-              ) : (
-                <span className="inline-flex items-center rounded-full bg-black/[0.04] dark:bg-white/[0.06] px-2.5 py-0.5 text-xs font-medium text-zinc-600 dark:text-zinc-400 border border-black/[0.05] dark:border-white/[0.08]">
-                  {t("শিক্ষার্থী", "Learner")}
-                </span>
-              )}
+    <div className={cn(CARD, "h-full p-4 sm:p-6 flex flex-col justify-between")}>
+      <div>
+        {/* Top Split: User Avatar + Name & Mastery Ring */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 sm:pb-5 border-b border-border/60">
+          {/* User Details */}
+          <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
+            <div className="relative shrink-0">
+              <div className="rounded-full ring-2 ring-primary/20 p-0.5">
+                <UserAvatar
+                  id={user?.id ?? 0}
+                  name={displayName}
+                  userName={displayName}
+                  image={user?.image}
+                  size="lg"
+                />
+              </div>
+              <div className="absolute -bottom-1 -right-1 flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xs ring-2 ring-background">
+                <Sparkles className="h-3 w-3 sm:h-3.5 sm:size-3.5" />
+              </div>
             </div>
-            <p className="mt-0.5 truncate text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-              {user.email || user.name}
-            </p>
+
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <h2 className="truncate text-base sm:text-xl font-semibold text-foreground tracking-tight">
+                  {displayName}
+                </h2>
+                {isAdmin ? (
+                  <Link
+                    href="/admin"
+                    className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-foreground border border-border/80 transition-colors"
+                  >
+                    <ShieldCheck className="h-3 w-3" />
+                    {t("অ্যাডমিন", "Admin")}
+                  </Link>
+                ) : (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[11px] sm:text-xs font-medium text-muted-foreground border border-border/60">
+                    <Award className="h-3 w-3" />
+                    {t("শিক্ষার্থী", "Learner")}
+                  </span>
+                )}
+              </div>
+              <p className="mt-0.5 truncate text-xs sm:text-sm text-muted-foreground font-normal">
+                {displayEmail}
+              </p>
+            </div>
+          </div>
+
+          {/* Circular Mastery Meter */}
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/40 border border-border/60 w-full sm:w-auto shrink-0 justify-between sm:justify-start">
+            <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0">
+              <svg width="56" height="56" viewBox="0 0 80 80" className="-rotate-90 sm:w-16 sm:h-16">
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="34"
+                  fill="none"
+                  strokeWidth="6"
+                  className="stroke-muted"
+                />
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="34"
+                  fill="none"
+                  strokeWidth="6"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={learnedLoaded ? offset : circumference}
+                  strokeLinecap="round"
+                  className="stroke-primary transition-all duration-700 ease-out"
+                />
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-xs font-bold tabular-nums text-foreground">
+                  {learnedLoaded ? `${overallPct}%` : "…"}
+                </span>
+              </div>
+            </div>
+            <div className="min-w-0 pr-1 text-right sm:text-left">
+              <div className="text-[11px] font-medium text-muted-foreground">
+                {t("সামগ্রিক দক্ষতা", "Overall Mastery")}
+              </div>
+              <div className="text-sm font-bold tabular-nums text-foreground">
+                {learnedLoaded ? `${totalLearned} / ${totalWords}` : "…"}
+              </div>
+              <div className="text-[10px] text-muted-foreground">
+                {t("শব্দ আয়ত্ত হয়েছে", "words mastered")}
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          {profile && profile.institutionName && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800/60 px-3 py-1 text-xs font-medium text-sky-700 dark:text-sky-300">
-              <Building2 className="h-3.5 w-3.5" />
-              {profile.institutionName}
+        {/* Academic & Attribute Tags */}
+        <div className="mt-3.5 sm:mt-4 flex flex-wrap items-center gap-1.5 sm:gap-2">
+          {profile?.institutionName && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted border border-border/60 px-2.5 sm:px-3 py-0.5 sm:py-1 text-xs font-medium text-foreground">
+              <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
+              <span className="truncate max-w-[180px] sm:max-w-none">{profile.institutionName}</span>
             </span>
           )}
-          {profile && profile.class && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-50 dark:bg-violet-950/40 border border-violet-200 dark:border-violet-800/60 px-3 py-1 text-xs font-medium text-violet-700 dark:text-violet-300">
-              <GraduationCap className="h-3.5 w-3.5" />
+          {profile?.class && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted border border-border/60 px-2.5 sm:px-3 py-0.5 sm:py-1 text-xs font-medium text-foreground">
+              <GraduationCap className="h-3.5 w-3.5 text-muted-foreground" />
               {profile.class}
             </span>
           )}
-          {profile && profile.gender && profile.gender !== "NOT_SET" && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 px-3 py-1 text-xs font-medium text-rose-700 dark:text-rose-300">
-              <User className="h-3.5 w-3.5" />
+          {profile?.gender && profile.gender !== "NOT_SET" && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted border border-border/60 px-2.5 sm:px-3 py-0.5 sm:py-1 text-xs font-medium text-foreground">
+              <UserIcon className="h-3.5 w-3.5 text-muted-foreground" />
               {t(
                 profile.gender === "MALE" ? "পুরুষ" : "মহিলা",
                 profile.gender === "MALE" ? "Male" : "Female"
               )}
             </span>
           )}
-          <Link
-            href={`/profile/${user.id}`}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-black/[0.08] dark:border-white/[0.12] bg-white/50 dark:bg-zinc-800/40 px-3 py-1.5 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
-          >
-            <Globe className="h-3.5 w-3.5" />
-            {t("পাবলিক প্রোফাইল", "Public Profile")}
-          </Link>
+
+          {isGoogle && (
+            <Link
+              href={`/profile/${user.id}`}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-border/80 bg-background/80 px-3 py-1 text-xs font-medium text-foreground hover:bg-muted shadow-2xs transition-colors"
+            >
+              <Globe className="h-3.5 w-3.5 text-muted-foreground" />
+              {t("পাবলিক প্রোফাইল", "Public Profile")}
+            </Link>
+          )}
+
           <button
             type="button"
             onClick={() => setActiveTab("settings")}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-black/[0.08] dark:border-white/[0.12] bg-white/50 dark:bg-zinc-800/40 px-3 py-1.5 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-border/80 bg-background/80 px-3 py-1 text-xs font-medium text-foreground hover:bg-muted shadow-2xs transition-colors cursor-pointer"
           >
-            <Settings className="h-3.5 w-3.5" />
+            <Settings className="h-3.5 w-3.5 text-muted-foreground" />
             {t("সেটিংস", "Settings")}
           </button>
         </div>
+
+        {/* Bio & Social Links */}
+        {profile?.bio && (
+          <p className="mt-3 text-xs sm:text-sm text-foreground/80 leading-relaxed line-clamp-2">
+            {profile.bio}
+          </p>
+        )}
+
+        {profile && profile.socialLinks.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5">
+            {profile.socialLinks.map((link) => (
+              <a
+                key={link}
+                href={link}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline transition-colors"
+              >
+                <Link2 className="h-3 w-3" />
+                {safeHostname(link)}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
 
-      {hasDetails && (
-        <div className="mt-4 border-t border-black/[0.06] dark:border-white/[0.08] pt-4">
-          {profile?.bio && (
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              {profile.bio}
-            </p>
-          )}
-          {profile && profile.socialLinks.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
-              {profile.socialLinks.map((link) => (
-                <a
-                  key={link}
-                  href={link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-medium text-sky-600 transition-colors hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
-                >
-                  <Link2 className="h-3.5 w-3.5" />
-                  {safeHostname(link)}
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {error && (
-        <p className="mt-3 text-[11px] text-zinc-400 dark:text-zinc-500">
-          {t("প্রোফাইল তথ্য লোড করা যায়নি।", "Could not load profile details.")}
-        </p>
-      )}
-
-      <SyncStatus />
+      <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between flex-wrap gap-2">
+        <SyncStatus />
+      </div>
     </div>
   );
 }
@@ -177,4 +247,8 @@ function safeHostname(link: string) {
   } catch {
     return link;
   }
+}
+
+export function ProfileCard() {
+  return null;
 }

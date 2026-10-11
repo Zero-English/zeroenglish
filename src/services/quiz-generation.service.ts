@@ -15,11 +15,17 @@ export type {
 } from "@/lib/quiz-generation-core";
 
 export const getQuizPoolCount = async (
-  input: Pick<QuizGenerationInput, "quizType" | "levels">
+  input: Pick<QuizGenerationInput, "quizType" | "levels" | "wordIds" | "excludeWordIds">
 ) => {
   try {
     const words = await getAllWords();
-    const maxCount = getQuizPoolCountCore(words, input.levels, input.quizType);
+    const maxCount = getQuizPoolCountCore(
+      words,
+      input.levels,
+      input.quizType,
+      input.wordIds,
+      input.excludeWordIds
+    );
 
     return {
       data: { maxCount },
@@ -46,9 +52,17 @@ export const generateQuizQuestions = async (
       input.levels,
       input.quantity,
       input.useAllQuestions,
-      input.quizType
+      input.quizType,
+      input.wordIds,
+      input.excludeWordIds
     );
-    const maxCount = getQuizPoolCountCore(words, input.levels, input.quizType);
+    const maxCount = getQuizPoolCountCore(
+      words,
+      input.levels,
+      input.quizType,
+      input.wordIds,
+      input.excludeWordIds
+    );
 
     return {
       data: { questions, maxCount },

@@ -20,9 +20,33 @@ export type Crumb = {
 
 export const HOME_CRUMB = { nameBn: "হোম", nameEn: "Home", href: "/" } as const;
 
+export const QUIZ_HUB: Crumb = { nameBn: "কুইজ", nameEn: "Quizzes", href: "/quiz" };
+
+export const QUIZ_CRUMBS = {
+  exam: { nameBn: "কুইজ পরীক্ষা", nameEn: "Quiz Exam", href: "/quiz/exam" },
+  quick: { nameBn: "কুইক কুইজ", nameEn: "Quick Quiz", href: "/quiz/quick" },
+  vocabulary: {
+    nameBn: "শব্দভাণ্ডার অনুশীলন",
+    nameEn: "Vocabulary Practice",
+    href: "/quiz/vocabulary",
+  },
+  grammar: {
+    nameBn: "গ্রামার টপিক কুইজ",
+    nameEn: "Grammar Topic Quizzes",
+    href: "/quiz/grammar",
+  },
+  class: { nameBn: "শ্রেণি ভিত্তিক কুইজ", nameEn: "Class Based Quizzes", href: "/quiz/class" },
+  results: {
+    nameBn: "পূর্বের পরীক্ষার ফলাফল",
+    nameEn: "Past Exam Results",
+    href: "/quiz/results",
+  },
+} satisfies Record<string, Crumb>;
+
 /** Every trail starts at Home, so callers only supply the pages below it. */
-export function buildTrail(items: Crumb[]): Crumb[] {
-  return [HOME_CRUMB, ...items];
+export function buildTrail(items: (Crumb | undefined | null)[]): Crumb[] {
+  const cleanItems = (items || []).filter((item): item is Crumb => Boolean(item && item.href && item.nameBn));
+  return [HOME_CRUMB, ...cleanItems];
 }
 
 /**
@@ -34,6 +58,8 @@ export function buildTrail(items: Crumb[]): Crumb[] {
  * of record for the content. Flipping the schema per-visitor would also
  * desync it from the crawler's own language settings.
  */
-export function schemaLabels(trail: Crumb[]): string[] {
-  return trail.map((c) => c.nameBn);
+export function schemaLabels(trail: (Crumb | undefined | null)[]): string[] {
+  return (trail || [])
+    .filter((c): c is Crumb => Boolean(c && typeof c.nameBn === "string"))
+    .map((c) => c.nameBn);
 }

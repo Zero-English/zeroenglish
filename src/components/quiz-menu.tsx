@@ -7,6 +7,7 @@ import {
   Languages,
   ArrowRight,
   BookMarked,
+  BookOpenCheck,
   GraduationCap,
   ClipboardList,
   History,
@@ -18,6 +19,7 @@ import {
   Target,
   Trophy,
   Layers,
+  BarChart3,
   type LucideIcon,
 } from "lucide-react";
 import { useT } from "@/components/language-provider";
@@ -60,7 +62,7 @@ const CARDS: QuizCard[] = [
     desc: "Take weekly and biweekly timed exams on a fixed schedule.",
     descBn: "নির্ধারিত সময়ে সাপ্তাহিক ও দ্বি-সাপ্তাহিক পরীক্ষা নিন।",
     href: "/quiz/exam",
-    icon: ClipboardList,
+    icon: CalendarClock,
     accent:
       "bg-violet-100/80 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
     arrow: "group-hover:bg-violet-500 group-hover:text-white group-active:bg-violet-500 group-active:text-white",
@@ -104,7 +106,7 @@ const CARDS: QuizCard[] = [
     desc: "Tenses, prepositions, articles, voice change and more.",
     descBn: "টেন্স, প্রিপজিশন, আর্টিকেল, ভয়েস চেঞ্জ ও আরও অনেক কিছু।",
     href: "/quiz/grammar",
-    icon: BookMarked,
+    icon: BookOpenCheck,
     accent:
       "bg-emerald-100/80 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300",
     arrow: "group-hover:bg-emerald-500 group-hover:text-white group-active:bg-emerald-500 group-active:text-white",
@@ -132,7 +134,7 @@ const CARDS: QuizCard[] = [
     desc: "Review your word-level performance across all past practice quizzes.",
     descBn: "আপনার নেওয়া সব প্র্যাকটিস কুইজের শব্দভিত্তিক ফলাফল দেখুন।",
     href: "/quiz/results",
-    icon: History,
+    icon: BarChart3,
     accent:
       "bg-indigo-100/80 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300",
     arrow: "group-hover:bg-indigo-500 group-hover:text-white group-active:bg-indigo-500 group-active:text-white",
@@ -466,7 +468,7 @@ export function QuizMenu() {
                         return (
                           <StaggerItem
                             key={card.href}
-                            className="border-l border-t border-black/[0.06] dark:border-white/[0.08] [&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0"
+                            className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0"
                           >
                             <Link
                               href={card.href}
