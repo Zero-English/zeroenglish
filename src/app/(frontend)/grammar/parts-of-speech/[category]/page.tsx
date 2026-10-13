@@ -40,5 +40,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   const rules = getRulesByCategory(categorySlug);
 
-  return <GrammarRuleList category={category} rules={rules} />;
+  return (
+    <GrammarRuleList
+      category={category}
+      rules={rules}
+      allCategories={getAllCategories()}
+    />
+  );
 }
