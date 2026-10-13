@@ -85,12 +85,14 @@ const COLOR_MAP: Record<
 
 interface GrammarCategoryCardProps {
   category: GrammarCategory;
+  sectionSlug?: string;
   className?: string;
   isGridCell?: boolean;
 }
 
 export function GrammarCategoryCard({
   category,
+  sectionSlug,
   className,
   isGridCell = true,
 }: GrammarCategoryCardProps) {
@@ -109,9 +111,11 @@ export function GrammarCategoryCard({
   const titleBanglaRaw =
     category.titleBn.split("(")[1]?.replace(")", "") || category.titleBn;
 
+  const targetSectionSlug = sectionSlug || category.sectionId || "parts-of-speech";
+
   return (
     <Link
-      href={`/grammar/parts-of-speech/${category.slug}`}
+      href={`/grammar/${targetSectionSlug}/${category.slug}`}
       className={cn(
         "group relative flex flex-col justify-between p-4 sm:p-5 transition-colors",
         isGridCell

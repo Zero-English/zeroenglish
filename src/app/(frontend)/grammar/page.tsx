@@ -1,7 +1,10 @@
 import { type Metadata } from "next";
 import { GrammarOverview } from "@/components/grammar/grammar-overview";
-import { getAllSections, getAllCategories } from "@/lib/grammar";
-import { GRAMMAR_RULES } from "@/data/grammar-data";
+import {
+  fetchDbSections,
+  fetchDbCategories,
+  fetchAllDbRules,
+} from "@/services/grammar.service";
 
 export const metadata: Metadata = {
   title: "English Grammar Rules & Lessons",
@@ -12,10 +15,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function GrammarPage() {
-  const sections = getAllSections();
-  const categories = getAllCategories();
-  const allRules = GRAMMAR_RULES;
+export default async function GrammarPage() {
+  const [sections, categories, allRules] = await Promise.all([
+    fetchDbSections(),
+    fetchDbCategories(),
+    fetchAllDbRules(),
+  ]);
 
   return (
     <GrammarOverview

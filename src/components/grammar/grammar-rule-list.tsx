@@ -6,6 +6,7 @@ import {
   type GrammarCategory,
   type GrammarRule,
   type DifficultyLevel,
+  type GrammarSection,
 } from "@/data/grammar-data";
 import {
   ArrowRight,
@@ -35,7 +36,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CATEGORY_GUIDES } from "@/data/grammar-category-guide";
+import { CATEGORY_GUIDES, type CategoryGuideInfo } from "@/data/grammar-category-guide";
 import { GrammarBreadcrumb } from "./grammar-breadcrumb";
 import { GrammarRulePreviewModal } from "./grammar-rule-preview-modal";
 import { GrammarSubcategorySidebar } from "./grammar-subcategory-sidebar";
@@ -48,14 +49,23 @@ interface GrammarRuleListProps {
   category: GrammarCategory;
   rules: GrammarRule[];
   allCategories?: GrammarCategory[];
+  guide?: CategoryGuideInfo;
+  section?: GrammarSection;
 }
 
 export function GrammarRuleList({
   category,
   rules,
   allCategories = [],
+  guide: propGuide,
+  section,
 }: GrammarRuleListProps) {
   const t = useT();
+  const targetSectionSlug =
+    section?.slug || category.sectionId || "parts-of-speech";
+  const sectionTitleEn = section?.titleEn || "Parts of Speech";
+  const sectionTitleBn =
+    section?.titleBn?.split("(")[1]?.replace(")", "") || section?.titleBn || "পদ প্রকরণ";
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     DifficultyLevel | "All"
   >("All");
@@ -100,7 +110,7 @@ export function GrammarRuleList({
   const titleBanglaRaw =
     category.titleBn.split("(")[1]?.replace(")", "") || category.titleBn;
 
-  const guide = CATEGORY_GUIDES[category.slug] || CATEGORY_GUIDES[category.id];
+  const guide = propGuide || CATEGORY_GUIDES[category.slug] || CATEGORY_GUIDES[category.id];
 
   const currentIndex = allCategories.findIndex(
     (c) => c.id === category.id || c.slug === category.slug
@@ -118,9 +128,9 @@ export function GrammarRuleList({
       <GrammarBreadcrumb
         items={[
           {
-            labelEn: "Parts of Speech",
-            labelBn: "পদ প্রকরণ",
-            href: "/grammar/parts-of-speech",
+            labelEn: sectionTitleEn,
+            labelBn: sectionTitleBn,
+            href: `/grammar/${targetSectionSlug}`,
           },
           { labelEn: category.titleEn, labelBn: titleBanglaRaw },
         ]}
@@ -170,6 +180,10 @@ export function GrammarRuleList({
                 category={category}
                 rules={rules}
                 allCategories={allCategories}
+                guide={guide}
+                sectionSlug={targetSectionSlug}
+                sectionTitleEn={sectionTitleEn}
+                sectionTitleBn={sectionTitleBn}
                 className="border-0 shadow-none bg-transparent p-0 sm:p-0"
                 onSelectCategory={() => setMobileDrawerOpen(false)}
               />
@@ -200,7 +214,7 @@ export function GrammarRuleList({
               return (
                 <Link
                   key={cat.id}
-                  href={`/grammar/parts-of-speech/${cat.slug}`}
+                  href={`/grammar/${targetSectionSlug}/${cat.slug}`}
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-all shrink-0",
                     isActive
@@ -234,7 +248,7 @@ export function GrammarRuleList({
               <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
                 <Layers className="h-3.5 w-3.5" />
                 <span>
-                  {t("পদ প্রকরণ", "Parts of Speech")} • {t("শাখা", "Class")} {category.order}/8
+                  {section ? t(sectionTitleBn, sectionTitleEn) : t("পদ প্রকরণ", "Parts of Speech")} • {t("শাখা", "Class")} {category.order}/{allCategories.length || 8}
                 </span>
               </span>
               <span className="text-xs text-muted-foreground font-mono">
@@ -260,11 +274,11 @@ export function GrammarRuleList({
 
           <div className="flex items-center gap-2 self-start md:self-start shrink-0">
             <Link
-              href="/grammar/parts-of-speech"
+              href={`/grammar/${targetSectionSlug}`}
               className="inline-flex items-center gap-1.5 rounded-xl border border-black/[0.06] bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground dark:border-white/[0.08] transition-colors shadow-2xs"
             >
               <Layers className="h-3.5 w-3.5 text-primary" />
-              <span>{t("সকল পদসমূহ", "All Parts of Speech")}</span>
+              <span>{t(`সকল ${sectionTitleBn}`, `All ${sectionTitleEn}`)}</span>
             </Link>
           </div>
         </div>
@@ -444,7 +458,7 @@ export function GrammarRuleList({
           <div className="flex items-center justify-between gap-3 pt-3 border-t border-black/[0.06] dark:border-white/[0.08] text-xs">
             {prevCategory ? (
               <Link
-                href={`/grammar/parts-of-speech/${prevCategory.slug}`}
+                href={`/grammar/${targetSectionSlug}/${prevCategory.slug}`}
                 className="inline-flex items-center gap-1.5 font-medium text-muted-foreground hover:text-foreground transition-colors group"
               >
                 <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
@@ -458,7 +472,7 @@ export function GrammarRuleList({
 
             {nextCategory && (
               <Link
-                href={`/grammar/parts-of-speech/${nextCategory.slug}`}
+                href={`/grammar/${targetSectionSlug}/${nextCategory.slug}`}
                 className="inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary/80 transition-colors group ml-auto"
               >
                 <span>
@@ -587,7 +601,7 @@ export function GrammarRuleList({
                       </div>
 
                       <Link
-                        href={`/grammar/parts-of-speech/${category.slug}/${rule.slug}`}
+                        href={`/grammar/${targetSectionSlug}/${category.slug}/${rule.slug}`}
                         className="block group-hover:text-primary transition-colors pt-0.5"
                       >
                         <h3 className="text-sm sm:text-base font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
@@ -638,7 +652,7 @@ export function GrammarRuleList({
                       </Button>
 
                       <Link
-                        href={`/grammar/parts-of-speech/${category.slug}/${rule.slug}`}
+                        href={`/grammar/${targetSectionSlug}/${category.slug}/${rule.slug}`}
                         className="flex h-8 w-8 items-center justify-center rounded-xl bg-muted/70 text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground transition-all shadow-2xs"
                         aria-label={t("পাঠটি পড়ুন", "Read lesson")}
                       >
@@ -660,6 +674,10 @@ export function GrammarRuleList({
             category={category}
             rules={rules}
             allCategories={allCategories}
+            guide={guide}
+            sectionSlug={targetSectionSlug}
+            sectionTitleEn={sectionTitleEn}
+            sectionTitleBn={sectionTitleBn}
           />
         </div>
       </div>

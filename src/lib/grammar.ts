@@ -1,12 +1,15 @@
 import {
   GRAMMAR_SECTIONS,
   GRAMMAR_CATEGORIES,
-  GRAMMAR_RULES,
   type GrammarSection,
   type GrammarCategory,
   type GrammarRule,
   type DifficultyLevel,
 } from "@/data/grammar-data";
+
+// ==========================================
+// Synchronous Static Accessors (Client & Fallback Safe)
+// ==========================================
 
 export function getAllSections(): GrammarSection[] {
   return GRAMMAR_SECTIONS;
@@ -28,43 +31,8 @@ export function getCategoryBySlug(slug: string): GrammarCategory | undefined {
   return GRAMMAR_CATEGORIES.find((c) => c.slug === slug);
 }
 
-export function getRulesByCategory(categoryIdOrSlug: string): GrammarRule[] {
-  return GRAMMAR_RULES.filter(
-    (r) => r.categoryId === categoryIdOrSlug || r.categorySlug === categoryIdOrSlug
-  ).sort((a, b) => a.order - b.order);
-}
-
-export function getRuleById(id: string): GrammarRule | undefined {
-  return GRAMMAR_RULES.find((r) => r.id === id);
-}
-
-export function getRuleBySlug(
-  categorySlug: string,
-  ruleSlug: string
-): GrammarRule | undefined {
-  return GRAMMAR_RULES.find(
-    (r) => r.categorySlug === categorySlug && r.slug === ruleSlug
-  );
-}
-
-export function getPrerequisiteRules(ruleId: string): GrammarRule[] {
-  const currentRule = getRuleById(ruleId);
-  if (!currentRule || !currentRule.prerequisiteRuleIds?.length) return [];
-  return currentRule.prerequisiteRuleIds
-    .map((id) => getRuleById(id))
-    .filter((r): r is GrammarRule => Boolean(r));
-}
-
-export function getRelatedRules(ruleId: string): GrammarRule[] {
-  const currentRule = getRuleById(ruleId);
-  if (!currentRule || !currentRule.relatedRuleIds?.length) return [];
-  return currentRule.relatedRuleIds
-    .map((id) => getRuleById(id))
-    .filter((r): r is GrammarRule => Boolean(r));
-}
-
 export function getCategoryNavigation(
-  categorySlug: string,
+  rules: GrammarRule[],
   currentRuleSlug: string
 ): {
   prevRule: GrammarRule | null;
@@ -72,7 +40,6 @@ export function getCategoryNavigation(
   totalRules: number;
   currentIndex: number;
 } {
-  const rules = getRulesByCategory(categorySlug);
   const currentIndex = rules.findIndex((r) => r.slug === currentRuleSlug);
 
   if (currentIndex === -1) {
@@ -90,43 +57,42 @@ export function getCategoryNavigation(
   };
 }
 
-export function searchRules({
-  query = "",
-  difficulty,
-  categoryId,
-}: {
-  query?: string;
-  difficulty?: DifficultyLevel | "All";
-  categoryId?: string | "All";
-}): GrammarRule[] {
-  const normalizedQuery = query.trim().toLowerCase();
+export function searchRules(
+  rules: GrammarRule[],
+  {
+    query = "",
+    difficulty,
+    categoryId,
+  }: {
+    query?: string;
+    difficulty?: DifficultyLevel | "All";
+    categoryId?: string | "All";
+  }
+): GrammarRule[] {
+  const normalizedQuery = query.toLowerCase().trim();
 
-  return GRAMMAR_RULES.filter((rule) => {
-    // Difficulty filter
+  return rules.filter((rule) => {
     if (difficulty && difficulty !== "All" && rule.difficulty !== difficulty) {
       return false;
     }
 
-    // Category filter
-    if (categoryId && categoryId !== "All" && rule.categoryId !== categoryId) {
+    if (
+      categoryId &&
+      categoryId !== "All" &&
+      rule.categoryId !== categoryId &&
+      rule.categorySlug !== categoryId
+    ) {
       return false;
     }
 
-    // Query filter
-    if (normalizedQuery) {
-      const inTitle =
-        rule.titleEn.toLowerCase().includes(normalizedQuery) ||
-        rule.titleBn.toLowerCase().includes(normalizedQuery);
-      const inDesc =
-        rule.shortDescriptionEn.toLowerCase().includes(normalizedQuery) ||
-        rule.shortDescriptionBn.toLowerCase().includes(normalizedQuery);
-      const inExpl =
-        rule.explanation.summaryEn.toLowerCase().includes(normalizedQuery) ||
-        rule.explanation.summaryBn.toLowerCase().includes(normalizedQuery);
+    if (!normalizedQuery) return true;
 
-      return inTitle || inDesc || inExpl;
-    }
+    const matchesTitleEn = rule.titleEn.toLowerCase().includes(normalizedQuery);
+    const matchesTitleBn = rule.titleBn.toLowerCase().includes(normalizedQuery);
+    const matchesDescEn = rule.shortDescriptionEn.toLowerCase().includes(normalizedQuery);
+    const matchesDescBn = rule.shortDescriptionBn.toLowerCase().includes(normalizedQuery);
+    const matchesFormula = rule.explanation?.formulaOrPattern?.toLowerCase().includes(normalizedQuery);
 
-    return true;
+    return matchesTitleEn || matchesTitleBn || matchesDescEn || matchesDescBn || matchesFormula;
   });
 }

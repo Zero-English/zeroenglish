@@ -6,7 +6,12 @@ import {
   type GrammarRule,
   type DifficultyLevel,
 } from "@/data/grammar-data";
-import { CATEGORY_GUIDES } from "@/data/grammar-category-guide";
+import {
+  CATEGORY_GUIDES,
+  type CategoryGuideInfo,
+  type CategorySentenceRole,
+  type CategoryGuideType,
+} from "@/data/grammar-category-guide";
 import { useGrammarProgress } from "@/lib/grammar-progress";
 import { useT } from "@/components/language-provider";
 import { Badge } from "@/components/ui/badge";
@@ -28,22 +33,32 @@ interface GrammarSubcategorySidebarProps {
   category: GrammarCategory;
   rules: GrammarRule[];
   allCategories?: GrammarCategory[];
+  guide?: CategoryGuideInfo;
   className?: string;
   onSelectCategory?: () => void;
+  sectionSlug?: string;
+  sectionTitleEn?: string;
+  sectionTitleBn?: string;
 }
 
 export function GrammarSubcategorySidebar({
   category,
   rules,
   allCategories = [],
+  guide: propGuide,
   className,
   onSelectCategory,
+  sectionSlug,
+  sectionTitleEn,
+  sectionTitleBn,
 }: GrammarSubcategorySidebarProps) {
   const t = useT();
+  const targetSectionSlug =
+    sectionSlug || category.sectionId || "parts-of-speech";
   const { getCategoryStats, resetCategoryProgress } = useGrammarProgress();
 
   const stats = getCategoryStats(rules);
-  const guide = CATEGORY_GUIDES[category.slug] || CATEGORY_GUIDES[category.id];
+  const guide = propGuide || CATEGORY_GUIDES[category.slug] || CATEGORY_GUIDES[category.id];
 
   const totalMinutes = rules.reduce(
     (acc, r) => acc + (r.estimatedMinutes || 5),
@@ -102,7 +117,7 @@ export function GrammarSubcategorySidebar({
                 {t("সাধারণ প্রত্যয় (Suffixes):", "Key Suffixes:")}
               </span>
               <div className="flex flex-wrap gap-1">
-                {guide.identificationHacks.suffixes.map((sfx, idx) => (
+                {guide.identificationHacks.suffixes.map((sfx: string, idx: number) => (
                   <Badge
                     key={idx}
                     variant="outline"
@@ -125,7 +140,7 @@ export function GrammarSubcategorySidebar({
 
           {guide ? (
             <div className="space-y-1.5">
-              {guide.sentenceRoles.map((role, idx) => (
+              {guide.sentenceRoles.map((role: CategorySentenceRole, idx: number) => (
                 <div
                   key={idx}
                   className="rounded-lg bg-background/70 p-2 text-xs border border-black/[0.04] dark:border-white/[0.04] space-y-0.5"
@@ -162,7 +177,7 @@ export function GrammarSubcategorySidebar({
 
           {guide ? (
             <div className="flex flex-wrap gap-1.5">
-              {guide.keyTypes.map((type, idx) => (
+              {guide.keyTypes.map((type: CategoryGuideType, idx: number) => (
                 <div
                   key={idx}
                   className="rounded-lg bg-background/80 border border-black/[0.05] dark:border-white/[0.05] px-2 py-1 text-xs"
@@ -266,15 +281,17 @@ export function GrammarSubcategorySidebar({
         )}
       </div>
 
-      {/* All 8 Parts of Speech Stepper */}
+      {/* All Categories Stepper */}
       {allCategories.length > 0 && (
         <div className="space-y-2 pt-1 border-t border-black/[0.06] dark:border-white/[0.08]">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-              {t("পদ পরিক্রমা (৮টি শাখা)", "Parts of Speech (8 Classes)")}
+              {sectionTitleEn
+                ? `${sectionTitleEn} (${allCategories.length})`
+                : t("পদ পরিক্রমা (৮টি শাখা)", "Parts of Speech (8 Classes)")}
             </span>
             <span className="text-[10px] text-primary font-mono font-semibold">
-              {category.order}/8
+              {category.order}/{allCategories.length}
             </span>
           </div>
 
@@ -287,7 +304,7 @@ export function GrammarSubcategorySidebar({
               return (
                 <Link
                   key={cat.id}
-                  href={`/grammar/parts-of-speech/${cat.slug}`}
+                  href={`/grammar/${targetSectionSlug}/${cat.slug}`}
                   onClick={onSelectCategory}
                   className={cn(
                     "flex items-center justify-between p-2 rounded-xl text-xs transition-all",

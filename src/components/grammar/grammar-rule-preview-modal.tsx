@@ -169,7 +169,7 @@ export function GrammarRulePreviewModal({
               className="text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90"
             >
               <Link
-                href={`/grammar/parts-of-speech/${rule.categorySlug}/${rule.slug}`}
+                href={`/grammar/${rule.sectionSlug || "parts-of-speech"}/${rule.categorySlug}/${rule.slug}`}
                 onClick={() => onOpenChange(false)}
               >
                 <span>{t("মূল পাঠে যান", "Go to Lesson")}</span>

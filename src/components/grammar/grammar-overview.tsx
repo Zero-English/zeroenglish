@@ -120,7 +120,7 @@ export function GrammarOverview({
     selectedCategoryId !== "All";
 
   const searchResults = isFiltering
-    ? searchRules({
+    ? searchRules(allRules, {
         query: searchQuery,
         difficulty: selectedDifficulty,
         categoryId: selectedCategoryId,
@@ -410,7 +410,7 @@ export function GrammarOverview({
 
                     <div className="mt-3 pt-2 border-t border-black/[0.06] dark:border-white/[0.08] flex items-center justify-end text-xs font-medium text-muted-foreground group-hover:text-primary">
                       <Link
-                        href={`/grammar/parts-of-speech/${rule.categorySlug}/${rule.slug}`}
+                        href={`/grammar/${rule.sectionSlug || "parts-of-speech"}/${rule.categorySlug}/${rule.slug}`}
                         className="inline-flex items-center gap-1 hover:text-primary transition-colors"
                       >
                         <span>{t("নিয়মটি পড়ুন", "Study rule")}</span>

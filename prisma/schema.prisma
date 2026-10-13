@@ -7,23 +7,139 @@ datasource db {
   provider = "postgresql"
 } 
 
-model GrammarRules {
-  id Int @id @default(autoincrement())
-  title String
-  description String
-  grammarCategoryId Int
-  grammarCategory QuizType @relation(fields: [grammarCategoryId], references: [id], onDelete: Cascade)
-  level Levels
-  prerequisites GrammarRules[] @relation("GrammarPrerequisites")
-  prerequisitesFor GrammarRules[] @relation("GrammarPrerequisites")
-  examples String[]
-  status grammarRuleStatus @default(PENDING)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  createdByUserId Int
-  createdBy User @relation(fields: [createdByUserId], references: [id], onDelete: Cascade)
-  commonMistakes String[]
+model GrammarSection {
+  id            Int               @id @default(autoincrement())
+  slug          String            @unique
+  titleEn       String
+  titleBn       String
+  descriptionEn String
+  descriptionBn String
+  icon          String            @default("Layers")
+  badgeText     String?
+  order         Int               @default(0)
+  status        String            @default("available")
+  isPublished      Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  // Section Educational Learning Guide
+  hasLearningGuide Boolean           @default(false)
+  learningGuide    Json?             @default("{}")
+
+  categories       GrammarCategory[]
+
+  @@index([order])
+  @@index([isPublished])
 }
+
+model GrammarCategory {
+  id                  Int            @id @default(autoincrement())
+  slug                String         @unique
+  sectionId           Int
+  section             GrammarSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  titleEn             String
+  titleBn             String
+  descriptionEn       String
+  descriptionBn       String
+  icon                String         @default("FileText")
+  order               Int            @default(0)
+  accentColor         String         @default("from-sky-500 to-blue-600")
+  isPublished         Boolean        @default(true)
+
+  // Educational Guide Fields
+  headlineEn          String?        @default("")
+  headlineBn          String?        @default("")
+  overviewEn          String?        @default("")
+  overviewBn          String?        @default("")
+  sentenceRoles       Json?          @default("[]")
+  keyTypes            Json?          @default("[]")
+  identificationHacks Json?          @default("{}")
+  commonTrap          Json?          @default("{}")
+
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  rules               GrammarRule[]
+
+  @@index([sectionId])
+  @@index([order])
+  @@index([isPublished])
+}
+
+model GrammarRule {
+  id                 Int               @id @default(autoincrement())
+  slug               String            @unique
+  categoryId         Int
+  category           GrammarCategory   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  titleEn            String
+  titleBn            String
+  shortDescriptionEn String
+  shortDescriptionBn String
+  difficulty         GrammarDifficulty @default(BEGINNER)
+  order              Int               @default(0)
+  estimatedMinutes   Int               @default(5)
+  status             grammarRuleStatus @default(APPROVED)
+  isPublished        Boolean           @default(true)
+
+  // Lesson Content
+  introductionEn     String            @default("")
+  introductionBn     String            @default("")
+  summaryEn          String            @default("")
+  summaryBn          String            @default("")
+  formulaOrPattern   String?           @default("")
+  keyRules           Json              @default("[]")
+  examples           Json              @default("[]")
+  comparisons        Json              @default("[]")
+  commonMistakes     Json              @default("[]")
+
+  // Prerequisites and Related Rules
+  prerequisites      GrammarRule[]     @relation("GrammarRulePrerequisites")
+  prerequisitesFor   GrammarRule[]     @relation("GrammarRulePrerequisites")
+  relatedRules       GrammarRule[]     @relation("GrammarRuleRelated")
+  relatedRulesFor    GrammarRule[]     @relation("GrammarRuleRelated")
+
+  addedByUserId      Int?
+  addedByUser        User?             @relation(fields: [addedByUserId], references: [id], onDelete: SetNull)
+
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  userProgress       UserGrammarProgress[]
+  userBookmarks      UserGrammarBookmark[]
+
+  @@index([categoryId])
+  @@index([difficulty])
+  @@index([order])
+  @@index([status, isPublished])
+}
+
+model UserGrammarProgress {
+  userId      Int
+  ruleId      Int
+  isCompleted Boolean   @default(false)
+  isVisited   Boolean   @default(true)
+  completedAt DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rule        GrammarRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, ruleId])
+  @@index([userId, isCompleted])
+}
+
+model UserGrammarBookmark {
+  userId       Int
+  ruleId       Int
+  bookmarkedAt DateTime @default(now())
+
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rule         GrammarRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, ruleId])
+  @@index([userId, bookmarkedAt])
+}
+
 
 model Blog {
   id              Int      @id @default(autoincrement())
@@ -254,10 +370,12 @@ model User {
   sessions       Session[]
   relatedWords   UserWord[]
   userBookmarks  UserBookmark[]
+  addedWords     Word[]
   isPending      Boolean @default(true)
   addedQuestions QuizQuestion[]
-  addedWords Word[]
-  addedGrammarRules GrammarRules[]
+  addedGrammarRules GrammarRule[]
+  grammarProgress   UserGrammarProgress[]
+  grammarBookmarks  UserGrammarBookmark[]
   relatedCombinedExamResults CombinedExamResult[]
   createdTemplates VisualTemplate[] @relation("CreatedTemplates")
 }
@@ -300,7 +418,6 @@ model QuizType {
   id               Int            @id @default(autoincrement())
   name             String         @unique
   relatedQuestions QuizQuestion[]
-  relatedGrammarRules GrammarRules[]
   combinedExamResults CombinedExamResult[]
 }
 
@@ -380,6 +497,12 @@ enum grammarRuleStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum GrammarDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
 }
 
 enum TemplateType {

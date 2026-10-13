@@ -28,6 +28,7 @@ interface GrammarTimelineSidebarProps {
   currentRuleSlug?: string;
   className?: string;
   onSelectRule?: (rule: GrammarRule) => void;
+  sectionSlug?: string;
 }
 
 export function GrammarTimelineSidebar({
@@ -36,8 +37,11 @@ export function GrammarTimelineSidebar({
   currentRuleSlug,
   className,
   onSelectRule,
+  sectionSlug,
 }: GrammarTimelineSidebarProps) {
   const t = useT();
+  const targetSectionSlug =
+    sectionSlug || category.sectionId || "parts-of-speech";
   const {
     isCompleted,
     isVisited,
@@ -78,7 +82,7 @@ export function GrammarTimelineSidebar({
       <div className="border-b border-black/[0.06] dark:border-white/[0.08] p-4 space-y-3 bg-muted/20">
         <div className="flex items-center justify-between">
           <Link
-            href={`/grammar/parts-of-speech/${category.slug}`}
+            href={`/grammar/${targetSectionSlug}/${category.slug}`}
             className="group flex items-center gap-2 hover:opacity-85 transition-opacity"
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold shadow-2xs">
@@ -98,10 +102,10 @@ export function GrammarTimelineSidebar({
           </Link>
 
           <Link
-            href="/grammar/parts-of-speech"
+            href={`/grammar/${targetSectionSlug}`}
             className="text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            {t("সকল পদ", "All Topics")}
+            {t("সকল পাঠ", "All Topics")}
           </Link>
         </div>
 
@@ -226,7 +230,7 @@ export function GrammarTimelineSidebar({
 
                 {/* Rule Title & Link */}
                 <Link
-                  href={`/grammar/parts-of-speech/${category.slug}/${rule.slug}`}
+                  href={`/grammar/${targetSectionSlug}/${category.slug}/${rule.slug}`}
                   onClick={() => onSelectRule?.(rule)}
                   className="block group-hover:text-primary transition-colors space-y-0.5"
                 >
@@ -285,7 +289,7 @@ export function GrammarTimelineSidebar({
                     </button>
 
                     <Link
-                      href={`/grammar/parts-of-speech/${category.slug}/${rule.slug}`}
+                      href={`/grammar/${targetSectionSlug}/${category.slug}/${rule.slug}`}
                       className="rounded p-0.5 hover:text-primary transition-colors"
                       aria-label={t("পাঠটি খুলুন", "Open lesson")}
                     >

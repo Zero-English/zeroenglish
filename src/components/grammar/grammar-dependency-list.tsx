@@ -50,7 +50,7 @@ export function GrammarDependencyList({
           {prerequisites.map((rule) => (
             <Link
               key={rule.id}
-              href={`/grammar/parts-of-speech/${rule.categorySlug}/${rule.slug}`}
+              href={`/grammar/${rule.sectionSlug || "parts-of-speech"}/${rule.categorySlug}/${rule.slug}`}
               className="group p-4 border-t border-amber-500/15 first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0 hover:bg-amber-500/[0.08] transition-colors flex flex-col justify-between space-y-2"
             >
               <div className="space-y-1">

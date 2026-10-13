@@ -6,6 +6,7 @@ import {
   type GrammarCategory,
   type GrammarRule,
   type DifficultyLevel,
+  type GrammarSection,
 } from "@/data/grammar-data";
 import {
   Clock,
@@ -53,6 +54,7 @@ interface GrammarRuleDetailProps {
     totalRules: number;
     currentIndex: number;
   };
+  section?: GrammarSection;
 }
 
 export function GrammarRuleDetail({
@@ -62,8 +64,14 @@ export function GrammarRuleDetail({
   prerequisites,
   relatedRules,
   navigation,
+  section,
 }: GrammarRuleDetailProps) {
   const t = useT();
+  const targetSectionSlug =
+    section?.slug || rule.sectionSlug || category.sectionId || "parts-of-speech";
+  const sectionTitleEn = section?.titleEn || "Parts of Speech";
+  const sectionTitleBn =
+    section?.titleBn?.split("(")[1]?.replace(")", "") || section?.titleBn || "পদ প্রকরণ";
   const [activeTab, setActiveTab] = useState<"all" | "en" | "bn">("all");
   const [copied, setCopied] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
@@ -160,14 +168,14 @@ export function GrammarRuleDetail({
         <GrammarBreadcrumb
           items={[
             {
-              labelEn: "Parts of Speech",
-              labelBn: "পদ প্রকরণ",
-              href: "/grammar/parts-of-speech",
+              labelEn: sectionTitleEn,
+              labelBn: sectionTitleBn,
+              href: `/grammar/${targetSectionSlug}`,
             },
             {
               labelEn: category.titleEn,
               labelBn: titleBanglaRaw,
-              href: `/grammar/parts-of-speech/${category.slug}`,
+              href: `/grammar/${targetSectionSlug}/${category.slug}`,
             },
             { labelEn: rule.titleEn, labelBn: rule.titleBn },
           ]}
@@ -273,6 +281,7 @@ export function GrammarRuleDetail({
                 category={category}
                 rules={rulesList}
                 currentRuleSlug={rule.slug}
+                sectionSlug={targetSectionSlug}
                 className="border-0 shadow-none bg-transparent"
                 onSelectRule={() => setMobileDrawerOpen(false)}
               />
@@ -289,6 +298,7 @@ export function GrammarRuleDetail({
             category={category}
             rules={rulesList}
             currentRuleSlug={rule.slug}
+            sectionSlug={targetSectionSlug}
           />
         </div>
 
@@ -322,7 +332,7 @@ export function GrammarRuleDetail({
                   className="hidden sm:inline-flex shrink-0 text-xs border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10"
                 >
                   <Link
-                    href={`/grammar/parts-of-speech/${navigation.nextRule.categorySlug}/${navigation.nextRule.slug}`}
+                    href={`/grammar/${navigation.nextRule.sectionSlug || targetSectionSlug}/${navigation.nextRule.categorySlug}/${navigation.nextRule.slug}`}
                   >
                     <span>{t("পরবর্তী পাঠ", "Next Lesson")}</span>
                     <ArrowRight className="h-3 w-3 ml-1" />
@@ -336,7 +346,7 @@ export function GrammarRuleDetail({
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
               <Link
-                href={`/grammar/parts-of-speech/${category.slug}`}
+                href={`/grammar/${targetSectionSlug}/${category.slug}`}
                 className="inline-flex items-center gap-1 rounded-lg bg-muted/70 px-2.5 py-0.5 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               >
                 <Layers className="h-3 w-3" />
@@ -404,7 +414,7 @@ export function GrammarRuleDetail({
                     <span key={p.id}>
                       {idx > 0 && ", "}
                       <Link
-                        href={`/grammar/parts-of-speech/${p.categorySlug}/${p.slug}`}
+                        href={`/grammar/${p.sectionSlug || targetSectionSlug}/${p.categorySlug}/${p.slug}`}
                         className="font-semibold text-amber-600 dark:text-amber-400 underline underline-offset-2 hover:opacity-85"
                       >
                         {p.titleEn}
@@ -684,7 +694,7 @@ export function GrammarRuleDetail({
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl p-4 sm:p-5 dark:border-white/[0.08] dark:bg-zinc-900/60 shadow-xs">
             {navigation.prevRule ? (
               <Link
-                href={`/grammar/parts-of-speech/${navigation.prevRule.categorySlug}/${navigation.prevRule.slug}`}
+                href={`/grammar/${navigation.prevRule.sectionSlug || targetSectionSlug}/${navigation.prevRule.categorySlug}/${navigation.prevRule.slug}`}
                 className="group flex items-center gap-2.5 text-left w-full sm:w-auto"
               >
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-black/[0.06] bg-muted/60 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary dark:border-white/[0.08] transition-all shadow-2xs">
@@ -705,7 +715,7 @@ export function GrammarRuleDetail({
 
             {navigation.nextRule ? (
               <Link
-                href={`/grammar/parts-of-speech/${navigation.nextRule.categorySlug}/${navigation.nextRule.slug}`}
+                href={`/grammar/${navigation.nextRule.sectionSlug || targetSectionSlug}/${navigation.nextRule.categorySlug}/${navigation.nextRule.slug}`}
                 className="group flex items-center gap-2.5 text-right justify-end w-full sm:w-auto"
               >
                 <div>
