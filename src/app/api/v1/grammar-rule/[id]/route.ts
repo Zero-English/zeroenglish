@@ -6,7 +6,7 @@ import {
     getGrammarRuleById,
     updateGrammarRuleById,
 } from "@/services/grammar-rule.service";
-import { grammarRuleUpdateSchema } from "@/utils/validation/zod";
+import { contributorGrammarRuleUpdateSchema as grammarRuleUpdateSchema } from "@/utils/validation/zod";
 
 /**
  * @openapi

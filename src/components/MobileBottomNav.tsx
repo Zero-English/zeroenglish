@@ -15,6 +15,7 @@ import {
   LogOut,
   LogIn,
   Shield,
+  GraduationCap,
   SquarePen,
   Newspaper,
   Info,
@@ -59,7 +60,7 @@ function FacebookIcon({ className }: { className?: string }) {
 const spring = { type: 'spring', stiffness: 420, damping: 32, mass: 0.9 } as const
 
 const itemClass =
-  'relative flex flex-1 flex-col items-center gap-0.5 rounded-lg px-1 py-1.5 transition-colors cursor-pointer'
+  'relative flex flex-1 min-w-0 flex-col items-center gap-0.5 rounded-lg px-0.5 py-1.5 transition-colors cursor-pointer'
 
 export function MobileBottomNav() {
   const pathname = usePathname()
@@ -85,6 +86,7 @@ export function MobileBottomNav() {
   const currentTheme = theme === 'system' ? systemTheme : theme
   const isLoggedIn = status !== 'none'
   const user = session?.user
+  const isAdmin = user?.role === 'admin'
   const canContribute = user?.role === 'admin' || user?.role === 'contributor'
 
   const vocabularyHref = level ? `/vocabulary/${level.toLowerCase()}` : '/vocabulary'
@@ -92,8 +94,8 @@ export function MobileBottomNav() {
   const navLinks = [
     { href: '/', label: t('হোম', 'Home'), icon: Home },
     { href: vocabularyHref, label: t('শব্দভাণ্ডার', 'Vocabulary'), icon: LibraryBig },
+    { href: '/grammar', label: t('গ্রামার', 'Grammar'), icon: GraduationCap },
     { href: '/quiz', label: t('কুইজ', 'Quiz'), icon: BadgeQuestionMark },
-    { href: '/leaderboard', label: t('লিডারবোর্ড', 'Leaderboard'), icon: Trophy },
   ]
 
   const toggleTheme = () => {
@@ -176,7 +178,7 @@ export function MobileBottomNav() {
                     }
                     transition={{ duration: 0.18 }}
                     className={cn(
-                      'text-[10px] leading-none transition-colors',
+                      'text-[10px] leading-none transition-colors truncate max-w-full text-center',
                       active ? 'font-bold text-primary' : 'font-medium'
                     )}
                   >
@@ -383,6 +385,41 @@ export function MobileBottomNav() {
             </Link>
 
             <Link
+              href="/grammar"
+              onClick={() => setDrawerOpen(false)}
+              className="flex items-center justify-between p-2.5 rounded-lg text-xs font-medium text-foreground hover:bg-muted/70 transition-colors"
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="flex size-7 items-center justify-center rounded-md bg-violet-500/10 text-violet-600 dark:text-violet-400">
+                  <GraduationCap className="size-4" />
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">{t('ইংরেজি গ্রামার', 'English Grammar')}</p>
+                  <p className="text-[10px] text-muted-foreground">{t('রুলস, ব্যাখ্যা ও প্র্যাকটিস', 'Rules, explanations & practice')}</p>
+                </div>
+              </div>
+              <ChevronRight className="size-4 text-muted-foreground/60" />
+            </Link>
+
+            {/* Leaderboard Button */}
+            <Link
+              href="/leaderboard"
+              onClick={() => setDrawerOpen(false)}
+              className="flex items-center justify-between p-2.5 rounded-lg text-xs font-medium text-foreground hover:bg-muted/70 transition-colors"
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="flex size-7 items-center justify-center rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                  <Trophy className="size-4" />
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">{t('লিডারবোর্ড', 'Leaderboard')}</p>
+                  <p className="text-[10px] text-muted-foreground">{t('সেরা শিক্ষার্থীদের তালিকা ও র‍্যাংকিং', 'Top learners & rankings')}</p>
+                </div>
+              </div>
+              <ChevronRight className="size-4 text-muted-foreground/60" />
+            </Link>
+
+            <Link
               href="/news"
               onClick={() => setDrawerOpen(false)}
               className="flex items-center justify-between p-2.5 rounded-lg text-xs font-medium text-foreground hover:bg-muted/70 transition-colors"
@@ -418,23 +455,25 @@ export function MobileBottomNav() {
               </Link>
             )}
 
-            {/* Admin Panel Button */}
-            <Link
-              href="/admin"
-              onClick={() => setDrawerOpen(false)}
-              className="flex items-center justify-between p-2.5 rounded-lg text-xs font-medium text-foreground hover:bg-muted/70 transition-colors"
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="flex size-7 items-center justify-center rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400">
-                  <Shield className="size-4" />
+            {/* Secure Admin Panel Button (Role-based: only visible to admins) */}
+            {isAdmin && (
+              <Link
+                href="/admin"
+                onClick={() => setDrawerOpen(false)}
+                className="flex items-center justify-between p-2.5 rounded-lg text-xs font-medium text-foreground hover:bg-muted/70 transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="flex size-7 items-center justify-center rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400">
+                    <Shield className="size-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-foreground">{t('অ্যাডমিন প্যানেল', 'Admin Panel')}</p>
+                    <p className="text-[10px] text-muted-foreground">{t('সিস্টেম ও কনটেন্ট ম্যানেজমেন্ট', 'System & content management')}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-medium text-foreground">{t('অ্যাডমিন প্যানেল', 'Admin Panel')}</p>
-                  <p className="text-[10px] text-muted-foreground">{t('সিস্টেম ও কনটেন্ট ম্যানেজমেন্ট', 'System & content management')}</p>
-                </div>
-              </div>
-              <ChevronRight className="size-4 text-muted-foreground/60" />
-            </Link>
+                <ChevronRight className="size-4 text-muted-foreground/60" />
+              </Link>
+            )}
 
             {/* Facebook Page Button */}
             <a

@@ -518,9 +518,235 @@ export const popupUpdateSchema = popupBaseSchema
 export type PopupInput = z.infer<typeof popupSchema>;
 export type PopupUpdateInput = z.infer<typeof popupUpdateSchema>;
 
+// ==========================================
+// Grammar System Validation Schemas
+// ==========================================
+
+export const grammarDifficultyEnumSchema = z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]);
 export const grammarRuleStatusEnumSchema = z.enum(["PENDING", "APPROVED", "REJECTED"]);
 
-export const grammarRuleSchema = z
+export const sentenceRoleSchema = z
+  .object({
+    role: z.string().trim().optional().default(""),
+    roleEn: z.string().trim().optional().default(""),
+    banglaRole: z.string().trim().optional().default(""),
+    roleBn: z.string().trim().optional().default(""),
+    explanation: z.string().trim().optional().default(""),
+    targetWord: z.string().trim().optional().default(""),
+    example: z.string().trim().optional().default(""),
+    exampleSentence: z.string().trim().optional().default(""),
+  })
+  .passthrough();
+
+export const keyTypeSchema = z
+  .object({
+    name: z.string().trim().optional().default(""),
+    nameEn: z.string().trim().optional().default(""),
+    bangla: z.string().trim().optional().default(""),
+    nameBn: z.string().trim().optional().default(""),
+    description: z.string().trim().optional().default(""),
+    descriptionEn: z.string().trim().optional().default(""),
+    descriptionBn: z.string().trim().optional().default(""),
+    examples: z.array(z.string().trim()).default([]),
+  })
+  .passthrough();
+
+export const identificationHacksSchema = z
+  .object({
+    questionHooks: z.array(z.string().trim()).default([]),
+    suffixClues: z.array(z.string().trim()).default([]),
+    positionRule: z.string().trim().default(""),
+    questionEn: z.string().trim().optional().default(""),
+    questionBn: z.string().trim().optional().default(""),
+    clueEn: z.string().trim().optional().default(""),
+    clueBn: z.string().trim().optional().default(""),
+    suffixes: z.array(z.string().trim()).optional().default([]),
+  })
+  .passthrough();
+
+export const commonTrapSchema = z
+  .object({
+    misconception: z.string().trim().default(""),
+    reality: z.string().trim().default(""),
+    testSentence: z.string().trim().default(""),
+    explanation: z.string().trim().default(""),
+    titleEn: z.string().trim().optional().default(""),
+    titleBn: z.string().trim().optional().default(""),
+    incorrect: z.string().trim().optional().default(""),
+    correct: z.string().trim().optional().default(""),
+    explanationEn: z.string().trim().optional().default(""),
+    explanationBn: z.string().trim().optional().default(""),
+  })
+  .passthrough();
+
+export const grammarRuleItemSchema = z
+  .object({
+    ruleEn: z.string().trim().min(1, "Rule in English is required"),
+    ruleBn: z.string().trim().min(1, "Rule in Bangla is required"),
+    note: z.string().trim().optional().default(""),
+    detailsEn: z.string().trim().optional(),
+    detailsBn: z.string().trim().optional(),
+    exampleEn: z.string().trim().optional(),
+    exampleBn: z.string().trim().optional(),
+  })
+  .passthrough();
+
+export const grammarExampleItemSchema = z
+  .object({
+    id: z.string().optional(),
+    en: z.string().trim().optional().default(""),
+    bn: z.string().trim().optional().default(""),
+    sentenceEn: z.string().trim().optional().default(""),
+    sentenceBn: z.string().trim().optional().default(""),
+    explanation: z.string().trim().optional().default(""),
+    noteEn: z.string().trim().optional().default(""),
+    noteBn: z.string().trim().optional().default(""),
+    badge: z.string().trim().optional().default(""),
+    highlights: z.union([z.array(z.string().trim()), z.string().trim()]).optional().default([]),
+  })
+  .passthrough();
+
+export const grammarComparisonItemSchema = z
+  .object({
+    id: z.string().optional(),
+    conceptA: z.string().trim().optional().default(""),
+    conceptB: z.string().trim().optional().default(""),
+    contrastEn: z.string().trim().optional().default(""),
+    contrastBn: z.string().trim().optional().default(""),
+    incorrect: z.string().trim().optional().default(""),
+    correct: z.string().trim().optional().default(""),
+    explanationEn: z.string().trim().optional().default(""),
+    explanationBn: z.string().trim().optional().default(""),
+  })
+  .passthrough();
+
+export const grammarMistakeItemSchema = z
+  .object({
+    id: z.string().optional(),
+    incorrect: z.string().trim().optional().default(""),
+    correct: z.string().trim().optional().default(""),
+    reasonEn: z.string().trim().optional().default(""),
+    reasonBn: z.string().trim().optional().default(""),
+    mistakeEn: z.string().trim().optional().default(""),
+    whyEn: z.string().trim().optional().default(""),
+    whyBn: z.string().trim().optional().default(""),
+    correctionEn: z.string().trim().optional().default(""),
+    correctionBn: z.string().trim().optional().default(""),
+  })
+  .passthrough();
+
+// Section Schema
+export const grammarSectionSchema = z.object({
+  slug: z.string().trim().min(1, "Section slug is required").regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
+  titleEn: z.string().trim().min(1, "English title is required"),
+  titleBn: z.string().trim().min(1, "Bangla title is required"),
+  descriptionEn: z.string().trim().default(""),
+  descriptionBn: z.string().trim().default(""),
+  icon: z.string().trim().default("Layers"),
+  badgeText: z.string().trim().nullable().optional(),
+  order: z.number().int().default(0),
+  status: z.enum(["available", "coming-soon"]).default("available"),
+  isPublished: z.boolean().default(true),
+  hasLearningGuide: z.boolean().default(false),
+  learningGuide: z.record(z.string(), z.any()).optional().default({}),
+});
+
+export const grammarSectionUpdateSchema = grammarSectionSchema.partial();
+
+// Category Schema
+export const grammarCategorySchema = z.object({
+  slug: z.string().trim().min(1, "Category slug is required").regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
+  sectionId: z.number().int().positive("Section ID is required"),
+  titleEn: z.string().trim().min(1, "English title is required"),
+  titleBn: z.string().trim().min(1, "Bangla title is required"),
+  descriptionEn: z.string().trim().default(""),
+  descriptionBn: z.string().trim().default(""),
+  icon: z.string().trim().default("FileText"),
+  order: z.number().int().default(0),
+  accentColor: z.string().trim().default("from-sky-500 to-blue-600"),
+  isPublished: z.boolean().default(true),
+
+  headlineEn: z.string().trim().optional().default(""),
+  headlineBn: z.string().trim().optional().default(""),
+  overviewEn: z.string().trim().optional().default(""),
+  overviewBn: z.string().trim().optional().default(""),
+  sentenceRoles: z.array(sentenceRoleSchema).default([]),
+  keyTypes: z.array(keyTypeSchema).default([]),
+  identificationHacks: identificationHacksSchema.default({
+    questionHooks: [],
+    suffixClues: [],
+    positionRule: "",
+    questionEn: "",
+    questionBn: "",
+    clueEn: "",
+    clueBn: "",
+    suffixes: [],
+  }),
+  commonTrap: commonTrapSchema.default({
+    misconception: "",
+    reality: "",
+    testSentence: "",
+    explanation: "",
+    titleEn: "",
+    titleBn: "",
+    incorrect: "",
+    correct: "",
+    explanationEn: "",
+    explanationBn: "",
+  }),
+});
+
+export const grammarCategoryUpdateSchema = grammarCategorySchema.partial();
+
+// Rule Schema
+export const grammarRuleSchema = z.object({
+  slug: z.string().trim().min(1, "Rule slug is required").regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
+  categoryId: z.number().int().positive("Category ID is required"),
+  titleEn: z.string().trim().min(1, "English title is required"),
+  titleBn: z.string().trim().min(1, "Bangla title is required"),
+  shortDescriptionEn: z.string().trim().default(""),
+  shortDescriptionBn: z.string().trim().default(""),
+  difficulty: grammarDifficultyEnumSchema.default("BEGINNER"),
+  order: z.number().int().default(0),
+  estimatedMinutes: z.number().int().positive().default(5),
+  status: grammarRuleStatusEnumSchema.default("APPROVED"),
+  isPublished: z.boolean().default(true),
+
+  introductionEn: z.string().trim().default(""),
+  introductionBn: z.string().trim().default(""),
+  summaryEn: z.string().trim().default(""),
+  summaryBn: z.string().trim().default(""),
+  formulaOrPattern: z.string().trim().nullable().optional().default(""),
+
+  keyRules: z.array(grammarRuleItemSchema).default([]),
+  examples: z.array(grammarExampleItemSchema).default([]),
+  comparisons: z.array(grammarComparisonItemSchema).default([]),
+  commonMistakes: z.array(grammarMistakeItemSchema).default([]),
+
+  prerequisiteIds: z.array(z.number().int().positive()).optional().default([]),
+  relatedRuleIds: z.array(z.number().int().positive()).optional().default([]),
+});
+
+export const grammarRuleUpdateSchema = grammarRuleSchema.partial();
+
+export const bulkGrammarRuleUpdateSchema = z.object({
+  ids: z.array(z.number().int().positive()).min(1, "At least one rule ID is required"),
+  status: grammarRuleStatusEnumSchema.optional(),
+  isPublished: z.boolean().optional(),
+  categoryId: z.number().int().positive().optional(),
+});
+
+export type GrammarDifficultyInput = z.infer<typeof grammarDifficultyEnumSchema>;
+export type GrammarRuleStatusInput = z.infer<typeof grammarRuleStatusEnumSchema>;
+export type GrammarSectionInput = z.infer<typeof grammarSectionSchema>;
+export type GrammarSectionUpdateInput = z.infer<typeof grammarSectionUpdateSchema>;
+export type GrammarCategoryInput = z.infer<typeof grammarCategorySchema>;
+export type GrammarCategoryUpdateInput = z.infer<typeof grammarCategoryUpdateSchema>;
+export type GrammarRuleInput = z.infer<typeof grammarRuleSchema>;
+export type GrammarRuleUpdateInput = z.infer<typeof grammarRuleUpdateSchema>;
+export type BulkGrammarRuleUpdateInput = z.infer<typeof bulkGrammarRuleUpdateSchema>;
+
+export const contributorGrammarRuleSchema = z
   .object({
     title: z.string().trim().min(1, "Title is required").max(300, "Title must be 300 characters or fewer"),
     description: z
@@ -546,13 +772,13 @@ export const grammarRuleSchema = z
   })
   .strict();
 
-export const grammarRuleUpdateSchema = grammarRuleSchema.partial();
-export const grammarRuleContributorUpdateSchema = grammarRuleSchema
+export const contributorGrammarRuleUpdateSchema = contributorGrammarRuleSchema.partial();
+export const contributorGrammarRuleContributorUpdateSchema = contributorGrammarRuleSchema
   .omit({ status: true })
   .strict();
 
-export const grammarRulesArraySchema = z
-  .array(grammarRuleSchema)
+export const contributorGrammarRulesArraySchema = z
+  .array(contributorGrammarRuleSchema)
   .min(1, "At least one grammar rule is required")
   .max(10_000, "Too many grammar rules in one file (max 10000)");
 
@@ -564,9 +790,13 @@ export const grammarRuleStatusUpdateSchema = z.object({
   status: grammarRuleStatusEnumSchema,
 });
 
-export type GrammarRuleInput = z.infer<typeof grammarRuleSchema>;
-export type GrammarRuleUpdateInput = z.infer<typeof grammarRuleUpdateSchema>;
-export type GrammarRuleContributorUpdateInput = z.infer<
-  typeof grammarRuleContributorUpdateSchema
+export const grammarRuleContributorUpdateSchema = contributorGrammarRuleContributorUpdateSchema;
+export const grammarRulesArraySchema = contributorGrammarRulesArraySchema;
+
+export type ContributorGrammarRuleInput = z.infer<typeof contributorGrammarRuleSchema>;
+export type ContributorGrammarRuleUpdateInput = z.infer<typeof contributorGrammarRuleUpdateSchema>;
+export type ContributorGrammarRuleContributorUpdateInput = z.infer<
+  typeof contributorGrammarRuleContributorUpdateSchema
 >;
+export type GrammarRuleContributorUpdateInput = ContributorGrammarRuleContributorUpdateInput;
 export type GrammarRuleStatusUpdateInput = z.infer<typeof grammarRuleStatusUpdateSchema>;

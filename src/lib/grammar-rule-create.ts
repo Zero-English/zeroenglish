@@ -4,8 +4,8 @@ import {
     createGrammarRulesBulk,
 } from "@/services/grammar-rule.service";
 import {
-    grammarRuleSchema,
-    grammarRulesArraySchema,
+    contributorGrammarRuleSchema as grammarRuleSchema,
+    contributorGrammarRulesArraySchema as grammarRulesArraySchema,
 } from "@/utils/validation/zod";
 import { parseBulkJsonFile } from "@/utils/bulk-import";
 

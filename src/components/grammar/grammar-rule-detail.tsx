@@ -6,14 +6,13 @@ import {
   type GrammarCategory,
   type GrammarRule,
   type DifficultyLevel,
+  type GrammarSection,
 } from "@/data/grammar-data";
 import {
   Clock,
   CheckCircle2,
-  XCircle,
   AlertTriangle,
   Lightbulb,
-  ArrowLeft,
   ArrowRight,
   BookOpen,
   Sparkles,
@@ -22,24 +21,27 @@ import {
   ChevronRight,
   Share2,
   Check,
-  RotateCcw,
+  Bookmark,
   ListTree,
-  Calendar,
+  Volume2,
+  Split,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { toast } from "sonner";
 import { GrammarBreadcrumb } from "./grammar-breadcrumb";
 import { GrammarDependencyList } from "./grammar-dependency-list";
 import { GrammarTimelineSidebar } from "./grammar-timeline-sidebar";
 import { useGrammarProgress } from "@/lib/grammar-progress";
+import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 
 interface GrammarRuleDetailProps {
@@ -54,6 +56,7 @@ interface GrammarRuleDetailProps {
     totalRules: number;
     currentIndex: number;
   };
+  section?: GrammarSection;
 }
 
 export function GrammarRuleDetail({
@@ -63,22 +66,30 @@ export function GrammarRuleDetail({
   prerequisites,
   relatedRules,
   navigation,
+  section,
 }: GrammarRuleDetailProps) {
+  const t = useT();
+  const targetSectionSlug =
+    section?.slug || rule.sectionSlug || category.sectionId || "parts-of-speech";
+  const sectionTitleEn = section?.titleEn || "Parts of Speech";
+  const sectionTitleBn =
+    section?.titleBn?.split("(")[1]?.replace(")", "") || section?.titleBn || "পদ প্রকরণ";
   const [activeTab, setActiveTab] = useState<"all" | "en" | "bn">("all");
   const [copied, setCopied] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   const {
     isCompleted,
+    isBookmarked,
     toggleCompleted,
+    toggleBookmark,
     markVisited,
     getCategoryStats,
-    progress,
   } = useGrammarProgress();
 
   const rulesList = categoryRules.length > 0 ? categoryRules : [rule];
   const completed = isCompleted(rule.id);
-  const completedTimestamp = progress.completedTimestamps[rule.id];
+  const bookmarked = isBookmarked(rule.id);
   const stats = getCategoryStats(rulesList);
 
   useEffect(() => {
@@ -87,15 +98,15 @@ export function GrammarRuleDetail({
 
   const difficultyColors: Record<DifficultyLevel, { badge: string; dot: string }> = {
     Beginner: {
-      badge: "border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
+      badge: "border-emerald-500/25 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
       dot: "bg-emerald-500",
     },
     Intermediate: {
-      badge: "border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/10",
+      badge: "border-amber-500/25 text-amber-600 dark:text-amber-400 bg-amber-500/10",
       dot: "bg-amber-500",
     },
     Advanced: {
-      badge: "border-rose-500/30 text-rose-600 dark:text-rose-400 bg-rose-500/10",
+      badge: "border-rose-500/25 text-rose-600 dark:text-rose-400 bg-rose-500/10",
       dot: "bg-rose-500",
     },
   };
@@ -103,13 +114,27 @@ export function GrammarRuleDetail({
   const handleToggleComplete = () => {
     const isNowCompleted = toggleCompleted(rule.id);
     if (isNowCompleted) {
-      toast.success("Lesson marked as completed! Timeline updated.", {
+      toast.success(t("পাঠটি সম্পন্ন হয়েছে!", "Lesson marked as completed!"), {
         description: navigation.nextRule
-          ? `Ready for next: ${navigation.nextRule.titleEn}`
-          : "You completed this grammar unit!",
+          ? `${t("পরবর্তী পাঠ:", "Next up:")} ${navigation.nextRule.titleEn}`
+          : t("আপনি এই ক্যাটাগরি সম্পন্ন করেছেন!", "You completed this grammar unit!"),
       });
     } else {
-      toast.info("Lesson marked as incomplete.");
+      toast.info(t("পাঠটি অসম্পূর্ণ হিসেবে চিহ্নিত করা হয়েছে।", "Lesson marked as incomplete."));
+    }
+  };
+
+  const handleToggleBookmark = () => {
+    const isNowBookmarked = toggleBookmark(rule.id);
+    if (isNowBookmarked) {
+      toast.success(t("রুলটি বুকমার্ক করা হয়েছে!", "Rule saved to bookmarks!"), {
+        description: t(
+          "প্রোফাইল থেকে বুকমার্ক করা রুলস যেকোনো সময় দেখতে পারবেন।",
+          "Access your saved rules anytime from your profile."
+        ),
+      });
+    } else {
+      toast.info(t("বুকমার্ক থেকে সরানো হয়েছে।", "Removed from bookmarks."));
     }
   };
 
@@ -118,12 +143,13 @@ export function GrammarRuleDetail({
       navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-      toast.success("Link copied to clipboard!");
+      toast.success(t("লিংক কপি হয়েছে!", "Link copied to clipboard!"));
     }
   };
 
   // Function to highlight target words in sentence
   const renderHighlightedSentence = (sentence: string, highlights: string[]) => {
+    if (!sentence) return "";
     if (!highlights || highlights.length === 0) return sentence;
 
     const escaped = highlights
@@ -152,21 +178,24 @@ export function GrammarRuleDetail({
     });
   };
 
+  const titleBanglaRaw =
+    category.titleBn.split("(")[1]?.replace(")", "") || category.titleBn;
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 space-y-6">
       {/* Top Header / Breadcrumbs & Global Lesson Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/60 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-black/[0.06] dark:border-white/[0.08] pb-3">
         <GrammarBreadcrumb
           items={[
             {
-              labelEn: "Parts of Speech",
-              labelBn: "পদ প্রকরণ",
-              href: "/grammar/parts-of-speech",
+              labelEn: sectionTitleEn,
+              labelBn: sectionTitleBn,
+              href: `/grammar/${targetSectionSlug}`,
             },
             {
               labelEn: category.titleEn,
-              labelBn: category.titleBn,
-              href: `/grammar/parts-of-speech/${category.slug}`,
+              labelBn: titleBanglaRaw,
+              href: `/grammar/${targetSectionSlug}/${category.slug}`,
             },
             { labelEn: rule.titleEn, labelBn: rule.titleBn },
           ]}
@@ -182,38 +211,54 @@ export function GrammarRuleDetail({
             className={cn(
               "text-xs font-semibold transition-all",
               completed
-                ? "border-emerald-500/40 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20"
-                : "bg-emerald-600 text-white hover:bg-emerald-700 shadow-xs"
+                ? "border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20"
+                : "bg-emerald-600 text-white hover:bg-emerald-700 shadow-2xs"
             )}
           >
             {completed ? (
               <>
                 <CheckCircle2 className="h-3.5 w-3.5 mr-1 text-emerald-500 fill-emerald-500/20" />
-                <span>Completed</span>
+                <span>{t("সম্পন্ন", "Completed")}</span>
               </>
             ) : (
               <>
                 <Check className="h-3.5 w-3.5 mr-1" />
-                <span>Mark as Done</span>
+                <span>{t("সম্পন্ন করুন", "Mark as Done")}</span>
               </>
             )}
           </Button>
 
+          {/* Bookmark Button */}
+          <button
+            type="button"
+            onClick={handleToggleBookmark}
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition-all shadow-2xs",
+              bookmarked
+                ? "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20"
+                : "border-black/[0.06] bg-card/80 text-muted-foreground hover:bg-muted hover:text-foreground dark:border-white/[0.08]"
+            )}
+            title={bookmarked ? t("বুকমার্ক থেকে সরান", "Remove bookmark") : t("বুকমার্ক করুন", "Bookmark rule")}
+          >
+            <Bookmark className={cn("h-3.5 w-3.5", bookmarked && "fill-amber-500 text-amber-500")} />
+            <span>{bookmarked ? t("সংরক্ষিত", "Saved") : t("বুকমার্ক", "Bookmark")}</span>
+          </button>
+
           {/* Share Button */}
           <button
             onClick={handleCopyLink}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-            title="Copy link to rule"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-black/[0.06] bg-card/80 px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground dark:border-white/[0.08] transition-colors shadow-2xs"
+            title={t("লিংক কপি করুন", "Copy link to rule")}
           >
             {copied ? (
               <>
                 <Check className="h-3.5 w-3.5 text-emerald-500" />
-                <span className="text-emerald-500">Copied!</span>
+                <span className="text-emerald-500">{t("কপি হয়েছে!", "Copied!")}</span>
               </>
             ) : (
               <>
                 <Share2 className="h-3.5 w-3.5" />
-                <span>Share</span>
+                <span>{t("শেয়ার", "Share")}</span>
               </>
             )}
           </button>
@@ -222,80 +267,95 @@ export function GrammarRuleDetail({
 
       {/* Mobile Timeline Toggle Bar (< lg screens) */}
       <div className="lg:hidden">
-        <Sheet open={mobileDrawerOpen} onOpenChange={setMobileDrawerOpen}>
-          <SheetTrigger asChild>
+        <Drawer open={mobileDrawerOpen} onOpenChange={setMobileDrawerOpen}>
+          <DrawerTrigger asChild>
             <button
               type="button"
-              className="w-full flex items-center justify-between p-3 rounded-xl border border-border bg-card/80 hover:bg-card hover:border-primary/50 transition-all shadow-xs"
+              className="w-full flex items-center justify-between p-3 rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl hover:bg-card hover:border-primary/40 dark:border-white/[0.08] dark:bg-zinc-900/60 transition-all shadow-xs"
             >
-              <div className="flex items-center gap-2 text-left">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <div className="flex items-center gap-2.5 text-left">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary shadow-2xs">
                   <ListTree className="h-4 w-4" />
                 </div>
                 <div>
                   <div className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                    <span>Lesson {navigation.currentIndex} of {navigation.totalRules}</span>
+                    <span>
+                      {t("পাঠ", "Lesson")} {navigation.currentIndex} / {navigation.totalRules}
+                    </span>
                     <span className="text-muted-foreground font-normal">
-                      • {category.titleEn} Timeline
+                      • {category.titleEn} {t("টাইমলাইন", "Timeline")}
                     </span>
                   </div>
                   <div className="text-[11px] text-muted-foreground">
-                    Progress: {stats.completedCount}/{stats.totalCount} completed ({stats.percent}%)
+                    {t("অগ্রগতি:", "Progress:")} {stats.completedCount}/{stats.totalCount}{" "}
+                    {t("সম্পন্ন", "completed")} ({stats.percent}%)
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-1 text-xs font-semibold text-primary">
-                <span>View Timeline</span>
+                <span>{t("টাইমলাইন দেখুন", "View Timeline")}</span>
                 <ChevronRight className="h-4 w-4" />
               </div>
             </button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-[320px] sm:w-[380px] p-0 overflow-y-auto">
-            <SheetHeader className="p-4 border-b border-border/60">
-              <SheetTitle className="text-sm font-bold flex items-center gap-2">
+          </DrawerTrigger>
+          <DrawerContent className="max-h-[85vh] rounded-t-2xl">
+            <DrawerHeader className="p-4 border-b border-black/[0.06] dark:border-white/[0.08] text-left">
+              <DrawerTitle className="text-sm font-bold flex items-center gap-2">
                 <Layers className="h-4 w-4 text-primary" />
-                {category.titleEn} Timeline
-              </SheetTitle>
-            </SheetHeader>
-            <div className="p-3">
+                <span>{category.titleEn} {t("টাইমলাইন", "Timeline")}</span>
+              </DrawerTitle>
+              <DrawerDescription className="text-xs text-muted-foreground text-left">
+                {t(
+                  "এই অধ্যায়ের সকল পাঠ ও অগ্রগতির সময়রেখা।",
+                  "Browse all rules and lessons in this category."
+                )}
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="p-3 overflow-y-auto max-h-[calc(85vh-90px)]">
               <GrammarTimelineSidebar
                 category={category}
                 rules={rulesList}
                 currentRuleSlug={rule.slug}
-                className="border-0 shadow-none"
+                sectionSlug={targetSectionSlug}
+                className="border-0 shadow-none bg-transparent"
+                onSelectRule={() => setMobileDrawerOpen(false)}
               />
             </div>
-          </SheetContent>
-        </Sheet>
+          </DrawerContent>
+        </Drawer>
       </div>
 
       {/* Main Split Layout: Timeline Sidebar + Rule Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr] gap-4 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[290px_1fr] xl:grid-cols-[330px_1fr] gap-6 items-start">
         {/* Left: Sticky Desktop Timeline Sidebar */}
-        <div className="hidden lg:block sticky top-20">
+        <div className="hidden lg:block sticky top-20 z-10">
           <GrammarTimelineSidebar
             category={category}
             rules={rulesList}
             currentRuleSlug={rule.slug}
+            sectionSlug={targetSectionSlug}
           />
         </div>
 
         {/* Right: Comprehensive Lesson Content */}
-        <main className="space-y-8 min-w-0">
+        <main className="space-y-6 min-w-0">
           {/* Previously Completed Banner if already completed */}
           {completed && (
-            <div className="flex items-center justify-between gap-3 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent p-4 text-xs sm:text-sm">
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-emerald-500/25 bg-emerald-500/[0.06] p-4 text-xs sm:text-sm shadow-2xs">
               <div className="flex items-center gap-3">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="h-5 w-5" />
                 </div>
                 <div>
                   <h4 className="font-semibold text-foreground">
-                    You previously completed this lesson!
+                    {t("আপনি পূর্বে এই পাঠটি সম্পন্ন করেছেন!", "You previously completed this lesson!")}
                   </h4>
                   <p className="text-muted-foreground text-xs">
-                    Great job! You can review the key rules below or advance to the next rule in the timeline.
+                    {t(
+                      "দারুণ! আপনি মূল নিয়মগুলো পুনরায় দেখতে পারেন বা পরবর্তী পাঠে এগিয়ে যেতে পারেন।",
+                      "Great job! You can review the key rules below or advance to the next rule in the timeline."
+                    )}
                   </p>
                 </div>
               </div>
@@ -308,9 +368,9 @@ export function GrammarRuleDetail({
                   className="hidden sm:inline-flex shrink-0 text-xs border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10"
                 >
                   <Link
-                    href={`/grammar/parts-of-speech/${navigation.nextRule.categorySlug}/${navigation.nextRule.slug}`}
+                    href={`/grammar/${navigation.nextRule.sectionSlug || targetSectionSlug}/${navigation.nextRule.categorySlug}/${navigation.nextRule.slug}`}
                   >
-                    <span>Next Lesson</span>
+                    <span>{t("পরবর্তী পাঠ", "Next Lesson")}</span>
                     <ArrowRight className="h-3 w-3 ml-1" />
                   </Link>
                 </Button>
@@ -319,50 +379,52 @@ export function GrammarRuleDetail({
           )}
 
           {/* Hero Header */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
               <Link
-                href={`/grammar/parts-of-speech/${category.slug}`}
-                className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
+                href={`/grammar/${targetSectionSlug}/${category.slug}`}
+                className="inline-flex items-center gap-1 rounded-lg bg-muted/70 px-2.5 py-0.5 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               >
                 <Layers className="h-3 w-3" />
-                {category.titleEn}
+                <span>{category.titleEn}</span>
               </Link>
               <Badge
                 variant="outline"
                 className={cn(
-                  "text-xs font-semibold",
+                  "text-[10px] font-medium px-2 py-0.5",
                   difficultyColors[rule.difficulty].badge
                 )}
               >
                 {rule.difficulty}
               </Badge>
               <span className="text-xs text-muted-foreground flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5" />
-                {rule.estimatedMinutes} min study time
+                <Clock className="h-3 w-3" />
+                <span>
+                  {rule.estimatedMinutes} {t("মিনিট অধ্যয়ন", "min study time")}
+                </span>
               </span>
               <span className="text-xs text-muted-foreground font-mono">
-                Rule {navigation.currentIndex} of {navigation.totalRules}
+                {t("পাঠ", "Rule")} {navigation.currentIndex} / {navigation.totalRules}
               </span>
             </div>
 
             <div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
                 {rule.titleEn}
               </h1>
-              <p className="mt-1 text-lg sm:text-xl font-medium text-muted-foreground font-bengali">
+              <p className="mt-1 text-base sm:text-lg font-medium text-muted-foreground font-bengali">
                 {rule.titleBn}
               </p>
             </div>
 
-            {/* Introduction Cards */}
-            <div className="rounded-xl border border-border/80 bg-card p-4 sm:p-5 space-y-3">
-              <p className="text-sm sm:text-base text-foreground/90 leading-relaxed">
+            {/* Introduction Container */}
+            <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl p-4 sm:p-5 space-y-3 dark:border-white/[0.08] dark:bg-zinc-900/60 shadow-xs">
+              <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed">
                 {rule.introduction.en}
               </p>
-              <div className="rounded-lg bg-muted/50 p-3 text-xs sm:text-sm text-muted-foreground leading-relaxed font-bengali border-l-2 border-primary/60">
-                <strong className="text-foreground font-medium block mb-1">
-                  সহজ সারসংক্ষেপ:
+              <div className="rounded-xl bg-primary/[0.04] p-3 text-xs sm:text-sm text-foreground/90 leading-relaxed font-bengali border-l-2 border-primary/60">
+                <strong className="text-primary font-semibold block mb-0.5">
+                  {t("সহজ সারসংক্ষেপ:", "Quick Summary:")}
                 </strong>
                 {rule.introduction.bn}
               </div>
@@ -371,28 +433,31 @@ export function GrammarRuleDetail({
 
           {/* Prerequisite Alert if any */}
           {prerequisites.length > 0 && (
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 flex items-start gap-3">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-400 mt-0.5">
+            <div className="rounded-2xl border border-amber-500/25 bg-amber-500/[0.05] p-4 flex items-start gap-3 shadow-2xs">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 mt-0.5">
                 <Lightbulb className="h-4 w-4" />
               </div>
               <div className="space-y-1 text-xs sm:text-sm flex-1">
                 <h4 className="font-semibold text-foreground">
-                  Prerequisite Recommendation
+                  {t("পূর্বশর্তীয় সুপারিশ", "Prerequisite Recommendation")}
                 </h4>
-                <p className="text-muted-foreground">
-                  This rule builds on fundamental concepts from{" "}
+                <p className="text-muted-foreground text-xs">
+                  {t(
+                    "এই নিয়মটি বোঝার আগে নিচের মৌলিক বিষয়গুলো পর্যালোচনা করার পরামর্শ দেওয়া হচ্ছে:",
+                    "This rule builds on fundamental concepts from"
+                  )}{" "}
                   {prerequisites.map((p, idx) => (
                     <span key={p.id}>
                       {idx > 0 && ", "}
                       <Link
-                        href={`/grammar/parts-of-speech/${p.categorySlug}/${p.slug}`}
-                        className="font-medium text-amber-600 dark:text-amber-400 underline underline-offset-2 hover:opacity-80"
+                        href={`/grammar/${p.sectionSlug || targetSectionSlug}/${p.categorySlug}/${p.slug}`}
+                        className="font-semibold text-amber-600 dark:text-amber-400 underline underline-offset-2 hover:opacity-85"
                       >
                         {p.titleEn}
                       </Link>
                     </span>
                   ))}
-                  . Feel free to review if needed!
+                  .
                 </p>
               </div>
             </div>
@@ -400,35 +465,35 @@ export function GrammarRuleDetail({
 
           {/* Core Rules & Explanation Section */}
           <section className="space-y-4">
-            <div className="flex items-center justify-between border-b border-border/60 pb-2">
+            <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.08] pb-2">
               <div className="flex items-center gap-2">
-                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10 text-primary">
-                  <BookOpen className="h-3.5 w-3.5" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <BookOpen className="h-4 w-4" />
                 </div>
-                <h2 className="text-lg font-bold text-foreground">
-                  Rules & Mechanics
+                <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground">
+                  {t("নিয়ম ও প্রয়োগ কৌশল", "Rules & Mechanics")}
                 </h2>
               </div>
 
               {/* Bilingual view filter pills */}
-              <div className="flex items-center rounded-lg border border-border bg-background p-0.5 text-xs">
+              <div className="flex items-center rounded-lg border border-black/[0.06] bg-muted/40 p-0.5 text-xs dark:border-white/[0.08]">
                 <button
                   onClick={() => setActiveTab("all")}
                   className={cn(
-                    "rounded-md px-2 py-0.5 font-medium transition-colors",
+                    "rounded-md px-2 py-0.5 font-medium transition-colors text-xs",
                     activeTab === "all"
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-primary text-primary-foreground shadow-2xs"
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  Bilingual
+                  {t("দ্বিভাষিক", "Bilingual")}
                 </button>
                 <button
                   onClick={() => setActiveTab("en")}
                   className={cn(
-                    "rounded-md px-2 py-0.5 font-medium transition-colors",
+                    "rounded-md px-2 py-0.5 font-medium transition-colors text-xs",
                     activeTab === "en"
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-primary text-primary-foreground shadow-2xs"
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
@@ -437,9 +502,9 @@ export function GrammarRuleDetail({
                 <button
                   onClick={() => setActiveTab("bn")}
                   className={cn(
-                    "rounded-md px-2 py-0.5 font-medium transition-colors",
+                    "rounded-md px-2 py-0.5 font-medium transition-colors text-xs",
                     activeTab === "bn"
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-primary text-primary-foreground shadow-2xs"
                       : "text-muted-foreground hover:text-foreground"
                   )}
                 >
@@ -450,25 +515,25 @@ export function GrammarRuleDetail({
 
             {/* Formula / Pattern box */}
             {rule.explanation.formulaOrPattern && (
-              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 sm:p-5">
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary mb-2">
+              <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 sm:p-5 space-y-2 shadow-2xs">
+                <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-primary">
                   <Sparkles className="h-3.5 w-3.5" />
-                  <span>Core Formula / Pattern</span>
+                  <span>{t("মূল সূত্র / প্যাটার্ন", "Core Formula / Pattern")}</span>
                 </div>
-                <div className="font-mono text-sm sm:text-base font-semibold text-foreground bg-card/80 p-3 rounded-lg border border-primary/20">
+                <div className="font-mono text-xs sm:text-sm font-semibold text-foreground bg-card/90 p-3 rounded-xl border border-primary/15 shadow-2xs">
                   {rule.explanation.formulaOrPattern}
                 </div>
               </div>
             )}
 
             {/* Explanation Summary */}
-            <div className="rounded-xl border border-border bg-card p-4 sm:p-5 space-y-3">
+            <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl p-4 sm:p-5 space-y-3 dark:border-white/[0.08] dark:bg-zinc-900/60 shadow-xs">
               {(activeTab === "all" || activeTab === "en") && (
                 <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1">
                     English Overview
                   </h3>
-                  <p className="text-sm sm:text-base text-foreground leading-relaxed">
+                  <p className="text-xs sm:text-sm text-foreground leading-relaxed">
                     {rule.explanation.summaryEn}
                   </p>
                 </div>
@@ -477,43 +542,44 @@ export function GrammarRuleDetail({
               {(activeTab === "all" || activeTab === "bn") && (
                 <div
                   className={
-                    activeTab === "all" ? "pt-3 border-t border-border/60" : ""
+                    activeTab === "all" ? "pt-3 border-t border-black/[0.06] dark:border-white/[0.08]" : ""
                   }
                 >
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-primary mb-1">
+                  <h3 className="text-[11px] font-bold uppercase tracking-wider text-primary mb-1">
                     সহজ বাংলা ব্যাখ্যা
                   </h3>
-                  <p className="text-sm sm:text-base text-foreground/90 font-bengali leading-relaxed">
+                  <p className="text-xs sm:text-sm text-foreground/90 font-bengali leading-relaxed">
                     {rule.explanation.summaryBn}
                   </p>
                 </div>
               )}
             </div>
 
-            {/* Key Rules Breakdown */}
+            {/* Key Rules Breakdown (One Frame Grid Pattern) */}
             {rule.explanation.keyRules.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-foreground">
-                  Detailed Rule Points
+              <div className="space-y-2.5">
+                <h3 className="text-xs sm:text-sm font-semibold text-foreground">
+                  {t("বিস্তারিত নিয়মাবলি", "Detailed Rule Points")}
                 </h3>
-                <div className="grid gap-3">
+
+                <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/60 overflow-hidden shadow-xs">
                   {rule.explanation.keyRules.map((keyRule, i) => (
                     <div
                       key={i}
-                      className="rounded-xl border border-border bg-card p-4 space-y-2 hover:border-border/80 transition-colors"
+                      className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 p-4 sm:p-5 space-y-2 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="flex items-start gap-2.5">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold">
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary text-xs font-bold font-mono">
                           {i + 1}
                         </span>
                         <div className="space-y-1 flex-1">
                           {(activeTab === "all" || activeTab === "en") && (
-                            <p className="text-sm font-semibold text-foreground">
+                            <p className="text-xs sm:text-sm font-semibold text-foreground">
                               {keyRule.ruleEn}
                             </p>
                           )}
                           {(activeTab === "all" || activeTab === "bn") && (
-                            <p className="text-xs sm:text-sm text-muted-foreground font-bengali">
+                            <p className="text-xs text-muted-foreground font-bengali">
                               {keyRule.ruleBn}
                             </p>
                           )}
@@ -521,9 +587,9 @@ export function GrammarRuleDetail({
                       </div>
 
                       {(keyRule.exampleEn || keyRule.exampleBn) && (
-                        <div className="ml-7 rounded-lg bg-muted/40 px-3 py-2 text-xs space-y-0.5 border border-border/40">
+                        <div className="ml-8 rounded-xl bg-muted/40 px-3 py-2 text-xs space-y-0.5 border border-border/50">
                           {keyRule.exampleEn && (
-                            <div className="font-mono text-foreground font-medium">
+                            <div className="font-mono text-foreground font-medium text-xs">
                               <span className="text-muted-foreground font-sans mr-1">
                                 Ex:
                               </span>
@@ -531,7 +597,7 @@ export function GrammarRuleDetail({
                             </div>
                           )}
                           {keyRule.exampleBn && (
-                            <div className="text-muted-foreground font-bengali">
+                            <div className="text-muted-foreground font-bengali text-xs">
                               {keyRule.exampleBn}
                             </div>
                           )}
@@ -544,135 +610,229 @@ export function GrammarRuleDetail({
             )}
           </section>
 
-          {/* Contextual Examples */}
+          {/* Contextual Examples (One Frame Grid Pattern) */}
           {rule.examples.length > 0 && (
-            <section className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-border/60 pb-2">
-                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
+            <section className="space-y-3">
+              <div className="flex items-center gap-2 border-b border-black/[0.06] dark:border-white/[0.08] pb-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                  <CheckCircle2 className="h-4 w-4" />
                 </div>
-                <h2 className="text-lg font-bold text-foreground">
-                  Contextual Examples
+                <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground">
+                  {t("বাস্তব উদাহরণ ও বাক্যে প্রয়োগ", "Contextual Examples")}
                 </h2>
-                <span className="text-xs text-muted-foreground">
-                  (উদাহরণ ও শব্দের প্রয়োগ)
+                <span className="text-xs text-muted-foreground font-bengali">
+                  ({rule.examples.length} {t("টি উদাহরণ", "examples")})
                 </span>
               </div>
 
-              <div className="grid gap-3.5">
-                {rule.examples.map((example) => (
-                  <div
-                    key={example.id}
-                    className="rounded-xl border border-border bg-card p-4 sm:p-5 space-y-2.5 transition-all hover:border-emerald-500/30"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-                        {example.badge || "Example Sentence"}
-                      </span>
-                    </div>
+              <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/60 overflow-hidden shadow-xs">
+                {rule.examples.map((example) => {
+                  const sentenceEn = example.sentenceEn || (example as any).en || "";
+                  const sentenceBn = example.sentenceBn || (example as any).bn || "";
+                  const noteEn = example.noteEn || (example as any).explanation || "";
+                  const noteBn = example.noteBn || "";
 
-                    <div className="text-base sm:text-lg font-medium text-foreground leading-relaxed">
-                      {renderHighlightedSentence(
-                        example.sentenceEn,
-                        example.highlights
+                  return (
+                    <div
+                      key={example.id}
+                      className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 p-4 sm:p-5 space-y-2 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+                          {example.badge || t("বাক্য প্রয়োগ", "Example Sentence")}
+                        </span>
+                      </div>
+
+                      <div className="text-sm sm:text-base font-medium text-foreground leading-relaxed">
+                        {renderHighlightedSentence(sentenceEn, example.highlights || [])}
+                      </div>
+
+                      {sentenceBn && (
+                        <p className="text-xs sm:text-sm text-muted-foreground font-bengali">
+                          {sentenceBn}
+                        </p>
+                      )}
+
+                      {(noteEn || noteBn) && (
+                        <div className="pt-2 mt-2 border-t border-black/[0.06] dark:border-white/[0.08] flex items-start gap-2 text-xs text-muted-foreground">
+                          <Lightbulb className="h-3.5 w-3.5 shrink-0 text-amber-500 mt-0.5" />
+                          <div>
+                            {noteEn && <span>{noteEn} </span>}
+                            {noteBn && (
+                              <span className="font-bengali">
+                                ({noteBn})
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       )}
                     </div>
-
-                    <p className="text-xs sm:text-sm text-muted-foreground font-bengali">
-                      {example.sentenceBn}
-                    </p>
-
-                    {(example.noteEn || example.noteBn) && (
-                      <div className="pt-2 mt-2 border-t border-border/60 flex items-start gap-2 text-xs text-muted-foreground">
-                        <Lightbulb className="h-3.5 w-3.5 shrink-0 text-amber-500 mt-0.5" />
-                        <div>
-                          {example.noteEn && <span>{example.noteEn} </span>}
-                          {example.noteBn && (
-                            <span className="font-bengali">
-                              ({example.noteBn})
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           )}
 
-          {/* Common Mistakes & Traps */}
-          {rule.commonMistakes.length > 0 && (
-            <section className="space-y-4">
-              <div className="flex items-center gap-2 border-b border-border/60 pb-2">
-                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400">
-                  <AlertTriangle className="h-3.5 w-3.5" />
+          {/* Conceptual Comparisons & Contrasts */}
+          {rule.comparisons && rule.comparisons.length > 0 && (
+            <section className="space-y-3">
+              <div className="flex items-center gap-2 border-b border-black/[0.06] dark:border-white/[0.08] pb-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+                  <Split className="h-4 w-4" />
                 </div>
-                <h2 className="text-lg font-bold text-foreground">
-                  Common Mistakes & Exam Traps
+                <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground">
+                  {t("ধারণাগত তুলনা ও পার্থক্য", "Conceptual Comparisons")}
                 </h2>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground font-bengali">
+                  ({rule.comparisons.length} {t("টি তুলনা", "contrasts")})
+                </span>
+              </div>
+
+              <div className="rounded-2xl border border-sky-500/20 bg-sky-500/[0.03] overflow-hidden shadow-xs">
+                {rule.comparisons.map((comp) => {
+                  const conceptA = (comp as any).conceptA || (comp as any).incorrect || "";
+                  const conceptB = (comp as any).conceptB || (comp as any).correct || "";
+                  const contrastEn = (comp as any).contrastEn || comp.explanationEn || (comp as any).explanation || "";
+                  const contrastBn = (comp as any).contrastBn || comp.explanationBn || "";
+
+                  return (
+                    <div
+                      key={comp.id}
+                      className="border-t border-sky-500/15 first:border-t-0 p-4 sm:p-5 space-y-3 hover:bg-sky-500/[0.06] transition-colors"
+                    >
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div className="rounded-xl border border-amber-500/20 bg-card/80 p-3 space-y-1">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
+                            {t("ধারণা ১ / রূপ", "Concept A")}
+                          </span>
+                          <p className="font-semibold text-foreground text-xs sm:text-sm">
+                            {conceptA}
+                          </p>
+                        </div>
+                        <div className="rounded-xl border border-sky-500/20 bg-card/80 p-3 space-y-1">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 block">
+                            {t("ধারণা ২ / বিকল্প", "Concept B")}
+                          </span>
+                          <p className="font-semibold text-foreground text-xs sm:text-sm">
+                            {conceptB}
+                          </p>
+                        </div>
+                      </div>
+
+                      {(contrastEn || contrastBn) && (
+                        <div className="rounded-xl bg-background/60 p-3 text-xs space-y-1 border border-black/[0.04] dark:border-white/[0.04]">
+                          {contrastEn && (
+                            <p className="text-foreground leading-relaxed">
+                              <strong className="text-muted-foreground mr-1">
+                                {t("পার্থক্য:", "Difference:")}
+                              </strong>
+                              {contrastEn}
+                            </p>
+                          )}
+                          {contrastBn && (
+                            <p className="text-muted-foreground font-bengali leading-relaxed">
+                              {contrastBn}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Common Mistakes & Traps (One Frame Warning Pattern) */}
+          {rule.commonMistakes.length > 0 && (
+            <section className="space-y-3">
+              <div className="flex items-center gap-2 border-b border-black/[0.06] dark:border-white/[0.08] pb-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400">
+                  <AlertTriangle className="h-4 w-4" />
+                </div>
+                <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground">
+                  {t("কমন ভুলত্রুটি ও সতর্কবার্তা", "Common Mistakes & Traps")}
+                </h2>
+                <span className="text-xs text-muted-foreground font-bengali">
                   (সাধারণ ভুলত্রুটি)
                 </span>
               </div>
 
-              <div className="grid gap-3.5">
-                {rule.commonMistakes.map((mistake) => (
-                  <div
-                    key={mistake.id}
-                    className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4 sm:p-5 space-y-2.5"
-                  >
-                    <div className="space-y-1">
-                      <h3 className="text-sm font-semibold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
-                        <AlertTriangle className="h-4 w-4 shrink-0" />
-                        <span>{mistake.mistakeEn}</span>
-                      </h3>
-                      <p className="text-xs text-muted-foreground font-bengali pl-5">
-                        {mistake.mistakeBn}
-                      </p>
-                    </div>
+              <div className="rounded-2xl border border-rose-500/20 bg-rose-500/[0.03] overflow-hidden shadow-xs">
+                {rule.commonMistakes.map((mistake) => {
+                  const mistakeEn = mistake.mistakeEn || (mistake as any).incorrect || "";
+                  const mistakeBn = mistake.mistakeBn || (mistake as any).reasonBn || "";
+                  const whyEn = mistake.whyEn || (mistake as any).reasonEn || "";
+                  const whyBn = mistake.whyBn || (mistake as any).reasonBn || "";
+                  const correctionEn = mistake.correctionEn || (mistake as any).correct || "";
 
-                    <div className="pl-5 text-xs text-muted-foreground space-y-1 border-l-2 border-rose-500/30 ml-2">
-                      <p>
-                        <strong className="text-foreground">Why it happens: </strong>
-                        {mistake.whyEn}{" "}
-                        <span className="font-bengali">({mistake.whyBn})</span>
-                      </p>
-                      <p className="pt-1 text-emerald-600 dark:text-emerald-400 font-semibold font-mono">
-                        <span className="text-foreground font-sans font-medium">
-                          Correct usage:{" "}
-                        </span>
-                        {mistake.correctionEn}
-                      </p>
+                  return (
+                    <div
+                      key={mistake.id}
+                      className="border-t border-rose-500/15 first:border-t-0 p-4 sm:p-5 space-y-2 hover:bg-rose-500/[0.06] transition-colors"
+                    >
+                      <div className="space-y-0.5">
+                        <h3 className="text-xs sm:text-sm font-semibold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                          <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                          <span>{mistakeEn}</span>
+                        </h3>
+                        {mistakeBn && (
+                          <p className="text-xs text-muted-foreground font-bengali pl-5">
+                            {mistakeBn}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="pl-5 text-xs text-muted-foreground space-y-1 border-l-2 border-rose-500/30 ml-1.5">
+                        {(whyEn || whyBn) && (
+                          <p>
+                            <strong className="text-foreground">
+                              {t("কেন এই ভুল হয়:", "Why it happens:")}{" "}
+                            </strong>
+                            {whyEn}{" "}
+                            {whyBn && whyBn !== whyEn && (
+                              <span className="font-bengali">({whyBn})</span>
+                            )}
+                          </p>
+                        )}
+                        {correctionEn && (
+                          <p className="pt-0.5 text-emerald-600 dark:text-emerald-400 font-semibold font-mono text-xs">
+                            <span className="text-foreground font-sans font-medium">
+                              {t("সঠিক প্রয়োগ:", "Correct usage:")}{" "}
+                            </span>
+                            {correctionEn}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           )}
 
-          {/* Prerequisite Knowledge (if any) */}
+          {/* Prerequisite Knowledge Component if any */}
           {prerequisites.length > 0 && (
-            <section className="pt-4 border-t border-border/60 space-y-4">
+            <section className="pt-2">
               <GrammarDependencyList prerequisites={prerequisites} />
             </section>
           )}
 
           {/* Prev / Next Pagination Bar with Completion Toggle */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-border bg-card p-4 sm:p-5">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl p-4 sm:p-5 dark:border-white/[0.08] dark:bg-zinc-900/60 shadow-xs">
             {navigation.prevRule ? (
               <Link
-                href={`/grammar/parts-of-speech/${navigation.prevRule.categorySlug}/${navigation.prevRule.slug}`}
-                className="group flex items-center gap-3 text-left w-full sm:w-auto"
+                href={`/grammar/${navigation.prevRule.sectionSlug || targetSectionSlug}/${navigation.prevRule.categorySlug}/${navigation.prevRule.slug}`}
+                className="group flex items-center gap-2.5 text-left w-full sm:w-auto"
               >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/50 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-black/[0.06] bg-muted/60 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary dark:border-white/[0.08] transition-all shadow-2xs">
                   <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-medium text-muted-foreground block">
-                    Previous Rule
+                  <span className="text-[10px] font-medium text-muted-foreground block">
+                    {t("পূর্ববর্তী পাঠ", "Previous Rule")}
                   </span>
-                  <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                  <span className="text-xs sm:text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {navigation.prevRule.titleEn}
                   </span>
                 </div>
@@ -681,54 +841,20 @@ export function GrammarRuleDetail({
               <div className="hidden sm:block" />
             )}
 
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant={completed ? "outline" : "default"}
-                size="sm"
-                onClick={handleToggleComplete}
-                className={cn(
-                  "text-xs font-semibold",
-                  completed
-                    ? "border-emerald-500/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10"
-                    : "bg-emerald-600 text-white hover:bg-emerald-700"
-                )}
-              >
-                {completed ? (
-                  <>
-                    <CheckCircle2 className="h-3.5 w-3.5 mr-1" />
-                    Completed
-                  </>
-                ) : (
-                  <>
-                    <Check className="h-3.5 w-3.5 mr-1" />
-                    Mark as Done
-                  </>
-                )}
-              </Button>
-
-              <Link
-                href={`/grammar/parts-of-speech/${category.slug}`}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-              >
-                All {category.titleEn}
-              </Link>
-            </div>
-
             {navigation.nextRule ? (
               <Link
-                href={`/grammar/parts-of-speech/${navigation.nextRule.categorySlug}/${navigation.nextRule.slug}`}
-                className="group flex items-center gap-3 text-right justify-end w-full sm:w-auto"
+                href={`/grammar/${navigation.nextRule.sectionSlug || targetSectionSlug}/${navigation.nextRule.categorySlug}/${navigation.nextRule.slug}`}
+                className="group flex items-center gap-2.5 text-right justify-end w-full sm:w-auto"
               >
                 <div>
-                  <span className="text-[11px] font-medium text-muted-foreground block">
-                    Next Rule
+                  <span className="text-[10px] font-medium text-muted-foreground block">
+                    {t("পরবর্তী পাঠ", "Next Rule")}
                   </span>
-                  <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                  <span className="text-xs sm:text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {navigation.nextRule.titleEn}
                   </span>
                 </div>
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/50 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-black/[0.06] bg-muted/60 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary dark:border-white/[0.08] transition-all shadow-2xs">
                   <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </div>
               </Link>
@@ -741,3 +867,4 @@ export function GrammarRuleDetail({
     </div>
   );
 }
+

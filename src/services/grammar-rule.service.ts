@@ -1,10 +1,10 @@
-﻿import prisma from "@/utils/prisma";
+import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
 import type { Prisma } from "@/generated/prisma/client";
 import type {
-    GrammarRuleContributorUpdateInput,
-    GrammarRuleInput,
-    GrammarRuleUpdateInput,
+    ContributorGrammarRuleContributorUpdateInput as GrammarRuleContributorUpdateInput,
+    ContributorGrammarRuleInput as GrammarRuleInput,
+    ContributorGrammarRuleUpdateInput as GrammarRuleUpdateInput,
 } from "@/utils/validation/zod";
 
 const grammarRuleAdminInclude = {
@@ -364,7 +364,7 @@ export const updateGrammarRuleById = async (
             }
         }
 
-        const prereqIds = data.prerequisites ?? existing.prerequisites.map((p) => p.id);
+        const prereqIds = data.prerequisites ?? existing.prerequisites.map((p: { id: number }) => p.id);
         const prereqError = await validatePrerequisites(prereqIds, id);
         if (prereqError) {
             return {

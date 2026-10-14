@@ -39,7 +39,9 @@ const adapter = new PrismaPg(pool);
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 const prisma =
-    globalForPrisma.prisma && (globalForPrisma.prisma as any).visualTemplate
+    globalForPrisma.prisma &&
+    (globalForPrisma.prisma as any).visualTemplate &&
+    (globalForPrisma.prisma as any).grammarCategory
         ? globalForPrisma.prisma
         : new PrismaClient({ adapter });
 

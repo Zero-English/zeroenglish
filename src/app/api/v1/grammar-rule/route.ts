@@ -1,4 +1,4 @@
-﻿import { NextResponse, NextRequest } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { requireAdmin, requireContributorOrAdmin, getApiSessionUser, unauthorizedResponse } from "@/lib/api-auth";
 import {
     createGrammarRule,
@@ -6,8 +6,8 @@ import {
     getGrammarRulesByPage,
 } from "@/services/grammar-rule.service";
 import {
-    grammarRuleSchema,
-    grammarRulesArraySchema,
+    contributorGrammarRuleSchema as grammarRuleSchema,
+    contributorGrammarRulesArraySchema as grammarRulesArraySchema,
 } from "@/utils/validation/zod";
 import { parseBulkJsonFile } from "@/utils/bulk-import";
 import logger from "@/utils/logger";

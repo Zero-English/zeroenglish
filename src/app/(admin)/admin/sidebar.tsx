@@ -21,7 +21,7 @@ import {
   ChevronDown,
   Megaphone,
   LayoutTemplate,
-  BookType,
+  GraduationCap,
   Sun,
   Moon,
   Laptop,
@@ -53,7 +53,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/vocabulary", label: "Vocabulary", icon: BookOpen },
-  { href: "/admin/grammar", label: "Grammar", icon: BookType },
+  { href: "/admin/grammar", label: "Grammar", icon: GraduationCap },
   { href: "/admin/templates", label: "Templates", icon: LayoutTemplate },
   { href: "/admin/media", label: "Media", icon: ImageIcon },
   { href: "/admin/blog", label: "Blog", icon: Newspaper },
@@ -244,7 +244,10 @@ export default function AdminSidebar({
   const pathname = usePathname();
   const isStudio =
     pathname?.includes("/admin/templates/new") ||
-    (pathname?.includes("/admin/templates/") && pathname?.includes("/edit"));
+    (pathname?.includes("/admin/templates/") && pathname?.includes("/edit")) ||
+    pathname?.includes("/admin/grammar/section/") ||
+    pathname?.includes("/admin/grammar/category/") ||
+    pathname?.includes("/admin/grammar/rule/");
 
   const handleLogout = () => {
     close();
