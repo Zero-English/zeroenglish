@@ -56,7 +56,10 @@ export function PartsOfSpeechOverview({
 }: PartsOfSpeechOverviewProps) {
   const t = useT();
   const totalRules = categories.reduce((sum, c) => sum + c.ruleCount, 0);
-  const guide = section?.learningGuide;
+  const rawGuide = section?.learningGuide;
+  const guide: any = typeof rawGuide === "string"
+    ? (() => { try { return JSON.parse(rawGuide); } catch { return {}; } })()
+    : rawGuide;
   const hasGoldenRule = Boolean(guide?.goldenRule);
   const hasCoreRoles = Boolean(guide?.coreRoles && guide.coreRoles.length > 0);
   const hasSentenceAnatomy = Boolean(guide?.sentenceAnatomy);
@@ -185,7 +188,7 @@ export function PartsOfSpeechOverview({
 
                     {guide.goldenRule.examples && guide.goldenRule.examples.length > 0 && (
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-                        {guide.goldenRule.examples.map((ex, idx) => {
+                        {guide.goldenRule.examples.map((ex: any, idx: number) => {
                           const colors = [
                             { border: "border-blue-500/20", bg: "bg-blue-500/[0.04]", badgeBg: "bg-blue-500/10", badgeText: "text-blue-600 dark:text-blue-400" },
                             { border: "border-rose-500/20", bg: "bg-rose-500/[0.04]", badgeBg: "bg-rose-500/10", badgeText: "text-rose-600 dark:text-rose-400" },
@@ -230,7 +233,7 @@ export function PartsOfSpeechOverview({
                 <TabsContent value="four-roles" className="m-0 space-y-3.5 outline-hidden">
                   <div className="rounded-xl border border-black/[0.06] bg-card/80 overflow-hidden dark:border-white/[0.08] shadow-2xs">
                     <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-black/[0.06] dark:divide-white/[0.08]">
-                      {guide.coreRoles.slice(0, 2).map((role, idx) => (
+                      {guide.coreRoles.slice(0, 2).map((role: any, idx: number) => (
                         <div key={idx} className="p-4 space-y-2">
                           <div className="flex items-center gap-2">
                             <span className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-bold font-mono">
@@ -242,7 +245,7 @@ export function PartsOfSpeechOverview({
                           </div>
                           {role.badges && role.badges.length > 0 && (
                             <div className="flex items-center gap-1.5 flex-wrap">
-                              {role.badges.map((b, bi) => (
+                              {role.badges.map((b: any, bi: number) => (
                                 <Badge key={bi} variant="secondary" className="text-[10px] font-semibold bg-primary/10 text-primary border-0">
                                   {b}
                                 </Badge>
@@ -263,7 +266,7 @@ export function PartsOfSpeechOverview({
 
                     {guide.coreRoles.length > 2 && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-black/[0.06] dark:divide-white/[0.08] border-t border-black/[0.06] dark:border-white/[0.08]">
-                        {guide.coreRoles.slice(2).map((role, idx) => (
+                        {guide.coreRoles.slice(2).map((role: any, idx: number) => (
                           <div key={idx} className="p-4 space-y-2">
                             <div className="flex items-center gap-2">
                               <span className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-bold font-mono">
@@ -275,7 +278,7 @@ export function PartsOfSpeechOverview({
                             </div>
                             {role.badges && role.badges.length > 0 && (
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                {role.badges.map((b, bi) => (
+                                {role.badges.map((b: any, bi: number) => (
                                   <Badge key={bi} variant="secondary" className="text-[10px] font-semibold bg-primary/10 text-primary border-0">
                                     {b}
                                   </Badge>
@@ -314,7 +317,7 @@ export function PartsOfSpeechOverview({
 
                     {guide.sentenceAnatomy.tokens && guide.sentenceAnatomy.tokens.length > 0 && (
                       <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 p-3.5 sm:p-4 rounded-xl border border-black/[0.06] bg-background/80 dark:border-white/[0.08]">
-                        {guide.sentenceAnatomy.tokens.map((token, ti) => {
+                        {guide.sentenceAnatomy.tokens.map((token: any, ti: number) => {
                           const tokenColorClass = getTokenColorClass(token.color);
                           return (
                             <div key={ti} className="flex flex-col items-center">
@@ -422,3 +425,5 @@ export function PartsOfSpeechOverview({
     </div>
   );
 }
+
+export { PartsOfSpeechOverview as SectionOverview };

@@ -120,10 +120,10 @@ export function GrammarRulePreviewModal({
                 {t("সংক্ষিপ্ত উদাহরণ", "Quick Example")}
               </span>
               <p className="font-medium text-foreground text-xs sm:text-sm">
-                &ldquo;{rule.examples[0].sentenceEn}&rdquo;
+                &ldquo;{rule.examples[0].sentenceEn || (rule.examples[0] as any).en || ""}&rdquo;
               </p>
               <p className="text-xs text-muted-foreground font-bengali">
-                &ldquo;{rule.examples[0].sentenceBn}&rdquo;
+                &ldquo;{rule.examples[0].sentenceBn || (rule.examples[0] as any).bn || ""}&rdquo;
               </p>
             </div>
           )}

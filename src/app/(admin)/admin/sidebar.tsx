@@ -244,7 +244,10 @@ export default function AdminSidebar({
   const pathname = usePathname();
   const isStudio =
     pathname?.includes("/admin/templates/new") ||
-    (pathname?.includes("/admin/templates/") && pathname?.includes("/edit"));
+    (pathname?.includes("/admin/templates/") && pathname?.includes("/edit")) ||
+    pathname?.includes("/admin/grammar/section/") ||
+    pathname?.includes("/admin/grammar/category/") ||
+    pathname?.includes("/admin/grammar/rule/");
 
   const handleLogout = () => {
     close();

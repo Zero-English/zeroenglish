@@ -23,6 +23,7 @@ import {
   Check,
   ListTree,
   Volume2,
+  Split,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -130,6 +131,7 @@ export function GrammarRuleDetail({
 
   // Function to highlight target words in sentence
   const renderHighlightedSentence = (sentence: string, highlights: string[]) => {
+    if (!sentence) return "";
     if (!highlights || highlights.length === 0) return sentence;
 
     const escaped = highlights
@@ -590,43 +592,119 @@ export function GrammarRuleDetail({
               </div>
 
               <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/60 overflow-hidden shadow-xs">
-                {rule.examples.map((example) => (
-                  <div
-                    key={example.id}
-                    className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 p-4 sm:p-5 space-y-2 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
-                        {example.badge || t("বাক্য প্রয়োগ", "Example Sentence")}
-                      </span>
-                    </div>
+                {rule.examples.map((example) => {
+                  const sentenceEn = example.sentenceEn || (example as any).en || "";
+                  const sentenceBn = example.sentenceBn || (example as any).bn || "";
+                  const noteEn = example.noteEn || (example as any).explanation || "";
+                  const noteBn = example.noteBn || "";
 
-                    <div className="text-sm sm:text-base font-medium text-foreground leading-relaxed">
-                      {renderHighlightedSentence(
-                        example.sentenceEn,
-                        example.highlights
+                  return (
+                    <div
+                      key={example.id}
+                      className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 p-4 sm:p-5 space-y-2 hover:bg-black/[0.02] dark:hover:bg-white/[0.04] transition-colors"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+                          {example.badge || t("বাক্য প্রয়োগ", "Example Sentence")}
+                        </span>
+                      </div>
+
+                      <div className="text-sm sm:text-base font-medium text-foreground leading-relaxed">
+                        {renderHighlightedSentence(sentenceEn, example.highlights || [])}
+                      </div>
+
+                      {sentenceBn && (
+                        <p className="text-xs sm:text-sm text-muted-foreground font-bengali">
+                          {sentenceBn}
+                        </p>
+                      )}
+
+                      {(noteEn || noteBn) && (
+                        <div className="pt-2 mt-2 border-t border-black/[0.06] dark:border-white/[0.08] flex items-start gap-2 text-xs text-muted-foreground">
+                          <Lightbulb className="h-3.5 w-3.5 shrink-0 text-amber-500 mt-0.5" />
+                          <div>
+                            {noteEn && <span>{noteEn} </span>}
+                            {noteBn && (
+                              <span className="font-bengali">
+                                ({noteBn})
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       )}
                     </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
 
-                    <p className="text-xs sm:text-sm text-muted-foreground font-bengali">
-                      {example.sentenceBn}
-                    </p>
+          {/* Conceptual Comparisons & Contrasts */}
+          {rule.comparisons && rule.comparisons.length > 0 && (
+            <section className="space-y-3">
+              <div className="flex items-center gap-2 border-b border-black/[0.06] dark:border-white/[0.08] pb-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+                  <Split className="h-4 w-4" />
+                </div>
+                <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground">
+                  {t("ধারণাগত তুলনা ও পার্থক্য", "Conceptual Comparisons")}
+                </h2>
+                <span className="text-xs text-muted-foreground font-bengali">
+                  ({rule.comparisons.length} {t("টি তুলনা", "contrasts")})
+                </span>
+              </div>
 
-                    {(example.noteEn || example.noteBn) && (
-                      <div className="pt-2 mt-2 border-t border-black/[0.06] dark:border-white/[0.08] flex items-start gap-2 text-xs text-muted-foreground">
-                        <Lightbulb className="h-3.5 w-3.5 shrink-0 text-amber-500 mt-0.5" />
-                        <div>
-                          {example.noteEn && <span>{example.noteEn} </span>}
-                          {example.noteBn && (
-                            <span className="font-bengali">
-                              ({example.noteBn})
-                            </span>
-                          )}
+              <div className="rounded-2xl border border-sky-500/20 bg-sky-500/[0.03] overflow-hidden shadow-xs">
+                {rule.comparisons.map((comp) => {
+                  const conceptA = (comp as any).conceptA || (comp as any).incorrect || "";
+                  const conceptB = (comp as any).conceptB || (comp as any).correct || "";
+                  const contrastEn = (comp as any).contrastEn || comp.explanationEn || (comp as any).explanation || "";
+                  const contrastBn = (comp as any).contrastBn || comp.explanationBn || "";
+
+                  return (
+                    <div
+                      key={comp.id}
+                      className="border-t border-sky-500/15 first:border-t-0 p-4 sm:p-5 space-y-3 hover:bg-sky-500/[0.06] transition-colors"
+                    >
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div className="rounded-xl border border-amber-500/20 bg-card/80 p-3 space-y-1">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 block">
+                            {t("ধারণা ১ / রূপ", "Concept A")}
+                          </span>
+                          <p className="font-semibold text-foreground text-xs sm:text-sm">
+                            {conceptA}
+                          </p>
+                        </div>
+                        <div className="rounded-xl border border-sky-500/20 bg-card/80 p-3 space-y-1">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 block">
+                            {t("ধারণা ২ / বিকল্প", "Concept B")}
+                          </span>
+                          <p className="font-semibold text-foreground text-xs sm:text-sm">
+                            {conceptB}
+                          </p>
                         </div>
                       </div>
-                    )}
-                  </div>
-                ))}
+
+                      {(contrastEn || contrastBn) && (
+                        <div className="rounded-xl bg-background/60 p-3 text-xs space-y-1 border border-black/[0.04] dark:border-white/[0.04]">
+                          {contrastEn && (
+                            <p className="text-foreground leading-relaxed">
+                              <strong className="text-muted-foreground mr-1">
+                                {t("পার্থক্য:", "Difference:")}
+                              </strong>
+                              {contrastEn}
+                            </p>
+                          )}
+                          {contrastBn && (
+                            <p className="text-muted-foreground font-bengali leading-relaxed">
+                              {contrastBn}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </section>
           )}
@@ -647,38 +725,54 @@ export function GrammarRuleDetail({
               </div>
 
               <div className="rounded-2xl border border-rose-500/20 bg-rose-500/[0.03] overflow-hidden shadow-xs">
-                {rule.commonMistakes.map((mistake) => (
-                  <div
-                    key={mistake.id}
-                    className="border-t border-rose-500/15 first:border-t-0 p-4 sm:p-5 space-y-2 hover:bg-rose-500/[0.06] transition-colors"
-                  >
-                    <div className="space-y-0.5">
-                      <h3 className="text-xs sm:text-sm font-semibold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
-                        <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
-                        <span>{mistake.mistakeEn}</span>
-                      </h3>
-                      <p className="text-xs text-muted-foreground font-bengali pl-5">
-                        {mistake.mistakeBn}
-                      </p>
-                    </div>
+                {rule.commonMistakes.map((mistake) => {
+                  const mistakeEn = mistake.mistakeEn || (mistake as any).incorrect || "";
+                  const mistakeBn = mistake.mistakeBn || (mistake as any).reasonBn || "";
+                  const whyEn = mistake.whyEn || (mistake as any).reasonEn || "";
+                  const whyBn = mistake.whyBn || (mistake as any).reasonBn || "";
+                  const correctionEn = mistake.correctionEn || (mistake as any).correct || "";
 
-                    <div className="pl-5 text-xs text-muted-foreground space-y-1 border-l-2 border-rose-500/30 ml-1.5">
-                      <p>
-                        <strong className="text-foreground">
-                          {t("কেন এই ভুল হয়:", "Why it happens:")}{" "}
-                        </strong>
-                        {mistake.whyEn}{" "}
-                        <span className="font-bengali">({mistake.whyBn})</span>
-                      </p>
-                      <p className="pt-0.5 text-emerald-600 dark:text-emerald-400 font-semibold font-mono text-xs">
-                        <span className="text-foreground font-sans font-medium">
-                          {t("সঠিক প্রয়োগ:", "Correct usage:")}{" "}
-                        </span>
-                        {mistake.correctionEn}
-                      </p>
+                  return (
+                    <div
+                      key={mistake.id}
+                      className="border-t border-rose-500/15 first:border-t-0 p-4 sm:p-5 space-y-2 hover:bg-rose-500/[0.06] transition-colors"
+                    >
+                      <div className="space-y-0.5">
+                        <h3 className="text-xs sm:text-sm font-semibold text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                          <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                          <span>{mistakeEn}</span>
+                        </h3>
+                        {mistakeBn && (
+                          <p className="text-xs text-muted-foreground font-bengali pl-5">
+                            {mistakeBn}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="pl-5 text-xs text-muted-foreground space-y-1 border-l-2 border-rose-500/30 ml-1.5">
+                        {(whyEn || whyBn) && (
+                          <p>
+                            <strong className="text-foreground">
+                              {t("কেন এই ভুল হয়:", "Why it happens:")}{" "}
+                            </strong>
+                            {whyEn}{" "}
+                            {whyBn && whyBn !== whyEn && (
+                              <span className="font-bengali">({whyBn})</span>
+                            )}
+                          </p>
+                        )}
+                        {correctionEn && (
+                          <p className="pt-0.5 text-emerald-600 dark:text-emerald-400 font-semibold font-mono text-xs">
+                            <span className="text-foreground font-sans font-medium">
+                              {t("সঠিক প্রয়োগ:", "Correct usage:")}{" "}
+                            </span>
+                            {correctionEn}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           )}

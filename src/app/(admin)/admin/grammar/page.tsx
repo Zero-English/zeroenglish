@@ -429,72 +429,30 @@ export default function AdminGrammarPage() {
         <div className="flex flex-wrap items-center gap-2">
 
           {activeTab === "rules" && (
-            <Button
-              size="sm"
-              onClick={() => {
-                setEditingRule({
-                  difficulty: "BEGINNER",
-                  order: 0,
-                  estimatedMinutes: 5,
-                  status: "APPROVED",
-                  isPublished: true,
-                  keyRules: [],
-                  examples: [],
-                  comparisons: [],
-                  commonMistakes: [],
-                });
-                setRuleModalOpen(true);
-              }}
-              className="gap-1.5 text-xs shadow-2xs"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              <span>New Rule</span>
-            </Button>
+            <Link href="/admin/grammar/rule/new">
+              <Button size="sm" className="gap-1.5 text-xs shadow-2xs">
+                <Plus className="h-3.5 w-3.5" />
+                <span>New Rule Workspace</span>
+              </Button>
+            </Link>
           )}
 
           {activeTab === "categories" && (
-            <Button
-              size="sm"
-              onClick={() => {
-                setEditingCategory({
-                  order: 0,
-                  accentColor: "from-sky-500 to-blue-600",
-                  icon: "FileText",
-                  isPublished: true,
-                  sentenceRoles: [],
-                  keyTypes: [],
-                  identificationHacks: {},
-                  commonTrap: {},
-                });
-                setCategoryModalOpen(true);
-              }}
-              className="gap-1.5 text-xs shadow-2xs"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              <span>New Category</span>
-            </Button>
+            <Link href="/admin/grammar/category/new">
+              <Button size="sm" className="gap-1.5 text-xs shadow-2xs">
+                <Plus className="h-3.5 w-3.5" />
+                <span>New Category Workspace</span>
+              </Button>
+            </Link>
           )}
 
           {activeTab === "sections" && (
-            <Button
-              size="sm"
-              onClick={() => {
-                setEditingSection({
-                  order: 0,
-                  icon: "Layers",
-                  status: "available",
-                  isPublished: true,
-                  hasLearningGuide: false,
-                  learningGuide: {},
-                });
-                setSectionGuideJson("{}");
-                setSectionModalOpen(true);
-              }}
-              className="gap-1.5 text-xs shadow-2xs"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              <span>New Section</span>
-            </Button>
+            <Link href="/admin/grammar/section/new">
+              <Button size="sm" className="gap-1.5 text-xs shadow-2xs">
+                <Plus className="h-3.5 w-3.5" />
+                <span>New Section Workspace</span>
+              </Button>
+            </Link>
           )}
         </div>
       </div>
@@ -724,17 +682,13 @@ export default function AdminGrammarPage() {
                               >
                                 <ExternalLink className="h-3.5 w-3.5" />
                               </Link>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                className="h-7 w-7 p-0"
-                                onClick={() => {
-                                  setEditingRule(rule);
-                                  setRuleModalOpen(true);
-                                }}
+                              <Link
+                                href={`/admin/grammar/rule/${rule.id}`}
+                                className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted"
+                                title="Edit in Workspace"
                               >
                                 <Pencil className="h-3.5 w-3.5" />
-                              </Button>
+                              </Link>
                               <Button
                                 size="sm"
                                 variant="ghost"
@@ -782,17 +736,13 @@ export default function AdminGrammarPage() {
                     {cat.section?.titleEn || "Parts of Speech"}
                   </Badge>
                   <div className="flex items-center gap-1">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-7 w-7 p-0"
-                      onClick={() => {
-                        setEditingCategory(cat);
-                        setCategoryModalOpen(true);
-                      }}
+                    <Link
+                      href={`/admin/grammar/category/${cat.id}`}
+                      className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted"
+                      title="Edit in Workspace"
                     >
                       <Pencil className="h-3.5 w-3.5" />
-                    </Button>
+                    </Link>
                     <Button
                       size="sm"
                       variant="ghost"
@@ -875,18 +825,13 @@ export default function AdminGrammarPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-1">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-7 w-7 p-0"
-                      onClick={() => {
-                        setEditingSection(sec);
-                        setSectionGuideJson(JSON.stringify(sec.learningGuide || {}, null, 2));
-                        setSectionModalOpen(true);
-                      }}
+                    <Link
+                      href={`/admin/grammar/section/${sec.id}`}
+                      className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted"
+                      title="Edit in Workspace"
                     >
                       <Pencil className="h-3.5 w-3.5" />
-                    </Button>
+                    </Link>
                     <Button
                       size="sm"
                       variant="ghost"

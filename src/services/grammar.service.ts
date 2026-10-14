@@ -341,6 +341,30 @@ export async function deleteGrammarSection(id: number) {
   }
 }
 
+export async function getAdminGrammarSectionById(id: number) {
+  try {
+    return await prisma.grammarSection.findUnique({
+      where: { id },
+      include: {
+        categories: {
+          orderBy: { order: "asc" },
+          select: {
+            id: true,
+            slug: true,
+            titleEn: true,
+            titleBn: true,
+            icon: true,
+            _count: { select: { rules: true } },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    logger.error("Failed to get admin grammar section by id", { id, error });
+    throw error;
+  }
+}
+
 export async function getAdminGrammarCategories(sectionId?: number) {
   try {
     return await prisma.grammarCategory.findMany({
@@ -439,6 +463,34 @@ export async function deleteGrammarCategory(id: number) {
     });
   } catch (error) {
     logger.error("Failed to delete grammar category", { id, error });
+    throw error;
+  }
+}
+
+export async function getAdminGrammarCategoryById(id: number) {
+  try {
+    return await prisma.grammarCategory.findUnique({
+      where: { id },
+      include: {
+        section: {
+          select: { id: true, titleEn: true, titleBn: true, slug: true },
+        },
+        rules: {
+          orderBy: { order: "asc" },
+          select: {
+            id: true,
+            slug: true,
+            titleEn: true,
+            titleBn: true,
+            difficulty: true,
+            order: true,
+            isPublished: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    logger.error("Failed to get admin grammar category by id", { id, error });
     throw error;
   }
 }
@@ -622,6 +674,32 @@ export async function deleteGrammarRule(id: number) {
     });
   } catch (error) {
     logger.error("Failed to delete grammar rule", { id, error });
+    throw error;
+  }
+}
+
+export async function getAdminGrammarRuleById(id: number) {
+  try {
+    return await prisma.grammarRule.findUnique({
+      where: { id },
+      include: {
+        category: {
+          include: {
+            section: {
+              select: { id: true, titleEn: true, titleBn: true, slug: true },
+            },
+          },
+        },
+        prerequisites: {
+          select: { id: true, slug: true, titleEn: true, titleBn: true },
+        },
+        relatedRules: {
+          select: { id: true, slug: true, titleEn: true, titleBn: true },
+        },
+      },
+    });
+  } catch (error) {
+    logger.error("Failed to get admin grammar rule by id", { id, error });
     throw error;
   }
 }
@@ -844,7 +922,66 @@ export async function fetchDbCategoryGuide(slug: string): Promise<CategoryGuideI
       include: { section: true },
     });
 
-    if (c && c.headlineEn) {
+    if (c && (c.headlineEn || c.headlineBn || c.overviewEn || c.overviewBn)) {
+      const rawRoles = Array.isArray(c.sentenceRoles) ? (c.sentenceRoles as any[]) : [];
+      const sentenceRoles = rawRoles.map((r: any) => ({
+        role: r.role || r.roleEn || "",
+        roleEn: r.roleEn || r.role || "",
+        banglaRole: r.banglaRole || r.roleBn || "",
+        roleBn: r.roleBn || r.banglaRole || "",
+        explanation: r.explanation || r.targetWord || "",
+        targetWord: r.targetWord || r.explanation || "",
+        example: r.example || r.exampleSentence || "",
+        exampleSentence: r.exampleSentence || r.example || "",
+      }));
+
+      const rawKeyTypes = Array.isArray(c.keyTypes) ? (c.keyTypes as any[]) : [];
+      const keyTypes = rawKeyTypes.map((kt: any) => ({
+        name: kt.name || kt.nameEn || "",
+        nameEn: kt.nameEn || kt.name || "",
+        bangla: kt.bangla || kt.nameBn || "",
+        nameBn: kt.nameBn || kt.bangla || "",
+        description: kt.description || kt.descriptionEn || "",
+        descriptionEn: kt.descriptionEn || kt.description || "",
+        descriptionBn: kt.descriptionBn || kt.description || "",
+        examples: Array.isArray(kt.examples) ? kt.examples : [],
+      }));
+
+      const h = (c.identificationHacks as any) || {};
+      const questionList = Array.isArray(h.questionHooks) && h.questionHooks.length > 0
+        ? h.questionHooks
+        : [h.questionEn, h.questionBn].filter(Boolean);
+      const suffixList = Array.isArray(h.suffixClues) && h.suffixClues.length > 0
+        ? h.suffixClues
+        : Array.isArray(h.suffixes)
+        ? h.suffixes
+        : [];
+
+      const identificationHacks = {
+        questionHooks: questionList,
+        suffixClues: suffixList,
+        positionRule: h.positionRule || h.clueEn || h.clueBn || "",
+        questionEn: h.questionEn || questionList[0] || "",
+        questionBn: h.questionBn || questionList[1] || "",
+        clueEn: h.clueEn || h.positionRule || "",
+        clueBn: h.clueBn || "",
+        suffixes: suffixList,
+      };
+
+      const t = (c.commonTrap as any) || {};
+      const commonTrap = {
+        misconception: t.misconception || t.titleEn || "",
+        reality: t.reality || t.titleBn || "",
+        testSentence: t.testSentence || t.incorrect || "",
+        explanation: t.explanation || t.explanationEn || t.explanationBn || "",
+        titleEn: t.titleEn || t.misconception || "",
+        titleBn: t.titleBn || t.reality || "",
+        incorrect: t.incorrect || t.testSentence || "",
+        correct: t.correct || t.reality || "",
+        explanationEn: t.explanationEn || t.explanation || "",
+        explanationBn: t.explanationBn || t.explanation || "",
+      };
+
       return {
         categoryId: c.slug,
         orderNumber: c.order,
@@ -855,22 +992,10 @@ export async function fetchDbCategoryGuide(slug: string): Promise<CategoryGuideI
         headlineBn: c.headlineBn || "",
         overviewEn: c.overviewEn || "",
         overviewBn: c.overviewBn || "",
-        sentenceRoles: (c.sentenceRoles as any) || [],
-        keyTypes: (c.keyTypes as any) || [],
-        identificationHacks: (c.identificationHacks as any) || {
-          questionEn: "",
-          questionBn: "",
-          clueEn: "",
-          clueBn: "",
-        },
-        commonTrap: (c.commonTrap as any) || {
-          titleEn: "",
-          titleBn: "",
-          incorrect: "",
-          correct: "",
-          explanationEn: "",
-          explanationBn: "",
-        },
+        sentenceRoles,
+        keyTypes,
+        identificationHacks,
+        commonTrap,
       };
     }
   } catch (error) {
@@ -881,12 +1006,74 @@ export async function fetchDbCategoryGuide(slug: string): Promise<CategoryGuideI
 }
 
 function mapPrismaRuleToGrammarRule(r: any, categorySlugFallback = ""): GrammarRule {
+  const rawKeyRules = Array.isArray(r.keyRules) ? (r.keyRules as any[]) : [];
+  const keyRules = rawKeyRules.map((k: any) => ({
+    ruleEn: k.ruleEn || k.rule || "",
+    ruleBn: k.ruleBn || k.bangla || "",
+    detailsEn: k.detailsEn || k.note || undefined,
+    detailsBn: k.detailsBn || undefined,
+    exampleEn: k.exampleEn || k.example || undefined,
+    exampleBn: k.exampleBn || undefined,
+  }));
+
+  const rawExamples = Array.isArray(r.examples) ? (r.examples as any[]) : [];
+  const examples = rawExamples.map((ex: any, idx: number) => {
+    const highlights = Array.isArray(ex.highlights)
+      ? ex.highlights
+      : typeof ex.highlights === "string" && ex.highlights
+      ? ex.highlights.split(",").map((s: string) => s.trim()).filter(Boolean)
+      : [];
+
+    return {
+      id: ex.id || String(idx + 1),
+      sentenceEn: ex.sentenceEn || ex.en || "",
+      sentenceBn: ex.sentenceBn || ex.bn || "",
+      en: ex.en || ex.sentenceEn || "",
+      bn: ex.bn || ex.sentenceBn || "",
+      highlights,
+      badge: ex.badge || ex.badgeEn || undefined,
+      noteEn: ex.noteEn || ex.explanation || ex.note || undefined,
+      noteBn: ex.noteBn || undefined,
+    };
+  });
+
+  const rawComparisons = Array.isArray(r.comparisons) ? (r.comparisons as any[]) : [];
+  const comparisons = rawComparisons.map((c: any, idx: number) => ({
+    id: c.id || String(idx + 1),
+    conceptA: c.conceptA || c.incorrect || "",
+    conceptB: c.conceptB || c.correct || "",
+    contrastEn: c.contrastEn || c.explanationEn || c.explanation || "",
+    contrastBn: c.contrastBn || c.explanationBn || "",
+    correct: c.correct || c.conceptB || "",
+    incorrect: c.incorrect || c.conceptA || "",
+    explanationEn: c.explanationEn || c.contrastEn || c.explanation || "",
+    explanationBn: c.explanationBn || c.contrastBn || "",
+  }));
+
+  const rawMistakes = Array.isArray(r.commonMistakes) ? (r.commonMistakes as any[]) : [];
+  const commonMistakes = rawMistakes.map((m: any, idx: number) => ({
+    id: m.id || String(idx + 1),
+    incorrect: m.incorrect || m.mistakeEn || "",
+    correct: m.correct || m.correctionEn || "",
+    reasonEn: m.reasonEn || m.whyEn || "",
+    reasonBn: m.reasonBn || m.whyBn || "",
+    mistakeEn: m.mistakeEn || m.incorrect || "",
+    mistakeBn: m.mistakeBn || m.reasonBn || "",
+    whyEn: m.whyEn || m.reasonEn || "",
+    whyBn: m.whyBn || m.reasonBn || "",
+    correctionEn: m.correctionEn || m.correct || "",
+    correctionBn: m.correctionBn || "",
+  }));
+
+  const sectionSlug = r.category?.section?.slug || "parts-of-speech";
+  const catSlug = r.category?.slug || categorySlugFallback;
+
   return {
     id: r.slug,
     slug: r.slug,
-    sectionSlug: r.category?.section?.slug || "parts-of-speech",
-    categoryId: r.category?.slug || categorySlugFallback,
-    categorySlug: r.category?.slug || categorySlugFallback,
+    sectionSlug,
+    categoryId: catSlug,
+    categorySlug: catSlug,
     titleEn: r.titleEn,
     titleBn: r.titleBn,
     shortDescriptionEn: r.shortDescriptionEn,
@@ -895,18 +1082,18 @@ function mapPrismaRuleToGrammarRule(r: any, categorySlugFallback = ""): GrammarR
     order: r.order,
     estimatedMinutes: r.estimatedMinutes,
     introduction: {
-      en: r.introductionEn,
-      bn: r.introductionBn,
+      en: r.introductionEn || "",
+      bn: r.introductionBn || "",
     },
     explanation: {
-      summaryEn: r.summaryEn,
-      summaryBn: r.summaryBn,
+      summaryEn: r.summaryEn || "",
+      summaryBn: r.summaryBn || "",
       formulaOrPattern: r.formulaOrPattern || undefined,
-      keyRules: (r.keyRules as any) || [],
+      keyRules,
     },
-    examples: (r.examples as any) || [],
-    comparisons: (r.comparisons as any) || [],
-    commonMistakes: (r.commonMistakes as any) || [],
+    examples,
+    comparisons,
+    commonMistakes,
     prerequisiteRuleIds: r.prerequisites?.map((p: any) => p.slug) || [],
     relatedRuleIds: r.relatedRules?.map((p: any) => p.slug) || [],
   };
@@ -979,7 +1166,7 @@ export async function fetchDbRuleBySlug(
       },
     });
 
-    if (r) {
+    if (r && (!categorySlug || r.category?.slug === categorySlug)) {
       return mapPrismaRuleToGrammarRule(r, categorySlug);
     }
   } catch (error) {

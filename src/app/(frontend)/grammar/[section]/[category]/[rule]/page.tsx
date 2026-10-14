@@ -33,13 +33,19 @@ export async function generateMetadata({
     fetchDbRuleBySlug(categorySlug, ruleSlug),
   ]);
 
-  if (!category || !rule) {
+  if (
+    !category ||
+    !section ||
+    !rule ||
+    category.sectionId !== section.slug ||
+    rule.categorySlug !== category.slug
+  ) {
     return {
       title: "Grammar Rule Not Found",
     };
   }
 
-  const sectionName = section?.titleEn || "Grammar";
+  const sectionName = section.titleEn || "Grammar";
 
   return {
     title: `${rule.titleEn} - ${category.titleEn} (${sectionName})`,
@@ -62,7 +68,13 @@ export default async function RuleDetailPage({ params }: RulePageProps) {
     fetchDbRuleBySlug(categorySlug, ruleSlug),
   ]);
 
-  if (!category || !rule) {
+  if (
+    !category ||
+    !section ||
+    !rule ||
+    category.sectionId !== section.slug ||
+    rule.categorySlug !== category.slug
+  ) {
     notFound();
   }
 

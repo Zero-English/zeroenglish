@@ -202,7 +202,12 @@ export function GrammarOverview({
           <div className="flex items-center gap-2 self-start sm:self-auto">
             <div className="inline-flex items-center gap-1.5 rounded-xl border border-black/[0.06] bg-card/80 px-3 py-1.5 text-xs font-medium text-muted-foreground dark:border-white/[0.08] shadow-2xs">
               <Flame className="h-3.5 w-3.5 text-orange-500" />
-              <span>{t("৮টি পদ প্রকরণ সক্রিয়", "8 Word Classes Active")}</span>
+              <span>
+                {t(
+                  `${categories.length}টি ক্যাটাগরি সক্রিয়`,
+                  `${categories.length} Categories Active`
+                )}
+              </span>
             </div>
           </div>
         </div>
@@ -222,7 +227,7 @@ export function GrammarOverview({
                 {sections.length}
               </p>
               <p className="truncate text-[11px] text-zinc-400 dark:text-zinc-500">
-                {t("৫টি মূল অধ্যায়", "5 Core Modules")}
+                {t(`${sections.length}টি মূল অধ্যায়`, `${sections.length} Core Modules`)}
               </p>
             </div>
           </div>
@@ -454,17 +459,23 @@ export function GrammarOverview({
           {/* Parent Categories in One Frame Grid */}
           <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/60 overflow-hidden shadow-xs">
             <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
-              {sections.map((section) => (
-                <StaggerItem key={section.id}>
-                  <GrammarSectionCard
-                    section={section}
-                    completedRulesCount={
-                      section.id === "parts-of-speech" ? completedRulesCount : 0
-                    }
-                    isGridCell={true}
-                  />
-                </StaggerItem>
-              ))}
+              {sections.map((section) => {
+                const sectionCompletedCount = allRules.filter(
+                  (r) =>
+                    (r.sectionSlug === section.slug || r.sectionSlug === section.id) &&
+                    progress.completedRuleIds.includes(r.id)
+                ).length;
+
+                return (
+                  <StaggerItem key={section.id}>
+                    <GrammarSectionCard
+                      section={section}
+                      completedRulesCount={sectionCompletedCount}
+                      isGridCell={true}
+                    />
+                  </StaggerItem>
+                );
+              })}
             </StaggerContainer>
           </div>
         </section>

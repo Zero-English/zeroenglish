@@ -86,6 +86,7 @@ const COLOR_MAP: Record<
 interface GrammarCategoryCardProps {
   category: GrammarCategory;
   sectionSlug?: string;
+  completedCount?: number;
   className?: string;
   isGridCell?: boolean;
 }
@@ -93,6 +94,7 @@ interface GrammarCategoryCardProps {
 export function GrammarCategoryCard({
   category,
   sectionSlug,
+  completedCount,
   className,
   isGridCell = true,
 }: GrammarCategoryCardProps) {
@@ -104,9 +106,15 @@ export function GrammarCategoryCard({
 
   const colors = COLOR_MAP[category.accentColor] || COLOR_MAP.blue;
   const { progress } = useGrammarProgress();
-  const completedInCategory = progress.completedRuleIds.filter(
-    (id) => id.startsWith(category.id) || id.startsWith(category.slug)
-  ).length;
+  const completedInCategory =
+    completedCount !== undefined
+      ? completedCount
+      : progress.completedRuleIds.filter(
+          (id) =>
+            id.startsWith(category.id) ||
+            id.startsWith(category.slug) ||
+            id.includes(`-${category.slug}`)
+        ).length;
 
   const titleBanglaRaw =
     category.titleBn.split("(")[1]?.replace(")", "") || category.titleBn;

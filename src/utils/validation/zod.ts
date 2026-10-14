@@ -525,58 +525,115 @@ export type PopupUpdateInput = z.infer<typeof popupUpdateSchema>;
 export const grammarDifficultyEnumSchema = z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]);
 export const grammarRuleStatusEnumSchema = z.enum(["PENDING", "APPROVED", "REJECTED"]);
 
-export const sentenceRoleSchema = z.object({
-  role: z.string().trim().min(1, "Role title is required"),
-  banglaRole: z.string().trim().default(""),
-  explanation: z.string().trim().default(""),
-  example: z.string().trim().default(""),
-});
+export const sentenceRoleSchema = z
+  .object({
+    role: z.string().trim().optional().default(""),
+    roleEn: z.string().trim().optional().default(""),
+    banglaRole: z.string().trim().optional().default(""),
+    roleBn: z.string().trim().optional().default(""),
+    explanation: z.string().trim().optional().default(""),
+    targetWord: z.string().trim().optional().default(""),
+    example: z.string().trim().optional().default(""),
+    exampleSentence: z.string().trim().optional().default(""),
+  })
+  .passthrough();
 
-export const keyTypeSchema = z.object({
-  name: z.string().trim().min(1, "Type name is required"),
-  bangla: z.string().trim().default(""),
-  description: z.string().trim().default(""),
-  examples: z.array(z.string().trim()).default([]),
-});
+export const keyTypeSchema = z
+  .object({
+    name: z.string().trim().optional().default(""),
+    nameEn: z.string().trim().optional().default(""),
+    bangla: z.string().trim().optional().default(""),
+    nameBn: z.string().trim().optional().default(""),
+    description: z.string().trim().optional().default(""),
+    descriptionEn: z.string().trim().optional().default(""),
+    descriptionBn: z.string().trim().optional().default(""),
+    examples: z.array(z.string().trim()).default([]),
+  })
+  .passthrough();
 
-export const identificationHacksSchema = z.object({
-  questionHooks: z.array(z.string().trim()).default([]),
-  suffixClues: z.array(z.string().trim()).default([]),
-  positionRule: z.string().trim().default(""),
-});
+export const identificationHacksSchema = z
+  .object({
+    questionHooks: z.array(z.string().trim()).default([]),
+    suffixClues: z.array(z.string().trim()).default([]),
+    positionRule: z.string().trim().default(""),
+    questionEn: z.string().trim().optional().default(""),
+    questionBn: z.string().trim().optional().default(""),
+    clueEn: z.string().trim().optional().default(""),
+    clueBn: z.string().trim().optional().default(""),
+    suffixes: z.array(z.string().trim()).optional().default([]),
+  })
+  .passthrough();
 
-export const commonTrapSchema = z.object({
-  misconception: z.string().trim().default(""),
-  reality: z.string().trim().default(""),
-  testSentence: z.string().trim().default(""),
-  explanation: z.string().trim().default(""),
-});
+export const commonTrapSchema = z
+  .object({
+    misconception: z.string().trim().default(""),
+    reality: z.string().trim().default(""),
+    testSentence: z.string().trim().default(""),
+    explanation: z.string().trim().default(""),
+    titleEn: z.string().trim().optional().default(""),
+    titleBn: z.string().trim().optional().default(""),
+    incorrect: z.string().trim().optional().default(""),
+    correct: z.string().trim().optional().default(""),
+    explanationEn: z.string().trim().optional().default(""),
+    explanationBn: z.string().trim().optional().default(""),
+  })
+  .passthrough();
 
-export const grammarRuleItemSchema = z.object({
-  ruleEn: z.string().trim().min(1, "Rule in English is required"),
-  ruleBn: z.string().trim().min(1, "Rule in Bangla is required"),
-  note: z.string().trim().optional().default(""),
-});
+export const grammarRuleItemSchema = z
+  .object({
+    ruleEn: z.string().trim().min(1, "Rule in English is required"),
+    ruleBn: z.string().trim().min(1, "Rule in Bangla is required"),
+    note: z.string().trim().optional().default(""),
+    detailsEn: z.string().trim().optional(),
+    detailsBn: z.string().trim().optional(),
+    exampleEn: z.string().trim().optional(),
+    exampleBn: z.string().trim().optional(),
+  })
+  .passthrough();
 
-export const grammarExampleItemSchema = z.object({
-  en: z.string().trim().min(1, "English example is required"),
-  bn: z.string().trim().min(1, "Bangla example is required"),
-  explanation: z.string().trim().optional().default(""),
-});
+export const grammarExampleItemSchema = z
+  .object({
+    id: z.string().optional(),
+    en: z.string().trim().optional().default(""),
+    bn: z.string().trim().optional().default(""),
+    sentenceEn: z.string().trim().optional().default(""),
+    sentenceBn: z.string().trim().optional().default(""),
+    explanation: z.string().trim().optional().default(""),
+    noteEn: z.string().trim().optional().default(""),
+    noteBn: z.string().trim().optional().default(""),
+    badge: z.string().trim().optional().default(""),
+    highlights: z.union([z.array(z.string().trim()), z.string().trim()]).optional().default([]),
+  })
+  .passthrough();
 
-export const grammarComparisonItemSchema = z.object({
-  conceptA: z.string().trim().min(1, "Concept A is required"),
-  conceptB: z.string().trim().min(1, "Concept B is required"),
-  contrastEn: z.string().trim().min(1, "English contrast is required"),
-  contrastBn: z.string().trim().min(1, "Bangla contrast is required"),
-});
+export const grammarComparisonItemSchema = z
+  .object({
+    id: z.string().optional(),
+    conceptA: z.string().trim().optional().default(""),
+    conceptB: z.string().trim().optional().default(""),
+    contrastEn: z.string().trim().optional().default(""),
+    contrastBn: z.string().trim().optional().default(""),
+    incorrect: z.string().trim().optional().default(""),
+    correct: z.string().trim().optional().default(""),
+    explanationEn: z.string().trim().optional().default(""),
+    explanationBn: z.string().trim().optional().default(""),
+  })
+  .passthrough();
 
-export const grammarMistakeItemSchema = z.object({
-  incorrect: z.string().trim().min(1, "Incorrect sentence is required"),
-  correct: z.string().trim().min(1, "Correct sentence is required"),
-  reasonEn: z.string().trim().min(1, "Reason in English is required"),
-  reasonBn: z.string().trim().min(1, "Reason in Bangla is required"),
-});
+export const grammarMistakeItemSchema = z
+  .object({
+    id: z.string().optional(),
+    incorrect: z.string().trim().optional().default(""),
+    correct: z.string().trim().optional().default(""),
+    reasonEn: z.string().trim().optional().default(""),
+    reasonBn: z.string().trim().optional().default(""),
+    mistakeEn: z.string().trim().optional().default(""),
+    whyEn: z.string().trim().optional().default(""),
+    whyBn: z.string().trim().optional().default(""),
+    correctionEn: z.string().trim().optional().default(""),
+    correctionBn: z.string().trim().optional().default(""),
+  })
+  .passthrough();
 
 // Section Schema
 export const grammarSectionSchema = z.object({
@@ -619,12 +676,23 @@ export const grammarCategorySchema = z.object({
     questionHooks: [],
     suffixClues: [],
     positionRule: "",
+    questionEn: "",
+    questionBn: "",
+    clueEn: "",
+    clueBn: "",
+    suffixes: [],
   }),
   commonTrap: commonTrapSchema.default({
     misconception: "",
     reality: "",
     testSentence: "",
     explanation: "",
+    titleEn: "",
+    titleBn: "",
+    incorrect: "",
+    correct: "",
+    explanationEn: "",
+    explanationBn: "",
   }),
 });
 

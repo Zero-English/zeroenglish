@@ -140,19 +140,27 @@ export function GrammarSubcategorySidebar({
 
           {guide ? (
             <div className="space-y-1.5">
-              {guide.sentenceRoles.map((role: CategorySentenceRole, idx: number) => (
-                <div
-                  key={idx}
-                  className="rounded-lg bg-background/70 p-2 text-xs border border-black/[0.04] dark:border-white/[0.04] space-y-0.5"
-                >
-                  <span className="text-[11px] font-semibold text-primary block">
-                    {t(role.roleBn, role.roleEn)}
-                  </span>
-                  <p className="text-[11px] text-muted-foreground italic">
-                    &quot;{role.exampleSentence}&quot;
-                  </p>
-                </div>
-              ))}
+              {guide.sentenceRoles.map((role: any, idx: number) => {
+                const roleEn = role.roleEn || role.role || "";
+                const roleBn = role.roleBn || role.banglaRole || "";
+                const example = role.exampleSentence || role.example || "";
+
+                return (
+                  <div
+                    key={idx}
+                    className="rounded-lg bg-background/70 p-2 text-xs border border-black/[0.04] dark:border-white/[0.04] space-y-0.5"
+                  >
+                    <span className="text-[11px] font-semibold text-primary block">
+                      {t(roleBn, roleEn)}
+                    </span>
+                    {example && (
+                      <p className="text-[11px] text-muted-foreground italic">
+                        &quot;{example}&quot;
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <p className="text-xs text-muted-foreground">
@@ -177,19 +185,26 @@ export function GrammarSubcategorySidebar({
 
           {guide ? (
             <div className="flex flex-wrap gap-1.5">
-              {guide.keyTypes.map((type: CategoryGuideType, idx: number) => (
-                <div
-                  key={idx}
-                  className="rounded-lg bg-background/80 border border-black/[0.05] dark:border-white/[0.05] px-2 py-1 text-xs"
-                >
-                  <span className="font-semibold text-foreground text-[11px]">
-                    {type.nameEn}
-                  </span>
-                  <span className="text-[10px] text-muted-foreground ml-1 font-bengali">
-                    ({type.nameBn})
-                  </span>
-                </div>
-              ))}
+              {guide.keyTypes.map((type: any, idx: number) => {
+                const nameEn = type.nameEn || type.name || "";
+                const nameBn = type.nameBn || type.bangla || "";
+
+                return (
+                  <div
+                    key={idx}
+                    className="rounded-lg bg-background/80 border border-black/[0.05] dark:border-white/[0.05] px-2 py-1 text-xs"
+                  >
+                    <span className="font-semibold text-foreground text-[11px]">
+                      {nameEn}
+                    </span>
+                    {nameBn && (
+                      <span className="text-[10px] text-muted-foreground ml-1 font-bengali">
+                        ({nameBn})
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <p className="text-xs text-muted-foreground">

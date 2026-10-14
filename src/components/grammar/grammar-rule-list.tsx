@@ -321,35 +321,44 @@ export function GrammarRuleList({
               {/* Tab 1: Types Bento */}
               <TabsContent value="types" className="m-0 outline-hidden">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                  {guide.keyTypes.map((type, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-lg border border-black/[0.06] bg-background/80 p-3 space-y-1.5 dark:border-white/[0.08]"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-foreground">
-                          {type.nameEn}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground font-bengali">
-                          {type.nameBn}
-                        </span>
+                  {guide.keyTypes.map((type, idx) => {
+                    const nameEn = type.nameEn || (type as any).name || "";
+                    const nameBn = type.nameBn || (type as any).bangla || "";
+                    const descEn = type.descriptionEn || (type as any).description || "";
+                    const descBn = type.descriptionBn || (type as any).description || "";
+
+                    return (
+                      <div
+                        key={idx}
+                        className="rounded-lg border border-black/[0.06] bg-background/80 p-3 space-y-1.5 dark:border-white/[0.08]"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-foreground">
+                            {nameEn}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground font-bengali">
+                            {nameBn}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-muted-foreground leading-relaxed">
+                          {t(descBn, descEn)}
+                        </p>
+                        {Array.isArray(type.examples) && type.examples.length > 0 && (
+                          <div className="flex flex-wrap gap-1 pt-0.5">
+                            {type.examples.map((ex, i) => (
+                              <Badge
+                                key={i}
+                                variant="secondary"
+                                className="text-[10px] px-1.5 py-0 font-mono font-normal"
+                              >
+                                {ex}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                      <p className="text-[11px] text-muted-foreground leading-relaxed">
-                        {t(type.descriptionBn, type.descriptionEn)}
-                      </p>
-                      <div className="flex flex-wrap gap-1 pt-0.5">
-                        {type.examples.map((ex, i) => (
-                          <Badge
-                            key={i}
-                            variant="secondary"
-                            className="text-[10px] px-1.5 py-0 font-mono font-normal"
-                          >
-                            {ex}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </TabsContent>
 
@@ -362,25 +371,38 @@ export function GrammarRuleList({
                       {t("বাক্যে ব্যবহারের অবস্থানসমূহ:", "Positions & Roles in a Sentence:")}
                     </span>
                     <div className="space-y-2">
-                      {guide.sentenceRoles.map((role, idx) => (
-                        <div key={idx} className="text-xs space-y-0.5 border-l-2 border-primary/40 pl-2">
-                          <span className="text-[11px] font-semibold text-primary block">
-                            {t(role.roleBn, role.roleEn)}
-                          </span>
-                          <p className="text-xs font-medium text-foreground">
-                            &quot;{role.exampleSentence.split(role.targetWord).map((part, i, arr) => (
-                              <span key={i}>
-                                {part}
-                                {i < arr.length - 1 && (
-                                  <span className="underline decoration-primary font-bold text-primary">
-                                    {role.targetWord}
-                                  </span>
-                                )}
-                              </span>
-                            ))}&quot;
-                          </p>
-                        </div>
-                      ))}
+                      {guide.sentenceRoles.map((role, idx) => {
+                        const roleEn = role.roleEn || (role as any).role || "";
+                        const roleBn = role.roleBn || (role as any).banglaRole || "";
+                        const example = role.exampleSentence || (role as any).example || "";
+                        const targetWord = role.targetWord || (role as any).explanation || "";
+
+                        return (
+                          <div key={idx} className="text-xs space-y-0.5 border-l-2 border-primary/40 pl-2">
+                            <span className="text-[11px] font-semibold text-primary block">
+                              {t(roleBn, roleEn)}
+                            </span>
+                            <p className="text-xs font-medium text-foreground">
+                              {example && targetWord && example.includes(targetWord) ? (
+                                <>
+                                  &quot;{example.split(targetWord).map((part: string, i: number, arr: string[]) => (
+                                    <span key={i}>
+                                      {part}
+                                      {i < arr.length - 1 && (
+                                        <span className="underline decoration-primary font-bold text-primary">
+                                          {targetWord}
+                                        </span>
+                                      )}
+                                    </span>
+                                  ))}&quot;
+                                </>
+                              ) : (
+                                <span>&quot;{example}&quot;</span>
+                              )}
+                            </p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
 
@@ -392,10 +414,12 @@ export function GrammarRuleList({
                     <div className="rounded-md bg-muted/60 p-2 text-xs font-semibold text-foreground">
                       {t(guide.identificationHacks.questionBn, guide.identificationHacks.questionEn)}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      {t(guide.identificationHacks.clueBn, guide.identificationHacks.clueEn)}
-                    </p>
-                    {guide.identificationHacks.suffixes && (
+                    {(guide.identificationHacks.clueBn || guide.identificationHacks.clueEn) && (
+                      <p className="text-xs text-muted-foreground">
+                        {t(guide.identificationHacks.clueBn, guide.identificationHacks.clueEn)}
+                      </p>
+                    )}
+                    {Array.isArray(guide.identificationHacks.suffixes) && guide.identificationHacks.suffixes.length > 0 && (
                       <div className="space-y-1">
                         <span className="text-[11px] font-semibold text-muted-foreground block">
                           {t("সাধারণ প্রত্যয় (Suffixes):", "Common Suffix Endings:")}
@@ -423,7 +447,10 @@ export function GrammarRuleList({
                   <div className="flex items-center gap-2">
                     <AlertCircle className="h-4 w-4 text-rose-500 shrink-0" />
                     <h4 className="text-xs font-bold text-rose-600 dark:text-rose-400">
-                      {t(guide.commonTrap.titleBn, guide.commonTrap.titleEn)}
+                      {t(
+                        guide.commonTrap.titleBn || (guide.commonTrap as any).reality || "সতর্কতা",
+                        guide.commonTrap.titleEn || (guide.commonTrap as any).misconception || "Common Trap"
+                      )}
                     </h4>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
@@ -432,7 +459,7 @@ export function GrammarRuleList({
                         ❌ {t("ভুল প্রয়োগ", "Incorrect")}
                       </span>
                       <p className="line-through text-muted-foreground font-mono">
-                        {guide.commonTrap.incorrect}
+                        {guide.commonTrap.incorrect || (guide.commonTrap as any).testSentence}
                       </p>
                     </div>
                     <div className="rounded-md border border-emerald-500/20 bg-background/80 p-2.5 space-y-1">
@@ -440,13 +467,18 @@ export function GrammarRuleList({
                         ✔️ {t("সঠিক প্রয়োগ", "Correct")}
                       </span>
                       <p className="text-emerald-600 dark:text-emerald-400 font-semibold font-mono">
-                        {guide.commonTrap.correct}
+                        {guide.commonTrap.correct || (guide.commonTrap as any).reality}
                       </p>
                     </div>
                   </div>
-                  <p className="text-xs text-muted-foreground pt-1 leading-relaxed">
-                    {t(guide.commonTrap.explanationBn, guide.commonTrap.explanationEn)}
-                  </p>
+                  {(guide.commonTrap.explanationBn || guide.commonTrap.explanationEn || (guide.commonTrap as any).explanation) && (
+                    <p className="text-xs text-muted-foreground pt-1 leading-relaxed">
+                      {t(
+                        guide.commonTrap.explanationBn || (guide.commonTrap as any).explanation || "",
+                        guide.commonTrap.explanationEn || (guide.commonTrap as any).explanation || ""
+                      )}
+                    </p>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>

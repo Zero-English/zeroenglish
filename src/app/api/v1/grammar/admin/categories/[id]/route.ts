@@ -1,8 +1,41 @@
 import { NextResponse, NextRequest } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
-import { updateGrammarCategory, deleteGrammarCategory } from "@/services/grammar.service";
+import {
+  getAdminGrammarCategoryById,
+  updateGrammarCategory,
+  deleteGrammarCategory,
+} from "@/services/grammar.service";
 import { grammarCategoryUpdateSchema } from "@/utils/validation/zod";
 import logger from "@/utils/logger";
+
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const forbidden = await requireAdmin();
+  if (forbidden) return forbidden;
+
+  try {
+    const { id } = await params;
+    const categoryId = parseInt(id, 10);
+    if (isNaN(categoryId)) {
+      return NextResponse.json({ success: false, message: "Invalid ID" }, { status: 400 });
+    }
+
+    const category = await getAdminGrammarCategoryById(categoryId);
+    if (!category) {
+      return NextResponse.json({ success: false, message: "Category not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, data: category });
+  } catch (error: any) {
+    logger.error("Error in GET /api/v1/grammar/admin/categories/[id]", { error });
+    return NextResponse.json(
+      { success: false, message: error.message || "Failed to fetch category" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function PATCH(
   request: NextRequest,

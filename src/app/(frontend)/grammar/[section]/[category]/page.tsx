@@ -25,13 +25,13 @@ export async function generateMetadata({
     fetchDbCategoryBySlug(categorySlug),
   ]);
 
-  if (!category) {
+  if (!category || !section || category.sectionId !== section.slug) {
     return {
       title: "Category Not Found",
     };
   }
 
-  const sectionName = section?.titleEn || "Grammar";
+  const sectionName = section.titleEn || "Grammar";
 
   return {
     title: `${category.titleEn} Rules & Lessons - ${sectionName}`,
@@ -49,7 +49,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     fetchDbCategoryBySlug(categorySlug),
   ]);
 
-  if (!category) {
+  if (!category || !section || category.sectionId !== section.slug) {
     notFound();
   }
 
