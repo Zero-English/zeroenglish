@@ -7,12 +7,10 @@ import { ContributeClient } from "@/components/contribute/contribute-client";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Contribute Quiz Questions",
+  title: "Contribute | Zero English",
   description:
-    "Submit a quiz question for Zero English. An editor reviews every submission, and a question only goes live once it is approved.",
+    "Submit quiz questions and vocabulary for Zero English. An editor reviews every submission, and questions and words only go live once approved.",
   alternates: { canonical: "/contribute" },
-  // The page redirects anyone without the contributor role, so there is nothing
-  // here for a search engine to land on.
   robots: { index: false, follow: false },
 };
 

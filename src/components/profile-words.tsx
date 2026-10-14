@@ -31,6 +31,8 @@ import { useSession } from "next-auth/react";
 import { useT } from "@/components/language-provider";
 import { useAuthStore } from "@/lib/auth-store";
 import { ProfileBentoIdentity } from "@/components/profile-card";
+import { UserAvatar } from "@/components/UserAvatar";
+import { SyncStatus } from "@/components/sync-status";
 import {
   BookmarkCheck,
   CheckCircle2,
@@ -51,6 +53,8 @@ import {
   Sparkles,
   Layers,
   ArrowRight,
+  ArrowLeft,
+  ChevronRight,
   Flame,
   Target,
   Trophy,
@@ -531,9 +535,14 @@ export function ProfileTabs({
   const normalizedTab = activeTab === "still-learning" ? "quiz" : activeTab;
   const authStatus = useAuthStore((s) => s.status);
   const { data: session } = useSession();
+  const isGoogle = authStatus === "google" && !!session?.user;
   const isContributor =
     session?.user?.role === "admin" || session?.user?.role === "contributor";
-  const effectiveTab = normalizedTab === "submits" && !isContributor ? "overview" : normalizedTab;
+  const effectiveTab =
+    (normalizedTab === "submits" && !isContributor) ||
+    (normalizedTab === "settings" && !isGoogle)
+      ? "overview"
+      : normalizedTab;
   const [quizSubTab, setQuizSubTab] = useState<"exams" | "vocab" | "still-learning">(
     activeTab === "still-learning" ? "still-learning" : "vocab"
   );
@@ -567,6 +576,22 @@ export function ProfileTabs({
   const [bookmarkedPage, setBookmarkedPage] = useState(1);
   const [stillLearningPage, setStillLearningPage] = useState(1);
   const [learnedPage, setLearnedPage] = useState(1);
+  const [mobileView, setMobileView] = useState<"menu" | "detail">("menu");
+
+  const handleOpenSection = (tabId: string) => {
+    setActiveTab(tabId);
+    setMobileView("detail");
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  };
+
+  const handleBackToMenu = () => {
+    setMobileView("menu");
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  };
 
   const handleMarkLearned = (id: number) => {
     const k = String(id);
@@ -599,36 +624,45 @@ export function ProfileTabs({
   const quizCircumference = 2 * Math.PI * 30;
   const quizOffset = quizCircumference * (1 - quizAccuracy / 100);
 
+  const user = session?.user;
+  const isAdmin = user?.role === "admin";
+  const displayName = isGoogle ? user?.name || "Learner" : t("অতিথি শিক্ষার্থী", "Guest Learner");
+  const displayEmail = isGoogle ? user?.email || user?.name : t("ডিভাইস লোকাল প্রোফাইল", "Device Local Account");
+
   const navItems = [
     {
       id: "overview",
       label: t("ড্যাশবোর্ড", "Dashboard"),
+      desc: t("সামগ্রিক অগ্রগতি, দৈনিক লক্ষ্য ও স্ট্রিক", "Overall progress, streak & daily goals"),
       icon: BarChart3,
-      color: "text-orange-500",
+      color: "text-orange-500 bg-orange-500/10",
       badge: null,
       badgeColor: "",
     },
     {
       id: "bookmarked",
       label: t("বুকমার্ক ডেক", "Bookmarked"),
+      desc: t("সংরক্ষিত ও পরবর্তীতে অনুশীলনের শব্দসমূহ", "Saved words for later revision"),
       icon: BookmarkCheck,
-      color: "text-amber-500",
+      color: "text-amber-500 bg-amber-500/10",
       badge: bookmarkedCount > 0 ? bookmarkedCount : null,
       badgeColor: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
     },
     {
       id: "learned",
       label: t("শেখা শব্দভাণ্ডার", "Learned Words"),
+      desc: t("সম্পূর্ণ আয়ত্ত করা শব্দতালিকা ও লেভেল", "Mastered vocabulary by CEFR level"),
       icon: Award,
-      color: "text-emerald-500",
+      color: "text-emerald-500 bg-emerald-500/10",
       badge: learnedCount > 0 ? learnedCount : null,
       badgeColor: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
     },
     {
       id: "quiz",
       label: t("কুইজ ও পরীক্ষা", "Quiz & Exams"),
+      desc: t("কুইজ স্কোর, ভুল শব্দের ডেক ও পরীক্ষার ইতিহাস", "Practice scores, review deck & exam history"),
       icon: GraduationCap,
-      color: "text-violet-500",
+      color: "text-violet-500 bg-violet-500/10",
       badge: quizCount + examCount > 0 ? quizCount + examCount : null,
       badgeColor: "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300",
     },
@@ -637,8 +671,9 @@ export function ProfileTabs({
           {
             id: "submits",
             label: t("আমার অবদান", "My Contributions"),
+            desc: t("জমা দেওয়া কুইজ প্রশ্ন ও শব্দের হিস্ট্রি", "Track submitted questions & vocabulary"),
             icon: SquarePen,
-            color: "text-sky-500",
+            color: "text-sky-500 bg-sky-500/10",
             badge: null,
             badgeColor: "",
           },
@@ -649,8 +684,9 @@ export function ProfileTabs({
           {
             id: "settings",
             label: t("অ্যাকাউন্ট সেটিংস", "Settings"),
+            desc: t("প্রোফাইল তথ্য, নাম ও অ্যাকাউন্ট সেটিংস", "Profile info & account preferences"),
             icon: Settings,
-            color: "text-zinc-500",
+            color: "text-zinc-500 bg-zinc-500/10",
             badge: null,
             badgeColor: "",
           },
@@ -658,82 +694,204 @@ export function ProfileTabs({
       : []),
   ];
 
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 lg:gap-6 items-start w-full min-w-0">
-      {/* ========================================================================= */}
-      {/* 🧭 SHADCN UI MINIMAL SIDEBAR TAB NAVIGATION */}
-      {/* ========================================================================= */}
-      <aside className="lg:col-span-3 lg:sticky lg:top-20 z-10 w-full min-w-0">
-        <div className="rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md p-1.5 sm:p-2 lg:p-2.5 space-y-1">
-          <div className="hidden lg:block px-2.5 py-1 mb-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80">
-              {t("নেভিগেশন মেনু", "Profile Menu")}
-            </span>
-          </div>
+  const currentNavItem = navItems.find((n) => n.id === effectiveTab) || navItems[0];
+  const CurrentIcon = currentNavItem.icon;
 
-          <nav className="flex flex-row m-0 lg:flex-col gap-1 w-full overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden">
+  return (
+    <div className="w-full min-w-0">
+      {/* ========================================================================= */}
+      {/* 📱 MOBILE APPLICATION MENU HUB (shown on small screens when mobileView === 'menu') */}
+      {/* ========================================================================= */}
+      {mobileView === "menu" && (
+        <StaggerContainer className="space-y-3.5 lg:hidden mb-4">
+          {/* Mobile Profile Card */}
+          <StaggerItem>
+            <div className={cn(CARD, "p-4")}>
+              <div className="flex items-center justify-between gap-3 pb-3 border-b border-border/60">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="relative shrink-0">
+                    <UserAvatar
+                      id={Number((user as { id?: number })?.id ?? 0)}
+                      name={displayName}
+                      userName={displayName}
+                      image={user?.image}
+                      size="md"
+                    />
+                    <div className="absolute -bottom-1 -right-1 flex size-4 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xs ring-2 ring-background">
+                      <Sparkles className="size-2.5" />
+                    </div>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      <h2 className="text-sm font-semibold text-foreground truncate">
+                        {displayName}
+                      </h2>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-muted-foreground border border-border/60 shrink-0">
+                        {isAdmin ? t("অ্যাডমিন", "Admin") : t("শিক্ষার্থী", "Learner")}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground truncate mt-0.5">
+                      {displayEmail}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Mastery Progress on Mobile Card */}
+              <div className="pt-3">
+                <div className="flex items-center justify-between text-xs mb-1.5">
+                  <span className="text-muted-foreground font-medium">
+                    {t("মাস্টারি রেট", "Mastery Rate")}
+                  </span>
+                  <span className="font-semibold tabular-nums text-foreground">
+                    {overallProgress}%
+                  </span>
+                </div>
+                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-primary transition-all duration-500"
+                    style={{ width: `${overallProgress}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Cloud Data Sync Status (Minimal on Small Screen) */}
+              <SyncStatus minimal className="mt-3" />
+            </div>
+          </StaggerItem>
+
+          {/* Mobile App Navigation Menu List */}
+          <StaggerContainer className={cn(CARD, "p-1.5 overflow-hidden divide-y divide-border/60")}>
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = effectiveTab === item.id;
               return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setActiveTab(item.id)}
-                  className={cn(
-                    "flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer shrink-0 text-left",
-                    "w-auto lg:w-full",
-                    isActive
-                      ? "bg-accent text-accent-foreground font-semibold shadow-2xs"
-                      : "text-muted-foreground hover:bg-muted/70 hover:text-foreground"
-                  )}
-                >
-                  <div className="flex items-center gap-2.5 truncate">
-                    <Icon className={cn("size-4 shrink-0 transition-colors", isActive ? "text-foreground" : "text-muted-foreground")} />
-                    <span className="whitespace-nowrap lg:whitespace-normal">{item.label}</span>
-                  </div>
-
-                  {item.badge != null && (
-                    <span
-                      className={cn(
-                        "ml-auto inline-flex items-center justify-center px-1.5 py-0.5 rounded-md text-[11px] font-medium shrink-0 tabular-nums",
-                        isActive
-                          ? "bg-background/80 text-foreground shadow-2xs"
-                          : "bg-muted text-muted-foreground"
-                      )}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
+                <StaggerItem key={item.id} className="w-full">
+                  <button
+                    type="button"
+                    onClick={() => handleOpenSection(item.id)}
+                    className="w-full flex items-center justify-between p-3.5 rounded-xl hover:bg-muted/70 active:bg-muted transition-colors text-left cursor-pointer group"
+                  >
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-xl", item.color)}>
+                        <Icon className="size-5" />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                            {item.label}
+                          </p>
+                          {item.badge != null && (
+                            <span className="inline-flex items-center justify-center px-1.5 py-0.5 rounded-md text-[11px] font-medium bg-muted text-muted-foreground tabular-nums">
+                              {item.badge}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground truncate mt-0.5">
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                    <ChevronRight className="size-4 text-muted-foreground/60 shrink-0 ml-2 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
+                  </button>
+                </StaggerItem>
               );
             })}
-          </nav>
+          </StaggerContainer>
+        </StaggerContainer>
+      )}
 
-          {/* Minimal Mastery Status (Desktop) */}
-          <div className="hidden lg:block mt-3 pt-3 border-t border-border/60 px-2.5 pb-1">
-            <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="text-muted-foreground font-medium">
-                {t("মাস্টারি রেট", "Mastery Rate")}
-              </span>
-              <span className="font-semibold tabular-nums text-foreground">
-                {overallProgress}%
+      {/* ========================================================================= */}
+      {/* 🧭 DESKTOP 2-COLUMN LAYOUT & MOBILE DETAIL VIEW */}
+      {/* ========================================================================= */}
+      <div className={cn(
+        "grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 lg:gap-6 items-start w-full min-w-0",
+        mobileView === "menu" ? "hidden lg:grid" : "grid"
+      )}>
+        {/* Desktop Sidebar (hidden on mobile) */}
+        <aside className="hidden lg:block lg:col-span-3 lg:sticky lg:top-20 z-10 w-full min-w-0">
+          <div className="rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md p-1.5 sm:p-2 lg:p-2.5 space-y-1">
+            <div className="px-2.5 py-1 mb-1">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80">
+                {t("নেভিগেশন মেনু", "Profile Menu")}
               </span>
             </div>
-            <div className="h-1 rounded-full bg-muted overflow-hidden">
-              <div
-                className="h-full rounded-full bg-primary transition-all duration-500"
-                style={{ width: `${overallProgress}%` }}
-              />
+
+            <nav className="flex flex-col gap-1 w-full">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = effectiveTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handleOpenSection(item.id)}
+                    className={cn(
+                      "flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer shrink-0 text-left w-full",
+                      isActive
+                        ? "bg-accent text-accent-foreground font-semibold shadow-2xs"
+                        : "text-muted-foreground hover:bg-muted/70 hover:text-foreground"
+                    )}
+                  >
+                    <div className="flex items-center gap-2.5 truncate">
+                      <Icon className={cn("size-4 shrink-0 transition-colors", isActive ? "text-foreground" : "text-muted-foreground")} />
+                      <span className="whitespace-normal">{item.label}</span>
+                    </div>
+
+                    {item.badge != null && (
+                      <span
+                        className={cn(
+                          "ml-auto inline-flex items-center justify-center px-1.5 py-0.5 rounded-md text-[11px] font-medium shrink-0 tabular-nums",
+                          isActive
+                            ? "bg-background/80 text-foreground shadow-2xs"
+                            : "bg-muted text-muted-foreground"
+                        )}
+                      >
+                        {item.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+
+            {/* Minimal Mastery Status (Desktop) */}
+            <div className="mt-3 pt-3 border-t border-border/60 px-2.5 pb-1">
+              <div className="flex items-center justify-between text-xs mb-1.5">
+                <span className="text-muted-foreground font-medium">
+                  {t("মাস্টারি রেট", "Mastery Rate")}
+                </span>
+                <span className="font-semibold tabular-nums text-foreground">
+                  {overallProgress}%
+                </span>
+              </div>
+              <div className="h-1 rounded-full bg-muted overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-primary transition-all duration-500"
+                  style={{ width: `${overallProgress}%` }}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </aside>
+        </aside>
 
-      {/* ========================================================================= */}
-      {/* 📱 MAIN CONTENT AREA (Bento Dashboard / Word Lists / History) */}
-      {/* ========================================================================= */}
-      <div className="lg:col-span-9 min-w-0 w-full space-y-4 sm:space-y-5">
+        {/* Main Content Workspace */}
+        <div className="lg:col-span-9 min-w-0 w-full space-y-4 sm:space-y-5">
+          {/* Mobile Back Button & Header (Mobile Detail View) */}
+          <div className="flex items-center justify-between pb-3 mb-1 lg:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBackToMenu}
+              className="h-8 -ml-2 gap-1.5 text-xs font-semibold text-foreground hover:text-primary cursor-pointer"
+            >
+              <ArrowLeft className="size-4" />
+              <span>{t("মেনুতে ফিরে যান", "Back to Menu")}</span>
+            </Button>
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+              <CurrentIcon className="size-3.5 text-primary" />
+              <span>{currentNavItem.label}</span>
+            </div>
+          </div>
         {/* ========================================================================= */}
         {/* 🚀 TAB 1: BENTO DASHBOARD */}
         {/* ========================================================================= */}
@@ -1128,5 +1286,6 @@ export function ProfileTabs({
         )}
       </div>
     </div>
+  </div>
   );
 }

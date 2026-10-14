@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useSyncStore, runSync, refreshPending } from "@/lib/sync";
 import { useAuthStatus } from "@/lib/auth-store";
 import { useT } from "@/components/language-provider";
@@ -27,7 +28,13 @@ function formatLastSynced(ts: number): string {
   return `${date}, ${time}`;
 }
 
-export function SyncStatus() {
+export function SyncStatus({
+  className,
+  minimal = false,
+}: {
+  className?: string;
+  minimal?: boolean;
+} = {}) {
   const {
     status,
     pendingQuiz,
@@ -51,6 +58,93 @@ export function SyncStatus() {
     window.addEventListener("progress-changed", onChange);
     return () => window.removeEventListener("progress-changed", onChange);
   }, [signedIn, hydrated]);
+
+  if (minimal) {
+    return (
+      <div
+        className={cn(
+          "flex items-center justify-between gap-2.5 p-2 rounded-xl bg-muted/40 border border-border/60 w-full min-w-0",
+          className
+        )}
+      >
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div
+            className={cn(
+              "flex size-7 shrink-0 items-center justify-center rounded-lg",
+              syncing
+                ? "bg-sky-500/10 text-sky-500"
+                : failed
+                  ? "bg-red-500/10 text-red-500"
+                  : allSynced
+                    ? "bg-emerald-500/10 text-emerald-500"
+                    : pending > 0
+                      ? "bg-amber-500/10 text-amber-500"
+                      : "bg-muted text-muted-foreground"
+            )}
+          >
+            {syncing ? (
+              <RefreshCw className="size-3.5 animate-spin" />
+            ) : failed ? (
+              <AlertTriangle className="size-3.5" />
+            ) : allSynced ? (
+              <CheckCircle2 className="size-3.5" />
+            ) : pending > 0 ? (
+              <RefreshCw className="size-3.5" />
+            ) : (
+              <CloudOff className="size-3.5" />
+            )}
+          </div>
+
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-foreground truncate">
+                {syncing
+                  ? t("সিঙ্ক হচ্ছে...", "Syncing...")
+                  : failed
+                    ? t("সিঙ্ক ব্যর্থ", "Sync failed")
+                    : allSynced
+                      ? t("সব ডেটা ব্যাকআপ আছে", "Data backed up")
+                      : pending > 0
+                        ? t(`${pending}টি সিঙ্ক বাকি`, `${pending} pending`)
+                        : t("সিঙ্ক বন্ধ", "Sync off")}
+              </span>
+              {pending > 0 && (
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/15 text-amber-600 dark:text-amber-400 tabular-nums">
+                  {pending}
+                </span>
+              )}
+            </div>
+            <p className="text-[10px] text-muted-foreground truncate">
+              {signedIn
+                ? lastSyncedAt
+                  ? `${t("সর্বশেষ", "Last")}: ${formatLastSynced(lastSyncedAt)}`
+                  : t("এখনো সিঙ্ক হয়নি", "Not synced yet")
+                : t("Google দিয়ে সাইন ইন করুন", "Sign in with Google")}
+            </p>
+          </div>
+        </div>
+
+        {signedIn ? (
+          <button
+            type="button"
+            onClick={() => void runSync()}
+            disabled={syncing}
+            className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary px-2.5 py-1 text-xs font-semibold disabled:opacity-50 transition-colors cursor-pointer"
+          >
+            <RefreshCw className={cn("size-3", syncing && "animate-spin")} />
+            <span>{syncing ? t("সিঙ্ক হচ্ছে...", "Syncing...") : t("সিঙ্ক", "Sync")}</span>
+          </button>
+        ) : (
+          <Link
+            href="/login"
+            className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-primary text-primary-foreground px-2.5 py-1 text-[11px] font-semibold hover:bg-primary/90 transition-colors"
+          >
+            {t("লগইন", "Login")}
+          </Link>
+        )}
+      </div>
+    );
+  }
 
   const rows = [
     {
@@ -84,7 +178,7 @@ export function SyncStatus() {
   ];
 
   return (
-    <div className="mt-4 border-t border-zinc-100 pt-4 dark:border-zinc-800 w-full">
+    <div className={cn("mt-4 border-t border-border/60 pt-4 w-full", className)}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-sky-100 dark:bg-sky-900/30">
@@ -100,10 +194,10 @@ export function SyncStatus() {
             />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            <h3 className="text-sm font-semibold text-foreground">
               {t("ডেটা সিঙ্ক", "Data Sync")}
             </h3>
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">
+            <p className="text-xs text-muted-foreground">
               {t(
                 "আপনার অগ্রগতি Google অ্যাকাউন্টে ব্যাকআপ রাখুন",
                 "Back up your progress to your Google account"
@@ -144,9 +238,9 @@ export function SyncStatus() {
       </div>
 
       {!signedIn || !hydrated ? (
-        <div className="mt-4 flex items-center justify-between gap-3 rounded-lg border border-dashed border-zinc-200 dark:border-zinc-800 bg-zinc-50/80 dark:bg-zinc-900/40 px-3 py-2.5 text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-dashed border-border/80 bg-muted/30 px-3 py-2.5 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
-            <ShieldCheck className="h-4 w-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
+            <ShieldCheck className="h-4 w-4 shrink-0 text-muted-foreground" />
             {t(
               "Google দিয়ে সাইন ইন করলে আপনার ডেটা সিনক্রোনাইজ হবে",
               "Sign in with Google to sync your data"
@@ -155,7 +249,7 @@ export function SyncStatus() {
           <button
             type="button"
             disabled
-            className="inline-flex shrink-0 items-center gap-1 rounded-md bg-zinc-200 dark:bg-zinc-800 px-2.5 py-1 font-medium text-zinc-400 dark:text-zinc-500 cursor-not-allowed"
+            className="inline-flex shrink-0 items-center gap-1 rounded-md bg-muted px-2.5 py-1 font-medium text-muted-foreground/60 cursor-not-allowed"
           >
             <CloudOff className="h-3.5 w-3.5" />
             {t("সিঙ্ক বন্ধ", "Sync off")}
@@ -193,14 +287,14 @@ export function SyncStatus() {
               {rows.map(({ label, count, icon: Icon, tint, bg }) => (
                 <span
                   key={label}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 px-2.5 py-1.5 text-xs text-zinc-600 dark:text-zinc-300"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border/60 bg-muted/40 px-2.5 py-1.5 text-xs text-foreground"
                 >
                   <span className={cn("p-1 rounded-md", bg)}>
                     <Icon className={cn("h-3 w-3", tint)} />
                   </span>
                   {label}
                   {count > 0 && (
-                    <span className="rounded-full bg-zinc-200 dark:bg-zinc-800 px-1.5 py-0.5 text-[10px] font-semibold tabular-nums">
+                    <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-foreground">
                       {count}
                     </span>
                   )}
@@ -209,8 +303,8 @@ export function SyncStatus() {
             </div>
           )}
 
-          <div className="flex items-center justify-between gap-3 border-t border-zinc-100 dark:border-zinc-800 pt-3">
-            <span className="flex items-center gap-1.5 text-[11px] text-zinc-400 dark:text-zinc-500">
+          <div className="flex items-center justify-between gap-3 border-t border-border/60 pt-3">
+            <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
               <Clock3 className="h-3.5 w-3.5" />
               {lastSyncedAt
                 ? t(
