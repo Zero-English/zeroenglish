@@ -204,3 +204,142 @@ li::marker{
 .right-env-space{
   padding-right: env(safe-area-inset-right);
 }
+
+/* ==========================================================
+   LENIS SMOOTH SCROLL SUPPORT
+   ========================================================== */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis [data-lenis-prevent],
+.lenis [data-lenis-prevent-wheel],
+.lenis [data-lenis-prevent-touch] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ==========================================================
+   CREATIVE NOTEPAD / SKETCHBOOK / GRID LINES AESTHETICS
+   ========================================================== */
+
+/* Tactile graph paper grid background */
+.sketch-grid-paper {
+  background-size: 26px 26px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+}
+
+.dark .sketch-grid-paper {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Ruled notebook paper lines */
+.sketch-notebook-lines {
+  background-size: 100% 32px;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 31px,
+    rgba(14, 116, 144, 0.07) 32px
+  );
+}
+
+.dark .sketch-notebook-lines {
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 31px,
+    rgba(255, 255, 255, 0.035) 32px
+  );
+}
+
+/* Dotted sketch paper */
+.sketch-dot-paper {
+  background-size: 24px 24px;
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.12) 1.2px, transparent 1.2px);
+}
+
+.dark .sketch-dot-paper {
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.12) 1.2px, transparent 1.2px);
+}
+
+/* Subtle hand-drawn irregular borders */
+.sketch-border {
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.sketch-border-sm {
+  border-radius: 180px 10px 170px 12px/12px 175px 10px 180px;
+}
+
+/* Paper shadows with gentle elevation */
+.paper-shadow {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+.sticky-shadow {
+  box-shadow: 
+    0 10px 25px -4px rgba(0, 0, 0, 0.07),
+    0 4px 6px -2px rgba(0, 0, 0, 0.04),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.dark .sticky-shadow {
+  box-shadow: 
+    0 10px 25px -4px rgba(0, 0, 0, 0.4),
+    0 4px 6px -2px rgba(0, 0, 0, 0.25);
+}
+
+/* Rubber ink stamp badge */
+.stamp-badge {
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-style: dashed;
+  transform: rotate(-1.5deg);
+}
+
+/* Perforated notebook spiral holes row */
+.notebook-holes {
+  background-image: radial-gradient(circle at 12px 12px, rgba(0, 0, 0, 0.14) 4px, transparent 4px);
+  background-size: 24px 24px;
+}
+
+.dark .notebook-holes {
+  background-image: radial-gradient(circle at 12px 12px, rgba(255, 255, 255, 0.18) 4px, transparent 4px);
+}
+
+/* Dog-ear paper fold corner */
+.paper-dogear {
+  position: relative;
+}
+.paper-dogear::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 16px 16px 0;
+  border-color: transparent rgba(0, 0, 0, 0.08) transparent transparent;
+  pointer-events: none;
+  transition: border-width 0.2s ease;
+}
+.dark .paper-dogear::after {
+  border-color: transparent rgba(255, 255, 255, 0.14) transparent transparent;
+}
+.paper-dogear:hover::after {
+  border-width: 0 22px 22px 0;
+}
+
