@@ -269,6 +269,236 @@ export async function getUserGrammarBookmarks(userId: number) {
   }
 }
 
+export interface UserGrammarRuleCardItem {
+  id: number;
+  slug: string;
+  titleEn: string;
+  titleBn: string;
+  shortDescriptionEn: string;
+  shortDescriptionBn: string;
+  difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
+  estimatedMinutes: number;
+  order: number;
+  categorySlug: string;
+  categoryTitleEn: string;
+  categoryTitleBn: string;
+  sectionSlug: string;
+  sectionTitleEn: string;
+  sectionTitleBn: string;
+  isCompleted: boolean;
+  isBookmarked: boolean;
+  completedAt?: string | null;
+  bookmarkedAt?: string | null;
+}
+
+export async function getUserGrammarRulesOverview(userId: number) {
+  try {
+    const [progressList, bookmarkList] = await Promise.all([
+      prisma.userGrammarProgress.findMany({
+        where: { userId },
+        include: {
+          rule: {
+            include: {
+              category: {
+                include: { section: true },
+              },
+            },
+          },
+        },
+      }),
+      prisma.userGrammarBookmark.findMany({
+        where: { userId },
+        include: {
+          rule: {
+            include: {
+              category: {
+                include: { section: true },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+
+    const bookmarkedRuleIdMap = new Map<number, Date>();
+    bookmarkList.forEach((b) => {
+      bookmarkedRuleIdMap.set(b.ruleId, b.bookmarkedAt);
+    });
+
+    const completedRuleIdMap = new Map<number, Date | null>();
+    progressList.forEach((p) => {
+      if (p.isCompleted) {
+        completedRuleIdMap.set(p.ruleId, p.completedAt);
+      }
+    });
+
+    const formatRule = (
+      r: any,
+      isCompleted: boolean,
+      isBookmarked: boolean,
+      completedAt?: Date | null,
+      bookmarkedAt?: Date | null
+    ): UserGrammarRuleCardItem => ({
+      id: r.id,
+      slug: r.slug,
+      titleEn: r.titleEn,
+      titleBn: r.titleBn,
+      shortDescriptionEn: r.shortDescriptionEn,
+      shortDescriptionBn: r.shortDescriptionBn,
+      difficulty: r.difficulty,
+      estimatedMinutes: r.estimatedMinutes || 5,
+      order: r.order,
+      categorySlug: r.category?.slug || "",
+      categoryTitleEn: r.category?.titleEn || "",
+      categoryTitleBn: r.category?.titleBn || "",
+      sectionSlug: r.category?.section?.slug || "parts-of-speech",
+      sectionTitleEn: r.category?.section?.titleEn || "Grammar",
+      sectionTitleBn: r.category?.section?.titleBn || "ব্যাকরণ",
+      isCompleted,
+      isBookmarked,
+      completedAt: completedAt ? completedAt.toISOString() : null,
+      bookmarkedAt: bookmarkedAt ? bookmarkedAt.toISOString() : null,
+    });
+
+    const learned: UserGrammarRuleCardItem[] = progressList
+      .filter((p) => p.isCompleted && p.rule)
+      .map((p) =>
+        formatRule(
+          p.rule,
+          true,
+          bookmarkedRuleIdMap.has(p.ruleId),
+          p.completedAt,
+          bookmarkedRuleIdMap.get(p.ruleId)
+        )
+      );
+
+    const bookmarked: UserGrammarRuleCardItem[] = bookmarkList
+      .filter((b) => b.rule)
+      .map((b) =>
+        formatRule(
+          b.rule,
+          completedRuleIdMap.has(b.ruleId),
+          true,
+          completedRuleIdMap.get(b.ruleId),
+          b.bookmarkedAt
+        )
+      );
+
+    const totalLearnedMinutes = learned.reduce(
+      (sum, item) => sum + (item.estimatedMinutes || 5),
+      0
+    );
+
+    return {
+      learned,
+      bookmarked,
+      stats: {
+        totalLearned: learned.length,
+        totalBookmarked: bookmarked.length,
+        totalMinutes: totalLearnedMinutes,
+      },
+    };
+  } catch (error) {
+    logger.error("Failed to fetch user grammar rules overview", { userId, error });
+    return {
+      learned: [],
+      bookmarked: [],
+      stats: { totalLearned: 0, totalBookmarked: 0, totalMinutes: 0 },
+    };
+  }
+}
+
+export async function getGrammarRulesBySlugs(
+  completedSlugs: string[] = [],
+  bookmarkedSlugs: string[] = []
+) {
+  try {
+    const allSlugs = Array.from(new Set([...completedSlugs, ...bookmarkedSlugs]));
+    if (allSlugs.length === 0) {
+      return {
+        learned: [],
+        bookmarked: [],
+        stats: { totalLearned: 0, totalBookmarked: 0, totalMinutes: 0 },
+      };
+    }
+
+    const rules = await prisma.grammarRule.findMany({
+      where: {
+        slug: { in: allSlugs },
+        isPublished: true,
+      },
+      include: {
+        category: {
+          include: { section: true },
+        },
+      },
+    });
+
+    const completedSet = new Set(completedSlugs);
+    const bookmarkedSet = new Set(bookmarkedSlugs);
+
+    const ruleMap = new Map(rules.map((r) => [r.slug, r]));
+
+    const formatRule = (
+      r: any,
+      isCompleted: boolean,
+      isBookmarked: boolean
+    ): UserGrammarRuleCardItem => ({
+      id: r.id,
+      slug: r.slug,
+      titleEn: r.titleEn,
+      titleBn: r.titleBn,
+      shortDescriptionEn: r.shortDescriptionEn,
+      shortDescriptionBn: r.shortDescriptionBn,
+      difficulty: r.difficulty,
+      estimatedMinutes: r.estimatedMinutes || 5,
+      order: r.order,
+      categorySlug: r.category?.slug || "",
+      categoryTitleEn: r.category?.titleEn || "",
+      categoryTitleBn: r.category?.titleBn || "",
+      sectionSlug: r.category?.section?.slug || "parts-of-speech",
+      sectionTitleEn: r.category?.section?.titleEn || "Grammar",
+      sectionTitleBn: r.category?.section?.titleBn || "ব্যাকরণ",
+      isCompleted,
+      isBookmarked,
+      completedAt: null,
+      bookmarkedAt: null,
+    });
+
+    const learned: UserGrammarRuleCardItem[] = completedSlugs
+      .map((slug) => ruleMap.get(slug))
+      .filter((r): r is NonNullable<typeof r> => Boolean(r))
+      .map((r) => formatRule(r, true, bookmarkedSet.has(r.slug)));
+
+    const bookmarked: UserGrammarRuleCardItem[] = bookmarkedSlugs
+      .map((slug) => ruleMap.get(slug))
+      .filter((r): r is NonNullable<typeof r> => Boolean(r))
+      .map((r) => formatRule(r, completedSet.has(r.slug), true));
+
+    const totalLearnedMinutes = learned.reduce(
+      (sum, item) => sum + (item.estimatedMinutes || 5),
+      0
+    );
+
+    return {
+      learned,
+      bookmarked,
+      stats: {
+        totalLearned: learned.length,
+        totalBookmarked: bookmarked.length,
+        totalMinutes: totalLearnedMinutes,
+      },
+    };
+  } catch (error) {
+    logger.error("Failed to fetch grammar rules by slugs", { error });
+    return {
+      learned: [],
+      bookmarked: [],
+      stats: { totalLearned: 0, totalBookmarked: 0, totalMinutes: 0 },
+    };
+  }
+}
+
 // ==========================================
 // Admin CRUD Operations
 // ==========================================

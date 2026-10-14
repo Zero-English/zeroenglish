@@ -7,6 +7,7 @@ const STORAGE_KEY = "zero_grammar_progress_v1";
 
 interface StoredProgress {
   completedRuleIds: string[];
+  bookmarkedRuleIds: string[];
   visitedRuleIds: string[];
   completedTimestamps: Record<string, string>;
   lastVisitedRuleId?: string;
@@ -14,6 +15,7 @@ interface StoredProgress {
 
 const defaultProgress: StoredProgress = {
   completedRuleIds: [],
+  bookmarkedRuleIds: [],
   visitedRuleIds: [],
   completedTimestamps: {},
 };
@@ -38,6 +40,9 @@ function getStoredProgress(): StoredProgress {
     return {
       completedRuleIds: Array.isArray(parsed.completedRuleIds)
         ? parsed.completedRuleIds
+        : [],
+      bookmarkedRuleIds: Array.isArray(parsed.bookmarkedRuleIds)
+        ? parsed.bookmarkedRuleIds
         : [],
       visitedRuleIds: Array.isArray(parsed.visitedRuleIds)
         ? parsed.visitedRuleIds
@@ -79,6 +84,7 @@ function getSnapshot(): StoredProgress {
   // Simple shallow check to prevent infinite re-renders
   if (
     current.completedRuleIds.length !== cachedSnapshot.completedRuleIds.length ||
+    current.bookmarkedRuleIds.length !== cachedSnapshot.bookmarkedRuleIds.length ||
     current.visitedRuleIds.length !== cachedSnapshot.visitedRuleIds.length ||
     current.lastVisitedRuleId !== cachedSnapshot.lastVisitedRuleId
   ) {
@@ -98,6 +104,11 @@ export function useGrammarProgress() {
   const isCompleted = useCallback(
     (ruleId: string) => progress.completedRuleIds.includes(ruleId),
     [progress.completedRuleIds]
+  );
+
+  const isBookmarked = useCallback(
+    (ruleId: string) => progress.bookmarkedRuleIds.includes(ruleId),
+    [progress.bookmarkedRuleIds]
   );
 
   const isVisited = useCallback(
@@ -130,7 +141,42 @@ export function useGrammarProgress() {
       visitedRuleIds: nextVisited,
     });
 
+    // Background server sync if available
+    try {
+      fetch(`/api/v1/grammar/rules/${ruleId}/progress`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isCompleted: !isAlreadyCompleted, isVisited: true }),
+      }).catch(() => {});
+    } catch {
+      // Ignore background fetch failure
+    }
+
     return !isAlreadyCompleted;
+  }, []);
+
+  const toggleBookmark = useCallback((ruleId: string) => {
+    const current = getStoredProgress();
+    const isAlreadyBookmarked = current.bookmarkedRuleIds.includes(ruleId);
+    const nextBookmarked = isAlreadyBookmarked
+      ? current.bookmarkedRuleIds.filter((id) => id !== ruleId)
+      : [...current.bookmarkedRuleIds, ruleId];
+
+    saveStoredProgress({
+      ...current,
+      bookmarkedRuleIds: nextBookmarked,
+    });
+
+    // Background server sync if available
+    try {
+      fetch(`/api/v1/grammar/rules/${ruleId}/bookmark`, {
+        method: "POST",
+      }).catch(() => {});
+    } catch {
+      // Ignore background fetch failure
+    }
+
+    return !isAlreadyBookmarked;
   }, []);
 
   const markCompleted = useCallback((ruleId: string) => {
@@ -147,6 +193,14 @@ export function useGrammarProgress() {
           ? current.visitedRuleIds
           : [...current.visitedRuleIds, ruleId],
       });
+
+      try {
+        fetch(`/api/v1/grammar/rules/${ruleId}/progress`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ isCompleted: true, isVisited: true }),
+        }).catch(() => {});
+      } catch {}
     }
   }, []);
 
@@ -196,15 +250,36 @@ export function useGrammarProgress() {
     });
   }, []);
 
+  const syncFromServer = useCallback(
+    (completedSlugs: string[], bookmarkedSlugs: string[]) => {
+      const current = getStoredProgress();
+      const mergedCompleted = Array.from(
+        new Set([...current.completedRuleIds, ...completedSlugs])
+      );
+      const mergedBookmarked = Array.from(
+        new Set([...current.bookmarkedRuleIds, ...bookmarkedSlugs])
+      );
+      saveStoredProgress({
+        ...current,
+        completedRuleIds: mergedCompleted,
+        bookmarkedRuleIds: mergedBookmarked,
+      });
+    },
+    []
+  );
+
   return {
     isClient,
     progress,
     isCompleted,
+    isBookmarked,
     isVisited,
     toggleCompleted,
+    toggleBookmark,
     markCompleted,
     markVisited,
     getCategoryStats,
     resetCategoryProgress,
+    syncFromServer,
   };
 }

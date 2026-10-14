@@ -59,10 +59,13 @@ import {
   Target,
   Trophy,
   Zap,
+  BookMarked,
 } from "lucide-react";
 import { ProfileSettings } from "@/components/profile-settings";
 import { MySubmissions } from "@/components/contribute/my-submissions";
 import { ContributorCertificateModal } from "@/components/template-engine/contributor-certificate-modal";
+import { ProfileGrammarPanel } from "@/components/profile-grammar";
+import { useGrammarProgress } from "@/lib/grammar-progress";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -532,7 +535,12 @@ export function ProfileTabs({
   levelWordMap = {},
 }: ProfileTabsProps) {
   const activeTab = useActiveTab();
-  const normalizedTab = activeTab === "still-learning" ? "quiz" : activeTab;
+  const normalizedTab =
+    activeTab === "still-learning"
+      ? "quiz"
+      : activeTab === "grammar"
+      ? "learned"
+      : activeTab;
   const authStatus = useAuthStore((s) => s.status);
   const { data: session } = useSession();
   const isGoogle = authStatus === "google" && !!session?.user;
@@ -546,6 +554,10 @@ export function ProfileTabs({
   const [quizSubTab, setQuizSubTab] = useState<"exams" | "vocab" | "still-learning">(
     activeTab === "still-learning" ? "still-learning" : "vocab"
   );
+  const [bookmarkedSubTab, setBookmarkedSubTab] = useState<"words" | "grammar">("words");
+  const [learnedSubTab, setLearnedSubTab] = useState<"words" | "grammar">(
+    activeTab === "grammar" ? "grammar" : "words"
+  );
   const quizCount = useQuizHistory().entries.length;
   const examCount = useQuizExamHistoryStore((s) => s.entries.length);
   const { bookmarkedIds, isBookmarked, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
@@ -553,6 +565,34 @@ export function ProfileTabs({
   const { stillLearningIds, removeStillLearning, toggleStillLearning, loaded: stillLearningLoaded } =
     useStillLearningWords();
   const { totalCorrectAnswers, loaded: quizLoaded } = useQuizActivity();
+  const { progress: grammarProgress } = useGrammarProgress();
+
+  const grammarLearnedCount = grammarProgress.completedRuleIds.length;
+  const grammarBookmarkedCount = grammarProgress.bookmarkedRuleIds.length;
+  const grammarTotalCount = grammarLearnedCount + grammarBookmarkedCount;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab");
+      const typeParam = params.get("type") || params.get("subtab") || params.get("view");
+      if (tabParam === "grammar") {
+        setActiveTab("learned");
+        setLearnedSubTab("grammar");
+        setMobileView("detail");
+      } else if (tabParam) {
+        setActiveTab(tabParam);
+        setMobileView("detail");
+        if (tabParam === "bookmarked" && (typeParam === "grammar" || typeParam === "bookmarked")) {
+          setBookmarkedSubTab("grammar");
+        }
+        if (tabParam === "learned" && (typeParam === "grammar" || typeParam === "learned")) {
+          setLearnedSubTab("grammar");
+        }
+      }
+    }
+  }, []);
+
   const loaded = bookmarkLoaded && learnedLoaded && stillLearningLoaded;
   const t = useT();
 
@@ -578,10 +618,54 @@ export function ProfileTabs({
   const [learnedPage, setLearnedPage] = useState(1);
   const [mobileView, setMobileView] = useState<"menu" | "detail">("menu");
 
+  const handleBookmarkedSubTabChange = (val: "words" | "grammar") => {
+    setBookmarkedSubTab(val);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", "bookmarked");
+      if (val === "grammar") {
+        url.searchParams.set("type", "grammar");
+      } else {
+        url.searchParams.delete("type");
+        url.searchParams.delete("subtab");
+        url.searchParams.delete("view");
+      }
+      window.history.replaceState(null, "", url.toString());
+    }
+  };
+
+  const handleLearnedSubTabChange = (val: "words" | "grammar") => {
+    setLearnedSubTab(val);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", "learned");
+      if (val === "grammar") {
+        url.searchParams.set("type", "grammar");
+      } else {
+        url.searchParams.delete("type");
+        url.searchParams.delete("subtab");
+        url.searchParams.delete("view");
+      }
+      window.history.replaceState(null, "", url.toString());
+    }
+  };
+
   const handleOpenSection = (tabId: string) => {
     setActiveTab(tabId);
     setMobileView("detail");
     if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", tabId);
+      if (tabId === "bookmarked" && bookmarkedSubTab === "grammar") {
+        url.searchParams.set("type", "grammar");
+      } else if (tabId === "learned" && learnedSubTab === "grammar") {
+        url.searchParams.set("type", "grammar");
+      } else {
+        url.searchParams.delete("type");
+        url.searchParams.delete("subtab");
+        url.searchParams.delete("view");
+      }
+      window.history.replaceState(null, "", url.toString());
       window.scrollTo({ top: 0, behavior: "instant" });
     }
   };
@@ -589,6 +673,12 @@ export function ProfileTabs({
   const handleBackToMenu = () => {
     setMobileView("menu");
     if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("tab");
+      url.searchParams.delete("type");
+      url.searchParams.delete("subtab");
+      url.searchParams.delete("view");
+      window.history.replaceState(null, "", url.toString());
       window.scrollTo({ top: 0, behavior: "instant" });
     }
   };
@@ -642,19 +732,19 @@ export function ProfileTabs({
     {
       id: "bookmarked",
       label: t("বুকমার্ক ডেক", "Bookmarked"),
-      desc: t("সংরক্ষিত ও পরবর্তীতে অনুশীলনের শব্দসমূহ", "Saved words for later revision"),
+      desc: t("সংরক্ষিত শব্দ ও ব্যাকরণ রুলস", "Saved words & grammar rules"),
       icon: BookmarkCheck,
       color: "text-amber-500 bg-amber-500/10",
-      badge: bookmarkedCount > 0 ? bookmarkedCount : null,
+      badge: bookmarkedCount + grammarBookmarkedCount > 0 ? bookmarkedCount + grammarBookmarkedCount : null,
       badgeColor: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
     },
     {
       id: "learned",
-      label: t("শেখা শব্দভাণ্ডার", "Learned Words"),
-      desc: t("সম্পূর্ণ আয়ত্ত করা শব্দতালিকা ও লেভেল", "Mastered vocabulary by CEFR level"),
+      label: t("শেখা বিষয়সমূহ", "Learned"),
+      desc: t("সম্পূর্ণ আয়ত্ত করা শব্দ ও গ্রামার রুলস", "Mastered vocabulary & grammar rules"),
       icon: Award,
       color: "text-emerald-500 bg-emerald-500/10",
-      badge: learnedCount > 0 ? learnedCount : null,
+      badge: learnedCount + grammarLearnedCount > 0 ? learnedCount + grammarLearnedCount : null,
       badgeColor: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
     },
     {
@@ -1107,35 +1197,106 @@ export function ProfileTabs({
         )}
 
         {/* ========================================================================= */}
-        {/* 🔖 TAB 2: BOOKMARKED WORDS */}
+        {/* ========================================================================= */}
+        {/* 🔖 TAB 2: BOOKMARKED ITEMS (WORDS & GRAMMAR) */}
         {/* ========================================================================= */}
         {effectiveTab === "bookmarked" && (
-          <PaginatedWordList
-            idSet={bookmarkedIds}
-            page={bookmarkedPage}
-            onPageChange={setBookmarkedPage}
-            emptyType="bookmark"
-            onToggleBookmark={toggleBookmark}
-            onToggleLearned={handleMarkLearned}
-            isBookmarked={isBookmarked}
-            isLearned={isLearned}
-          />
+          <Tabs
+            value={bookmarkedSubTab}
+            onValueChange={(v) => handleBookmarkedSubTabChange(v as "words" | "grammar")}
+            className="w-full min-w-0"
+          >
+            <div className="overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden mb-4 sm:mb-5">
+              <TabsList className="w-full">
+                <TabsTrigger value="words">
+                  <BookOpen className="size-3.5" />
+                  <span>{t("শব্দ", "Words")}</span>
+                  {bookmarkedCount > 0 && (
+                    <span className="ml-1 inline-flex items-center justify-center rounded-full bg-muted-foreground/15 px-1.5 py-0.2 text-[10px] font-semibold text-foreground/80 tabular-nums">
+                      {bookmarkedCount}
+                    </span>
+                  )}
+                </TabsTrigger>
+                <TabsTrigger value="grammar">
+                  <GraduationCap className="size-3.5" />
+                  <span>{t("গ্রামার", "Grammar")}</span>
+                  {grammarBookmarkedCount > 0 && (
+                    <span className="ml-1 inline-flex items-center justify-center rounded-full bg-muted-foreground/15 px-1.5 py-0.2 text-[10px] font-semibold text-foreground/80 tabular-nums">
+                      {grammarBookmarkedCount}
+                    </span>
+                  )}
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <TabsContent value="words" className="min-w-0 w-full mt-0">
+              <PaginatedWordList
+                idSet={bookmarkedIds}
+                page={bookmarkedPage}
+                onPageChange={setBookmarkedPage}
+                emptyType="bookmark"
+                onToggleBookmark={toggleBookmark}
+                onToggleLearned={handleMarkLearned}
+                isBookmarked={isBookmarked}
+                isLearned={isLearned}
+              />
+            </TabsContent>
+
+            <TabsContent value="grammar" className="min-w-0 w-full mt-0">
+              <ProfileGrammarPanel view="bookmarked" showSwitcher={false} />
+            </TabsContent>
+          </Tabs>
         )}
 
         {/* ========================================================================= */}
-        {/* 🏆 TAB 3: LEARNED WORDS */}
+        {/* 🏆 TAB 3: LEARNED ITEMS (WORDS & GRAMMAR) */}
         {/* ========================================================================= */}
         {effectiveTab === "learned" && (
-          <PaginatedWordList
-            idSet={learnedIds}
-            page={learnedPage}
-            onPageChange={setLearnedPage}
-            emptyType="learned"
-            onToggleBookmark={toggleBookmark}
-            onToggleLearned={handleMarkStillLearning}
-            isBookmarked={isBookmarked}
-            isLearned={isLearned}
-          />
+          <Tabs
+            value={learnedSubTab}
+            onValueChange={(v) => handleLearnedSubTabChange(v as "words" | "grammar")}
+            className="w-full min-w-0"
+          >
+            <div className="overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden mb-4 sm:mb-5">
+              <TabsList className="w-full">
+                <TabsTrigger value="words">
+                  <Award className="size-3.5" />
+                  <span>{t("শব্দ", "Words")}</span>
+                  {learnedCount > 0 && (
+                    <span className="ml-1 inline-flex items-center justify-center rounded-full bg-muted-foreground/15 px-1.5 py-0.2 text-[10px] font-semibold text-foreground/80 tabular-nums">
+                      {learnedCount}
+                    </span>
+                  )}
+                </TabsTrigger>
+                <TabsTrigger value="grammar">
+                  <GraduationCap className="size-3.5" />
+                  <span>{t("গ্রামার", "Grammar")}</span>
+                  {grammarLearnedCount > 0 && (
+                    <span className="ml-1 inline-flex items-center justify-center rounded-full bg-muted-foreground/15 px-1.5 py-0.2 text-[10px] font-semibold text-foreground/80 tabular-nums">
+                      {grammarLearnedCount}
+                    </span>
+                  )}
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <TabsContent value="words" className="min-w-0 w-full mt-0">
+              <PaginatedWordList
+                idSet={learnedIds}
+                page={learnedPage}
+                onPageChange={setLearnedPage}
+                emptyType="learned"
+                onToggleBookmark={toggleBookmark}
+                onToggleLearned={handleMarkStillLearning}
+                isBookmarked={isBookmarked}
+                isLearned={isLearned}
+              />
+            </TabsContent>
+
+            <TabsContent value="grammar" className="min-w-0 w-full mt-0">
+              <ProfileGrammarPanel view="learned" showSwitcher={false} />
+            </TabsContent>
+          </Tabs>
         )}
 
         {/* ========================================================================= */}
@@ -1148,34 +1309,25 @@ export function ProfileTabs({
             className="w-full min-w-0"
           >
             <div className="overflow-x-auto no-scrollbar [&::-webkit-scrollbar]:hidden mb-4 sm:mb-5">
-              <TabsList className="bg-muted/80 p-1 rounded-xl border border-border/60 flex w-max sm:w-auto">
-                <TabsTrigger
-                  value="vocab"
-                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium cursor-pointer shrink-0 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-2xs text-muted-foreground"
-                >
-                  <BookOpenCheck className="h-3.5 w-3.5" />
-                  {t("প্র্যাকটিস কুইজ ফলাফল", "Practice Results")}
+              <TabsList>
+                <TabsTrigger value="vocab">
+                  <BookOpenCheck className="size-3.5" />
+                  <span>{t("প্র্যাকটিস কুইজ ফলাফল", "Practice Results")}</span>
                 </TabsTrigger>
-                <TabsTrigger
-                  value="exams"
-                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium cursor-pointer shrink-0 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-2xs text-muted-foreground"
-                >
-                  <ClipboardList className="h-3.5 w-3.5" />
-                  {t("নির্ধারিত পরীক্ষা ফলাফল", "Scheduled Exams")}
+                <TabsTrigger value="exams">
+                  <ClipboardList className="size-3.5" />
+                  <span>{t("নির্ধারিত পরীক্ষা ফলাফল", "Scheduled Exams")}</span>
                   {examCount > 0 && (
-                    <span className="inline-flex items-center justify-center h-4.5 min-w-4.5 px-1.5 rounded-md text-[10px] font-semibold bg-muted text-muted-foreground">
+                    <span className="ml-1 inline-flex items-center justify-center rounded-full bg-muted-foreground/15 px-1.5 py-0.2 text-[10px] font-semibold text-foreground/80 tabular-nums">
                       {examCount}
                     </span>
                   )}
                 </TabsTrigger>
-                <TabsTrigger
-                  value="still-learning"
-                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium cursor-pointer shrink-0 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-2xs text-muted-foreground"
-                >
-                  <RefreshCw className="h-3.5 w-3.5" />
-                  {t("ভুল উত্তর পুনর্বিবেচনা", "Mistakes Review Deck")}
+                <TabsTrigger value="still-learning">
+                  <RefreshCw className="size-3.5" />
+                  <span>{t("ভুল উত্তর পুনর্বিবেচনা", "Mistakes Review Deck")}</span>
                   {stillLearningCount > 0 && (
-                    <span className="inline-flex items-center justify-center h-4.5 min-w-4.5 px-1.5 rounded-md text-[10px] font-semibold bg-muted text-muted-foreground">
+                    <span className="ml-1 inline-flex items-center justify-center rounded-full bg-muted-foreground/15 px-1.5 py-0.2 text-[10px] font-semibold text-foreground/80 tabular-nums">
                       {stillLearningCount}
                     </span>
                   )}

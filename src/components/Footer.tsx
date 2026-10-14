@@ -31,6 +31,7 @@ export default function FFooter() {
       categoryEn: "Product",
       links: [
         { labelBn: "শব্দভান্ডার", labelEn: "Vocabulary", href: "/vocabulary" },
+        { labelBn: "গ্রামার", labelEn: "Grammar", href: "/grammar" },
         { labelBn: "কুইজ", labelEn: "Quiz", href: "/quiz" },
         { labelBn: "নিউজ ও ব্লগ", labelEn: "News & Blog", href: "/news" },
       ],

@@ -22,6 +22,7 @@ import {
   Sun,
   Moon,
   Shield,
+  GraduationCap,
   Info,
   ChevronRight,
   Sparkles,
@@ -96,6 +97,7 @@ export function Sidebar() {
   const navLinks: { href: string; label: string; icon: typeof Home }[] = [
     { href: "/", label: t("হোম", "Home"), icon: Home },
     { href: vocabularyHref, label: t("শব্দভাণ্ডার", "Vocabulary"), icon: LibraryBig },
+    { href: "/grammar", label: t("গ্রামার", "Grammar"), icon: GraduationCap },
     { href: "/search", label: t("অনুসন্ধান", "Search"), icon: Search },
     { href: "/quiz", label: t("কুইজ", "Quiz"), icon: BookOpenCheck },
     { href: "/leaderboard", label: t("লিডারবোর্ড", "Leaderboard"), icon: Trophy },
@@ -421,6 +423,23 @@ export function Sidebar() {
                   <div>
                     <p className="font-medium text-foreground">{t("আমার শব্দতালিকা ও অগ্রগতি", "My Words & Progress")}</p>
                     <p className="text-[10px] text-muted-foreground">{t("বুকমার্ক ও শেখা শব্দাবলী", "Bookmarks & learned lists")}</p>
+                  </div>
+                </div>
+                <ChevronRight className="size-4 text-muted-foreground/60" />
+              </Link>
+
+              <Link
+                href="/grammar"
+                onClick={() => setProfileDrawerOpen(false)}
+                className="flex items-center justify-between p-2.5 rounded-lg text-xs font-medium text-foreground hover:bg-muted/70 transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="flex size-7 items-center justify-center rounded-md bg-violet-500/10 text-violet-600 dark:text-violet-400">
+                    <GraduationCap className="size-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-foreground">{t("ইংরেজি গ্রামার", "English Grammar")}</p>
+                    <p className="text-[10px] text-muted-foreground">{t("রুলস, ব্যাখ্যা ও অনুশীলন", "Rules, explanations & practice")}</p>
                   </div>
                 </div>
                 <ChevronRight className="size-4 text-muted-foreground/60" />

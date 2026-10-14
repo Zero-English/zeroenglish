@@ -13,6 +13,7 @@ import {
   Shield,
   SquarePen,
   Trophy,
+  GraduationCap,
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -52,6 +53,7 @@ const BANNER = {
   href: '/vocabulary',
   links: [
     { label: { en: 'Vocabulary', bn: 'শব্দভাণ্ডার' }, href: '/vocabulary' },
+    { label: { en: 'Grammar', bn: 'গ্রামার' }, href: '/grammar' },
     { label: { en: 'Quiz', bn: 'কুইজ' }, href: '/quiz' },
     { label: { en: 'Leaderboard', bn: 'লিডারবোর্ড' }, href: '/leaderboard' },
   ],
@@ -132,6 +134,70 @@ const NAV_ITEMS: NavItem[] = [
             description: {
               en: 'Top performers and weekly quiz rankings',
               bn: 'সেরা লার্নারদের তালিকা ও পয়েন্ট অবস্থান',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: { en: 'Grammar', bn: 'গ্রামার' },
+    href: '/grammar',
+    columns: [
+      {
+        title: { en: 'Popular Topics', bn: 'জনপ্রিয় বিষয়সমূহ' },
+        links: [
+          {
+            label: { en: 'Parts of Speech', bn: 'পদ প্রকরণ (Parts of Speech)' },
+            href: '/grammar/parts-of-speech',
+            description: {
+              en: 'Nouns, Pronouns, Verbs, Adjectives & more',
+              bn: 'নাউন, প্রোনাউন, ভার্ব ও অন্যান্য পদের নিয়ম',
+            },
+          },
+          {
+            label: { en: 'Tense & Time', bn: 'টেন্স ও সময় (Tense)' },
+            href: '/grammar/tense',
+            description: {
+              en: 'Master present, past, and future tense rules',
+              bn: '১২টি টেন্সের গঠন, ব্যবহার ও বাস্তব উদাহরণ',
+            },
+          },
+          {
+            label: { en: 'Sentence Structure', bn: 'বাক্য গঠন (Sentence)' },
+            href: '/grammar/sentence-structure',
+            description: {
+              en: 'Simple, Compound, Complex & conditionals',
+              bn: 'বাক্যের প্রকারভেদ ও রূপান্তরের নিয়মাবলী',
+            },
+          },
+        ],
+      },
+      {
+        title: { en: 'Learn & Track', bn: 'শেখা ও অগ্রগতি' },
+        links: [
+          {
+            label: { en: 'All Grammar Topics', bn: 'সকল ব্যাকরণ বিষয়' },
+            href: '/grammar',
+            description: {
+              en: 'Browse comprehensive curated English grammar lessons',
+              bn: 'সকল প্রয়োজনীয় ইংরেজি ব্যাকরণ টপিক ও গাইড দেখুন',
+            },
+          },
+          {
+            label: { en: 'My Grammar Rules', bn: 'আমার ব্যাকরণ রুলস' },
+            href: '/profile?tab=learned&type=grammar',
+            description: {
+              en: 'Quick access to your learned and bookmarked rules',
+              bn: 'আপনার শেখা ও বুকমার্ক করা রুলস সরাসরি দেখুন',
+            },
+          },
+          {
+            label: { en: 'Grammar Quiz', bn: 'গ্রামার কুইজ' },
+            href: '/quiz',
+            description: {
+              en: 'Test your understanding with rule-based questions',
+              bn: 'গ্রামার রুল ভিত্তিক কুইজ দিয়ে প্রস্তুতি যাচাই করুন',
             },
           },
         ],
@@ -440,6 +506,12 @@ export function Header() {
                     <Link href="/profile" className="cursor-pointer gap-2">
                       <User className="size-3.5 text-muted-foreground" />
                       <span>{lang === 'en' ? 'My Profile & Words' : 'প্রোফাইল ও শব্দতালিকা'}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile?tab=learned&type=grammar" className="cursor-pointer gap-2">
+                      <GraduationCap className="size-3.5 text-muted-foreground" />
+                      <span>{lang === 'en' ? 'My Grammar Rules' : 'আমার ব্যাকরণ রুলস'}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>

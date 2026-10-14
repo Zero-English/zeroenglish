@@ -21,6 +21,7 @@ import {
   ChevronRight,
   Share2,
   Check,
+  Bookmark,
   ListTree,
   Volume2,
   Split,
@@ -79,13 +80,16 @@ export function GrammarRuleDetail({
 
   const {
     isCompleted,
+    isBookmarked,
     toggleCompleted,
+    toggleBookmark,
     markVisited,
     getCategoryStats,
   } = useGrammarProgress();
 
   const rulesList = categoryRules.length > 0 ? categoryRules : [rule];
   const completed = isCompleted(rule.id);
+  const bookmarked = isBookmarked(rule.id);
   const stats = getCategoryStats(rulesList);
 
   useEffect(() => {
@@ -117,6 +121,20 @@ export function GrammarRuleDetail({
       });
     } else {
       toast.info(t("পাঠটি অসম্পূর্ণ হিসেবে চিহ্নিত করা হয়েছে।", "Lesson marked as incomplete."));
+    }
+  };
+
+  const handleToggleBookmark = () => {
+    const isNowBookmarked = toggleBookmark(rule.id);
+    if (isNowBookmarked) {
+      toast.success(t("রুলটি বুকমার্ক করা হয়েছে!", "Rule saved to bookmarks!"), {
+        description: t(
+          "প্রোফাইল থেকে বুকমার্ক করা রুলস যেকোনো সময় দেখতে পারবেন।",
+          "Access your saved rules anytime from your profile."
+        ),
+      });
+    } else {
+      toast.info(t("বুকমার্ক থেকে সরানো হয়েছে।", "Removed from bookmarks."));
     }
   };
 
@@ -209,6 +227,22 @@ export function GrammarRuleDetail({
               </>
             )}
           </Button>
+
+          {/* Bookmark Button */}
+          <button
+            type="button"
+            onClick={handleToggleBookmark}
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition-all shadow-2xs",
+              bookmarked
+                ? "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20"
+                : "border-black/[0.06] bg-card/80 text-muted-foreground hover:bg-muted hover:text-foreground dark:border-white/[0.08]"
+            )}
+            title={bookmarked ? t("বুকমার্ক থেকে সরান", "Remove bookmark") : t("বুকমার্ক করুন", "Bookmark rule")}
+          >
+            <Bookmark className={cn("h-3.5 w-3.5", bookmarked && "fill-amber-500 text-amber-500")} />
+            <span>{bookmarked ? t("সংরক্ষিত", "Saved") : t("বুকমার্ক", "Bookmark")}</span>
+          </button>
 
           {/* Share Button */}
           <button
