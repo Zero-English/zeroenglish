@@ -81,7 +81,7 @@ export function ProfileBentoIdentity({
           {/* User Details */}
           <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
             <div className="relative shrink-0">
-              <div className="rounded-full ring-2 ring-primary/20 p-0.5">
+              <div className="rounded-full">
                 <UserAvatar
                   id={user?.id ?? 0}
                   name={displayName}

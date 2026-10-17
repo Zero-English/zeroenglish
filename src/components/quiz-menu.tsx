@@ -6,11 +6,8 @@ import { motion } from "motion/react";
 import {
   Languages,
   ArrowRight,
-  BookMarked,
   BookOpenCheck,
   GraduationCap,
-  ClipboardList,
-  History,
   Sparkles,
   Timer,
   CalendarClock,
@@ -20,12 +17,14 @@ import {
   Trophy,
   Layers,
   BarChart3,
+  Flame,
   type LucideIcon,
 } from "lucide-react";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { useQuizHistory } from "@/lib/use-quiz-history";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
+import { requestGoogleLogin } from "@/lib/login-required";
 import type { QuizExamPublicItem } from "@/types/quiz-exam";
 
 const CARD =
@@ -56,6 +55,21 @@ const MUTED_PILL =
   "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400";
 
 const CARDS: QuizCard[] = [
+  {
+    label: "Daily Practice",
+    labelBn: "দৈনিক অনুশীলন",
+    desc: "10 personalized blitz questions (5 vocab + 5 grammar) in 20s each. Complete once a day to protect your streak!",
+    descBn: "ব্যক্তিগত ১০টি প্রশ্ন (৫টি ভোকাব + ৫টি গ্রামার), প্রতিটি ২০ সেকেন্ডে। স্ট্রিক বাড়াতে প্রতিদিন ১ বার দিন!",
+    href: "/quiz/daily",
+    icon: Flame,
+    accent:
+      "bg-amber-100/80 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300",
+    arrow: "group-hover:bg-amber-500 group-hover:text-white group-active:bg-amber-500 group-active:text-white",
+    pill: "bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300",
+    badge: "Daily 10 × 20s",
+    badgeBn: "দৈনিক ১০ × ২০ সে.",
+    badgeIcon: Flame,
+  },
   {
     label: "Quiz Exam",
     labelBn: "কুইজ পরীক্ষা",
@@ -472,6 +486,11 @@ export function QuizMenu() {
                           >
                             <Link
                               href={card.href}
+                              onClick={(e) => {
+                                if (card.href === "/quiz/daily" && requestGoogleLogin()) {
+                                  e.preventDefault();
+                                }
+                              }}
                               className={cn(
                                 "group flex h-full flex-col gap-3 p-5 sm:p-6 transition-colors",
                                 "hover:bg-black/[0.02] active:bg-black/[0.02] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04]"

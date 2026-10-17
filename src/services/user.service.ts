@@ -528,14 +528,32 @@ export const getUserLearningProgress = async (id: number) => {
 
 export const getUserDailyActivity = async (id: number) => {
     try {
-        const rows = await prisma.userWord.findMany({
-            where: { userId: id, learningStatus: "LEARNED" },
-            select: { updatedAt: true },
-        });
+        const [rows, dailyPractices] = await Promise.all([
+            prisma.userWord.findMany({
+                where: { userId: id, learningStatus: "LEARNED" },
+                select: { updatedAt: true },
+            }),
+            prisma.combinedExamResult.findMany({
+                where: {
+                    userId: id,
+                    title: "Personalized Daily Practice",
+                    status: { in: ["SUBMITTED", "LATE_SUBMITTED"] },
+                },
+                select: { createdAt: true },
+            }),
+        ]);
 
         const counts: Record<string, number> = {};
         for (const r of rows) {
             const key = fmtDate(new Date(r.updatedAt));
+            counts[key] = (counts[key] ?? 0) + 1;
+        }
+
+        const practiceDates = new Set<string>();
+        for (const p of dailyPractices) {
+            const key = fmtDate(new Date(p.createdAt));
+            practiceDates.add(key);
+            // Count daily practice as an activity entry on the heatmap
             counts[key] = (counts[key] ?? 0) + 1;
         }
 
@@ -549,14 +567,36 @@ export const getUserDailyActivity = async (id: number) => {
         }
 
         const todayKey = fmtDate(now);
-        const todayLearned = counts[todayKey] ?? 0;
+        const todayLearned = rows.filter((r) => fmtDate(new Date(r.updatedAt)) === todayKey).length;
+
+        // Daily Practice driven streak calculation
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayKey = fmtDate(yesterday);
 
         let streak = 0;
-        for (let i = 0; ; i++) {
-            const day = new Date(now);
-            day.setDate(day.getDate() - i);
-            if ((counts[fmtDate(day)] ?? 0) > 0) streak += 1;
-            else break;
+        if (practiceDates.has(todayKey)) {
+            for (let i = 0; ; i++) {
+                const day = new Date(now);
+                day.setDate(day.getDate() - i);
+                if (practiceDates.has(fmtDate(day))) streak += 1;
+                else break;
+            }
+        } else if (practiceDates.has(yesterdayKey)) {
+            for (let i = 1; ; i++) {
+                const day = new Date(now);
+                day.setDate(day.getDate() - i);
+                if (practiceDates.has(fmtDate(day))) streak += 1;
+                else break;
+            }
+        } else if (practiceDates.size === 0) {
+            // Legacy fallback if user has no daily practice attempts yet
+            for (let i = 0; ; i++) {
+                const day = new Date(now);
+                day.setDate(day.getDate() - i);
+                if ((counts[fmtDate(day)] ?? 0) > 0) streak += 1;
+                else break;
+            }
         }
 
         return {

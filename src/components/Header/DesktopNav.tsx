@@ -9,6 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 import { useLanguage } from '@/components/language-provider'
+import { requestGoogleLogin } from '@/lib/login-required'
 
 const CLOSE_DELAY_MS = 220
 
@@ -174,7 +175,14 @@ export function DesktopNav({
                       <li key={`${link.label.en}-${link.href}`}>
                         <Link
                           href={link.href}
-                          onClick={close}
+                          onClick={(e) => {
+                            if (link.href === '/quiz/daily' && requestGoogleLogin()) {
+                              e.preventDefault()
+                              close()
+                              return
+                            }
+                            close()
+                          }}
                           className="group flex items-start gap-3 rounded-lg p-2 transition-colors hover:bg-muted/80 active:bg-muted"
                         >
                           {link.image && (

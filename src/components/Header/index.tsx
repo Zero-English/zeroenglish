@@ -212,6 +212,14 @@ const NAV_ITEMS: NavItem[] = [
         title: { en: 'Interactive Practice', bn: 'ইন্টারেক্টিভ কুইজ' },
         links: [
           {
+            label: { en: 'Daily Practice', bn: 'দৈনিক অনুশীলন' },
+            href: '/quiz/daily',
+            description: {
+              en: '10 questions in 20s each, once daily to grow your streak',
+              bn: 'প্রতিদিন ১ বার ১০টি প্রশ্ন দিয়ে স্ট্রিক রক্ষা করুন',
+            },
+          },
+          {
             label: { en: 'Vocabulary Quiz', bn: 'শব্দভাণ্ডার কুইজ' },
             href: '/quiz',
             description: {

@@ -21,6 +21,7 @@ import { useAuthStore } from "@/lib/auth-store";
 import { useLastLearned, type LastLearnedEntry } from "@/lib/last-learned-store";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useDailyGoal } from "@/lib/use-daily-goal";
+import { requestGoogleLogin } from "@/lib/login-required";
 import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
 import type { LeaderboardRow } from "@/components/leaderboard";
 import { TopLearners } from "@/components/top-learners";
@@ -303,6 +304,39 @@ export function Dashboard({
             <div className="space-y-4 sm:space-y-6">
               <StaggerItem>
                 <div className={cn(CARD, "overflow-hidden")}>
+                  {/* Daily Practice Challenge */}
+                  <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 border-b border-black/[0.06] dark:border-white/[0.08] bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="flex size-6 items-center justify-center rounded-lg bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-300">
+                          <Flame className="size-3.5 fill-orange-500" />
+                        </span>
+                        <h2 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                          {t("ব্যক্তিগত দৈনিক অনুশীলন", "Personalized Daily Practice")}
+                        </h2>
+                      </div>
+                      <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                        {t("১০টি প্রশ্ন • ২০ সেকেন্ড • প্রতিদিন ১ বার আপনার স্ট্রিক বাড়াতে", "10 questions • 20s blitz • Once daily to protect & grow your streak")}
+                      </p>
+                    </div>
+                    <Button
+                      asChild
+                      className={cn(BTN_PRIMARY, "self-start sm:self-auto cursor-pointer")}
+                    >
+                      <Link
+                        href="/quiz/daily"
+                        onClick={(e) => {
+                          if (requestGoogleLogin()) {
+                            e.preventDefault();
+                          }
+                        }}
+                      >
+                        <Flame className="size-4" />
+                        {t("অনুশীলন শুরু করুন", "Daily Practice")}
+                      </Link>
+                    </Button>
+                  </div>
+
                   {/* Quiz challenge */}
                   <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 border-b border-black/[0.06] dark:border-white/[0.08]">
                     <div className="min-w-0">
