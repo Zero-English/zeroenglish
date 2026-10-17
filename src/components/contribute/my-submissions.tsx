@@ -99,15 +99,42 @@ export function MySubmissions() {
   const t = useT();
 
   const activeRef = useRef<HTMLLIElement | null>(null);
+  const paginationContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const isFirstMount = useRef(true);
 
   useEffect(() => {
-    if (activeRef.current) {
-      activeRef.current.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-        block: "nearest",
-      });
-    }
+    const behavior = isFirstMount.current ? "auto" : "smooth";
+    isFirstMount.current = false;
+
+    const centerActiveItem = (mode: ScrollBehavior = behavior) => {
+      const container = paginationContainerRef.current;
+      const activeEl = activeRef.current;
+      if (!container || !activeEl) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const activeRect = activeEl.getBoundingClientRect();
+      if (containerRect.width === 0 || activeRect.width === 0) return;
+
+      const currentRelativeLeft = activeRect.left - containerRect.left;
+      const targetOffsetInViewport = containerRect.width / 2 - activeRect.width / 2;
+      const scrollDelta = currentRelativeLeft - targetOffsetInViewport;
+
+      if (Math.abs(scrollDelta) > 1) {
+        container.scrollBy({
+          left: scrollDelta,
+          behavior: mode,
+        });
+      }
+    };
+
+    const rafId = requestAnimationFrame(() => centerActiveItem());
+    const handleResize = () => centerActiveItem("auto");
+    window.addEventListener("resize", handleResize);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", handleResize);
+    };
   }, [page]);
 
   useEffect(() => {
@@ -530,7 +557,10 @@ export function MySubmissions() {
                         className={cn(page <= 1 ? "pointer-events-none opacity-50" : "")}
                       />
                     </div>
-                    <div className="min-w-0 flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden py-1 px-1">
+                    <div
+                      ref={paginationContainerRef}
+                      className="min-w-0 flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden py-1 px-1"
+                    >
                       <PaginationContent className="flex items-center justify-center gap-0.5 w-max min-w-full">
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                           (p) => (

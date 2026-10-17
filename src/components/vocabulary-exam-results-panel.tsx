@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   CalendarDays,
@@ -28,6 +28,16 @@ import {
   combinedExamResultDate,
   type DbCombinedExamResult,
 } from "@/lib/vocabulary-exam-results-api";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+const ITEMS_PER_PAGE = 10;
 
 const CARD =
   "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
@@ -220,6 +230,11 @@ export function CombinedExamResultsPanel() {
   const [loaded, setLoaded] = useState(false);
   const t = useT();
 
+  const [page, setPage] = useState(1);
+  const activeRef = useRef<HTMLLIElement | null>(null);
+  const paginationContainerRef = useRef<HTMLDivElement | null>(null);
+  const listRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     let cancelled = false;
     void (async () => {
@@ -253,6 +268,66 @@ export function CombinedExamResultsPanel() {
       total > 0 ? Math.max(...results.map((r) => r.scoreInPercent)) : 0;
     return { total, totalWords, avg, best };
   }, [results]);
+
+  const total = results.length;
+  const totalPages = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+  const currentPage = Math.min(Math.max(1, page), totalPages);
+  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedResults = useMemo(() => {
+    return results.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+  }, [results, startIdx]);
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
+
+  const isFirstMount = useRef(true);
+
+  useEffect(() => {
+    const behavior = isFirstMount.current ? "auto" : "smooth";
+    isFirstMount.current = false;
+
+    const centerActiveItem = (mode: ScrollBehavior = behavior) => {
+      const container = paginationContainerRef.current;
+      const activeEl = activeRef.current;
+      if (!container || !activeEl) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const activeRect = activeEl.getBoundingClientRect();
+      if (containerRect.width === 0 || activeRect.width === 0) return;
+
+      const currentRelativeLeft = activeRect.left - containerRect.left;
+      const targetOffsetInViewport = containerRect.width / 2 - activeRect.width / 2;
+      const scrollDelta = currentRelativeLeft - targetOffsetInViewport;
+
+      if (Math.abs(scrollDelta) > 1) {
+        container.scrollBy({
+          left: scrollDelta,
+          behavior: mode,
+        });
+      }
+    };
+
+    const rafId = requestAnimationFrame(() => centerActiveItem());
+    const handleResize = () => centerActiveItem("auto");
+    window.addEventListener("resize", handleResize);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [currentPage]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    if (listRef.current) {
+      const rect = listRef.current.getBoundingClientRect();
+      if (rect.top < 80) {
+        listRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  };
 
   if (!loaded) {
     return (
@@ -295,6 +370,14 @@ export function CombinedExamResultsPanel() {
             `${stats.total} practice quizzes · ${stats.totalWords} words answered`
           )}
         </p>
+        {totalPages > 1 && (
+          <span className="text-xs text-muted-foreground">
+            {t(
+              `পৃষ্ঠা ${currentPage} / ${totalPages}`,
+              `Page ${currentPage} of ${totalPages}`
+            )}
+          </span>
+        )}
       </div>
 
       {stats.total > 0 ? (
@@ -325,13 +408,74 @@ export function CombinedExamResultsPanel() {
             </StaggerContainer>
           </div>
 
-          <div className="grid grid-cols-1 gap-2.5 sm:gap-3">
+          <div ref={listRef} className="grid grid-cols-1 gap-2.5 sm:gap-3 scroll-mt-20">
             <StaggerContainer className="contents">
-              {results.map((result, idx) => (
+              {paginatedResults.map((result, idx) => (
                 <ResultItem key={result.id ?? idx} result={result} />
               ))}
             </StaggerContainer>
           </div>
+
+          {total > 0 && (
+            <p className="mt-5 mb-2 text-center text-xs sm:text-sm text-zinc-400 dark:text-zinc-500">
+              {t(
+                `মোট ${total}টির মধ্যে ${startIdx + 1}–${Math.min(startIdx + ITEMS_PER_PAGE, total)} দেখানো হচ্ছে`,
+                `Showing ${startIdx + 1}–${Math.min(startIdx + ITEMS_PER_PAGE, total)} of ${total}`
+              )}
+            </p>
+          )}
+
+          {totalPages > 1 && (
+            <Pagination>
+              <div className="relative flex items-center justify-center max-w-full w-full gap-1 sm:gap-1.5">
+                <div className="shrink-0 z-10 bg-background/95 backdrop-blur-xs">
+                  <PaginationPrevious
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage > 1) handlePageChange(currentPage - 1);
+                    }}
+                    className={cn(currentPage <= 1 ? "pointer-events-none opacity-50" : "")}
+                  />
+                </div>
+                <div
+                  ref={paginationContainerRef}
+                  className="min-w-0 flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden py-1 px-1"
+                >
+                  <PaginationContent className="flex items-center justify-center gap-0.5 w-max min-w-full">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                      <PaginationItem
+                        key={p}
+                        ref={p === currentPage ? activeRef : undefined}
+                        className="shrink-0"
+                      >
+                        <PaginationLink
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handlePageChange(p);
+                          }}
+                          isActive={p === currentPage}
+                        >
+                          {p}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                  </PaginationContent>
+                </div>
+                <div className="shrink-0 z-10 bg-background/95 backdrop-blur-xs">
+                  <PaginationNext
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage < totalPages) handlePageChange(currentPage + 1);
+                    }}
+                    className={cn(currentPage >= totalPages ? "pointer-events-none opacity-50" : "")}
+                  />
+                </div>
+              </div>
+            </Pagination>
+          )}
         </>
       ) : (
         <div className="text-center py-12 space-y-2">
