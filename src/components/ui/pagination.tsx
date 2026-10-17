@@ -1,4 +1,5 @@
 import * as React from "react"
+import Link from "next/link"
 import { cn } from "cn"
 
 import { Button } from "@/components/ui/button"
@@ -29,25 +30,32 @@ function PaginationContent({
   )
 }
 
-function PaginationItem({ className, ...props }: React.ComponentProps<"li">) {
+const PaginationItem = React.forwardRef<
+  HTMLLIElement,
+  React.ComponentProps<"li">
+>(function PaginationItem({ className, ...props }, ref) {
   return (
     <li
+      ref={ref}
       data-slot="pagination-item"
       className={cn("list-none", className)}
       {...props}
     />
   )
-}
+})
+PaginationItem.displayName = "PaginationItem"
 
 type PaginationLinkProps = {
   isActive?: boolean
+  href?: string
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a">
+  Omit<React.ComponentProps<typeof Link>, "href">
 
 function PaginationLink({
   className,
   isActive,
   size = "icon",
+  href = "#",
   ...props
 }: PaginationLinkProps) {
   return (
@@ -57,7 +65,8 @@ function PaginationLink({
       size={size}
       className={cn(className)}
     >
-      <a
+      <Link
+        href={href}
         aria-current={isActive ? "page" : undefined}
         data-slot="pagination-link"
         data-active={isActive}

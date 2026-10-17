@@ -22,6 +22,7 @@ const staticRoutes = [
   { url: `${BASE_URL}/quiz/grammar`, changeFrequency: "weekly" as const, priority: 0.7 },
   { url: `${BASE_URL}/quiz/class`, changeFrequency: "weekly" as const, priority: 0.7 },
   { url: `${BASE_URL}/quiz/quick`, changeFrequency: "weekly" as const, priority: 0.7 },
+  { url: `${BASE_URL}/quiz/mistakes`, changeFrequency: "weekly" as const, priority: 0.7 },
   { url: `${BASE_URL}/about`, changeFrequency: "monthly" as const, priority: 0.7 },
   { url: `${BASE_URL}/news`, changeFrequency: "daily" as const, priority: 0.7 },
   { url: `${BASE_URL}/leaderboard`, changeFrequency: "daily" as const, priority: 0.5 },
