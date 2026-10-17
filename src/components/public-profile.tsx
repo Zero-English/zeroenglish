@@ -19,6 +19,7 @@ import {
 import { dbResultToHistoryEntry, type DbCombinedExamResult } from "@/lib/quiz-results-api";
 import type { QuizType } from "@/lib/quiz-history-store";
 import { cn } from "@/lib/utils";
+import { ProfileSkillsCard } from "@/components/profile-skills";
 import {
   ShieldCheck,
   BookOpen,
@@ -507,6 +508,11 @@ export function PublicProfileView({
 
           <TabsContent value="overview">
             <StaggerContainer className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-12">
+              {/* Skills Profile Breakdown */}
+              <StaggerItem className="lg:col-span-12">
+                <ProfileSkillsCard userId={user.id} isPublic={true} />
+              </StaggerItem>
+
               {/* Word progress */}
               <StaggerItem className="lg:col-span-4">
                 <div className={TILE}>

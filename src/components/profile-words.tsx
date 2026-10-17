@@ -67,6 +67,7 @@ import { ContributorCertificateModal } from "@/components/template-engine/contri
 import { ProfileGrammarPanel } from "@/components/profile-grammar";
 import { useGrammarProgress } from "@/lib/grammar-progress";
 import { Button } from "@/components/ui/button";
+import { ProfileSkillsCard } from "@/components/profile-skills";
 import Link from "next/link";
 
 const ITEMS_PER_PAGE = 10;
@@ -401,10 +402,6 @@ function PaginatedWordList({
       .finally(() => setLoading(false));
   }, [pageIds, wordsMap]);
 
-  if (totalCount === 0) return <EmptyWordState type={emptyType} />;
-
-  const pageWords = pageIds.map((id) => wordsMap.get(id)).filter(Boolean) as Word[];
-
   const activeRef = useRef<HTMLLIElement | null>(null);
 
   useEffect(() => {
@@ -416,6 +413,10 @@ function PaginatedWordList({
       });
     }
   }, [currentPage]);
+
+  if (totalCount === 0) return <EmptyWordState type={emptyType} />;
+
+  const pageWords = pageIds.map((id) => wordsMap.get(id)).filter(Boolean) as Word[];
 
   return (
     <>
@@ -571,6 +572,11 @@ export function ProfileTabs({
   const grammarBookmarkedCount = grammarProgress.bookmarkedRuleIds.length;
   const grammarTotalCount = grammarLearnedCount + grammarBookmarkedCount;
 
+  const [bookmarkedPage, setBookmarkedPage] = useState(1);
+  const [stillLearningPage, setStillLearningPage] = useState(1);
+  const [learnedPage, setLearnedPage] = useState(1);
+  const [mobileView, setMobileView] = useState<"menu" | "detail">("menu");
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -612,11 +618,6 @@ export function ProfileTabs({
     }
     return map;
   }, [levelStats, levelWordMap, learnedIds, loaded]);
-
-  const [bookmarkedPage, setBookmarkedPage] = useState(1);
-  const [stillLearningPage, setStillLearningPage] = useState(1);
-  const [learnedPage, setLearnedPage] = useState(1);
-  const [mobileView, setMobileView] = useState<"menu" | "detail">("menu");
 
   const handleBookmarkedSubTabChange = (val: "words" | "grammar") => {
     setBookmarkedSubTab(val);
@@ -1113,7 +1114,12 @@ export function ProfileTabs({
               </div>
             </StaggerItem>
 
-            {/* BENTO TILE 4: CEFR 6-Tier Progression Matrix */}
+            {/* BENTO TILE 4: English Skills Profile (Competency Mastery Breakdown) */}
+            <StaggerItem className="col-span-1 md:col-span-12 min-w-0">
+              <ProfileSkillsCard />
+            </StaggerItem>
+
+            {/* BENTO TILE 5: CEFR 6-Tier Progression Matrix */}
             <StaggerItem className="col-span-1 md:col-span-12 min-w-0">
               <div className={cn(CARD, "p-4 sm:p-6")}>
                 <div className="flex items-center justify-between gap-3 mb-4 sm:mb-5">
