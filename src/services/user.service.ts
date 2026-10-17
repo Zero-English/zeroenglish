@@ -618,3 +618,274 @@ export const getUserDailyActivity = async (id: number) => {
     }
 };
 
+export interface SkillProfileItem {
+    id: string;
+    name: string;
+    nameBn: string;
+    percentage: number;
+    visualBar: string;
+    correctCount: number;
+    totalCount: number;
+    unit: "words" | "questions";
+    status: "active" | "untested";
+    icon: string;
+    color: string;
+    practiceUrl: string;
+}
+
+export interface UserSkillsProfile {
+    overallScore: number;
+    levelTitle: string;
+    levelTitleBn: string;
+    skills: SkillProfileItem[];
+    totalQuestionsAttempted: number;
+    totalWordsMastered: number;
+}
+
+export function generateBlockBar(percentage: number, totalBlocks: number = 10): string {
+    const clamped = Math.max(0, Math.min(100, Math.round(percentage)));
+    const filledBlocks = Math.round((clamped / 100) * totalBlocks);
+    const emptyBlocks = Math.max(0, totalBlocks - filledBlocks);
+    return "█".repeat(filledBlocks) + "░".repeat(emptyBlocks);
+}
+
+function normalizeSkillCategory(name?: string | null): string {
+    if (!name) return "other";
+    const upper = name.toUpperCase().replace(/\s+/g, "_");
+    if (upper.includes("PREPOSITION")) return "prepositions";
+    if (upper.includes("ARTICLE")) return "articles";
+    if (upper.includes("IDIOM")) return "idioms";
+    if (upper.includes("TENSE")) return "tenses";
+    if (upper.includes("PARTS_OF_SPEECH") || upper.includes("PART_OF_SPEECH")) return "parts_of_speech";
+    if (upper.includes("VOICE") || upper.includes("NARRATION")) return "voice_narration";
+    if (
+        upper.includes("GRAMMAR") ||
+        upper.includes("VERB") ||
+        upper.includes("TRANSFORMATION") ||
+        upper.includes("SENTENCE") ||
+        upper.includes("PUNCTUATION") ||
+        upper.includes("SINGULAR")
+    ) {
+        return "grammar";
+    }
+    if (
+        upper.includes("ENGLISH_TO_BANGLA") ||
+        upper.includes("BANGLA_TO_ENGLISH") ||
+        upper.includes("SYNONYM") ||
+        upper.includes("ANTONYM")
+    ) {
+        return "vocabulary_quiz";
+    }
+    return "other";
+}
+
+export const getUserSkillsProfile = async (id: number): Promise<{
+    data: UserSkillsProfile | null;
+    message: string;
+    success: boolean;
+}> => {
+    try {
+        const [learnedCount, stillLearningCount, examResults] = await Promise.all([
+            prisma.userWord.count({
+                where: { userId: id, learningStatus: "LEARNED" },
+            }),
+            prisma.userWord.count({
+                where: { userId: id, learningStatus: "STILL_LEARNING" },
+            }),
+            prisma.combinedExamResult.findMany({
+                where: {
+                    userId: id,
+                    status: { in: [QuizResultStatus.SUBMITTED, QuizResultStatus.LATE_SUBMITTED] },
+                },
+                select: {
+                    id: true,
+                    mode: true,
+                    questionCount: true,
+                    correctAnswers: true,
+                    quizType: {
+                        select: { id: true, name: true },
+                    },
+                    correctQuestions: {
+                        select: {
+                            id: true,
+                            quizType: { select: { id: true, name: true } },
+                        },
+                    },
+                    incorrectQuestions: {
+                        select: {
+                            id: true,
+                            quizType: { select: { id: true, name: true } },
+                        },
+                    },
+                },
+            }),
+        ]);
+
+        const quizBuckets: Record<string, { correct: number; total: number }> = {
+            grammar: { correct: 0, total: 0 },
+            prepositions: { correct: 0, total: 0 },
+            articles: { correct: 0, total: 0 },
+            idioms: { correct: 0, total: 0 },
+            tenses: { correct: 0, total: 0 },
+            parts_of_speech: { correct: 0, total: 0 },
+            voice_narration: { correct: 0, total: 0 },
+        };
+
+        for (const r of examResults) {
+            const hasDetailedQuestions =
+                r.correctQuestions.length > 0 || r.incorrectQuestions.length > 0;
+
+            if (hasDetailedQuestions) {
+                for (const q of r.correctQuestions) {
+                    const cat = normalizeSkillCategory(q.quizType?.name);
+                    if (quizBuckets[cat]) {
+                        quizBuckets[cat].correct++;
+                        quizBuckets[cat].total++;
+                    }
+                    if (cat !== "grammar" && cat !== "vocabulary_quiz" && cat !== "other") {
+                        quizBuckets.grammar.correct++;
+                        quizBuckets.grammar.total++;
+                    }
+                }
+                for (const q of r.incorrectQuestions) {
+                    const cat = normalizeSkillCategory(q.quizType?.name);
+                    if (quizBuckets[cat]) {
+                        quizBuckets[cat].total++;
+                    }
+                    if (cat !== "grammar" && cat !== "vocabulary_quiz" && cat !== "other") {
+                        quizBuckets.grammar.total++;
+                    }
+                }
+            } else {
+                const examCat = normalizeSkillCategory(r.quizType?.name);
+                if (examCat !== "other" && examCat !== "vocabulary_quiz") {
+                    if (quizBuckets[examCat]) {
+                        quizBuckets[examCat].correct += r.correctAnswers;
+                        quizBuckets[examCat].total += r.questionCount;
+                    }
+                    if (examCat !== "grammar") {
+                        quizBuckets.grammar.correct += r.correctAnswers;
+                        quizBuckets.grammar.total += r.questionCount;
+                    }
+                } else if (
+                    r.mode === QuizMode.PRACTICE &&
+                    r.quizType?.name &&
+                    !r.quizType.name.includes("BANGLA") &&
+                    !r.quizType.name.includes("SYNONYM") &&
+                    !r.quizType.name.includes("ANTONYM") &&
+                    !r.quizType.name.includes("MIXED")
+                ) {
+                    quizBuckets.grammar.correct += r.correctAnswers;
+                    quizBuckets.grammar.total += r.questionCount;
+                }
+            }
+        }
+
+        // Vocabulary percentage: based on learned words as requested
+        const totalTrackedWords = learnedCount + stillLearningCount;
+        let vocabPercentage = 0;
+        let vocabTargetCount = totalTrackedWords;
+        if (totalTrackedWords > 0) {
+            vocabPercentage = Math.round((learnedCount / totalTrackedWords) * 100);
+        } else if (learnedCount > 0) {
+            vocabTargetCount = Math.max(learnedCount, 500);
+            vocabPercentage = Math.min(100, Math.round((learnedCount / vocabTargetCount) * 100));
+        }
+
+        const buildSkill = (
+            id: string,
+            name: string,
+            nameBn: string,
+            correct: number,
+            total: number,
+            unit: "words" | "questions",
+            icon: string,
+            color: string,
+            practiceUrl: string
+        ): SkillProfileItem => {
+            const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+            return {
+                id,
+                name,
+                nameBn,
+                percentage,
+                visualBar: generateBlockBar(percentage),
+                correctCount: correct,
+                totalCount: total,
+                unit,
+                status: total > 0 ? "active" : "untested",
+                icon,
+                color,
+                practiceUrl,
+            };
+        };
+
+        const skills: SkillProfileItem[] = [
+            {
+                id: "vocabulary",
+                name: "Vocabulary",
+                nameBn: "শব্দভাণ্ডার",
+                percentage: vocabPercentage,
+                visualBar: generateBlockBar(vocabPercentage),
+                correctCount: learnedCount,
+                totalCount: vocabTargetCount,
+                unit: "words",
+                status: (learnedCount > 0 || totalTrackedWords > 0) ? "active" : "untested",
+                icon: "BookOpen",
+                color: "emerald",
+                practiceUrl: "/dictionary",
+            },
+            buildSkill("grammar", "Grammar", "ব্যাকরণ", quizBuckets.grammar.correct, quizBuckets.grammar.total, "questions", "GraduationCap", "violet", "/quiz"),
+            buildSkill("prepositions", "Prepositions", "প্রেপজিশন", quizBuckets.prepositions.correct, quizBuckets.prepositions.total, "questions", "Compass", "amber", "/quiz"),
+            buildSkill("articles", "Articles", "আর্টিকেল", quizBuckets.articles.correct, quizBuckets.articles.total, "questions", "FileText", "sky", "/quiz"),
+            buildSkill("idioms", "Idioms & Phrases", "বাগধারা ও ইডিয়ম", quizBuckets.idioms.correct, quizBuckets.idioms.total, "questions", "Sparkles", "rose", "/quiz"),
+            buildSkill("tenses", "Tenses", "টেন্স / কাল", quizBuckets.tenses.correct, quizBuckets.tenses.total, "questions", "Clock", "indigo", "/quiz"),
+            buildSkill("parts_of_speech", "Parts of Speech", "পদ প্রকরণ", quizBuckets.parts_of_speech.correct, quizBuckets.parts_of_speech.total, "questions", "Layers", "cyan", "/quiz"),
+            buildSkill("voice_narration", "Voice & Narration", "ভয়েস ও ন্যারেশন", quizBuckets.voice_narration.correct, quizBuckets.voice_narration.total, "questions", "Mic", "fuchsia", "/quiz"),
+        ];
+
+        const activeSkills = skills.filter((s) => s.status === "active");
+        const overallScore = activeSkills.length > 0
+            ? Math.round(activeSkills.reduce((sum, s) => sum + s.percentage, 0) / activeSkills.length)
+            : 0;
+
+        let levelTitle = "Beginner (A1)";
+        let levelTitleBn = "শিক্ষানবিস স্তর (A1)";
+        if (overallScore >= 85) {
+            levelTitle = "Advanced (C1-C2)";
+            levelTitleBn = "উচ্চতর স্তর (C1-C2)";
+        } else if (overallScore >= 70) {
+            levelTitle = "Upper Intermediate (B2)";
+            levelTitleBn = "উচ্চ-মধ্যম স্তর (B2)";
+        } else if (overallScore >= 50) {
+            levelTitle = "Intermediate (B1)";
+            levelTitleBn = "মধ্যম স্তর (B1)";
+        } else if (overallScore >= 30) {
+            levelTitle = "Elementary (A2)";
+            levelTitleBn = "প্রাথমিক স্তর (A2)";
+        }
+
+        const totalQuestionsAttempted = Object.values(quizBuckets).reduce((sum, b) => sum + b.total, 0);
+
+        return {
+            data: {
+                overallScore,
+                levelTitle,
+                levelTitleBn,
+                skills,
+                totalQuestionsAttempted,
+                totalWordsMastered: learnedCount,
+            },
+            message: "User skills profile fetched successfully",
+            success: true,
+        };
+    } catch (error) {
+        logger.error(`Failed to fetch skills profile for user ${id}: ${error}`);
+        return {
+            data: null,
+            message: "Failed to fetch skills profile",
+            success: false,
+        };
+    }
+};
+
