@@ -251,6 +251,45 @@ export type CombinedExamResultVocabularyInput = z.infer<
   typeof combinedExamResultVocabularySchema
 >;
 
+export const dailyPracticeSubmitSchema = z.object({
+  clientId: z.string().trim().max(64).nullish(),
+  clientDate: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format (expected YYYY-MM-DD)")
+    .optional(),
+  correctAnswers: z
+    .number()
+    .int()
+    .min(0, "correctAnswers must be >= 0")
+    .max(10, "correctAnswers must be <= 10"),
+  scoreInPercent: z
+    .number()
+    .int()
+    .min(0, "scoreInPercent must be >= 0")
+    .max(100, "scoreInPercent must be <= 100"),
+  totalScore: z.number().int().nonnegative("totalScore must be non-negative"),
+  timeTotalQuiz: z
+    .number()
+    .int()
+    .nonnegative("timeTotalQuiz must be non-negative"),
+  correctWordIds: z
+    .array(z.number().int().positive("word id must be positive"))
+    .default([]),
+  incorrectWordIds: z
+    .array(z.number().int().positive("word id must be positive"))
+    .default([]),
+  correctQuestionIds: z
+    .array(z.number().int().positive("question id must be positive"))
+    .default([]),
+  incorrectQuestionIds: z
+    .array(z.number().int().positive("question id must be positive"))
+    .default([]),
+  levels: z.array(levelEnumSchema).default(["A1"]),
+});
+
+export type DailyPracticeSubmitInput = z.infer<typeof dailyPracticeSubmitSchema>;
+
 const quizExamBaseSchema = z.object({
   title: z.string().trim().min(1, "Title is required").max(200),
   mode: quizModeEnumSchema,

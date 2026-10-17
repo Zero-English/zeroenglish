@@ -19,9 +19,9 @@ import {
 import { LogIn } from "lucide-react";
 import { Classic } from "@/components/classic";
 
-function GoogleIcon() {
+export function GoogleIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
-    <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
       <path
         fill="#4285F4"
         d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"
@@ -44,6 +44,9 @@ function GoogleIcon() {
 
 export function LoginRequiredDrawer() {
   const open = useLoginRequiredStore((s) => s.open);
+  const googleOnly = useLoginRequiredStore((s) => s.googleOnly);
+  const title = useLoginRequiredStore((s) => s.title);
+  const description = useLoginRequiredStore((s) => s.description);
   const continueAsGuest = useAuthStore((s) => s.continueAsGuest);
   const pathname = usePathname();
   const t = useT();
@@ -54,10 +57,13 @@ export function LoginRequiredDrawer() {
     setBusy(true);
     try {
       const { signIn } = await import("next-auth/react");
-      await signIn("google", {
+      const res = await signIn("google", {
         redirect: false,
-        callbackUrl: pathname ?? "/profile",
+        callbackUrl: pathname && pathname !== "/" ? pathname : "/quiz/daily",
       });
+      if (res?.url) {
+        window.location.href = res.url;
+      }
     } finally {
       setBusy(false);
     }
@@ -78,36 +84,47 @@ export function LoginRequiredDrawer() {
             </div>
           </div>
           <DrawerTitle className="text-center text-base font-semibold sm:text-lg">
-            {t("লগইন প্রয়োজন", "Login required")}
+            {title ??
+              (googleOnly
+                ? t("গুগল সাইন-ইন প্রয়োজন", "Google sign-in required")
+                : t("লগইন প্রয়োজন", "Login required"))}
           </DrawerTitle>
           <DrawerDescription className="mt-1.5 text-center text-xs sm:text-sm text-muted-foreground leading-relaxed">
-            {t(
-              "শেখা, বুকমার্ক এবং কুইজের অগ্রগতি সংরক্ষণ করতে একটি প্রোফাইল তৈরি করুন।",
-              "Create a profile to save your learned words, bookmarks, and quiz progress."
-            )}
+            {description ??
+              (googleOnly
+                ? t(
+                    "ব্যক্তিগত দৈনিক অনুশীলন ও স্ট্রিক ট্র্যাক করতে গুগল দিয়ে সাইন-ইন করুন।",
+                    "Sign in with Google to access Personalized Daily Practice and protect your streak."
+                  )
+                : t(
+                    "শেখা, বুকমার্ক এবং কুইজের অগ্রগতি সংরক্ষণ করতে একটি প্রোফাইল তৈরি করুন।",
+                    "Create a profile to save your learned words, bookmarks, and quiz progress."
+                  ))}
           </DrawerDescription>
           <div className="mt-5 space-y-2">
             <Button
               size="lg"
               variant="default"
-              className="w-full gap-2"
+              className="w-full gap-2 cursor-pointer"
               onClick={() => void handleGoogle()}
               disabled={busy}
             >
               {busy ? <Classic className="h-4 w-4" /> : <GoogleIcon />}
               {t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full"
-              onClick={handleGuest}
-              disabled={busy}
-            >
-              {t("অতিথি হিসেবে চালিয়ে যান", "Continue as Guest")}
-            </Button>
+            {!googleOnly && (
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full cursor-pointer"
+                onClick={handleGuest}
+                disabled={busy}
+              >
+                {t("অতিথি হিসেবে চালিয়ে যান", "Continue as Guest")}
+              </Button>
+            )}
             <DrawerClose asChild>
-              <Button size="lg" variant="ghost" className="w-full text-muted-foreground" disabled={busy}>
+              <Button size="lg" variant="ghost" className="w-full text-muted-foreground cursor-pointer" disabled={busy}>
                 {t("পরে", "Maybe later")}
               </Button>
             </DrawerClose>

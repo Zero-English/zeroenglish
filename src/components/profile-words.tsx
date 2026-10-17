@@ -1105,9 +1105,9 @@ export function ProfileTabs({
                   <button
                     type="button"
                     onClick={() => setActiveTab("quiz")}
-                    className="font-medium text-foreground hover:underline cursor-pointer"
+                    className="font-medium flex gap-1 items-center text-foreground hover:underline cursor-pointer"
                   >
-                    {t("ফলাফল ডেক", "Results Deck")} →
+                    {t("ফলাফল ডেক", "Results Deck")} <ArrowRight className="h-3 w-3" />
                   </button>
                 </div>
               </div>

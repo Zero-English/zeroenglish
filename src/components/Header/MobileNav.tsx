@@ -7,6 +7,7 @@ import { useCallback, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 import { useLanguage } from '@/components/language-provider'
+import { requestGoogleLogin } from '@/lib/login-required'
 import type { LocalizedText } from '@/components/Header/DesktopNav'
 
 const linkClass =
@@ -97,7 +98,14 @@ export function MobileNav({
                   <Link
                     key={`${child.label.en}-${child.href}`}
                     href={child.href}
-                    onClick={onNavigate}
+                    onClick={(e) => {
+                      if (child.href === '/quiz/daily' && requestGoogleLogin()) {
+                        e.preventDefault()
+                        onNavigate()
+                        return
+                      }
+                      onNavigate()
+                    }}
                     className={cn(
                       linkClass,
                       'py-1.5 text-sidebar-foreground/70',

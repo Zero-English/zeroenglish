@@ -23,6 +23,7 @@ export const HOME_CRUMB = { nameBn: "হোম", nameEn: "Home", href: "/" } as 
 export const QUIZ_HUB: Crumb = { nameBn: "কুইজ", nameEn: "Quizzes", href: "/quiz" };
 
 export const QUIZ_CRUMBS = {
+  daily: { nameBn: "দৈনিক অনুশীলন", nameEn: "Daily Practice", href: "/quiz/daily" },
   exam: { nameBn: "কুইজ পরীক্ষা", nameEn: "Quiz Exam", href: "/quiz/exam" },
   quick: { nameBn: "কুইক কুইজ", nameEn: "Quick Quiz", href: "/quiz/quick" },
   vocabulary: {
