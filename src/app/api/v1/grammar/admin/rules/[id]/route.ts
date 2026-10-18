@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { requireContributorOrAdmin, requireAdmin } from "@/lib/api-auth";
+import { requireAdmin } from "@/lib/api-auth";
 import {
   getAdminGrammarRuleById,
   updateGrammarRule,
@@ -12,7 +12,7 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const forbidden = await requireContributorOrAdmin();
+  const forbidden = await requireAdmin();
   if (forbidden) return forbidden;
 
   try {
@@ -41,7 +41,7 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const forbidden = await requireContributorOrAdmin();
+  const forbidden = await requireAdmin();
   if (forbidden) return forbidden;
 
   try {

@@ -840,6 +840,34 @@ export async function createGrammarRule(data: GrammarRuleInput, adminUserId?: nu
   }
 }
 
+export async function getGrammarRulesByContributor(userId: number) {
+  try {
+    return await prisma.grammarRule.findMany({
+      where: { addedByUserId: userId },
+      orderBy: { createdAt: "desc" },
+      take: 100,
+      select: {
+        id: true,
+        slug: true,
+        titleEn: true,
+        titleBn: true,
+        status: true,
+        isPublished: true,
+        createdAt: true,
+        category: {
+          select: {
+            titleEn: true,
+            titleBn: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    logger.error("Failed to get grammar rules by contributor", { userId, error });
+    throw error;
+  }
+}
+
 export async function updateGrammarRule(id: number, data: GrammarRuleUpdateInput) {
   try {
     const updateData: Prisma.GrammarRuleUpdateInput = {

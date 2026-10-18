@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Contribute | Zero English",
   description:
-    "Submit quiz questions and vocabulary for Zero English. An editor reviews every submission, and questions and words only go live once approved.",
+    "Submit quiz questions, vocabulary, and grammar rules for Zero English. An editor reviews every submission before it goes live.",
   alternates: { canonical: "/contribute" },
   robots: { index: false, follow: false },
 };

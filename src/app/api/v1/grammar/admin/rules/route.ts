@@ -1,12 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
-import { requireContributorOrAdmin, getApiSessionUser } from "@/lib/api-auth";
+import { getApiSessionUser, requireAdmin, unauthorizedResponse } from "@/lib/api-auth";
 import { getAdminGrammarRules, createGrammarRule } from "@/services/grammar.service";
 import { grammarRuleSchema } from "@/utils/validation/zod";
 import { GrammarDifficulty, grammarRuleStatus } from "@/generated/prisma/client";
 import logger from "@/utils/logger";
 
 export async function GET(request: NextRequest) {
-  const forbidden = await requireContributorOrAdmin();
+  const forbidden = await requireAdmin();
   if (forbidden) return forbidden;
 
   try {
@@ -42,14 +42,16 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const forbidden = await requireContributorOrAdmin();
+  const forbidden = await requireAdmin();
   if (forbidden) return forbidden;
 
   try {
     const user = await getApiSessionUser();
+    if (!user) return unauthorizedResponse();
+
     const body = await request.json();
     const validated = grammarRuleSchema.parse(body);
-    const rule = await createGrammarRule(validated, user?.id);
+    const rule = await createGrammarRule(validated, user.id);
 
     return NextResponse.json({ success: true, data: rule }, { status: 201 });
   } catch (error: any) {
