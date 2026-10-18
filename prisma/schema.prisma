@@ -5,7 +5,37 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-} 
+}
+
+model Written {
+  id              Int           @id @default(autoincrement())
+  titleEn         String
+  titleBn         String
+  contentEnEasy       String
+  contentEnMedium     String
+  contentEnHard       String
+  contentBnEasy       String
+  contentBnMedium     String
+  contentBnHard       String
+  writtenType     WrittenType   @relation(fields: [writtenTypeId], references: [id], onDelete: Cascade)
+  writtenTypeId   Int
+  writtenBy       User          @relation(fields: [writtenByUserId], references: [id], onDelete: Cascade)
+  writtenByUserId Int
+  metaTitle       String
+  metaDescription String
+  slug            String        @unique
+  status          WrittenStatus @default(PENDING)
+  keywords        String[]
+  published       Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model WrittenType {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  writings Written[]
+}
 
 model GrammarRules {
   id                Int               @id @default(autoincrement())
@@ -26,58 +56,58 @@ model GrammarRules {
 }
 
 model GrammarSection {
-  id            Int               @id @default(autoincrement())
-  slug          String            @unique
+  id            Int      @id @default(autoincrement())
+  slug          String   @unique
   titleEn       String
   titleBn       String
   descriptionEn String
   descriptionBn String
-  icon          String            @default("Layers")
+  icon          String   @default("Layers")
   badgeText     String?
-  order         Int               @default(0)
-  status        String            @default("available")
-  isPublished      Boolean           @default(true)
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  order         Int      @default(0)
+  status        String   @default("available")
+  isPublished   Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   // Section Educational Learning Guide
-  hasLearningGuide Boolean           @default(false)
-  learningGuide    Json?             @default("{}")
+  hasLearningGuide Boolean @default(false)
+  learningGuide    Json?   @default("{}")
 
-  categories       GrammarCategory[]
+  categories GrammarCategory[]
 
   @@index([order])
   @@index([isPublished])
 }
 
 model GrammarCategory {
-  id                  Int            @id @default(autoincrement())
-  slug                String         @unique
-  sectionId           Int
-  section             GrammarSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
-  titleEn             String
-  titleBn             String
-  descriptionEn       String
-  descriptionBn       String
-  icon                String         @default("FileText")
-  order               Int            @default(0)
-  accentColor         String         @default("from-sky-500 to-blue-600")
-  isPublished         Boolean        @default(true)
+  id            Int            @id @default(autoincrement())
+  slug          String         @unique
+  sectionId     Int
+  section       GrammarSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  titleEn       String
+  titleBn       String
+  descriptionEn String
+  descriptionBn String
+  icon          String         @default("FileText")
+  order         Int            @default(0)
+  accentColor   String         @default("from-sky-500 to-blue-600")
+  isPublished   Boolean        @default(true)
 
   // Educational Guide Fields
-  headlineEn          String?        @default("")
-  headlineBn          String?        @default("")
-  overviewEn          String?        @default("")
-  overviewBn          String?        @default("")
-  sentenceRoles       Json?          @default("[]")
-  keyTypes            Json?          @default("[]")
-  identificationHacks Json?          @default("{}")
-  commonTrap          Json?          @default("{}")
+  headlineEn          String? @default("")
+  headlineBn          String? @default("")
+  overviewEn          String? @default("")
+  overviewBn          String? @default("")
+  sentenceRoles       Json?   @default("[]")
+  keyTypes            Json?   @default("[]")
+  identificationHacks Json?   @default("{}")
+  commonTrap          Json?   @default("{}")
 
-  createdAt           DateTime       @default(now())
-  updatedAt           DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  rules               GrammarRule[]
+  rules GrammarRule[]
 
   @@index([sectionId])
   @@index([order])
@@ -100,30 +130,30 @@ model GrammarRule {
   isPublished        Boolean           @default(true)
 
   // Lesson Content
-  introductionEn     String            @default("")
-  introductionBn     String            @default("")
-  summaryEn          String            @default("")
-  summaryBn          String            @default("")
-  formulaOrPattern   String?           @default("")
-  keyRules           Json              @default("[]")
-  examples           Json              @default("[]")
-  comparisons        Json              @default("[]")
-  commonMistakes     Json              @default("[]")
+  introductionEn   String  @default("")
+  introductionBn   String  @default("")
+  summaryEn        String  @default("")
+  summaryBn        String  @default("")
+  formulaOrPattern String? @default("")
+  keyRules         Json    @default("[]")
+  examples         Json    @default("[]")
+  comparisons      Json    @default("[]")
+  commonMistakes   Json    @default("[]")
 
   // Prerequisites and Related Rules
-  prerequisites      GrammarRule[]     @relation("GrammarRulePrerequisites")
-  prerequisitesFor   GrammarRule[]     @relation("GrammarRulePrerequisites")
-  relatedRules       GrammarRule[]     @relation("GrammarRuleRelated")
-  relatedRulesFor    GrammarRule[]     @relation("GrammarRuleRelated")
+  prerequisites    GrammarRule[] @relation("GrammarRulePrerequisites")
+  prerequisitesFor GrammarRule[] @relation("GrammarRulePrerequisites")
+  relatedRules     GrammarRule[] @relation("GrammarRuleRelated")
+  relatedRulesFor  GrammarRule[] @relation("GrammarRuleRelated")
 
-  addedByUserId      Int?
-  addedByUser        User?             @relation(fields: [addedByUserId], references: [id], onDelete: SetNull)
+  addedByUserId Int?
+  addedByUser   User? @relation(fields: [addedByUserId], references: [id], onDelete: SetNull)
 
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  userProgress       UserGrammarProgress[]
-  userBookmarks      UserGrammarBookmark[]
+  userProgress  UserGrammarProgress[]
+  userBookmarks UserGrammarBookmark[]
 
   @@index([categoryId])
   @@index([difficulty])
@@ -139,8 +169,8 @@ model UserGrammarProgress {
   completedAt DateTime?
   updatedAt   DateTime  @updatedAt
 
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  rule        GrammarRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  user User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rule GrammarRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
 
   @@id([userId, ruleId])
   @@index([userId, isCompleted])
@@ -151,13 +181,12 @@ model UserGrammarBookmark {
   ruleId       Int
   bookmarkedAt DateTime @default(now())
 
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  rule         GrammarRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  user User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rule GrammarRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
 
   @@id([userId, ruleId])
   @@index([userId, bookmarkedAt])
 }
-
 
 model Blog {
   id              Int      @id @default(autoincrement())
@@ -198,30 +227,30 @@ model Media {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  blogs Blog[]
-  popupLandscape Popup[] @relation("PopupLandscape")
-  popupPortrait  Popup[] @relation("PopupPortrait")
+  blogs          Blog[]
+  popupLandscape Popup[]          @relation("PopupLandscape")
+  popupPortrait  Popup[]          @relation("PopupPortrait")
   templates      VisualTemplate[] @relation("TemplateBackground")
 
   @@index([createdAt])
 }
 
 model Popup {
-  id                   Int      @id @default(autoincrement())
+  id                   Int       @id @default(autoincrement())
   name                 String
-  active               Boolean  @default(true)
-  link                 String   @default("")
+  active               Boolean   @default(true)
+  link                 String    @default("")
   landscapeMediaId     Int?
   portraitMediaId      Int?
-  scheduleEnabled      Boolean  @default(false)
+  scheduleEnabled      Boolean   @default(false)
   scheduledOpeningTime DateTime?
   scheduledClosingTime DateTime?
-  audience             String   @default("ALL")
-  pageRule             String   @default("ALL")
-  includePaths         String[] @default([])
-  animation            String   @default("FADE")
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  audience             String    @default("ALL")
+  pageRule             String    @default("ALL")
+  includePaths         String[]  @default([])
+  animation            String    @default("FADE")
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
   landscapeMedia Media? @relation("PopupLandscape", fields: [landscapeMediaId], references: [id], onDelete: SetNull)
   portraitMedia  Media? @relation("PopupPortrait", fields: [portraitMediaId], references: [id], onDelete: SetNull)
@@ -250,34 +279,34 @@ model QuizExam {
 }
 
 model CombinedExamResult {
-  id Int @id @default(autoincrement())
-  userId Int
-  correctWords Word[] @relation("CombinedExamCorrectWords")
-  incorrectWords Word[] @relation("CombinedExamIncorrectWords")
-  correctQuestions QuizQuestion[] @relation("CombinedExamCorrectQuestions")
-  incorrectQuestions QuizQuestion[] @relation("CombinedExamIncorrectQuestions")
-  questionCount Int
-  correctAnswers Int
-  scoreInPercent Int
-  totalScore Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  levels Levels[]
-  timePerQuestion Int
-  quizTypeId Int
-  examId Int?
-  clientId String?
-  exam QuizExam? @relation(fields: [examId], references: [id], onDelete: SetNull)
-  title String
-  mode QuizMode
-  timeTotalQuiz Int
-  scheduleEnabled        Boolean    @default(false)
-  scheduledOpeningTime   DateTime?
-  scheduledClosingTime   DateTime?
-  status                 QuizResultStatus @default(SUBMITTED)
-  isFirstAttempt         Boolean          @default(true)
+  id                   Int              @id @default(autoincrement())
+  userId               Int
+  correctWords         Word[]           @relation("CombinedExamCorrectWords")
+  incorrectWords       Word[]           @relation("CombinedExamIncorrectWords")
+  correctQuestions     QuizQuestion[]   @relation("CombinedExamCorrectQuestions")
+  incorrectQuestions   QuizQuestion[]   @relation("CombinedExamIncorrectQuestions")
+  questionCount        Int
+  correctAnswers       Int
+  scoreInPercent       Int
+  totalScore           Int
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  levels               Levels[]
+  timePerQuestion      Int
+  quizTypeId           Int
+  examId               Int?
+  clientId             String?
+  exam                 QuizExam?        @relation(fields: [examId], references: [id], onDelete: SetNull)
+  title                String
+  mode                 QuizMode
+  timeTotalQuiz        Int
+  scheduleEnabled      Boolean          @default(false)
+  scheduledOpeningTime DateTime?
+  scheduledClosingTime DateTime?
+  status               QuizResultStatus @default(SUBMITTED)
+  isFirstAttempt       Boolean          @default(true)
 
-  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user     User     @relation(references: [id], fields: [userId], onDelete: Cascade)
   quizType QuizType @relation(references: [id], fields: [quizTypeId], onDelete: Cascade)
 }
 
@@ -294,47 +323,47 @@ model QuizExamQuestion {
 }
 
 model QuizQuestion {
-  id              Int                @id @default(autoincrement())
-  quizType        QuizType           @relation(fields: [quizTypeId], references: [id], onDelete: Cascade)
-  quizTypeId      Int
-  questionText    String
-  options         String[]
-  difficultyLevel DifficultyLevels
-  answer          String
-  isPending       Boolean @default(true)
-  quizExams       QuizExamQuestion[]
-  class           Class[]
-  hintWords       Word[]
-  explanation     String @default("")
-  addedByUserId   Int
-  addedBy         User @relation(fields: [addedByUserId], references: [id], onDelete: Cascade)
-  relaventCombinedExamCorrectQuestions CombinedExamResult[] @relation("CombinedExamCorrectQuestions")
+  id                                     Int                  @id @default(autoincrement())
+  quizType                               QuizType             @relation(fields: [quizTypeId], references: [id], onDelete: Cascade)
+  quizTypeId                             Int
+  questionText                           String
+  options                                String[]
+  difficultyLevel                        DifficultyLevels
+  answer                                 String
+  isPending                              Boolean              @default(true)
+  quizExams                              QuizExamQuestion[]
+  class                                  Class[]
+  hintWords                              Word[]
+  explanation                            String               @default("")
+  addedByUserId                          Int
+  addedBy                                User                 @relation(fields: [addedByUserId], references: [id], onDelete: Cascade)
+  relaventCombinedExamCorrectQuestions   CombinedExamResult[] @relation("CombinedExamCorrectQuestions")
   relaventCombinedExamIncorrectQuestions CombinedExamResult[] @relation("CombinedExamIncorrectQuestions")
 }
 
 model Word {
-  id            Int            @id @default(autoincrement())
-  word          String         @unique
-  meaningBn     String[]
-  synonyms      String[]
-  antonyms      String[]
-  definitionEn  String
-  definitionBn  String
-  examplesEn    String[]
-  examplesBn    String[]
-  level         Levels
-  category      String
-  wordType      String[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  relatedBy     UserWord[]
-  userBookmarks UserBookmark[]
-  quizQuestions QuizQuestion[]
-  relatedCombinedExamResultCorrectWords CombinedExamResult[] @relation("CombinedExamCorrectWords")
+  id                                      Int                  @id @default(autoincrement())
+  word                                    String               @unique
+  meaningBn                               String[]
+  synonyms                                String[]
+  antonyms                                String[]
+  definitionEn                            String
+  definitionBn                            String
+  examplesEn                              String[]
+  examplesBn                              String[]
+  level                                   Levels
+  category                                String
+  wordType                                String[]
+  createdAt                               DateTime             @default(now())
+  updatedAt                               DateTime             @updatedAt
+  relatedBy                               UserWord[]
+  userBookmarks                           UserBookmark[]
+  quizQuestions                           QuizQuestion[]
+  relatedCombinedExamResultCorrectWords   CombinedExamResult[] @relation("CombinedExamCorrectWords")
   relatedCombinedExamResultIncorrectWords CombinedExamResult[] @relation("CombinedExamIncorrectWords")
-  isPending Boolean @default(true)
-  addedByUserId Int 
-  addedByUser User @relation(references: [id], fields: [addedByUserId], onDelete: Cascade)
+  isPending                               Boolean              @default(true)
+  addedByUserId                           Int
+  addedByUser                             User                 @relation(references: [id], fields: [addedByUserId], onDelete: Cascade)
 
   @@index([level])
   @@index([category])
@@ -367,36 +396,37 @@ model UserWord {
 }
 
 model User {
-  id             Int            @id @default(autoincrement())
-  name           String?
-  user_name      String
-  institutionName String?
-  bio            String?
-  class          Class?
-  gender         Gender   @default(NOT_SET)
-  socialLinks    String[]
-  location       String?
-  email          String         @unique
-  emailVerified  DateTime?
-  image          String?
-  role           Roles          @default(user)
-  created_at     DateTime       @default(now())
-  updated_at     DateTime       @updatedAt
-  lastActivityAt DateTime?      @default(now())
-  password       String?
-  accounts       Account[]
-  sessions       Session[]
-  relatedWords   UserWord[]
-  userBookmarks  UserBookmark[]
-  addedWords     Word[]
-  isPending      Boolean @default(true)
-  addedQuestions QuizQuestion[]
-  addedGrammarRules GrammarRule[]
-  contributedGrammarRules GrammarRules[] @relation("ContributedGrammarRules")
-  grammarProgress   UserGrammarProgress[]
-  grammarBookmarks  UserGrammarBookmark[]
+  id                         Int                   @id @default(autoincrement())
+  name                       String?
+  user_name                  String
+  institutionName            String?
+  bio                        String?
+  class                      Class?
+  gender                     Gender                @default(NOT_SET)
+  socialLinks                String[]
+  location                   String?
+  email                      String                @unique
+  emailVerified              DateTime?
+  image                      String?
+  role                       Roles                 @default(user)
+  created_at                 DateTime              @default(now())
+  updated_at                 DateTime              @updatedAt
+  lastActivityAt             DateTime?             @default(now())
+  password                   String?
+  accounts                   Account[]
+  sessions                   Session[]
+  relatedWords               UserWord[]
+  userBookmarks              UserBookmark[]
+  addedWords                 Word[]
+  isPending                  Boolean               @default(true)
+  addedQuestions             QuizQuestion[]
+  addedGrammarRules          GrammarRule[]
+  addedWrittenContent        Written[]
+  contributedGrammarRules    GrammarRules[]        @relation("ContributedGrammarRules")
+  grammarProgress            UserGrammarProgress[]
+  grammarBookmarks           UserGrammarBookmark[]
   relatedCombinedExamResults CombinedExamResult[]
-  createdTemplates VisualTemplate[] @relation("CreatedTemplates")
+  createdTemplates           VisualTemplate[]      @relation("CreatedTemplates")
 }
 
 model Account {
@@ -434,9 +464,9 @@ model VerificationToken {
 }
 
 model QuizType {
-  id               Int            @id @default(autoincrement())
-  name             String         @unique
-  relatedQuestions QuizQuestion[]
+  id                  Int                  @id @default(autoincrement())
+  name                String               @unique
+  relatedQuestions    QuizQuestion[]
   relatedGrammarRules GrammarRules[]
   combinedExamResults CombinedExamResult[]
 }
@@ -519,6 +549,12 @@ enum grammarRuleStatus {
   REJECTED
 }
 
+enum WrittenStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum GrammarDifficulty {
   BEGINNER
   INTERMEDIATE
@@ -538,22 +574,22 @@ enum TemplateType {
 }
 
 model VisualTemplate {
-  id                 Int          @id @default(autoincrement())
-  name               String
-  description        String?      @default("")
-  type               TemplateType @default(QUIZ_POSTER)
-  width              Int          @default(1080)
-  height             Int          @default(1350)
-  isDefault          Boolean      @default(false)
-  isActive           Boolean      @default(true)
-  elements           Json         @default("[]")
-  backgroundMediaId  Int?
-  backgroundMedia    Media?       @relation("TemplateBackground", fields: [backgroundMediaId], references: [id], onDelete: SetNull)
-  backgroundColor    String?      @default("#ffffff")
-  createdById        Int?
-  createdBy          User?        @relation("CreatedTemplates", fields: [createdById], references: [id], onDelete: SetNull)
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
+  id                Int          @id @default(autoincrement())
+  name              String
+  description       String?      @default("")
+  type              TemplateType @default(QUIZ_POSTER)
+  width             Int          @default(1080)
+  height            Int          @default(1350)
+  isDefault         Boolean      @default(false)
+  isActive          Boolean      @default(true)
+  elements          Json         @default("[]")
+  backgroundMediaId Int?
+  backgroundMedia   Media?       @relation("TemplateBackground", fields: [backgroundMediaId], references: [id], onDelete: SetNull)
+  backgroundColor   String?      @default("#ffffff")
+  createdById       Int?
+  createdBy         User?        @relation("CreatedTemplates", fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 
   @@index([type, isActive])
   @@index([backgroundMediaId])
