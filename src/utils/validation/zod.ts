@@ -766,6 +766,16 @@ export const grammarRuleSchema = z.object({
   relatedRuleIds: z.array(z.number().int().positive()).optional().default([]),
 });
 
+export const contributorCurriculumGrammarRuleSchema = grammarRuleSchema
+  .omit({
+    order: true,
+    status: true,
+    isPublished: true,
+    prerequisiteIds: true,
+    relatedRuleIds: true,
+  })
+  .strict();
+
 export const grammarRuleUpdateSchema = grammarRuleSchema.partial();
 
 export const bulkGrammarRuleUpdateSchema = z.object({

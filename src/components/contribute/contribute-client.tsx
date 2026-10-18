@@ -45,10 +45,8 @@ import {
 } from "./types";
 import { MySubmissions } from "./my-submissions";
 import { VocabularyContributeFlow } from "./vocabulary-contribute-flow";
-import {
-  GrammarRuleContributeFlow,
-  MyGrammarRuleSubmissions,
-} from "./grammar-rule-contribute";
+import { MyGrammarRuleSubmissions } from "./grammar-rule-contribute";
+import { GrammarCurriculumContributeFlow } from "./grammar-curriculum-contribute";
 import { ReviewPanelCard, MobileQueueBar } from "./review-panel";
 import { ModeSwitch, SubmitButton, type ManualMode } from "./shared";
 
@@ -114,8 +112,8 @@ export function ContributeClient() {
     },
     {
       id: "grammar" as const,
-      label: t("ব্যাকরণ নিয়ম", "Grammar Rules"),
-      desc: t("উদাহরণ ও সাধারণ ভুলসহ ব্যাকরণের নিয়ম জমা দিন", "Submit grammar rules with examples & common mistakes"),
+      label: t("ব্যাকরণ নিয়ম যোগ করুন", "Add Grammar Rule"),
+      desc: t("দ্বিভাষিক পাঠ তৈরি করে এডমিন পর্যালোচনার জন্য জমা দিন", "Create a bilingual grammar lesson for admin review"),
       icon: BookOpenCheck,
       color: "text-emerald-500 bg-emerald-500/10",
     },
@@ -410,7 +408,7 @@ export function ContributeClient() {
               {/* Tab Views */}
               {activeTab === "quiz" && <QuizContributeFlow />}
               {activeTab === "vocabulary" && <VocabularyContributeFlow />}
-              {activeTab === "grammar" && <GrammarRuleContributeFlow />}
+              {activeTab === "grammar" && <GrammarCurriculumContributeFlow />}
               {activeTab === "submissions" && (
                 <div className="space-y-4">
                   <div className="inline-flex gap-1 rounded-xl bg-muted/80 p-1 border border-border/60">
