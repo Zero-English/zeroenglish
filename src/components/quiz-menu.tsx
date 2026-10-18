@@ -18,6 +18,7 @@ import {
   Layers,
   BarChart3,
   Flame,
+  RefreshCw,
   type LucideIcon,
 } from "lucide-react";
 import { useT } from "@/components/language-provider";
@@ -99,6 +100,21 @@ const CARDS: QuizCard[] = [
     badge: "20 × 20s",
     badgeBn: "২০ × ২০ সে.",
     badgeIcon: Timer,
+  },
+  {
+    label: "Mistake Bank Quiz",
+    labelBn: "ভুল উত্তর কুইজ",
+    desc: "Retest and master questions you previously answered incorrectly across all quizzes and exams.",
+    descBn: "পূর্বে ভুল হওয়া প্রশ্নগুলো পুনরায় পরীক্ষা দিয়ে নিজের দুর্বলতা দূর করুন।",
+    href: "/quiz/mistakes",
+    icon: RefreshCw,
+    accent:
+      "bg-fuchsia-100/80 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300",
+    arrow: "group-hover:bg-fuchsia-500 group-hover:text-white group-active:bg-fuchsia-500 group-active:text-white",
+    pill: "bg-fuchsia-50 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300",
+    badge: "Mistakes",
+    badgeBn: "ভুল ব্যাংক",
+    badgeIcon: RefreshCw,
   },
   {
     label: "Vocabulary Practice",

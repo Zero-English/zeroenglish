@@ -31,6 +31,8 @@ import { useSession } from "next-auth/react";
 import { useT } from "@/components/language-provider";
 import { useAuthStore } from "@/lib/auth-store";
 import { ProfileBentoIdentity } from "@/components/profile-card";
+import { ProfileMistakesDeck } from "@/components/profile-mistakes-deck";
+import { fetchMistakeBank } from "@/lib/mistake-bank-api";
 import { UserAvatar } from "@/components/UserAvatar";
 import { SyncStatus } from "@/components/sync-status";
 import {
@@ -403,15 +405,42 @@ function PaginatedWordList({
   }, [pageIds, wordsMap]);
 
   const activeRef = useRef<HTMLLIElement | null>(null);
+  const paginationContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const isFirstMount = useRef(true);
 
   useEffect(() => {
-    if (activeRef.current) {
-      activeRef.current.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-        block: "nearest",
-      });
-    }
+    const behavior = isFirstMount.current ? "auto" : "smooth";
+    isFirstMount.current = false;
+
+    const centerActiveItem = (mode: ScrollBehavior = behavior) => {
+      const container = paginationContainerRef.current;
+      const activeEl = activeRef.current;
+      if (!container || !activeEl) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const activeRect = activeEl.getBoundingClientRect();
+      if (containerRect.width === 0 || activeRect.width === 0) return;
+
+      const currentRelativeLeft = activeRect.left - containerRect.left;
+      const targetOffsetInViewport = containerRect.width / 2 - activeRect.width / 2;
+      const scrollDelta = currentRelativeLeft - targetOffsetInViewport;
+
+      if (Math.abs(scrollDelta) > 1) {
+        container.scrollBy({
+          left: scrollDelta,
+          behavior: mode,
+        });
+      }
+    };
+
+    const rafId = requestAnimationFrame(() => centerActiveItem());
+    const handleResize = () => centerActiveItem("auto");
+    window.addEventListener("resize", handleResize);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", handleResize);
+    };
   }, [currentPage]);
 
   if (totalCount === 0) return <EmptyWordState type={emptyType} />;
@@ -485,7 +514,10 @@ function PaginatedWordList({
                 className={cn(currentPage <= 1 ? "pointer-events-none opacity-50" : "")}
               />
             </div>
-            <div className="min-w-0 flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden py-1 px-1">
+            <div
+              ref={paginationContainerRef}
+              className="min-w-0 flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden py-1 px-1"
+            >
               <PaginationContent className="flex items-center justify-center gap-0.5 w-max min-w-full">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                   <PaginationItem
@@ -576,6 +608,27 @@ export function ProfileTabs({
   const [stillLearningPage, setStillLearningPage] = useState(1);
   const [learnedPage, setLearnedPage] = useState(1);
   const [mobileView, setMobileView] = useState<"menu" | "detail">("menu");
+
+  const [mistakeQuestionsCount, setMistakeQuestionsCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadMistakes = () => {
+      if (authStatus === "google") {
+        void fetchMistakeBank().then((data) => {
+          if (!cancelled && data) {
+            setMistakeQuestionsCount(data.totalMistakeQuestions);
+          }
+        });
+      }
+    };
+    loadMistakes();
+    window.addEventListener("activity-changed", loadMistakes);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("activity-changed", loadMistakes);
+    };
+  }, [authStatus]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -708,6 +761,8 @@ export function ProfileTabs({
   const learnedCount = learnedIds.size;
   const bookmarkedCount = bookmarkedIds.size;
   const stillLearningCount = stillLearningIds.size;
+  const displayMistakesCount =
+    (mistakeQuestionsCount ?? 0) + stillLearningCount;
   const overallProgress = total > 0 ? Math.round((learnedCount / total) * 100) : 0;
 
   const totalQuizAnswers = totalCorrectAnswers + stillLearningCount;
@@ -1087,7 +1142,7 @@ export function ProfileTabs({
                         {t("ভুল", "Mistakes")}
                       </span>
                       <span className="text-sm sm:text-base font-bold tabular-nums text-foreground mt-0.5 block">
-                        {stillLearningCount}
+                        {quizLoaded ? displayMistakesCount : "—"}
                       </span>
                     </div>
                     <div className="p-2 sm:p-2.5 rounded-xl bg-muted/50 border border-border/60">
@@ -1332,9 +1387,9 @@ export function ProfileTabs({
                 <TabsTrigger value="still-learning">
                   <RefreshCw className="size-3.5" />
                   <span>{t("ভুল উত্তর পুনর্বিবেচনা", "Mistakes Review Deck")}</span>
-                  {stillLearningCount > 0 && (
+                  {displayMistakesCount > 0 && (
                     <span className="ml-1 inline-flex items-center justify-center rounded-full bg-muted-foreground/15 px-1.5 py-0.2 text-[10px] font-semibold text-foreground/80 tabular-nums">
-                      {stillLearningCount}
+                      {displayMistakesCount}
                     </span>
                   )}
                 </TabsTrigger>
@@ -1371,15 +1426,20 @@ export function ProfileTabs({
             </TabsContent>
 
             <TabsContent value="still-learning" className="min-w-0 w-full">
-              <PaginatedWordList
-                idSet={stillLearningIds}
-                page={stillLearningPage}
-                onPageChange={setStillLearningPage}
-                emptyType="still-learning"
-                onToggleBookmark={toggleBookmark}
-                onToggleLearned={handleMarkLearned}
-                isBookmarked={isBookmarked}
-                isLearned={isLearned}
+              <ProfileMistakesDeck
+                totalVocabWordsCount={stillLearningCount}
+                vocabularyWordsSlot={
+                  <PaginatedWordList
+                    idSet={stillLearningIds}
+                    page={stillLearningPage}
+                    onPageChange={setStillLearningPage}
+                    emptyType="still-learning"
+                    onToggleBookmark={toggleBookmark}
+                    onToggleLearned={handleMarkLearned}
+                    isBookmarked={isBookmarked}
+                    isLearned={isLearned}
+                  />
+                }
               />
             </TabsContent>
           </Tabs>

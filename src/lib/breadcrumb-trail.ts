@@ -42,6 +42,11 @@ export const QUIZ_CRUMBS = {
     nameEn: "Past Exam Results",
     href: "/quiz/results",
   },
+  mistakes: {
+    nameBn: "ভুল উত্তর কুইজ",
+    nameEn: "Mistake Bank Quiz",
+    href: "/quiz/mistakes",
+  },
 } satisfies Record<string, Crumb>;
 
 /** Every trail starts at Home, so callers only supply the pages below it. */
