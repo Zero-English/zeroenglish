@@ -21,6 +21,7 @@ import {
   CheckCircle2,
   HelpCircle,
   ArrowLeft,
+  FileText,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Classic } from "@/components/classic";
@@ -47,6 +48,8 @@ import { MySubmissions } from "./my-submissions";
 import { VocabularyContributeFlow } from "./vocabulary-contribute-flow";
 import { MyGrammarRuleSubmissions } from "./grammar-rule-contribute";
 import { GrammarCurriculumContributeFlow } from "./grammar-curriculum-contribute";
+import { WrittenContributeFlow } from "./written-contribute-flow";
+import { MyWrittenSubmissions } from "./my-written-submissions";
 import { ReviewPanelCard, MobileQueueBar } from "./review-panel";
 import { ModeSwitch, SubmitButton, type ManualMode } from "./shared";
 
@@ -85,9 +88,9 @@ function questionKey(text: string): string {
 
 export function ContributeClient() {
   const [activeTab, setActiveTab] = useState<
-    "quiz" | "vocabulary" | "grammar" | "submissions" | "guidelines"
+    "quiz" | "vocabulary" | "grammar" | "written" | "submissions" | "guidelines"
   >("quiz");
-  const [submissionType, setSubmissionType] = useState<"content" | "grammar">(
+  const [submissionType, setSubmissionType] = useState<"content" | "grammar" | "written">(
     "content"
   );
   const [mobileView, setMobileView] = useState<"menu" | "detail">("menu");
@@ -118,9 +121,16 @@ export function ContributeClient() {
       color: "text-emerald-500 bg-emerald-500/10",
     },
     {
+      id: "written" as const,
+      label: t("লিখিত বিষয়", "Written Content"),
+      desc: t("প্রবন্ধ, অনুচ্ছেদ ও চিঠি Markdown এ লিখুন", "Compose essays, paragraphs and letters in Markdown"),
+      icon: FileText,
+      color: "text-indigo-500 bg-indigo-500/10",
+    },
+    {
       id: "submissions" as const,
       label: t("আমার সাবমিশন", "My Submissions"),
-      desc: t("জমা দেওয়া প্রশ্ন, শব্দ ও ব্যাকরণের হিস্ট্রি", "Track approval status and edit drafts"),
+      desc: t("জমা দেওয়া প্রশ্ন, শব্দ ও লেখার হিস্ট্রি", "Track approval status and edit drafts"),
       icon: ListChecks,
       color: "text-sky-500 bg-sky-500/10",
     },
@@ -409,6 +419,7 @@ export function ContributeClient() {
               {activeTab === "quiz" && <QuizContributeFlow />}
               {activeTab === "vocabulary" && <VocabularyContributeFlow />}
               {activeTab === "grammar" && <GrammarCurriculumContributeFlow />}
+              {activeTab === "written" && <WrittenContributeFlow />}
               {activeTab === "submissions" && (
                 <div className="space-y-4">
                   <div className="inline-flex gap-1 rounded-xl bg-muted/80 p-1 border border-border/60">
@@ -436,9 +447,23 @@ export function ContributeClient() {
                     >
                       {t("ব্যাকরণ নিয়ম", "Grammar Rules")}
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => setSubmissionType("written")}
+                      className={cn(
+                        "rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer",
+                        submissionType === "written"
+                          ? "bg-background text-foreground shadow-2xs"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {t("লিখিত কনটেন্ট", "Written Content")}
+                    </button>
                   </div>
                   {submissionType === "grammar" ? (
                     <MyGrammarRuleSubmissions />
+                  ) : submissionType === "written" ? (
+                    <MyWrittenSubmissions />
                   ) : (
                     <MySubmissions />
                   )}
