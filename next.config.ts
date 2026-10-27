@@ -20,6 +20,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   experimental: {
     globalNotFound: true,
+    agentUpgrade: "security",
   },
   async redirects() {
     return [
