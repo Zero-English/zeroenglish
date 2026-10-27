@@ -789,6 +789,24 @@ export default function AdminWrittenPage() {
                       {/* Actions */}
                       <td className="p-3 text-right">
                         <div className="flex items-center justify-end gap-1">
+                          {item.published && item.slug && (
+                            <Button
+                              asChild
+                              variant="ghost"
+                              size="icon"
+                              className="size-8 cursor-pointer text-muted-foreground hover:text-primary"
+                              title="View on site"
+                            >
+                              <Link
+                                href={`/written/${item.slug}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <ExternalLink className="size-3.5" />
+                              </Link>
+                            </Button>
+                          )}
+
                           <Button
                             asChild
                             variant="ghost"

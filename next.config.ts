@@ -21,6 +21,20 @@ const nextConfig: NextConfig = {
   experimental: {
     globalNotFound: true,
   },
+  async redirects() {
+    return [
+      {
+        source: "/writing",
+        destination: "/written",
+        permanent: true,
+      },
+      {
+        source: "/writing/:slug",
+        destination: "/written/:slug",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withSerwist(nextConfig);

@@ -313,6 +313,21 @@ export default function AdminWrittenEditorPage() {
             </SelectContent>
           </Select>
 
+          {/* View Live on Frontend */}
+          {published && slug && (
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="gap-1.5 cursor-pointer text-xs h-9 text-primary hover:text-primary"
+            >
+              <Link href={`/written/${slug}`} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="size-3.5" />
+                View Live
+              </Link>
+            </Button>
+          )}
+
           {/* Publish / Unpublish Toggle Button */}
           <Button
             type="button"
@@ -455,6 +470,8 @@ export default function AdminWrittenEditorPage() {
             <div className="pt-1">
               {langTab === "en" && tierTab === "easy" && (
                 <WrittenMarkdownEditor
+                  key="editor-en-easy"
+                  editorKey="editor-en-easy"
                   value={contentEnEasy}
                   onChange={setContentEnEasy}
                   placeholder="Compose Easy English written content in Markdown..."
@@ -462,6 +479,8 @@ export default function AdminWrittenEditorPage() {
               )}
               {langTab === "en" && tierTab === "medium" && (
                 <WrittenMarkdownEditor
+                  key="editor-en-medium"
+                  editorKey="editor-en-medium"
                   value={contentEnMedium}
                   onChange={setContentEnMedium}
                   placeholder="Compose Medium English written content in Markdown..."
@@ -469,6 +488,8 @@ export default function AdminWrittenEditorPage() {
               )}
               {langTab === "en" && tierTab === "hard" && (
                 <WrittenMarkdownEditor
+                  key="editor-en-hard"
+                  editorKey="editor-en-hard"
                   value={contentEnHard}
                   onChange={setContentEnHard}
                   placeholder="Compose Advanced/Hard English written content in Markdown..."
@@ -477,6 +498,8 @@ export default function AdminWrittenEditorPage() {
 
               {langTab === "bn" && tierTab === "easy" && (
                 <WrittenMarkdownEditor
+                  key="editor-bn-easy"
+                  editorKey="editor-bn-easy"
                   value={contentBnEasy}
                   onChange={setContentBnEasy}
                   placeholder="সহজ বাংলায় লিখিত কনটেন্ট তৈরি করুন (Markdown)..."
@@ -484,6 +507,8 @@ export default function AdminWrittenEditorPage() {
               )}
               {langTab === "bn" && tierTab === "medium" && (
                 <WrittenMarkdownEditor
+                  key="editor-bn-medium"
+                  editorKey="editor-bn-medium"
                   value={contentBnMedium}
                   onChange={setContentBnMedium}
                   placeholder="মধ্যম মানের বাংলায় লিখিত কনটেন্ট তৈরি করুন (Markdown)..."
@@ -491,6 +516,8 @@ export default function AdminWrittenEditorPage() {
               )}
               {langTab === "bn" && tierTab === "hard" && (
                 <WrittenMarkdownEditor
+                  key="editor-bn-hard"
+                  editorKey="editor-bn-hard"
                   value={contentBnHard}
                   onChange={setContentBnHard}
                   placeholder="উন্নত বাংলায় লিখিত কনটেন্ট তৈরি করুন (Markdown)..."
@@ -610,6 +637,22 @@ export default function AdminWrittenEditorPage() {
                 className="text-xs"
               />
             </Field>
+
+            {/* Google SERP Live Snippet Preview */}
+            <div className="rounded-lg border border-border/60 bg-muted/30 p-3 space-y-1 text-xs">
+              <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block">
+                Google Search Preview
+              </span>
+              <div className="text-[11px] text-emerald-600 dark:text-emerald-400 truncate">
+                zeroenglish.org &gt; written &gt; {slug || "content-slug"}
+              </div>
+              <div className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline truncate">
+                {metaTitle || titleEn || "Title of Written Content"} | Zero English
+              </div>
+              <p className="text-xs text-muted-foreground line-clamp-2">
+                {metaDescription || titleBn || "Learn English writing with bilingual examples, structured vocabulary, and easy-to-hard explanations on Zero English."}
+              </p>
+            </div>
           </div>
 
           {/* Author & Contribution Details Card */}

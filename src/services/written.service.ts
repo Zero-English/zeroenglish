@@ -31,6 +31,7 @@ export type WrittenListFilters = {
   search?: string;
   status?: WrittenStatus | "ALL";
   writtenTypeId?: number;
+  writtenTypeName?: string;
   published?: boolean;
   writtenByUserId?: number;
 };
@@ -171,6 +172,12 @@ export async function getWrittenList(
       where.writtenTypeId = filters.writtenTypeId;
     }
 
+    if (filters.writtenTypeName && filters.writtenTypeName !== "ALL") {
+      where.writtenType = {
+        name: { equals: filters.writtenTypeName, mode: "insensitive" },
+      };
+    }
+
     if (filters.writtenByUserId) {
       where.writtenByUserId = filters.writtenByUserId;
     }
@@ -267,10 +274,19 @@ export async function getWrittenById(id: number) {
 /**
  * Get a single written entry by Slug
  */
-export async function getWrittenBySlug(slug: string) {
+export async function getWrittenBySlug(
+  slug: string,
+  publishedOnly: boolean = false
+) {
   try {
-    const written = await prisma.written.findUnique({
-      where: { slug },
+    const where: Prisma.WrittenWhereInput = { slug };
+    if (publishedOnly) {
+      where.published = true;
+      where.status = "APPROVED";
+    }
+
+    const written = await prisma.written.findFirst({
+      where,
       include: writtenInclude,
     });
 
@@ -282,6 +298,108 @@ export async function getWrittenBySlug(slug: string) {
   } catch (error) {
     logger.error(`Failed to fetch written content by slug ${slug}:`, error);
     return { success: false, data: null, message: "Failed to fetch written content" };
+  }
+}
+
+/**
+ * Get related published writings in the same category
+ */
+export async function getRelatedWritings(
+  writtenTypeId: number,
+  currentId: number,
+  limit: number = 3
+) {
+  try {
+    const items = await prisma.written.findMany({
+      where: {
+        writtenTypeId,
+        id: { not: currentId },
+        published: true,
+        status: "APPROVED",
+      },
+      take: limit,
+      orderBy: { createdAt: "desc" },
+      include: writtenInclude,
+    });
+
+    return { success: true, data: items };
+  } catch (error) {
+    logger.error("Failed to fetch related writings:", error);
+    return { success: false, data: [] };
+  }
+}
+
+/**
+ * Get adjacent (previous and next) published writings for page-turning flow
+ */
+export async function getAdjacentWritings(
+  currentId: number,
+  writtenTypeId?: number
+) {
+  try {
+    const whereBase: Prisma.WrittenWhereInput = {
+      published: true,
+      status: "APPROVED",
+      ...(writtenTypeId ? { writtenTypeId } : {}),
+    };
+
+    const [prev, next] = await Promise.all([
+      prisma.written.findFirst({
+        where: { ...whereBase, id: { lt: currentId } },
+        orderBy: { id: "desc" },
+        select: {
+          id: true,
+          slug: true,
+          titleEn: true,
+          titleBn: true,
+          writtenType: { select: { id: true, name: true } },
+        },
+      }),
+      prisma.written.findFirst({
+        where: { ...whereBase, id: { gt: currentId } },
+        orderBy: { id: "asc" },
+        select: {
+          id: true,
+          slug: true,
+          titleEn: true,
+          titleBn: true,
+          writtenType: { select: { id: true, name: true } },
+        },
+      }),
+    ]);
+
+    return { success: true, prev, next };
+  } catch (error) {
+    logger.error("Failed to fetch adjacent writings:", error);
+    return { success: false, prev: null, next: null };
+  }
+}
+
+/**
+ * Get a random published written item slug for surprise/endless learning
+ */
+export async function getRandomWrittenSlug(excludeId?: number) {
+  try {
+    const where: Prisma.WrittenWhereInput = {
+      published: true,
+      status: "APPROVED",
+      ...(excludeId ? { id: { not: excludeId } } : {}),
+    };
+
+    const count = await prisma.written.count({ where });
+    if (count === 0) return null;
+
+    const skip = Math.floor(Math.random() * count);
+    const randomItem = await prisma.written.findFirst({
+      where,
+      skip,
+      select: { slug: true },
+    });
+
+    return randomItem?.slug || null;
+  } catch (error) {
+    logger.error("Failed to fetch random written slug:", error);
+    return null;
   }
 }
 

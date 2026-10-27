@@ -23,6 +23,8 @@ export async function GET(req: NextRequest) {
     const typeId = searchParams.get("typeId")
       ? parseInt(searchParams.get("typeId")!, 10)
       : undefined;
+    const typeName =
+      searchParams.get("type") || searchParams.get("typeName") || undefined;
 
     const statusParam = searchParams.get("status");
     let status = statusParam as any;
@@ -52,6 +54,7 @@ export async function GET(req: NextRequest) {
         search,
         status,
         writtenTypeId: typeId,
+        writtenTypeName: typeName,
         published,
         writtenByUserId,
       }),

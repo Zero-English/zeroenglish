@@ -378,6 +378,8 @@ export function WrittenContributeFlow() {
           <div className="pt-1">
             {langTab === "en" && tierTab === "easy" && (
               <WrittenMarkdownEditor
+                key="contrib-editor-en-easy"
+                editorKey="contrib-editor-en-easy"
                 value={contentEnEasy}
                 onChange={setContentEnEasy}
                 placeholder="Write Easy English content in Markdown..."
@@ -385,6 +387,8 @@ export function WrittenContributeFlow() {
             )}
             {langTab === "en" && tierTab === "medium" && (
               <WrittenMarkdownEditor
+                key="contrib-editor-en-medium"
+                editorKey="contrib-editor-en-medium"
                 value={contentEnMedium}
                 onChange={setContentEnMedium}
                 placeholder="Write Medium English content in Markdown..."
@@ -392,6 +396,8 @@ export function WrittenContributeFlow() {
             )}
             {langTab === "en" && tierTab === "hard" && (
               <WrittenMarkdownEditor
+                key="contrib-editor-en-hard"
+                editorKey="contrib-editor-en-hard"
                 value={contentEnHard}
                 onChange={setContentEnHard}
                 placeholder="Write Advanced/Hard English content in Markdown..."
@@ -400,6 +406,8 @@ export function WrittenContributeFlow() {
 
             {langTab === "bn" && tierTab === "easy" && (
               <WrittenMarkdownEditor
+                key="contrib-editor-bn-easy"
+                editorKey="contrib-editor-bn-easy"
                 value={contentBnEasy}
                 onChange={setContentBnEasy}
                 placeholder="সহজ ভাষায় বাংলায় লিখুন (Markdown)..."
@@ -407,6 +415,8 @@ export function WrittenContributeFlow() {
             )}
             {langTab === "bn" && tierTab === "medium" && (
               <WrittenMarkdownEditor
+                key="contrib-editor-bn-medium"
+                editorKey="contrib-editor-bn-medium"
                 value={contentBnMedium}
                 onChange={setContentBnMedium}
                 placeholder="মধ্যম মানের ভাষায় বাংলায় লিখুন (Markdown)..."
@@ -414,6 +424,8 @@ export function WrittenContributeFlow() {
             )}
             {langTab === "bn" && tierTab === "hard" && (
               <WrittenMarkdownEditor
+                key="contrib-editor-bn-hard"
+                editorKey="contrib-editor-bn-hard"
                 value={contentBnHard}
                 onChange={setContentBnHard}
                 placeholder="উন্নত মানের ভাষায় বাংলায় লিখুন (Markdown)..."
