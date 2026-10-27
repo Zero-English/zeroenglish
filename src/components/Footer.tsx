@@ -32,6 +32,7 @@ export default function FFooter() {
       links: [
         { labelBn: "শব্দভান্ডার", labelEn: "Vocabulary", href: "/vocabulary" },
         { labelBn: "গ্রামার", labelEn: "Grammar", href: "/grammar" },
+        { labelBn: "লিখিত প্রস্তুতি", labelEn: "Writing", href: "/written" },
         { labelBn: "কুইজ", labelEn: "Quiz", href: "/quiz" },
         { labelBn: "নিউজ ও ব্লগ", labelEn: "News & Blog", href: "/news" },
       ],

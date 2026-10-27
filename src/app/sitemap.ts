@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getLevelAggregate, getLevelLastModified } from "@/lib/data";
 import { getPublishedBlogsByPage } from "@/services/blog.service";
+import { getWrittenList } from "@/services/written.service";
 import { SITE_URL } from "@/lib/site-config";
 import { isLevelLive, VALID_LEVELS } from "@/lib/level-copy";
 
@@ -17,6 +18,7 @@ const staticRoutes = [
   { url: BASE_URL, changeFrequency: "weekly" as const, priority: 1 },
   { url: `${BASE_URL}/vocabulary`, changeFrequency: "weekly" as const, priority: 0.9 },
   { url: `${BASE_URL}/search`, changeFrequency: "weekly" as const, priority: 0.8 },
+  { url: `${BASE_URL}/written`, changeFrequency: "daily" as const, priority: 0.8 },
   { url: `${BASE_URL}/quiz`, changeFrequency: "weekly" as const, priority: 0.8 },
   { url: `${BASE_URL}/quiz/exam`, changeFrequency: "weekly" as const, priority: 0.7 },
   { url: `${BASE_URL}/quiz/grammar`, changeFrequency: "weekly" as const, priority: 0.7 },
@@ -75,6 +77,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: blog.updatedAt,
         changeFrequency: "weekly" as const,
         priority: 0.6,
+      });
+    }
+  }
+
+  const writings = await getWrittenList(1, 1000, {
+    published: true,
+    status: "APPROVED",
+  });
+  if (writings.success && writings.data) {
+    for (const writing of writings.data) {
+      entries.push({
+        url: `${BASE_URL}/written/${writing.slug}`,
+        lastModified: writing.updatedAt ? new Date(writing.updatedAt) : undefined,
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
       });
     }
   }

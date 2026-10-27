@@ -475,6 +475,52 @@ export type BlogInput = z.infer<typeof blogSchema>;
 export type BlogUpdateInput = z.infer<typeof blogUpdateSchema>;
 export type BlogPublishInput = z.infer<typeof blogPublishSchema>;
 
+export const writtenStatusEnumSchema = z.enum(["PENDING", "APPROVED", "REJECTED"]);
+export type WrittenStatus = z.infer<typeof writtenStatusEnumSchema>;
+
+export const writtenTypeSchema = z.object({
+    name: z.string().trim().min(1, "Name is required").max(100),
+});
+export type WrittenTypeInput = z.infer<typeof writtenTypeSchema>;
+
+export const writtenSchema = z
+    .object({
+        titleEn: z.string().trim().min(1, "English title is required").max(300),
+        titleBn: z.string().trim().min(1, "Bangla title is required").max(300),
+        contentEnEasy: z.string().default(""),
+        contentEnMedium: z.string().default(""),
+        contentEnHard: z.string().default(""),
+        contentBnEasy: z.string().default(""),
+        contentBnMedium: z.string().default(""),
+        contentBnHard: z.string().default(""),
+        writtenTypeId: z.coerce.number().int().positive("Writing type is required"),
+        metaTitle: z.string().trim().max(300).nullish().default(""),
+        metaDescription: z.string().trim().max(1000).nullish().default(""),
+        slug: slugSchema.nullish(),
+        status: writtenStatusEnumSchema.default("PENDING"),
+        keywords: z.array(z.string().trim().min(1).max(100)).max(50).default([]),
+        published: z.boolean().default(false),
+    })
+    .strict();
+
+export const writtenUpdateSchema = writtenSchema.partial();
+
+export const writtenStatusUpdateSchema = z.object({
+    status: writtenStatusEnumSchema,
+    published: z.boolean().optional(),
+});
+
+export const bulkWrittenStatusUpdateSchema = z.object({
+    ids: z.array(z.number().int().positive()).min(1, "At least one id is required"),
+    status: writtenStatusEnumSchema,
+});
+
+export type WrittenInput = z.infer<typeof writtenSchema>;
+export type WrittenUpdateInput = z.infer<typeof writtenUpdateSchema>;
+export type WrittenStatusUpdateInput = z.infer<typeof writtenStatusUpdateSchema>;
+export type BulkWrittenStatusUpdateInput = z.infer<typeof bulkWrittenStatusUpdateSchema>;
+
+
 export const popupAudienceSchema = z.enum([
   "ALL",
   "LOGGED_OUT_ONLY",

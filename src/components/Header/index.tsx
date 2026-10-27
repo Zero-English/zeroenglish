@@ -54,6 +54,7 @@ const BANNER = {
   links: [
     { label: { en: 'Vocabulary', bn: 'শব্দভাণ্ডার' }, href: '/vocabulary' },
     { label: { en: 'Grammar', bn: 'গ্রামার' }, href: '/grammar' },
+    { label: { en: 'Writing', bn: 'লিখিত' }, href: '/written' },
     { label: { en: 'Quiz', bn: 'কুইজ' }, href: '/quiz' },
     { label: { en: 'Leaderboard', bn: 'লিডারবোর্ড' }, href: '/leaderboard' },
   ],
@@ -233,6 +234,49 @@ const NAV_ITEMS: NavItem[] = [
             description: {
               en: 'Earn XP, track streak and climb the ranks',
               bn: 'পয়েন্ট অর্জন করুন এবং বন্ধুদের সাথে প্রতিযোগিতা করুন',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: { en: 'Writing', bn: 'লিখিত' },
+    href: '/written',
+    columns: [
+      {
+        title: { en: 'Written Practice', bn: 'লিখিত প্রস্তুতি' },
+        links: [
+          {
+            label: { en: 'All Written Content', bn: 'সকল লিখিত বিষয়' },
+            href: '/written',
+            description: {
+              en: 'Browse paragraphs, essays, letters, and dialogues',
+              bn: 'প্যারাগ্রাফ, রচনা, চিঠি ও ডায়ালগের সমাহার',
+            },
+          },
+          {
+            label: { en: 'Paragraph Writing', bn: 'প্যারাগ্রাফ (Paragraph)' },
+            href: '/written?type=Paragraph',
+            description: {
+              en: 'Model paragraphs with easy, medium, and hard tiers',
+              bn: 'বাংলা অর্থসহ সহজ ও উন্নত মডেল প্যারাগ্রাফ',
+            },
+          },
+          {
+            label: { en: 'Essay Writing', bn: 'রচনা (Essay / Composition)' },
+            href: '/written?type=Essay',
+            description: {
+              en: 'Structured comprehensive essays for exams',
+              bn: 'পরীক্ষার প্রস্তুতিতে পূর্ণাঙ্গ ইংরেজি রচনা',
+            },
+          },
+          {
+            label: { en: 'Letters & Applications', bn: 'চিঠি ও দরখাস্ত' },
+            href: '/written?type=Application',
+            description: {
+              en: 'Official letters, job applications, and emails',
+              bn: 'অফিসিয়াল দরখাস্ত ও ফরমাল লেটার ফরম্যাট',
             },
           },
         ],
