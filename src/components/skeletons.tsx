@@ -23,6 +23,13 @@ export function HomeSkeleton() {
       <div className="relative px-4 py-14 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <section className="mb-14 text-center">
+            {/* Semantic H1 and description for raw crawlers and screen readers */}
+            <h1 className="sr-only">
+              Learn English Vocabulary in Bangla | Zero English (জিরো ইংলিশ)
+            </h1>
+            <p className="sr-only">
+              Learn English vocabulary with Bangla meanings. Browse 5,000+ CEFR-graded words from A1 to C1 with example sentences, grammar guides, and quizzes.
+            </p>
             <S className="mx-auto mb-5 h-6 w-48 rounded-full" />
             <S className="mx-auto h-12 w-80 max-w-full rounded-xl sm:w-[26rem]" />
             <S className="mx-auto mt-3 h-12 w-56 max-w-full rounded-xl sm:w-72" />

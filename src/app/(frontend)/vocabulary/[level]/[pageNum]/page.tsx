@@ -9,6 +9,8 @@ import {
 } from "@/lib/data";
 import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/vocabulary-query";
 import { Breadcrumb } from "@/components/breadcrumb";
+import { JsonLd } from "@/components/seo/json-ld";
+import { SITE_URL } from "@/lib/site-config";
 import { getLevelMeta, isLevelLive, levelMetaDescription } from "@/lib/level-copy";
 
 // Cached at the edge via ISR for 24 hours.
@@ -110,8 +112,58 @@ export default async function Page({ params, searchParams }: PageProps) {
   // `browsePublicWords` clamps the page, so a clamp means the page is past the end.
   if (pageData.page < page) notFound();
 
+  const levelSlug = upper.toLowerCase();
+  const pageUrl = `${SITE_URL}/vocabulary/${levelSlug}/${page}`;
+  const setId = `${pageUrl}#termset`;
+  const definedTermSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "শব্দভাণ্ডার",
+            item: `${SITE_URL}/vocabulary`,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: `${upper} · ${meta.labelBn}`,
+            item: `${SITE_URL}/vocabulary/${levelSlug}`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: `পৃষ্ঠা ${page}`,
+            item: pageUrl,
+          },
+        ],
+      },
+      {
+        "@type": "DefinedTermSet",
+        "@id": setId,
+        name: `${upper} ${meta.label} English Vocabulary — Page ${page}`,
+        alternateName: `${upper} লেভেল ইংরেজি শব্দভাণ্ডার (পৃষ্ঠা ${page})`,
+        inLanguage: "en",
+        description: `CEFR ${upper} (${meta.label}) English words with Bangla meanings and definitions (Page ${page} of ${pageData.totalPages}).`,
+        url: pageUrl,
+        numberOfTerms: pageData.words.length,
+        publisher: { "@id": `${SITE_URL}/#organization` },
+        hasDefinedTerm: pageData.words.map((w) => ({
+          name: w.word,
+          description: w.definitionEn,
+          inLanguage: "en",
+          inDefinedTermSet: { "@id": setId },
+        })),
+      },
+    ],
+  };
+
   return (
     <>
+      <JsonLd data={definedTermSchema} />
       <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-0">
         <Breadcrumb
           items={[
