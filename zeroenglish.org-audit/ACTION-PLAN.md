@@ -7,57 +7,58 @@
 
 ---
 
-## Phase 1: Critical Fixes (Week 1)
+## Phase 1: Critical Fixes (Completed on branch seo/fix)
 *Goal: Remove crawlability barriers and unlock AI search indexing.*
 
-- [ ] **1. Prerender Static Hero with H1 on Homepage**
-  - **File:** [src/components/home-or-dashboard.tsx](file:///c:/code/zeroenglish/src/components/home-or-dashboard.tsx)
-  - **Action:** Ensure server-side rendering delivers the full static `HomeContent` view (containing the `<h1>` headline) on initial render, so search crawlers receive the semantic headline before JavaScript hydration.
-  - **Impact:** Critical for Googlebot, Bingbot, and AI crawlers to index primary brand and value keywords.
+- [x] **1. Prerender Static Hero with H1 on Homepage**
+  - **File:** [src/components/skeletons.tsx](file:///c:/code/zeroenglish/src/components/skeletons.tsx)
+  - **Action:** Added semantic, screen-reader accessible `<h1>` and summary description to `HomeSkeleton` so crawlers streaming the initial HTML instantly receive the primary semantic headline and platform context before JS hydration.
+  - **Status:** Completed.
 
-- [ ] **2. Publish `/llms.txt` for AI Citation Engines**
-  - **File:** `public/llms.txt`
-  - **Action:** Create a markdown/text summary introducing Zero English, its CEFR vocabulary tiers (A1 to C1), grammar resources, and canonical entry points.
-  - **Impact:** High — directly indexed by Perplexity, ChatGPT Search, Claude, and Gemini when users query Bengali-English learning materials.
+- [x] **2. Publish `/llms.txt` for AI Citation Engines**
+  - **File:** [public/llms.txt](file:///c:/code/zeroenglish/public/llms.txt)
+  - **Action:** Created structured Markdown knowledge sheet introducing Zero English, CEFR vocabulary tiers, grammar guides, and canonical entry points.
+  - **Status:** Completed.
 
-- [ ] **3. Update `robots.ts` with Explicit AI Crawler Directives**
+- [x] **3. Update `robots.ts` with Explicit AI Crawler Directives**
   - **File:** [src/app/robots.ts](file:///c:/code/zeroenglish/src/app/robots.ts)
-  - **Action:** Explicitly allow AI search agents (`PerplexityBot`, `ChatGPT-User`, `Claude-Web`) while protecting private directories (`/admin`, `/api`).
-  - **Impact:** Ensures AI search engines can cite your pages in answer overviews.
+  - **Action:** Explicitly allowed AI search & agent crawlers (`PerplexityBot`, `ChatGPT-User`, `Claude-Web`, `OAI-SearchBot`, `Applebot-Extended`).
+  - **Status:** Completed.
 
 ---
 
-## Phase 2: High-Impact On-Page & Schema Enhancements (Weeks 2–3)
+## Phase 2: High-Impact On-Page & Schema Enhancements (Completed on branch seo/fix)
 *Goal: Fix heading hierarchy and tighten metadata across programmatic pages.*
 
-- [ ] **4. Fix Heading Hierarchy in Written Article Pages**
+- [x] **4. Fix Heading Hierarchy in Written Article Pages**
+  - **File:** [src/components/written/written-article-reader.tsx](file:///c:/code/zeroenglish/src/components/written/written-article-reader.tsx)
+  - **Action:** Added semantic `<h2>` section outline to fix heading hierarchy from H1 ➔ H2 ➔ H3.
+  - **Status:** Completed.
+
+- [x] **5. Cap Vocabulary Meta Descriptions at 155 Characters**
+  - **File:** [src/lib/level-copy.ts](file:///c:/code/zeroenglish/src/lib/level-copy.ts)
+  - **Action:** Optimized `levelMetaDescription` down from 214 characters to 130 characters to prevent SERP ellipsis truncation.
+  - **Status:** Completed.
+
+- [x] **6. Link Article Schema Author to Person Entity (`@id`)**
   - **File:** [src/app/(frontend)/written/[slug]/page.tsx](file:///c:/code/zeroenglish/src/app/(frontend)/written/[slug]/page.tsx)
-  - **Action:** Introduce proper `<h2>` section headings (`Model Paragraph`, `Bengali Meaning`, `Vocabulary Notes`) before `<h3>` subsections.
-  - **Impact:** Resolves HTML outline warnings and improves featured snippet eligibility.
-
-- [ ] **5. Cap Vocabulary Meta Descriptions at 155 Characters**
-  - **File:** Vocabulary page metadata generator
-  - **Action:** Shorten programmatic descriptions from ~214 characters down to ~150 characters to prevent ellipsis truncation in Google search results.
-  - **Impact:** Boosts search click-through rate (CTR) by presenting clean, readable summaries.
-
-- [ ] **6. Link Article Schema Author to Person Entity (`@id`)**
-  - **File:** Article JSON-LD generator
-  - **Action:** Link `author` to `https://zeroenglish.org/about#mahir-asef` instead of an anonymous text string.
-  - **Impact:** Strengthens E-E-A-T signals by connecting content directly to known author profile.
+  - **Action:** Linked `author` to canonical Person `@id` with canonical URL.
+  - **Status:** Completed.
 
 ---
 
-## Phase 3: Security & Vocabulary Schema Breadth (Month 2)
+## Phase 3: Security & Vocabulary Schema Breadth (Completed on branch seo/fix)
 *Goal: Harden technical posture and unlock dictionary rich results.*
 
-- [ ] **7. Add Security Headers in `next.config.ts`**
+- [x] **7. Add Security Headers in `next.config.ts`**
   - **File:** [next.config.ts](file:///c:/code/zeroenglish/next.config.ts)
-  - **Action:** Add `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, and `Referrer-Policy: origin-when-cross-origin`.
-  - **Impact:** Enhances security grading and trust signals for search engines.
+  - **Action:** Added `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, and `Referrer-Policy: origin-when-cross-origin`.
+  - **Status:** Completed.
 
-- [ ] **8. Add `DefinedTermSet` Schema to Vocabulary Pages**
-  - **File:** [src/app/(frontend)/vocabulary/](file:///c:/code/zeroenglish/src/app/(frontend)/vocabulary/)
-  - **Action:** Tag each word on vocabulary list pages with `DefinedTerm` and `DefinedTermSet` JSON-LD schema.
+- [x] **8. Add `DefinedTermSet` Schema to Vocabulary Pages**
+  - **File:** [src/app/(frontend)/vocabulary/[level]/[pageNum]/page.tsx](file:///c:/code/zeroenglish/src/app/(frontend)/vocabulary/[level]/[pageNum]/page.tsx)
+  - **Action:** Added `DefinedTermSet` and `BreadcrumbList` schema to all 150+ paginated vocabulary routes.
+  - **Status:** Completed.
   - **Impact:** Makes CEFR vocabulary entries eligible for dictionary and linguistic rich cards.
 
 ---
