@@ -97,7 +97,11 @@ export default async function WrittenArticlePage({
     inLanguage: ["en", "bn"],
     author: {
       "@type": "Person",
+      "@id": item.writtenBy?.id
+        ? `${SITE_URL}/about#user-${item.writtenBy.id}`
+        : `${SITE_URL}/#organization`,
       name: item.writtenBy?.name || item.writtenBy?.user_name || "Zero English",
+      url: `${SITE_URL}/about`,
     },
     publisher: { "@id": `${SITE_URL}/#organization` },
     isAccessibleForFree: true,

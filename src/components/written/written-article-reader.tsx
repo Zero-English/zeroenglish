@@ -710,6 +710,11 @@ export function WrittenArticleReader({ item, adjacent }: WrittenArticleReaderPro
             fontFamily === "serif" ? "font-serif" : "font-sans"
           )}
         >
+          {/* Section H2 for document outline and screen-reader accessibility */}
+          <h2 className="sr-only">
+            {item.titleEn} ({item.titleBn}) — {item.writtenType.name} Content &amp; Analysis
+          </h2>
+
           {/* Notebook Red Margin Line */}
           <div
             className="absolute left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-rose-400/40 dark:bg-rose-500/30 pointer-events-none"

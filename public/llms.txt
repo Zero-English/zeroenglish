@@ -1,0 +1,23 @@
+# Zero English
+
+> Zero English (জিরো ইংলিশ) is a free bilingual (Bangla-English) educational platform teaching 5,000+ CEFR-graded English words (A1 to C1), grammar guides with clear Bangla explanations, interactive vocabulary quizzes, and model written compositions.
+
+## Learning Resources
+- [CEFR Vocabulary Directory](https://zeroenglish.org/vocabulary): 5,000+ curated words graded from A1 (Beginner) to C1 (Advanced) with Bangla meanings, pronunciation, synonyms, antonyms, and real-life example sentences.
+- [A1 Vocabulary (Beginner)](https://zeroenglish.org/vocabulary/a1): Foundational vocabulary for absolute beginners in English.
+- [A2 Vocabulary (Elementary)](https://zeroenglish.org/vocabulary/a2): Everyday vocabulary for routine interactions and common activities.
+- [B1 Vocabulary (Intermediate)](https://zeroenglish.org/vocabulary/b1): Vocabulary for travel, work, and personal expressions.
+- [B2 Vocabulary (Upper Intermediate)](https://zeroenglish.org/vocabulary/b2): Complex vocabulary for professional, academic, and fluent communication.
+- [C1 Vocabulary (Advanced)](https://zeroenglish.org/vocabulary/c1): 1,290+ advanced words for formal register, academic writing, and critical reasoning.
+- [English Grammar Lessons](https://zeroenglish.org/grammar): Core grammar rules (Parts of Speech, 12 Tenses, Articles, Subject-Verb Agreement, Common Bengali Speaker Traps) explained with timeline analogies.
+- [Written Notebook & Model Paragraphs](https://zeroenglish.org/written): Multi-tier model essays, paragraphs, and formal letters with Bengali translations and vocabulary analysis across Easy, Medium, and Hard difficulty tiers.
+- [Interactive Quizzes & Practice](https://zeroenglish.org/quiz): Fast, gamified vocabulary quizzes with instant score tracking and CEFR progress feedback.
+
+## Platform Metadata
+- Canonical URL: https://zeroenglish.org
+- Languages: Bengali (bn-BD) & English (en-US)
+- Target Audience: Students, job seekers, and lifelong learners from Bangladesh and West Bengal
+- Pricing: 100% Free, core vocabulary and grammar require no authentication
+- Founders: Tahmid Hasan (Web Developer & UI Designer) & Md. Mahir Asef (Full-Stack Software Engineer)
+- Contact Email: zeroenglishweb@gmail.com
+- Social: https://facebook.com/zeroenglishorg

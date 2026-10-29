@@ -1,0 +1,218 @@
+{
+  "summary": {
+    "health_score": 83,
+    "business_type": "EdTech / Online Language Learning Platform (Bilingual Bangla-English)",
+    "domain": "zeroenglish.org",
+    "analyzed_urls": [
+      "https://zeroenglish.org",
+      "https://zeroenglish.org/written/a-winter-morning",
+      "https://zeroenglish.org/vocabulary/c1/84",
+      "https://zeroenglish.org/news/new-features-are-here"
+    ],
+    "top_findings": [
+      {
+        "title": "Raw HTML Streams Skeleton Instead of Static H1 for Crawlers",
+        "severity": "Critical",
+        "category": "Technical SEO"
+      },
+      {
+        "title": "Missing llms.txt & AI Search Directives (GEO)",
+        "severity": "High",
+        "category": "AI Search Readiness"
+      },
+      {
+        "title": "Article Heading Hierarchy Skips H2 (Jumps from H1 to H3)",
+        "severity": "Medium",
+        "category": "On-Page SEO"
+      },
+      {
+        "title": "Vocabulary Meta Descriptions Exceed Optimal Length (>200 characters)",
+        "severity": "Medium",
+        "category": "On-Page SEO"
+      },
+      {
+        "title": "Missing Security Headers (X-Content-Type-Options, CSP, X-Frame-Options)",
+        "severity": "Low",
+        "category": "Technical SEO"
+      }
+    ],
+    "quick_wins": [
+      "Add /llms.txt with site summary and core CEFR directory links",
+      "Update robots.ts with explicit AI user-agents and Content-Signal",
+      "Add H2 sections in written article templates (/written/[slug])",
+      "Trim vocabulary meta descriptions to 155 characters",
+      "Add security headers in next.config.ts"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "weight": 22,
+      "score": 78,
+      "what_works": [
+        "Enforced HTTPS with strict HSTS (max-age=63072000)",
+        "Vercel Edge CDN with valid ETag and cache-control headers",
+        "Clean canonical tags across all tested pages",
+        "Valid XML sitemap linked in robots.txt"
+      ],
+      "findings": [
+        {
+          "title": "Client-Side Hydration Renders Skeleton in Initial HTML",
+          "severity": "Critical",
+          "description": "When search bots crawl without JavaScript execution, the initial server response contains skeleton placeholder divs instead of the rendered H1 headline.",
+          "recommendation": "Render the static H1 headline and hero copy server-side directly in HomeOrDashboard without waiting for auth store hydration."
+        },
+        {
+          "title": "Missing Security Headers in HTTP Response",
+          "severity": "Low",
+          "description": "Missing X-Content-Type-Options: nosniff, X-Frame-Options, and Content-Security-Policy headers.",
+          "recommendation": "Add standard security headers inside next.config.ts headers() hook."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality & E-E-A-T",
+      "weight": 23,
+      "score": 88,
+      "what_works": [
+        "Rich bilingual Bangla-English educational content",
+        "Structured CEFR graded vocabulary from A1 to C1",
+        "Verified author and founder profiles with social proof (sameAs)",
+        "Detailed model paragraphs with multi-tier difficulty levels"
+      ],
+      "findings": [
+        {
+          "title": "Article Author Schema Missing Profile @id Link",
+          "severity": "Medium",
+          "description": "Article schema lists author as a plain name string rather than linking to the author entity defined in Organization.",
+          "recommendation": "Link Article author to founder/person @id in JSON-LD markup."
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "weight": 20,
+      "score": 82,
+      "what_works": [
+        "Targeted title tags matching high-volume Bengali search queries",
+        "Complete OpenGraph and Twitter card metadata",
+        "100% image alt text coverage on sampled pages"
+      ],
+      "findings": [
+        {
+          "title": "Heading Hierarchy Gap in Written Articles",
+          "severity": "Medium",
+          "description": "Written articles have an H1 followed directly by H3 tags, skipping the H2 heading level.",
+          "recommendation": "Restructure article subheadings to use H2 tags for main sections (e.g., 'Model Paragraph', 'Bengali Meaning', 'Vocabulary Notes')."
+        },
+        {
+          "title": "Meta Description Length Exceeds SERP Snippet Bounds",
+          "severity": "Low",
+          "description": "Vocabulary page meta descriptions average 214 characters, causing truncation in Google mobile SERPs.",
+          "recommendation": "Cap dynamic meta descriptions at 155 characters."
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "weight": 10,
+      "score": 92,
+      "what_works": [
+        "Organization schema with founder details, logo, contact points, and sameAs links",
+        "WebSite schema with SearchAction for site search box",
+        "BreadcrumbList schema on written and vocabulary subpages",
+        "Valid Article schema with datePublished and dateModified"
+      ],
+      "findings": [
+        {
+          "title": "Vocabulary Pages Lack DefinedTermSet Schema",
+          "severity": "Low",
+          "description": "Dictionary and vocabulary list pages currently rely only on BreadcrumbList and WebSite.",
+          "recommendation": "Implement DefinedTermSet or ItemList schema for vocabulary words."
+        }
+      ]
+    },
+    {
+      "name": "Performance (Core Web Vitals)",
+      "weight": 10,
+      "score": 85,
+      "what_works": [
+        "Fast server response times from Vercel Edge (<150ms)",
+        "Preloaded WOFF2 variable fonts",
+        "Optimized image assets served via ImageKit CDN"
+      ],
+      "findings": [
+        {
+          "title": "Potential LCP Delay on Hero Sketch Highlight Elements",
+          "severity": "Medium",
+          "description": "Client-rendered SVG doodle animations in hero could shift LCP timing on slower mobile CPUs.",
+          "recommendation": "Ensure hero text renders with CSS font-display: swap without waiting for animation libraries."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness (GEO)",
+      "weight": 10,
+      "score": 65,
+      "what_works": [
+        "Fact-dense bilingual tables and example sentences ideal for LLM retrieval",
+        "High entity clarity with CEFR levels and linguistic definitions"
+      ],
+      "findings": [
+        {
+          "title": "Missing llms.txt & llms-full.txt Files",
+          "severity": "High",
+          "description": "AI search engines (Perplexity, ChatGPT, Claude) look for /llms.txt to index structured knowledge about the platform.",
+          "recommendation": "Add a public/llms.txt summarizing Zero English, CEFR tiers, and key learning resources."
+        },
+        {
+          "title": "Missing AI Bot Directives in robots.txt",
+          "severity": "High",
+          "description": "robots.txt has no explicit rules for GPTBot, ClaudeBot, or PerplexityBot, and lacks Content-Signal declarations.",
+          "recommendation": "Update src/app/robots.ts to explicitly welcome AI search engines while managing training scrapers."
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "weight": 5,
+      "score": 95,
+      "what_works": [
+        "100% of tested images have descriptive alt attributes",
+        "Next.js optimized Image components with lazy loading",
+        "CDN-hosted assets via ImageKit"
+      ],
+      "findings": []
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical & Crawlability Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Prerender Hero H1 server-side on homepage so search bots receive static text immediately",
+          "Publish public/llms.txt for AI search citation indexing",
+          "Add AI bot rules and Content-Signal in src/app/robots.ts"
+        ]
+      },
+      {
+        "name": "Phase 2: High-Impact On-Page & Schema Enhancements",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Fix heading hierarchy in written articles (/written/[slug]) to include proper H2 tags",
+          "Trim vocabulary programmatic meta descriptions to 155 characters",
+          "Link Article author schema to founder Person entity (@id)"
+        ]
+      },
+      {
+        "name": "Phase 3: Security & Structured Data Breadth",
+        "timeframe": "Month 2",
+        "items": [
+          "Add security headers in next.config.ts (X-Content-Type-Options, CSP, X-Frame-Options)",
+          "Add DefinedTermSet schema on vocabulary pages (/vocabulary/[level]/[page])"
+        ]
+      }
+    ]
+  }
+}

@@ -171,5 +171,5 @@ export function levelMetaDescription(level: string, wordCount: number): string {
     return `The Zero English ${level} list is still being written. ${count} entries so far; it is marked noindex until it is ready to study.`;
   }
 
-  return `${level} (${meta.label}) English vocabulary with Bangla meanings: ${count} words covering ${topics.join(", ")}. Each entry has a Bangla meaning, English definition, examples, synonyms and antonyms.`;
+  return `Learn ${count} ${level} (${meta.label}) English words with Bangla meanings, definitions, example sentences, synonyms & antonyms on Zero English.`;
 }
