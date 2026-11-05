@@ -132,9 +132,27 @@ export async function proxy(request: NextRequest) {
         }
     }
 
+    if (request.nextUrl.pathname.startsWith("/dashboard")) {
+        const token = await getToken({
+            req: request,
+            secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
+        });
+
+        if (!token) {
+            const loginUrl = new URL("/join", request.url);
+            loginUrl.searchParams.set("callbackUrl", request.url);
+            return NextResponse.redirect(loginUrl);
+        }
+    }
+
     return response;
 }
 
 export const config = {
-    matcher: ["/api/v1/:path*", "/admin/:path*", "/quiz/question/:path*"],
+    matcher: [
+        "/api/v1/:path*",
+        "/admin/:path*",
+        "/dashboard",
+        "/quiz/question/:path*",
+    ],
 };

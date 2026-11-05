@@ -4,7 +4,11 @@ import { Breadcrumb } from "@/components/breadcrumb";
 import { JsonLd } from "@/components/seo/json-ld";
 import { FAQS } from "@/lib/site-faq";
 import { SITE_NAME, SITE_URL } from "@/lib/site-config";
-import { buildAboutStats, ATTRIBUTION_EN, LAST_REVIEWED } from "@/lib/about-content";
+import {
+  buildAboutStats,
+  ATTRIBUTION_EN,
+  LAST_REVIEWED,
+} from "@/lib/about-content";
 import { getAboutFacts } from "@/lib/data";
 
 const ABOUT_TITLE = "About Zero English | How the Word Lists Are Built";
@@ -139,9 +143,6 @@ export default async function AboutPage() {
       <JsonLd data={aboutPageSchema} />
       <JsonLd data={factsSchema} />
       <JsonLd data={faqSchema} />
-      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-0">
-        <Breadcrumb items={[{ nameBn: "আমাদের সম্পর্কে", nameEn: "About", href: "/about" }]} />
-      </div>
       <AboutClient facts={facts} />
     </>
   );

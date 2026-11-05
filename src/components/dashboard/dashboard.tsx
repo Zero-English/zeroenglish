@@ -25,7 +25,7 @@ import { requestGoogleLogin } from "@/lib/login-required";
 import { LatestPosts, type LatestPost } from "@/components/news/latest-posts";
 import type { LeaderboardRow } from "@/components/leaderboard";
 import { TopLearners } from "@/components/top-learners";
-import type { LevelStatItem } from "@/components/home-or-dashboard";
+import type { LevelStatItem } from "@/lib/data";
 
 const CARD =
   "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";

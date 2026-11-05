@@ -7,11 +7,19 @@ import {
   getLevelWordIds,
   isValidLevel,
 } from "@/lib/data";
-import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/vocabulary-query";
+import {
+  ITEMS_PER_PAGE,
+  parseLevelQuery,
+  type RawSearchParams,
+} from "@/lib/vocabulary-query";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { SITE_URL } from "@/lib/site-config";
-import { getLevelMeta, isLevelLive, levelMetaDescription } from "@/lib/level-copy";
+import {
+  getLevelMeta,
+  isLevelLive,
+  levelMetaDescription,
+} from "@/lib/level-copy";
 
 // Cached at the edge via ISR for 24 hours.
 export const revalidate = 86400;
@@ -29,7 +37,10 @@ export async function generateMetadata({
   const upper = level.toUpperCase();
 
   if (!isValidLevel(upper)) {
-    return { title: "Level Not Found", robots: { index: false, follow: false } };
+    return {
+      title: "Level Not Found",
+      robots: { index: false, follow: false },
+    };
   }
 
   const { isFiltered } = parseLevelQuery(await searchParams);
@@ -43,7 +54,10 @@ export async function generateMetadata({
   const levelSlug = upper.toLowerCase();
 
   if (!meta) {
-    return { title: "Level Not Found", robots: { index: false, follow: false } };
+    return {
+      title: "Level Not Found",
+      robots: { index: false, follow: false },
+    };
   }
 
   return {
@@ -121,18 +135,6 @@ export default async function Page({ params, searchParams }: PageProps) {
   return (
     <>
       <JsonLd data={definedTermSchema} />
-      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-0">
-        <Breadcrumb
-          items={[
-            { nameBn: "শব্দভাণ্ডার", nameEn: "Vocabulary", href: "/vocabulary" },
-            {
-              nameBn: `${upper} · ${meta.labelBn}`,
-              nameEn: `${upper} · ${meta.label}`,
-              href: `/vocabulary/${levelSlug}`,
-            },
-          ]}
-        />
-      </div>
       <LevelPageContent
         level={upper}
         pageNum={1}

@@ -871,7 +871,7 @@ function DailyResultsView({
             size="lg"
             className="w-full sm:w-auto px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 text-white shadow-md shadow-orange-500/20 cursor-pointer"
           >
-            <Link href="/">
+            <Link href="/dashboard">
               {t("ড্যাশবোর্ডে ফিরুন", "Go to Dashboard")}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Link>
@@ -988,7 +988,7 @@ function DailyCompletedView({
             size="lg"
             className="w-full sm:w-auto px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 text-white shadow-md shadow-orange-500/20 cursor-pointer"
           >
-            <Link href="/">
+            <Link href="/dashboard">
               {t("ড্যাশবোর্ডে যান", "Go to Dashboard")}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Link>

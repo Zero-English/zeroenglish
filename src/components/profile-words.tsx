@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/pagination";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
-import { DailyGoalCard } from "@/components/daily-goal";
+import { DailyRoutineCard } from "@/components/daily-goal";
 import { useActiveTab, setActiveTab } from "@/lib/profile-tab-store";
 import { useQuizActivity } from "@/lib/use-quiz-activity";
 import { Classic } from "@/components/classic";
@@ -1050,7 +1050,7 @@ export function ProfileTabs({
 
             {/* BENTO TILE 2: Streak & Daily Goal Bento Box */}
             <StaggerItem className="col-span-1 md:col-span-6 flex flex-col min-w-0">
-              <DailyGoalCard />
+              <DailyRoutineCard />
             </StaggerItem>
 
             {/* BENTO TILE 3: Quiz Performance & Accuracy Engine */}

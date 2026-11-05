@@ -427,6 +427,18 @@ model User {
   grammarBookmarks           UserGrammarBookmark[]
   relatedCombinedExamResults CombinedExamResult[]
   createdTemplates           VisualTemplate[]      @relation("CreatedTemplates")
+  dailyRoutine               UserDailyRoutine?
+}
+
+model UserDailyRoutine {
+  userId    Int      @id
+  version   Int      @default(1)
+  timezone  String?  @default("Asia/Dhaka")
+  targets   Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {

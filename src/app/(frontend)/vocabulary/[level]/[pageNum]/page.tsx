@@ -7,11 +7,19 @@ import {
   getLevelWordIds,
   isValidLevel,
 } from "@/lib/data";
-import { ITEMS_PER_PAGE, parseLevelQuery, type RawSearchParams } from "@/lib/vocabulary-query";
+import {
+  ITEMS_PER_PAGE,
+  parseLevelQuery,
+  type RawSearchParams,
+} from "@/lib/vocabulary-query";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SITE_URL } from "@/lib/site-config";
-import { getLevelMeta, isLevelLive, levelMetaDescription } from "@/lib/level-copy";
+import {
+  getLevelMeta,
+  isLevelLive,
+  levelMetaDescription,
+} from "@/lib/level-copy";
 
 // Cached at the edge via ISR for 24 hours.
 export const revalidate = 86400;
@@ -164,24 +172,6 @@ export default async function Page({ params, searchParams }: PageProps) {
   return (
     <>
       <JsonLd data={definedTermSchema} />
-      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-0">
-        <Breadcrumb
-          items={[
-            { nameBn: "শব্দভাণ্ডার", nameEn: "Vocabulary", href: "/vocabulary" },
-            {
-              nameBn: `${upper} · ${meta.labelBn}`,
-              nameEn: `${upper} · ${meta.label}`,
-              href: `/vocabulary/${level}`,
-            },
-            {
-              nameBn: `পৃষ্ঠা ${page}`,
-              nameEn: `Page ${page}`,
-              href: `/vocabulary/${level}/${pageNum}`,
-              livePage: { level: upper, page },
-            },
-          ]}
-        />
-      </div>
       <LevelPageContent
         level={upper}
         pageNum={page}

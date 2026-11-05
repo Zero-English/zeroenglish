@@ -894,3 +894,26 @@ export type ContributorGrammarRuleContributorUpdateInput = z.infer<
 >;
 export type GrammarRuleContributorUpdateInput = ContributorGrammarRuleContributorUpdateInput;
 export type GrammarRuleStatusUpdateInput = z.infer<typeof grammarRuleStatusUpdateSchema>;
+
+const routineItemTargetSchema = z
+  .object({
+    enabled: z.boolean(),
+    target: z.number().int().min(1).max(500),
+  })
+  .strict();
+
+export const dailyRoutineUpdateSchema = z
+  .object({
+    timezone: z.string().trim().min(1).max(64).optional(),
+    targets: z
+      .object({
+        words: routineItemTargetSchema,
+        quizQuestions: routineItemTargetSchema,
+        grammarRules: routineItemTargetSchema,
+        dailyPractice: routineItemTargetSchema,
+      })
+      .strict(),
+  })
+  .strict();
+
+export type DailyRoutineUpdateInput = z.infer<typeof dailyRoutineUpdateSchema>;

@@ -27,6 +27,7 @@ import {
   ChevronRight,
   Sparkles,
   ExternalLink,
+  LayoutDashboard,
 } from "lucide-react";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
@@ -96,6 +97,15 @@ export function Sidebar() {
 
   const navLinks: { href: string; label: string; icon: typeof Home }[] = [
     { href: "/", label: t("হোম", "Home"), icon: Home },
+    ...(isLoggedIn
+      ? [
+          {
+            href: "/dashboard",
+            label: t("ড্যাশবোর্ড", "Dashboard"),
+            icon: LayoutDashboard,
+          },
+        ]
+      : []),
     { href: vocabularyHref, label: t("শব্দভাণ্ডার", "Vocabulary"), icon: LibraryBig },
     { href: "/grammar", label: t("গ্রামার", "Grammar"), icon: GraduationCap },
     { href: "/search", label: t("অনুসন্ধান", "Search"), icon: Search },

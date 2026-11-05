@@ -22,6 +22,7 @@ import {
   ChevronRight,
   Sparkles,
   ExternalLink,
+  LayoutDashboard,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -92,7 +93,13 @@ export function MobileBottomNav() {
   const vocabularyHref = level ? `/vocabulary/${level.toLowerCase()}` : '/vocabulary'
 
   const navLinks = [
-    { href: '/', label: t('হোম', 'Home'), icon: Home },
+    isLoggedIn
+      ? {
+          href: '/dashboard',
+          label: t('ড্যাশবোর্ড', 'Dashboard'),
+          icon: LayoutDashboard,
+        }
+      : { href: '/', label: t('হোম', 'Home'), icon: Home },
     { href: vocabularyHref, label: t('শব্দভাণ্ডার', 'Vocabulary'), icon: LibraryBig },
     { href: '/grammar', label: t('গ্রামার', 'Grammar'), icon: GraduationCap },
     { href: '/quiz', label: t('কুইজ', 'Quiz'), icon: BadgeQuestionMark },
