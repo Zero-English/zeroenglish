@@ -1,4 +1,4 @@
-import { getAllWords } from "@/lib/data";
+import { getAllWords, getPublicWordsForQuiz } from "@/lib/data";
 import logger from "@/utils/logger";
 import {
   generateQuestions,
@@ -14,11 +14,27 @@ export type {
   GeneratedQuizQuestion,
 } from "@/lib/quiz-generation-core";
 
+function hasQuizScope(input: Pick<QuizGenerationInput, "levels" | "wordIds" | "excludeWordIds">) {
+  return (
+    input.levels.some((level) => level !== "Random") ||
+    (input.wordIds?.length ?? 0) > 0 ||
+    (input.excludeWordIds?.length ?? 0) > 0
+  );
+}
+
+async function getWordsForQuiz(
+  input: Pick<QuizGenerationInput, "levels" | "wordIds" | "excludeWordIds">
+) {
+  return hasQuizScope(input)
+    ? getPublicWordsForQuiz(input)
+    : getAllWords();
+}
+
 export const getQuizPoolCount = async (
   input: Pick<QuizGenerationInput, "quizType" | "levels" | "wordIds" | "excludeWordIds">
 ) => {
   try {
-    const words = await getAllWords();
+    const words = await getWordsForQuiz(input);
     const maxCount = getQuizPoolCountCore(
       words,
       input.levels,
@@ -46,7 +62,7 @@ export const generateQuizQuestions = async (
   input: QuizGenerationInput
 ): Promise<QuizGenerationResult> => {
   try {
-    const words = await getAllWords();
+    const words = await getWordsForQuiz(input);
     const questions = generateQuestions(
       words,
       input.levels,

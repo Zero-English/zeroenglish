@@ -1,6 +1,10 @@
 import prisma from "@/utils/prisma";
 import logger from "@/utils/logger";
-import { getAllWords, type Word } from "@/lib/data";
+import {
+  getPublicWordSample,
+  getPublicWordsByIds,
+  type Word,
+} from "@/lib/data";
 import type { Levels, QuizMode } from "@/generated/prisma/enums";
 
 export const DAILY_PRACTICE_TITLE = "Personalized Daily Practice";
@@ -181,9 +185,8 @@ export async function getDailyPracticeStatus(
 export async function generateDailyPracticeQuestions(
   userId: number
 ): Promise<{ questions: DailyPracticeQuestion[]; streak: number }> {
-  const [allWords, streak, pastMistakes, stillLearningRows, userBookmarks] =
+  const [streak, pastMistakes, stillLearningRows, userBookmarks] =
     await Promise.all([
-      getAllWords(),
       calculateDailyStreak(userId),
       // User's past incorrect words and questions from CombinedExamResult
       prisma.combinedExamResult.findMany({
@@ -222,6 +225,16 @@ export async function generateDailyPracticeQuestions(
     ...stillLearningRows.map((r) => r.wordId),
     ...userBookmarks.map((r) => r.wordId),
   ];
+
+  const [prioritizedWords, sampleWords] = await Promise.all([
+    getPublicWordsByIds(prioritizedWordIds),
+    getPublicWordSample(100),
+  ]);
+  const allWords = Array.from(
+    new Map<number, Word>(
+      [...prioritizedWords, ...sampleWords].map((word) => [word.id, word])
+    ).values()
+  );
 
   const wordMap = new Map<number, Word>();
   for (const w of allWords) {

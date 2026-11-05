@@ -51,6 +51,21 @@ interface DbWordRecord {
   wordType: string[];
 }
 
+export const publicWordSelect = {
+  id: true,
+  word: true,
+  meaningBn: true,
+  synonyms: true,
+  antonyms: true,
+  definitionEn: true,
+  definitionBn: true,
+  examplesEn: true,
+  examplesBn: true,
+  level: true,
+  category: true,
+  wordType: true,
+} satisfies Prisma.WordSelect;
+
 function toPublicWord(w: DbWordRecord): Word {
   return {
     id: w.id,
@@ -88,30 +103,13 @@ function sortOrder(sort: LevelPageSort): Prisma.WordOrderByWithRelationInput[] {
   }
 }
 
-function scoreWord(row: DbWordRecord, query: string): number {
-  let score = 0;
-  const word = row.word.toLowerCase();
-  const meaning = row.meaningBn.join(" ").toLowerCase();
-  const definitionEn = row.definitionEn.toLowerCase();
-  const definitionBn = row.definitionBn.toLowerCase();
-
-  if (word === query) score += 100;
-  else if (word.startsWith(query)) score += 50;
-  else if (word.includes(query)) score += 20;
-
-  if (meaning === query) score += 80;
-  else if (meaning.startsWith(query)) score += 40;
-  else if (meaning.includes(query)) score += 15;
-
-  if (definitionEn.includes(query)) score += 5;
-  if (definitionBn.includes(query)) score += 5;
-
-  return score;
-}
-
 export const getAllWords = cache(async (): Promise<Word[]> => {
   const words = await withPrismaRetry(() =>
-    prisma.word.findMany({ where: PUBLIC_WORD_WHERE, orderBy: publicOrder })
+    prisma.word.findMany({
+      where: PUBLIC_WORD_WHERE,
+      orderBy: publicOrder,
+      select: publicWordSelect,
+    })
   );
   return words.map(toPublicWord);
 });
@@ -123,9 +121,78 @@ export const getWordsByLevel = cache(
       prisma.word.findMany({
         where: { ...PUBLIC_WORD_WHERE, level: upper },
         orderBy: publicOrder,
+        select: publicWordSelect,
       })
     );
     return words.map(toPublicWord);
+  }
+);
+
+export const getPublicWordsByIds = cache(async (ids: number[]): Promise<Word[]> => {
+  const uniqueIds = Array.from(new Set(ids.filter((id) => Number.isInteger(id)))).slice(0, 100);
+  if (uniqueIds.length === 0) return [];
+
+  const rows = await withPrismaRetry(() =>
+    prisma.word.findMany({
+      where: { ...PUBLIC_WORD_WHERE, id: { in: uniqueIds } },
+      select: publicWordSelect,
+    })
+  );
+  const wordsById = new Map(rows.map((row) => [row.id, toPublicWord(row)]));
+  return uniqueIds
+    .map((id) => wordsById.get(id))
+    .filter((word): word is Word => Boolean(word));
+});
+
+export const getPublicWordSample = cache(async (limit = 100): Promise<Word[]> => {
+  const safeLimit = Math.min(200, Math.max(1, limit));
+  const rows = await withPrismaRetry(() =>
+    prisma.word.findMany({
+      where: PUBLIC_WORD_WHERE,
+      orderBy: publicOrder,
+      take: safeLimit,
+      select: publicWordSelect,
+    })
+  );
+  return rows.map(toPublicWord);
+});
+
+export const getPublicWordsForQuiz = cache(
+  async ({
+    levels,
+    wordIds,
+    excludeWordIds,
+  }: {
+    levels?: string[];
+    wordIds?: number[];
+    excludeWordIds?: number[];
+  }): Promise<Word[]> => {
+    const selectedLevels = (levels ?? []).filter(
+      (level): level is LevelCode => level !== "Random" && isValidLevel(level)
+    );
+    const uniqueWordIds = Array.from(
+      new Set((wordIds ?? []).filter((id) => Number.isInteger(id)))
+    );
+    const excludedWordIds = Array.from(
+      new Set((excludeWordIds ?? []).filter((id) => Number.isInteger(id)))
+    );
+    const where: Prisma.WordWhereInput = {
+      ...PUBLIC_WORD_WHERE,
+      ...(selectedLevels.length
+        ? { level: { in: selectedLevels as Levels[] } }
+        : {}),
+      ...(uniqueWordIds.length ? { id: { in: uniqueWordIds } } : {}),
+      ...(excludedWordIds.length ? { id: { notIn: excludedWordIds } } : {}),
+    };
+
+    const rows = await withPrismaRetry(() =>
+      prisma.word.findMany({
+        where,
+        orderBy: publicOrder,
+        select: publicWordSelect,
+      })
+    );
+    return rows.map(toPublicWord);
   }
 );
 
@@ -173,31 +240,30 @@ export const browsePublicWords = cache(
     const q = search?.trim() ?? "";
 
     if (q) {
-      // Relevance ranking has to happen in memory, so the whole (filtered) slice
-      // is loaded before paginating.
-      const rows = await withPrismaRetry(() =>
-        prisma.word.findMany({ where, orderBy: publicOrder })
-      );
-      const query = q.toLowerCase();
-      const scored = rows
-        .map((row) => ({ row, score: scoreWord(row, query) }))
-        .filter((entry) => entry.score > 0)
-        .sort(
-          (a, b) =>
-            b.score - a.score ||
-            (sort === "za"
-              ? b.row.word.localeCompare(a.row.word)
-              : a.row.word.localeCompare(b.row.word))
-        );
-
-      const total = scored.length;
+      const searchWhere: Prisma.WordWhereInput = {
+        ...where,
+        OR: [
+          { word: { contains: q, mode: "insensitive" } },
+          { definitionEn: { contains: q, mode: "insensitive" } },
+          { definitionBn: { contains: q, mode: "insensitive" } },
+          { meaningBn: { has: q } },
+        ],
+      };
+      const total = await withPrismaRetry(() => prisma.word.count({ where: searchWhere }));
       const totalPages = Math.max(1, Math.ceil(total / safeLimit));
       const currentPage = Math.min(safePage, totalPages);
+      const rows = await withPrismaRetry(() =>
+        prisma.word.findMany({
+          where: searchWhere,
+          orderBy: sortOrder(sort),
+          skip: (currentPage - 1) * safeLimit,
+          take: safeLimit,
+          select: publicWordSelect,
+        })
+      );
 
       return {
-        words: scored
-          .slice((currentPage - 1) * safeLimit, currentPage * safeLimit)
-          .map((entry) => toPublicWord(entry.row)),
+        words: rows.map(toPublicWord),
         total,
         page: currentPage,
         limit: safeLimit,
@@ -212,6 +278,7 @@ export const browsePublicWords = cache(
           orderBy: sortOrder(sort),
           skip: (safePage - 1) * safeLimit,
           take: safeLimit,
+          select: publicWordSelect,
         })
       ),
       withPrismaRetry(() => prisma.word.count({ where })),

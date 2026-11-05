@@ -200,6 +200,20 @@ export const getWordsByIds = async (ids: number[]) => {
         if (unique.length === 0) return { data: [], message: "No IDs provided", success: true };
         const words = await prisma.word.findMany({
             where: { id: { in: unique }, isPending: false },
+            select: {
+                id: true,
+                word: true,
+                meaningBn: true,
+                synonyms: true,
+                antonyms: true,
+                definitionEn: true,
+                definitionBn: true,
+                examplesEn: true,
+                examplesBn: true,
+                level: true,
+                category: true,
+                wordType: true,
+            },
         });
         const wordMap = new Map(words.map((w) => [w.id, toPublicWord(w)]));
         const ordered = unique.map((id) => wordMap.get(id)).filter(Boolean) as Word[];
