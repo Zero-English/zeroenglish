@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getUserById, getUserLearningProgress } from "@/services/user.service";
 import { getCombinedExamResultsByUser } from "@/services/quiz-result.service";
-import { getAllWords } from "@/lib/data";
+import { getLevelStats } from "@/lib/data";
 import { PublicProfileView } from "@/components/public-profile";
 import { BackButton } from "@/components/back-button";
 
@@ -50,11 +50,11 @@ export default async function PublicProfilePage({
     notFound();
   }
 
-  const [result, progressResult, combinedExamResultsResult, words] = await Promise.all([
+  const [result, progressResult, combinedExamResultsResult, levelStats] = await Promise.all([
     getUserById(userId),
     getUserLearningProgress(userId),
     getCombinedExamResultsByUser(userId),
-    getAllWords(),
+    getLevelStats(),
   ]);
 
   if (!result.success || !result.data) {
@@ -65,18 +65,13 @@ export default async function PublicProfilePage({
 
   const levelProgress =
     progressResult.success && progressResult.data
-      ? words
-          .reduce<{ level: string; total: number; learned: number }[]>((acc, w) => {
-            const existing = acc.find((l) => l.level === w.level);
-            if (existing) existing.total += 1;
-            else acc.push({ level: w.level, total: 1, learned: 0 });
-            return acc;
-          }, [])
-          .map((l) => ({
-            ...l,
-            learned: progressResult.data.levelCounts[l.level] ?? 0,
-          }))
+      ? levelStats.map(({ level, count }) => ({
+          level,
+          total: count,
+          learned: progressResult.data.levelCounts[level] ?? 0,
+        }))
       : [];
+  const totalWords = levelStats.reduce((total, { count }) => total + count, 0);
 
   const dailyData =
     progressResult.success && progressResult.data ? progressResult.data.daily : [];
@@ -111,7 +106,7 @@ export default async function PublicProfilePage({
               gender: data.gender,
               socialLinks: data.socialLinks,
             }}
-            totalWords={words.length}
+            totalWords={totalWords}
             levelProgress={levelProgress}
             dailyData={dailyData}
             combinedExamResults={combinedExamResults}

@@ -34,20 +34,17 @@ export async function GET(request: NextRequest) {
     if (forbidden) return forbidden;
 
     const searchParams = request.nextUrl.searchParams;
-    const pageParam = searchParams.get("page");
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10) || 1);
+    const limit = Math.min(
+        100,
+        Math.max(1, parseInt(searchParams.get("limit") || "25", 10) || 25)
+    );
 
-    if (pageParam) {
-        const page = Math.max(1, parseInt(pageParam, 10) || 1);
-        const limit = Math.min(
-            100,
-            Math.max(1, parseInt(searchParams.get("limit") || "10", 10) || 10)
-        );
-        const result = await getWordsByPage(page, limit);
-        return NextResponse.json(result);
+    if (searchParams.get("bulk") === "true") {
+        return NextResponse.json(await getAllWords());
     }
 
-    const result = await getAllWords();
-    return NextResponse.json(result);
+    return NextResponse.json(await getWordsByPage(page, limit));
 }
 
 /**
