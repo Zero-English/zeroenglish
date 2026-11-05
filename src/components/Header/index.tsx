@@ -405,6 +405,7 @@ export function Header() {
   const user = session?.user
   const isAdmin = user?.role === 'admin'
   const canContribute = user?.role === 'admin' || user?.role === 'contributor'
+  const backHref = headerPage?.parentHref ?? (isLoggedIn ? '/dashboard' : '/')
 
   const toggleTheme = () => {
     setTheme(currentTheme === 'dark' ? 'light' : 'dark')
@@ -485,36 +486,22 @@ export function Header() {
           {/* Logo on home/about, page title + back button elsewhere */}
           {headerPage ? (
             <div className="flex min-w-0 flex-1 items-center gap-1 md:flex-none">
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                asChild
-                className="h-9 w-9 shrink-0 text-muted-foreground hover:text-foreground"
-              >
-                <Link
-                  href={isLoggedIn ? '/dashboard' : '/'}
-                  aria-label={
-                    lang === 'en'
-                      ? isLoggedIn
-                        ? 'Go to dashboard'
-                        : 'Go to home'
-                      : isLoggedIn
-                        ? 'ড্যাশবোর্ডে যান'
-                        : 'হোমে যান'
-                  }
-                  title={
-                    lang === 'en'
-                      ? isLoggedIn
-                        ? 'Go to dashboard'
-                        : 'Go to home'
-                      : isLoggedIn
-                        ? 'ড্যাশবোর্ডে যান'
-                        : 'হোমে যান'
-                  }
+              {pathname !== '/dashboard' && (
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  asChild
+                  className="h-9 w-9 shrink-0 text-muted-foreground hover:text-foreground"
                 >
-                  <ArrowLeft className="size-4" />
-                </Link>
-              </Button>
+                  <Link
+                    href={backHref}
+                    aria-label={lang === 'en' ? 'Go back' : 'ফিরে যান'}
+                    title={lang === 'en' ? 'Go back' : 'ফিরে যান'}
+                  >
+                    <ArrowLeft className="size-4" />
+                  </Link>
+                </Button>
+              )}
               <span className="max-w-[42vw] truncate text-sm font-semibold tracking-tight text-foreground sm:max-w-xs">
                 {lang === 'en' ? headerPage.titleEn : headerPage.titleBn}
               </span>
