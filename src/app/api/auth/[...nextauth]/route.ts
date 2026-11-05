@@ -1,17 +1,10 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import NextAuth from "next-auth";
-import { authOptions, bindIntentStore } from "@/lib/auth";
-import { BIND_COOKIE } from "@/lib/bind-intent";
+import { authOptions } from "@/lib/auth";
 import { ALLOWED_SITE_HOSTS } from "@/lib/site-domains";
 
 const baseAuth = NextAuth(authOptions);
-
-// Cookie armed by POST /api/v1/auth/bind/begin when a guest clicks
-// "Continue with Google" to bind an account. The OAuth callback request
-// carries it; if present we run the callback with a request-scoped bind intent
-// (AsyncLocalStorage) so the signIn callback can reject existing accounts and
-// forbid rebinding an already-registered Google account onto guest data.
 
 // NextAuth v4 hardcodes the default base path (/api/auth) for the OAuth
 // redirect/callback URLs it generates on the server. To keep sign-in and the
@@ -69,7 +62,6 @@ async function handler(
     }
 
     const params = await ctx.params;
-    const isCallback = params.nextauth?.[0] === "callback";
     // NextAuth redirects failed OAuth flows to its built-in signin page with
     // ?error=OAuthCallback. Send those users to the home page instead.
     if (
@@ -78,30 +70,8 @@ async function handler(
     ) {
         return NextResponse.redirect(new URL("/", req.url));
     }
-    const hasBindIntent = req.cookies.get(BIND_COOKIE)?.value === "1";
 
-    const res = await bindIntentStore.run(
-        { pending: isCallback && hasBindIntent },
-        () => baseAuth(req, { params: ctx.params }),
-    );
-
-    if (isCallback && hasBindIntent) {
-        // NextAuth returns a plain Response here (cookies already serialized
-        // into "Set-Cookie" headers), so append the cookie expiry instead of
-        // mutating res.cookies.
-        const headers = new Headers(res.headers);
-        headers.append(
-            "Set-Cookie",
-            `${BIND_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`
-        );
-        return new NextResponse(res.body, {
-            status: res.status,
-            statusText: res.statusText,
-            headers,
-        });
-    }
-
-    return res;
+    return baseAuth(req, { params: ctx.params });
 }
 
 export { handler as GET, handler as POST };

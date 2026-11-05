@@ -158,7 +158,7 @@ export function QuizDailyClient() {
     };
   }, []);
 
-  // Initial load: unauthenticated or guest users don't make 401 calls; they show intro directly
+  // Initial load: unauthenticated users don't make 401 calls; they show intro directly
   useEffect(() => {
     if (!isGoogleAuth) return;
     return loadDailyData();

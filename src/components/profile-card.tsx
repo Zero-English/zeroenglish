@@ -67,8 +67,8 @@ export function ProfileBentoIdentity({
   const user = session?.user;
   const isGoogle = status === "google" && !!user;
   const isAdmin = user?.role === "admin";
-  const displayName = isGoogle ? user.name || "Learner" : t("অতিথি শিক্ষার্থী", "Guest Learner");
-  const displayEmail = isGoogle ? user.email || user.name : t("ডিভাইস লোকাল প্রোফাইল", "Device Local Account");
+  const displayName = isGoogle ? user.name || "Learner" : t("শিক্ষার্থী", "Learner");
+  const displayEmail = isGoogle ? user.email || user.name : t("ডিভাইস প্রোফাইল", "Local Account");
 
   const circumference = 2 * Math.PI * 34;
   const offset = circumference * (1 - overallPct / 100);

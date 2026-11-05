@@ -525,7 +525,6 @@ export const popupAudienceSchema = z.enum([
   "ALL",
   "LOGGED_OUT_ONLY",
   "LOGGED_IN_ONLY",
-  "GUEST_ONLY",
 ]);
 
 export const popupPageRuleSchema = z.enum(["ALL", "HOME", "SPECIFIC_PATHS"]);

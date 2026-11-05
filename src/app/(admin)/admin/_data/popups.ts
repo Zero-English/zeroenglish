@@ -1,8 +1,7 @@
 export type PopupAudienceValue =
   | "ALL"
   | "LOGGED_OUT_ONLY"
-  | "LOGGED_IN_ONLY"
-  | "GUEST_ONLY";
+  | "LOGGED_IN_ONLY";
 
 export type PopupPageRuleValue = "ALL" | "HOME" | "SPECIFIC_PATHS";
 
@@ -20,7 +19,6 @@ export const popupAudienceOptions: {
   { value: "ALL", label: "Everyone" },
   { value: "LOGGED_OUT_ONLY", label: "Logged out only" },
   { value: "LOGGED_IN_ONLY", label: "Logged in only" },
-  { value: "GUEST_ONLY", label: "Guest logged in only" },
 ];
 
 export const popupAudienceLabelMap: Record<PopupAudienceValue, string> =

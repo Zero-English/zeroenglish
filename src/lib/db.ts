@@ -324,17 +324,12 @@ export async function migrateProfileData(
 /**
  * Adopts data written while the user was not signed in (anonymous scope) into
  * the target scope. The `pathScope` is the auth-store path used for per-word
- * keys (e.g. "guest" or "google:5"); the `nsScope` is the identity namespace
- * used for scoped zustand stores (e.g. "guest" or "5"). Existing target data is
- * never overwritten.
+ * keys (e.g. "google:5"); the `nsScope` is the identity namespace used for
+ * scoped zustand stores (e.g. "5"). Existing target data is never overwritten.
  */
 export async function adoptAnonDataInto(
   pathScope: string,
   nsScope?: string
 ): Promise<void> {
   await migrateProfileData(ANON_SCOPE, pathScope, nsScope ?? pathScope);
-}
-
-export function adoptAnonDataIntoGuest(): void {
-  void adoptAnonDataInto("guest");
 }

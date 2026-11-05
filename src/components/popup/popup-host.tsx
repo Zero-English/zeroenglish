@@ -47,14 +47,15 @@ function getDismissedIds(): number[] {
 
 function matchesAudience(status: AuthStatus, audience: string): boolean {
   switch (audience) {
+    case "ALL":
+      return true;
     case "LOGGED_OUT_ONLY":
       return status === "none";
     case "LOGGED_IN_ONLY":
       return status === "google";
-    case "GUEST_ONLY":
-      return status === "guest";
     default:
-      return true;
+      // Unknown/retired audiences (e.g. the old GUEST_ONLY value) never match.
+      return false;
   }
 }
 

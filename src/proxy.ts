@@ -122,7 +122,7 @@ export async function proxy(request: NextRequest) {
         });
 
         if (!token) {
-            const loginUrl = new URL("/login", request.url);
+            const loginUrl = new URL("/join", request.url);
             loginUrl.searchParams.set("callbackUrl", request.url);
             return NextResponse.redirect(loginUrl);
         }

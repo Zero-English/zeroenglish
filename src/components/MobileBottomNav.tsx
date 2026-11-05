@@ -130,7 +130,7 @@ export function MobileBottomNav() {
 
   if (hidden) return null
 
-  const isProfileActive = pathname === '/profile' || pathname === '/login' || drawerOpen
+  const isProfileActive = pathname === '/profile' || pathname === '/join' || drawerOpen
 
   return (
     <>
@@ -296,9 +296,9 @@ export function MobileBottomNav() {
                 </Button>
               ) : (
                 <Button size="sm" asChild className="h-7 text-xs gap-1">
-                  <Link href="/login" onClick={() => setDrawerOpen(false)}>
+                  <Link href="/join" onClick={() => setDrawerOpen(false)}>
                     <LogIn className="size-3.5" />
-                    <span>{t('লগইন', 'Login')}</span>
+                    <span>{t('যোগ দিন', 'Join')}</span>
                   </Link>
                 </Button>
               )}
@@ -532,9 +532,9 @@ export function MobileBottomNav() {
                 asChild
                 className="w-full justify-center gap-2 h-9 text-xs"
               >
-                <Link href="/login" onClick={() => setDrawerOpen(false)}>
+                <Link href="/join" onClick={() => setDrawerOpen(false)}>
                   <LogIn className="size-3.5" />
-                  <span>{t('লগইন / রেজিস্টার করুন', 'Sign in / Register')}</span>
+                  <span>{t('যোগ দিন / সাইন ইন', 'Join / Sign in')}</span>
                 </Link>
               </Button>
             )}

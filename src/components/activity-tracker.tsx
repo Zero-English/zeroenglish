@@ -7,7 +7,7 @@ export function ActivityTracker() {
   const { status, hydrated } = useAuthStatus();
 
   useEffect(() => {
-    // Only track activity for authenticated users (not guests or anonymous visitors)
+    // Only track activity for authenticated users (not anonymous visitors)
     if (!hydrated || status !== "google") return;
 
     const updateActivity = async () => {

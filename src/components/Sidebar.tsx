@@ -125,7 +125,7 @@ export function Sidebar() {
 
   if (hidden) return null;
 
-  const isProfileActive = pathname === "/profile" || pathname === "/login" || profileDrawerOpen;
+  const isProfileActive = pathname === "/profile" || pathname === "/join" || profileDrawerOpen;
 
   return (
     <>
@@ -340,9 +340,9 @@ export function Sidebar() {
                   </Button>
                 ) : (
                   <Button size="sm" asChild className="h-7 text-xs gap-1">
-                    <Link href="/login" onClick={() => setProfileDrawerOpen(false)}>
+                    <Link href="/join" onClick={() => setProfileDrawerOpen(false)}>
                       <LogIn className="size-3.5" />
-                      <span>{t("লগইন", "Login")}</span>
+                      <span>{t("যোগ দিন", "Join")}</span>
                     </Link>
                   </Button>
                 )}
@@ -556,9 +556,9 @@ export function Sidebar() {
                   asChild
                   className="w-full justify-center gap-2 h-9 text-xs"
                 >
-                  <Link href="/login" onClick={() => setProfileDrawerOpen(false)}>
+                  <Link href="/join" onClick={() => setProfileDrawerOpen(false)}>
                     <LogIn className="size-3.5" />
-                    <span>{t("লগইন / রেজিস্টার করুন", "Sign in / Register")}</span>
+                    <span>{t("যোগ দিন / সাইন ইন", "Join / Sign in")}</span>
                   </Link>
                 </Button>
               )}

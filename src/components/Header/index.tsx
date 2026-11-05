@@ -606,9 +606,9 @@ export function Header() {
                 asChild
                 className="hidden md:inline-flex h-8 text-xs font-medium"
               >
-                <Link href="/login" className="flex items-center gap-1.5">
+                <Link href="/join" className="flex items-center gap-1.5">
                   <User className="size-4 text-muted-foreground" />
-                  <span>{lang === 'en' ? 'Login' : 'লগইন'}</span>
+                  <span>{lang === 'en' ? 'Join' : 'যোগ দিন'}</span>
                 </Link>
               </Button>
             )}
@@ -683,8 +683,8 @@ export function Header() {
                       asChild
                       className="w-full justify-center text-xs"
                     >
-                      <Link href="/login" onClick={() => setMobileOpen(false)}>
-                        {lang === 'en' ? 'Login' : 'লগইন'}
+                      <Link href="/join" onClick={() => setMobileOpen(false)}>
+                        {lang === 'en' ? 'Join' : 'যোগ দিন'}
                       </Link>
                     </Button>
                   )}

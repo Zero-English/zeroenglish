@@ -34,16 +34,13 @@ export function closeLoginRequired(): void {
  */
 export function requestLogin(): boolean {
   const auth = useAuthStore.getState();
-  if (auth.status === "google" || auth.status === "guest") return false;
+  if (auth.status === "google") return false;
   if (typeof window !== "undefined") {
     try {
       const raw = window.localStorage.getItem("auth-state");
       if (raw) {
         const saved = JSON.parse(raw) as { state?: { status?: string } };
-        if (
-          saved?.state?.status === "google" ||
-          saved?.state?.status === "guest"
-        ) {
+        if (saved?.state?.status === "google") {
           return false;
         }
       }
@@ -62,7 +59,7 @@ export function requestLogin(): boolean {
 
 /**
  * Blocks an action that specifically requires Google authentication
- * (guests and unauthenticated users are blocked) by opening the
+ * (unauthenticated users are blocked) by opening the
  * login-required drawer. Returns true when the action should be aborted.
  */
 export function requestGoogleLogin(options?: {
