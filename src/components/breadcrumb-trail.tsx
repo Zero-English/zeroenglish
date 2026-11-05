@@ -25,7 +25,7 @@ export function BreadcrumbTrail({
   const t = useT();
 
   // Logged-out readers page by URL, so the server-rendered crumb stays true.
-  // For guest/Google the page is client state, so follow the store once the
+  // For signed-in/Google users the page is client state, so follow the store once the
   // auth identity and the pagination store have both hydrated.
   const { status } = useAuthStatus();
   const pathname = usePathname();

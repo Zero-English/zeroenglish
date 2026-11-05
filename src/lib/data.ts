@@ -401,7 +401,12 @@ export const getLevelWordIdMap = cache(async (): Promise<Record<string, number[]
   return map;
 });
 
-export const getLevelStats = cache(async () => {
+export interface LevelStatItem {
+  level: LevelCode;
+  count: number;
+}
+
+export const getLevelStats = cache(async (): Promise<LevelStatItem[]> => {
   const grouped = await withPrismaRetry(() =>
     prisma.word.groupBy({
       by: ["level"],

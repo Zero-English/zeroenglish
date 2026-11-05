@@ -33,7 +33,7 @@ export default async function AdminLayout({
   const role = session?.user?.role;
 
   if (!session?.user?.id) {
-    redirect("/login");
+    redirect("/join");
   }
 
   if (role !== "admin") {

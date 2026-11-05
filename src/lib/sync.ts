@@ -315,7 +315,7 @@ async function reconcileType(
     const id = Number(rec.id);
     if (Number.isNaN(id)) continue;
     // Only contact the server for words it actually owns for this user (per
-    // the id set fetched this run). Stale/guest-migrated tombstones for words
+    // the id set fetched this run). Stale/migrated tombstones for words
     // the server has never seen can simply be dropped locally — firing a
     // DELETE for them would only produce a 404.
     if (!dbIds.has(id)) {

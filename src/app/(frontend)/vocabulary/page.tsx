@@ -18,11 +18,6 @@ export default async function VocabularyPage() {
 
   return (
     <>
-      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-0">
-        <Breadcrumb
-          items={[{ nameBn: "শব্দভাণ্ডার", nameEn: "Vocabulary", href: "/vocabulary" }]}
-        />
-      </div>
       <VocabularyClient serverMode={true} facets={facets} />
     </>
   );

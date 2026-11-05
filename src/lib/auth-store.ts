@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { createLocalStorage } from "./state-storage";
-import { adoptAnonDataInto, adoptAnonDataIntoGuest } from "./db";
+import { adoptAnonDataInto } from "./db";
 
-export type AuthStatus = "none" | "guest" | "google";
+export type AuthStatus = "none" | "google";
 
 export const ANON_PATH = "anon";
-export const GUEST_PATH = "guest";
 export const GOOGLE_SCOPE_PREFIX = "google:";
 const LEGACY_GOOGLE_PATH_PREFIX = "google|";
 
@@ -36,7 +35,7 @@ export function googlePathFromSession(
 }
 
 export interface AuthPersistedProfile {
-  status?: "guest" | "google";
+  status?: "google";
   path?: string;
   userName?: string | null;
   userEmail?: string | null;
@@ -49,7 +48,6 @@ interface AuthState {
   userName: string | null;
   userEmail: string | null;
   userId: number | null;
-  continueAsGuest: () => void;
   setGoogleAuth: (
     name: string | null,
     email: string | null,
@@ -66,10 +64,6 @@ export const useAuthStore = create<AuthState>()(
       userName: null,
       userEmail: null,
       userId: null,
-      continueAsGuest: () => {
-        adoptAnonDataIntoGuest();
-        set({ status: "guest", path: GUEST_PATH, userName: "Guest", userEmail: null, userId: null });
-      },
       setGoogleAuth: (name, email, id) => {
         const path = googlePathFromSession(id, email);
         const ns = path.slice(GOOGLE_SCOPE_PREFIX.length);
@@ -91,7 +85,7 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => {
         if (state.status === "none") return {};
         return {
-          status: state.status as "guest" | "google",
+          status: "google",
           path: state.path,
           userName: state.userName,
           userEmail: state.userEmail,
@@ -100,16 +94,16 @@ export const useAuthStore = create<AuthState>()(
       },
       merge: (persisted, current) => {
         const saved = persisted as AuthPersistedProfile | undefined;
-        if (!saved || (saved.status !== "guest" && saved.status !== "google")) return current;
+        // Legacy persisted "guest" identities are discarded: guest mode no
+        // longer exists, so those sessions simply become logged out.
+        if (!saved || saved.status !== "google") return current;
         const path = normalizeGooglePath(
           saved.path ??
-            (saved.status === "google"
-              ? googleScope(`${saved.userId ?? saved.userEmail ?? "user"}`)
-              : GUEST_PATH)
+            googleScope(`${saved.userId ?? saved.userEmail ?? "user"}`)
         );
         return {
           ...current,
-          status: saved.status,
+          status: "google",
           path,
           userName: saved.userName ?? null,
           userEmail: saved.userEmail ?? null,
@@ -148,14 +142,13 @@ export function useAuthHydrated(): boolean {
 
 /**
  * Stable, user-scoped namespace used to isolate localStorage data between
- * identities. Uses the stable numeric DB userId for authenticated users and
- * fixed labels for guest/anon. Never uses the email address.
+ * identities. Uses the stable numeric DB userId for authenticated users and a
+ * fixed label for anonymous visitors. Never uses the email address.
  */
 export function identityNamespace(): string {
   const s = useAuthStore.getState();
   if (s.status === "google") {
     return s.userId != null && s.userId > 0 ? String(s.userId) : "user";
   }
-  if (s.status === "guest") return "guest";
   return "anon";
 }

@@ -187,11 +187,11 @@ export function ProfileSkillsCard({
   const [filter, setFilter] = useState<"all" | "active">("all");
   const [, startTransition] = useTransition();
 
-  // Offline/guest fallback support for vocabulary
+  // Offline/local fallback support for vocabulary
   const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
   const { stillLearningIds, loaded: stillLoaded } = useStillLearningWords();
-  const guestLearnedCount = learnedIds?.size ?? 0;
-  const guestStillLearningCount = stillLearningIds?.size ?? 0;
+  const localLearnedCount = learnedIds?.size ?? 0;
+  const localStillLearningCount = stillLearningIds?.size ?? 0;
 
   const fetchProfile = useCallback(async () => {
     try {
@@ -201,7 +201,7 @@ export function ProfileSkillsCard({
       const res = await fetch(url);
       if (!res.ok) {
         if (res.status === 401 && !userId) {
-          // Unauthenticated guest user
+          // Unauthenticated user
           setProfile(null);
           setLoading(false);
           return;
@@ -262,31 +262,31 @@ export function ProfileSkillsCard({
     };
   }, [userId, initialProfile]);
 
-  // Construct guest profile if unauthenticated
+  // Construct local profile if unauthenticated
   const resolvedProfile: UserSkillsProfile | null = profile ?? (
     (!userId && !isPublic && learnedLoaded && stillLoaded)
       ? {
-          overallScore: (guestLearnedCount + guestStillLearningCount > 0)
-            ? Math.round((guestLearnedCount / (guestLearnedCount + guestStillLearningCount)) * 100)
+          overallScore: (localLearnedCount + localStillLearningCount > 0)
+            ? Math.round((localLearnedCount / (localLearnedCount + localStillLearningCount)) * 100)
             : 0,
           levelTitle: "Beginner (A1)",
           levelTitleBn: "শিক্ষানবিস স্তর (A1)",
           totalQuestionsAttempted: 0,
-          totalWordsMastered: guestLearnedCount,
+          totalWordsMastered: localLearnedCount,
           skills: [
             {
               id: "vocabulary",
               name: "Vocabulary",
               nameBn: "শব্দভাণ্ডার",
-              percentage: (guestLearnedCount + guestStillLearningCount > 0)
-                ? Math.round((guestLearnedCount / (guestLearnedCount + guestStillLearningCount)) * 100)
-                : (guestLearnedCount > 0 ? Math.min(100, Math.round((guestLearnedCount / 500) * 100)) : 0),
-              visualBar: "█".repeat(Math.min(10, Math.round(((guestLearnedCount / Math.max(1, guestLearnedCount + guestStillLearningCount)) * 10)))) +
-                "░".repeat(Math.max(0, 10 - Math.min(10, Math.round(((guestLearnedCount / Math.max(1, guestLearnedCount + guestStillLearningCount)) * 10))))),
-              correctCount: guestLearnedCount,
-              totalCount: guestLearnedCount + guestStillLearningCount || 500,
+              percentage: (localLearnedCount + localStillLearningCount > 0)
+                ? Math.round((localLearnedCount / (localLearnedCount + localStillLearningCount)) * 100)
+                : (localLearnedCount > 0 ? Math.min(100, Math.round((localLearnedCount / 500) * 100)) : 0),
+              visualBar: "█".repeat(Math.min(10, Math.round(((localLearnedCount / Math.max(1, localLearnedCount + localStillLearningCount)) * 10)))) +
+                "░".repeat(Math.max(0, 10 - Math.min(10, Math.round(((localLearnedCount / Math.max(1, localLearnedCount + localStillLearningCount)) * 10))))),
+              correctCount: localLearnedCount,
+              totalCount: localLearnedCount + localStillLearningCount || 500,
               unit: "words",
-              status: guestLearnedCount > 0 ? "active" : "untested",
+              status: localLearnedCount > 0 ? "active" : "untested",
               icon: "BookOpen",
               color: "emerald",
               practiceUrl: "/dictionary",

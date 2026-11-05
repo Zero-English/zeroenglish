@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getLevelStats } from "@/lib/data";
-import { HomeOrDashboard } from "@/components/home-or-dashboard";
+import { HomeContent } from "@/components/home-content";
 import { getPublishedBlogsByPage } from "@/services/blog.service";
 import { getLeaderboard } from "@/services/user.service";
 import { SITE_URL, SITE_OG_IMAGE } from "@/lib/site-config";
@@ -51,5 +51,5 @@ export default async function Home() {
   const leaderboardResult = await getLeaderboard();
   const leaderboard = leaderboardResult.success && leaderboardResult.data ? leaderboardResult.data : [];
 
-  return <HomeOrDashboard levelStats={levelStats} posts={posts} leaderboard={leaderboard} />;
+  return <HomeContent levelStats={levelStats} posts={posts} leaderboard={leaderboard} />;
 }

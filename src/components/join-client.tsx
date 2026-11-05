@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useAuthStore, useAuthHydrated } from "@/lib/auth-store";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { UserRound, GraduationCap } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import { Classic } from "@/components/classic";
 import { useT } from "@/components/language-provider";
@@ -39,8 +38,7 @@ function GoogleIcon() {
     );
 }
 
-export function LoginClient() {
-  const continueAsGuest = useAuthStore((s) => s.continueAsGuest);
+export function JoinClient() {
   const status = useAuthStore((s) => s.status);
   const setGoogleAuth = useAuthStore((s) => s.setGoogleAuth);
   const hydrated = useAuthHydrated();
@@ -49,26 +47,19 @@ export function LoginClient() {
   const greeted = useRef(false);
   const sessionLoading = sessionStatus === "loading";
   const t = useT();
-  const accessDenied =
-    typeof window !== "undefined" &&
-    new URLSearchParams(window.location.search).get("error") === "AccessDenied";
 
   useEffect(() => {
     if (!hydrated || sessionLoading) return;
-    if (accessDenied) {
-      toast.error(t("এই Google অ্যাকাউন্টটি ইতিমধ্যে বিদ্যমান। অতিথি ডেটা এই অ্যাকাউন্টে সিঙ্ক করা হয়নি।", "This Google account already exists. Guest data was not synced to it."));
-      return;
-    }
     if (session?.user && !greeted.current) {
       greeted.current = true;
       setGoogleAuth(session.user.name ?? null, session.user.email ?? null, session.user.id ?? null);
       toast.success(t(`ফিরে এসে স্বাগতম, ${session.user.name ?? "আপনি"}!`, `Welcome back, ${session.user.name ?? "there"}!`));
       return;
     }
-    if (status === "guest" || (status !== "none" && session?.user)) {
+    if (status === "google" && session?.user) {
       router.replace("/profile");
     }
-  }, [hydrated, sessionLoading, session, status, router, setGoogleAuth, t, greeted, accessDenied]);
+  }, [hydrated, sessionLoading, session, status, router, setGoogleAuth, t, greeted]);
 
     if (!hydrated || sessionLoading) {
         return (
@@ -80,11 +71,6 @@ export function LoginClient() {
 
   const handleGoogle = () => {
     void signInGoogle("/profile");
-  };
-
-  const handleGuest = () => {
-    continueAsGuest();
-    toast.success(t("অতিথি হিসেবে চলছে", "Continuing as Guest"));
   };
 
     return (
@@ -103,67 +89,21 @@ export function LoginClient() {
                                 Zero English
                             </h1>
                             <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
-                                {t("আপনার শেখার অগ্রগতি ট্র্যাক করতে সাইন ইন করুন।", "Sign in to track your learning progress.")}
+                                {t("অ্যাকাউন্ট তৈরি করুন অথবা সাইন ইন করুন।", "Create an account or sign in.")}
                             </p>
                         </div>
 
-                        <Tabs defaultValue="login">
-                            <TabsList className="grid w-full grid-cols-2">
-                                <TabsTrigger value="login">{t("লগইন", "Login")}</TabsTrigger>
-                                <TabsTrigger value="register">
-                                    {t("রেজিস্টার", "Register")}
-                                </TabsTrigger>
-                            </TabsList>
-
-                            <TabsContent value="login" className="mt-4">
-                                <Button
-                                    variant="outline"
-                                    className="h-11 w-full gap-2.5 text-sm font-medium"
-                                    onClick={handleGoogle}
-                                >
-                                    <GoogleIcon />
-                                    {t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
-                                </Button>
-                            </TabsContent>
-
-                            <TabsContent value="register" className="mt-4">
-                                <Button
-                                    variant="outline"
-                                    className="h-11 w-full gap-2.5 text-sm font-medium"
-                                    onClick={() =>
-                                        void signInGoogle("/profile")
-                                    }
-                                >
-                                    <GoogleIcon />
-                                    {t("Google দিয়ে সাইন আপ করুন", "Sign up with Google")}
-                                </Button>
-                            </TabsContent>
-                        </Tabs>
-
-                        <div className="relative my-6">
-                            <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-zinc-200 dark:border-zinc-800" />
-                            </div>
-                            <div className="relative flex justify-center text-xs">
-                                <span className="bg-white/90 px-3 text-zinc-400 dark:bg-zinc-950/80">
-                                    {t("বা", "or")}
-                                </span>
-                            </div>
-                        </div>
-
                         <Button
-                            variant="secondary"
-                            className="h-11 w-full gap-2 text-sm font-medium"
-                            onClick={handleGuest}
+                            variant="outline"
+                            className="h-11 w-full gap-2.5 text-sm font-medium"
+                            onClick={handleGoogle}
                         >
-                            <UserRound className="h-4 w-4" />
-                            {t("অতিথি হিসেবে চালিয়ে যান", "Continue as Guest")}
+                            <GoogleIcon />
+                            {t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
                         </Button>
 
                         <p className="mt-4 text-center text-xs leading-relaxed text-zinc-400 dark:text-zinc-500">
-                            {t("অ্যাপটি এক্সপ্লোর করতে অতিথি হিসেবে চালিয়ে যান।", "Continue as guest to explore the app.")}
-                            <br />
-                            {t("আপনি পরে Google অ্যাকাউন্ট যুক্ত করতে পারবেন।", "You can bind a Google account later.")}
+                            {t("আপনার অগ্রগতি সেভ করতে এবং ডিভাইস জুড়ে সিঙ্ক করতে Google দিয়ে সাইন ইন করুন।", "Sign in with Google to save your progress and sync it across devices.")}
                         </p>
                     </div>
                 </div>

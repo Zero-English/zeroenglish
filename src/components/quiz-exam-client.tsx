@@ -16,7 +16,6 @@ import {
   GraduationCap,
   Trophy,
   ArrowLeft,
-  Link2,
   LogIn,
   type LucideIcon,
 } from "lucide-react";
@@ -471,7 +470,7 @@ function ExamListView() {
   const [exams, setExams] = useState<QuizExamPublicItem[] | null>(null);
   const [loadingId, setLoadingId] = useState<number | null>(null);
   const { status, hydrated } = useAuthStatus();
-  const [authPrompt, setAuthPrompt] = useState<"login" | "bind" | null>(null);
+  const [authPrompt, setAuthPrompt] = useState<"login" | null>(null);
   const [authBusy, setAuthBusy] = useState(false);
 
   useEffect(() => {
@@ -501,27 +500,12 @@ function ExamListView() {
     };
   }, []);
 
-  const promptOpen =
-    authPrompt !== null && (status === "none" || status === "guest");
+  const promptOpen = authPrompt !== null && status === "none";
 
   const handleAuthAction = async () => {
     if (authBusy) return;
     setAuthBusy(true);
     try {
-      if (authPrompt === "bind") {
-        const armRes = await fetch("/api/v1/auth/bind/begin", {
-          method: "POST",
-        });
-        if (!armRes.ok) {
-          toast.error(
-            t(
-              "সাইন-ইন শুরু করা যায়নি। আবার চেষ্টা করুন।",
-              "Could not start sign-in. Please try again."
-            )
-          );
-          return;
-        }
-      }
       const { signIn } = await import("next-auth/react");
       await signIn("google", {
         redirect: false,
@@ -539,10 +523,6 @@ function ExamListView() {
   const handleStart = async (exam: QuizExamPublicItem) => {
     if (hydrated && status === "none") {
       setAuthPrompt("login");
-      return;
-    }
-    if (hydrated && status === "guest") {
-      setAuthPrompt("bind");
       return;
     }
     if (isOffline()) {
@@ -674,28 +654,17 @@ function ExamListView() {
             <div className="px-6 pb-8 pt-2">
               <div className="mb-5 flex justify-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-rose-500 to-pink-500 text-white shadow-lg shadow-orange-500/30">
-                  {authPrompt === "bind" ? (
-                    <Link2 className="h-6 w-6" />
-                  ) : (
-                    <LogIn className="h-6 w-6" />
-                  )}
+                  <LogIn className="h-6 w-6" />
                 </div>
               </div>
               <DrawerTitle className="text-center text-base font-bold sm:text-lg">
-                {authPrompt === "bind"
-                  ? t("অতিথি অ্যাকাউন্ট যুক্ত করুন", "Bind your guest account")
-                  : t("পরীক্ষা দেওয়ার জন্য সাইন-ইন দরকার", "Sign in to take the exam")}
+                {t("পরীক্ষা দেওয়ার জন্য সাইন-ইন দরকার", "Sign in to take the exam")}
               </DrawerTitle>
               <DrawerDescription className="mt-1.5 text-center text-xs sm:text-sm leading-relaxed">
-                {authPrompt === "bind"
-                  ? t(
-                      "পরীক্ষায় অংশ নেওয়ার আগে আপনার Google অ্যাকাউন্ট যুক্ত করতে হবে। আপনার অতিথি অগ্রগতি স্বয়ংক্রিয়ভাবে নতুন অ্যাকাউন্টে সিঙ্ক হবে।",
-                      "You need to link a Google account before taking the exam. Your guest progress will be synced to the new account automatically."
-                    )
-                  : t(
-                      "পরীক্ষায় অংশ নেওয়ার জন্য একটি Google অ্যাকাউন্ট দিয়ে সাইন-ইন করতে হবে।",
-                      "You need to sign in with a Google account to take the exam."
-                    )}
+                {t(
+                  "পরীক্ষায় অংশ নেওয়ার জন্য একটি Google অ্যাকাউন্ট দিয়ে সাইন-ইন করতে হবে।",
+                  "You need to sign in with a Google account to take the exam."
+                )}
               </DrawerDescription>
               <div className="mt-5 space-y-2">
                 <Button
@@ -709,9 +678,7 @@ function ExamListView() {
                   ) : (
                     <GoogleIcon />
                   )}
-                  {authPrompt === "bind"
-                    ? t("Google অ্যাকাউন্ট যুক্ত করুন", "Link Google account")
-                    : t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
+                  {t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
                 </Button>
                 <DrawerClose asChild>
                   <Button

@@ -80,7 +80,7 @@ export function ProfileGrammarPanel({
   const [loading, setLoading] = useState(true);
   const [isPending, startTransition] = useTransition();
 
-  // Load rules from API (DB for authenticated, batch resolution for guest)
+  // Load rules from API (DB for authenticated, batch resolution for anonymous)
   useEffect(() => {
     let isMounted = true;
 
@@ -100,7 +100,7 @@ export function ProfileGrammarPanel({
             syncFromServer(dbCompletedSlugs, dbBookmarkedSlugs);
           }
         } else {
-          // Unauthenticated/guest: resolve local progress rule slugs via POST batch
+          // Unauthenticated: resolve local progress rule slugs via POST batch
           const localProgress = typeof window !== "undefined"
             ? (() => {
                 try {

@@ -1,4 +1,3 @@
-import { AsyncLocalStorage } from "node:async_hooks";
 import type { Adapter, AdapterUser } from "next-auth/adapters";
 import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
@@ -6,56 +5,6 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import logger from "@/utils/logger";
 import prisma from "@/utils/prisma";
 import "dotenv/config";
-
-// Request-scoped bind intent. Armed by the NextAuth route handler (via the
-// AsyncLocalStorage context) just before it runs the OAuth callback when a
-// guest clicked "Continue with Google" to bind an account. The signIn
-// callback reads it to reject Google accounts that already exist in the
-// database (only brand-new accounts may be bound, and they receive the
-// guest's synced localStorage data). Using AsyncLocalStorage keeps the intent
-// isolated per-request so concurrent logins can never observe each other's
-// state.
-export const bindIntentStore = new AsyncLocalStorage<{ pending: boolean }>();
-
-export function markBindIntentPending(): void {
-    const store = bindIntentStore.getStore();
-    if (store) store.pending = true;
-}
-
-export function clearBindIntent(): void {
-    const store = bindIntentStore.getStore();
-    if (store) store.pending = false;
-}
-
-async function accountAlreadyExists(user: {
-    id?: number | string | null;
-    email?: string | null;
-}, account?: {
-    provider?: string | null;
-    providerAccountId?: string | null;
-} | null): Promise<boolean> {
-    const email = user?.email?.toLowerCase().trim();
-    if (email) {
-        const found = await prisma.user.findUnique({
-            where: { email },
-            select: { id: true },
-        });
-        if (found) return true;
-    }
-    if (account?.provider && account.providerAccountId) {
-        const linked = await prisma.account.findUnique({
-            where: {
-                provider_providerAccountId: {
-                    provider: account.provider,
-                    providerAccountId: account.providerAccountId,
-                },
-            },
-            select: { userId: true },
-        });
-        if (linked) return true;
-    }
-    return false;
-}
 
 const baseAdapter = PrismaAdapter(prisma);
 
@@ -142,7 +91,7 @@ export const authOptions: NextAuthOptions = {
     adapter,
     secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
     session: { strategy: "jwt" },
-    pages: { error: "/login" },
+    pages: { error: "/join" },
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID || "",
@@ -150,24 +99,7 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        async signIn({ user, account }) {
-            const bind = bindIntentStore.getStore();
-            if (bind?.pending) {
-                let exists = true;
-                try {
-                    exists = await accountAlreadyExists(user, account);
-                } catch (error) {
-                    logger.error("Bind intent existence check failed — rejecting", { error });
-                }
-                logger.info("Bind intent sign-in", { email: user?.email, exists });
-                if (exists) {
-                    logger.warn(
-                        "Bind rejected: account already exists — guest data will NOT be synced",
-                        { email: user?.email, provider: account?.provider }
-                    );
-                    return false;
-                }
-            }
+        async signIn({ user }) {
             logger.info("Logged in successfully", { userId: user?.id });
             return true;
         },

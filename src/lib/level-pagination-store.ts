@@ -26,9 +26,9 @@ const DEFAULT_ENTRY: LevelPageEntry = {
 };
 
 /**
- * Identity-scoped, so a Guest sitting at A1 page 9 and then signing in as
- * Google starts from the Google-scoped entry instead of inheriting the
- * guest's page.
+ * Identity-scoped, so an anonymous visitor sitting at A1 page 9 and then
+ * signing in with Google starts from the Google-scoped entry instead of
+ * inheriting the anonymous page.
  */
 const useLevelPaginationStore = create<LevelPaginationState>()(
   persist(

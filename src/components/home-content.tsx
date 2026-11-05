@@ -37,7 +37,7 @@ import { useT } from "@/components/language-provider";
 import { LatestPostsHome, type LatestPost } from "@/components/news/latest-posts-home";
 import type { LeaderboardRow } from "@/components/leaderboard";
 import { isLevelLive, VALID_LEVELS } from "@/lib/level-copy";
-import type { LevelStatItem } from "@/components/home-or-dashboard";
+import type { LevelStatItem } from "@/lib/data";
 import { LenisProvider } from "@/components/lenis-provider";
 import {
   ScrollReveal,

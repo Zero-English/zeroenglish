@@ -11,7 +11,6 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 import { useT } from "@/components/language-provider";
-import { useAuthStore } from "@/lib/auth-store";
 import {
   useLoginRequiredStore,
   closeLoginRequired,
@@ -47,7 +46,6 @@ export function LoginRequiredDrawer() {
   const googleOnly = useLoginRequiredStore((s) => s.googleOnly);
   const title = useLoginRequiredStore((s) => s.title);
   const description = useLoginRequiredStore((s) => s.description);
-  const continueAsGuest = useAuthStore((s) => s.continueAsGuest);
   const pathname = usePathname();
   const t = useT();
   const [busy, setBusy] = useState(false);
@@ -67,11 +65,6 @@ export function LoginRequiredDrawer() {
     } finally {
       setBusy(false);
     }
-  };
-
-  const handleGuest = () => {
-    closeLoginRequired();
-    continueAsGuest();
   };
 
   return (
@@ -112,17 +105,6 @@ export function LoginRequiredDrawer() {
               {busy ? <Classic className="h-4 w-4" /> : <GoogleIcon />}
               {t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
             </Button>
-            {!googleOnly && (
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full cursor-pointer"
-                onClick={handleGuest}
-                disabled={busy}
-              >
-                {t("অতিথি হিসেবে চালিয়ে যান", "Continue as Guest")}
-              </Button>
-            )}
             <DrawerClose asChild>
               <Button size="lg" variant="ghost" className="w-full text-muted-foreground cursor-pointer" disabled={busy}>
                 {t("পরে", "Maybe later")}

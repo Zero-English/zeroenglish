@@ -2,8 +2,6 @@ import { Metadata } from "next";
 import { getLevelStats, getLevelWordIdMap } from "@/lib/data";
 import { ProfileTabs } from "@/components/profile-words";
 import { ProfileGuard } from "@/components/profile-guard";
-import { ProfileAuthBanner } from "@/components/profile-auth-banner";
-import { ProfileHeader } from "@/components/profile-header";
 import { ProfileSyncTrigger } from "@/components/profile-sync-trigger";
 
 export const metadata: Metadata = {
@@ -27,7 +25,6 @@ export default async function ProfilePage() {
           {/* <ProfileHeader /> */}
 
           <ProfileGuard>
-            <ProfileAuthBanner />
             <ProfileTabs
               levelStats={levelStats}
               totalWords={totalWords}

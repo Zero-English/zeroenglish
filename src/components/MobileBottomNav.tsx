@@ -22,6 +22,7 @@ import {
   ChevronRight,
   Sparkles,
   ExternalLink,
+  LayoutDashboard,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -92,7 +93,13 @@ export function MobileBottomNav() {
   const vocabularyHref = level ? `/vocabulary/${level.toLowerCase()}` : '/vocabulary'
 
   const navLinks = [
-    { href: '/', label: t('হোম', 'Home'), icon: Home },
+    isLoggedIn
+      ? {
+          href: '/dashboard',
+          label: t('ড্যাশবোর্ড', 'Dashboard'),
+          icon: LayoutDashboard,
+        }
+      : { href: '/', label: t('হোম', 'Home'), icon: Home },
     { href: vocabularyHref, label: t('শব্দভাণ্ডার', 'Vocabulary'), icon: LibraryBig },
     { href: '/grammar', label: t('গ্রামার', 'Grammar'), icon: GraduationCap },
     { href: '/quiz', label: t('কুইজ', 'Quiz'), icon: BadgeQuestionMark },
@@ -130,7 +137,7 @@ export function MobileBottomNav() {
 
   if (hidden) return null
 
-  const isProfileActive = pathname === '/profile' || pathname === '/login' || drawerOpen
+  const isProfileActive = pathname === '/profile' || pathname === '/join' || drawerOpen
 
   return (
     <>
@@ -296,9 +303,9 @@ export function MobileBottomNav() {
                 </Button>
               ) : (
                 <Button size="sm" asChild className="h-7 text-xs gap-1">
-                  <Link href="/login" onClick={() => setDrawerOpen(false)}>
+                  <Link href="/join" onClick={() => setDrawerOpen(false)}>
                     <LogIn className="size-3.5" />
-                    <span>{t('লগইন', 'Login')}</span>
+                    <span>{t('যোগ দিন', 'Join')}</span>
                   </Link>
                 </Button>
               )}
@@ -532,9 +539,9 @@ export function MobileBottomNav() {
                 asChild
                 className="w-full justify-center gap-2 h-9 text-xs"
               >
-                <Link href="/login" onClick={() => setDrawerOpen(false)}>
+                <Link href="/join" onClick={() => setDrawerOpen(false)}>
                   <LogIn className="size-3.5" />
-                  <span>{t('লগইন / রেজিস্টার করুন', 'Sign in / Register')}</span>
+                  <span>{t('যোগ দিন / সাইন ইন', 'Join / Sign in')}</span>
                 </Link>
               </Button>
             )}

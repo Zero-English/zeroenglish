@@ -9,10 +9,10 @@ import { useAuthStore, useAuthHydrated } from "@/lib/auth-store";
 /**
  * Protects the profile screen:
  * - tears down a stale Google identity when the NextAuth session is gone
- * - redirects a truly logged-out visitor to /login
+ * - redirects a truly logged-out visitor to /join
  *
- * Identity adoption (login and guest-bind) is handled globally by
- * `SessionAdopter`, so switching accounts works from any page.
+ * Identity adoption (login) is handled globally by `SessionAdopter`, so
+ * switching accounts works from any page.
  */
 export function ProfileGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -31,12 +31,12 @@ export function ProfileGuard({ children }: { children: React.ReactNode }) {
     // identity down and leave before any protected fetch fires.
     if (status === "google" && sessionMissing) {
       logout();
-      router.replace("/login");
+      router.replace("/join");
       return;
     }
 
     if (status === "none" && !session?.user) {
-      router.replace("/login");
+      router.replace("/join");
     }
   }, [hydrated, sessionLoading, sessionMissing, status, session, router, logout]);
 

@@ -22,14 +22,6 @@ export const metadata: Metadata = {
 export default function SearchPage() {
   return (
     <>
-      <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-0">
-        <Breadcrumb
-          items={[
-            { nameBn: "শব্দভাণ্ডার", nameEn: "Vocabulary", href: "/vocabulary" },
-            { nameBn: "অনুসন্ধান", nameEn: "Search", href: "/search" },
-          ]}
-        />
-      </div>
       <SearchClient />
     </>
   );

@@ -26,7 +26,7 @@ export function createLocalStorage<T>(): PersistStorage<T> {
 
 /**
  * Identity-scoped persistence storage. All data for the current identity
- * (Guest -> "zero_english:guest", User 5 -> "zero_english:5") lives under a
+ * (Anonymous -> "zero_english:anon", User 5 -> "zero_english:5") lives under a
  * single localStorage key, so switching users never leaks data.
  */
 export function createScopedLocalStorage<T>(

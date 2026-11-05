@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Mail, ArrowRight } from "lucide-react";
 import { useT } from "@/components/language-provider";
 import { Separator } from "@/components/ui/separator";
@@ -20,9 +21,14 @@ interface FooterColumn {
   links: FooterLink[];
 }
 
+// The footer is only part of the marketing surface. App pages keep the
+// bottom area free for their own navigation and content.
+const FOOTER_ROUTES = new Set(["/", "/about"]);
+
 export default function FFooter() {
   const currentYear = new Date().getFullYear();
   const t = useT();
+  const pathname = usePathname();
   const hidden = useQuizChrome((s) => s.hidden);
 
   const footerColumns: FooterColumn[] = [
@@ -75,7 +81,7 @@ export default function FFooter() {
     { icon: FacebookIcon, href: "https://facebook.com/zeroenglishorg", label: "Facebook" },
   ];
 
-  if (hidden) return null;
+  if (hidden || !FOOTER_ROUTES.has(pathname)) return null;
 
   return (
     <footer className="border-t border-border bg-card/40 text-muted-foreground mt-auto">

@@ -14,6 +14,7 @@ import {
   SquarePen,
   Trophy,
   GraduationCap,
+  LayoutDashboard,
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -555,6 +556,12 @@ export function Header() {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="cursor-pointer gap-2">
+                      <LayoutDashboard className="size-3.5 text-muted-foreground" />
+                      <span>{lang === 'en' ? 'Dashboard' : 'ড্যাশবোর্ড'}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/profile" className="cursor-pointer gap-2">
                       <User className="size-3.5 text-muted-foreground" />
                       <span>{lang === 'en' ? 'My Profile & Words' : 'প্রোফাইল ও শব্দতালিকা'}</span>
@@ -606,9 +613,9 @@ export function Header() {
                 asChild
                 className="hidden md:inline-flex h-8 text-xs font-medium"
               >
-                <Link href="/login" className="flex items-center gap-1.5">
+                <Link href="/join" className="flex items-center gap-1.5">
                   <User className="size-4 text-muted-foreground" />
-                  <span>{lang === 'en' ? 'Login' : 'লগইন'}</span>
+                  <span>{lang === 'en' ? 'Join' : 'যোগ দিন'}</span>
                 </Link>
               </Button>
             )}
@@ -665,17 +672,27 @@ export function Header() {
 
                 <div className="border-t border-sidebar-border p-3 space-y-2">
                   {isLoggedIn ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMobileOpen(false)
-                        handleSignOut()
-                      }}
-                      className="flex items-center w-full px-3 py-2 rounded-md text-xs font-medium text-sidebar-foreground/70 hover:text-destructive hover:bg-destructive/10 transition-colors gap-2.5"
-                    >
-                      <LogOut className="size-4 shrink-0" />
-                      <span>{lang === 'en' ? 'Log out' : 'লগ আউট'}</span>
-                    </button>
+                    <>
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center w-full px-3 py-2 rounded-md text-xs font-medium text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/60 transition-colors gap-2.5"
+                      >
+                        <LayoutDashboard className="size-4 shrink-0" />
+                        <span>{lang === 'en' ? 'Dashboard' : 'ড্যাশবোর্ড'}</span>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMobileOpen(false)
+                          handleSignOut()
+                        }}
+                        className="flex items-center w-full px-3 py-2 rounded-md text-xs font-medium text-sidebar-foreground/70 hover:text-destructive hover:bg-destructive/10 transition-colors gap-2.5"
+                      >
+                        <LogOut className="size-4 shrink-0" />
+                        <span>{lang === 'en' ? 'Log out' : 'লগ আউট'}</span>
+                      </button>
+                    </>
                   ) : (
                     <Button
                       variant="default"
@@ -683,8 +700,8 @@ export function Header() {
                       asChild
                       className="w-full justify-center text-xs"
                     >
-                      <Link href="/login" onClick={() => setMobileOpen(false)}>
-                        {lang === 'en' ? 'Login' : 'লগইন'}
+                      <Link href="/join" onClick={() => setMobileOpen(false)}>
+                        {lang === 'en' ? 'Join' : 'যোগ দিন'}
                       </Link>
                     </Button>
                   )}

@@ -122,7 +122,7 @@ db.version(2)
   });
 
 function scopeFromNamespace(ns: string): string {
-  if (ns === "guest" || ns === "anon") return ns;
+  if (ns === "anon") return ns;
   return `${GOOGLE_SCOPE_PREFIX}${ns}`;
 }
 

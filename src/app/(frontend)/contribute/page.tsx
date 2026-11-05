@@ -19,7 +19,7 @@ export default async function ContributePage() {
   const role = session?.user?.role;
 
   if (!session?.user?.id) {
-    redirect("/login");
+    redirect("/join");
   }
 
   if (role !== "admin" && role !== "contributor") {
