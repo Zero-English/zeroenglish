@@ -70,17 +70,14 @@ export function LevelHero({
   const t = useT();
 
   const learnedIdsSet = useMemo(() => new Set(levelWordIds), [levelWordIds]);
-  const learned = useMemo(
-    () => {
-      if (!loaded) return 0;
-      let count = 0;
-      for (const id of learnedIds) {
-        if (learnedIdsSet.has(Number(id))) count++;
-      }
-      return count;
-    },
-    [learnedIds, learnedIdsSet, loaded]
-  );
+  const learned = useMemo(() => {
+    if (!loaded) return 0;
+    let count = 0;
+    for (const id of learnedIds) {
+      if (learnedIdsSet.has(Number(id))) count++;
+    }
+    return count;
+  }, [learnedIds, learnedIdsSet, loaded]);
 
   const pct = totalCount > 0 ? Math.round((learned / totalCount) * 100) : 0;
   const remaining = Math.max(0, totalCount - learned);
@@ -93,7 +90,10 @@ export function LevelHero({
           <StaggerItem>
             <div className={cn(CARD, "overflow-hidden")}>
               <span
-                className={cn("absolute inset-x-0 top-0 h-1 bg-gradient-to-r", gradient)}
+                className={cn(
+                  "absolute inset-x-0 top-0 h-1 bg-gradient-to-r",
+                  gradient,
+                )}
                 aria-hidden
               />
 
@@ -104,7 +104,7 @@ export function LevelHero({
                       "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold",
                       text,
                       border,
-                      bg
+                      bg,
                     )}
                   >
                     {level}
@@ -116,22 +116,29 @@ export function LevelHero({
                 <h1 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
                   {t(
                     `${level} ইংরেজি শব্দভাণ্ডার`,
-                    `${level} English Vocabulary`
+                    `${level} English Vocabulary`,
                   )}
-                  <span className="mx-2 text-zinc-300 dark:text-zinc-600">·</span>
+                  <span className="mx-2 text-zinc-300 dark:text-zinc-600">
+                    ·
+                  </span>
                   {t(labelBn, label)}
                 </h1>
                 <p className="mt-1 text-sm font-medium text-zinc-500 dark:text-zinc-400">
                   {t(
                     `${count}টি শব্দ, প্রতিটির বাংলা অর্থ ও উদাহরণ বাক্যসহ`,
-                    `${count} words with Bangla meanings and example sentences`
+                    `${count} words with Bangla meanings and example sentences`,
                   )}
                 </p>
               </div>
 
               <div className="flex items-center gap-4 border-y border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4">
                 <div className="relative h-14 w-14 shrink-0">
-                  <ProgressRing pct={loaded ? pct : 0} size={56} stroke={5.5} level={level} />
+                  <ProgressRing
+                    pct={loaded ? pct : 0}
+                    size={56}
+                    stroke={5.5}
+                    level={level}
+                  />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-xs font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
                       {loaded ? `${pct}%` : "…"}
@@ -146,7 +153,10 @@ export function LevelHero({
                     {loaded ? (
                       <>
                         {learned}
-                        <span className="font-normal text-zinc-400"> / {totalCount}</span>
+                        <span className="font-normal text-zinc-400">
+                          {" "}
+                          / {totalCount}
+                        </span>
                       </>
                     ) : (
                       "…"
@@ -199,7 +209,7 @@ export function LevelHero({
 
               {/* Unique copy per level. Without this all six pages ship the
                   same hero and read as one thin template. */}
-              <div className="border-t border-black/[0.06] px-5 py-5 dark:border-white/[0.08] sm:px-6">
+              {/* <div className="border-t border-black/[0.06] px-5 py-5 dark:border-white/[0.08] sm:px-6">
                 <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
                   {t(introBn, introEn)}
                 </p>
@@ -236,7 +246,7 @@ export function LevelHero({
                     {t("কুইজ", "a vocabulary quiz")}
                   </Link>
                 </p>
-              </div>
+              </div> */}
             </div>
           </StaggerItem>
         </StaggerContainer>
@@ -264,7 +274,12 @@ function ProgressRing({
   const { from, to } = LEVEL_RING[level.toUpperCase()] ?? LEVEL_RING.A1;
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      className="-rotate-90"
+    >
       <defs>
         <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor={from} />
@@ -318,7 +333,7 @@ function StatRow({
     <div
       className={cn(
         "flex items-center gap-3 border-l border-t px-5 py-4 border-black/[0.06] dark:border-white/[0.08]",
-        "[&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0"
+        "[&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0",
       )}
     >
       <div className={cn(ICON_CHIP, tint)}>

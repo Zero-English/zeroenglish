@@ -39,11 +39,7 @@ import {
   validateDraft,
   DRAFT_ERROR_I18N,
 } from "./question-editor";
-import {
-  type DraftQuestion,
-  quizTypeI18n,
-  difficultyI18n,
-} from "./types";
+import { type DraftQuestion, quizTypeI18n, difficultyI18n } from "./types";
 import { MySubmissions } from "./my-submissions";
 import { VocabularyContributeFlow } from "./vocabulary-contribute-flow";
 import { MyGrammarRuleSubmissions } from "./grammar-rule-contribute";
@@ -67,7 +63,8 @@ const TILE_ICON =
 
 const DIFFICULTY_CHIP: Record<string, string> = {
   EASY: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20",
-  MEDIUM: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20",
+  MEDIUM:
+    "bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20",
   HARD: "bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20",
 };
 
@@ -90,9 +87,9 @@ export function ContributeClient() {
   const [activeTab, setActiveTab] = useState<
     "quiz" | "vocabulary" | "grammar" | "written" | "submissions" | "guidelines"
   >("quiz");
-  const [submissionType, setSubmissionType] = useState<"content" | "grammar" | "written">(
-    "content"
-  );
+  const [submissionType, setSubmissionType] = useState<
+    "content" | "grammar" | "written"
+  >("content");
   const [mobileView, setMobileView] = useState<"menu" | "detail">("menu");
   const { data: session } = useSession();
   const user = session?.user;
@@ -102,56 +99,78 @@ export function ContributeClient() {
     {
       id: "quiz" as const,
       label: t("কুইজ প্রশ্ন", "Quiz Questions"),
-      desc: t("হাতে লিখুন বা JSON ফাইলে বাল্কে আপলোড করুন", "Compose manually or upload in bulk"),
+      desc: t(
+        "হাতে লিখুন বা JSON ফাইলে বাল্কে আপলোড করুন",
+        "Compose manually or upload in bulk",
+      ),
       icon: Brain,
       color: "text-orange-500 bg-orange-500/10",
     },
     {
       id: "vocabulary" as const,
       label: t("শব্দভাণ্ডার", "Vocabulary"),
-      desc: t("অর্থ, উদাহরণ ও বিবরণসহ নতুন শব্দ যোগ করুন", "Add new words with definitions and examples"),
+      desc: t(
+        "অর্থ, উদাহরণ ও বিবরণসহ নতুন শব্দ যোগ করুন",
+        "Add new words with definitions and examples",
+      ),
       icon: BookOpen,
       color: "text-violet-500 bg-violet-500/10",
     },
     {
       id: "grammar" as const,
       label: t("ব্যাকরণ নিয়ম যোগ করুন", "Add Grammar Rule"),
-      desc: t("দ্বিভাষিক পাঠ তৈরি করে এডমিন পর্যালোচনার জন্য জমা দিন", "Create a bilingual grammar lesson for admin review"),
+      desc: t(
+        "দ্বিভাষিক পাঠ তৈরি করে এডমিন পর্যালোচনার জন্য জমা দিন",
+        "Create a bilingual grammar lesson for admin review",
+      ),
       icon: BookOpenCheck,
       color: "text-emerald-500 bg-emerald-500/10",
     },
     {
       id: "written" as const,
       label: t("লিখিত বিষয়", "Written Content"),
-      desc: t("প্রবন্ধ, অনুচ্ছেদ ও চিঠি Markdown এ লিখুন", "Compose essays, paragraphs and letters in Markdown"),
+      desc: t(
+        "প্রবন্ধ, অনুচ্ছেদ ও চিঠি Markdown এ লিখুন",
+        "Compose essays, paragraphs and letters in Markdown",
+      ),
       icon: FileText,
       color: "text-indigo-500 bg-indigo-500/10",
     },
     {
       id: "submissions" as const,
       label: t("আমার সাবমিশন", "My Submissions"),
-      desc: t("জমা দেওয়া প্রশ্ন, শব্দ ও লেখার হিস্ট্রি", "Track approval status and edit drafts"),
+      desc: t(
+        "জমা দেওয়া প্রশ্ন, শব্দ ও লেখার হিস্ট্রি",
+        "Track approval status and edit drafts",
+      ),
       icon: ListChecks,
       color: "text-sky-500 bg-sky-500/10",
     },
     {
       id: "guidelines" as const,
       label: t("গাইডলাইন ও ধাপ", "Guidelines & Workflow"),
-      desc: t("উচ্চমানের কনটেন্ট তৈরি ও অনুমোদনের নিয়মাবলী", "Content standards and admin review process"),
+      desc: t(
+        "উচ্চমানের কনটেন্ট তৈরি ও অনুমোদনের নিয়মাবলী",
+        "Content standards and admin review process",
+      ),
       icon: ShieldCheck,
       color: "text-amber-500 bg-amber-500/10",
     },
   ];
 
-  const currentNavItem = navItems.find((n) => n.id === activeTab) || navItems[0];
+  const currentNavItem =
+    navItems.find((n) => n.id === activeTab) || navItems[0];
   const CurrentIcon = currentNavItem.icon;
 
   return (
-    <div className="relative min-h-dvh overflow-x-clip">
+    <div className="relative">
       <div className="relative px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="max-w-6xl mx-auto w-full min-w-0">
           {/* Breadcrumb Header matching /profile */}
-          <nav aria-label="Breadcrumb" className="mb-4 sm:mb-6 flex items-center gap-1.5 text-xs text-muted-foreground">
+          <nav
+            aria-label="Breadcrumb"
+            className="mb-4 sm:mb-6 flex items-center gap-1.5 text-xs text-muted-foreground"
+          >
             <Link
               href="/"
               className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
@@ -165,7 +184,9 @@ export function ContributeClient() {
               onClick={() => setMobileView("menu")}
               className={cn(
                 "hover:text-foreground transition-colors cursor-pointer",
-                mobileView === "menu" ? "font-semibold text-foreground" : "text-muted-foreground"
+                mobileView === "menu"
+                  ? "font-semibold text-foreground"
+                  : "text-muted-foreground",
               )}
             >
               {t("কন্ট্রিবিউট", "Contribute")}
@@ -181,7 +202,12 @@ export function ContributeClient() {
           </nav>
 
           {/* MOBILE ONLY MENU HUB (shown on small screens when mobileView === 'menu') */}
-          <div className={cn("space-y-3.5 lg:hidden", mobileView === "menu" ? "block" : "hidden")}>
+          <div
+            className={cn(
+              "space-y-3.5 lg:hidden",
+              mobileView === "menu" ? "block" : "hidden",
+            )}
+          >
             {/* Contributor Profile Mini Card */}
             <div className={cn(CARD, "p-4")}>
               <div className="flex items-center justify-between gap-3">
@@ -204,11 +230,14 @@ export function ContributeClient() {
                         {user?.name || t("কন্ট্রিবিউটর", "Contributor")}
                       </h2>
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
-                        {user?.role === "admin" ? t("অ্যাডমিন", "Admin") : t("ভেরিফাইড", "Verified")}
+                        {user?.role === "admin"
+                          ? t("অ্যাডমিন", "Admin")
+                          : t("ভেরিফাইড", "Verified")}
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground truncate mt-0.5">
-                      {user?.email || t("কন্ট্রিবিউটর পোর্টাল", "Contributor Portal")}
+                      {user?.email ||
+                        t("কন্ট্রিবিউটর পোর্টাল", "Contributor Portal")}
                     </p>
                   </div>
                 </div>
@@ -233,7 +262,12 @@ export function ContributeClient() {
             </div>
 
             {/* Mobile App Navigation Menu List */}
-            <div className={cn(CARD, "p-1.5 overflow-hidden divide-y divide-border/60")}>
+            <div
+              className={cn(
+                CARD,
+                "p-1.5 overflow-hidden divide-y divide-border/60",
+              )}
+            >
               {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -247,7 +281,12 @@ export function ContributeClient() {
                     className="w-full flex items-center justify-between p-3.5 rounded-xl hover:bg-muted/70 active:bg-muted transition-colors text-left cursor-pointer group"
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-xl", item.color)}>
+                      <span
+                        className={cn(
+                          "flex size-10 shrink-0 items-center justify-center rounded-xl",
+                          item.color,
+                        )}
+                      >
                         <Icon className="size-5" />
                       </span>
                       <div className="min-w-0 flex-1">
@@ -272,19 +311,25 @@ export function ContributeClient() {
                   <span className="inline-flex size-7 items-center justify-center rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 text-xs font-bold">
                     01
                   </span>
-                  <p className="text-[11px] font-semibold text-foreground">{t("যোগ করুন", "Add")}</p>
+                  <p className="text-[11px] font-semibold text-foreground">
+                    {t("যোগ করুন", "Add")}
+                  </p>
                 </div>
                 <div className="space-y-1 border-x border-border/60">
                   <span className="inline-flex size-7 items-center justify-center rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400 text-xs font-bold">
                     02
                   </span>
-                  <p className="text-[11px] font-semibold text-foreground">{t("রিভিউ", "Review")}</p>
+                  <p className="text-[11px] font-semibold text-foreground">
+                    {t("রিভিউ", "Review")}
+                  </p>
                 </div>
                 <div className="space-y-1">
                   <span className="inline-flex size-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
                     03
                   </span>
-                  <p className="text-[11px] font-semibold text-foreground">{t("লাইভ", "Live")}</p>
+                  <p className="text-[11px] font-semibold text-foreground">
+                    {t("লাইভ", "Live")}
+                  </p>
                 </div>
               </div>
             </div>
@@ -297,7 +342,12 @@ export function ContributeClient() {
               >
                 <div className="flex items-center gap-2">
                   <Brain className="size-4 text-primary" />
-                  <span>{t("লাইভ কুইজ ও প্রশ্ন ব্রাউজ করুন", "Browse Live Quizzes & Questions")}</span>
+                  <span>
+                    {t(
+                      "লাইভ কুইজ ও প্রশ্ন ব্রাউজ করুন",
+                      "Browse Live Quizzes & Questions",
+                    )}
+                  </span>
                 </div>
                 <ChevronRight className="size-3.5 text-muted-foreground" />
               </Link>
@@ -305,10 +355,12 @@ export function ContributeClient() {
           </div>
 
           {/* DESKTOP 2-COLUMN LAYOUT & MOBILE DETAIL VIEW */}
-          <div className={cn(
-            "grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 lg:gap-6 items-start w-full min-w-0",
-            mobileView === "menu" ? "hidden lg:grid" : "grid"
-          )}>
+          <div
+            className={cn(
+              "grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 lg:gap-6 items-start w-full min-w-0",
+              mobileView === "menu" ? "hidden lg:grid" : "grid",
+            )}
+          >
             {/* Desktop Sidebar (hidden on mobile) */}
             <aside className="hidden lg:block lg:col-span-3 lg:sticky lg:top-20 z-10 w-full min-w-0">
               <div className="rounded-2xl border border-border/80 bg-card/80 backdrop-blur-md p-1.5 sm:p-2 lg:p-2.5 space-y-1">
@@ -334,14 +386,16 @@ export function ContributeClient() {
                           "flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer shrink-0 text-left w-full",
                           isActive
                             ? "bg-accent text-accent-foreground font-semibold shadow-2xs"
-                            : "text-muted-foreground hover:bg-muted/70 hover:text-foreground"
+                            : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
                         )}
                       >
                         <div className="flex items-center gap-2.5 truncate">
                           <Icon
                             className={cn(
                               "size-4 shrink-0 transition-colors",
-                              isActive ? "text-foreground" : "text-muted-foreground"
+                              isActive
+                                ? "text-foreground"
+                                : "text-muted-foreground",
                             )}
                           />
                           <span className="whitespace-normal">
@@ -361,7 +415,9 @@ export function ContributeClient() {
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                       <Sparkles className="size-3" />
-                      {user?.role === "admin" ? t("অ্যাডমিন", "Admin") : t("ভেরিফাইড", "Verified")}
+                      {user?.role === "admin"
+                        ? t("অ্যাডমিন", "Admin")
+                        : t("ভেরিফাইড", "Verified")}
                     </span>
                   </div>
 
@@ -386,7 +442,9 @@ export function ContributeClient() {
                     href="/quiz"
                     className="flex items-center justify-between pt-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    <span className="truncate">{t("লাইভ কুইজ ব্রাউজ", "Browse Quizzes")}</span>
+                    <span className="truncate">
+                      {t("লাইভ কুইজ ব্রাউজ", "Browse Quizzes")}
+                    </span>
                     <ChevronRight className="size-3.5 shrink-0" />
                   </Link>
                 </div>
@@ -430,7 +488,7 @@ export function ContributeClient() {
                         "rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer",
                         submissionType === "content"
                           ? "bg-background text-foreground shadow-2xs"
-                          : "text-muted-foreground hover:text-foreground"
+                          : "text-muted-foreground hover:text-foreground",
                       )}
                     >
                       {t("প্রশ্ন ও শব্দ", "Questions & Words")}
@@ -442,7 +500,7 @@ export function ContributeClient() {
                         "rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer",
                         submissionType === "grammar"
                           ? "bg-background text-foreground shadow-2xs"
-                          : "text-muted-foreground hover:text-foreground"
+                          : "text-muted-foreground hover:text-foreground",
                       )}
                     >
                       {t("ব্যাকরণ নিয়ম", "Grammar Rules")}
@@ -454,7 +512,7 @@ export function ContributeClient() {
                         "rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors cursor-pointer",
                         submissionType === "written"
                           ? "bg-background text-foreground shadow-2xs"
-                          : "text-muted-foreground hover:text-foreground"
+                          : "text-muted-foreground hover:text-foreground",
                       )}
                     >
                       {t("লিখিত কনটেন্ট", "Written Content")}
@@ -491,11 +549,16 @@ function ContributorHeroIdentity() {
           </span>
           <div>
             <p className="text-xs font-semibold text-foreground">
-              <span className="text-[10px] text-muted-foreground font-bold mr-1">01</span>
+              <span className="text-[10px] text-muted-foreground font-bold mr-1">
+                01
+              </span>
               {t("আইটেম যোগ করুন", "Add Items")}
             </p>
             <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">
-              {t("হাতে লিখুন বা JSON ফাইলে বাল্কে আপলোড করুন।", "Compose manually or upload JSON in bulk.")}
+              {t(
+                "হাতে লিখুন বা JSON ফাইলে বাল্কে আপলোড করুন।",
+                "Compose manually or upload JSON in bulk.",
+              )}
             </p>
           </div>
         </div>
@@ -506,11 +569,16 @@ function ContributorHeroIdentity() {
           </span>
           <div>
             <p className="text-xs font-semibold text-foreground">
-              <span className="text-[10px] text-muted-foreground font-bold mr-1">02</span>
+              <span className="text-[10px] text-muted-foreground font-bold mr-1">
+                02
+              </span>
               {t("পর্যালোচনা করুন", "Review Queue")}
             </p>
             <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">
-              {t("জমা দেওয়ার আগে ড্রাফট দেখে সম্পাদন করুন।", "Inspect and edit drafts before final submission.")}
+              {t(
+                "জমা দেওয়ার আগে ড্রাফট দেখে সম্পাদন করুন।",
+                "Inspect and edit drafts before final submission.",
+              )}
             </p>
           </div>
         </div>
@@ -521,11 +589,16 @@ function ContributorHeroIdentity() {
           </span>
           <div>
             <p className="text-xs font-semibold text-foreground">
-              <span className="text-[10px] text-muted-foreground font-bold mr-1">03</span>
+              <span className="text-[10px] text-muted-foreground font-bold mr-1">
+                03
+              </span>
               {t("যাচাই ও অনুমোদন", "Admin Approval")}
             </p>
             <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">
-              {t("এডমিন রিভিউয়ের পর লাইভ প্ল্যাটফর্মে যুক্ত হবে।", "Goes live to all learners once approved.")}
+              {t(
+                "এডমিন রিভিউয়ের পর লাইভ প্ল্যাটফর্মে যুক্ত হবে।",
+                "Goes live to all learners once approved.",
+              )}
             </p>
           </div>
         </div>
@@ -542,7 +615,7 @@ function ContributorGuidelines() {
       title: t("নির্ভুল ব্যাকরণ ও বানান", "Accuracy & Grammar"),
       desc: t(
         "প্রশ্নের বাক্য ও শব্দার্থ সম্পূর্ণ সঠিক হতে হবে। বিভ্রান্তিকর বানান বা ভুল অর্থ গ্রহণযোগ্য নয়।",
-        "Ensure clear phrasing, correct spelling, and accurate bilingual definitions."
+        "Ensure clear phrasing, correct spelling, and accurate bilingual definitions.",
       ),
       icon: CheckCircle2,
       color: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
@@ -551,7 +624,7 @@ function ContributorGuidelines() {
       title: t("একটিমাত্র সুনির্দিষ্ট সঠিক উত্তর", "Single Correct Answer"),
       desc: t(
         "অপশনগুলোর মধ্যে যেন শুধুমাত্র একটি উত্তরই সুনির্দিষ্টভাবে সঠিক থাকে এবং অন্যান্য অপশন যৌক্তিক হয়।",
-        "Ensure exactly one unambiguous correct answer, with reasonable distractors."
+        "Ensure exactly one unambiguous correct answer, with reasonable distractors.",
       ),
       icon: HelpCircle,
       color: "text-sky-600 dark:text-sky-400 bg-sky-500/10",
@@ -560,7 +633,7 @@ function ContributorGuidelines() {
       title: t("সহায়ক ও স্পষ্ট ব্যাখ্যা যোগ", "Helpful Explanations"),
       desc: t(
         "ব্যাখ্যা ফিল্ডে সংক্ষিপ্ত কারণ লিখুন যাতে শিক্ষার্থীরা ভুল করলে তা পড়ে সহজে নিয়মটি শিখতে পারে।",
-        "Provide a concise explanation so learners understand why the correct answer is right."
+        "Provide a concise explanation so learners understand why the correct answer is right.",
       ),
       icon: Sparkles,
       color: "text-amber-600 dark:text-amber-400 bg-amber-500/10",
@@ -569,7 +642,7 @@ function ContributorGuidelines() {
       title: t("উপযুক্ত কাঠিন্য মাত্রা নির্ধারণ", "Accurate Difficulty Tier"),
       desc: t(
         "A1/A2 (সহজ), B1/B2 (মাঝারি), C1/C2 (উন্নত) স্তর নির্ভুলভাবে নির্ধারণ করুন।",
-        "Assign accurate CEFR levels and difficulty tiers suited for the target learners."
+        "Assign accurate CEFR levels and difficulty tiers suited for the target learners.",
       ),
       icon: Award,
       color: "text-violet-600 dark:text-violet-400 bg-violet-500/10",
@@ -585,10 +658,16 @@ function ContributorGuidelines() {
           </div>
           <div>
             <h2 className="text-base sm:text-lg font-semibold text-foreground">
-              {t("কন্ট্রিবিউটর গাইডলাইন ও মানদণ্ড", "Contributor Quality Guidelines")}
+              {t(
+                "কন্ট্রিবিউটর গাইডলাইন ও মানদণ্ড",
+                "Contributor Quality Guidelines",
+              )}
             </h2>
             <p className="text-xs text-muted-foreground">
-              {t("উচ্চমানের কনটেন্ট নিশ্চিত করতে এই নিয়মগুলো অনুসরণ করুন", "Follow these standards to get your submissions approved quickly")}
+              {t(
+                "উচ্চমানের কনটেন্ট নিশ্চিত করতে এই নিয়মগুলো অনুসরণ করুন",
+                "Follow these standards to get your submissions approved quickly",
+              )}
             </p>
           </div>
         </div>
@@ -601,7 +680,12 @@ function ContributorGuidelines() {
                 key={idx}
                 className="p-4 rounded-xl border border-border/70 bg-card/60 hover:bg-card hover:border-border transition-colors flex items-start gap-3"
               >
-                <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-xl", rule.color)}>
+                <span
+                  className={cn(
+                    "flex size-9 shrink-0 items-center justify-center rounded-xl",
+                    rule.color,
+                  )}
+                >
                   <Icon className="size-4.5" />
                 </span>
                 <div>
@@ -625,7 +709,7 @@ function QuizContributeFlow() {
   const [drafts, setDrafts] = useState<DraftQuestion[]>([]);
   const [typeOptions, setTypeOptions] = useState<QuizTypeOption[]>([]);
   const [manualDraft, setManualDraft] = useState<DraftQuestion>(() =>
-    emptyDraft()
+    emptyDraft(),
   );
   const [manualError, setManualError] = useState<string | null>(null);
   const [mode, setMode] = useState<ManualMode>("manual");
@@ -647,7 +731,7 @@ function QuizContributeFlow() {
             json.data.map((item: { id: number; name: string }) => ({
               value: item.name,
               label: quizTypeI18n(item.name)[1],
-            }))
+            })),
           );
         }
       })
@@ -661,7 +745,7 @@ function QuizContributeFlow() {
 
   function updateDraft(id: string, patch: Partial<DraftQuestion>) {
     setDrafts((prev) =>
-      prev.map((d) => (d.id === id ? { ...d, ...patch } : d))
+      prev.map((d) => (d.id === id ? { ...d, ...patch } : d)),
     );
   }
 
@@ -681,8 +765,8 @@ function QuizContributeFlow() {
       setManualError(
         t(
           "এই প্রশ্নের লেখা আপনার পর্যালোচনা তালিকায় ইতিমধ্যেই আছে। দুবার যোগ না করে সেখানেই সম্পাদনা করুন।",
-          "This question text is already in your review list. Edit it there instead of adding it twice."
-        )
+          "This question text is already in your review list. Edit it there instead of adding it twice.",
+        ),
       );
       return;
     }
@@ -697,7 +781,9 @@ function QuizContributeFlow() {
     setImporting(true);
     try {
       if (!file.name.toLowerCase().endsWith(".json")) {
-        notify(t("শুধুমাত্র .json ফাইল অনুমোদিত।", "Only .json files are allowed."));
+        notify(
+          t("শুধুমাত্র .json ফাইল অনুমোদিত।", "Only .json files are allowed."),
+        );
         return;
       }
       const text = await file.text();
@@ -708,8 +794,8 @@ function QuizContributeFlow() {
         notify(
           t(
             "JSON সঠিক নয়। ফাইলের সিনট্যাক্স পরীক্ষা করুন।",
-            "Invalid JSON. Please check the file syntax."
-          )
+            "Invalid JSON. Please check the file syntax.",
+          ),
         );
         return;
       }
@@ -722,8 +808,8 @@ function QuizContributeFlow() {
         notify(
           t(
             `"${location ?? "row"}"-এ যাচাই ব্যর্থ: ${detail}`,
-            `Validation failed at "${location ?? "row"}": ${detail}`
-          )
+            `Validation failed at "${location ?? "row"}": ${detail}`,
+          ),
         );
         return;
       }
@@ -737,11 +823,11 @@ function QuizContributeFlow() {
           answer: row.answer,
           explanation: row.explanation ?? "",
           class: [...(row.class ?? [])],
-        })
+        }),
       );
 
       const existingKeys = new Set(
-        drafts.map((d) => questionKey(d.questionText))
+        drafts.map((d) => questionKey(d.questionText)),
       );
       const added: DraftQuestion[] = [];
       const skipped: string[] = [];
@@ -760,8 +846,8 @@ function QuizContributeFlow() {
         notify(
           t(
             `${added.length}টি প্রশ্ন ফাইল থেকে লোড হয়েছে। পর্যালোচনা করে জমা দিন।`,
-            `${added.length} question${added.length === 1 ? "" : "s"} loaded from the file. Review and submit.`
-          )
+            `${added.length} question${added.length === 1 ? "" : "s"} loaded from the file. Review and submit.`,
+          ),
         );
       }
       if (skipped.length > 0) {
@@ -774,16 +860,16 @@ function QuizContributeFlow() {
             `${skipped.length} duplicate question text${skipped.length === 1 ? "" : "s"} skipped: ${skipped
               .slice(0, 3)
               .map((q) => `"${q}"`)
-              .join(", ")}${skipped.length > 3 ? "…" : ""}`
-          )
+              .join(", ")}${skipped.length > 3 ? "…" : ""}`,
+          ),
         );
       }
     } catch {
       notify(
         t(
           "ফাইল পড়া ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
-          "Failed to read the file. Please try again."
-        )
+          "Failed to read the file. Please try again.",
+        ),
       );
     } finally {
       setImporting(false);
@@ -805,8 +891,8 @@ function QuizContributeFlow() {
         notify(
           t(
             `আপনার তালিকায় ডুপ্লিকেট প্রশ্ন: "${d.questionText.trim()}"। জমা দেওয়ার আগে প্রতিটি প্রশ্ন একক করুন।`,
-            `Duplicate question text in your list: "${d.questionText.trim()}". Make each question unique before submitting.`
-          )
+            `Duplicate question text in your list: "${d.questionText.trim()}". Make each question unique before submitting.`,
+          ),
         );
         return;
       }
@@ -831,8 +917,8 @@ function QuizContributeFlow() {
       notify(
         t(
           `প্রশ্ন ${location ?? ""} প্রস্তুত নয়: ${detail}`,
-          `Question ${location ?? ""} is not ready: ${detail}`
-        )
+          `Question ${location ?? ""} is not ready: ${detail}`,
+        ),
       );
       return;
     }
@@ -854,22 +940,22 @@ function QuizContributeFlow() {
         notify(
           t(
             `${rows.length}টি প্রশ্ন পর্যালোচনার জন্য জমা দেওয়া হয়েছে (অনুমোদন অপেক্ষমাণ)।`,
-            `${rows.length} question${rows.length === 1 ? "" : "s"} submitted for review (pending approval).`
-          )
+            `${rows.length} question${rows.length === 1 ? "" : "s"} submitted for review (pending approval).`,
+          ),
         );
         setDrafts([]);
         setEditingId(null);
       } else {
         notify(
-          t(
-            "প্রশ্ন জমা দিতে ব্যর্থ হয়েছে।",
-            "Failed to submit questions."
-          )
+          t("প্রশ্ন জমা দিতে ব্যর্থ হয়েছে।", "Failed to submit questions."),
         );
       }
     } catch {
       notify(
-        t("জমা দিতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।", "Failed to submit. Please try again.")
+        t(
+          "জমা দিতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+          "Failed to submit. Please try again.",
+        ),
       );
     } finally {
       setSubmitting(false);
@@ -885,13 +971,13 @@ function QuizContributeFlow() {
         title={t("পর্যালোচনা ও জমা দিন", "Review & submit")}
         subtitle={t(
           "জমা দেওয়ার আগে প্রতিটি আইটেম সম্পাদনা করুন",
-          "Edit every item before it ships"
+          "Edit every item before it ships",
         )}
         count={drafts.length}
         emptyTitle={t("এখনো পর্যালোচনা করার কিছু নেই", "Nothing to review yet")}
         emptyBody={t(
           "প্রশ্ন যোগ করুন বা ফাইল আপলোড করুন — জমা দেওয়ার আগে প্রতিটি আইটেম এখানে পর্যালোচনার জন্য আসবে।",
-          "Add questions or upload a file — every item lands here for review before you submit."
+          "Add questions or upload a file — every item lands here for review before you submit.",
         )}
         className={className}
         footer={
@@ -901,7 +987,7 @@ function QuizContributeFlow() {
             nounEn="question"
             note={t(
               "আপনার জমা দেওয়া সব কিছু অপেক্ষমাণ অবস্থায় শুরু হয় এবং এডমিনরা যাচাই করেন।",
-              "Everything you submit starts as pending and is reviewed by admins."
+              "Everything you submit starts as pending and is reviewed by admins.",
             )}
             submitting={submitting}
             onClick={handleSubmit}
@@ -948,13 +1034,16 @@ function QuizContributeFlow() {
                           className={cn(
                             "rounded-md px-2 py-0.5 text-[11px] font-semibold",
                             DIFFICULTY_CHIP[draft.difficultyLevel] ??
-                              "bg-muted text-muted-foreground"
+                              "bg-muted text-muted-foreground",
                           )}
                         >
                           {t(...difficultyI18n(draft.difficultyLevel))}
                         </span>
                         <span
-                          className={cn(CHIP_PENDING, "px-2 py-0.5 text-[11px] font-semibold")}
+                          className={cn(
+                            CHIP_PENDING,
+                            "px-2 py-0.5 text-[11px] font-semibold",
+                          )}
                         >
                           {pendingLabel}
                         </span>
@@ -963,7 +1052,10 @@ function QuizContributeFlow() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          aria-label={t("প্রশ্ন সম্পাদনা করুন", "Edit question")}
+                          aria-label={t(
+                            "প্রশ্ন সম্পাদনা করুন",
+                            "Edit question",
+                          )}
                           onClick={() => setEditingId(draft.id)}
                           className="size-8 cursor-pointer"
                         >
@@ -982,13 +1074,13 @@ function QuizContributeFlow() {
                     </div>
 
                     <p className="mt-2 text-sm font-semibold leading-relaxed text-foreground">
-                      {draft.questionText || t("অনামী প্রশ্ন", "Untitled question")}
+                      {draft.questionText ||
+                        t("অনামী প্রশ্ন", "Untitled question")}
                     </p>
 
                     <ul className="mt-2 space-y-1">
                       {draft.options.map((option, i) => {
-                        const isAnswer =
-                          option.trim() === draft.answer.trim();
+                        const isAnswer = option.trim() === draft.answer.trim();
                         return (
                           <li
                             key={i}
@@ -996,7 +1088,7 @@ function QuizContributeFlow() {
                               "flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-xs font-medium",
                               isAnswer
                                 ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200 font-semibold"
-                                : "border-border/60 bg-muted/20 text-muted-foreground"
+                                : "border-border/60 bg-muted/20 text-muted-foreground",
                             )}
                           >
                             <span
@@ -1004,7 +1096,7 @@ function QuizContributeFlow() {
                                 "flex size-4 shrink-0 items-center justify-center rounded-full text-[10px]",
                                 isAnswer
                                   ? "bg-emerald-500 text-white"
-                                  : "bg-muted text-muted-foreground"
+                                  : "bg-muted text-muted-foreground",
                               )}
                             >
                               {isAnswer ? (
@@ -1013,9 +1105,7 @@ function QuizContributeFlow() {
                                 i + 1
                               )}
                             </span>
-                            <span className="truncate">
-                              {option}
-                            </span>
+                            <span className="truncate">{option}</span>
                           </li>
                         );
                       })}
@@ -1064,7 +1154,7 @@ function QuizContributeFlow() {
           <div
             className={cn(
               "flex flex-wrap items-center justify-between gap-3 p-4 sm:px-6 sm:py-4.5",
-              DIVIDER
+              DIVIDER,
             )}
           >
             <div className="flex items-center gap-3">
@@ -1076,7 +1166,10 @@ function QuizContributeFlow() {
                   {t("প্রশ্ন যোগ করুন", "Add Questions")}
                 </h2>
                 <p className="text-xs text-muted-foreground">
-                  {t("হাতে লিখুন বা বাল্কে আপলোড করুন", "Compose or upload in bulk")}
+                  {t(
+                    "হাতে লিখুন বা বাল্কে আপলোড করুন",
+                    "Compose or upload in bulk",
+                  )}
                 </p>
               </div>
             </div>
@@ -1119,12 +1212,15 @@ function QuizContributeFlow() {
                   </span>
                   <div>
                     <p className="font-semibold text-foreground">
-                      {t("প্রশ্নের JSON ফাইল আপলোড করুন", "Upload a JSON file of questions")}
+                      {t(
+                        "প্রশ্নের JSON ফাইল আপলোড করুন",
+                        "Upload a JSON file of questions",
+                      )}
                     </p>
                     <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
                       {t(
                         "প্রশ্নগুলো পর্যালোচনা প্যানেলে লোড হবে, যেখানে আপনি জমা দেওয়ার আগে সেগুলো সম্পাদনা করতে পারবেন।",
-                        "Questions are loaded into the review panel where you can edit them before submitting."
+                        "Questions are loaded into the review panel where you can edit them before submitting.",
                       )}
                     </p>
                   </div>
@@ -1153,7 +1249,7 @@ function QuizContributeFlow() {
                     {t("প্রত্যাশিত ফরম্যাট", "Expected format")}
                   </p>
                   <pre className="mt-2 overflow-x-auto rounded-lg bg-muted p-3 text-[11px] leading-relaxed text-foreground font-mono border border-border/60">
-{`[
+                    {`[
   {
     "quizType": "ENGLISH_TO_BANGLA",
     "questionText": "What is the Bangla of 'apple'?",
@@ -1182,7 +1278,7 @@ function QuizContributeFlow() {
           drafts.length > 0
             ? t(
                 `পর্যালোচনা করুন ${drafts.length}টি প্রশ্ন`,
-                `Review ${drafts.length} question${drafts.length === 1 ? "" : "s"} for approval`
+                `Review ${drafts.length} question${drafts.length === 1 ? "" : "s"} for approval`,
               )
             : ""
         }

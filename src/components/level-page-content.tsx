@@ -129,7 +129,7 @@ function NotFoundScreen() {
         <p className="text-zinc-500 dark:text-zinc-400 mb-8">
           {t(
             "আপনি যে লেভেলটি খুঁজছেন সেটি বিদ্যমান নেই।",
-            "The level you're looking for doesn't exist."
+            "The level you're looking for doesn't exist.",
           )}
         </p>
         <Button asChild>
@@ -161,23 +161,28 @@ function LevelInProgressScreen({
       <div className="max-w-xl mx-auto text-center mt-20">
         <div className="text-6xl mb-6">🚧</div>
         <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
-          {t(`${level} · ${labelBn} লিস্ট তৈরি হচ্ছে`, `${level} · ${label} list is being built`)}
+          {t(
+            `${level} · ${labelBn} লিস্ট তৈরি হচ্ছে`,
+            `${level} · ${label} list is being built`,
+          )}
         </h1>
         <p className="text-zinc-500 dark:text-zinc-400 mb-4">
           {t(
             `এই লেভেলে এখন ${total}টি শব্দ আছে। যথেষ্ট শব্দ জমা হওয়ার আগে এটিকে শেখার জন্য খোলা হচ্ছে না, তাই এখনো সার্চ ইঞ্জিন থেকে বাদ দেওয়া হয়েছে।`,
-            `This level has ${total} entries so far. It is not open for study, and it is kept out of search results, until it holds enough words to be worth your time.`
+            `This level has ${total} entries so far. It is not open for study, and it is kept out of search results, until it holds enough words to be worth your time.`,
           )}
         </p>
         <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-8">
           {t(
             "ততক্ষণ নিচের লেভেলগুলোতে শুরু করুন।",
-            "Start from one of the levels below in the meantime."
+            "Start from one of the levels below in the meantime.",
           )}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Button asChild>
-            <Link href={`/vocabulary/${(VALID_LEVELS[VALID_LEVELS.indexOf(level as (typeof VALID_LEVELS)[number]) - 1] ?? "A1").toLowerCase()}`}>
+            <Link
+              href={`/vocabulary/${(VALID_LEVELS[VALID_LEVELS.indexOf(level as (typeof VALID_LEVELS)[number]) - 1] ?? "A1").toLowerCase()}`}
+            >
               <ArrowLeft className="mr-2 h-4 w-4" />
               {t("আগের লেভেল", "Previous level")}
             </Link>
