@@ -917,3 +917,64 @@ export const dailyRoutineUpdateSchema = z
   .strict();
 
 export type DailyRoutineUpdateInput = z.infer<typeof dailyRoutineUpdateSchema>;
+
+export const NOTE_COLORS = [
+  "amber",
+  "rose",
+  "sky",
+  "emerald",
+  "violet",
+  "slate",
+] as const;
+
+export const noteColorSchema = z.enum(NOTE_COLORS);
+
+export const noteTagSchema = z.string().trim().min(1).max(24);
+export const noteTagsSchema = z.array(noteTagSchema).max(12);
+
+const noteContentSchema = z.string().max(200_000, "Note content is too long");
+const noteTitleSchema = z.string().trim().max(200, "Title is too long");
+
+export const noteCreateSchema = z
+  .object({
+    title: noteTitleSchema.default(""),
+    content: noteContentSchema.default(""),
+    tags: noteTagsSchema.default([]),
+    color: noteColorSchema.default("amber"),
+    isPinned: z.boolean().default(false),
+  })
+  .strict();
+
+export const noteUpdateSchema = z
+  .object({
+    title: noteTitleSchema.optional(),
+    content: noteContentSchema.optional(),
+    tags: noteTagsSchema.optional(),
+    color: noteColorSchema.optional(),
+    isPinned: z.boolean().optional(),
+    isArchived: z.boolean().optional(),
+  })
+  .strict();
+
+export const noteFilterSchema = z.enum([
+  "all",
+  "pinned",
+  "archived",
+  "trash",
+]);
+
+export const noteListQuerySchema = z
+  .object({
+    search: z.string().trim().max(100).optional(),
+    tag: z.string().trim().max(24).optional(),
+    filter: noteFilterSchema.default("all"),
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(60).default(30),
+  })
+  .strict();
+
+export type NoteCreateInput = z.infer<typeof noteCreateSchema>;
+export type NoteUpdateInput = z.infer<typeof noteUpdateSchema>;
+export type NoteFilter = z.infer<typeof noteFilterSchema>;
+export type NoteListQueryInput = z.infer<typeof noteListQuerySchema>;
+export type NoteColor = z.infer<typeof noteColorSchema>;

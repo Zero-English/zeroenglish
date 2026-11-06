@@ -11,6 +11,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AppHydration } from "@/components/app-hydration";
 import {ActivityTracker} from "@/components/activity-tracker";
 import { LoginRequiredDrawer } from "@/components/login-required-drawer";
+import { NotesDialog } from "@/components/notes/notes-dialog";
 import { SessionAdopter } from "@/components/session-adopter";
 import { PopupHost } from "@/components/popup/popup-host";
 import { SiteSchema } from "@/components/seo/site-schema";
@@ -79,6 +80,7 @@ export default function FrontendLayout({
             <MobileBottomNav />
             <Footer />
             <LoginRequiredDrawer />
+            <NotesDialog />
             <SessionAdopter />
             <PopupHost />
           </div>
