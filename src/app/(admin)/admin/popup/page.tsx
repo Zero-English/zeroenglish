@@ -179,14 +179,14 @@ export default function AdminPopupsPage() {
   const end = Math.min(page * pageSize, total);
 
   return (
-    <div className="p-3 lg:p-4">
-      <BackButton />
-      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-6 space-y-4">
+      <BackButton className="hidden md:inline-flex" />
+      <header className="mb-2 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-xs sm:text-sm text-muted-foreground font-medium">
           {loading ? "Loading..." : `Manage popups (${total} popups)`}
         </p>
         <div className="flex items-center gap-2">
-          <Button onClick={openCreate}>
+          <Button size="sm" onClick={openCreate}>
             <Plus />
             Create Popup
           </Button>
@@ -194,18 +194,18 @@ export default function AdminPopupsPage() {
       </header>
 
       {message && (
-        <div className="mb-4 inline-flex rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300">
+        <div className="mb-4 inline-flex rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs text-foreground">
           {message}
         </div>
       )}
 
-      <div className="rounded-xl border border-border shadow-sm bg-card">
+      <div className="rounded-xl border border-border/70 shadow-2xs bg-card overflow-hidden">
         {/* Toolbar / Filters */}
-        <div className="border-b border-gray-200 p-4 dark:border-gray-800">
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="relative min-w-56 flex-1">
-                <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <div className="border-b border-border p-3 sm:p-4 bg-muted/10">
+          <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <div className="relative w-full sm:flex-1">
+                <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={searchInput}
                   onChange={(e) => {
@@ -213,11 +213,13 @@ export default function AdminPopupsPage() {
                     setPage(1);
                   }}
                   placeholder="Search by name..."
-                  className="pl-8"
+                  className="pl-8 text-xs h-8 sm:h-9"
                 />
               </div>
               <Button
                 variant="outline"
+                size="sm"
+                className="self-end sm:self-auto"
                 onClick={resetFilters}
                 disabled={!searchInput}
               >
@@ -229,8 +231,8 @@ export default function AdminPopupsPage() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+        <div className="relative w-full overflow-x-auto">
+          <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500 dark:border-gray-800 dark:text-gray-400">
                 <th className="px-4 py-2.5 font-medium">ID</th>

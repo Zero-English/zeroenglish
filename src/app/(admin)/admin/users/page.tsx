@@ -124,36 +124,35 @@ export default function AdminUsersPage() {
   const end = Math.min(page * pageSize, total);
 
   return (
-    <div className="p-3 lg:p-4">
-      <BackButton />
-      <header className="mb-4">
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-6 space-y-4">
+      <BackButton className="hidden md:inline-flex" />
+      <header className="mb-2">
+        <p className="text-sm text-muted-foreground font-medium">
           All registered users ({total})
         </p>
         {message && (
-          <div className="mt-3 inline-flex rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300">
+          <div className="mt-3 inline-flex rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs text-foreground">
             {message}
           </div>
         )}
       </header>
 
       {selectedList.length > 0 && (
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-2.5">
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">{selectedList.length}</span>{" "}
-            selected
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-primary/30 bg-primary/5 px-4 py-2.5">
+          <p className="text-xs font-medium text-foreground">
+            <span className="font-bold">{selectedList.length}</span> selected
           </p>
           <div className="flex items-center gap-2">
             <button
               onClick={clearSelection}
-              className="rounded-md px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+              className="rounded-md px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors active:scale-95"
             >
               Clear
             </button>
             <button
               type="button"
               onClick={bulkEmail}
-              className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-all active:scale-95"
             >
               <Mail className="h-3.5 w-3.5" />
               Email
@@ -162,16 +161,16 @@ export default function AdminUsersPage() {
         </div>
       )}
 
-      <div className="rounded-md border border-border bg-card">
-        <div className="border-b border-border px-4 py-3">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
-            All Users
+      <div className="rounded-xl border border-border/70 bg-card overflow-hidden shadow-2xs">
+        <div className="border-b border-border px-4 py-3 bg-muted/20">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            All Users Directory
           </h2>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+        <div className="relative w-full overflow-x-auto">
+          <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-border text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <tr className="border-b border-border text-[11px] uppercase tracking-wide text-muted-foreground bg-muted/10 whitespace-nowrap">
                 <th className="w-12 px-4 py-2.5">
                   <input
                     type="checkbox"
@@ -184,18 +183,18 @@ export default function AdminUsersPage() {
                     className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                   />
                 </th>
-                <th className="px-4 py-2.5 font-medium">ID</th>
-                <th className="px-4 py-2.5 font-medium">Name</th>
-                <th className="px-4 py-2.5 font-medium">Email</th>
-                <th className="px-4 py-2.5 font-medium">Bookmarked</th>
-                <th className="px-4 py-2.5 font-medium">Still Learning</th>
-                <th className="px-4 py-2.5 font-medium">Learned</th>
-                <th className="px-4 py-2.5 font-medium">Quiz Result</th>
-                <th className="px-4 py-2.5 font-medium">Role</th>
-                <th className="px-4 py-2.5 font-medium">Status</th>
-                <th className="px-4 py-2.5 font-medium">Last Activity</th>
-                <th className="px-4 py-2.5 font-medium">Joined</th>
-                <th className="px-4 py-2.5 font-medium">Actions</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">ID</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Name</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Email</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Bookmarked</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Still Learning</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Learned</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Quiz Result</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Role</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Status</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Last Activity</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Joined</th>
+                <th className="px-4 py-2.5 font-semibold whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody>

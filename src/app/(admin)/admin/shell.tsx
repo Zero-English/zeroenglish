@@ -1,15 +1,15 @@
 "use client";
 
-import AdminSidebar from "./sidebar";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import AdminSidebar from "./sidebar";
+import { AdminMobileHeader } from "@/components/admin/admin-mobile-header";
 
 export default function AdminShell({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isOpen, setIsOpen] = useState(false);
   const [isDesktopOpen, setIsDesktopOpen] = useState(false);
   const pathname = usePathname();
 
@@ -26,19 +26,21 @@ export default function AdminShell({
         isStudio ? "h-screen overflow-hidden" : "min-h-screen"
       }`}
     >
+      {/* Sticky Mobile Header (< 768px / md) */}
+      {!isStudio && <AdminMobileHeader />}
+
+      {/* Persistent Desktop Sidebar (>= 768px / md) */}
       <AdminSidebar
-        isOpen={isOpen}
         isDesktopOpen={isDesktopOpen}
-        close={() => setIsOpen(false)}
         toggleDesktop={() => setIsDesktopOpen((prev) => !prev)}
-        onMenu={() => setIsOpen(true)}
       />
+
+      {/* Main Viewport Container */}
       <main
         className={`flex-1 min-w-0 w-full ${
-          isStudio ? "h-full overflow-hidden flex flex-col" : ""
+          isStudio ? "h-full overflow-hidden flex flex-col" : "min-h-0"
         }`}
       >
-        {!isStudio && <div className="h-14 md:hidden" aria-hidden="true" />}
         {children}
       </main>
     </div>

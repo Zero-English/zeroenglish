@@ -287,8 +287,8 @@ export default function AdminMediaPage() {
   const end = Math.min(page * PAGE_LIMIT, total);
 
   return (
-    <div className="p-3 lg:p-4">
-      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-6 space-y-4">
+      <header className="mb-2 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           {loading ? "Loading..." : `${total} image${total === 1 ? "" : "s"} in the media library`}
         </p>

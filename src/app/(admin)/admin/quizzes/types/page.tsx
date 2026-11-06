@@ -150,9 +150,9 @@ export default function AdminQuizTypesPage() {
   }
 
   return (
-    <div className="p-3 lg:p-4">
-      <BackButton />
-      <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-6 space-y-4">
+      <BackButton className="hidden md:inline-flex" />
+      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
           <QuizSectionNav />
           <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -198,11 +198,11 @@ export default function AdminQuizTypesPage() {
         {message}
       </div>
 
-      <div className="rounded-xl border border-border shadow-sm bg-card">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+      <div className="rounded-xl border border-border/70 shadow-2xs bg-card overflow-hidden">
+        <div className="relative w-full overflow-x-auto">
+          <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500 dark:border-gray-800 dark:text-gray-400">
+              <tr className="border-b border-border text-[11px] uppercase tracking-wide text-muted-foreground bg-muted/10 whitespace-nowrap">
                 <th className="px-4 py-2.5 font-medium">ID</th>
                 <th className="px-4 py-2.5 font-medium">Name</th>
                 <th className="px-4 py-2.5 font-medium">Questions</th>

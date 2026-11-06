@@ -2,17 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const items = [
-  { href: "/admin/quizzes", label: "Questions" },
-  { href: "/admin/quizzes/types", label: "Types" },
+  { href: "/admin/quizzes", label: "Questions Bank" },
+  { href: "/admin/quizzes/types", label: "Quiz Types" },
 ];
 
 export function QuizSectionNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="inline-flex w-fit items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 p-0.5 shadow-sm dark:border-gray-800 dark:bg-gray-800/40">
+    <nav className="inline-flex w-fit items-center gap-1 rounded-xl border border-border/70 bg-muted/50 p-1 shadow-2xs">
       {items.map((item) => {
         const active = pathname === item.href;
         return (
@@ -20,12 +21,12 @@ export function QuizSectionNav() {
             key={item.href}
             href={item.href}
             aria-current={active ? "page" : undefined}
-            className={
-              "rounded-md px-2.5 py-1 text-xs font-medium transition-colors " +
-              (active
-                ? "bg-white text-gray-900 shadow-sm dark:bg-gray-800 dark:text-gray-100"
-                : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200")
-            }
+            className={cn(
+              "rounded-lg px-3 py-1.5 text-xs font-semibold transition-all active:scale-95 select-none",
+              active
+                ? "bg-background text-foreground shadow-xs font-semibold"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+            )}
           >
             {item.label}
           </Link>

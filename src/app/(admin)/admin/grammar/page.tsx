@@ -409,14 +409,14 @@ export default function AdminGrammarPage() {
   };
 
   return (
-    <div className="space-y-6 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-6 space-y-6">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <BackButton />
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              <GraduationCap className="h-6 w-6 text-primary" />
+            <BackButton className="hidden md:inline-flex" />
+            <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+              <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               <span>Grammar Curriculum Manager</span>
             </h1>
           </div>
