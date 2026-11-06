@@ -15,7 +15,6 @@ import {
   Image as ImageIcon,
   Newspaper,
   FileText,
-  Menu,
   UserRound,
   ExternalLink,
   LogOut,
@@ -27,6 +26,7 @@ import {
   Moon,
   Laptop,
   Mail,
+  LayoutGrid,
 } from "lucide-react";
 import { UserAvatar } from "@/components/UserAvatar";
 import { Button } from "@/components/ui/button";
@@ -44,14 +44,10 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 const navItems = [
+  { href: "/admin", label: "Admin Hub", icon: LayoutGrid, exact: true },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/vocabulary", label: "Vocabulary", icon: BookOpen },
   { href: "/admin/grammar", label: "Grammar", icon: GraduationCap },
@@ -77,7 +73,9 @@ function NavLinks({
   return (
     <nav className="flex-1 px-2.5 py-2 space-y-0.5 overflow-y-auto">
       {navItems.map((item) => {
-        const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+        const isActive = item.exact
+          ? pathname === item.href
+          : pathname === item.href || (pathname.startsWith(item.href + "/") && item.href !== "/admin");
         return (
           <Link
             key={item.href}
@@ -175,6 +173,12 @@ function ProfileMenu({
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
+          <Link href="/admin" className="cursor-pointer gap-2 text-xs">
+            <LayoutGrid className="size-3.5" />
+            Admin Hub
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
           <Link href={`/admin/users/${user?.id ?? ""}`} className="cursor-pointer gap-2 text-xs">
             <UserRound className="size-3.5" />
             My Profile
@@ -231,111 +235,58 @@ function ProfileMenu({
 }
 
 export default function AdminSidebar({
-  isOpen,
   isDesktopOpen,
-  close,
   toggleDesktop,
-  onMenu,
 }: {
-  isOpen: boolean;
   isDesktopOpen: boolean;
-  close: () => void;
   toggleDesktop: () => void;
-  onMenu: () => void;
 }) {
-  const pathname = usePathname();
-  const isStudio =
-    pathname?.includes("/admin/templates/new") ||
-    (pathname?.includes("/admin/templates/") && pathname?.includes("/edit")) ||
-    pathname?.includes("/admin/grammar/section/") ||
-    pathname?.includes("/admin/grammar/category/") ||
-    pathname?.includes("/admin/grammar/rule/");
-
   const handleLogout = () => {
-    close();
     void signOut({ callbackUrl: "/admin" });
   };
 
   return (
-    <>
-      {/* Mobile top hamburger trigger (hidden on studio editor to preserve back button) */}
-      {!isStudio && (
-        <Button
-          variant="outline"
-          size="icon-sm"
-          onClick={onMenu}
-          aria-label="Open admin menu"
-          className="md:hidden fixed top-3 left-3 z-40 bg-background/95 backdrop-blur shadow-xs"
-        >
-          <Menu className="size-4" />
-        </Button>
-      )}
-
-      {/* Desktop simple sidebar */}
-      <motion.aside
-        initial={false}
-        animate={{ width: isDesktopOpen ? 220 : 56 }}
-        transition={{ type: "spring", stiffness: 350, damping: 32 }}
-        className="hidden md:flex sticky top-0 z-30 h-screen md:shrink-0 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border overflow-hidden select-none"
+    <motion.aside
+      initial={false}
+      animate={{ width: isDesktopOpen ? 220 : 56 }}
+      transition={{ type: "spring", stiffness: 350, damping: 32 }}
+      className="hidden md:flex sticky top-0 z-30 h-screen md:shrink-0 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border overflow-hidden select-none"
+    >
+      {/* Header / Brand */}
+      <div
+        className={cn(
+          "flex items-center h-14 border-b border-sidebar-border px-3",
+          isDesktopOpen ? "justify-between" : "justify-center"
+        )}
       >
-        {/* Header / Brand */}
-        <div
-          className={cn(
-            "flex items-center h-14 border-b border-sidebar-border px-3",
-            isDesktopOpen ? "justify-between" : "justify-center"
-          )}
-        >
-          {isDesktopOpen && (
-            <div className="flex items-center gap-1.5 min-w-0">
-              <span className="text-xs font-bold tracking-tight text-foreground truncate">
-                Zero English
-              </span>
-              <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 font-normal">
-                Admin
-              </Badge>
-            </div>
-          )}
-          <Button
-            variant="ghost"
-            size="icon-xs"
-            onClick={toggleDesktop}
-            aria-label={isDesktopOpen ? "Collapse sidebar" : "Expand sidebar"}
-            className="text-muted-foreground hover:text-foreground hover:bg-sidebar-accent"
-          >
-            <PanelLeft className="size-3.5" />
-          </Button>
-        </div>
-
-        {/* Navigation list */}
-        <NavLinks isOpen={isDesktopOpen} />
-
-        {/* Profile / Actions footer */}
-        <div className="p-2 border-t border-sidebar-border mt-auto">
-          <ProfileMenu isOpen={isDesktopOpen} onLogout={handleLogout} />
-        </div>
-      </motion.aside>
-
-      {/* Mobile Drawer (shadcn Sheet) */}
-      <Sheet open={isOpen} onOpenChange={(open) => { if (!open) close(); }}>
-        <SheetContent
-          side="left"
-          className="w-60 gap-0 p-0 bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col"
-        >
-          <SheetTitle className="sr-only">Admin Navigation</SheetTitle>
-          <div className="flex items-center gap-2 px-4 h-14 border-b border-sidebar-border">
-            <span className="text-xs font-bold tracking-tight text-foreground">
+        {isDesktopOpen && (
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="text-xs font-bold tracking-tight text-foreground truncate">
               Zero English
             </span>
             <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 font-normal">
               Admin
             </Badge>
           </div>
-          <NavLinks isOpen onNavigate={close} />
-          <div className="mt-auto border-t border-sidebar-border p-2">
-            <ProfileMenu isOpen onLogout={handleLogout} />
-          </div>
-        </SheetContent>
-      </Sheet>
-    </>
+        )}
+        <Button
+          variant="ghost"
+          size="icon-xs"
+          onClick={toggleDesktop}
+          aria-label={isDesktopOpen ? "Collapse sidebar" : "Expand sidebar"}
+          className="text-muted-foreground hover:text-foreground hover:bg-sidebar-accent"
+        >
+          <PanelLeft className="size-3.5" />
+        </Button>
+      </div>
+
+      {/* Navigation list */}
+      <NavLinks isOpen={isDesktopOpen} />
+
+      {/* Profile / Actions footer */}
+      <div className="p-2 border-t border-sidebar-border mt-auto">
+        <ProfileMenu isOpen={isDesktopOpen} onLogout={handleLogout} />
+      </div>
+    </motion.aside>
   );
 }

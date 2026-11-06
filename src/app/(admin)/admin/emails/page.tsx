@@ -617,7 +617,7 @@ export default function AdminEmailsPage() {
   }
 
   return (
-    <div className="p-3 sm:p-5 lg:p-8 max-w-7xl mx-auto space-y-6">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-6 space-y-6">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/60">
         <div className="space-y-1">

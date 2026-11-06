@@ -2,17 +2,27 @@
 
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export function BackButton() {
+interface BackButtonProps {
+  className?: string;
+  label?: string;
+}
+
+export function BackButton({ className, label = "Back" }: BackButtonProps) {
   const router = useRouter();
 
   return (
     <button
+      type="button"
       onClick={() => router.back()}
-      className="mb-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors"
+      className={cn(
+        "mb-4 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors select-none",
+        className,
+      )}
     >
-      <ArrowLeft className="h-4 w-4" />
-      Back
+      <ArrowLeft className="size-3.5" />
+      <span>{label}</span>
     </button>
   );
 }

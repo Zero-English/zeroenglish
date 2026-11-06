@@ -137,8 +137,8 @@ export default function AdminBlogsPage() {
   const end = Math.min(page * PAGE_SIZE, total);
 
   return (
-    <div className="p-3 lg:p-4">
-      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-6 space-y-4">
+      <header className="mb-2 flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-gray-500 dark:text-gray-400">
           {loading ? "Loading..." : `Manage blogs (${total} blog${total === 1 ? "" : "s"})`}
         </p>
@@ -154,10 +154,10 @@ export default function AdminBlogsPage() {
         </div>
       )}
 
-      <div className="rounded-xl border border-border shadow-sm bg-card">
-        <div className="border-b border-gray-200 p-4 dark:border-gray-800">
-          <div className="relative min-w-56 flex-1">
-            <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <div className="rounded-xl border border-border/70 shadow-2xs bg-card overflow-hidden">
+        <div className="border-b border-border p-3 sm:p-4 bg-muted/10">
+          <div className="relative w-full">
+            <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               value={searchInput}
               onChange={(e) => {
@@ -165,15 +165,15 @@ export default function AdminBlogsPage() {
                 setPage(1);
               }}
               placeholder="Search by title, description or slug..."
-              className="pl-8"
+              className="pl-8 text-xs h-8 sm:h-9"
             />
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+        <div className="relative w-full overflow-x-auto">
+          <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500 dark:border-gray-800 dark:text-gray-400">
+              <tr className="border-b border-border text-[11px] uppercase tracking-wide text-muted-foreground bg-muted/10 whitespace-nowrap">
                 <th className="px-4 py-2.5 font-medium">ID</th>
                 <th className="px-4 py-2.5 font-medium">Title</th>
                 <th className="px-4 py-2.5 font-medium">Slug</th>

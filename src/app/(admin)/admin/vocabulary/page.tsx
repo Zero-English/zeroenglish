@@ -435,13 +435,13 @@ export default function AdminVocabularyPage() {
   }
 
   return (
-    <div className="p-3 lg:p-4">
-      <BackButton />
-      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-6 space-y-4">
+      <BackButton className="hidden md:inline-flex" />
+      <header className="mb-2 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-xs sm:text-sm text-muted-foreground font-medium">
           {loading ? "Loading..." : `Manage vocabulary entries (${words.length} words)`}
         </p>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <input
             ref={fileInputRef}
             type="file"
@@ -451,13 +451,14 @@ export default function AdminVocabularyPage() {
           />
           <Button
             variant="outline"
+            size="sm"
             disabled={importing}
             onClick={() => fileInputRef.current?.click()}
           >
             <Upload />
             {importing ? "Importing..." : "Import JSON"}
           </Button>
-          <Button onClick={() => { setEditing(null); setFormOpen(true); }}>
+          <Button size="sm" onClick={() => { setEditing(null); setFormOpen(true); }}>
             <Plus />
             Add Word
           </Button>
@@ -467,7 +468,7 @@ export default function AdminVocabularyPage() {
       <div
         className={
           showMessage && message
-            ? "mb-4 inline-flex rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300"
+            ? "mb-4 inline-flex rounded-md border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs text-foreground"
             : "hidden"
         }
       >
@@ -475,16 +476,16 @@ export default function AdminVocabularyPage() {
       </div>
 
       {selected.size > 0 && (
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-2.5">
-          <p className="text-sm text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">{selected.size}</span>{" "}
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-primary/30 bg-primary/5 px-4 py-2.5">
+          <p className="text-xs font-medium text-foreground">
+            <span className="font-bold">{selected.size}</span>{" "}
             {selected.size === 1 ? "word" : "words"} selected
           </p>
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={clearSelection}
-              className="rounded-md px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+              className="rounded-md px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors active:scale-95"
             >
               Clear
             </button>
@@ -499,22 +500,24 @@ export default function AdminVocabularyPage() {
         </div>
       )}
 
-      <div className="rounded-xl border border-border bg-card shadow-sm">
+      <div className="rounded-xl border border-border/70 bg-card shadow-2xs overflow-hidden">
         {/* Toolbar / Filters */}
-        <div className="border-b border-border p-4">
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="relative min-w-56 flex-1">
-                <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <div className="border-b border-border p-3 sm:p-4 bg-muted/10">
+          <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <div className="relative w-full sm:flex-1">
+                <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                   placeholder="Search word, meaning, definition, category..."
-                  className="pl-8"
+                  className="pl-8 text-xs h-8 sm:h-9"
                 />
               </div>
               <Button
                 variant="outline"
+                size="sm"
+                className="self-end sm:self-auto"
                 onClick={resetPageAndFilters}
                 disabled={
                   !search &&
@@ -529,12 +532,12 @@ export default function AdminVocabularyPage() {
                 Reset
               </Button>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
               <Select
                 value={levelFilter}
                 onValueChange={(v) => { setLevelFilter(v); setPage(1); }}
               >
-                <SelectTrigger className="w-28" aria-label="Filter by level">
+                <SelectTrigger className="w-full sm:w-28 text-xs h-8" aria-label="Filter by level">
                   <SelectValue placeholder="Level" />
                 </SelectTrigger>
                 <SelectContent>
@@ -550,7 +553,7 @@ export default function AdminVocabularyPage() {
                 value={categoryFilter}
                 onValueChange={(v) => { setCategoryFilter(v); setPage(1); }}
               >
-                <SelectTrigger className="w-40" aria-label="Filter by category">
+                <SelectTrigger className="w-full sm:w-36 text-xs h-8" aria-label="Filter by category">
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -566,7 +569,7 @@ export default function AdminVocabularyPage() {
                 value={posFilter}
                 onValueChange={(v) => { setPosFilter(v); setPage(1); }}
               >
-                <SelectTrigger className="w-44" aria-label="Filter by word type">
+                <SelectTrigger className="w-full sm:w-36 text-xs h-8" aria-label="Filter by word type">
                   <SelectValue placeholder="Word type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -582,7 +585,7 @@ export default function AdminVocabularyPage() {
                 value={statusFilter}
                 onValueChange={(v) => { setStatusFilter(v as "all" | "pending" | "approved"); setPage(1); }}
               >
-                <SelectTrigger className="w-32" aria-label="Filter by status">
+                <SelectTrigger className="w-full sm:w-32 text-xs h-8" aria-label="Filter by status">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -595,7 +598,7 @@ export default function AdminVocabularyPage() {
                 value={addedByFilter}
                 onValueChange={(v) => { setAddedByFilter(v); setPage(1); }}
               >
-                <SelectTrigger className="w-40" aria-label="Filter by added by">
+                <SelectTrigger className="w-full col-span-2 sm:col-span-1 sm:w-36 text-xs h-8" aria-label="Filter by added by">
                   <SelectValue placeholder="Added by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -612,10 +615,10 @@ export default function AdminVocabularyPage() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+        <div className="relative w-full overflow-x-auto">
+          <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-border text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <tr className="border-b border-border text-[11px] uppercase tracking-wide text-muted-foreground bg-muted/10 whitespace-nowrap">
                 <th className="w-12 px-4 py-2.5">
                   <input
                     type="checkbox"

@@ -435,16 +435,16 @@ export default function AdminQuizzesPage() {
   }
 
   return (
-    <div className="p-3 lg:p-4">
-      <BackButton />
-      <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-6 space-y-4">
+      <BackButton className="hidden md:inline-flex" />
+      <header className="mb-2 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
           <QuizSectionNav />
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-xs sm:text-sm text-muted-foreground font-medium">
             {loading ? "Loading..." : `Manage quiz questions (${questions.length} questions)`}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <input
             ref={fileInputRef}
             type="file"
@@ -452,19 +452,20 @@ export default function AdminQuizzesPage() {
             className="hidden"
             onChange={handleFileChange}
           />
-          <Button variant="outline" onClick={handleExport}>
+          <Button variant="outline" size="sm" onClick={handleExport}>
             <Download />
-            Export JSON
+            Export
           </Button>
           <Button
             variant="outline"
+            size="sm"
             disabled={importing}
             onClick={() => fileInputRef.current?.click()}
           >
             <Upload />
-            {importing ? "Importing..." : "Import JSON"}
+            {importing ? "Importing..." : "Import"}
           </Button>
-          <Button onClick={() => { setEditing(null); setFormOpen(true); }}>
+          <Button size="sm" onClick={() => { setEditing(null); setFormOpen(true); }}>
             <Plus />
             Add Question
           </Button>
@@ -520,22 +521,24 @@ export default function AdminQuizzesPage() {
         </div>
       )}
 
-      <div className="rounded-xl border border-border bg-card shadow-sm">
+      <div className="rounded-xl border border-border/70 bg-card shadow-2xs overflow-hidden">
         {/* Toolbar / Filters */}
-        <div className="border-b border-border p-4">
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="relative min-w-56 flex-1">
-                <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <div className="border-b border-border p-3 sm:p-4 bg-muted/10">
+          <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <div className="relative w-full sm:flex-1">
+                <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                   placeholder="Search question, answer, options..."
-                  className="pl-8"
+                  className="pl-8 text-xs h-8 sm:h-9"
                 />
               </div>
               <Button
                 variant="outline"
+                size="sm"
+                className="self-end sm:self-auto"
                 onClick={resetPageAndFilters}
                 disabled={!search && typeFilter === "all" && difficultyFilter === "all" && statusFilter === "all" && addedByFilter === "all"}
               >
@@ -543,12 +546,12 @@ export default function AdminQuizzesPage() {
                 Reset
               </Button>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
               <Select
                 value={typeFilter}
                 onValueChange={(v) => { setTypeFilter(v); setPage(1); }}
               >
-                <SelectTrigger className="w-48" aria-label="Filter by quiz type">
+                <SelectTrigger className="w-full sm:w-44 text-xs h-8" aria-label="Filter by quiz type">
                   <SelectValue placeholder="Quiz type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -564,7 +567,7 @@ export default function AdminQuizzesPage() {
                 value={difficultyFilter}
                 onValueChange={(v) => { setDifficultyFilter(v); setPage(1); }}
               >
-                <SelectTrigger className="w-36" aria-label="Filter by difficulty">
+                <SelectTrigger className="w-full sm:w-36 text-xs h-8" aria-label="Filter by difficulty">
                   <SelectValue placeholder="Difficulty" />
                 </SelectTrigger>
                 <SelectContent>
@@ -583,7 +586,7 @@ export default function AdminQuizzesPage() {
                   setPage(1);
                 }}
               >
-                <SelectTrigger className="w-36" aria-label="Filter by status">
+                <SelectTrigger className="w-full sm:w-32 text-xs h-8" aria-label="Filter by status">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -596,7 +599,7 @@ export default function AdminQuizzesPage() {
                 value={addedByFilter}
                 onValueChange={(v) => { setAddedByFilter(v); setPage(1); }}
               >
-                <SelectTrigger className="w-40" aria-label="Filter by added by">
+                <SelectTrigger className="w-full sm:w-36 text-xs h-8" aria-label="Filter by added by">
                   <SelectValue placeholder="Added By" />
                 </SelectTrigger>
                 <SelectContent>
@@ -612,7 +615,7 @@ export default function AdminQuizzesPage() {
                 value={sortOrder}
                 onValueChange={(v) => { setSortOrder(v as "asc" | "desc"); setPage(1); }}
               >
-                <SelectTrigger className="w-40" aria-label="Sort by ID">
+                <SelectTrigger className="w-full col-span-2 sm:col-span-1 sm:w-36 text-xs h-8" aria-label="Sort by ID">
                   <SelectValue placeholder="Sort by ID" />
                 </SelectTrigger>
                 <SelectContent>
@@ -625,10 +628,10 @@ export default function AdminQuizzesPage() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
+        <div className="relative w-full overflow-x-auto">
+          <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-border text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <tr className="border-b border-border text-[11px] uppercase tracking-wide text-muted-foreground bg-muted/10 whitespace-nowrap">
                 <th className="w-12 px-4 py-2.5">
                   <input
                     type="checkbox"

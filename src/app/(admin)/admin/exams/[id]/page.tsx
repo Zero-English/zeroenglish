@@ -60,7 +60,7 @@ export default async function SingleExamPage({
     exam.results.length > 0
       ? Math.round(
           exam.results.reduce((sum, r) => sum + r.scoreInPercent, 0) /
-            exam.results.length
+            exam.results.length,
         )
       : null;
 
@@ -88,12 +88,12 @@ export default async function SingleExamPage({
   ];
 
   return (
-    <div className="p-3 lg:p-4">
+    <div className="w-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-6 space-y-6">
       <Link
         href="/admin/exams"
-        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
+        className="hidden md:inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors mb-2"
       >
-        <ArrowLeft className="h-4 w-4" />
+        <ArrowLeft className="h-3.5 w-3.5" />
         Back to Exams
       </Link>
 
@@ -178,9 +178,7 @@ export default async function SingleExamPage({
               </dd>
             </div>
             <div className="flex flex-wrap items-center justify-between gap-2 px-5 py-3 text-sm">
-              <dt className="text-gray-500 dark:text-gray-400">
-                Questions
-              </dt>
+              <dt className="text-gray-500 dark:text-gray-400">Questions</dt>
               <dd className="flex items-center gap-1 font-medium text-gray-900 dark:text-white">
                 <ListOrdered className="h-3.5 w-3.5 text-gray-400" />
                 {exam.linkedQuestionCount} linked
@@ -354,7 +352,7 @@ export default async function SingleExamPage({
                       <div className="flex flex-col gap-1">
                         <span
                           className={`inline-flex w-fit rounded-full px-2 py-0.5 text-xs font-medium ${scoreBadgeClass(
-                            r.scoreInPercent
+                            r.scoreInPercent,
                           )}`}
                         >
                           {r.scoreInPercent}%
