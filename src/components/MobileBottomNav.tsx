@@ -23,6 +23,7 @@ import {
   Sparkles,
   ExternalLink,
   LayoutDashboard,
+  NotebookPen,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -31,6 +32,7 @@ import { useTheme } from 'next-themes'
 
 import { cn } from '@/lib/utils'
 import { useAuthStatus, useAuthStore } from '@/lib/auth-store'
+import { openNotesDialog } from '@/lib/notes-dialog'
 import { useSelectedLevel } from '@/lib/level-store'
 import { useLanguage } from '@/components/language-provider'
 import { useQuizChrome } from '@/lib/quiz-chrome'
@@ -390,6 +392,26 @@ export function MobileBottomNav() {
               </div>
               <ChevronRight className="size-4 text-muted-foreground/60" />
             </Link>
+
+            <button
+              type="button"
+              onClick={() => {
+                setDrawerOpen(false)
+                openNotesDialog()
+              }}
+              className="flex w-full items-center justify-between p-2.5 rounded-lg text-left text-xs font-medium text-foreground hover:bg-muted/70 transition-colors"
+            >
+              <div className="flex items-center gap-2.5">
+                <div className="flex size-7 items-center justify-center rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                  <NotebookPen className="size-4" />
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">{t('আমার নোট', 'My Notes')}</p>
+                  <p className="text-[10px] text-muted-foreground">{t('ব্যক্তিগত পড়ার নোটবুক', 'Your personal notebook')}</p>
+                </div>
+              </div>
+              <ChevronRight className="size-4 text-muted-foreground/60" />
+            </button>
 
             <Link
               href="/grammar"

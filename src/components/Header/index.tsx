@@ -16,6 +16,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   ArrowLeft,
+  NotebookPen,
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -28,6 +29,7 @@ import { DesktopNav, type NavItem, type LocalizedText } from '@/components/Heade
 import { MobileNav, type MobileNavItem } from '@/components/Header/MobileNav'
 import { useLanguage } from '@/components/language-provider'
 import { useAuthStatus, useAuthStore } from '@/lib/auth-store'
+import { openNotesDialog } from '@/lib/notes-dialog'
 import { getHeaderPage } from '@/lib/header-page'
 import { useQuizChrome } from '@/lib/quiz-chrome'
 import { UserAvatar } from '@/components/UserAvatar'
@@ -595,6 +597,10 @@ export function Header() {
                       <User className="size-3.5 text-muted-foreground" />
                       <span>{lang === 'en' ? 'My Profile & Words' : 'প্রোফাইল ও শব্দতালিকা'}</span>
                     </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => openNotesDialog()} className="cursor-pointer gap-2">
+                    <NotebookPen className="size-3.5 text-muted-foreground" />
+                    <span>{lang === 'en' ? 'My Notes' : 'আমার নোট'}</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/profile?tab=learned&type=grammar" className="cursor-pointer gap-2">

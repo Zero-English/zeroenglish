@@ -28,9 +28,11 @@ import {
   Sparkles,
   ExternalLink,
   LayoutDashboard,
+  NotebookPen,
 } from "lucide-react";
 import { useSidebar } from "@/components/sidebar-provider";
 import { useAuthStatus, useAuthStore } from "@/lib/auth-store";
+import { openNotesDialog, useNotesDialogStore } from "@/lib/notes-dialog";
 import { useSelectedLevel } from "@/lib/level-store";
 import { useLanguage } from "@/components/language-provider";
 import { useQuizChrome } from "@/lib/quiz-chrome";
@@ -78,6 +80,7 @@ export function Sidebar() {
   const { theme, setTheme, systemTheme } = useTheme();
   const logout = useAuthStore((s) => s.logout);
   const { data: session } = useSession();
+  const notesOpen = useNotesDialogStore((s) => s.open);
 
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
 
@@ -185,6 +188,37 @@ export function Sidebar() {
                 </Link>
               );
             })}
+
+            {/* Notes Dialog Trigger in Dock */}
+            <button
+              type="button"
+              onClick={openNotesDialog}
+              aria-label={t("আমার নোট", "My Notes")}
+              aria-pressed={notesOpen}
+              className={cn(
+                "group relative flex size-11 items-center justify-center rounded-xl transition-all",
+                notesOpen
+                  ? "text-primary font-semibold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/70 active:scale-95"
+              )}
+            >
+              {notesOpen && (
+                <span className="absolute inset-0 rounded-xl bg-primary/15 border border-primary/20 shadow-xs" />
+              )}
+              <motion.div
+                whileHover={{ scale: 1.2, y: -4 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="relative z-10"
+              >
+                <NotebookPen className="size-5 shrink-0" />
+              </motion.div>
+
+              {/* Dock Tooltip positioned above */}
+              <span className="pointer-events-none absolute bottom-full mb-3 hidden group-hover:flex items-center rounded-md bg-popover px-2.5 py-1 text-xs font-medium text-popover-foreground shadow-md border border-border whitespace-nowrap z-50 animate-in fade-in-0 zoom-in-95">
+                {t("আমার নোট", "My Notes")}
+              </span>
+            </button>
 
             <Separator orientation="vertical" className="h-6 mx-0.5 bg-border/80" />
 
