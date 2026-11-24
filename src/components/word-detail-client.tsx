@@ -32,6 +32,12 @@ import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import {
+  useGuidedTour,
+  GuidedTour,
+  TourReplayButton,
+  WORD_DETAIL_TOUR,
+} from "@/components/guided-tour";
 
 interface WordDetailClientProps {
   word: Word;
@@ -54,6 +60,15 @@ export function WordDetailClient({
     toggleBookmark,
     loaded: bookmarkLoaded,
   } = useBookmarkedWords();
+
+  const {
+    isOpen: isTourOpen,
+    currentStepIndex: tourStepIndex,
+    nextStep: tourNext,
+    prevStep: tourPrev,
+    closeTour,
+    startTour,
+  } = useGuidedTour(WORD_DETAIL_TOUR);
 
   const [copied, setCopied] = useState(false);
   const [activeRecallHidden, setActiveRecallHidden] = useState(true);
@@ -272,7 +287,9 @@ export function WordDetailClient({
               )}
             </div>
 
-            {/* Quick Action Share Pill */}
+            {/* Guide Replay & Share Buttons */}
+            <TourReplayButton onReplay={startTour} />
+
             <button
               onClick={handleShare}
               className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[12px] font-medium text-[#242423] ring-1 ring-black/5 hover:bg-[#f1f1ef] active:scale-95 transition-all dark:bg-[#1c1c1e] dark:ring-white/[0.08] dark:text-[#f3f3f2]"
@@ -328,7 +345,7 @@ export function WordDetailClient({
 
             {/* Quick Toggle Controls (Bookmark & Learned) */}
             {loaded && (
-              <div className="flex items-center gap-2">
+              <div data-tour="word-actions" className="flex items-center gap-2">
                 <button
                   onClick={() => toggleBookmark(word.id)}
                   className={cn(
@@ -386,7 +403,7 @@ export function WordDetailClient({
             </div>
 
             {/* Audio Buttons: Normal Speed & Slow Speed for Learners */}
-            <div className="flex items-center gap-2">
+            <div data-tour="word-audio" className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => speak(word.word, 0.9)}
@@ -411,6 +428,7 @@ export function WordDetailClient({
 
           {/* Bengali Meaning Module with Active Recall / Flashcard Self-Test */}
           <div
+            data-tour="active-recall"
             onClick={() => {
               if (activeRecallHidden) setActiveRecallHidden(false);
             }}
@@ -603,7 +621,7 @@ export function WordDetailClient({
         {/* =========================================================================
             CARD 3: INTERACTIVE QUICK SELF-CHECK (Gamified Active Recall Widget)
            ========================================================================= */}
-        <div className="rounded-[28px] border border-black/[0.06] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03),0_24px_48px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[32px] sm:p-7">
+        <div data-tour="quick-quiz" className="rounded-[28px] border border-black/[0.06] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03),0_24px_48px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[32px] sm:p-7">
           <div className="flex items-center justify-between border-b border-black/[0.05] pb-3.5 dark:border-white/[0.06]">
             <div className="flex items-center gap-2">
               <span className="grid size-7 place-items-center rounded-full bg-amber-500/10 text-amber-600 dark:bg-amber-400/15 dark:text-amber-400">
@@ -1015,6 +1033,15 @@ export function WordDetailClient({
           )}
         </div>
       </div>
+
+      <GuidedTour
+        config={WORD_DETAIL_TOUR}
+        isOpen={isTourOpen}
+        currentStepIndex={tourStepIndex}
+        onNext={tourNext}
+        onPrev={tourPrev}
+        onClose={closeTour}
+      />
     </div>
   );
 }

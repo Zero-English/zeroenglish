@@ -27,6 +27,12 @@ import {
   Bookmark,
   Sparkles,
 } from "lucide-react";
+import {
+  useGuidedTour,
+  GuidedTour,
+  TourReplayButton,
+  LEVEL_WORDS_TOUR,
+} from "@/components/guided-tour";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -199,6 +205,15 @@ export function LevelWordsClient({
     loaded: bookmarkLoaded,
   } = useBookmarkedWords();
   const storesLoaded = learnedLoaded && bookmarkLoaded;
+
+  const {
+    isOpen: isTourOpen,
+    currentStepIndex: tourStepIndex,
+    nextStep: tourNext,
+    prevStep: tourPrev,
+    closeTour,
+    startTour,
+  } = useGuidedTour(LEVEL_WORDS_TOUR);
 
   // Local cache of word objects, initialized with server-provided words
   const [wordsCache, setWordsCache] = useState<Map<number, Word>>(() => {
@@ -411,15 +426,17 @@ export function LevelWordsClient({
 
   return (
     <div>
-      <LevelServerFilterBar
-        basePath={basePath}
-        search={search}
-        sort={sort}
-        category={category}
-        categories={categories}
-        wordType={wordType}
-        status={status}
-      />
+      <div data-tour="filter-bar">
+        <LevelServerFilterBar
+          basePath={basePath}
+          search={search}
+          sort={sort}
+          category={category}
+          categories={categories}
+          wordType={wordType}
+          status={status}
+        />
+      </div>
 
       {isLoadingWords ? (
         <div className="space-y-4">
@@ -449,28 +466,36 @@ export function LevelWordsClient({
             animate="show"
             className="space-y-4"
           >
-            {displayedWords.map((word) => (
+            {displayedWords.map((word, index) => (
               <motion.div
                 key={`${word.id}-${word.word}`}
                 variants={itemVariants}
               >
-                <WordCard word={word} gradient={gradient} />
+                <WordCard
+                  word={word}
+                  gradient={gradient}
+                  isFirst={index === 0}
+                />
               </motion.div>
             ))}
           </motion.div>
 
-          {/* Showing counter badge */}
-          <div className="mt-8 mb-5 flex justify-center">
+          {/* Showing counter badge & Guide Replay */}
+          <div className="mt-8 mb-5 flex items-center justify-center gap-2">
             <span className="rounded-full bg-[#242423]/[0.05] px-4 py-1.5 text-xs font-semibold text-[#242423]/70 dark:bg-white/[0.06] dark:text-zinc-300">
               {t(
                 `মোট ${total}টির মধ্যে ${start + 1}–${Math.min(end, total)} দেখানো হচ্ছে`,
                 `Showing ${start + 1}–${Math.min(end, total)} of ${total}`,
               )}
             </span>
+            <TourReplayButton onReplay={startTour} />
           </div>
 
           {totalPages > 1 && (
-            <div className="w-full rounded-[22px] sm:rounded-full border border-black/[0.06] bg-white p-1.5 sm:p-2 shadow-[0_2px_12px_rgba(0,0,0,0.03),0_12px_28px_-12px_rgba(0,0,0,0.05)] dark:border-white/[0.08] dark:bg-[#1c1c1e]">
+            <div
+              data-tour="pagination"
+              className="w-full rounded-[22px] sm:rounded-full border border-black/[0.06] bg-white p-1.5 sm:p-2 shadow-[0_2px_12px_rgba(0,0,0,0.03),0_12px_28px_-12px_rgba(0,0,0,0.05)] dark:border-white/[0.08] dark:bg-[#1c1c1e]"
+            >
               <Pagination className="mx-0 w-full max-w-none">
                 <div className="flex w-full items-center justify-between gap-1.5 sm:gap-2">
                   <PaginationPrevious
@@ -538,6 +563,15 @@ export function LevelWordsClient({
           )}
         </>
       )}
+
+      <GuidedTour
+        config={LEVEL_WORDS_TOUR}
+        isOpen={isTourOpen}
+        currentStepIndex={tourStepIndex}
+        onNext={tourNext}
+        onPrev={tourPrev}
+        onClose={closeTour}
+      />
     </div>
   );
 }

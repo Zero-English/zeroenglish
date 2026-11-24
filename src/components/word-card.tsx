@@ -18,9 +18,10 @@ import {
 interface WordCardProps {
   word: Word;
   gradient?: string;
+  isFirst?: boolean;
 }
 
-export function WordCard({ word }: WordCardProps) {
+export function WordCard({ word, isFirst }: WordCardProps) {
   const speak = useSpeak();
   const t = useT();
   const { isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
@@ -63,6 +64,7 @@ export function WordCard({ word }: WordCardProps) {
   return (
     <article
       onDoubleClick={() => loaded && toggleLearned(word.id)}
+      {...(isFirst ? { "data-tour": "word-card" } : {})}
       className={cn(
         "group relative rounded-[24px] border bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] transition-all duration-200 hover:shadow-[0_2px_6px_rgba(0,0,0,0.04),0_18px_40px_-14px_rgba(0,0,0,0.09)] dark:bg-[#1c1c1e] sm:rounded-[28px] sm:p-5",
         learned
@@ -128,7 +130,10 @@ export function WordCard({ word }: WordCardProps) {
 
         {/* Circular Tactile Action Controls */}
         {loaded && (
-          <div className="flex shrink-0 items-center gap-1.5">
+          <div
+            className="flex shrink-0 items-center gap-1.5"
+            {...(isFirst ? { "data-tour": "card-actions" } : {})}
+          >
             <button
               type="button"
               onClick={(e) => {
