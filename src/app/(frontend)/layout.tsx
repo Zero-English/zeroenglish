@@ -14,7 +14,6 @@ import { LoginRequiredDrawer } from "@/components/login-required-drawer";
 import { NotesDialog } from "@/components/notes/notes-dialog";
 import { SessionAdopter } from "@/components/session-adopter";
 import { PopupHost } from "@/components/popup/popup-host";
-import { TTSProgressHUD } from "@/components/tts-progress-hud";
 import { SiteSchema } from "@/components/seo/site-schema";
 import { shellMetadata } from "@/components/html-shell";
 import {
@@ -84,7 +83,6 @@ export default function FrontendLayout({
             <NotesDialog />
             <SessionAdopter />
             <PopupHost />
-            <TTSProgressHUD />
           </div>
         </LanguageProvider>
       </SidebarProvider>

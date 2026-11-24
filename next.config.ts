@@ -18,7 +18,7 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  serverExternalPackages: ["kokoro-js", "@huggingface/transformers"],
+  serverExternalPackages: ["msedge-tts"],
   experimental: {
     globalNotFound: true,
     agentUpgrade: "security",
