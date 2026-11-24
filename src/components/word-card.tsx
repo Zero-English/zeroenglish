@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
 import { useSpeak } from "@/lib/use-speak";
@@ -45,7 +46,12 @@ export function WordCard({ word, gradient }: WordCardProps) {
       <div className="pl-4 sm:pl-5">
         <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1.5 mb-1.5">
           <h2 className="text-lg sm:text-xl font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight">
-            {word.word}
+            <Link
+              href={`/vocabulary/${encodeURIComponent(word.word.toLowerCase())}`}
+              className="hover:underline hover:text-black dark:hover:text-white transition-colors"
+            >
+              {word.word}
+            </Link>
           </h2>
           <button
             onClick={() => speak(word.word)}

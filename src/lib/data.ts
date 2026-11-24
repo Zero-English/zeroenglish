@@ -103,6 +103,101 @@ function sortOrder(sort: LevelPageSort): Prisma.WordOrderByWithRelationInput[] {
   }
 }
 
+export const getPublicWordBySlug = cache(
+  async (slugOrWord: string): Promise<Word | null> => {
+    const raw = decodeURIComponent(slugOrWord).trim();
+    if (!raw) return null;
+    const normalized = raw.replace(/-/g, " ");
+
+    const row = await withPrismaRetry(() =>
+      prisma.word.findFirst({
+        where: {
+          ...PUBLIC_WORD_WHERE,
+          OR: [
+            { word: { equals: raw, mode: "insensitive" } },
+            { word: { equals: normalized, mode: "insensitive" } },
+          ],
+        },
+        select: publicWordSelect,
+      })
+    );
+
+    return row ? toPublicWord(row) : null;
+  }
+);
+
+export const getRelatedWords = cache(
+  async (word: Word, limit = 6): Promise<Word[]> => {
+    const rows = await withPrismaRetry(() =>
+      prisma.word.findMany({
+        where: {
+          ...PUBLIC_WORD_WHERE,
+          level: word.level as Levels,
+          id: { not: word.id },
+        },
+        take: limit,
+        select: publicWordSelect,
+      })
+    );
+    return rows.map(toPublicWord);
+  }
+);
+
+export type AdjacentWord = {
+  id: number;
+  word: string;
+  level: string;
+  meaningBn: string[];
+};
+
+export const getAdjacentWords = cache(
+  async (
+    currentId: number
+  ): Promise<{ prev: AdjacentWord | null; next: AdjacentWord | null }> => {
+    const [prevRow, nextRow] = await Promise.all([
+      withPrismaRetry(() =>
+        prisma.word.findFirst({
+          where: {
+            ...PUBLIC_WORD_WHERE,
+            id: { lt: currentId },
+          },
+          orderBy: { id: "desc" },
+          select: { id: true, word: true, level: true, meaningBn: true },
+        })
+      ),
+      withPrismaRetry(() =>
+        prisma.word.findFirst({
+          where: {
+            ...PUBLIC_WORD_WHERE,
+            id: { gt: currentId },
+          },
+          orderBy: { id: "asc" },
+          select: { id: true, word: true, level: true, meaningBn: true },
+        })
+      ),
+    ]);
+
+    return {
+      prev: prevRow
+        ? {
+            id: prevRow.id,
+            word: prevRow.word,
+            level: prevRow.level,
+            meaningBn: prevRow.meaningBn,
+          }
+        : null,
+      next: nextRow
+        ? {
+            id: nextRow.id,
+            word: nextRow.word,
+            level: nextRow.level,
+            meaningBn: nextRow.meaningBn,
+          }
+        : null,
+    };
+  }
+);
+
 export const getAllWords = cache(async (): Promise<Word[]> => {
   const words = await withPrismaRetry(() =>
     prisma.word.findMany({
