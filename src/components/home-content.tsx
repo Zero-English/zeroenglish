@@ -423,10 +423,10 @@ export function HomeContent({
   const [activeRuleIdx, setActiveRuleIdx] = useState(0);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const {
-    speak: kokoroSpeak,
-    isPlaying: isKokoroPlaying,
-    isGenerating: isKokoroGenerating,
-    activeText: kokoroActiveText,
+    speak: edgeSpeak,
+    isPlaying: isEdgePlaying,
+    isLoading: isEdgeLoading,
+    activeText: edgeActiveText,
   } = useTTS();
   const [dailyGoals, setDailyGoals] = useState({
     vocab: true,
@@ -458,7 +458,7 @@ export function HomeContent({
   };
 
   const playWordAudio = (word: string) => {
-    kokoroSpeak(word, 0.9);
+    edgeSpeak(word, 0.95);
   };
 
   const toggleDailyGoal = (key: "vocab" | "grammar" | "quiz") => {
@@ -693,9 +693,9 @@ export function HomeContent({
                             </h4>
                             {/* Interactive Audio Pronunciation Button */}
                             {(() => {
-                              const isSampleActive = kokoroActiveText === currentSample.word;
-                              const isSampleLoading = isSampleActive && isKokoroGenerating;
-                              const isSamplePlaying = (isSampleActive && isKokoroPlaying) || isPlayingAudio;
+                              const isSampleActive = edgeActiveText === currentSample.word;
+                              const isSampleLoading = isSampleActive && isEdgeLoading;
+                              const isSamplePlaying = (isSampleActive && isEdgePlaying) || isPlayingAudio;
 
                               return (
                                 <button

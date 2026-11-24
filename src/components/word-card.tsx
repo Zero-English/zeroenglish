@@ -23,9 +23,9 @@ interface WordCardProps {
 }
 
 export function WordCard({ word, isFirst }: WordCardProps) {
-  const { speak, isGenerating, isPlaying, isDownloading, activeText } = useTTS();
+  const { speak, isLoading, isPlaying, activeText } = useTTS();
   const isThisWordActive = activeText === word.word;
-  const isThisWordLoading = (isThisWordActive && isGenerating) || (isThisWordActive && isDownloading);
+  const isThisWordLoading = isThisWordActive && isLoading;
   const isThisWordPlaying = isThisWordActive && isPlaying;
   const t = useT();
   const { isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();

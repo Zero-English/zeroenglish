@@ -118,15 +118,23 @@ export function WordDetailClient({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [prevWord, nextWord, router]);
 
-  // Neural Text-to-Speech via Kokoro-82M Web Worker
-  const { speak, isGenerating, isPlaying, isDownloading, progress, activeText } = useTTS();
+  // Neural Text-to-Speech via Server-Side Edge TTS (/api/tts)
+  const { speak, prefetch, isLoading, isPlaying, activeText } = useTTS();
   const isWordActive = activeText === word.word;
-  const isWordLoading = (isWordActive && isGenerating) || (isWordActive && isDownloading);
+  const isWordLoading = isWordActive && isLoading;
   const isWordPlaying = isWordActive && isPlaying;
+
+  // Pre-fetch audio for current word into browser cache in idle time for instant 0ms play
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      prefetch(word.word, 0.95);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [word.word, prefetch]);
 
   const handleSpeakSentence = (text: string, index: number) => {
     setPlayingSentenceIdx(index);
-    speak(text, { speed: 0.9, voice: "af_heart" });
+    speak(text, { speed: 0.95 });
   };
 
   const handleShare = async () => {
@@ -417,9 +425,7 @@ export function WordDetailClient({
                 )}
                 <span>
                   {isWordLoading
-                    ? isDownloading && progress
-                      ? `${t("ক্যাশ হচ্ছে", "Caching")} ${progress.percent}%`
-                      : t("তৈরি হচ্ছে...", "Generating...")
+                    ? t("লোড হচ্ছে...", "Loading...")
                     : t("উচ্চারণ", "Pronounce")}
                 </span>
               </button>
@@ -585,7 +591,7 @@ export function WordDetailClient({
                 const en = word.examplesEn?.[i];
                 const bn = word.examples_bn?.[i];
                 const isSentenceActive = activeText === en;
-                const isSentenceLoading = isSentenceActive && isGenerating;
+                const isSentenceLoading = isSentenceActive && isLoading;
                 const isSentencePlaying =
                   (isSentenceActive && isPlaying) ||
                   (playingSentenceIdx === i && isPlaying);
