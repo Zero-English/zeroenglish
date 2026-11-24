@@ -47,7 +47,7 @@ export async function generateMetadata({
     return { title: "Page Not Found", robots: { index: false, follow: false } };
   }
 
-  const { q, sort, category, isFiltered } = parseLevelQuery(await searchParams);
+  const { q, sort, category, wordType, isFiltered } = parseLevelQuery(await searchParams);
   const meta = getLevelMeta(upper);
   if (!meta) {
     return { title: "Page Not Found", robots: { index: false, follow: false } };
@@ -62,6 +62,7 @@ export async function generateMetadata({
       limit: ITEMS_PER_PAGE,
       search: q,
       category,
+      wordType,
       sort,
     }),
     getLevelAggregate(upper),
@@ -101,7 +102,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const meta = getLevelMeta(upper);
   if (!meta) notFound();
 
-  const { q, sort, category } = parseLevelQuery(await searchParams);
+  const { q, sort, category, wordType, status } = parseLevelQuery(await searchParams);
 
   const [pageData, aggregate, wordIds] = await Promise.all([
     browsePublicWords({
@@ -110,6 +111,7 @@ export default async function Page({ params, searchParams }: PageProps) {
       limit: ITEMS_PER_PAGE,
       search: q,
       category,
+      wordType,
       sort,
     }),
     getLevelAggregate(upper),
@@ -188,6 +190,8 @@ export default async function Page({ params, searchParams }: PageProps) {
         search={q}
         sort={sort}
         category={category}
+        wordType={wordType}
+        status={status}
       />
     </>
   );

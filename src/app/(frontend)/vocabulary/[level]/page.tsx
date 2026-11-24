@@ -6,6 +6,9 @@ import {
   getLevelAggregate,
   getLevelWordIds,
   isValidLevel,
+  getPublicWordBySlug,
+  getRelatedWords,
+  getAdjacentWords,
 } from "@/lib/data";
 import {
   ITEMS_PER_PAGE,
@@ -20,6 +23,7 @@ import {
   isLevelLive,
   levelMetaDescription,
 } from "@/lib/level-copy";
+import { WordDetailClient } from "@/components/word-detail-client";
 
 // Cached at the edge via ISR for 24 hours.
 export const revalidate = 86400;
@@ -37,9 +41,32 @@ export async function generateMetadata({
   const upper = level.toUpperCase();
 
   if (!isValidLevel(upper)) {
+    // If not a CEFR level (A1-C2), check if it is a specific word
+    const word = await getPublicWordBySlug(level);
+    if (!word) {
+      return {
+        title: "Word Not Found",
+        robots: { index: false, follow: false },
+      };
+    }
+
+    const cleanWord = word.word;
+    const meaning = word.meaningBn.filter((m) => m && m !== "...").join(", ");
+    const pageTitle = `${cleanWord} - Meaning, Definition & Examples | Zero English`;
+    const pageDesc = `${cleanWord} (${word.wordType.join(", ")}): ${meaning || word.definitionEn}. CEFR ${word.level} English vocabulary with Bengali meaning and example sentences.`;
+
     return {
-      title: "Level Not Found",
-      robots: { index: false, follow: false },
+      title: pageTitle,
+      description: pageDesc,
+      alternates: {
+        canonical: `/vocabulary/${encodeURIComponent(cleanWord.toLowerCase())}`,
+      },
+      openGraph: {
+        title: `${cleanWord} (${word.level}) - Meaning & Definition`,
+        description: pageDesc,
+        url: `${SITE_URL}/vocabulary/${encodeURIComponent(cleanWord.toLowerCase())}`,
+        type: "article",
+      },
     };
   }
 
@@ -76,14 +103,57 @@ export default async function Page({ params, searchParams }: PageProps) {
   const { level } = await params;
   const upper = level.toUpperCase();
 
-  if (!isValidLevel(upper)) notFound();
+  if (!isValidLevel(upper)) {
+    // Dispatch to single word detail page
+    const word = await getPublicWordBySlug(level);
+    if (!word) notFound();
+
+    const [relatedWords, adjacent] = await Promise.all([
+      getRelatedWords(word, 6),
+      getAdjacentWords(word.id),
+    ]);
+    const wordSlug = encodeURIComponent(word.word.toLowerCase());
+    const wordUrl = `${SITE_URL}/vocabulary/${wordSlug}`;
+
+    const definedTermSchema = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "DefinedTerm",
+          "@id": `${wordUrl}#term`,
+          name: word.word,
+          description: word.definitionEn,
+          inLanguage: "en",
+          url: wordUrl,
+          termCode: word.level,
+          inDefinedTermSet: {
+            "@type": "DefinedTermSet",
+            name: `CEFR ${word.level} English Vocabulary`,
+            url: `${SITE_URL}/vocabulary/${word.level.toLowerCase()}`,
+          },
+        },
+      ],
+    };
+
+    return (
+      <>
+        <JsonLd data={definedTermSchema} />
+        <WordDetailClient
+          word={word}
+          relatedWords={relatedWords}
+          prevWord={adjacent.prev}
+          nextWord={adjacent.next}
+        />
+      </>
+    );
+  }
 
   // Level labels live in lib/level-copy so the page, the hero and the metadata
   // can never disagree about what a level is called.
   const meta = getLevelMeta(upper);
   if (!meta) notFound();
 
-  const { q, sort, category } = parseLevelQuery(await searchParams);
+  const { q, sort, category, wordType, status } = parseLevelQuery(await searchParams);
 
   const [pageData, aggregate, wordIds] = await Promise.all([
     browsePublicWords({
@@ -92,6 +162,7 @@ export default async function Page({ params, searchParams }: PageProps) {
       limit: ITEMS_PER_PAGE,
       search: q,
       category,
+      wordType,
       sort,
     }),
     getLevelAggregate(upper),
@@ -152,6 +223,8 @@ export default async function Page({ params, searchParams }: PageProps) {
         search={q}
         sort={sort}
         category={category}
+        wordType={wordType}
+        status={status}
       />
     </>
   );

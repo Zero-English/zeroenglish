@@ -11,7 +11,7 @@ import { requestGoogleLogin } from '@/lib/login-required'
 import type { LocalizedText } from '@/components/Header/DesktopNav'
 
 const linkClass =
-  'flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-xs font-medium text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent'
+  'flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-xs font-semibold text-[#242423]/80 transition-all hover:bg-[#f1f1ef] active:scale-[0.98] dark:text-zinc-200 dark:hover:bg-[#252528]'
 
 export type MobileNavItem = {
   label: LocalizedText
@@ -36,7 +36,7 @@ export function MobileNav({
   )
 
   return (
-    <div className="flex flex-col space-y-0.5">
+    <div className="flex flex-col space-y-1">
       {items.map((item, i) => {
         const hasChildren = item.children.length > 0
         const isOpen = openIndex === i
@@ -45,14 +45,14 @@ export function MobileNav({
         return (
           <div key={`${item.label.en}-${item.href}`}>
             {hasChildren ? (
-              <div className="flex w-full items-center">
+              <div className="flex w-full items-center gap-1">
                 <Link
                   href={item.href}
                   onClick={onNavigate}
                   className={cn(
                     linkClass,
                     'flex-1',
-                    isActive && 'font-semibold text-primary'
+                    isActive && 'bg-[#242423]/[0.08] text-[#242423] font-bold dark:bg-white/[0.1] dark:text-white'
                   )}
                 >
                   {t(item.label)}
@@ -64,12 +64,12 @@ export function MobileNav({
                     { en: `Toggle ${item.label.en} submenu`, bn: `${item.label.bn} সাবমেনু টগল করুন` }
                   )}
                   onClick={() => setOpenIndex(isOpen ? null : i)}
-                  className="flex size-8 shrink-0 items-center justify-center rounded-md text-sidebar-foreground/60 transition-colors hover:text-sidebar-foreground hover:bg-sidebar-accent"
+                  className="flex size-8 shrink-0 items-center justify-center rounded-full text-[#242423]/60 transition-all hover:bg-[#f1f1ef] hover:text-[#242423] active:scale-95 dark:text-zinc-400 dark:hover:bg-[#252528] dark:hover:text-white"
                 >
                   <ChevronDown
                     className={cn(
-                      'size-4 transition-transform duration-200',
-                      isOpen && 'rotate-180 text-primary'
+                      'size-3.5 transition-transform duration-200',
+                      isOpen && 'rotate-180 text-[#242423] dark:text-white'
                     )}
                   />
                 </button>
@@ -80,7 +80,7 @@ export function MobileNav({
                 onClick={onNavigate}
                 className={cn(
                   linkClass,
-                  isActive && 'bg-sidebar-accent font-semibold text-primary'
+                  isActive && 'bg-[#242423]/[0.08] text-[#242423] font-bold dark:bg-white/[0.1] dark:text-white'
                 )}
               >
                 {t(item.label)}
@@ -90,8 +90,8 @@ export function MobileNav({
             {hasChildren && (
               <div
                 className={cn(
-                  'ml-3 overflow-hidden border-l border-sidebar-border pl-2 transition-all duration-200',
-                  isOpen ? 'max-h-96 py-1' : 'max-h-0'
+                  'my-1 ml-2 overflow-hidden rounded-[16px] bg-[#f1f1ef]/60 p-1 transition-all duration-200 dark:bg-[#252528]/60 space-y-0.5',
+                  isOpen ? 'max-h-96 py-1.5' : 'max-h-0 py-0'
                 )}
               >
                 {item.children.map((child) => (
@@ -107,10 +107,9 @@ export function MobileNav({
                       onNavigate()
                     }}
                     className={cn(
-                      linkClass,
-                      'py-1.5 text-sidebar-foreground/70',
+                      'block rounded-lg px-2.5 py-1.5 text-xs font-medium text-[#242423]/70 transition-all hover:bg-white hover:text-[#242423] active:scale-[0.98] dark:text-zinc-400 dark:hover:bg-[#1c1c1e] dark:hover:text-white',
                       pathname === child.href &&
-                        'font-semibold text-primary'
+                        'bg-white font-semibold text-[#242423] shadow-2xs dark:bg-[#1c1c1e] dark:text-white'
                     )}
                   >
                     <span>{t(child.label)}</span>

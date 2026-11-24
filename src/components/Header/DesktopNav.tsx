@@ -116,9 +116,12 @@ export function DesktopNav({
           item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
         const hasChildren = item.columns.length > 0
         const triggerClass = cn(
-          'rounded-md px-3 py-1.5 text-xs font-medium transition-colors outline-none text-foreground/80 hover:text-foreground hover:bg-muted/80',
-          isActive && 'bg-muted text-foreground',
-          isCurrentRoute && 'text-primary font-semibold'
+          'rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all outline-none active:scale-95',
+          isActive
+            ? 'bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]'
+            : isCurrentRoute
+              ? 'bg-[#242423]/[0.08] text-[#242423] dark:bg-white/[0.1] dark:text-white'
+              : 'text-[#242423]/70 hover:bg-[#242423]/[0.05] hover:text-[#242423] dark:text-zinc-300 dark:hover:bg-white/[0.06] dark:hover:text-white'
         )
         return (
           <div
@@ -131,13 +134,13 @@ export function DesktopNav({
                 href={item.href}
                 aria-haspopup="true"
                 aria-expanded={isActive}
-                className={cn(triggerClass, 'flex items-center gap-1')}
+                className={cn(triggerClass, 'flex items-center gap-1.5')}
               >
-                {t(item.label)}
+                <span>{t(item.label)}</span>
                 <ChevronDown
                   className={cn(
                     'size-3 transition-transform duration-200',
-                    isActive && 'rotate-180 text-primary'
+                    isActive && 'rotate-180'
                   )}
                 />
               </Link>
@@ -154,19 +157,19 @@ export function DesktopNav({
         {hasDropdown && (
           <motion.div
             key="mega-menu"
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
+            initial={{ opacity: 0, y: 6, scale: 0.99 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.99 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
             onMouseEnter={clearClose}
             onMouseLeave={scheduleClose}
-            className="absolute inset-x-0 top-full z-50 border-b border-border bg-background/95 backdrop-blur-md shadow-lg"
+            className="absolute left-1/2 top-[calc(100%+8px)] z-50 -translate-x-1/2 w-[92vw] max-w-4xl rounded-[28px] border border-black/[0.06] bg-white/95 p-5 shadow-[0_4px_24px_rgba(0,0,0,0.06),0_24px_48px_-12px_rgba(0,0,0,0.1)] backdrop-blur-2xl dark:border-white/[0.08] dark:bg-[#1c1c1e]/95"
           >
-            <div className="mx-auto flex max-w-7xl flex-wrap gap-8 px-6 py-6 md:px-8">
+            <div className="flex flex-wrap gap-6 sm:gap-8">
               {activeColumns.map((col, ci) => (
                 <div key={ci} className="min-w-56 flex-1">
                   {col.title && (
-                    <p className="mb-2.5 text-[11px] font-semibold tracking-wider text-muted-foreground uppercase">
+                    <p className="mb-2 px-1 text-[11px] font-bold tracking-wider text-[#242423]/45 uppercase dark:text-zinc-400">
                       {t(col.title)}
                     </p>
                   )}
@@ -183,10 +186,10 @@ export function DesktopNav({
                             }
                             close()
                           }}
-                          className="group flex items-start gap-3 rounded-lg p-2 transition-colors hover:bg-muted/80 active:bg-muted"
+                          className="group flex items-start gap-3 rounded-[16px] p-2.5 transition-all hover:bg-[#f1f1ef] active:scale-[0.98] dark:hover:bg-[#252528]"
                         >
                           {link.image && (
-                            <span className="relative size-10 shrink-0 overflow-hidden rounded-md bg-muted">
+                            <span className="relative size-10 shrink-0 overflow-hidden rounded-[12px] bg-[#f1f1ef] dark:bg-[#252528]">
                               <Image
                                 src={link.image}
                                 alt={t(link.label)}
@@ -196,12 +199,12 @@ export function DesktopNav({
                               />
                             </span>
                           )}
-                          <span>
-                            <span className="block text-xs font-medium text-foreground group-hover:text-primary transition-colors">
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-xs font-semibold text-[#242423] transition-colors group-hover:text-black dark:text-[#f3f3f2] dark:group-hover:text-white">
                               {t(link.label)}
                             </span>
                             {link.description && (
-                              <span className="mt-0.5 block text-[11px] text-muted-foreground leading-tight">
+                              <span className="mt-0.5 block text-[11px] leading-snug text-[#242423]/60 dark:text-zinc-400">
                                 {t(link.description)}
                               </span>
                             )}

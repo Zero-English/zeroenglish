@@ -1,458 +1,552 @@
-# Zero English — System Design & Architecture Analysis (`DESIGNS.md`)
+# Zero English — Master Design System & Architectural Specification (`DESIGNS.md`)
 
-> **Comprehensive Design & UI/UX Analysis for Zero English Web Application**  
-> Focus Areas: **Home Page & Dashboard Component**, **/quiz Experience & Engine**, and **/vocabulary Hub & Word Learning System**.
-
----
-
-## 1. Executive Summary & Design Philosophy
-
-Zero English is a modern, bilingual (English & Bengali) web platform engineered for learners mastering English vocabulary, grammar, and competitive exams (SSC, HSC, IELTS, TOEFL, BCS).
-
-### Core Design Tenets
-1. **Bilingual Fluidity**: First-class English and Bengali (বাংলা) support across all surfaces using dynamic localization (`useT`, `useLanguage`), contextual font pairings, and culturally intuitive phrasing.
-2. **Glassmorphic Tactility & Depth**: Multi-layer elevation system utilizing `backdrop-blur-xl`, subtle translucent borders (`border-black/[0.06]` / `dark:border-white/[0.08]`), dynamic gradients, and radial progress rings.
-3. **Frictionless Micro-Interactions**: Double-tap word mastery, fluid spring physics (`motion/react`), stagger entrance choreographies, and haptic-like active states (`active:scale-95`).
-4. **Distraction-Free Focus Modes**: Context-aware UI chrome suppression during exams and quizzes (`useQuizChrome`) that hides floating docks and headers to maximize learner immersion.
-5. **Offline-First & Edge Performance**: Hybrid architecture pairing Next.js ISR (Incremental Static Regeneration at Edge) with client-side IndexedDB (`Dexie`) and real-time backend synchronization.
+> **The Definitive Design Skill & UI/UX System Standard**  
+> Synthesized from Emil Kowalski’s fluid design foundations, Apple Human Interface Guidelines (WWDC Fluid Interfaces), and the 13 canonical reference artifacts.  
+> This document is the authoritative design contract for all interfaces across the Zero English ecosystem.
 
 ---
 
-## 2. Design System & Visual Foundation
+## 1. Executive Philosophy: The Fluid & Restrained Aesthetic
 
-### 2.1 Color Palette & Semantic Tokens (OKLCH)
+The design standard documented here represents the apex of modern mobile and desktop software craft. Often characterized as the **Emil Kowalski / Apple Fluid / Linear** style, it rejects generic digital boilerplate in favor of physical directness, visual calm, mathematical rhythm, and tactile delight.
 
-The platform utilizes a modern OKLCH color model with calibrated chroma and lightness:
+### Core Tenets
 
-```
-┌─────────────────┬──────────────────────────────────┬───────────────────────────────┐
-│ Token           │ Light Mode (iOS True Tone OKLCH) │ Dark Mode (OKLCH)             │
-├─────────────────┼──────────────────────────────────┼───────────────────────────────┤
-│ --background    │ oklch(0.986 0.005 85) [Warm Paper│ oklch(0.153 0.006 107.1)      │
-│ --foreground    │ oklch(0.153 0.006 107.1)         │ oklch(0.988 0.003 106.5)      │
-│ --card          │ oklch(0.998 0.002 85) [75% + Blur│ oklch(0.228 0.013 107.4)      │
-│ --primary       │ oklch(0.68 0.22 45) [Orange]     │ oklch(0.68 0.22 45) [Orange]  │
-│ --accent        │ oklch(0.96 0.006 85)             │ oklch(0.286 0.016 107.4)      │
-│ --muted         │ oklch(0.96 0.006 85)             │ oklch(0.286 0.016 107.4)      │
-│ --border        │ oklch(0.925 0.008 85)            │ oklch(1 0 0 / 10%)            │
-│ --radius        │ 0.45rem (Base) / 1rem (Cards)    │ 0.45rem (Base) / 1rem (Cards) │
-└─────────────────┴──────────────────────────────────┴───────────────────────────────┘
-```
+1. **Restraint Over Clutter**: Color is an intentional instrument, not wallpaper. Surfaces are monochromatic, bone-white, obsidian, and soft warm zinc. Color is reserved exclusively for real-time status indicators, data-viz polarity, and moments of earned celebration.
+2. **Surface Depth & Inset Geometry**: Flat design is dead; skeumorphism is dead. The modern paradigm is **material elevation through insets**: elevated outer cards housing sunken, soft-toned modules (`#f1f1ef`), which in turn house crisp interactive buttons and pills.
+3. **Continuous Radii Rhythm (Squircle Hierarchy)**: Nested elements must follow mathematical radius decay so interior curves never pinch or mismatch outer curves:
+   $$\text{Radius}_{\text{inner}} \approx \text{Radius}_{\text{outer}} - \text{Padding}$$
+4. **Micro-Pills as First-Class Information Units**: Information is grouped into compact, rounded capsules: status chips, segmented filter bars, inline data highlights inside prose, and keyboard shortcuts.
+5. **Instantaneous Tactility & Spring Physics**: An interface must feel mechanical and physical. Buttons respond on *pointer-down* (`active:scale-[0.97]`), animations use critically damped springs without lag or stiff linear curves, and progress tracks feature live liquid shimmers.
 
-### 2.2 CEFR Level Color Architecture
+---
 
-Every CEFR level has a designated semantic color scheme mapped across cards, badges, progress bars, and glows:
+## 2. In-Depth Teardown: Analysis of the 13 Reference Designs
 
-| Level | CEFR Classification | Light Background | Dark Background | Border | Primary Gradient | Text Tint |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **A1** | Beginner (শিক্ষানবিস) | `bg-emerald-50` | `dark:bg-emerald-950/40` | `border-emerald-200` | `from-emerald-500 to-teal-500` | `text-emerald-700` |
-| **A2** | Elementary (প্রাথমিক) | `bg-sky-50` | `dark:bg-sky-950/40` | `border-sky-200` | `from-sky-500 to-blue-500` | `text-sky-700` |
-| **B1** | Intermediate (মাঝারি) | `bg-amber-50` | `dark:bg-amber-950/40` | `border-amber-200` | `from-amber-500 to-orange-500` | `text-amber-700` |
-| **B2** | Upper Intermediate (উচ্চ-মাঝারি) | `bg-rose-50` | `dark:bg-rose-950/40` | `border-rose-200` | `from-rose-500 to-pink-500` | `text-rose-700` |
-| **C1** | Advanced (উন্নত) | `bg-violet-50` | `dark:bg-violet-950/40` | `border-violet-200` | `from-violet-500 to-purple-500` | `text-violet-700` |
-| **C2** | Mastery (পারদর্শী) | `bg-fuchsia-50` | `dark:bg-fuchsia-950/40` | `border-fuchsia-200` | `from-fuchsia-500 to-pink-500` | `text-fuchsia-700` |
+Below is an exhaustive, pixel-level analysis of the 13 reference artifacts uploaded by the user, identifying their visual mechanics, token values, layout primitives, and micro-interactions.
 
-### 2.3 Motion, Easing & Choreography
+---
 
-- **Stagger Transitions**: Custom `<StaggerContainer>` and `<StaggerItem>` wrappers that cascade entrance cards smoothly with a 50–100ms offset.
-- **Spring Physics**: Navigation docks and active tabs utilize spring animations:
-  $$\text{stiffness: 420},\ \text{damping: 32},\ \text{mass: 0.9}$$
-- **SVG Circular Progress**: Dynamic stroke-dashoffset interpolation with ease-out timing curves for visual celebration upon completion.
-
-### 2.4 The "One Frame Grid" Pattern & Minimalist Typography Standard
-
-To create a clean, cohesive, and modern tactile surface across catalogs, Zero English utilizes the **One Frame Grid Pattern** instead of fragmented floating cards:
+### Reference 1: Profile & Creator Card (`Lena Hartmann`)
+*A refined personal branding card balancing rich ambient gradients with rigorous structural utility.*
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        "One Frame Grid" Anatomy                        │
-│                                                                        │
-│ ┌────────────────────────────────────────────────────────────────────┐ │
-│ │ 🔲 Header (text-lg font-semibold) + Subtitle (text-xs text-zinc-500)│ │
-│ └────────────────────────────────────────────────────────────────────┘ │
-│ ┌──────────────────────────────────┬─────────────────────────────────┐ │
-│ │ Cell 1: [Icon] Title + Subtitle  │ Cell 2: [Icon] Title + Subtitle │ │
-│ │ • Border: Top-Left (None)        │ • Border: Left Divider          │ │
-│ ├──────────────────────────────────┼─────────────────────────────────┤ │
-│ │ Cell 3: [Icon] Title + Subtitle  │ Cell 4: [Icon] Title + Subtitle │ │
-│ │ • Border: Top Divider            │ • Border: Top & Left Dividers   │ │
-│ └──────────────────────────────────┴─────────────────────────────────┘ │
-└────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│ [ Soft Iridescent Mesh Banner (Peach → Lilac → Sky) ]           │
+│                                              [● Available] Pill │
+│   (Avatar)                                                      │
+│    Ring-4                                                       │
+│                                                                 │
+│ Lena Hartmann [✓ Blue]                                          │
+│ Brand and motion designer · 📍 Lisbon                           │
+│                                                                 │
+│ "I shape identities that move: logos with a heartbeat..."       │
+│                                                                 │
+│ [Motion] [Branding] [3D] [+3]                                   │
+│                                                                 │
+│ ┌───────────────────┬───────────────────┬─────────────────────┐ │
+│ │ 12,480 Followers  │ 86 Projects       │ 4.9 Rating          │ │
+│ └───────────────────┴───────────────────┴─────────────────────┘ │
+│                                                                 │
+│ [  + Follow (Dark Pill)  ]   [ (Chat) ]   [ (Bookmark) ]        │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-#### A. Architecture & Tailwind Implementation
-- **Outer Shell**: Single unified container with glassmorphic backdrop:
-  ```tsx
-  <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/60 overflow-hidden">
-  ```
-- **Inner 2-Column Responsive Stagger Grid**:
-  ```tsx
-  <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
-  ```
-- **Internal Cell Divider Rules**: Subtly separates internal cells without double borders on the perimeter across both 1-column mobile and 2-column desktop layouts:
-  ```tsx
-  className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0"
-  ```
-  - *Mobile (`< sm`, 1 column)*: Stacked cards are separated by a single clean `border-t`, suppressing the first card with `first:border-t-0` and having no left/right side borders.
-  - *Desktop (`>= sm`, 2 columns)*: The left column (`odd`) suppresses left border with `sm:[&:nth-child(odd)]:border-l-0`, the right column receives `sm:border-l`, and the top row (first 2 items) suppresses top border with `sm:[&:nth-child(-n+2)]:border-t-0`.
-- **Micro-Interaction State**:
-  ```tsx
-  className="hover:bg-black/[0.02] active:bg-black/[0.02] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04] transition-colors"
-  ```
+- **Container Anatomy**: Outer shell with continuous curvature (`rounded-[32px]`), pure white card (`#ffffff`) resting on a warm off-white canvas (`#f7f7f8`). Elevated by a diffused double shadow: `shadow-[0_2px_12px_rgba(0,0,0,0.03),0_24px_48px_-12px_rgba(0,0,0,0.06)]` with hairline ring `ring-1 ring-black/5`.
+- **Mesh Gradient Banner**: High-bleed top cover transitioning diagonally from soft apricot (`#ffd8be`) through ethereal lavender (`#dfd7f8`) to soft sky blue (`#cce3f9`).
+- **Floating Status Pill**: Pinned in the top-right of the banner: `rounded-full bg-white/80 backdrop-blur-md px-3 py-1 text-[12px] font-medium text-zinc-800 shadow-xs` with a glowing emerald green dot (`#10b981`).
+- **Avatar Inset**: Circular photo (`size-16` / 64px) with a heavy `ring-4 ring-white` overlapping the boundary between the gradient banner and the white card body. Bottom-right status badge with emerald fill and white ring.
+- **Typography & Identity**:
+  - Name: `text-[20px] font-bold tracking-tight text-[#1c1c1e]`, accompanied by a verified blue checkmark (`#0071e3`).
+  - Meta: Location and title in `text-[13px] text-zinc-500 font-normal`.
+  - Bio: `text-[14px] leading-relaxed text-[#2c2c2e]` with generous optical breathability.
+- **Tag Capsules**: Wrap of horizontal tags (`rounded-full bg-zinc-100/80 px-3.5 py-1 text-[12px] font-medium text-zinc-700`).
+- **3-Cell Stat Inset**: Inset container `rounded-2xl bg-[#f5f5f7] p-2 grid grid-cols-3 gap-2 text-center`. Stat figures are bold tabular numerals (`text-[18px] font-bold text-[#1c1c1e]`) over muted labels (`text-[11px] text-zinc-400 font-medium`).
+- **Action Toolbar**: Primary action is a wide pill button (`rounded-full bg-[#1c1c1e] text-white py-3 px-6 text-[14px] font-medium active:scale-97`), flanked by circular secondary action discs (`size-12 rounded-full bg-zinc-100 text-zinc-700 flex items-center justify-center`).
 
-#### B. Minimalist Typography Guidelines
-- **Strict Prohibition of Bloated Text**: Avoid oversized headings (`text-3xl`, `text-4xl`, `text-5xl`) in standard section headers and option cards.
-- **Section Headers**: `text-lg sm:text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100`
-- **Subtitles & Descriptions**: `text-xs sm:text-sm text-zinc-500 dark:text-zinc-400`
-- **Action / Option Labels**: `text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100`
-- **Icon Chips**: Standardized to `h-9 w-9` or `h-10 w-10` with `rounded-[10px]` and subtle ring borders. Feature mode chips scale up to `h-12 w-12 rounded-[14px]` with inner gradient highlights.
+---
 
-#### C. Applied Locations
-- **`/quiz`**: Primary Quiz Mode catalog (6 modes).
-- **`/quiz/vocabulary`**: 2x2 Vocabulary Mode selector (English to Bengali, Bengali to English, Synonyms, Antonyms).
-- **`/quiz/grammar`**: Grammar Topics catalog (Tenses, Prepositions, Voice Change, Articles, Narration, etc.).
-- **`/quiz/class`**: Academic & Standardized Class catalog (18 classes: Primary, SSC, HSC, IELTS, TOEFL, BCS, Job).
-- **Dashboard Hub**: Quick Action exploration tiles.
+### Reference 2: Home Energy Metric & Chart Widget
+*A masterclass in dense data visualization using pattern-differentiated bars and segmented controls.*
 
-### 2.5 Semantic Iconography System
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Home energy                       [ Week | Month | Year ] Track │
+│                                                                 │
+│ 187.8 kWh   [+12.4% ↗]                                          │
+│ used this week                                                  │
+│                                                                 │
+│ [● Solar]   [● Battery]   [● Grid]                              │
+│                                                                 │
+│ 40 ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ │
+│    ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌───┐  ┌───┐  █ Grid             │
+│ 20 ├───┤  ├───┤  ├───┤  ├───┤  ├───┤  ├───┤  █ Battery          │
+│    └───┘  └───┘  └───┘  └───┘  └───┘  └───┘  █ Solar (Solid)    │
+│ 0  ──────────────────────────────────────────────────────────── │
+│      M      T      W      T      F      S      S (Active)       │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-Every card across all quiz surfaces has a dedicated, meaningful icon matching the conceptual domain of the topic or exam:
+- **Segmented Control Filter**: Sunken pill track `rounded-full bg-zinc-100 p-1 flex gap-1`. Active segment is an elevated white capsule (`rounded-full bg-white px-3.5 py-1 text-[12px] font-semibold text-zinc-900 shadow-xs`). Inactive segments are transparent with `text-zinc-400 font-medium hover:text-zinc-700`.
+- **Large Metric Hero**: `187.8` rendered in heavy bold typography (`text-[40px] font-bold tracking-tighter text-[#1c1c1e] tabular-nums`), paired with inline unit `kWh` in medium gray (`text-[18px] font-normal text-zinc-400`).
+- **Delta Indicator Capsule**: Soft mint pill `rounded-full bg-emerald-50 text-emerald-700 px-2.5 py-1 text-[12px] font-semibold` with upward diagonal arrow (`+12.4% ↗`).
+- **Legend Chips**: Pills with colored dot indicators: Solar (`#f59e0b`), Battery (`#10b981`), Grid (`#6366f1`).
+- **Pattern-Fills in Data Visualization**:
+  - Historical days (`M` through `S`): Rendered with a diagonal crosshatch/striped pattern fill (`repeating-linear-gradient(45deg, ...)`) in soft translucent tints, visually indicating past/unselected state.
+  - Active / Current day (`Sunday`): Rendered in vibrant, solid, saturated colors with rounded corner caps on every stacked block segment.
+  - Gridlines: Delicate horizontal dashed rules (`stroke-dasharray: 4 4`, opacity 8%) at intervals of 10, 20, 30, 40.
 
-| Domain / Card | Concept / Card Meaning | Assigned Icon | Visual Metaphor |
+---
+
+### Reference 3: Focus Sessions Heatmap & Insights Card
+*Monochromatic activity mapping inspired by GitHub contribution graphs, elevated into consumer software.*
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Focus sessions                           [ Last 20 weeks ] Pill │
+│                                                                 │
+│ 344 sessions   [+47% ↗]                                         │
+│                                                                 │
+│ Jul      Aug         Sep         Oct         Nov                │
+│ Mon ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ▣ (Hover Ring)      │
+│     ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■                   │
+│ Wed ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■                   │
+│     ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■                   │
+│ Fri ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■                   │
+│                                       Less ▫ ▫ ▫ ▫ ▫ More       │
+│                                                                 │
+│ ┌─────────────────────────────────────────────────────────────┐ │
+│ │ ∿ Total sessions                               344          │ │
+│ │   Last 20 weeks                                             │ │
+│ ├─────────────────────────────────────────────────────────────┤ │
+│ │ 🔥 Longest streak                              18 days      │ │
+│ │   Nov 7 to Nov 24                                           │ │
+│ ├─────────────────────────────────────────────────────────────┤ │
+│ │ ⚡ Current streak                              18 days      │ │
+│ │   Since Nov 7                                               │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+- **Monochromatic 5-Level Heatmap Matrix**:
+  - Cell geometry: Squares with subtle corner rounding (`size-3.5 rounded-[3.5px]`).
+  - Intensity ramp (grayscale): Level 0 (`#f4f4f5` / `zinc-100`), Level 1 (`#d4d4d8` / `zinc-300`), Level 2 (`#a1a1aa` / `zinc-400`), Level 3 (`#52525b` / `zinc-600`), Level 4 (`#18181b` / `zinc-900`).
+  - Active Cell State: Emphasized with an outer outline ring (`ring-2 ring-zinc-900 dark:ring-white`) without altering layout geometry.
+- **Stacked Inset Insight Rows**:
+  - Inset module: `rounded-[20px] bg-[#f6f6f8] p-3.5 flex items-center justify-between`.
+  - Icon chips: Subtle outline glyphs (`size-4 text-zinc-500`).
+  - Metrics: Bold tabular lining numerals (`text-base font-semibold text-zinc-900 tabular-nums`).
+
+---
+
+### Reference 4: Natural Language Highlights ("Your Month in Words")
+*Transforming cold statistics into conversational human prose with embedded interactive data capsules.*
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ Your month in words                         [ November ] Pill   │
+│                                                                 │
+│ This month you wrote [📄 12,480 words] , [↗ 18% more] than     │
+│ in October. You finished [9 drafts] and kept a                  │
+│ [🔥 14 day streak] going.                                       │
+│                                                                 │
+│    ╭───╮          ╭───╮          ╭───╮          ╭───╮           │
+│    │ ☼ │✓         │ 🔥│✓         │ 🪶│✓         │ ☾ │ (57% Arc) │
+│    ╰───╯          ╰───╯          ╰───╯          ╰───╯           │
+│  Early riser   Streak keeper   Wordsmith      Night owl         │
+│    Earned         Earned         Earned          57%            │
+│                                                                 │
+│ [                     View full recap →                       ] │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+- **Prose-Embedded Data Pills**:
+  - The sentence text is rendered in `text-[16px] leading-[2.2] text-zinc-600`.
+  - Embedded data points are wrapped in capsule chips: `inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-3 py-1 font-semibold text-zinc-900 text-[13px] shadow-2xs align-middle`.
+  - Inline icons (document `📄`, delta arrow `↗`, fire `🔥`) are scaled to `size-3.5` and color-matched.
+- **Circular Milestone Achievement Badges**:
+  - Badge container: Circular gray disc (`size-14 rounded-full bg-zinc-100 flex items-center justify-center`).
+  - Completed status: Solid black circular checkmark badge overlapping the bottom-right quadrant (`size-4 rounded-full bg-black text-white`).
+  - In-progress status: Outer circular SVG arc indicator tracking partial percentage (`57%`), with stroke color in `#1c1c1e` and track in `#e4e4e7`.
+- **Full-Width Pill Button**: Wide capsule footer button `rounded-full bg-zinc-100 hover:bg-zinc-200/80 text-zinc-900 font-semibold py-3.5 px-4 text-center text-[14px]`.
+
+---
+
+### Reference 5: Atmospheric Grain & Gradient Visual Card ("Light, bent")
+*Demonstrating tactile sensory depth through analog noise textures and floating frosted chrome.*
+
+- **Surface Treatment**: Continuous rounded rectangle (`rounded-[32px] overflow-hidden`) featuring an ultra-smooth deep atmospheric gradient (violet twilight at top, incandescent orange/amber in the middle, deep void black at base).
+- **Film Grain Noise**: A uniform, microscopic stippled noise/grain texture applied over the gradient via SVG turbulence or CSS noise pattern, eliminating sterile digital banding and introducing tactile warmth.
+- **Floating Controls**:
+  - Top-left: Frosted pill `"New"` (`rounded-full bg-black/40 backdrop-blur-md px-3 py-1 text-[11px] font-medium text-white`).
+  - Bottom-left: Frosted pill `"Prism flow Hover"` (`rounded-full bg-white/90 backdrop-blur-md px-4 py-2 text-[12px] font-semibold text-zinc-900 shadow-sm`).
+  - Bottom-right: Circular floating action button (`size-12 rounded-full bg-white text-zinc-900 flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform`).
+
+---
+
+### Reference 6: Command Palette & Category Launcher ("Jump back in")
+*The benchmark for keyboard-driven navigation, soft pastel tiles, and quick shortcuts.*
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 🔍  Search for "stoneware"                              [ ⌘ K ] │
+├─────────────────────────────────────────────────────────────────┤
+│ [All] (Active)  [Products]   [Shops]   [Watchlist]   [Keywords] │
+│                                                                 │
+│ Jump back in                                                    │
+│ ┌─────────────────────────────┬───────────────────────────────┐ │
+│ │ [C] Products                │ [M] Shops                     │ │
+│ │ Ceramic pour over ...       │ Moonspirit Studio             │ │
+│ │ 1,210 sales                 │ 48 products                   │ │
+│ │ (Soft Sage Background)      │ (Soft Lavender Background)    │ │
+│ ├─────────────────────────────┼───────────────────────────────┤ │
+│ │ [L] Products                │ [P] Open ↵                    │ │
+│ │ Linen tote bag              │ Paper and Pine                │ │
+│ │ 970 sales                   │ 31 products                   │ │
+│ │ (Soft Sand Background)      │ (Soft Eucalyptus Background)  │ │
+│ └─────────────────────────────┴───────────────────────────────┘ │
+│                                                                 │
+│ Shortcuts                                                       │
+│ [ ∿ Product analytics ]         [ ⊞ Shop analyser ]             │
+│ [ 🧭 Keyword research ]          [ 📈 Trends ]                   │
+│                                                                 │
+│ Type to search, Tab for example    ↑ ↓ to move, ↵ to open       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+- **Search Header**: Minimalist input field with inset shortcut badge `[ ⌘ K ]` (`rounded border border-zinc-200 px-1.5 py-0.5 text-[10px] font-mono text-zinc-400`).
+- **Pastel Category Tiles (2x2 Grid)**:
+  - Tiles use muted, desaturated, soft pastel tints:
+    - Sage Green: `#ebf3ed`
+    - Soft Lavender: `#f1edf7`
+    - Warm Sand: `#f7f2ed`
+    - Eucalyptus: `#e7eee9`
+  - Each tile features a pure white rounded squircle badge (`size-8 rounded-[10px] bg-white text-zinc-800 font-bold shadow-2xs`), category label (`text-[10px] uppercase font-semibold text-zinc-400`), title (`text-[13px] font-semibold text-zinc-800`), and tabular counter (`text-[11px] text-zinc-500`).
+- **Shortcut Pills**: 2x2 grid of rounded rectangular button chips (`rounded-2xl bg-zinc-100/70 p-3 hover:bg-zinc-200/60 transition-colors`).
+
+---
+
+### Reference 7: Floating Island Navigation Dock
+*The quintessential modern floating tab bar, prioritizing thumb ergonomics and layout physics.*
+
+- **Island Container**: A floating capsule hovering above content: `rounded-full bg-white/90 backdrop-blur-xl px-2 py-1.5 shadow-[0_4px_24px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.04)] border border-black/[0.05]`.
+- **Active Tab Capsule**: The active tab expands with text label: `rounded-full bg-zinc-100/80 px-4 py-2 flex items-center gap-2 text-zinc-900 font-semibold text-[14px]`.
+- **Inactive Tabs**: Clean icon-only hit targets (`size-10 rounded-full flex items-center justify-center text-zinc-400 hover:text-zinc-700 transition-colors`).
+- **Notification Badge**: Circular red indicator overlapping the history icon: `size-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white`.
+
+---
+
+### Reference 8: Integration Hub ("All your tools, one hub")
+*Interactive connection canvas showing fluid vector bezier splines linking external services.*
+
+- **Center Hub Badge**: Squircle icon container encircled by a delicate iridescent rainbow/spectral border (subtle pastel spectrum transition: `#ec4899` → `#8b5cf6` → `#06b6d4` → `#10b981`).
+- **Smooth Bezier Splines**: Fluid cubic bezier paths linking the hub to 6 app icons, with micro-particles scattered along the trajectory to signify data in motion.
+- **Action Semantics**: Tap to link, tap again to let go.
+
+---
+
+### Reference 9: The Canonical Jordan Lee Profile & Workspace Menu
+*The absolute benchmark for account switcher and multi-section mobile menus.*
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ ┌─────────────────────────────────────────────────────────────┐ │
+│ │ (Avatar) Jordan Lee                       ▲ (Collapse)      │ │
+│ │          @jordan · Available                                │ │
+│ │                                                             │ │
+│ │ ┌─────────────┬─────────────┬─────────────┬───────────────┐ │ │
+│ │ │ ● Online    │ ● Focus     │ ● Away      │ ● Hidden      │ │ │
+│ │ │ (White Pill)│             │             │               │ │ │
+│ │ └─────────────┴─────────────┴─────────────┴───────────────┘ │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+│                                                                 │
+│ ┌───────────────┐     ┌───────────────┐     ┌───────────────┐   │
+│ │ [User]        │     │ [Gear]        │     │ [Zap]     [?] │   │
+│ │ Profile       │     │ Settings      │     │ Shortcuts     │   │
+│ └───────────────┘     └───────────────┘     └───────────────┘   │
+│                                                                 │
+│ Workspaces                                                      │
+│ [L] Lumen (Pro plan, 12 members)                         [✓]    │
+│ [N] Northwind (Free plan, 3 members)                            │
+│ [+] New workspace                                               │
+│                                                                 │
+│ ┌─────────────────────────────────────────────────────────────┐ │
+│ │ Storage                                       6.4 of 10 GB  │ │
+│ │ ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │ │
+│ │ ✨ Upgrade for 100 GB →                                     │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+│                                                                 │
+│ ↳ Log out                                                       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+- **Color Architecture**:
+  - Base container: Pure white `#ffffff` with `rounded-[28px] p-2.5 text-[#242423] ring-1 ring-black/5`.
+  - Inset header module: Distinct `#f1f1ef` background (`rounded-[22px] p-3`).
+  - Text: Warm charcoal `#242423` (never harsh pure `#000000`). Muted copy in `#242423]/55`.
+  - Button fills: Subtle `#242423]/[0.04]` hoverable to `#242423]/[0.07]`.
+- **Radiogroup Status Bar**: Sunken 4-column pill track `bg-[#242423]/[0.05] p-0.5 rounded-full`. Active status (`"Online"`) is an elevated white pill with soft shadow and green dot. Inactive options have colored dots (blue, amber, gray).
+- **Workspace Rows**: Clean list items featuring monochrome squircle badges (`size-9 rounded-[12px] bg-[#242423] text-white text-[13px] font-bold`), organization title, member count, and circular black checkmark badge for the active tenant.
+- **Storage Progress Inset**: Pill-ended progress bar (`h-2 rounded-full bg-[#242423]/10`) filled with deep black `bg-[#242423]` and animated liquid shimmer highlight.
+
+---
+
+### Reference 10: Deep Work Matrix Timer ("Keep the noise out")
+*Concentration UI combining pixelated background density with circular focus dials.*
+
+- **Pixel Heatmap Matrix**: Pixel field with radial density falloff; vibrant burnt orange and coral pixels clustering at bottom-center and transitioning into periwinkle blue and white toward the periphery.
+- **Concentric Circular Timer**: Central dial floating over the matrix. Outer ring tracks elapsed minutes. Inner disc displays mode title (`"Deep work"`), giant countdown numerals (`"24:55"` in `text-[36px] font-bold text-[#1c1c1e]`), and blocked notification counter (`"11 held back"`).
+- **Pinned Pill Chips**: Floating rounded tags anchored around the perimeter (`"dup in 5 min"`, `"🧾 Invoice #2041 paid"`).
+
+---
+
+### Reference 11: Progress Stepper Card ("Product roadmap")
+*Linear milestone tracking with segmented progress bars and high-contrast numerical anchors.*
+
+- **Segmented Horizontal Progress Track**: 5 horizontal bar segments separated by 4px gaps:
+  - Completed segments: Solid black (`bg-[#1c1c1e]`).
+  - Active segment: Partial fill.
+  - Future segments: Soft gray (`bg-zinc-200`).
+- **Hero Step Number & Title**: Giant step numeral `"03"` in extra-large pale gray (`text-[48px] font-bold text-zinc-300`), placed directly inline with the title `"Private beta"` (`text-[22px] font-bold text-[#1c1c1e]`).
+- **Checklist Architecture**: Checklist items with green checkmarks in circular containers (`size-5 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center`).
+- **Pagination Controls**: Bottom navigation with circular back `<` (`bg-zinc-100`) and next `>` (`bg-[#1c1c1e] text-white`) buttons.
+
+---
+
+### Reference 12: Chromatic Gauge & Dot-Matrix Display ("Body age")
+*Vibrant warm chromatic sunset gradient paired with LED dot-matrix numerals and frosted glass rotary dials.*
+
+- **Chromatic Canvas**: Sunset mesh gradient blending soft seafoam green, lavender, amber gold, and warm coral rose.
+- **Dot-Matrix / LED Typography**: Metric value (`"25"`) rendered using a dotted 5x7 matrix grid font in pure white, providing an authentic retro-mechanical feel.
+- **Glassmorphic Rotary Dial**:
+  - Inset slider card: `rounded-[24px] bg-white/20 backdrop-blur-xl border border-white/30 p-4 shadow-lg`.
+  - Dial ruler with fine vertical tick marks, white center needle with luminous glowing tip, and frosted circular `-` and `+` adjustment discs.
+
+---
+
+### Reference 13: Mobile Operating System Health Dashboard ("Alex Morgan")
+*Complete mobile viewport composition demonstrating top-level hierarchy, dynamic island, and stacked card modules.*
+
+- **Top Chrome**: iPhone frame with Dynamic Island, circular avatar, time-aware greeting (`"Good morning"`), and circular notification bell button (`size-10 rounded-full bg-zinc-100`).
+- **Health Score Hero**: Elevated card (`rounded-[24px] bg-zinc-100/70 p-4`) with metric `"88/100"`, delta capsule `"+4"`, and mini 7-day bar chart with pill-capped bars.
+- **Activity Row Modules**: Stacked clean cards (`rounded-[22px] bg-white border border-zinc-100 p-4 flex items-center justify-between`) displaying icon, metric title, and bold tabular values (`"Sleep: 7h 40m"`, `"Steps: 8,214"`).
+
+---
+
+## 3. Systematic Design Token Specifications
+
+To guarantee exact visual parity with these reference artifacts, all components must strictly adhere to the following design token matrix.
+
+### 3.1 Color Palette & Surface Contrast
+
+| Token Role | Light Mode Value | Dark Mode Value | Usage Context |
 | :--- | :--- | :--- | :--- |
-| **Scheduled Exam** | Fixed timed event & countdown | `CalendarClock` | Scheduled calendar test window |
-| **Quick Quiz** | High-speed 20s blitz | `Zap` | Lightning fast test speed |
-| **English to Bangla** | Bilingual vocabulary translation | `Languages` | Multilingual translation bridge |
-| **Bangla to English** | Reverse word translation | `ArrowRightLeft` | Bidirectional translation switch |
-| **Synonyms** | Words with identical meaning | `Equal` | Equivalence sign ($$=$$) |
-| **Antonyms** | Words with opposite polarity | `Contrast` | High-contrast opposing polarities |
-| **Mixed / Blitz** | Random mixture of categories | `Shuffle` | Randomized deck shuffle |
-| **Tenses** | Past, present, and future time | `Clock` | Chronological time progression |
-| **Articles** | Grammatical determiners (a, an, the) | `PenLine` | Editorial pencil writing marker |
-| **Voice Change** | Active to passive voice transition | `Volume2` | Audio / vocal inflection |
-| **Narration** | Direct & indirect speech quotes | `Quote` | Speech quote marks |
-| **Prepositions** | Spatial / directional placement | `Compass` | Spatial direction & navigation |
-| **Parts of Speech** | Sentence component classification | `LayoutGrid` | Categorized modular building blocks |
-| **Verb Conjugation** | Right form of verbs | `CheckSquare` | Verified correct grammatical form |
-| **Subject-Verb Agreement**| Grammatical balance & alignment | `Scale` | Balanced weights & symmetry |
-| **Modal Auxiliaries** | Can, could, may, might, must | `Key` | Unlocking capability & permission |
-| **Conditionals** | If / then conditional branching | `GitFork` | Logical condition branching |
-| **Sentence Transformation**| Syntactic structure conversion | `RefreshCw` | Structural reformation cycle |
-| **Spelling** | Orthographic accuracy | `SpellCheck` | Spellcheck dictionary verification |
-| **Idioms & Phrases** | Figurative expressions | `MessageSquareQuote`| Expressive conversational speech |
-| **Academic: Pre-Primary** | Early childhood fundamentals | `Baby` | Early learning stage |
-| **Academic: Primary (1–5)**| Primary school foundation | `Backpack` / `Pencil` / `BookOpen` / `School` | Elementary learning tools |
-| **Academic: Middle (6–8)** | Peer group & library study | `UsersRound` / `Library` / `BookMarked` | Structured reading & study |
-| **Academic: SSC** | Secondary Certificate Award | `Award` | Secondary school certificate milestone |
-| **Academic: HSC** | Higher Secondary Graduation | `GraduationCap` | College / Higher secondary graduation |
-| **Standardized: IELTS** | Global English proficiency test | `Globe2` | Worldwide international standard |
-| **Standardized: TOEFL** | Academic listening & speaking | `Headphones` | Audio & listening comprehension |
-| **Higher Ed: University** | Higher education academy | `Landmark` | Classical university institution |
-| **Higher Ed: Masters** | Postgraduate master thesis | `Scroll` | Academic diploma scroll |
-| **Certification: Diploma** | Technical credential badge | `FileBadge2` | Verified professional diploma badge |
-| **Civil Service: BCS** | Government service commission | `ShieldCheck` | Official state civil service insignia |
-| **Professional: JOB** | Career employment exams | `Briefcase` | Workplace & professional recruitment |
-| **Past Results** | Historical scores & analytics | `BarChart3` | Performance analytics graph |
+| **Canvas Background** | `#f8f8f6` (Warm Paper) | `#0c0c0e` (Deep OLED) | The page/screen viewport behind floating cards |
+| **Surface Card** | `#ffffff` (Pure White) | `#1c1c1e` (Apple Dark) | Primary floating cards, drawers, dialogs |
+| **Inset Module** | `#f1f1ef` (Refined Bone) | `#252528` (Dark Inset) | Sunk headers, nested utility blocks, status containers |
+| **Interactive Fill (Subtle)** | `rgba(36, 36, 35, 0.04)` | `rgba(255, 255, 255, 0.05)` | Action cards, list item default states, secondary buttons |
+| **Interactive Fill (Hover)** | `rgba(36, 36, 35, 0.07)` | `rgba(255, 255, 255, 0.08)` | Hover/pressed feedback states |
+| **Primary Text** | `#242423` or `#1c1c1e` | `#f4f4f5` | Headings, primary titles, heavy numbers |
+| **Secondary Text** | `rgba(36, 36, 35, 0.55)` | `rgba(244, 244, 245, 0.60)` | Subtitles, taglines, units, meta timestamps |
+| **Tertiary / Caption Text** | `rgba(36, 36, 35, 0.35)` | `rgba(244, 244, 245, 0.40)` | Section uppercase trackers, empty states |
+| **Hairline Border** | `rgba(36, 36, 35, 0.06)` | `rgba(255, 255, 255, 0.08)` | Dividing lines, outer card rings |
+| **Pill Background (Active)** | `#ffffff` (`shadow-xs`) | `#323236` | Selected segmented control segment |
+
+### 3.2 Accent & Polarity Colors (Semantic Only)
+
+Never apply loud solid saturated fills across structural cards. Saturated color is strictly reserved for small dots, deltas, and progress bars:
+- **Emerald (Success / Online / Mastered)**: `#10b981` (Light tint: `bg-emerald-500/10 text-emerald-700`)
+- **Sky / Blue (Focus / Verified / Informational)**: `#0284c7` / `#0071e3` (Light tint: `bg-sky-500/10 text-sky-700`)
+- **Amber / Orange (Brand / Streak / Away / Solar)**: `#f59e0b` / `#f97316` (Light tint: `bg-amber-500/10 text-amber-700`)
+- **Rose / Red (Alert / Notifications / Negative)**: `#f43f5e` (Badge fill: `bg-rose-500 text-white`)
+- **Violet / Purple (Grid / Advanced / Deep Work)**: `#8b5cf6` (Light tint: `bg-violet-500/10 text-violet-700`)
+
+### 3.3 Continuous Corner Radius Hierarchy (Squircles)
+
+```
+┌────────────────────────────────────────────────────────┐  Outer Card: rounded-[28px] - rounded-[32px]
+│  ┌──────────────────────────────────────────────────┐  │  
+│  │                                                  │  │  Inset Header: rounded-[20px] - rounded-[22px]
+│  └──────────────────────────────────────────────────┘  │  
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │  
+│  │              │  │              │  │              │  │  Action Chips: rounded-[16px] - rounded-[18px]
+│  └──────────────┘  └──────────────┘  └──────────────┘  │  
+│  [ (Squircle: rounded-[12px]) Title     [ Pill ] > ]   │  List Row: rounded-[14px] - rounded-[16px]
+└────────────────────────────────────────────────────────┘  Badges & Controls: rounded-full
+```
+
+- **Viewport Sheets & Modals**: `rounded-[32px]`
+- **Primary Section Cards**: `rounded-[26px]` sm: `rounded-[28px]`
+- **Inset Modules & Top Headers**: `rounded-[18px]` sm: `rounded-[22px]`
+- **Action Tiles & Utility Cards**: `rounded-[16px]` sm: `rounded-[18px]`
+- **List Rows**: `rounded-[14px]` sm: `rounded-[16px]`
+- **Icons & Monogram Squircle Badges**: `rounded-[10px]` sm: `rounded-[12px]`
+- **Pills, Segmented Tracks & Controls**: `rounded-full`
 
 ---
 
-## 3. Deep Analysis: Home Page & Dashboard Component
+## 4. Reusable Component Pattern Recipes
 
+### 4.1 The Inset Header & Segmented Pill Control
+
+```tsx
+<div className="rounded-[22px] border border-black/[0.06] bg-white p-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[26px] sm:p-3.5">
+  {/* Sunken Inset Header */}
+  <div className="rounded-[18px] bg-[#f1f1ef] p-2.5 dark:bg-[#252528] sm:rounded-[20px] sm:p-3.5">
+    <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+      <div>
+        <h2 className="text-[14px] font-semibold leading-5 text-[#242423] dark:text-[#f3f3f2] sm:text-[16px]">
+          {title}
+        </h2>
+        <p className="text-[11px] text-[#242423]/60 dark:text-zinc-400 sm:text-[12px]">
+          {subtitle}
+        </p>
+      </div>
+
+      {/* Sunken Segmented Control Track */}
+      <div
+        role="radiogroup"
+        className="grid w-full grid-cols-4 rounded-full bg-[#242423]/[0.05] p-0.5 dark:bg-white/[0.07] sm:flex sm:w-auto"
+      >
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActive(tab.id)}
+            className={cn(
+              "relative flex h-7 cursor-pointer items-center justify-center rounded-full text-[11px] font-medium outline-none transition-colors sm:h-8 sm:px-3 sm:text-[12px]",
+              active === tab.id
+                ? "text-[#242423] dark:text-[#f3f3f2]"
+                : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-200"
+            )}
+          >
+            {active === tab.id && (
+              <span className="absolute inset-0 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.08)] dark:bg-[#323236]" />
+            )}
+            <span className="relative">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        Home / Dashboard Architecture                   │
-│                                                                        │
-│                      [ ISR Revalidated Page: / ]                       │
-│                                   │                                    │
-│                         <HomeOrDashboard />                            │
-│                                   │                                    │
-│             ┌─────────────────────┴─────────────────────┐              │
-│      (Guest / Unauthenticated)                 (Authenticated)         │
-│             ▼                                           ▼              │
-│       <HomeContent />                             <Dashboard />        │
-│    • Hero Banner & Value Prop               • Time-Aware Greeting      │
-│    • CEFR Level Explorer Matrix             • Circular Progress Gauge  │
-│    • Feature Showcase Grid                  • 4-Metric Grid (Streak)   │
-│    • Quiz Mode Previews                     • "Continue Learning" Box  │
-│    • Community Leaderboard & Blog           • Quick Action Hub Tiles   │
-└────────────────────────────────────────────────────────────────────────┘
-```
-
-### 3.1 Authenticated Dashboard (`<Dashboard />`)
-
-#### A. Header & Greeting Card (Left Rail)
-- **Time-Aware Salutation**: Dynamically generates morning/afternoon/evening/night greetings in Bengali & English with localized calendar date strings (e.g., *"শুভ সন্ধ্যা, Tahmid"* / *"Good evening, Tahmid"*).
-- **Circular Progress Hero Gauge**:
-  - Central 56px SVG circle displaying overall platform mastery percentage ($$\text{Words Learned} / \text{Total Platform Words}$$).
-  - Dual-gradient stroke animation (`#f97316` to `#e11d48`).
-- **4-Metric Grid Matrix**:
-  1. *Words Learned*: Total vocabulary items marked as known across all levels.
-  2. *Today's Words*: Real-time count of words completed in current 24-hour cycle.
-  3. *Day Streak (Flame)*: Continuous daily learning streak tracking.
-  4. *Daily Goal (Target)*: Percentage attainment of the user's daily quota (e.g., 20 words/day).
-
-#### B. Main Action Column (Right Rail)
-- **Quiz Challenge Hero Banner**: High-priority CTA directing users into immediate test sessions (`/quiz`).
-- **Smart "Continue Learning" Resume Card**:
-  - Detects the user's last visited CEFR level and page from `lastLearnedStore`.
-  - Displays a color-coded CEFR badge (e.g., `B1 Intermediate`) alongside a progress bar showing that level's completion rate.
-  - Direct 1-click resume button navigating immediately to the exact remembered pagination segment.
-- **Explore Action Tiles (2x2 Grid)**:
-  - *Vocabulary*: Level browsing and word bank management.
-  - *Quiz*: Practice tests and scheduled exam portal.
-  - *Progress*: Detailed activity charts, analytics, and word history.
-  - *Search*: Instant dictionary lookup with instant fuzzy matching.
-- **Community & Content Integration**:
-  - Sticky Leaderboard preview highlighting top learners by score and streak.
-  - Latest news and vocabulary insights articles with image previews.
 
 ---
 
-## 4. Deep Analysis: `/quiz` Engine & Experience
+### 4.2 The 3-Column Utility Action Grid
 
-The Quiz ecosystem is architected around an extensible, multi-modal assessment engine supporting both self-paced practice and synchronized competitive exams.
-
-### 4.1 Quiz Navigation & Taxonomy (`<QuizMenu />`)
-
-The `/quiz` route presents an intuitive, high-energy catalog featuring 6 primary game modes:
-
+```tsx
+<div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+  {actions.map((action) => (
+    <Link
+      key={action.title}
+      href={action.href}
+      className="group relative flex h-[64px] cursor-pointer flex-col justify-between rounded-[16px] bg-[#242423]/[0.04] p-2 text-left outline-none transition-all duration-150 hover:bg-[#242423]/[0.07] active:scale-[0.97] dark:bg-white/[0.05] dark:hover:bg-white/[0.08] sm:h-[74px] sm:rounded-[18px] sm:p-2.5"
+    >
+      <div className="flex items-start justify-between">
+        <span className="size-3.5 text-[#242423]/70 transition-colors group-hover:text-[#242423] dark:text-zinc-400 dark:group-hover:text-zinc-100 sm:size-4">
+          <action.icon className="size-full" />
+        </span>
+        <ArrowUpRight className="size-3 text-[#242423]/40 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-zinc-500 sm:size-3.5" />
+      </div>
+      <span className="truncate text-[11px] font-semibold text-[#242423] dark:text-[#f3f3f2] sm:text-[12px]">
+        {action.title}
+      </span>
+    </Link>
+  ))}
+</div>
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│                            Quiz Modes                                │
-├────────────────────────────┬─────────────────────────────────────────┤
-│ 1. Scheduled Exam          │ Fixed-window timed tests with live      │
-│    (/quiz/exam)            │ countdown ticker & real-time rankings   │
-├────────────────────────────┼─────────────────────────────────────────┤
-│ 2. Quick Quiz              │ High-speed blitz: 20 mixed questions,   │
-│    (/quiz/quick)           │ 20 seconds per question                 │
-├────────────────────────────┼─────────────────────────────────────────┤
-│ 3. Vocabulary Practice     │ Level-filtered word meaning & synonym   │
-│    (/quiz/vocabulary)      │ drills (A1 through C2)                  │
-├────────────────────────────┼─────────────────────────────────────────┤
-│ 4. Grammar Topic Quizzes   │ Specialized category quizzes (Tenses,   │
-│    (/quiz/grammar)         │ Prepositions, Voice Change, Articles)   │
-├────────────────────────────┼─────────────────────────────────────────┤
-│ 5. Class Based Quizzes     │ Curated academic packs (SSC, HSC,       │
-│    (/quiz/class)           │ BCS, IELTS, University Admission)       │
-├────────────────────────────┼─────────────────────────────────────────┤
-│ 6. Past Exam Results       │ Detailed historical analytics, wrong    │
-│    (/quiz/results)         │ answer reviews, and word re-testing     │
-└────────────────────────────┴─────────────────────────────────────────┘
-```
-
-### 4.2 Scheduled Exam Live Countdown Engine
-
-- Automatically polls `/api/v1/quiz-exam/scheduled` to identify current and upcoming events.
-- **State Switcher**:
-  - *Upcoming*: Displays formatted countdown timer (e.g., `2d 14h 32m`) with an info pill.
-  - *Live / Active*: Flashes an animated amber indicator (`Hourglass`) with immediate entry CTA.
-  - *Closed / Concluded*: Directs users to the leaderboard and answer key review.
-
-### 4.3 Interactive Quiz Play Engine (`<QuickQuizClient>`, `<QuizPracticeClient>`)
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                        Active Quiz Interface                         │
-│                                                                      │
-│  [Top Bar]  ◄ Exit Quiz      [ Question 07 / 20 ]       ⏱ 00:14     │
-│  [Progress Bar: ██████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░] 35%       │
-│                                                                      │
-│  ┌────────────────────────────────────────────────────────────────┐  │
-│  │  Question:                                                     │  │
-│  │  What is the antonym of the word "BENEVOLENT"?                 │  │
-│  └────────────────────────────────────────────────────────────────┘  │
-│                                                                      │
-│  [ Option A: Kind-hearted       ]   [ Option B: Malicious (Correct) ]│
-│  [ Option C: Generous           ]   [ Option D: Sympathetic         ]│
-│                                                                      │
-│  ┌────────────────────────────────────────────────────────────────┐  │
-│  │ 💡 Instant Explanation: "Benevolent means well-meaning and     │  │
-│  │    kind, so malicious is its direct opposite."                 │  │
-│  └────────────────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────────────┘
-```
-
-#### Key Play Features:
-- **Distraction-Free Fullscreen**: Invokes `useQuizChrome(true)` to hide the global header, sidebar, and floating dock.
-- **Micro-Timer Dial**: Radial countdown animation per question; plays soft pulse effect when time drops below 5 seconds.
-- **Immediate Feedback Loop**: Options highlight instantly with green (`emerald`) for correct choices and red (`rose`) for misses, alongside contextual Bengali/English explanation notes.
-- **Post-Quiz Performance Review**:
-  - Circular Score Breakdown (% accuracy, total score, time per question).
-  - Question-by-Question breakdown highlighting missed questions.
-  - 1-Click "Bookmark Missed Words" to save difficult vocabulary directly into personal review decks.
-  - Auto-sync with user activity graph (`/api/v1/quiz/results`).
 
 ---
 
-## 5. Deep Analysis: `/vocabulary` Hub & Word Exploration System
+### 4.3 The Streamlined Typographic List Row (No Heavy Block Noise)
 
-The Vocabulary system is the foundational learning core of Zero English, hosting 5,000+ words organized by CEFR levels and Oxford lexical sets.
+```tsx
+<Link
+  href={item.href}
+  className="group relative flex min-h-[56px] w-full cursor-pointer items-center justify-between rounded-[14px] px-3 py-2 text-left outline-none transition-all duration-150 hover:bg-[#242423]/[0.04] focus-visible:ring-2 focus-visible:ring-[#242423]/30 active:scale-[0.99] dark:hover:bg-white/[0.05] sm:min-h-[60px] sm:rounded-[16px] sm:px-3.5 sm:py-2.5"
+>
+  {/* Left: Typographic Identifier & Tagline */}
+  <div className="min-w-0 flex-1 pr-3">
+    <div className="flex items-center gap-2">
+      <span className="inline-flex items-center justify-center rounded-[8px] bg-[#242423]/[0.06] px-2 py-0.5 font-mono text-[12px] font-bold tracking-tight text-[#242423] dark:bg-white/[0.08] dark:text-[#f3f3f2] sm:text-[13px]">
+        {item.code}
+      </span>
+      <span className="truncate text-[13.5px] font-semibold text-[#242423] dark:text-[#f3f3f2] sm:text-[14.5px]">
+        {item.title}
+      </span>
+    </div>
+    <p className="mt-0.5 truncate text-[11.5px] leading-4 text-[#242423]/55 dark:text-zinc-400 sm:text-[12.5px]">
+      {item.description}
+    </p>
+  </div>
 
+  {/* Right: Tabular Counter Pill & Chevron Circle */}
+  <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+    <span className="rounded-full bg-[#242423]/[0.05] px-2 py-0.5 text-[10.5px] font-medium tabular-nums text-[#242423]/70 dark:bg-white/[0.08] dark:text-zinc-300 sm:px-2.5 sm:py-1 sm:text-[11px]">
+      {item.count.toLocaleString()} words
+    </span>
+    <span className="grid size-7 place-items-center rounded-full text-[#242423]/40 transition-all duration-150 group-hover:bg-[#242423]/[0.06] group-hover:text-[#242423] group-hover:translate-x-0.5 dark:text-zinc-500 dark:group-hover:bg-white/[0.08] dark:group-hover:text-zinc-100 sm:size-8">
+      <ChevronRight className="size-4" />
+    </span>
+  </div>
+</Link>
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      Vocabulary Exploration Flow                        │
-│                                                                         │
-│                       /vocabulary (Level Hub)                           │
-│     • Level Cards (A1–C2) with completion percentages                   │
-│     • Category Facets (Oxford 3000 / Oxford 5000 / Daily English)       │
-│                                  │                                      │
-│                                  ▼                                      │
-│                   /vocabulary/[level] (Level View)                      │
-│     • Level Hero with aggregate statistics                              │
-│     • Sticky Server Filter Bar (Search, Part of Speech, Sorting)        │
-│     • Word Grid / List View with Responsive Pagination                  │
-│     • Rich Word Cards with Pronunciation, Synonyms & Antonyms           │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-### 5.1 Level Hub & Facet Selector (`<VocabularyClient />`)
-
-- **CEFR Card Matrix**: Interactive cards for each level (A1 to C2) displaying:
-  - Color-themed badge and gradient border.
-  - Total word count in that level.
-  - Circular animated progress ring tracking the user's mastered words.
-  - Quick action to dive directly into that level's word stream.
-- **Categorical Facets**: Filter words by curated sets including Oxford 3000, Oxford 5000, Academic Word List (AWL), and topic-based clusters (Business, Technology, Daily Routine).
-
-### 5.2 Word Card Anatomy (`<WordCard />`)
-
-The `<WordCard />` is an information-dense, interactive learning unit:
-
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│ ▌ "Ambiguous"   🔊 [Pronounce]   [adj.]   [Oxford 5000]     ★ ⭕       │
-│ ─────────────────────────────────────────────────────────────────────── │
-│   বাংলা অর্থ: অস্পষ্ট, দ্ব্যর্থবোধক                                    │
-│   Definition: Open to more than one interpretation; not having one      │
-│               obvious meaning. (স্পষ্ট নয় এমন বা একাধিক অর্থ হতে পারে) │
-│ ─────────────────────────────────────────────────────────────────────── │
-│   SYNONYMS:  [equivocal]  [vague]  [unclear]                            │
-│   ANTONYMS:  [clear]  [unambiguous]  [precise]                          │
-│ ─────────────────────────────────────────────────────────────────────── │
-│   "The election results were ambiguous, leaving voters confused."       │
-│   "নির্বাচনের ফলাফল অস্পষ্ট ছিল, যা ভোটারদের বিভ্রান্ত করে তুলেছিল।"     │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-#### Detailed Feature Set:
-1. **Left Gradient Accent**: Dynamic vertical border indicator that shifts from level-tint to solid vibrant emerald upon mastery.
-2. **Text-to-Speech (TTS) Speech Synthesis**: Native Web Speech API integration (`useSpeak`) with accent preference and fallback mechanisms.
-3. **Double-Click Gesture**: Double-clicking anywhere on the card toggles its "Learned" state with smooth border glow and badge animation.
-4. **Rich Bilingual Content**:
-   - English headword and phonetic part of speech.
-   - High-contrast Bengali primary meaning.
-   - Dual-language comprehensive definitions.
-   - Distinctive Synonyms (`bg-emerald-500/10`) & Antonyms (`bg-rose-500/10`) badges.
-   - Paired bilingual example sentences in italics.
-5. **Quick Action Float Controls**:
-   - Bookmark toggle (Amber star/ribbon) storing to local and cloud wordlists.
-   - Learned toggle (Emerald checkmark) instantly updating daily goals and streaks.
-
-### 5.3 Filter, Search & URL Synchronization (`<LevelFilterBar />`)
-
-- **Instant Search**: Debounced client-side + server-accelerated querying.
-- **Multi-Facet Dropdowns**:
-  - Part of Speech: Noun, Verb, Adjective, Adverb, Idiom, Phrasal Verb.
-  - Sorting: Alphabetical (A–Z, Z–A), Difficulty, Most Common, Recently Added.
-  - Status Filter: All Words, Mastered, In Progress, Bookmarked.
-- **SEO-Friendly URL Architecture**: Canonical `/vocabulary/[level]` URLs with query string hydration (`?q=...&category=...&sort=...`) ensuring shareability and search engine crawlability.
 
 ---
 
-## 6. Deep Analysis: `/profile` Sidebar Navigation & Bento Grid Dashboard
+### 4.4 Shimmering Liquid Progress Bar
 
-The Profile experience is structured as an **Asymmetric Split Workspace** pairing a **Sticky Vertical Sidebar Navigation Rail** on the left with a high-density **Modular Bento Grid Dashboard** on the right.
+```tsx
+<div className="rounded-[16px] bg-[#242423]/[0.03] p-2.5 dark:bg-white/[0.04] sm:rounded-[18px] sm:p-3">
+  <div className="flex items-center justify-between text-[11px] sm:text-[12px]">
+    <span className="font-semibold text-[#242423] dark:text-[#f3f3f2]">
+      {label}
+    </span>
+    <span className="tabular-nums text-[#242423]/60 dark:text-zinc-400">
+      {current} of {target} {unit}
+    </span>
+  </div>
 
+  <div className="relative mt-2 h-1.5 overflow-hidden rounded-full bg-[#242423]/10 dark:bg-white/10">
+    <div
+      className="relative h-full overflow-hidden rounded-full bg-orange-500 transition-all duration-500"
+      style={{ width: `${pct}%` }}
+    >
+      <span
+        aria-hidden="true"
+        className="absolute inset-y-0 w-8 bg-gradient-to-r from-transparent via-white/50 to-transparent"
+        style={{ transform: "translateX(600%)" }}
+      />
+    </div>
+  </div>
+</div>
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                                   <ProfileHeader />                                    │
-│       [Learning Hub Badge • Action Pills: Vocab / Quiz / Leaderboard]                  │
-├───────────────────────────────┬────────────────────────────────────────────────────────┤
-│  LEFT VERTICAL SIDEBAR RAIL   │  RIGHT CONTENT WORKSPACE (Col 9 / Flex-1)              │
-│  (lg:col-span-3 • Sticky)     │                                                        │
-│                               │  • [Tab 1: Bento Dashboard]                            │
-│  ┌─────────────────────────┐  │    - Bento Tile 1: User Identity & Mastery Meter       │
-│  │ 📊 Dashboard            │  │    - Bento Tile 2: Habit Streak & Daily Goal Dial      │
-│  ├─────────────────────────┤  │    - Bento Tile 3: Quiz Assessment & Accuracy Engine   │
-│  │ 🔖 Bookmarked      [12] │  │    - Bento Tile 4: CEFR 6-Tier Progression Matrix      │
-│  ├─────────────────────────┤  │    - Bento Tile 5: Activity Trend Curve & Analytics    │
-│  │ 🏆 Learned Words   [85] │  │                                                        │
-│  ├─────────────────────────┤  │  • [Tab 2: Bookmarked Decks]                           │
-│  │ 🎓 Quiz & Exams     [6] │  │    - Paginated interactive word cards with TTS         │
-│  ├─────────────────────────┤  │                                                        │
-│  │ ✍️ Submits          [1] │  │  • [Tab 3: Learned Decks]                              │
-│  ├─────────────────────────┤  │    - Mastered vocabulary review grid                   │
-│  │ ⚙️ Account Settings     │  │                                                        │
-│  └─────────────────────────┘  │  • [Tab 4: Quiz & Exam History]                        │
-│                               │    - Practice Results, Scheduled Exams, Mistakes Deck  │
-│  [Sidebar Mastery Widget]     │                                                        │
-│  • Global Progress Mini Bar   │  • [Tab 5: Account Settings]                           │
-└───────────────────────────────┴────────────────────────────────────────────────────────┘
-```
-
-### 6.1 Key Architecture & Ergonomics Breakdown
-
-1. **Sticky Vertical Sidebar Rail (`<TabsList />` on `lg:col-span-3`)**:
-   - **Desktop Layout**: Stays pinned (`sticky top-6`) alongside the content for effortless switching across decks and dashboard analytics without scrolling to top.
-   - **Active State Feedback**: Active tab pill with glassmorphic depth (`bg-black/[0.06] dark:bg-white/[0.08]`), text contrast, and color-coded icon tokens.
-   - **Real-Time Badge Counters**: Dynamic pill counters for Bookmarked words (`amber`), Learned words (`emerald`), and Quiz completions (`violet`).
-   - **Mini Mastery Widget**: Bottom-docked global progress bar displaying overall platform mastery percentage.
-   - **Mobile Responsiveness**: Automatically collapses to a horizontal scrolling pill dock on smaller viewports.
-
-2. **Bento Grid Main Workspace (`lg:col-span-9`)**:
-   - **Bento Tile 1 — Identity & Overall Mastery**: Status avatar ring, verified role pills, academic affiliations, bio/socials, and multi-stop radial meter.
-   - **Bento Tile 2 — Habit Streak & Daily Goal**: Flame streak badge, animated SVG goal ring, and year-to-date contribution calendar.
-   - **Bento Tile 3 — Quiz Assessment Engine**: Accuracy radial percentage dial and correct vs mistake counters.
-   - **Bento Tile 4 — CEFR 6-Tier Progression Matrix**: 6-grid cards (A1 to C2) with live word counts.
-   - **Bento Tile 5 — Longitudinal Learning Trends**: Full-width interactive activity chart with customizable range filters.
-
-3. **Collection Decks & Workspaces**:
-   - High-performance paginated word cards with Web Speech TTS audio, definition pairs, synonyms, antonyms, and double-click mastery toggles.
-   - Dedicated quiz practice result cards and scheduled exam scorecards.
 
 ---
 
-## 7. Global Navigation & Layout Architecture
+## 5. Responsive Small Screen Engineering (320px–375px)
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                             Global Layout                               │
-│                                                                         │
-│   [Header: Main Logo • Search Trigger • Language Toggle • Theme Toggle] │
-│ ─────────────────────────────────────────────────────────────────────── │
-│                                                                         │
-│                           Main Content View                             │
-│                     (Home, Quiz, Vocabulary, etc.)                      │
-│                                                                         │
-│ ─────────────────────────────────────────────────────────────────────── │
-│   [Desktop: Floating Glass Dock (Bottom Center)]                        │
-│   [Home] [Vocabulary] [Search] [Quiz] [Leaderboard] [News] [Profile]    │
-│                                                                         │
-│   [Mobile: Fixed Bottom Navigation Bar]                                 │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+Many interfaces look acceptable on a 1440px desktop but disintegrate on mobile viewports. To uphold this design standard, all components must pass these strict responsiveness constraints:
 
-### 6.1 Desktop Floating Dock (`<Sidebar />`)
-- **Positioning**: Floating at bottom center (`fixed bottom-5 inset-x-0 mx-auto w-max z-40`).
-- **Glassmorphism**: Built with `bg-background/85 dark:bg-card/75 backdrop-blur-xl shadow-2xl` and rounded pill borders.
-- **Active Indicator**: Smooth spring-animated highlight tracking the current active route.
-
-### 6.2 Mobile Bottom Navigation (`<MobileBottomNav />`)
-- **Touch-Optimized Ergonomics**: 5 core icons with haptic visual response and safe-area padding for modern notch/gesture smartphones.
+1. **Equal Distribution Grids**: Segmented filter controls must use `grid w-full grid-cols-4` on mobile rather than `flex`, ensuring every pill receives an exact 25% width without squishing or clipping text.
+2. **Elimination of Text Duplication**: Never repeat metadata across the same list item (e.g., displaying `B1` inside an artificial box and `B1` in the title, or `1,200 words` in the subtitle and `1,200` in the right badge). Redundancy is the primary cause of mobile truncation.
+3. **Safe Container Padding**: Mobile viewport outer gutters must use `px-2.5 py-3 sm:px-6 sm:py-8`. This preserves 300px of usable layout width even on 320px displays (iPhone SE 1st gen).
+4. **Touch Target Accessibility**: Minimum interactive hit target is 44px (using touch margins / padding), even when visual pills are styled to `h-7` or `h-8`.
 
 ---
 
-## 7. Strategic Recommendations & Design Evolution
+## 6. Verification Checklist for Future Feature Implementations
 
-| Strategic Area | Current State | Proposed Enhancement |
-| :--- | :--- | :--- |
-| **Micro-Animations** | Basic CSS fade-ups & Framer motion springs | Add celebratory particle confetti upon hitting 100% daily word goals or winning a quiz. |
-| **Audio Pronunciation** | Native browser `speechSynthesis` | Add slow-speed playback toggle (0.75x) for beginners and phonetic IPA transcription badges. |
-| **Gamification** | Day streak counter & Leaderboard | Introduce Level Achievement Badges (e.g., "A1 Master", "Vocabulary Guru", "Grammar Knight"). |
-| **Card Accessibility** | High contrast text & hover states | Introduce keyboard navigation shortcuts (e.g., `Space` to pronounce, `L` to mark learned, `B` to bookmark). |
-| **Offline Resilience** | IndexedDB with local sync | Add full service-worker caching for quiz questions to enable 100% offline quiz practice on the go. |
+Before shipping any new interface or component in Zero English, verify against this 10-point audit:
 
----
-
-*Document Generated: October 2026*  
-*Status: Approved Architecture Reference*
+- [ ] **Canvas Contrast**: Does the outer card float on a distinct warm background (`#f8f8f6` / `#0c0c0e`) rather than bleeding invisibly into a pure white body?
+- [ ] **Inset Architecture**: Does the component employ a sunken header or module (`#f1f1ef`) inside the card shell?
+- [ ] **No Solid Crayon Blocks**: Are list items free from heavy, solid-colored rainbow boxes?
+- [ ] **Tabular Numerals**: Are all numbers, streaks, percentages, and counters styled with `tabular-nums`?
+- [ ] **Radii Mathematical Hierarchy**: Do inner child radii decrease relative to outer parent radii?
+- [ ] **Spring Haptic Press**: Do clickable items have `active:scale-[0.97]` or `active:scale-[0.985]` press feedback?
+- [ ] **Hairline Ring Boundaries**: Are card borders styled with `border-black/[0.06]` / `ring-1 ring-black/5` rather than harsh solid borders?
+- [ ] **Color Discipline**: Is color restricted to semantic indicators (status dots, trend arrows, progress fills)?
+- [ ] **Mobile Narrow Check**: Does the interface render flawlessly down to 320px without horizontal scroll or text truncation?
+- [ ] **Dark Mode Symmetry**: Are dark mode styles explicitly defined using Apple secondary/tertiary dark grouped background tokens (`#1c1c1e`, `#252528`, `#323236`)?

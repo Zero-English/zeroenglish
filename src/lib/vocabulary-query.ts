@@ -8,6 +8,8 @@ export type LevelQuery = {
   q: string;
   sort: LevelPageSort;
   category: string;
+  wordType: string;
+  status: string;
   /** True when the URL narrows the list, so the page is a filter variant. */
   isFiltered: boolean;
 };
@@ -22,7 +24,7 @@ function first(value: string | string[] | undefined): string {
 /**
  * Normalizes the level filter query string.
  *
- * `sort=default` and `category=all` are treated as "no filter" so a plain form
+ * `sort=default`, `category=all`, and `type=all` are treated as "no filter" so a plain form
  * submit does not turn an ordinary page into a duplicate filter variant.
  */
 export function parseLevelQuery(
@@ -31,14 +33,27 @@ export function parseLevelQuery(
   const q = first(searchParams?.q).trim().slice(0, MAX_QUERY_LENGTH);
   const rawSort = first(searchParams?.sort).trim();
   const rawCategory = first(searchParams?.category).trim();
+  const rawType = first(searchParams?.type ?? searchParams?.wordType).trim().toLowerCase();
+  const rawStatus = first(searchParams?.status).trim().toLowerCase();
 
   const sort = isLevelPageSort(rawSort) ? rawSort : "default";
   const category = rawCategory && rawCategory !== "all" ? rawCategory : "all";
+  const wordType = rawType && rawType !== "all" ? rawType : "all";
+  const status = ["all", "learned", "unlearned", "bookmarked"].includes(rawStatus)
+    ? rawStatus
+    : "all";
 
   return {
     q,
     sort,
     category,
-    isFiltered: q !== "" || sort !== "default" || category !== "all",
+    wordType,
+    status,
+    isFiltered:
+      q !== "" ||
+      sort !== "default" ||
+      category !== "all" ||
+      wordType !== "all" ||
+      status !== "all",
   };
 }

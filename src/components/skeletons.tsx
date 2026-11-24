@@ -28,7 +28,9 @@ export function HomeSkeleton() {
               Learn English Vocabulary in Bangla | Zero English (জিরো ইংলিশ)
             </h1>
             <p className="sr-only">
-              Learn English vocabulary with Bangla meanings. Browse 5,000+ CEFR-graded words from A1 to C1 with example sentences, grammar guides, and quizzes.
+              Learn English vocabulary with Bangla meanings. Browse 5,000+
+              CEFR-graded words from A1 to C1 with example sentences, grammar
+              guides, and quizzes.
             </p>
             <S className="mx-auto mb-5 h-6 w-48 rounded-full" />
             <S className="mx-auto h-12 w-80 max-w-full rounded-xl sm:w-[26rem]" />
@@ -77,32 +79,68 @@ export function HomeSkeleton() {
 export function VocabularySkeleton() {
   return (
     <SkeletonBackdrop>
-      <section className="relative px-4 pt-10 pb-6 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">
-          <S className="h-6 w-48 rounded-full" />
-          <S className="mt-5 h-10 w-64 rounded-xl sm:h-12" />
-          <S className="mt-3 h-4 w-80 max-w-full rounded-full" />
-          <div className="mt-6 grid max-w-md grid-cols-3 gap-2.5">
-            <S className="h-20 rounded-2xl" />
-            <S className="h-20 rounded-2xl" />
-            <S className="h-20 rounded-2xl" />
+      <div className="relative mx-auto max-w-5xl px-2.5 py-3 sm:px-6 sm:py-8 lg:px-8">
+        <div className="grid gap-3.5 sm:gap-6 lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)] lg:items-start">
+          {/* Left Column Skeleton */}
+          <div className="w-full">
+            <div className="rounded-[22px] border border-black/[0.06] bg-white p-2.5 dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[26px] sm:p-3.5">
+              <div className="rounded-[18px] bg-[#f1f1ef] p-2.5 dark:bg-[#252528] sm:rounded-[20px] sm:p-3.5">
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <S className="size-10 sm:size-11 rounded-[12px] sm:rounded-[14px] shrink-0" />
+                  <div className="space-y-1.5 flex-1">
+                    <S className="h-4 w-28 rounded-md" />
+                    <S className="h-3 w-20 rounded-md" />
+                  </div>
+                </div>
+                <S className="mt-2.5 sm:mt-3 h-7 sm:h-8 w-full rounded-full" />
+              </div>
+              <div className="mt-2 grid grid-cols-3 gap-1.5 sm:gap-2">
+                <S className="h-[64px] sm:h-[74px] rounded-[16px] sm:rounded-[18px]" />
+                <S className="h-[64px] sm:h-[74px] rounded-[16px] sm:rounded-[18px]" />
+                <S className="h-[64px] sm:h-[74px] rounded-[16px] sm:rounded-[18px]" />
+              </div>
+              <S className="mt-2 sm:mt-2.5 h-[76px] rounded-[16px] sm:rounded-[18px]" />
+              <div className="mt-2 sm:mt-2.5 flex gap-1.5 sm:gap-2">
+                <S className="h-12 sm:h-14 flex-1 rounded-[14px] sm:rounded-2xl" />
+                <S className="h-12 sm:h-14 flex-1 rounded-[14px] sm:rounded-2xl" />
+                <S className="h-12 sm:h-14 flex-1 rounded-[14px] sm:rounded-2xl" />
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
 
-      <section className="relative px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">
-          <div className="mb-5 space-y-2">
-            <S className="h-7 w-48 rounded-lg" />
-            <S className="h-4 w-56 rounded-full" />
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <S key={i} className="h-40 rounded-3xl" />
-            ))}
+          {/* Right Column Skeleton */}
+          <div className="w-full">
+            <div className="rounded-[22px] border border-black/[0.06] bg-white p-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[26px] sm:p-3.5">
+              <div className="rounded-[18px] bg-[#f1f1ef] p-2.5 dark:bg-[#252528] sm:rounded-[20px] sm:p-3.5">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
+                  <div className="space-y-1">
+                    <S className="h-5 w-32 rounded-md" />
+                    <S className="h-3 w-48 rounded-md" />
+                  </div>
+                  <S className="h-7 sm:h-8 w-full sm:w-48 rounded-full" />
+                </div>
+              </div>
+              <div className="mt-2 sm:mt-2.5 flex flex-col gap-1">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="flex min-h-[56px] sm:min-h-[60px] items-center justify-between rounded-[14px] sm:rounded-[16px] px-3 py-2 sm:px-3.5 sm:py-2.5">
+                    <div className="flex-1 space-y-1.5 min-w-0 pr-3">
+                      <div className="flex items-center gap-2">
+                        <S className="h-5 w-8 rounded-[8px] shrink-0" />
+                        <S className="h-4 w-24 rounded-md" />
+                      </div>
+                      <S className="h-3 w-44 rounded-md" />
+                    </div>
+                    <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                      <S className="h-6 w-16 rounded-full" />
+                      <S className="size-7 sm:size-8 rounded-full" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     </SkeletonBackdrop>
   );
 }
