@@ -25,10 +25,12 @@ import {
   Zap,
   Turtle,
   CheckCheck,
+  Loader2,
 } from "lucide-react";
 import { Word, AdjacentWord } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
+import { useTTS } from "@/lib/use-speak";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -116,20 +118,15 @@ export function WordDetailClient({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [prevWord, nextWord, router]);
 
-  // Web Speech API with rate control
-  const speak = useCallback((text: string, rate = 0.9) => {
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = rate;
-    window.speechSynthesis.speak(utterance);
-  }, []);
+  // Neural Text-to-Speech via Kokoro-82M Web Worker
+  const { speak, isGenerating, isPlaying, isDownloading, progress, activeText } = useTTS();
+  const isWordActive = activeText === word.word;
+  const isWordLoading = (isWordActive && isGenerating) || (isWordActive && isDownloading);
+  const isWordPlaying = isWordActive && isPlaying;
 
   const handleSpeakSentence = (text: string, index: number) => {
     setPlayingSentenceIdx(index);
-    speak(text, 0.85);
-    setTimeout(() => setPlayingSentenceIdx(null), 2500);
+    speak(text, { speed: 0.9, voice: "af_heart" });
   };
 
   const handleShare = async () => {
@@ -406,21 +403,39 @@ export function WordDetailClient({
             <div data-tour="word-audio" className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => speak(word.word, 0.9)}
-                className="group flex cursor-pointer items-center gap-2 rounded-full bg-[#242423] px-4 py-2 text-[13px] font-semibold text-white shadow-xs transition-all duration-150 hover:bg-black active:scale-95 dark:bg-white dark:text-[#242423] dark:hover:bg-zinc-100"
-                title="Normal pronunciation"
+                onClick={() => speak(word.word, 0.95)}
+                disabled={isWordLoading}
+                className="group flex cursor-pointer items-center gap-2 rounded-full bg-[#242423] px-4 py-2 text-[13px] font-semibold text-white shadow-xs transition-all duration-150 hover:bg-black active:scale-95 dark:bg-white dark:text-[#242423] dark:hover:bg-zinc-100 disabled:opacity-80"
+                title="Normal neural pronunciation"
               >
-                <Volume2 className="size-4 transition-transform group-hover:scale-110" />
-                <span>{t("উচ্চারণ", "Pronounce")}</span>
+                {isWordLoading ? (
+                  <Loader2 className="size-4 animate-spin text-amber-400" />
+                ) : isWordPlaying ? (
+                  <Volume2 className="size-4 text-emerald-400 animate-pulse" />
+                ) : (
+                  <Volume2 className="size-4 transition-transform group-hover:scale-110" />
+                )}
+                <span>
+                  {isWordLoading
+                    ? isDownloading && progress
+                      ? `${t("ক্যাশ হচ্ছে", "Caching")} ${progress.percent}%`
+                      : t("তৈরি হচ্ছে...", "Generating...")
+                    : t("উচ্চারণ", "Pronounce")}
+                </span>
               </button>
 
               <button
                 type="button"
-                onClick={() => speak(word.word, 0.65)}
-                className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[#242423]/[0.06] px-3 py-2 text-[12px] font-medium text-[#242423] transition-all duration-150 hover:bg-[#242423]/[0.1] active:scale-95 dark:bg-white/[0.08] dark:text-[#f3f3f2]"
-                title="Slow pronunciation for clarity"
+                onClick={() => speak(word.word, 0.7)}
+                disabled={isWordLoading}
+                className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[#242423]/[0.06] px-3 py-2 text-[12px] font-medium text-[#242423] transition-all duration-150 hover:bg-[#242423]/[0.1] active:scale-95 dark:bg-white/[0.08] dark:text-[#f3f3f2] disabled:opacity-80"
+                title="Slow neural pronunciation for clarity"
               >
-                <Turtle className="size-3.5 text-[#242423]/60 dark:text-zinc-400" />
+                {isWordLoading ? (
+                  <Loader2 className="size-3.5 animate-spin text-amber-500" />
+                ) : (
+                  <Turtle className="size-3.5 text-[#242423]/60 dark:text-zinc-400" />
+                )}
                 <span>{t("ধীরগতি", "Slow")}</span>
               </button>
             </div>
@@ -569,7 +584,11 @@ export function WordDetailClient({
               }).map((_, i) => {
                 const en = word.examplesEn?.[i];
                 const bn = word.examples_bn?.[i];
-                const isPlaying = playingSentenceIdx === i;
+                const isSentenceActive = activeText === en;
+                const isSentenceLoading = isSentenceActive && isGenerating;
+                const isSentencePlaying =
+                  (isSentenceActive && isPlaying) ||
+                  (playingSentenceIdx === i && isPlaying);
 
                 return (
                   <div
@@ -601,13 +620,22 @@ export function WordDetailClient({
                           onClick={() => handleSpeakSentence(en, i)}
                           className={cn(
                             "grid size-9 shrink-0 cursor-pointer place-items-center rounded-full transition-all duration-150 active:scale-95 sm:size-10",
-                            isPlaying
+                            isSentencePlaying
                               ? "bg-emerald-500 text-white shadow-xs"
                               : "bg-white text-[#242423] shadow-xs hover:scale-105 dark:bg-[#1c1c1e] dark:text-[#f3f3f2]",
                           )}
                           title="Listen to this example sentence"
                         >
-                          <Volume2 className="size-4" />
+                          {isSentenceLoading ? (
+                            <Loader2 className="size-4 animate-spin text-amber-500" />
+                          ) : (
+                            <Volume2
+                              className={cn(
+                                "size-4",
+                                isSentencePlaying && "animate-pulse"
+                              )}
+                            />
+                          )}
                         </button>
                       )}
                     </div>

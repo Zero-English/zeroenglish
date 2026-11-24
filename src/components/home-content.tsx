@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useLearnedWords } from "@/lib/use-learned-words";
+import { useTTS } from "@/lib/use-speak";
 import { Button } from "@/components/ui/button";
 import {
   LibraryBig,
@@ -31,6 +32,7 @@ import {
   Volume2,
   CheckSquare,
   Square,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
@@ -420,6 +422,12 @@ export function HomeContent({
   const [activeWordIdx, setActiveWordIdx] = useState(0);
   const [activeRuleIdx, setActiveRuleIdx] = useState(0);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const {
+    speak: kokoroSpeak,
+    isPlaying: isKokoroPlaying,
+    isGenerating: isKokoroGenerating,
+    activeText: kokoroActiveText,
+  } = useTTS();
   const [dailyGoals, setDailyGoals] = useState({
     vocab: true,
     grammar: true,
@@ -450,20 +458,7 @@ export function HomeContent({
   };
 
   const playWordAudio = (word: string) => {
-    if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      try {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = "en-US";
-        utterance.rate = 0.88;
-        setIsPlayingAudio(true);
-        utterance.onend = () => setIsPlayingAudio(false);
-        utterance.onerror = () => setIsPlayingAudio(false);
-        window.speechSynthesis.speak(utterance);
-      } catch {
-        setIsPlayingAudio(false);
-      }
-    }
+    kokoroSpeak(word, 0.9);
   };
 
   const toggleDailyGoal = (key: "vocab" | "grammar" | "quiz") => {
@@ -697,19 +692,32 @@ export function HomeContent({
                               {currentSample.word}
                             </h4>
                             {/* Interactive Audio Pronunciation Button */}
-                            <button
-                              onClick={() => playWordAudio(currentSample.word)}
-                              type="button"
-                              title="উচ্চারণ শুনুন (Listen to pronunciation)"
-                              className={cn(
-                                "size-7 rounded-full flex items-center justify-center transition-all cursor-pointer border",
-                                isPlayingAudio
-                                  ? "bg-orange-500 text-white border-orange-600 scale-110 animate-pulse shadow-sm"
-                                  : "bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 border-amber-300/80 hover:bg-orange-500 hover:text-white hover:border-orange-500"
-                              )}
-                            >
-                              <Volume2 className="size-3.5" />
-                            </button>
+                            {(() => {
+                              const isSampleActive = kokoroActiveText === currentSample.word;
+                              const isSampleLoading = isSampleActive && isKokoroGenerating;
+                              const isSamplePlaying = (isSampleActive && isKokoroPlaying) || isPlayingAudio;
+
+                              return (
+                                <button
+                                  onClick={() => playWordAudio(currentSample.word)}
+                                  type="button"
+                                  disabled={isSampleLoading}
+                                  title="উচ্চারণ শুনুন (Listen to pronunciation)"
+                                  className={cn(
+                                    "size-7 rounded-full flex items-center justify-center transition-all cursor-pointer border",
+                                    isSamplePlaying
+                                      ? "bg-orange-500 text-white border-orange-600 scale-110 animate-pulse shadow-sm"
+                                      : "bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 border-amber-300/80 hover:bg-orange-500 hover:text-white hover:border-orange-500 disabled:opacity-75"
+                                  )}
+                                >
+                                  {isSampleLoading ? (
+                                    <Loader2 className="size-3.5 animate-spin text-amber-700 dark:text-amber-300" />
+                                  ) : (
+                                    <Volume2 className="size-3.5" />
+                                  )}
+                                </button>
+                              );
+                            })()}
                           </div>
                           <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase">
                             {currentSample.pos}

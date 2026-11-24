@@ -18,6 +18,7 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  serverExternalPackages: ["kokoro-js", "@huggingface/transformers"],
   experimental: {
     globalNotFound: true,
     agentUpgrade: "security",
