@@ -53,43 +53,6 @@ export function LevelHero({
 
   return (
     <section className="mx-auto max-w-4xl px-4 pt-4 pb-2 sm:px-6 lg:px-8">
-      {/* 1. Mobile App Top Bar: Back & Segmented Level Switcher */}
-      <div className="flex items-center justify-between gap-2">
-        <Link
-          href="/vocabulary"
-          className="flex size-9 shrink-0 items-center justify-center rounded-full border border-black/[0.06] bg-white text-[#242423]/70 shadow-2xs transition-all hover:bg-[#f1f1ef] hover:text-[#242423] active:scale-95 dark:border-white/[0.08] dark:bg-[#1c1c1e] dark:text-zinc-300 dark:hover:bg-[#252528] dark:hover:text-white"
-          title={t("সব লেভেল", "All Levels")}
-          aria-label={t("সব লেভেল", "All Levels")}
-        >
-          <ArrowLeft className="size-4" />
-        </Link>
-
-        {/* iOS-Style Segmented Control */}
-        <div
-          role="tablist"
-          aria-label="CEFR Levels"
-          className="flex items-center gap-0.5 rounded-full bg-black/[0.04] p-1 dark:bg-white/[0.06]"
-        >
-          {ALL_LEVELS.map((lvl) => {
-            const isActive = lvl.toUpperCase() === level.toUpperCase();
-            return (
-              <Link
-                key={lvl}
-                href={`/vocabulary/${lvl.toLowerCase()}`}
-                className={cn(
-                  "relative flex h-7 items-center justify-center rounded-full px-2.5 text-[12px] font-bold transition-all active:scale-95 sm:px-3",
-                  isActive
-                    ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
-                    : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-100"
-                )}
-              >
-                {lvl}
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-
       {/* 2. Minimal Mobile Card Widget */}
       <div className="mt-3 rounded-[22px] border border-black/[0.06] bg-white p-4 shadow-xs dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[26px] sm:p-5">
         <div className="flex items-center justify-between gap-3">
@@ -105,7 +68,7 @@ export function LevelHero({
             <p className="mt-0.5 text-xs text-[#242423]/55 dark:text-zinc-400">
               {t(
                 `মোট ${totalCount}টি শব্দ · ${learned}টি আয়ত্ত`,
-                `${totalCount} words · ${learned} mastered`
+                `${totalCount} words · ${learned} mastered`,
               )}
             </p>
           </div>
@@ -143,8 +106,12 @@ export function LevelHero({
             </div>
           </div>
           <div className="mt-1.5 flex items-center justify-between text-[11px] font-medium text-[#242423]/45 dark:text-zinc-500">
-            <span>{pct}% {t("সম্পন্ন", "completed")}</span>
-            <span>{remaining} {t("বাকি", "remaining")}</span>
+            <span>
+              {pct}% {t("সম্পন্ন", "completed")}
+            </span>
+            <span>
+              {remaining} {t("বাকি", "remaining")}
+            </span>
           </div>
         </div>
       </div>

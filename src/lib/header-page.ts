@@ -23,6 +23,27 @@ export interface HeaderPage {
   titleEn: string;
   /** Parent route in the URL hierarchy; `null` for top-level pages. */
   parentHref: string | null;
+  parentTitleBn?: string;
+  parentTitleEn?: string;
+}
+
+export function getParentTitle(parentHref: string | null): { en: string; bn: string } {
+  if (!parentHref) return { en: "Dashboard", bn: "ড্যাশবোর্ড" };
+  const clean = parentHref.replace(/\/$/, "");
+  if (clean === "/dashboard") return { en: "Dashboard", bn: "ড্যাশবোর্ড" };
+  if (clean === "/vocabulary") return { en: "Vocabulary", bn: "শব্দভাণ্ডার" };
+  if (clean === "/grammar") return { en: "Grammar", bn: "গ্রামার" };
+  if (clean === "/written") return { en: "Written", bn: "লিখিত" };
+  if (clean === "/quiz") return { en: "Quiz", bn: "কুইজ" };
+  if (clean === "/news") return { en: "News", bn: "নিউজ" };
+  if (clean === "/profile") return { en: "Profile", bn: "প্রোফাইল" };
+  if (clean === "/leaderboard") return { en: "Leaderboard", bn: "লিডারবোর্ড" };
+  if (clean === "/admin") return { en: "Admin", bn: "অ্যাডমিন" };
+  if (clean.startsWith("/vocabulary/")) {
+    const level = clean.split("/")[2]?.toUpperCase();
+    return { en: level || "Vocabulary", bn: level || "শব্দভাণ্ডার" };
+  }
+  return { en: "Back", bn: "পেছনে" };
 }
 
 /** Pages with a fixed label. `/` and `/about` are absent on purpose. */
@@ -138,6 +159,17 @@ function parentOf(segments: string[]): string | null {
  * Returns `null` when the header should keep the logo (home and about).
  */
 export function getHeaderPage(pathname: string): HeaderPage | null {
+  const page = resolveRawHeaderPage(pathname);
+  if (!page) return null;
+  const parentTitle = getParentTitle(page.parentHref);
+  return {
+    ...page,
+    parentTitleEn: page.parentTitleEn ?? parentTitle.en,
+    parentTitleBn: page.parentTitleBn ?? parentTitle.bn,
+  };
+}
+
+function resolveRawHeaderPage(pathname: string): HeaderPage | null {
   const path = normalizePathname(pathname);
 
   // Logo pages.
@@ -157,41 +189,83 @@ export function getHeaderPage(pathname: string): HeaderPage | null {
 
   const segments = path.split("/").filter(Boolean);
 
-  // /vocabulary/[level] → "A1 | Beginner"
-  // /vocabulary/[level]/[page] → same label, parent is the level page.
+  // /vocabulary/[levelOrWord]
   if (segments[0] === "vocabulary" && segments.length >= 2) {
-    const level = decodeSegment(segments[1]).toUpperCase();
+    const rawSecond = decodeSegment(segments[1]);
+    const level = rawSecond.toUpperCase();
     const meta = getLevelMeta(level);
     if (meta) {
+      if (segments.length >= 3) {
+        const pageNum = segments[2];
+        return {
+          titleBn: `${level} · পৃষ্ঠা ${pageNum}`,
+          titleEn: `${level} · Page ${pageNum}`,
+          parentHref: `/vocabulary/${segments[1]}`,
+          parentTitleEn: level,
+          parentTitleBn: level,
+        };
+      }
       return {
-        titleBn: `${level} | ${meta.labelBn}`,
-        titleEn: `${level} | ${meta.label}`,
-        parentHref:
-          segments.length === 2 ? "/vocabulary" : `/${segments[0]}/${segments[1]}`,
+        titleBn: `${level} · ${meta.labelBn}`,
+        titleEn: `${level} · ${meta.label}`,
+        parentHref: "/vocabulary",
+        parentTitleEn: "Vocabulary",
+        parentTitleBn: "শব্দভাণ্ডার",
       };
     }
-    return { ...STATIC_PAGES["/vocabulary"], parentHref: "/vocabulary" };
+
+    // It is a single word detail page like /vocabulary/abroad
+    const wordLabel = labelFromSegment(rawSecond);
+    const parentHref = parentOf(segments) ?? "/vocabulary";
+    return {
+      titleBn: wordLabel,
+      titleEn: wordLabel,
+      parentHref,
+      parentTitleEn: "Vocabulary",
+      parentTitleBn: "শব্দভাণ্ডার",
+    };
+  }
+
+  // /word/[slug] or /words/[slug]
+  if ((segments[0] === "word" || segments[0] === "words") && segments.length >= 2) {
+    const wordLabel = labelFromSegment(segments[1]);
+    return {
+      titleBn: wordLabel,
+      titleEn: wordLabel,
+      parentHref: "/vocabulary",
+      parentTitleEn: "Vocabulary",
+      parentTitleBn: "শব্দভাণ্ডার",
+    };
   }
 
   // Grammar: section → category → rule, each step up one segment.
   if (segments[0] === "grammar" && segments.length >= 2) {
+    const last = segments[segments.length - 1];
+    const label = labelFromSegment(last);
     return {
-      ...STATIC_PAGES["/grammar"],
-      parentHref: parentOf(segments),
+      titleBn: label,
+      titleEn: label,
+      parentHref: parentOf(segments) ?? "/grammar",
     };
   }
 
   if (segments[0] === "news" && segments.length >= 2) {
+    const last = segments[segments.length - 1];
+    const label = labelFromSegment(last);
     return {
-      ...STATIC_PAGES["/news"],
-      parentHref: "/news",
+      titleBn: label,
+      titleEn: label,
+      parentHref: parentOf(segments) ?? "/news",
     };
   }
 
   if (segments[0] === "written" && segments.length >= 2) {
+    const last = segments[segments.length - 1];
+    const label = labelFromSegment(last);
     return {
-      ...STATIC_PAGES["/written"],
-      parentHref: "/written",
+      titleBn: label,
+      titleEn: label,
+      parentHref: parentOf(segments) ?? "/written",
     };
   }
 

@@ -27,13 +27,15 @@ import { useTheme } from 'next-themes'
 
 import { DesktopNav, type NavItem, type LocalizedText } from '@/components/Header/DesktopNav'
 import { MobileNav, type MobileNavItem } from '@/components/Header/MobileNav'
+import { LoggedInHeader } from '@/components/Header/LoggedInHeader'
+export { LoggedInHeader }
 import { useLanguage } from '@/components/language-provider'
 import { useAuthStatus, useAuthStore } from '@/lib/auth-store'
 import { openNotesDialog } from '@/lib/notes-dialog'
 import { getHeaderPage } from '@/lib/header-page'
 import { useQuizChrome } from '@/lib/quiz-chrome'
 import { UserAvatar } from '@/components/UserAvatar'
-import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -435,6 +437,10 @@ export function Header() {
 
   if (hidden) return null
 
+  if (mounted && isLoggedIn) {
+    return <LoggedInHeader />
+  }
+
   const banner = bannerDismissed ? null : BANNER
 
   const handleSignOut = async () => {
@@ -450,27 +456,30 @@ export function Header() {
   return (
     <>
       {banner && (
-        <div className="relative z-40 w-full overflow-hidden border-b border-border/60 bg-background text-[11px] sm:text-xs text-muted-foreground">
-          <div className="mx-auto flex h-7 max-w-7xl items-center justify-between gap-3 px-4 md:px-8">
+        <div className="relative z-40 w-full overflow-hidden border-b border-black/[0.04] bg-[#f8f8f6] text-[11px] sm:text-xs text-[#242423]/75 dark:border-white/[0.04] dark:bg-[#121214] dark:text-zinc-300">
+          <div className="mx-auto flex h-8 max-w-7xl items-center justify-between gap-3 px-4 md:px-8">
             <Link
               href={banner.href}
-              className="flex items-center gap-1.5 font-medium transition-colors hover:text-primary text-foreground"
+              className="group flex min-w-0 items-center gap-2 font-medium transition-colors hover:text-[#242423] dark:hover:text-white"
             >
-              <Sparkles className="size-3 text-primary shrink-0" />
-              <span className="text-zinc-600 dark:text-zinc-300">{lang === 'en' ? banner.text.en : banner.text.bn}</span>
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400">
+                <Sparkles className="size-2.5 shrink-0" />
+                <span>{lang === 'en' ? 'NEW' : 'নতুন'}</span>
+              </span>
+              <span className="truncate text-[#242423]/80 group-hover:text-black dark:text-zinc-300 dark:group-hover:text-white">
+                {lang === 'en' ? banner.text.en : banner.text.bn}
+              </span>
             </Link>
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="hidden sm:flex items-center gap-3">
-                {banner.links.map((link) => (
-                  <Link
-                    key={`${link.label.en}-${link.href}`}
-                    href={link.href}
-                    className="transition-colors hover:text-foreground"
-                  >
-                    {lang === 'en' ? link.label.en : link.label.bn}
-                  </Link>
-                ))}
-              </div>
+            <div className="hidden sm:flex items-center gap-1 shrink-0 text-xs">
+              {banner.links.map((link) => (
+                <Link
+                  key={`${link.label.en}-${link.href}`}
+                  href={link.href}
+                  className="rounded-full px-2.5 py-1 text-[11px] font-medium text-[#242423]/60 transition-colors hover:bg-black/[0.04] hover:text-[#242423] dark:text-zinc-400 dark:hover:bg-white/[0.06] dark:hover:text-white"
+                >
+                  {lang === 'en' ? link.label.en : link.label.bn}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
@@ -480,43 +489,42 @@ export function Header() {
         initial={false}
         animate={{ y: isHidden ? '-100%' : '0%' }}
         transition={{ duration: 0.28, ease: [0.25, 0.1, 0.25, 1] }}
-        className={`sticky top-0 z-40 w-full transform-gpu border-b bg-background transition-colors ${
-          isScrolled ? 'border-border' : 'border-border/60'
-        }`}
+        className={cn(
+          'sticky top-0 z-40 w-full transform-gpu transition-all duration-200',
+          'bg-white/85 dark:bg-[#0c0c0e]/85 backdrop-blur-xl backdrop-saturate-150',
+          isScrolled
+            ? 'border-b border-black/[0.06] shadow-[0_2px_12px_rgba(0,0,0,0.03),0_12px_28px_-12px_rgba(0,0,0,0.05)] dark:border-white/[0.08]'
+            : 'border-b border-black/[0.04] dark:border-white/[0.05]'
+        )}
       >
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 md:px-8">
           {/* Logo on home/about, page title + back button elsewhere */}
           {headerPage ? (
-            <div className="flex min-w-0 flex-1 items-center gap-1 md:flex-none">
+            <div className="flex min-w-0 flex-1 items-center gap-2 md:flex-none">
               {pathname !== '/dashboard' && (
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  asChild
-                  className="h-9 w-9 shrink-0 text-muted-foreground hover:text-foreground"
+                <Link
+                  href={backHref}
+                  aria-label={lang === 'en' ? 'Go back' : 'ফিরে যান'}
+                  title={lang === 'en' ? 'Go back' : 'ফিরে যান'}
+                  className="flex size-8.5 shrink-0 items-center justify-center rounded-full bg-[#f1f1ef] text-[#242423] transition-all hover:bg-[#e7e7e4] active:scale-95 dark:bg-[#252528] dark:text-[#f3f3f2] dark:hover:bg-[#2e2e32]"
                 >
-                  <Link
-                    href={backHref}
-                    aria-label={lang === 'en' ? 'Go back' : 'ফিরে যান'}
-                    title={lang === 'en' ? 'Go back' : 'ফিরে যান'}
-                  >
-                    <ArrowLeft className="size-4" />
-                  </Link>
-                </Button>
+                  <ArrowLeft className="size-4" />
+                </Link>
               )}
-              <span className="max-w-[42vw] truncate text-sm font-semibold tracking-tight text-foreground sm:max-w-xs">
+              <span className="max-w-[42vw] truncate text-[14px] font-bold tracking-tight text-[#242423] sm:max-w-xs dark:text-[#f3f3f2]">
                 {lang === 'en' ? headerPage.titleEn : headerPage.titleBn}
               </span>
             </div>
           ) : (
             <Link
               href="/"
-              className="flex items-center gap-2 font-bold tracking-tight text-foreground transition-opacity hover:opacity-90"
+              className="flex items-center gap-2 font-bold tracking-tight text-foreground transition-transform hover:opacity-90 active:scale-95"
             >
               <Image
                 src={logo}
                 alt="Zero English"
                 className="h-5 w-auto dark:brightness-0 dark:invert"
+                priority
               />
             </Link>
           )}
@@ -525,31 +533,29 @@ export function Header() {
           <DesktopNav items={NAV_ITEMS} hidden={isHidden} />
 
           {/* Right Action Icons */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {/* Language Switcher */}
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
+              type="button"
               onClick={toggleLanguage}
               aria-label={lang === 'bn' ? 'Switch to English' : 'Switch to Bangla'}
               title={lang === 'bn' ? 'Switch to English' : 'Switch to Bangla'}
-              className="h-8 gap-1.5 px-2 text-xs font-medium text-muted-foreground hover:text-foreground"
+              className="inline-flex h-8.5 items-center gap-1.5 rounded-full bg-[#f1f1ef] px-3 text-xs font-semibold text-[#242423] transition-all hover:bg-[#e7e7e4] active:scale-95 dark:bg-[#252528] dark:text-[#f3f3f2] dark:hover:bg-[#2e2e32]"
             >
-              <Languages className="size-4" />
+              <Languages className="size-3.5" />
               <span>{lang === 'bn' ? 'বাং' : 'EN'}</span>
-            </Button>
+            </button>
 
             {/* Theme Switcher */}
-            <Button
-              variant="ghost"
-              size="icon-sm"
+            <button
+              type="button"
               onClick={toggleTheme}
               aria-label={
                 mounted && currentTheme === 'dark'
                   ? 'Switch to light mode'
                   : 'Switch to dark mode'
               }
-              className="h-8 w-8 text-muted-foreground hover:text-foreground"
+              className="flex size-8.5 items-center justify-center rounded-full bg-[#f1f1ef] text-[#242423] transition-all hover:bg-[#e7e7e4] active:scale-95 dark:bg-[#252528] dark:text-[#f3f3f2] dark:hover:bg-[#2e2e32]"
             >
               {mounted &&
                 (currentTheme === 'dark' ? (
@@ -557,17 +563,16 @@ export function Header() {
                 ) : (
                   <Moon className="size-4" />
                 ))}
-            </Button>
+            </button>
 
             {/* User Session & Profile Menu */}
             {isLoggedIn && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    className="relative size-8 overflow-hidden rounded-full p-0 hidden md:inline-flex"
+                  <button
+                    type="button"
                     aria-label="User profile menu"
+                    className="relative hidden size-8.5 shrink-0 overflow-hidden rounded-full ring-2 ring-black/[0.06] transition-all hover:ring-black/20 active:scale-95 md:inline-flex dark:ring-white/[0.1] dark:hover:ring-white/30"
                   >
                     <UserAvatar
                       id={(user as { id?: number }).id ?? 1}
@@ -576,65 +581,76 @@ export function Header() {
                       image={user.image}
                       size="sm"
                     />
-                  </Button>
+                  </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" sideOffset={8} className="w-52">
-                  <div className="px-2 py-1.5 text-xs">
-                    <p className="font-semibold text-foreground truncate">{user.name || 'Learner'}</p>
+                <DropdownMenuContent
+                  align="end"
+                  sideOffset={10}
+                  className="w-56 rounded-[22px] border border-black/[0.06] bg-white/95 p-1.5 shadow-[0_4px_24px_rgba(0,0,0,0.08),0_24px_48px_-12px_rgba(0,0,0,0.12)] backdrop-blur-2xl dark:border-white/[0.08] dark:bg-[#1c1c1e]/95"
+                >
+                  <div className="rounded-[16px] bg-[#f1f1ef] p-2.5 dark:bg-[#252528]">
+                    <p className="truncate text-xs font-bold text-[#242423] dark:text-[#f3f3f2]">
+                      {user.name || 'Learner'}
+                    </p>
                     {user.email && (
-                      <p className="text-muted-foreground truncate text-[11px]">{user.email}</p>
+                      <p className="truncate text-[11px] text-[#242423]/60 dark:text-zinc-400">
+                        {user.email}
+                      </p>
                     )}
                   </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="cursor-pointer gap-2">
-                      <LayoutDashboard className="size-3.5 text-muted-foreground" />
+                  <DropdownMenuSeparator className="my-1 bg-black/[0.06] dark:bg-white/[0.08]" />
+                  <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
+                    <Link href="/dashboard" className="flex items-center gap-2.5">
+                      <LayoutDashboard className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
                       <span>{lang === 'en' ? 'Dashboard' : 'ড্যাশবোর্ড'}</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/profile" className="cursor-pointer gap-2">
-                      <User className="size-3.5 text-muted-foreground" />
+                  <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
+                    <Link href="/profile" className="flex items-center gap-2.5">
+                      <User className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
                       <span>{lang === 'en' ? 'My Profile & Words' : 'প্রোফাইল ও শব্দতালিকা'}</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => openNotesDialog()} className="cursor-pointer gap-2">
-                    <NotebookPen className="size-3.5 text-muted-foreground" />
+                  <DropdownMenuItem
+                    onSelect={() => openNotesDialog()}
+                    className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer flex items-center gap-2.5"
+                  >
+                    <NotebookPen className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
                     <span>{lang === 'en' ? 'My Notes' : 'আমার নোট'}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/profile?tab=learned&type=grammar" className="cursor-pointer gap-2">
-                      <GraduationCap className="size-3.5 text-muted-foreground" />
+                  <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
+                    <Link href="/profile?tab=learned&type=grammar" className="flex items-center gap-2.5">
+                      <GraduationCap className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
                       <span>{lang === 'en' ? 'My Grammar Rules' : 'আমার ব্যাকরণ রুলস'}</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/leaderboard" className="cursor-pointer gap-2">
-                      <Trophy className="size-3.5 text-muted-foreground" />
+                  <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
+                    <Link href="/leaderboard" className="flex items-center gap-2.5">
+                      <Trophy className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
                       <span>{lang === 'en' ? 'Leaderboard' : 'লিডারবোর্ড'}</span>
                     </Link>
                   </DropdownMenuItem>
                   {canContribute && (
-                    <DropdownMenuItem asChild>
-                      <Link href="/contribute" className="cursor-pointer gap-2">
-                        <SquarePen className="size-3.5 text-muted-foreground" />
+                    <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
+                      <Link href="/contribute" className="flex items-center gap-2.5">
+                        <SquarePen className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
                         <span>{lang === 'en' ? 'Contribute' : 'কন্ট্রিবিউট'}</span>
                       </Link>
                     </DropdownMenuItem>
                   )}
                   {isAdmin && (
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin" className="cursor-pointer gap-2">
-                        <Shield className="size-3.5 text-muted-foreground" />
+                    <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
+                      <Link href="/admin" className="flex items-center gap-2.5">
+                        <Shield className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
                         <span>{lang === 'en' ? 'Admin Panel' : 'অ্যাডমিন প্যানেল'}</span>
                       </Link>
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuSeparator />
+                  <DropdownMenuSeparator className="my-1 bg-black/[0.06] dark:bg-white/[0.08]" />
                   <DropdownMenuItem
                     onClick={handleSignOut}
                     variant="destructive"
-                    className="cursor-pointer gap-2 text-destructive focus:text-destructive"
+                    className="rounded-xl px-2.5 py-2 text-xs font-semibold cursor-pointer gap-2.5 text-rose-600 focus:text-rose-600 dark:text-rose-400"
                   >
                     <LogOut className="size-3.5" />
                     <span>{lang === 'en' ? 'Sign out' : 'লগ আউট'}</span>
@@ -642,37 +658,33 @@ export function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button
-                variant="ghost"
-                size="sm"
-                asChild
-                className="hidden md:inline-flex h-8 text-xs font-medium"
+              <Link
+                href="/join"
+                className="hidden h-8.5 items-center gap-1.5 rounded-full bg-[#242423] px-4 text-xs font-semibold text-white shadow-xs transition-all hover:bg-black active:scale-95 md:inline-flex dark:bg-white dark:text-[#242423] dark:hover:bg-zinc-200"
               >
-                <Link href="/join" className="flex items-center gap-1.5">
-                  <User className="size-4 text-muted-foreground" />
-                  <span>{lang === 'en' ? 'Join' : 'যোগ দিন'}</span>
-                </Link>
-              </Button>
+                <User className="size-3.5" />
+                <span>{lang === 'en' ? 'Join' : 'যোগ দিন'}</span>
+              </Link>
             )}
 
             {/* Mobile Sheet Trigger */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
+                <button
+                  type="button"
                   aria-label="Open mobile menu"
-                  className="md:hidden h-8 w-8 text-muted-foreground hover:text-foreground"
+                  className="flex size-8.5 items-center justify-center rounded-full bg-[#f1f1ef] text-[#242423] transition-all hover:bg-[#e7e7e4] active:scale-95 md:hidden dark:bg-[#252528] dark:text-[#f3f3f2] dark:hover:bg-[#2e2e32]"
                 >
-                  <Menu className="size-5" />
-                </Button>
+                  <Menu className="size-4" />
+                </button>
               </SheetTrigger>
               <SheetContent
                 side="left"
-                className="flex w-72 flex-col gap-0 bg-sidebar p-0 text-sidebar-foreground border-r border-sidebar-border"
+                className="flex w-80 flex-col gap-0 border-r border-black/[0.06] bg-white/95 p-0 text-[#242423] shadow-2xl backdrop-blur-2xl dark:border-white/[0.08] dark:bg-[#1c1c1e]/95 dark:text-[#f3f3f2]"
                 showCloseButton={false}
               >
-                <div className="relative flex flex-row items-center justify-between border-b border-sidebar-border px-4 py-3.5 h-14">
+                {/* Sunken Drawer Header Module */}
+                <div className="m-3 flex items-center justify-between rounded-[20px] bg-[#f1f1ef] p-3 dark:bg-[#252528]">
                   <Link
                     href="/"
                     onClick={() => setMobileOpen(false)}
@@ -685,17 +697,17 @@ export function Header() {
                     />
                   </Link>
                   <SheetClose asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      className="h-8 w-8 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+                    <button
+                      type="button"
+                      aria-label="Close menu"
+                      className="flex size-8 items-center justify-center rounded-full bg-white text-[#242423] shadow-xs transition-all hover:bg-zinc-100 active:scale-95 dark:bg-[#1c1c1e] dark:text-[#f3f3f2] dark:hover:bg-zinc-800"
                     >
-                      <X className="size-4" />
-                    </Button>
+                      <X className="size-3.5" />
+                    </button>
                   </SheetClose>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-2">
+                <div className="flex-1 overflow-y-auto px-3 py-2">
                   <SheetTitle className="sr-only">
                     {lang === 'en' ? 'Navigation Menu' : 'নেভিগেশন মেনু'}
                   </SheetTitle>
@@ -705,13 +717,14 @@ export function Header() {
                   />
                 </div>
 
-                <div className="border-t border-sidebar-border p-3 space-y-2">
+                {/* Sunken Drawer Footer Module */}
+                <div className="m-3 rounded-[22px] bg-[#f1f1ef] p-3 dark:bg-[#252528] space-y-1.5">
                   {isLoggedIn ? (
                     <>
                       <Link
                         href="/dashboard"
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center w-full px-3 py-2 rounded-md text-xs font-medium text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/60 transition-colors gap-2.5"
+                        className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-[#242423]/80 transition-all hover:bg-white active:scale-[0.98] dark:text-zinc-200 dark:hover:bg-[#1c1c1e]"
                       >
                         <LayoutDashboard className="size-4 shrink-0" />
                         <span>{lang === 'en' ? 'Dashboard' : 'ড্যাশবোর্ড'}</span>
@@ -722,23 +735,20 @@ export function Header() {
                           setMobileOpen(false)
                           handleSignOut()
                         }}
-                        className="flex items-center w-full px-3 py-2 rounded-md text-xs font-medium text-sidebar-foreground/70 hover:text-destructive hover:bg-destructive/10 transition-colors gap-2.5"
+                        className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold text-rose-600 transition-all hover:bg-rose-500/10 active:scale-[0.98] dark:text-rose-400"
                       >
                         <LogOut className="size-4 shrink-0" />
                         <span>{lang === 'en' ? 'Log out' : 'লগ আউট'}</span>
                       </button>
                     </>
                   ) : (
-                    <Button
-                      variant="default"
-                      size="sm"
-                      asChild
-                      className="w-full justify-center text-xs"
+                    <Link
+                      href="/join"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex h-10 w-full items-center justify-center rounded-full bg-[#242423] text-xs font-semibold text-white shadow-xs transition-all hover:bg-black active:scale-95 dark:bg-white dark:text-[#242423] dark:hover:bg-zinc-200"
                     >
-                      <Link href="/join" onClick={() => setMobileOpen(false)}>
-                        {lang === 'en' ? 'Join' : 'যোগ দিন'}
-                      </Link>
-                    </Button>
+                      {lang === 'en' ? 'Join Zero English' : 'জিরো ইংলিশে যোগ দিন'}
+                    </Link>
                   )}
                 </div>
               </SheetContent>

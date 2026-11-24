@@ -1,1 +1,1 @@
-export { Header } from "./Header/index";
+export { Header, LoggedInHeader } from "./Header/index";

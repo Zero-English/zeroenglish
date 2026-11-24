@@ -49,14 +49,22 @@ export function WordDetailClient({
   const t = useT();
   const router = useRouter();
   const { isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
-  const { isBookmarked, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
+  const {
+    isBookmarked,
+    toggleBookmark,
+    loaded: bookmarkLoaded,
+  } = useBookmarkedWords();
 
   const [copied, setCopied] = useState(false);
   const [activeRecallHidden, setActiveRecallHidden] = useState(true);
-  const [playingSentenceIdx, setPlayingSentenceIdx] = useState<number | null>(null);
+  const [playingSentenceIdx, setPlayingSentenceIdx] = useState<number | null>(
+    null,
+  );
 
   // Quick Self-Check State
-  const [selectedQuizOption, setSelectedQuizOption] = useState<number | null>(null);
+  const [selectedQuizOption, setSelectedQuizOption] = useState<number | null>(
+    null,
+  );
   const [quizSubmitted, setQuizSubmitted] = useState(false);
 
   // Reset to hidden state and reset quiz when navigating between words
@@ -80,9 +88,13 @@ export function WordDetailClient({
         return;
       }
       if (e.key === "ArrowLeft" && prevWord) {
-        router.push(`/vocabulary/${encodeURIComponent(prevWord.word.toLowerCase())}`);
+        router.push(
+          `/vocabulary/${encodeURIComponent(prevWord.word.toLowerCase())}`,
+        );
       } else if (e.key === "ArrowRight" && nextWord) {
-        router.push(`/vocabulary/${encodeURIComponent(nextWord.word.toLowerCase())}`);
+        router.push(
+          `/vocabulary/${encodeURIComponent(nextWord.word.toLowerCase())}`,
+        );
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -130,7 +142,8 @@ export function WordDetailClient({
 
   // Generate 3 multiple choice options for the interactive Quick Self-Check
   const quizOptions = useMemo(() => {
-    const correct = primaryMeaning.slice(0, 2).join(", ") || word.definitionBn || "সঠিক অর্থ";
+    const correct =
+      primaryMeaning.slice(0, 2).join(", ") || word.definitionBn || "সঠিক অর্থ";
     const distractors: string[] = [];
 
     for (const rw of relatedWords) {
@@ -145,7 +158,8 @@ export function WordDetailClient({
     }
 
     if (distractors.length < 1) distractors.push("বিপরীত বা অন্য দিক নির্দেশক");
-    if (distractors.length < 2) distractors.push("পূর্বে বা অতীতে ঘটে যাওয়া কোনো ঘটনা");
+    if (distractors.length < 2)
+      distractors.push("পূর্বে বা অতীতে ঘটে যাওয়া কোনো ঘটনা");
 
     const all = [
       { text: correct, isCorrect: true },
@@ -189,7 +203,7 @@ export function WordDetailClient({
         </span>
       ) : (
         part
-      )
+      ),
     );
   };
 
@@ -209,14 +223,6 @@ export function WordDetailClient({
         {/* Navigation & Breadcrumb Header with Quick Prev/Next Pills */}
         <div className="flex flex-wrap items-center justify-between gap-2.5">
           <div className="flex items-center gap-2 text-[12px] sm:text-[13px] text-[#242423]/60 dark:text-zinc-400">
-            <Link
-              href="/vocabulary"
-              className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 font-medium text-[#242423] ring-1 ring-black/5 hover:bg-[#f1f1ef] active:scale-95 transition-all dark:bg-[#1c1c1e] dark:ring-white/[0.08] dark:text-[#f3f3f2]"
-            >
-              <ArrowLeft className="size-3.5" />
-              <span>{t("শব্দভাণ্ডার", "Vocabulary")}</span>
-            </Link>
-            <span className="text-[#242423]/30 dark:text-zinc-600">/</span>
             <Link
               href={`/vocabulary/${word.level.toLowerCase()}`}
               className="rounded-full bg-white px-2.5 py-1 font-mono font-bold text-[#242423] ring-1 ring-black/5 hover:bg-[#f1f1ef] active:scale-95 transition-all dark:bg-[#1c1c1e] dark:ring-white/[0.08] dark:text-[#f3f3f2]"
@@ -329,7 +335,7 @@ export function WordDetailClient({
                     "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-medium transition-all active:scale-95",
                     bookmarked
                       ? "bg-amber-500/10 text-amber-600 ring-1 ring-amber-500/30 dark:bg-amber-500/20 dark:text-amber-400"
-                      : "bg-[#242423]/[0.04] text-[#242423]/70 ring-1 ring-black/5 hover:bg-[#242423]/[0.07] dark:bg-white/[0.06] dark:ring-white/10 dark:text-zinc-300"
+                      : "bg-[#242423]/[0.04] text-[#242423]/70 ring-1 ring-black/5 hover:bg-[#242423]/[0.07] dark:bg-white/[0.06] dark:ring-white/10 dark:text-zinc-300",
                   )}
                   title={bookmarked ? "Bookmarked" : "Bookmark this word"}
                 >
@@ -339,7 +345,9 @@ export function WordDetailClient({
                     <Bookmark className="size-3.5" />
                   )}
                   <span>
-                    {bookmarked ? t("বুকমার্কড", "Saved") : t("সংরক্ষণ", "Save")}
+                    {bookmarked
+                      ? t("বুকমার্কড", "Saved")
+                      : t("সংরক্ষণ", "Save")}
                   </span>
                 </button>
 
@@ -349,7 +357,7 @@ export function WordDetailClient({
                     "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-medium transition-all active:scale-95",
                     learned
                       ? "bg-emerald-500/10 text-emerald-700 ring-1 ring-emerald-500/30 dark:bg-emerald-500/20 dark:text-emerald-300"
-                      : "bg-[#242423]/[0.04] text-[#242423]/70 ring-1 ring-black/5 hover:bg-[#242423]/[0.07] dark:bg-white/[0.06] dark:ring-white/10 dark:text-zinc-300"
+                      : "bg-[#242423]/[0.04] text-[#242423]/70 ring-1 ring-black/5 hover:bg-[#242423]/[0.07] dark:bg-white/[0.06] dark:ring-white/10 dark:text-zinc-300",
                   )}
                   title={learned ? "Learned" : "Mark as learned"}
                 >
@@ -408,7 +416,8 @@ export function WordDetailClient({
             }}
             className={cn(
               "mt-6 rounded-[22px] bg-[#f1f1ef] p-4 dark:bg-[#252528] sm:p-5 transition-all duration-200",
-              activeRecallHidden && "cursor-pointer hover:bg-[#ecece9] dark:hover:bg-[#28282c]"
+              activeRecallHidden &&
+                "cursor-pointer hover:bg-[#ecece9] dark:hover:bg-[#28282c]",
             )}
           >
             <div className="flex items-center justify-between">
@@ -444,13 +453,13 @@ export function WordDetailClient({
             <div
               className={cn(
                 "relative mt-2.5 transition-all duration-200",
-                activeRecallHidden && "select-none"
+                activeRecallHidden && "select-none",
               )}
             >
               <div
                 className={cn(
                   "flex flex-wrap items-center gap-2 transition-all duration-200",
-                  activeRecallHidden && "blur-md opacity-25"
+                  activeRecallHidden && "blur-md opacity-25",
                 )}
               >
                 {primaryMeaning.length > 0 ? (
@@ -474,7 +483,9 @@ export function WordDetailClient({
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-[#242423] px-3.5 py-1 text-[12px] font-semibold text-white shadow-xs dark:bg-white dark:text-[#242423] transition-transform hover:scale-105">
                     <Eye className="size-3.5" />
-                    <span>{t("অর্থ দেখতে ট্যাপ করুন", "Tap to Reveal Meaning")}</span>
+                    <span>
+                      {t("অর্থ দেখতে ট্যাপ করুন", "Tap to Reveal Meaning")}
+                    </span>
                   </span>
                 </div>
               )}
@@ -485,7 +496,7 @@ export function WordDetailClient({
               <p
                 className={cn(
                   "mt-3 border-t border-black/[0.05] pt-2 text-[13px] leading-relaxed text-[#242423]/75 dark:border-white/[0.05] dark:text-zinc-300 transition-all",
-                  activeRecallHidden && "blur-sm select-none opacity-20"
+                  activeRecallHidden && "blur-sm select-none opacity-20",
                 )}
               >
                 {word.definitionBn}
@@ -516,11 +527,18 @@ export function WordDetailClient({
                   {t("ব্যবহারিক উদাহরণসমূহ", "Real-World Examples")}
                 </h2>
                 <p className="text-[12px] text-[#242423]/55 dark:text-zinc-400">
-                  {t("বাক্যে ব্যবহারের ধরন শুনুন ও শিখুন", "Listen to natural sentence flow & context")}
+                  {t(
+                    "বাক্যে ব্যবহারের ধরন শুনুন ও শিখুন",
+                    "Listen to natural sentence flow & context",
+                  )}
                 </p>
               </div>
               <span className="rounded-full bg-[#242423]/[0.05] px-2.5 py-0.5 text-[11px] font-semibold text-[#242423]/60 dark:bg-white/[0.06] dark:text-zinc-400">
-                {Math.max(word.examplesEn?.length ?? 0, word.examples_bn?.length ?? 0)} {t("উদাহরণ", "Sentences")}
+                {Math.max(
+                  word.examplesEn?.length ?? 0,
+                  word.examples_bn?.length ?? 0,
+                )}{" "}
+                {t("উদাহরণ", "Sentences")}
               </span>
             </div>
 
@@ -528,7 +546,7 @@ export function WordDetailClient({
               {Array.from({
                 length: Math.max(
                   word.examplesEn?.length ?? 0,
-                  word.examples_bn?.length ?? 0
+                  word.examples_bn?.length ?? 0,
                 ),
               }).map((_, i) => {
                 const en = word.examplesEn?.[i];
@@ -545,7 +563,8 @@ export function WordDetailClient({
                         {/* English Sentence with Keyword Highlight */}
                         {en && (
                           <p className="text-[14.5px] font-medium leading-relaxed text-[#242423] dark:text-[#f3f3f2] sm:text-[16px]">
-                            &ldquo;{renderHighlightedSentence(en, word.word)}&rdquo;
+                            &ldquo;{renderHighlightedSentence(en, word.word)}
+                            &rdquo;
                           </p>
                         )}
 
@@ -566,7 +585,7 @@ export function WordDetailClient({
                             "grid size-9 shrink-0 cursor-pointer place-items-center rounded-full transition-all duration-150 active:scale-95 sm:size-10",
                             isPlaying
                               ? "bg-emerald-500 text-white shadow-xs"
-                              : "bg-white text-[#242423] shadow-xs hover:scale-105 dark:bg-[#1c1c1e] dark:text-[#f3f3f2]"
+                              : "bg-white text-[#242423] shadow-xs hover:scale-105 dark:bg-[#1c1c1e] dark:text-[#f3f3f2]",
                           )}
                           title="Listen to this example sentence"
                         >
@@ -595,7 +614,10 @@ export function WordDetailClient({
                   {t("দ্রুত যাচাই (Quick Check)", "Quick Self-Check")}
                 </h2>
                 <p className="text-[11.5px] text-[#242423]/55 dark:text-zinc-400">
-                  {t("নিচের বিকল্পগুলো থেকে সঠিক অর্থটি চিহ্নিত করুন", "Test your immediate recall of this word")}
+                  {t(
+                    "নিচের বিকল্পগুলো থেকে সঠিক অর্থটি চিহ্নিত করুন",
+                    "Test your immediate recall of this word",
+                  )}
                 </p>
               </div>
             </div>
@@ -648,7 +670,7 @@ export function WordDetailClient({
                     onClick={() => handleQuizAnswer(idx)}
                     className={cn(
                       "flex items-center justify-between rounded-[16px] p-3 text-left transition-all duration-150 active:scale-[0.99] cursor-pointer sm:p-3.5",
-                      optionStyle
+                      optionStyle,
                     )}
                   >
                     <span className="text-[13.5px] font-medium sm:text-[14.5px]">
@@ -668,8 +690,14 @@ export function WordDetailClient({
               <div className="mt-3 flex items-center justify-between rounded-[16px] bg-black/[0.03] p-3 dark:bg-white/[0.04]">
                 <p className="text-[12px] font-semibold text-[#242423] dark:text-[#f3f3f2]">
                   {quizOptions[selectedQuizOption ?? 0]?.isCorrect
-                    ? t("সঠিক উত্তর! শব্দটি মনে রাখার জন্য ধন্যবাদ।", "Correct! You've mastered this meaning.")
-                    : t("ভুল হয়েছে, সঠিক অর্থটি সবুজ রঙে চিহ্নিত করা হয়েছে।", "Not quite, the correct meaning is highlighted in green.")}
+                    ? t(
+                        "সঠিক উত্তর! শব্দটি মনে রাখার জন্য ধন্যবাদ।",
+                        "Correct! You've mastered this meaning.",
+                      )
+                    : t(
+                        "ভুল হয়েছে, সঠিক অর্থটি সবুজ রঙে চিহ্নিত করা হয়েছে।",
+                        "Not quite, the correct meaning is highlighted in green.",
+                      )}
                 </p>
                 <Link
                   href="/quiz/vocabulary"
@@ -692,7 +720,10 @@ export function WordDetailClient({
               {t("সম্পর্কিত শব্দসমূহ", "Word Connections")}
             </h2>
             <p className="text-[12px] text-[#242423]/55 dark:text-zinc-400">
-              {t("সমার্থক ও বিপরীত শব্দ জেনে শব্দভাণ্ডার সমৃদ্ধ করুন", "Broaden your vocabulary with synonyms and antonyms")}
+              {t(
+                "সমার্থক ও বিপরীত শব্দ জেনে শব্দভাণ্ডার সমৃদ্ধ করুন",
+                "Broaden your vocabulary with synonyms and antonyms",
+              )}
             </p>
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -779,7 +810,9 @@ export function WordDetailClient({
                   <div className="min-w-0">
                     <p className="flex items-center gap-1.5 text-[11px] font-medium text-[#242423]/50 dark:text-zinc-400">
                       <span>{t("পূর্ববর্তী", "Previous")}</span>
-                      <span className="font-mono text-[10px]">#{prevWord.id}</span>
+                      <span className="font-mono text-[10px]">
+                        #{prevWord.id}
+                      </span>
                       <span>·</span>
                       <span className="font-mono font-bold text-[#242423]/70 dark:text-zinc-300">
                         {prevWord.level}
@@ -789,7 +822,9 @@ export function WordDetailClient({
                       {prevWord.word}
                     </p>
                     <p className="truncate text-[11.5px] font-medium text-[#242423]/60 dark:text-zinc-400">
-                      {prevWord.meaningBn.filter((m) => m && m !== "...").join(", ") || "অর্থ দেখুন"}
+                      {prevWord.meaningBn
+                        .filter((m) => m && m !== "...")
+                        .join(", ") || "অর্থ দেখুন"}
                     </p>
                   </div>
                 </div>
@@ -823,14 +858,18 @@ export function WordDetailClient({
                         {nextWord.level}
                       </span>
                       <span>·</span>
-                      <span className="font-mono text-[10px]">#{nextWord.id}</span>
+                      <span className="font-mono text-[10px]">
+                        #{nextWord.id}
+                      </span>
                       <span>{t("পরবর্তী", "Next")}</span>
                     </p>
                     <p className="truncate text-[15px] font-bold text-[#242423] dark:text-[#f3f3f2]">
                       {nextWord.word}
                     </p>
                     <p className="truncate text-[11.5px] font-medium text-[#242423]/60 dark:text-zinc-400">
-                      {nextWord.meaningBn.filter((m) => m && m !== "...").join(", ") || "অর্থ দেখুন"}
+                      {nextWord.meaningBn
+                        .filter((m) => m && m !== "...")
+                        .join(", ") || "অর্থ দেখুন"}
                     </p>
                   </div>
                   <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white text-[#242423] shadow-2xs transition-transform duration-150 group-hover:translate-x-0.5 dark:bg-[#1c1c1e] dark:text-[#f3f3f2]">
@@ -891,7 +930,9 @@ export function WordDetailClient({
                 </span>
               </div>
               <span className="truncate text-[12px] font-semibold text-[#242423] dark:text-[#f3f3f2]">
-                {learned ? t("শেখা শেষ", "Learned") : t("শেখা মার্ক", "Mark Learned")}
+                {learned
+                  ? t("শেখা শেষ", "Learned")
+                  : t("শেখা মার্ক", "Mark Learned")}
               </span>
             </button>
 
@@ -918,7 +959,10 @@ export function WordDetailClient({
                     {t("পরবর্তী শব্দ শিখুন", "Jump back in")}
                   </p>
                   <h2 className="text-[16px] font-bold tracking-tight text-[#242423] dark:text-[#f3f3f2]">
-                    {t(`আরও ${word.level} শব্দসমূহ`, `More ${word.level} Vocabulary`)}
+                    {t(
+                      `আরও ${word.level} শব্দসমূহ`,
+                      `More ${word.level} Vocabulary`,
+                    )}
                   </h2>
                 </div>
                 <Link
@@ -933,7 +977,8 @@ export function WordDetailClient({
                 {relatedWords.map((rw, index) => {
                   const pastelClass = pastelStyles[index % pastelStyles.length];
                   const meaning =
-                    rw.meaningBn.filter((m) => m && m !== "...").join(", ") || rw.definitionEn;
+                    rw.meaningBn.filter((m) => m && m !== "...").join(", ") ||
+                    rw.definitionEn;
 
                   return (
                     <Link
@@ -941,7 +986,7 @@ export function WordDetailClient({
                       href={`/vocabulary/${encodeURIComponent(rw.word.toLowerCase())}`}
                       className={cn(
                         "group relative flex min-h-[76px] flex-col justify-between rounded-[20px] border p-3.5 transition-all duration-150 hover:shadow-xs active:scale-[0.985]",
-                        pastelClass
+                        pastelClass,
                       )}
                     >
                       <div className="flex items-start justify-between">
