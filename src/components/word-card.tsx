@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
-import { useSpeak } from "@/lib/use-speak";
+import { useTTS } from "@/lib/use-speak";
 import type { Word } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
@@ -13,15 +13,20 @@ import {
   Bookmark,
   Volume2,
   ArrowUpRight,
+  Loader2,
 } from "lucide-react";
 
 interface WordCardProps {
   word: Word;
   gradient?: string;
+  isFirst?: boolean;
 }
 
-export function WordCard({ word }: WordCardProps) {
-  const speak = useSpeak();
+export function WordCard({ word, isFirst }: WordCardProps) {
+  const { speak, isGenerating, isPlaying, isDownloading, activeText } = useTTS();
+  const isThisWordActive = activeText === word.word;
+  const isThisWordLoading = (isThisWordActive && isGenerating) || (isThisWordActive && isDownloading);
+  const isThisWordPlaying = isThisWordActive && isPlaying;
   const t = useT();
   const { isLearned, toggleLearned, loaded: learnedLoaded } = useLearnedWords();
   const { isBookmarked, toggleBookmark, loaded: bookmarkLoaded } = useBookmarkedWords();
@@ -63,6 +68,7 @@ export function WordCard({ word }: WordCardProps) {
   return (
     <article
       onDoubleClick={() => loaded && toggleLearned(word.id)}
+      {...(isFirst ? { "data-tour": "word-card" } : {})}
       className={cn(
         "group relative rounded-[24px] border bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] transition-all duration-200 hover:shadow-[0_2px_6px_rgba(0,0,0,0.04),0_18px_40px_-14px_rgba(0,0,0,0.09)] dark:bg-[#1c1c1e] sm:rounded-[28px] sm:p-5",
         learned
@@ -83,7 +89,13 @@ export function WordCard({ word }: WordCardProps) {
             title={t("উচ্চারণ শুনুন", "Listen to pronunciation")}
             aria-label={`Listen to ${word.word}`}
           >
-            <Volume2 className="size-[18px]" />
+            {isThisWordLoading ? (
+              <Loader2 className="size-[18px] animate-spin text-amber-500" />
+            ) : isThisWordPlaying ? (
+              <Volume2 className="size-[18px] text-emerald-600 animate-pulse dark:text-emerald-400" />
+            ) : (
+              <Volume2 className="size-[18px]" />
+            )}
           </button>
 
           <div className="min-w-0">
@@ -128,7 +140,10 @@ export function WordCard({ word }: WordCardProps) {
 
         {/* Circular Tactile Action Controls */}
         {loaded && (
-          <div className="flex shrink-0 items-center gap-1.5">
+          <div
+            className="flex shrink-0 items-center gap-1.5"
+            {...(isFirst ? { "data-tour": "card-actions" } : {})}
+          >
             <button
               type="button"
               onClick={(e) => {

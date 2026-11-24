@@ -17,6 +17,12 @@ import { useDailyGoal } from "@/lib/use-daily-goal";
 import { setSelectedLevel } from "@/lib/level-store";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
+import {
+  useGuidedTour,
+  GuidedTour,
+  TourReplayButton,
+  VOCABULARY_HUB_TOUR,
+} from "@/components/guided-tour";
 
 interface LevelVisualMeta {
   label: string;
@@ -76,6 +82,15 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
   const { todayLearned, streak, dailyGoal, loaded: goalLoaded } = useDailyGoal();
   const t = useT();
 
+  const {
+    isOpen: isTourOpen,
+    currentStepIndex: tourStepIndex,
+    nextStep: tourNext,
+    prevStep: tourPrev,
+    closeTour,
+    startTour,
+  } = useGuidedTour(VOCABULARY_HUB_TOUR);
+
   const [activeTier, setActiveTier] = useState<TierFilter>("all");
 
   const totalWords = facets?.totalWords ?? 0;
@@ -134,9 +149,12 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
 
                   {/* Title & Status */}
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[14px] font-semibold leading-5 text-[#242423] dark:text-[#f3f3f2] sm:text-[16px] sm:leading-6">
-                      {t("শব্দভাণ্ডার", "Vocabulary Hub")}
-                    </p>
+                    <div className="flex items-center justify-between gap-1">
+                      <p className="truncate text-[14px] font-semibold leading-5 text-[#242423] dark:text-[#f3f3f2] sm:text-[16px] sm:leading-6">
+                        {t("শব্দভাণ্ডার", "Vocabulary Hub")}
+                      </p>
+                      <TourReplayButton onReplay={startTour} />
+                    </div>
                     <p className="flex items-center gap-1.5 text-[11px] leading-4 text-[#242423]/60 dark:text-zinc-400 sm:text-[12px]">
                       <span className="truncate">{categoryLabel}</span>
                       <span aria-hidden="true" className="text-[#242423]/30 dark:text-zinc-600">·</span>
@@ -250,7 +268,7 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
               </div>
 
               {/* Daily Target Progress Bar */}
-              <div className="mt-2 rounded-[16px] bg-[#242423]/[0.03] p-2.5 dark:bg-white/[0.04] sm:mt-2.5 sm:rounded-[18px] sm:p-3">
+              <div data-tour="daily-goal" className="mt-2 rounded-[16px] bg-[#242423]/[0.03] p-2.5 dark:bg-white/[0.04] sm:mt-2.5 sm:rounded-[18px] sm:p-3">
                 <div className="flex items-center justify-between text-[11px] sm:text-[12px]">
                   <span className="font-semibold text-[#242423] dark:text-[#f3f3f2]">
                     {t("দৈনিক লক্ষ্য", "Daily Target")}
@@ -333,6 +351,7 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
 
                   {/* Tier Filter Pills (Even distribution with Apple sliding pill aesthetic) */}
                   <div
+                    data-tour="tier-filter"
                     role="radiogroup"
                     aria-label="Filter by Tier"
                     className="grid w-full grid-cols-4 rounded-full bg-[#242423]/[0.05] p-0.5 dark:bg-white/[0.07] sm:flex sm:w-auto"
@@ -405,7 +424,7 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
               </div>
 
               {/* Grouped Level Items */}
-              <div className="mt-2 sm:mt-2.5 flex flex-col gap-1">
+              <div data-tour="level-cards" className="mt-2 sm:mt-2.5 flex flex-col gap-1">
                 {filteredGroups.map((group) => (
                   <div key={group.category || group.label} className="flex flex-col gap-1">
                     {/* Section Caption */}
@@ -464,6 +483,15 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
           </div>
         </div>
       </div>
+
+      <GuidedTour
+        config={VOCABULARY_HUB_TOUR}
+        isOpen={isTourOpen}
+        currentStepIndex={tourStepIndex}
+        onNext={tourNext}
+        onPrev={tourPrev}
+        onClose={closeTour}
+      />
     </div>
   );
 }

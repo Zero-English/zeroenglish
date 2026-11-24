@@ -25,13 +25,21 @@ import {
   Zap,
   Turtle,
   CheckCheck,
+  Loader2,
 } from "lucide-react";
 import { Word, AdjacentWord } from "@/lib/data";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useBookmarkedWords } from "@/lib/use-bookmarked-words";
+import { useTTS } from "@/lib/use-speak";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import {
+  useGuidedTour,
+  GuidedTour,
+  TourReplayButton,
+  WORD_DETAIL_TOUR,
+} from "@/components/guided-tour";
 
 interface WordDetailClientProps {
   word: Word;
@@ -54,6 +62,15 @@ export function WordDetailClient({
     toggleBookmark,
     loaded: bookmarkLoaded,
   } = useBookmarkedWords();
+
+  const {
+    isOpen: isTourOpen,
+    currentStepIndex: tourStepIndex,
+    nextStep: tourNext,
+    prevStep: tourPrev,
+    closeTour,
+    startTour,
+  } = useGuidedTour(WORD_DETAIL_TOUR);
 
   const [copied, setCopied] = useState(false);
   const [activeRecallHidden, setActiveRecallHidden] = useState(true);
@@ -101,20 +118,15 @@ export function WordDetailClient({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [prevWord, nextWord, router]);
 
-  // Web Speech API with rate control
-  const speak = useCallback((text: string, rate = 0.9) => {
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = rate;
-    window.speechSynthesis.speak(utterance);
-  }, []);
+  // Neural Text-to-Speech via Kokoro-82M Web Worker
+  const { speak, isGenerating, isPlaying, isDownloading, progress, activeText } = useTTS();
+  const isWordActive = activeText === word.word;
+  const isWordLoading = (isWordActive && isGenerating) || (isWordActive && isDownloading);
+  const isWordPlaying = isWordActive && isPlaying;
 
   const handleSpeakSentence = (text: string, index: number) => {
     setPlayingSentenceIdx(index);
-    speak(text, 0.85);
-    setTimeout(() => setPlayingSentenceIdx(null), 2500);
+    speak(text, { speed: 0.9, voice: "af_heart" });
   };
 
   const handleShare = async () => {
@@ -272,7 +284,9 @@ export function WordDetailClient({
               )}
             </div>
 
-            {/* Quick Action Share Pill */}
+            {/* Guide Replay & Share Buttons */}
+            <TourReplayButton onReplay={startTour} />
+
             <button
               onClick={handleShare}
               className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[12px] font-medium text-[#242423] ring-1 ring-black/5 hover:bg-[#f1f1ef] active:scale-95 transition-all dark:bg-[#1c1c1e] dark:ring-white/[0.08] dark:text-[#f3f3f2]"
@@ -328,7 +342,7 @@ export function WordDetailClient({
 
             {/* Quick Toggle Controls (Bookmark & Learned) */}
             {loaded && (
-              <div className="flex items-center gap-2">
+              <div data-tour="word-actions" className="flex items-center gap-2">
                 <button
                   onClick={() => toggleBookmark(word.id)}
                   className={cn(
@@ -386,24 +400,42 @@ export function WordDetailClient({
             </div>
 
             {/* Audio Buttons: Normal Speed & Slow Speed for Learners */}
-            <div className="flex items-center gap-2">
+            <div data-tour="word-audio" className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => speak(word.word, 0.9)}
-                className="group flex cursor-pointer items-center gap-2 rounded-full bg-[#242423] px-4 py-2 text-[13px] font-semibold text-white shadow-xs transition-all duration-150 hover:bg-black active:scale-95 dark:bg-white dark:text-[#242423] dark:hover:bg-zinc-100"
-                title="Normal pronunciation"
+                onClick={() => speak(word.word, 0.95)}
+                disabled={isWordLoading}
+                className="group flex cursor-pointer items-center gap-2 rounded-full bg-[#242423] px-4 py-2 text-[13px] font-semibold text-white shadow-xs transition-all duration-150 hover:bg-black active:scale-95 dark:bg-white dark:text-[#242423] dark:hover:bg-zinc-100 disabled:opacity-80"
+                title="Normal neural pronunciation"
               >
-                <Volume2 className="size-4 transition-transform group-hover:scale-110" />
-                <span>{t("উচ্চারণ", "Pronounce")}</span>
+                {isWordLoading ? (
+                  <Loader2 className="size-4 animate-spin text-amber-400" />
+                ) : isWordPlaying ? (
+                  <Volume2 className="size-4 text-emerald-400 animate-pulse" />
+                ) : (
+                  <Volume2 className="size-4 transition-transform group-hover:scale-110" />
+                )}
+                <span>
+                  {isWordLoading
+                    ? isDownloading && progress
+                      ? `${t("ক্যাশ হচ্ছে", "Caching")} ${progress.percent}%`
+                      : t("তৈরি হচ্ছে...", "Generating...")
+                    : t("উচ্চারণ", "Pronounce")}
+                </span>
               </button>
 
               <button
                 type="button"
-                onClick={() => speak(word.word, 0.65)}
-                className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[#242423]/[0.06] px-3 py-2 text-[12px] font-medium text-[#242423] transition-all duration-150 hover:bg-[#242423]/[0.1] active:scale-95 dark:bg-white/[0.08] dark:text-[#f3f3f2]"
-                title="Slow pronunciation for clarity"
+                onClick={() => speak(word.word, 0.7)}
+                disabled={isWordLoading}
+                className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[#242423]/[0.06] px-3 py-2 text-[12px] font-medium text-[#242423] transition-all duration-150 hover:bg-[#242423]/[0.1] active:scale-95 dark:bg-white/[0.08] dark:text-[#f3f3f2] disabled:opacity-80"
+                title="Slow neural pronunciation for clarity"
               >
-                <Turtle className="size-3.5 text-[#242423]/60 dark:text-zinc-400" />
+                {isWordLoading ? (
+                  <Loader2 className="size-3.5 animate-spin text-amber-500" />
+                ) : (
+                  <Turtle className="size-3.5 text-[#242423]/60 dark:text-zinc-400" />
+                )}
                 <span>{t("ধীরগতি", "Slow")}</span>
               </button>
             </div>
@@ -411,6 +443,7 @@ export function WordDetailClient({
 
           {/* Bengali Meaning Module with Active Recall / Flashcard Self-Test */}
           <div
+            data-tour="active-recall"
             onClick={() => {
               if (activeRecallHidden) setActiveRecallHidden(false);
             }}
@@ -551,7 +584,11 @@ export function WordDetailClient({
               }).map((_, i) => {
                 const en = word.examplesEn?.[i];
                 const bn = word.examples_bn?.[i];
-                const isPlaying = playingSentenceIdx === i;
+                const isSentenceActive = activeText === en;
+                const isSentenceLoading = isSentenceActive && isGenerating;
+                const isSentencePlaying =
+                  (isSentenceActive && isPlaying) ||
+                  (playingSentenceIdx === i && isPlaying);
 
                 return (
                   <div
@@ -583,13 +620,22 @@ export function WordDetailClient({
                           onClick={() => handleSpeakSentence(en, i)}
                           className={cn(
                             "grid size-9 shrink-0 cursor-pointer place-items-center rounded-full transition-all duration-150 active:scale-95 sm:size-10",
-                            isPlaying
+                            isSentencePlaying
                               ? "bg-emerald-500 text-white shadow-xs"
                               : "bg-white text-[#242423] shadow-xs hover:scale-105 dark:bg-[#1c1c1e] dark:text-[#f3f3f2]",
                           )}
                           title="Listen to this example sentence"
                         >
-                          <Volume2 className="size-4" />
+                          {isSentenceLoading ? (
+                            <Loader2 className="size-4 animate-spin text-amber-500" />
+                          ) : (
+                            <Volume2
+                              className={cn(
+                                "size-4",
+                                isSentencePlaying && "animate-pulse"
+                              )}
+                            />
+                          )}
                         </button>
                       )}
                     </div>
@@ -603,7 +649,7 @@ export function WordDetailClient({
         {/* =========================================================================
             CARD 3: INTERACTIVE QUICK SELF-CHECK (Gamified Active Recall Widget)
            ========================================================================= */}
-        <div className="rounded-[28px] border border-black/[0.06] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03),0_24px_48px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[32px] sm:p-7">
+        <div data-tour="quick-quiz" className="rounded-[28px] border border-black/[0.06] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03),0_24px_48px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[32px] sm:p-7">
           <div className="flex items-center justify-between border-b border-black/[0.05] pb-3.5 dark:border-white/[0.06]">
             <div className="flex items-center gap-2">
               <span className="grid size-7 place-items-center rounded-full bg-amber-500/10 text-amber-600 dark:bg-amber-400/15 dark:text-amber-400">
@@ -1015,6 +1061,15 @@ export function WordDetailClient({
           )}
         </div>
       </div>
+
+      <GuidedTour
+        config={WORD_DETAIL_TOUR}
+        isOpen={isTourOpen}
+        currentStepIndex={tourStepIndex}
+        onNext={tourNext}
+        onPrev={tourPrev}
+        onClose={closeTour}
+      />
     </div>
   );
 }
