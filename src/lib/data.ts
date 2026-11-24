@@ -305,6 +305,7 @@ export type PublicBrowseParams = {
   limit?: number;
   search?: string;
   category?: string;
+  wordType?: string;
   sort?: LevelPageSort;
 };
 
@@ -323,6 +324,7 @@ export const browsePublicWords = cache(
     limit = 10,
     search,
     category,
+    wordType,
     sort = "default",
   }: PublicBrowseParams = {}): Promise<PublicBrowseResult> => {
     const safeLimit = Math.min(100, Math.max(1, limit));
@@ -331,6 +333,9 @@ export const browsePublicWords = cache(
     const where: Prisma.WordWhereInput = { ...PUBLIC_WORD_WHERE };
     if (level && isValidLevel(level)) where.level = level.toUpperCase() as Levels;
     if (category && category !== "all") where.category = category;
+    if (wordType && wordType !== "all") {
+      where.wordType = { has: wordType.toLowerCase() };
+    }
 
     const q = search?.trim() ?? "";
 

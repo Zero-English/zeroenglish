@@ -2,51 +2,29 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
 import { useLearnedWords } from "@/lib/use-learned-words";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
-import { GraduationCap, Target, Sparkles, CircleDashed } from "lucide-react";
-import { StaggerContainer, StaggerItem } from "@/components/stagger";
+import { ArrowLeft, Play, Sparkles } from "lucide-react";
 
-const CARD =
-  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
-
-const ICON_CHIP =
-  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-black/[0.04] dark:bg-white/[0.06] ring-1 ring-inset ring-black/[0.05] dark:ring-white/[0.08]";
-
-const LEVEL_RING: Record<string, { from: string; to: string }> = {
-  A1: { from: "#34d399", to: "#10b981" },
-  A2: { from: "#38bdf8", to: "#3b82f6" },
-  B1: { from: "#fbbf24", to: "#f97316" },
-  B2: { from: "#fb7185", to: "#ec4899" },
-  C1: { from: "#a78bfa", to: "#a855f7" },
-  C2: { from: "#e879f9", to: "#ec4899" },
-};
+const ALL_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 
 interface LevelHeroProps {
   level: string;
   label: string;
   labelBn: string;
-  gradient: string;
-  text: string;
-  bg: string;
-  border: string;
-  solid: string;
-  stroke: string;
-  /** Total words in the level, independent of how many are on screen. */
+  gradient?: string;
+  text?: string;
+  bg?: string;
+  border?: string;
+  solid?: string;
+  stroke?: string;
   totalCount: number;
-  /** Number of distinct categories in the level. */
-  categoryCount: number;
-  categoryLabel: string;
-  /** Unique per-level intro copy and topic chips. */
-  introEn: string;
-  introBn: string;
-  topics: { en: string; bn: string }[];
-  /**
-   * Ids belonging to this level, used to scope locally stored learned words.
-   * In server mode this is the only way to know which learned ids are in level.
-   */
+  categoryCount?: number;
+  categoryLabel?: string;
+  introEn?: string;
+  introBn?: string;
+  topics?: { en: string; bn: string }[];
   levelWordIds: number[];
 }
 
@@ -54,16 +32,7 @@ export function LevelHero({
   level,
   label,
   labelBn,
-  gradient,
-  text,
-  bg,
-  border,
   totalCount,
-  categoryCount,
-  categoryLabel,
-  introEn,
-  introBn,
-  topics,
   levelWordIds,
 }: LevelHeroProps) {
   const { learnedIds, loaded } = useLearnedWords();
@@ -81,275 +50,104 @@ export function LevelHero({
 
   const pct = totalCount > 0 ? Math.round((learned / totalCount) * 100) : 0;
   const remaining = Math.max(0, totalCount - learned);
-  const count = totalCount.toLocaleString("en-US");
 
   return (
-    <section className="relative">
-      <div className="relative mx-auto max-w-4xl pt-8 pb-6 px-4 sm:px-6 lg:px-0">
-        <StaggerContainer className="relative mt-4">
-          <StaggerItem>
-            <div className={cn(CARD, "overflow-hidden")}>
-              <span
+    <section className="mx-auto max-w-4xl px-4 pt-4 pb-2 sm:px-6 lg:px-8">
+      {/* 1. Mobile App Top Bar: Back & Segmented Level Switcher */}
+      <div className="flex items-center justify-between gap-2">
+        <Link
+          href="/vocabulary"
+          className="flex size-9 shrink-0 items-center justify-center rounded-full border border-black/[0.06] bg-white text-[#242423]/70 shadow-2xs transition-all hover:bg-[#f1f1ef] hover:text-[#242423] active:scale-95 dark:border-white/[0.08] dark:bg-[#1c1c1e] dark:text-zinc-300 dark:hover:bg-[#252528] dark:hover:text-white"
+          title={t("সব লেভেল", "All Levels")}
+          aria-label={t("সব লেভেল", "All Levels")}
+        >
+          <ArrowLeft className="size-4" />
+        </Link>
+
+        {/* iOS-Style Segmented Control */}
+        <div
+          role="tablist"
+          aria-label="CEFR Levels"
+          className="flex items-center gap-0.5 rounded-full bg-black/[0.04] p-1 dark:bg-white/[0.06]"
+        >
+          {ALL_LEVELS.map((lvl) => {
+            const isActive = lvl.toUpperCase() === level.toUpperCase();
+            return (
+              <Link
+                key={lvl}
+                href={`/vocabulary/${lvl.toLowerCase()}`}
                 className={cn(
-                  "absolute inset-x-0 top-0 h-1 bg-gradient-to-r",
-                  gradient,
+                  "relative flex h-7 items-center justify-center rounded-full px-2.5 text-[12px] font-bold transition-all active:scale-95 sm:px-3",
+                  isActive
+                    ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                    : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-100"
                 )}
-                aria-hidden
-              />
+              >
+                {lvl}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
 
-              <div className="p-5 sm:p-6">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span
-                    className={cn(
-                      "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold",
-                      text,
-                      border,
-                      bg,
-                    )}
-                  >
-                    {level}
-                  </span>
-                  <p className="text-xs font-medium text-zinc-400 dark:text-zinc-500">
-                    {categoryLabel}
-                  </p>
-                </div>
-                <h1 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                  {t(
-                    `${level} ইংরেজি শব্দভাণ্ডার`,
-                    `${level} English Vocabulary`,
-                  )}
-                  <span className="mx-2 text-zinc-300 dark:text-zinc-600">
-                    ·
-                  </span>
-                  {t(labelBn, label)}
-                </h1>
-                <p className="mt-1 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                  {t(
-                    `${count}টি শব্দ, প্রতিটির বাংলা অর্থ ও উদাহরণ বাক্যসহ`,
-                    `${count} words with Bangla meanings and example sentences`,
-                  )}
-                </p>
-              </div>
-
-              <div className="flex items-center gap-4 border-y border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4">
-                <div className="relative h-14 w-14 shrink-0">
-                  <ProgressRing
-                    pct={loaded ? pct : 0}
-                    size={56}
-                    stroke={5.5}
-                    level={level}
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-xs font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-                      {loaded ? `${pct}%` : "…"}
-                    </span>
-                  </div>
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                    {t("এই লেভেলের অগ্রগতি", "Level progress")}
-                  </p>
-                  <p className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-                    {loaded ? (
-                      <>
-                        {learned}
-                        <span className="font-normal text-zinc-400">
-                          {" "}
-                          / {totalCount}
-                        </span>
-                      </>
-                    ) : (
-                      "…"
-                    )}
-                  </p>
-                  <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                    {t("শব্দ শেখা হয়েছে", "words learned")}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 overflow-hidden">
-                <StatRow
-                  icon={GraduationCap}
-                  labelEn="Words learned"
-                  labelBn="শব্দ শেখা হয়েছে"
-                  value={loaded ? `${learned}` : "…"}
-                  subEn={`of ${count} total`}
-                  subBn={`মোট ${count}টির মধ্যে`}
-                  tint="text-orange-500"
-                />
-                <StatRow
-                  icon={CircleDashed}
-                  labelEn="Remaining"
-                  labelBn="বাকি আছে"
-                  value={loaded ? `${remaining}` : "…"}
-                  subEn="words to go"
-                  subBn="পড়ে আছে যতটি"
-                  tint="text-sky-500"
-                />
-                <StatRow
-                  icon={Target}
-                  labelEn="Progress"
-                  labelBn="অগ্রগতি"
-                  value={loaded ? `${pct}%` : "…"}
-                  subEn="of this level"
-                  subBn={`${level} লেভেলের`}
-                  tint="text-violet-500"
-                />
-                <StatRow
-                  icon={Sparkles}
-                  labelEn="Categories"
-                  labelBn="বিষয়"
-                  value={`${categoryCount}`}
-                  subEn="topics in this level"
-                  subBn={`${level} লেভেলে যত বিষয়`}
-                  tint="text-emerald-500"
-                />
-              </div>
-
-              {/* Unique copy per level. Without this all six pages ship the
-                  same hero and read as one thin template. */}
-              {/* <div className="border-t border-black/[0.06] px-5 py-5 dark:border-white/[0.08] sm:px-6">
-                <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                  {t(introBn, introEn)}
-                </p>
-
-                {topics.length > 0 && (
-                  <ul className="mt-3 flex flex-wrap gap-1.5">
-                    {topics.map((topic) => (
-                      <li
-                        key={topic.en}
-                        className="rounded-full bg-black/[0.04] px-2.5 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-white/[0.06] dark:text-zinc-400"
-                      >
-                        {t(topic.bn, topic.en)}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">
-                  {t(
-                    `সব শব্দ একসঙ্গে দেখতে `,
-                    `See every word at once: `
-                  )}
-                  <Link
-                    href="/vocabulary"
-                    className="font-medium text-orange-600 hover:underline dark:text-orange-400"
-                  >
-                    {t("শব্দভাণ্ডার", "Vocabulary")}
-                  </Link>
-                  {t(" · পরে পরীক্ষা করতে ", " · test yourself with ")}
-                  <Link
-                    href="/quiz/vocabulary"
-                    className="font-medium text-orange-600 hover:underline dark:text-orange-400"
-                  >
-                    {t("কুইজ", "a vocabulary quiz")}
-                  </Link>
-                </p>
-              </div> */}
+      {/* 2. Minimal Mobile Card Widget */}
+      <div className="mt-3 rounded-[22px] border border-black/[0.06] bg-white p-4 shadow-xs dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[26px] sm:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-lg font-bold tracking-tight text-[#242423] dark:text-[#f3f3f2] sm:text-xl">
+                {level} · {t(labelBn, label)}
+              </h1>
+              <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400">
+                CEFR
+              </span>
             </div>
-          </StaggerItem>
-        </StaggerContainer>
+            <p className="mt-0.5 text-xs text-[#242423]/55 dark:text-zinc-400">
+              {t(
+                `মোট ${totalCount}টি শব্দ · ${learned}টি আয়ত্ত`,
+                `${totalCount} words · ${learned} mastered`
+              )}
+            </p>
+          </div>
+
+          {/* Quick Action Pills */}
+          <div className="flex items-center gap-1.5">
+            <Link
+              href={`/quiz/vocabulary?level=${level.toUpperCase()}`}
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#242423] px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-black active:scale-95 dark:bg-white dark:text-[#242423] dark:hover:bg-zinc-200"
+              title={t("কুইজ অনুশীলন", "Practice Quiz")}
+            >
+              <Play className="size-3 fill-current" />
+              <span>{t("কুইজ", "Quiz")}</span>
+            </Link>
+
+            <Link
+              href="/quiz/speed"
+              className="hidden items-center gap-1 rounded-full border border-black/[0.06] bg-[#f1f1ef] px-3 py-1.5 text-xs font-semibold text-[#242423] transition-all hover:bg-[#eaeae8] active:scale-95 dark:border-white/[0.08] dark:bg-[#252528] dark:text-[#f3f3f2] xs:inline-flex"
+              title={t("স্পিড টেস্ট", "Speed Test")}
+            >
+              <Sparkles className="size-3 text-amber-500" />
+              <span>{t("স্পিড", "Speed")}</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Minimal Progress Line */}
+        <div className="mt-3">
+          <div className="relative h-1.5 w-full overflow-hidden rounded-full bg-black/5 dark:bg-white/10">
+            <div
+              className="relative h-full rounded-full bg-[#242423] transition-all duration-500 ease-out dark:bg-white"
+              style={{ width: `${pct}%` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/35 to-transparent animate-[shimmer_2s_infinite]" />
+            </div>
+          </div>
+          <div className="mt-1.5 flex items-center justify-between text-[11px] font-medium text-[#242423]/45 dark:text-zinc-500">
+            <span>{pct}% {t("সম্পন্ন", "completed")}</span>
+            <span>{remaining} {t("বাকি", "remaining")}</span>
+          </div>
+        </div>
       </div>
     </section>
-  );
-}
-
-function ProgressRing({
-  pct,
-  size,
-  stroke,
-  level,
-}: {
-  pct: number;
-  size: number;
-  stroke: number;
-  level: string;
-}) {
-  const r = (size - stroke) / 2;
-  const c = 2 * Math.PI * r;
-  const clamped = Math.min(100, Math.max(0, pct));
-  const offset = c - (clamped / 100) * c;
-  const id = `level-ring-${level}`;
-  const { from, to } = LEVEL_RING[level.toUpperCase()] ?? LEVEL_RING.A1;
-
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox={`0 0 ${size} ${size}`}
-      className="-rotate-90"
-    >
-      <defs>
-        <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor={from} />
-          <stop offset="100%" stopColor={to} />
-        </linearGradient>
-      </defs>
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={r}
-        strokeWidth={stroke}
-        className="fill-none stroke-black/[0.06] dark:stroke-white/[0.08]"
-      />
-      <motion.circle
-        cx={size / 2}
-        cy={size / 2}
-        r={r}
-        strokeWidth={stroke}
-        strokeLinecap="round"
-        stroke={`url(#${id})`}
-        strokeDasharray={c}
-        initial={{ strokeDashoffset: c }}
-        animate={{ strokeDashoffset: offset }}
-        transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-        className="fill-none"
-      />
-    </svg>
-  );
-}
-
-function StatRow({
-  icon: Icon,
-  labelEn,
-  labelBn,
-  value,
-  subEn,
-  subBn,
-  tint,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  labelEn: string;
-  labelBn: string;
-  value: string;
-  subEn: string;
-  subBn: string;
-  tint: string;
-}) {
-  const t = useT();
-
-  return (
-    <div
-      className={cn(
-        "flex items-center gap-3 border-l border-t px-5 py-4 border-black/[0.06] dark:border-white/[0.08]",
-        "[&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0",
-      )}
-    >
-      <div className={cn(ICON_CHIP, tint)}>
-        <Icon className="size-4.5" />
-      </div>
-      <div className="min-w-0">
-        <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
-          {t(labelBn, labelEn)}
-        </p>
-        <p className="mt-0.5 text-lg font-semibold tracking-tight tabular-nums text-zinc-900 dark:text-zinc-100">
-          {value}
-        </p>
-        <p className="truncate text-[11px] text-zinc-400 dark:text-zinc-500">
-          {t(subBn, subEn)}
-        </p>
-      </div>
-    </div>
   );
 }

@@ -8,8 +8,7 @@ import type { Word, LevelPageSort } from "@/lib/data";
 import { LevelHero } from "@/components/level-hero";
 import { LevelWordsClient } from "@/components/level-words-client";
 import { useT } from "@/components/language-provider";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeft, Compass, Construction, BookOpen } from "lucide-react";
 
 const VALID_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 
@@ -103,6 +102,8 @@ export interface LevelPageContentProps {
   search?: string;
   sort?: LevelPageSort;
   category?: string;
+  wordType?: string;
+  status?: string;
 }
 
 type HeroStats = Pick<
@@ -119,25 +120,27 @@ type HeroStats = Pick<
 function NotFoundScreen() {
   const t = useT();
   return (
-    <div className="relative min-h-dvh overflow-hidden px-6 py-16">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="max-w-md mx-auto text-center mt-24">
-        <div className="text-7xl mb-6">🗺️</div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+    <div className="min-h-dvh bg-[#f8f8f6] dark:bg-[#0c0c0e] px-4 py-16 flex items-center justify-center">
+      <div className="w-full max-w-md rounded-[28px] sm:rounded-[32px] border border-black/[0.06] bg-white p-7 sm:p-9 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03),0_24px_48px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e]">
+        <div className="size-14 mx-auto mb-4 rounded-[20px] bg-[#f1f1ef] dark:bg-[#252528] flex items-center justify-center text-[#242423] dark:text-[#f3f3f2]">
+          <Compass className="size-7" />
+        </div>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#242423] dark:text-[#f3f3f2] mb-2">
           {t("লেভেলটি খুঁজে পাওয়া যায়নি", "Level not found")}
         </h1>
-        <p className="text-zinc-500 dark:text-zinc-400 mb-8">
+        <p className="text-sm text-[#242423]/60 dark:text-zinc-400 mb-6 leading-relaxed">
           {t(
-            "আপনি যে লেভেলটি খুঁজছেন সেটি বিদ্যমান নেই।",
-            "The level you're looking for doesn't exist.",
+            "আপনি যে লেভেলটি খুঁজছেন সেটি বিদ্যমান নেই। দয়া করে সঠিক CEFR লেভেল নির্বাচন করুন।",
+            "The level you're looking for doesn't exist. Please select a valid CEFR level.",
           )}
         </p>
-        <Button asChild>
-          <Link href="/vocabulary">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            {t("লেভেল তালিকায় ফিরুন", "Back to levels")}
-          </Link>
-        </Button>
+        <Link
+          href="/vocabulary"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-[#242423] px-6 py-2.5 text-sm font-semibold text-white transition-all hover:bg-black active:scale-95 dark:bg-white dark:text-[#242423] dark:hover:bg-zinc-200"
+        >
+          <ArrowLeft className="size-4" />
+          <span>{t("সব লেভেল দেখুন", "Browse all levels")}</span>
+        </Link>
       </div>
     </div>
   );
@@ -155,41 +158,50 @@ function LevelInProgressScreen({
   total: number;
 }) {
   const t = useT();
+  const prevLevel =
+    VALID_LEVELS[
+      Math.max(0, VALID_LEVELS.indexOf(level as (typeof VALID_LEVELS)[number]) - 1)
+    ] ?? "A1";
+
   return (
-    <div className="relative min-h-dvh overflow-hidden px-6 py-16">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="max-w-xl mx-auto text-center mt-20">
-        <div className="text-6xl mb-6">🚧</div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+    <div className="min-h-dvh bg-[#f8f8f6] dark:bg-[#0c0c0e] px-4 py-16 flex items-center justify-center">
+      <div className="w-full max-w-lg rounded-[28px] sm:rounded-[32px] border border-black/[0.06] bg-white p-7 sm:p-9 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03),0_24px_48px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e]">
+        <div className="size-14 mx-auto mb-4 rounded-[20px] bg-amber-500/10 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 flex items-center justify-center">
+          <Construction className="size-7" />
+        </div>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#242423] dark:text-[#f3f3f2] mb-2">
           {t(
             `${level} · ${labelBn} লিস্ট তৈরি হচ্ছে`,
             `${level} · ${label} list is being built`,
           )}
         </h1>
-        <p className="text-zinc-500 dark:text-zinc-400 mb-4">
+        <p className="text-sm text-[#242423]/70 dark:text-zinc-300 mb-3 leading-relaxed">
           {t(
-            `এই লেভেলে এখন ${total}টি শব্দ আছে। যথেষ্ট শব্দ জমা হওয়ার আগে এটিকে শেখার জন্য খোলা হচ্ছে না, তাই এখনো সার্চ ইঞ্জিন থেকে বাদ দেওয়া হয়েছে।`,
-            `This level has ${total} entries so far. It is not open for study, and it is kept out of search results, until it holds enough words to be worth your time.`,
+            `এই লেভেলে এখন ${total}টি শব্দ আছে। পর্যাপ্ত শব্দ যোগ হওয়ার পরেই এটি উন্মুক্ত করা হবে।`,
+            `This level has ${total} entries so far. It will be unlocked once a comprehensive word list is verified.`,
           )}
         </p>
-        <p className="text-sm text-zinc-400 dark:text-zinc-500 mb-8">
+        <p className="text-xs text-[#242423]/50 dark:text-zinc-500 mb-6">
           {t(
-            "ততক্ষণ নিচের লেভেলগুলোতে শুরু করুন।",
-            "Start from one of the levels below in the meantime.",
+            "ততক্ষণ আগের লেভেলগুলোতে অনুশীলন চালিয়ে যান।",
+            "In the meantime, continue practicing with the earlier levels.",
           )}
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <Button asChild>
-            <Link
-              href={`/vocabulary/${(VALID_LEVELS[VALID_LEVELS.indexOf(level as (typeof VALID_LEVELS)[number]) - 1] ?? "A1").toLowerCase()}`}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              {t("আগের লেভেল", "Previous level")}
-            </Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/vocabulary">{t("সব লেভেল", "All levels")}</Link>
-          </Button>
+        <div className="flex flex-wrap items-center justify-center gap-2.5">
+          <Link
+            href={`/vocabulary/${prevLevel.toLowerCase()}`}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#242423] px-5 py-2 text-sm font-semibold text-white transition-all hover:bg-black active:scale-95 dark:bg-white dark:text-[#242423] dark:hover:bg-zinc-200"
+          >
+            <ArrowLeft className="size-4" />
+            <span>{t(`${prevLevel} লেভেলে যান`, `Go to ${prevLevel}`)}</span>
+          </Link>
+          <Link
+            href="/vocabulary"
+            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#242423]/[0.05] px-5 py-2 text-sm font-semibold text-[#242423] transition-all hover:bg-[#242423]/[0.08] active:scale-95 dark:bg-white/[0.08] dark:text-[#f3f3f2]"
+          >
+            <BookOpen className="size-4" />
+            <span>{t("সব লেভেল", "All levels")}</span>
+          </Link>
         </div>
       </div>
     </div>
@@ -208,10 +220,7 @@ function LevelPageFrame({
   children: ReactNode;
 }) {
   return (
-    <div className="relative min-h-dvh overflow-hidden">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-zinc-100 via-white to-zinc-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black" />
-      <div className="fixed inset-0 -z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cuc3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTIwIDIwbDEwIDEwTTIwIDIwbC0xMCAxME0yMCAyMGwxMC0xME0yMCAyMGwtMTAtMTAiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9Ii41IiBzdHJva2Utb3BhY2l0eT0iLjA0Ii8+PC9zdmc+')] opacity-50" />
-
+    <div className="min-h-dvh bg-[#f8f8f6] text-[#242423] transition-colors duration-200 dark:bg-[#0c0c0e] dark:text-[#f3f3f2]">
       <LevelHero
         level={level}
         label={config.label}
@@ -225,9 +234,9 @@ function LevelPageFrame({
         {...stats}
       />
 
-      <div className="relative px-4 pb-12 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">{children}</div>
-      </div>
+      <main className="mx-auto max-w-4xl px-4 pb-16 sm:px-6 lg:px-8">
+        {children}
+      </main>
     </div>
   );
 }
@@ -246,6 +255,8 @@ export function LevelPageContent({
   search = "",
   sort = "default",
   category = "all",
+  wordType = "all",
+  status = "all",
 }: LevelPageContentProps) {
   const upper = level.toUpperCase();
   const valid = VALID_LEVELS.includes(upper as (typeof VALID_LEVELS)[number]);
@@ -299,6 +310,9 @@ export function LevelPageContent({
         search={search}
         sort={sort}
         category={category}
+        wordType={wordType}
+        status={status}
+        levelWordIds={initialWordIds ?? []}
       />
     </LevelPageFrame>
   );
