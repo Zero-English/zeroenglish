@@ -2,16 +2,12 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Newspaper, CalendarDays, Clock } from "lucide-react";
+import { ArrowUpRight, Calendar, Newspaper } from "lucide-react";
 import { useT } from "@/components/language-provider";
 import type { LatestPost } from "@/components/news/latest-posts";
-import { WashiTape, SketchHighlight } from "@/components/scroll-reveal";
 import { cn } from "@/lib/utils";
 
 export type { LatestPost };
-
-const CARD_ROTATIONS = ["rotate-[-0.7deg]", "rotate-[0.9deg]", "rotate-[-0.5deg]"];
-const TAPE_COLORS = ["neutral", "amber", "rose"] as const;
 
 export function LatestPostsHome({ posts }: { posts: LatestPost[] }) {
   const t = useT();
@@ -19,44 +15,39 @@ export function LatestPostsHome({ posts }: { posts: LatestPost[] }) {
   if (!posts || posts.length === 0) return null;
 
   return (
-    <section className="py-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+    <section className="py-6 sm:py-8">
+      {/* Header Container */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm border border-dashed border-orange-500/60 bg-orange-50/80 dark:bg-orange-950/30 text-orange-900 dark:text-orange-200 font-mono text-xs uppercase tracking-wider mb-2.5 stamp-badge">
-            <Newspaper className="size-3.5 text-orange-600 dark:text-orange-400" />
-            <span>{t("খবরের খাতা // স্টাডি টিপস", "STUDY GAZETTE // LATEST POSTS")}</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-black/[0.06] bg-white dark:border-white/[0.08] dark:bg-[#1c1c1e] text-[#242423] dark:text-[#f4f4f5] text-xs font-medium shadow-2xs mb-2.5">
+            <Newspaper className="size-3.5 text-zinc-500 dark:text-zinc-400" />
+            <span>{t("খবরের খাতা ও স্টাডি টিপস", "News & Study Guides")}</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">
-            <span>{t("সাম্প্রতিক লেখা ও ", "Recent Articles & ")}</span>
-            <SketchHighlight color="yellow">
-              {t("স্টাডি টিপস", "Study Tips")}
-            </SketchHighlight>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1c1c1e] dark:text-[#f4f4f5] tracking-tight">
+            {t("সাম্প্রতিক লেখা ও স্টাডি টিপস", "Recent Articles & Study Tips")}
           </h2>
 
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1 max-w-xl">
+          <p className="text-sm text-[#242423]/60 dark:text-zinc-400 mt-1 max-w-xl">
             {t(
-              "ইংরেজি শেখার সহজ কৌশল, ব্যাকরণ টিপস ও সাম্প্রতিক সব আপডেট এক নজরে।",
-              "Practical vocabulary guides, exam preparation tips, and latest platform updates."
+              "ইংরেজি শেখার কার্যকর কৌশল, ব্যাকরণ টিপস ও সাম্প্রতিক সব আপডেট এক নজরে।",
+              "Practical vocabulary guides, exam preparation tips, and platform updates."
             )}
           </p>
         </div>
 
         <Link
           href="/news"
-          className="group inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white/90 dark:bg-zinc-900/90 hover:border-orange-500/60 text-xs font-mono font-bold text-zinc-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 transition-all shadow-xs hover:shadow-md shrink-0"
+          className="group inline-flex items-center gap-2 h-10 px-4 rounded-full border border-black/[0.08] bg-white hover:bg-zinc-50 dark:border-white/[0.1] dark:bg-[#1c1c1e] dark:hover:bg-zinc-800 text-xs font-semibold text-[#1c1c1e] dark:text-[#f4f4f5] transition-all shadow-2xs active:scale-[0.98] shrink-0"
         >
           <span>{t("সব আর্টিকেল দেখুন", "View All Articles")}</span>
-          <ArrowRight className="size-3.5 group-hover:translate-x-1 transition-transform" />
+          <ArrowUpRight className="size-3.5 text-[#242423]/40 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-zinc-400 transition-transform" />
         </Link>
       </div>
 
-      {/* 3 Clipping Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {posts.slice(0, 3).map((post, idx) => {
-          const rotation = CARD_ROTATIONS[idx % CARD_ROTATIONS.length];
-          const tapeColor = TAPE_COLORS[idx % TAPE_COLORS.length];
+      {/* 3 Clean Modern Feature Cards (DESIGNS.md) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        {posts.slice(0, 3).map((post) => {
           const formattedDate = new Date(post.createdAt).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
@@ -68,16 +59,12 @@ export function LatestPostsHome({ posts }: { posts: LatestPost[] }) {
               key={post.slug}
               href={`/news/${post.slug}`}
               className={cn(
-                "group relative flex flex-col justify-between rounded-2xl border-2 border-zinc-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden sticky-shadow paper-dogear transition-all duration-300 hover:scale-[1.02] hover:rotate-0 hover:border-orange-400 dark:hover:border-orange-500 min-h-[340px]",
-                rotation
+                "group relative flex flex-col justify-between rounded-[24px] sm:rounded-[26px] border border-black/[0.06] bg-white dark:border-white/[0.08] dark:bg-[#1c1c1e] overflow-hidden shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] transition-all duration-200 hover:shadow-md active:scale-[0.99] min-h-[320px]"
               )}
             >
-              {/* Tape topper */}
-              <WashiTape color={tapeColor} />
-
               <div>
                 {/* Photo / Graphic Container */}
-                <div className="relative aspect-[16/9] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800/80 border-b border-dashed border-zinc-200 dark:border-zinc-800">
+                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f1f1ef] dark:bg-[#252528] border-b border-black/[0.04] dark:border-white/[0.06]">
                   {post.imageUrl ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img
@@ -87,48 +74,44 @@ export function LatestPostsHome({ posts }: { posts: LatestPost[] }) {
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center p-4 text-center bg-radial from-amber-50/60 to-zinc-100 dark:from-zinc-800 dark:to-zinc-900">
-                      <Newspaper className="size-8 text-zinc-300 dark:text-zinc-600 mb-1" />
-                      <span className="font-mono text-xs uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-bold">
-                        ZERO GAZETTE
+                    <div className="flex h-full w-full flex-col items-center justify-center p-4 text-center text-[#242423]/35 dark:text-zinc-500">
+                      <Newspaper className="size-8 mb-1" />
+                      <span className="text-xs uppercase tracking-wider font-semibold">
+                        Article
                       </span>
                     </div>
                   )}
 
-                  {/* Stamp badge in corner of picture */}
-                  <div className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-sm bg-black/60 backdrop-blur-xs text-white font-mono text-[10px] tracking-wider uppercase font-semibold">
-                    POST #{String(idx + 1).padStart(2, "0")}
+                  {/* Date badge in corner */}
+                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-medium shadow-xs">
+                    {formattedDate}
                   </div>
                 </div>
 
                 {/* Content body */}
-                <div className="p-5">
-                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 dark:text-zinc-500 mb-2">
-                    <span className="inline-flex items-center gap-1">
-                      <CalendarDays className="size-3 text-orange-500" />
-                      <span>{formattedDate}</span>
-                    </span>
-                    <span className="inline-flex items-center gap-1">
-                      <Clock className="size-3" />
-                      <span>3 MIN READ</span>
-                    </span>
+                <div className="p-4 sm:p-5">
+                  <div className="flex items-center gap-1.5 text-[11px] text-[#242423]/45 dark:text-zinc-500 mb-1.5">
+                    <Calendar className="size-3" />
+                    <span>{formattedDate}</span>
+                    <span>·</span>
+                    <span>3 min read</span>
                   </div>
 
-                  <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 leading-snug">
+                  <h3 className="text-sm sm:text-base font-bold text-[#1c1c1e] dark:text-[#f4f4f5] group-hover:text-black dark:group-hover:text-white transition-colors line-clamp-2 leading-snug">
                     {t(post.titleBn, post.titleEn)}
                   </h3>
 
-                  <p className="mt-2 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-3">
+                  <p className="mt-1.5 text-xs text-[#242423]/60 dark:text-zinc-400 leading-relaxed line-clamp-2">
                     {t(post.descriptionBn, post.descriptionEn)}
                   </p>
                 </div>
               </div>
 
-              {/* Read Action Bottom Strip */}
-              <div className="px-5 pb-4 pt-2.5 border-t border-dashed border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono font-bold text-orange-600 dark:text-orange-400">
+              {/* Bottom Inset Action Bar */}
+              <div className="px-4 sm:px-5 pb-4 pt-2.5 flex items-center justify-between text-xs font-semibold text-[#1c1c1e] dark:text-[#f4f4f5]">
                 <span className="group-hover:underline">{t("সম্পূর্ণ পড়ুন", "Read Article")}</span>
-                <span className="flex size-6 items-center justify-center rounded-full bg-orange-50 dark:bg-orange-950/60 group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                  <ArrowRight className="size-3 group-hover:translate-x-0.5 transition-transform" />
+                <span className="flex size-7 items-center justify-center rounded-full bg-[#f1f1ef] text-[#242423] dark:bg-[#252528] dark:text-zinc-300 group-hover:bg-[#1c1c1e] group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-[#1c1c1e] transition-colors">
+                  <ArrowUpRight className="size-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </span>
               </div>
             </Link>

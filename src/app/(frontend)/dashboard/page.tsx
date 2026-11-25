@@ -5,7 +5,6 @@ import { authOptions } from "@/lib/auth";
 import { getLevelStats } from "@/lib/data";
 import { Dashboard } from "@/components/dashboard/dashboard";
 import { getPublishedBlogsByPage } from "@/services/blog.service";
-import { getLeaderboard } from "@/services/user.service";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -38,17 +37,10 @@ export default async function DashboardPage() {
     createdAt: blog.createdAt.toISOString(),
   }));
 
-  const leaderboardResult = await getLeaderboard();
-  const leaderboard =
-    leaderboardResult.success && leaderboardResult.data
-      ? leaderboardResult.data
-      : [];
-
   return (
     <Dashboard
       levelStats={levelStats}
       posts={posts}
-      leaderboard={leaderboard}
     />
   );
 }

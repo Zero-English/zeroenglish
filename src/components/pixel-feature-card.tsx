@@ -395,10 +395,10 @@ export function PixelFeatureCard({
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "group relative mx-auto flex w-full max-w-[460px] h-[520px] sm:h-[560px] flex-col items-center justify-end overflow-hidden",
-        "rounded-[32px] sm:rounded-[36px] bg-white dark:bg-[#151518]",
+        "group relative mx-auto flex w-full h-[440px] sm:h-[520px] lg:h-[560px] flex-col items-center justify-end overflow-hidden",
+        "rounded-[28px] sm:rounded-[36px] bg-white dark:bg-[#151518]",
         "border border-black/[0.06] dark:border-white/[0.08]",
-        "shadow-[0_24px_64px_-16px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)]",
+        "shadow-[0_24px_64px_-16px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] dark:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.06)]",
         "select-none cursor-pointer",
         className
       )}
@@ -427,17 +427,17 @@ export function PixelFeatureCard({
           mass: 0.8,
           delay: 0.15,
         }}
-        className="relative z-10 w-[275px] sm:w-[295px] origin-bottom transform-gpu"
+        className="relative z-10 w-[250px] sm:w-[285px] lg:w-[310px] origin-bottom transform-gpu"
       >
         {/* Ink Phone Outer Chassis Frame */}
-        <div className="relative rounded-[46px] bg-[#0d0d0f] p-[9px] shadow-[0_25px_60px_-12px_rgba(0,0,0,0.45),0_0_0_1px_rgba(255,255,255,0.1)_inset]">
+        <div className="relative rounded-[46px] bg-[#0d0d0f] p-2 sm:p-[9px] shadow-[0_25px_60px_-12px_rgba(0,0,0,0.45),0_0_0_1px_rgba(255,255,255,0.1)_inset]">
           {/* Side Hardware Buttons */}
           <div className="absolute -left-[3px] top-24 h-9 w-[3px] rounded-l-sm bg-zinc-700/80" />
           <div className="absolute -left-[3px] top-36 h-9 w-[3px] rounded-l-sm bg-zinc-700/80" />
           <div className="absolute -right-[3px] top-28 h-14 w-[3px] rounded-r-sm bg-zinc-700/80" />
 
           {/* Inner Phone Screen */}
-          <div className="relative overflow-hidden rounded-[38px] bg-[#fafafa] dark:bg-[#121214] p-4 pb-8 text-zinc-900 dark:text-zinc-100 shadow-inner">
+          <div className="relative overflow-hidden rounded-[38px] bg-[#fafafa] dark:bg-[#121214] p-3.5 sm:p-4 pb-7 sm:pb-8 text-zinc-900 dark:text-zinc-100 shadow-inner">
             {/* Dynamic Island Pill */}
             <div className="relative z-20 mx-auto flex h-6 w-24 items-center justify-between rounded-full bg-black px-2.5 shadow-md">
               <span className="size-2 rounded-full bg-[#1c1c1e] ring-1 ring-white/10" />
