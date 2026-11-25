@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useLearnedWords } from "@/lib/use-learned-words";
-import { PixelFeatureCard } from "@/components/pixel-feature-card";
 import { Button } from "@/components/ui/button";
 import {
   LibraryBig,
@@ -42,6 +41,8 @@ import type { LeaderboardRow } from "@/components/leaderboard";
 import { isLevelLive, VALID_LEVELS } from "@/lib/level-copy";
 import type { LevelStatItem } from "@/lib/data";
 import { LenisProvider } from "@/components/lenis-provider";
+import { PixelFeatureCard } from "@/components/pixel-feature-card";
+import { DailyRoutineSection } from "@/components/daily-routine-section";
 import {
   ScrollReveal,
   SketchHighlight,
@@ -351,117 +352,113 @@ export function HomeContent({
         <div className="relative px-3 sm:px-6 lg:px-8 pt-8 pb-20 max-w-6xl xl:max-w-7xl mx-auto">
           {/* Main Content Container */}
           <div className="relative">
-            {/* ======================================================== */}
-            {/* HERO SECTION: Fluid, Restrained & Modern (DESIGNS.md)   */}
-            {/* ======================================================== */}
-            <section className="relative pt-6 sm:pt-10 pb-12 sm:pb-16">
-              {/* Split 2-Column Responsive Hero Grid (DESIGNS.md) */}
-              <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center">
-                {/* Left Column: Master Typography & Action Flow */}
-                <div className="space-y-6">
-                  {/* Status Capsule (Reference 1 in DESIGNS.md) */}
-                  <div className="inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-700 shadow-2xs dark:border-white/[0.08] dark:bg-[#1c1c1e] dark:text-zinc-300">
-                    <span className="flex size-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>{t("অক্সফোর্ড CEFR ও ব্যাকরণ পদ্ধতি", "Oxford CEFR & Grammar Framework")}</span>
-                    <span className="text-zinc-300 dark:text-zinc-600">·</span>
-                    <span className="font-bold text-amber-600 dark:text-amber-400 tabular-nums">
-                      {fmt(totalWords)} {t("শব্দ", "Words")}
-                    </span>
-                  </div>
+            {/* HERO SECTION - FLUID, RESTRAINED, DESIGNS.MD COMPLIANT */}
+            <section className="pt-2 sm:pt-6 pb-12 sm:pb-16 text-center max-w-4xl mx-auto">
+              <ScrollReveal direction="up">
+                {/* Eyebrow / Status Capsule */}
+                <div className="inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white/80 dark:bg-[#1c1c1e]/80 backdrop-blur-md px-3.5 py-1.5 text-xs font-medium text-[#242423] dark:text-[#f4f4f5] shadow-xs mb-5 sm:mb-6">
+                  <span className="relative flex size-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+                  </span>
+                  <span>{t("অক্সফোর্ড CEFR মানসম্মত পাঠ্যক্রম", "Oxford 3000™ & 5000™ Vocabulary")}</span>
+                  <span className="text-[#242423]/30 dark:text-white/20">·</span>
+                  <span className="font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
+                    {fmt(totalWords)} {t("শব্দ", "Words")}
+                  </span>
+                </div>
 
-                  {/* Primary Heading */}
-                  <div className="space-y-3">
-                    <h1 className="text-3xl sm:text-5xl lg:text-[46px] font-bold tracking-tight text-[#1c1c1e] dark:text-[#f4f4f5] leading-[1.14] sm:leading-[1.12]">
-                      {t("সহজ ও নির্ভুল বাংলা ব্যাখ্যায় ইংরেজি শিখুন।", "Master English Vocabulary & Grammar with Bangla Clarity.")}
-                    </h1>
-                    <p className="text-base sm:text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-xl">
-                      {t(
-                        `অক্সফোর্ড ৩০০০ ও ৫০০০ তালিকা থেকে বাছাই করা ${fmt(totalWords)}টি ইংরেজি শব্দ এবং পার্টস অব স্পিচ, টেন্স ও সেন্টেন্স মেকানিক্সের পূর্ণাঙ্গ নিয়মাবলী। বাস্তব উদাহরণ, খাঁটি উচ্চারণ ও স্মার্ট কুইজ টেস্ট।`,
-                        `Over ${fmt(totalWords)} graded Oxford words across A1 to C1 levels, core grammar formulas, and instant audio pronunciation. Built for conversational fluency and real exam confidence.`
-                      )}
-                    </p>
-                  </div>
+                {/* Primary Typographic Headline */}
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#1c1c1e] dark:text-[#f4f4f5] leading-[1.14] sm:leading-[1.1] max-w-3xl mx-auto">
+                  {t(
+                    "সহজ নিয়মে ইংরেজি শব্দভাণ্ডার আয়ত্ত করুন",
+                    "Master English Vocabulary with Oxford Precision"
+                  )}
+                </h1>
 
-                  {/* Action Toolbar (Reference 1 in DESIGNS.md) */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
+                {/* Refined Subtitle */}
+                <p className="mt-4 sm:mt-5 text-sm sm:text-base lg:text-lg text-[#242423]/65 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+                  {t(
+                    "প্রাথমিক A1 থেকে সাবলীল C1 পর্যন্ত প্রতিটি শব্দের সঠিক বাংলা অর্থ, উচ্চারণ ও ব্যবহার। ফ্ল্যাশকার্ড ও কুইজে নিজের অগ্রগতি যাচাই করুন।",
+                    "Systematic vocabulary progression from A1 beginner to C1 advanced. Powered by contextual Bengali translations, human audio pronunciation, and interactive recall drills."
+                  )}
+                </p>
+
+                {/* Responsive Action Buttons (DESIGNS.md Section 5: Mobile Optimized) */}
+                <div className="mt-7 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md sm:max-w-none mx-auto w-full px-1">
+                  {/* Primary CTA */}
+                  <a
+                    href="#levels"
+                    className="w-full sm:w-auto h-12 px-7 flex items-center justify-center gap-2 rounded-full bg-[#1c1c1e] hover:bg-black text-white dark:bg-white dark:hover:bg-zinc-100 dark:text-[#1c1c1e] font-semibold text-sm shadow-[0_2px_12px_rgba(0,0,0,0.08)] active:scale-[0.98] transition-all duration-150"
+                  >
+                    <span>{t("শেখা শুরু করুন", "Explore Word Lists")}</span>
+                    <ArrowRight className="size-4" />
+                  </a>
+
+                  {/* Secondary CTAs - 50/50 split on mobile screens, inline pills on desktop */}
+                  <div className="grid grid-cols-2 gap-2.5 w-full sm:flex sm:w-auto sm:items-center">
                     <Link
-                      href="/vocabulary"
-                      className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1c1c1e] px-6 py-3.5 text-sm font-semibold text-white shadow-xs transition-all hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#1c1c1e] dark:hover:bg-zinc-200"
+                      href="/words"
+                      className="h-11 sm:h-12 px-4 sm:px-5 flex items-center justify-center gap-2 rounded-full border border-black/[0.06] bg-white hover:bg-zinc-50 dark:border-white/[0.08] dark:bg-[#1c1c1e] dark:hover:bg-zinc-800 text-xs sm:text-sm font-medium text-[#242423] dark:text-[#f4f4f5] active:scale-[0.98] transition-all duration-150 shadow-2xs"
                     >
-                      <LibraryBig className="size-4" />
-                      <span>{t("শব্দতালিকা দেখুন", "Explore Word Lists")}</span>
-                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                      <Search className="size-3.5 sm:size-4 text-zinc-500 dark:text-zinc-400" />
+                      <span className="truncate">{t("শব্দ খুঁজুন", "Dictionary")}</span>
                     </Link>
 
                     <Link
-                      href="/grammar"
-                      className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3.5 text-sm font-semibold text-[#242423] border border-black/[0.08] shadow-2xs transition-all hover:bg-zinc-50 active:scale-[0.98] dark:bg-[#1c1c1e] dark:text-[#f3f3f2] dark:border-white/[0.1] dark:hover:bg-[#252528]"
+                      href="/dashboard"
+                      className="h-11 sm:h-12 px-4 sm:px-5 flex items-center justify-center gap-2 rounded-full border border-black/[0.06] bg-white hover:bg-zinc-50 dark:border-white/[0.08] dark:bg-[#1c1c1e] dark:hover:bg-zinc-800 text-xs sm:text-sm font-medium text-[#242423] dark:text-[#f4f4f5] active:scale-[0.98] transition-all duration-150 shadow-2xs"
                     >
-                      <BookMarked className="size-4 text-emerald-600 dark:text-emerald-400" />
-                      <span>{t("গ্রামার রুলস পড়ুন", "Grammar Lessons")}</span>
-                    </Link>
-
-                    <Link
-                      href="/quiz"
-                      className="group inline-flex items-center justify-center gap-1.5 px-4 py-3 text-xs sm:text-sm font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
-                    >
-                      <BookOpenCheck className="size-4 text-amber-500" />
-                      <span>{t("কুইজ অনুশীলন", "Practice Quizzes")}</span>
-                      <ArrowRight className="size-3.5 text-zinc-400 group-hover:translate-x-0.5 transition-transform" />
+                      <GraduationCap className="size-3.5 sm:size-4 text-zinc-500 dark:text-zinc-400" />
+                      <span className="truncate">{t("ড্যাশবোর্ড", "Dashboard")}</span>
                     </Link>
                   </div>
+                </div>
 
-                  {/* Micro-Trust Indicator Line */}
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400 dark:text-zinc-500 pt-1">
-                    <span className="flex items-center gap-1.5">
-                      <CheckCircle2 className="size-3.5 text-emerald-500" />
-                      <span>{t("১০০% ফ্রি ও উন্মুক্ত", "100% Free & Open")}</span>
-                    </span>
-                    <span>·</span>
-                    <span>{t("অ্যাকাউন্ট ছাড়াই শেখা যায়", "No sign-up required")}</span>
-                    <span>·</span>
-                    <span>{t("স্পিচ অডিও উচ্চারণ", "Audio pronunciation")}</span>
-                  </div>
-
-                  {/* Inset Metric Capsule Bar (Reference 1 & 9 in DESIGNS.md) */}
-                  <div className="grid grid-cols-3 gap-2 rounded-[20px] bg-[#f1f1ef] p-2.5 dark:bg-[#252528] text-center max-w-lg">
-                    <div className="rounded-[14px] bg-white p-2.5 dark:bg-[#1c1c1e] shadow-2xs">
-                      <span className="text-sm sm:text-base font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
+                {/* 3-Cell Inset Stat Module (Reference 1 from DESIGNS.md) */}
+                <div className="mt-8 sm:mt-10 mx-auto max-w-lg rounded-[22px] bg-[#f1f1ef] dark:bg-[#252528] p-2 border border-black/[0.04] dark:border-white/[0.05]">
+                  <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-center">
+                    <div className="rounded-[16px] bg-white dark:bg-[#1c1c1e] p-2.5 sm:p-3 shadow-2xs">
+                      <div className="text-base sm:text-lg font-bold text-[#1c1c1e] dark:text-[#f4f4f5] tabular-nums">
                         {fmt(totalWords)}
-                      </span>
-                      <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">
-                        {t("অক্সফোর্ড শব্দ", "Oxford Words")}
-                      </p>
+                      </div>
+                      <div className="text-[11px] sm:text-xs text-[#242423]/55 dark:text-zinc-400 font-medium truncate">
+                        {t("মোট শব্দ", "Oxford Words")}
+                      </div>
                     </div>
-                    <div className="rounded-[14px] bg-white p-2.5 dark:bg-[#1c1c1e] shadow-2xs">
-                      <span className="text-sm sm:text-base font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
-                        12 / 8
-                      </span>
-                      <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">
-                        {t("টেন্স ও পদ", "Tenses & Parts")}
-                      </p>
+                    <div className="rounded-[16px] bg-white dark:bg-[#1c1c1e] p-2.5 sm:p-3 shadow-2xs">
+                      <div className="text-base sm:text-lg font-bold text-[#1c1c1e] dark:text-[#f4f4f5] tabular-nums">
+                        {fmt(liveLevelCount)} CEFR
+                      </div>
+                      <div className="text-[11px] sm:text-xs text-[#242423]/55 dark:text-zinc-400 font-medium truncate">
+                        {t("লেভেল ধাপ", "Skill Levels")}
+                      </div>
                     </div>
-                    <div className="rounded-[14px] bg-white p-2.5 dark:bg-[#1c1c1e] shadow-2xs">
-                      <span className="text-sm sm:text-base font-bold tabular-nums text-amber-600 dark:text-amber-400">
-                        {liveLevelCount} {t("টি লেভেল", "Levels")}
-                      </span>
-                      <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">
-                        {t("A1 থেকে C1", "A1 to C1")}
-                      </p>
+                    <div className="rounded-[16px] bg-white dark:bg-[#1c1c1e] p-2.5 sm:p-3 shadow-2xs">
+                      <div className="text-base sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
+                        100%
+                      </div>
+                      <div className="text-[11px] sm:text-xs text-[#242423]/55 dark:text-zinc-400 font-medium truncate">
+                        {t("বিনামূল্যে", "Free & Open")}
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Right Column: Motion Brew Pixel Feature Card */}
-                <div className="w-full flex justify-center lg:justify-end">
-                  <PixelFeatureCard />
+                {/* Full-Width Interactive App Preview Stage with PixelFeatureCard */}
+                <div className="mt-10 sm:mt-14 w-full">
+                  <PixelFeatureCard
+                    className="w-full shadow-[0_2px_12px_rgba(0,0,0,0.03),0_24px_48px_-12px_rgba(0,0,0,0.06)] ring-1 ring-black/5 dark:ring-white/10"
+                    score={overallPct > 0 ? overallPct : 88}
+                    userName={t("শিক্ষার্থী", "Learner")}
+                    greeting={t("শুভ সকাল", "Good morning")}
+                  />
                 </div>
-              </div>
-
-              </section>
+              </ScrollReveal>
+            </section>
 
             {/* CEFR LEVEL CARDS SECTION - "STICKY NOTES" DESIGN WITH SAMPLE WORDS */}
-            <section className="py-12 border-t border-dashed border-zinc-200 dark:border-zinc-800 relative">
+            <section id="levels" className="py-4 sm:py-8 relative">
               <ScrollReveal direction="up" className="mb-8">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                   <div>
@@ -611,6 +608,9 @@ export function HomeContent({
                 })}
               </div>
             </section>
+
+            {/* DAILY ROUTINE SECTION (POWERED BY USER DAILY ROUTINE MODEL) */}
+            <DailyRoutineSection />
 
             {/* DEDICATED GRAMMAR WORKBOOK SECTION */}
             <section className="py-12 border-t border-dashed border-zinc-200 dark:border-zinc-800">

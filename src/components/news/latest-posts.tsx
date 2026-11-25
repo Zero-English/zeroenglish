@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, CalendarDays } from "lucide-react";
+import { ArrowUpRight, Calendar, Newspaper } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
@@ -24,68 +24,86 @@ export function LatestPosts({ posts }: { posts: LatestPost[] }) {
 
   return (
     <section>
-      <div className="overflow-hidden rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-white/70 dark:bg-zinc-900/60 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)]">
-        <div className="flex items-center justify-between gap-4 border-b border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-5 sm:py-6">
+      <div className="rounded-[24px] sm:rounded-[26px] border border-black/[0.06] bg-white p-3.5 sm:p-4.5 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] space-y-3">
+        {/* Sunken Inset Header (DESIGNS.md 4.1) */}
+        <div className="rounded-[18px] sm:rounded-[20px] bg-[#f1f1ef] p-3.5 sm:p-4 dark:bg-[#252528] flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <h2 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-              {t("নিউজ ও ব্লগ", "News & Blog")}
-            </h2>
-            <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="flex items-center gap-2">
+              <span className="flex size-7 items-center justify-center rounded-[10px] bg-white shadow-2xs dark:bg-[#1c1c1e] text-[#1c1c1e] dark:text-[#f4f4f5]">
+                <Newspaper className="size-3.5" />
+              </span>
+              <h2 className="text-sm sm:text-base font-bold tracking-tight text-[#1c1c1e] dark:text-[#f4f4f5]">
+                {t("নিউজ ও ব্লগ", "News & Blog")}
+              </h2>
+            </div>
+            <p className="mt-1 text-xs text-[#242423]/55 dark:text-zinc-400">
               {t("সাম্প্রতিক আর্টিকেল, টিপস ও আপডেট।", "Recent articles, tips and updates")}
             </p>
           </div>
+
           <Link
             href="/news"
-            className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-orange-600 hover:text-orange-700 active:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 dark:active:text-orange-300 transition-colors"
+            className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-black/[0.06] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#1c1c1e] shadow-2xs transition-all duration-150 hover:bg-zinc-50 active:scale-[0.98] dark:border-white/[0.08] dark:bg-[#1c1c1e] dark:text-[#f4f4f5] dark:hover:bg-zinc-800"
           >
-            {t("সব দেখুন", "View all")}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-active:translate-x-0.5" />
+            <span>{t("সব দেখুন", "View all")}</span>
+            <ArrowUpRight className="size-3 text-[#242423]/40 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-zinc-400 transition-transform" />
           </Link>
         </div>
 
-        <StaggerContainer className="flex flex-col">
-          {posts.slice(0, 3).map((post, i) => (
-            <StaggerItem
-              key={post.slug}
-              className={cn(
-                "transition-colors hover:bg-black/[0.02] active:bg-black/[0.02] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04]",
-                "border-t border-black/[0.06] dark:border-white/[0.08]",
-                i === 0 && "border-t-0"
-              )}
-            >
-              <Link
-                href={`/news/${post.slug}`}
-                className="group flex items-center gap-3 sm:gap-5 px-5 sm:px-6 py-4 sm:py-5"
-              >
-              {post.imageUrl ? (
-                <div className="relative hidden h-16 w-24 shrink-0 overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-900 sm:block">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={post.imageUrl}
-                    alt={post.imageAlt || t(post.titleBn, post.titleEn)}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-              ) : null}
+        {/* Clean Typographic List Rows (DESIGNS.md 4.3) */}
+        <StaggerContainer className="flex flex-col gap-1">
+          {posts.slice(0, 3).map((post) => {
+            const formattedDate = new Date(post.createdAt).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            });
 
-              <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-                  <CalendarDays className="h-3.5 w-3.5 shrink-0" />
-                  {new Date(post.createdAt).toLocaleDateString()}
-                </p>
-                <h3 className="mt-1 line-clamp-2 text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                  {t(post.titleBn, post.titleEn)}
-                </h3>
-                <p className="mt-1 line-clamp-1 text-xs text-zinc-500 dark:text-zinc-400 sm:line-clamp-2 sm:text-sm">
-                  {t(post.descriptionBn, post.descriptionEn)}
-                </p>
-              </div>
+            return (
+              <StaggerItem key={post.slug}>
+                <Link
+                  href={`/news/${post.slug}`}
+                  className="group relative flex items-center justify-between gap-3.5 rounded-[16px] p-2.5 sm:p-3 text-left outline-none transition-all duration-150 hover:bg-[#242423]/[0.04] active:scale-[0.99] dark:hover:bg-white/[0.05]"
+                >
+                  {/* Thumbnail Squircle */}
+                  {post.imageUrl ? (
+                    <div className="relative size-14 sm:size-16 shrink-0 overflow-hidden rounded-[12px] sm:rounded-[14px] bg-[#f1f1ef] dark:bg-[#252528] border border-black/[0.04] dark:border-white/[0.06]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={post.imageUrl}
+                        alt={post.imageAlt || t(post.titleBn, post.titleEn)}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex size-14 sm:size-16 shrink-0 items-center justify-center rounded-[12px] sm:rounded-[14px] bg-[#f1f1ef] dark:bg-[#252528] border border-black/[0.04] dark:border-white/[0.06] text-[#242423]/35 dark:text-zinc-500">
+                      <Newspaper className="size-5" />
+                    </div>
+                  )}
 
-              <ArrowRight className="h-4 w-4 shrink-0 text-zinc-300 dark:text-zinc-600 transition-all group-hover:translate-x-0.5 group-hover:text-orange-500 group-active:translate-x-0.5 group-active:text-orange-500" />
-              </Link>
-            </StaggerItem>
-          ))}
+                  {/* Text Meta */}
+                  <div className="min-w-0 flex-1">
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[#242423]/45 dark:text-zinc-500">
+                      <Calendar className="size-3" />
+                      <span>{formattedDate}</span>
+                    </span>
+                    <h3 className="mt-0.5 line-clamp-1 text-xs sm:text-[13.5px] font-bold text-[#1c1c1e] dark:text-[#f4f4f5] group-hover:text-black dark:group-hover:text-white transition-colors">
+                      {t(post.titleBn, post.titleEn)}
+                    </h3>
+                    <p className="mt-0.5 line-clamp-1 text-[11.5px] sm:text-xs text-[#242423]/55 dark:text-zinc-400">
+                      {t(post.descriptionBn, post.descriptionEn)}
+                    </p>
+                  </div>
+
+                  {/* Arrow Pill */}
+                  <span className="grid size-7 sm:size-8 shrink-0 place-items-center rounded-full text-[#242423]/40 group-hover:bg-[#242423]/[0.06] group-hover:text-[#1c1c1e] group-hover:translate-x-0.5 dark:text-zinc-500 dark:group-hover:bg-white/[0.08] dark:group-hover:text-zinc-100 transition-all">
+                    <ArrowUpRight className="size-3.5" />
+                  </span>
+                </Link>
+              </StaggerItem>
+            );
+          })}
         </StaggerContainer>
       </div>
     </section>
