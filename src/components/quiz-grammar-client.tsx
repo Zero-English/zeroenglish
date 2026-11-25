@@ -44,7 +44,7 @@ export function QuizGrammarClient({
   const selected = resolveSelectedTopics(quizTypes, selectedTopicSlug);
 
   return (
-    <div className="relative min-h-dvh overflow-hidden">
+    <div className="relative min-h-dvh overflow-hidden bg-[#f8f8f6] text-[#242423] transition-colors duration-200 dark:bg-[#0c0c0e] dark:text-[#f3f3f2]">
       <div className="relative px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl w-full">
           {loading && selectedTopicSlug ? (
@@ -81,115 +81,76 @@ export function QuizGrammarClient({
           ) : (
             <StaggerContainer>
               <StaggerItem>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className={cn(ICON_CHIP, "text-emerald-500")}>
-                      <BookMarked className="size-4.5" />
-                    </div>
-                    <div>
-                      <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                        {t("গ্রামার টপিক কুইজ", "Grammar Topic Quizzes")}
-                      </h1>
-                      <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-                        {t(
-                          "টেন্স, প্রিপজিশন, ভয়েস চেঞ্জ, আর্টিকেল ও ন্যারেশনসহ সব গুরুত্বপূর্ণ গ্রামার টপিক অনুশীলন।",
-                          "Master English grammar concepts with targeted topic quizzes and instant explanations."
-                        )}
-                      </p>
+                {/* Sunken Inset Header */}
+                <div className="mb-6 rounded-[22px] border border-black/[0.06] bg-white p-3.5 shadow-sm dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:p-5">
+                  <div className="rounded-[18px] bg-[#f1f1ef] p-3.5 dark:bg-[#252528] sm:rounded-[20px] sm:p-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]">
+                          <BookMarked className="size-5 text-emerald-500" />
+                        </span>
+                        <div>
+                          <h1 className="text-base font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-lg">
+                            {t("গ্রামার টপিক কুইজ", "Grammar Topic Quizzes")}
+                          </h1>
+                          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+                            {t(
+                              "টেন্স, প্রিপজিশন, ভয়েস চেঞ্জ ও আর্টিকেলসহ বিষয়ভিত্তিক অনুশীলন",
+                              "Targeted grammar concept quizzes with instant answer feedback"
+                            )}
+                          </p>
+                        </div>
+                      </div>
+
+                      <Link
+                        href="/quiz"
+                        className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-700 shadow-2xs hover:bg-zinc-100 dark:bg-[#323236] dark:text-zinc-200 dark:hover:bg-[#3c3c40] transition-colors"
+                      >
+                        <ArrowLeft className="size-3.5" />
+                        {t("সব কুইজ", "All Quizzes")}
+                      </Link>
                     </div>
                   </div>
-                  <Link
-                    href="/quiz"
-                    className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/60 dark:bg-zinc-900/60 hover:bg-black/[0.03] dark:hover:bg-white/[0.05] px-3 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300 transition-colors"
-                  >
-                    <ArrowLeft className="h-3.5 w-3.5" />
-                    {t("সব কুইজ", "All Quizzes")}
-                  </Link>
                 </div>
               </StaggerItem>
 
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 animate-pulse">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 animate-pulse">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="h-44 rounded-2xl bg-zinc-200/70 dark:bg-zinc-800/70" />
+                    <div key={i} className="h-40 rounded-[22px] bg-zinc-200/70 dark:bg-zinc-800/70" />
                   ))}
                 </div>
               ) : error ? (
-                <div className={cn(CARD, "p-8 text-center")}>
+                <div className="rounded-[24px] border border-black/[0.06] bg-white p-8 text-center shadow-sm dark:border-white/[0.08] dark:bg-[#1c1c1e]">
                   <p className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                     {t("কুইজের তালিকা লোড করা যায়নি", "Couldn't load the quiz list")}
                   </p>
                   <button
                     onClick={reload}
-                    className="inline-flex items-center gap-1.5 mt-4 rounded-xl bg-orange-600 text-white font-semibold px-5 py-2 text-sm shadow-md shadow-orange-500/20 hover:bg-orange-700 transition-colors cursor-pointer"
+                    className="mt-4 cursor-pointer rounded-full bg-[#242423] px-6 py-2.5 text-xs font-semibold text-white transition-all hover:bg-black active:scale-[0.97] dark:bg-white dark:text-[#242423] dark:hover:bg-zinc-200"
                   >
                     {t("আবার চেষ্টা করুন", "Try again")}
                   </button>
                 </div>
               ) : quizTypes.length === 0 ? (
-                <div className={cn(CARD, "p-8 text-center")}>
+                <div className="rounded-[24px] border border-black/[0.06] bg-white p-8 text-center shadow-sm dark:border-white/[0.08] dark:bg-[#1c1c1e]">
                   <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
                     {t("এখনো কোনো গ্রামার টপিক কুইজ নেই।", "No grammar topic quizzes yet.")}
                   </p>
                 </div>
               ) : (
-                <div className={cn(CARD, "overflow-hidden")}>
-                  <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
-                    {[...quizTypes]
-                      .sort((a, b) => b.questionCount - a.questionCount)
-                      .map((item) => {
-                        const topic = quizTopicMeta(item.name);
-                        const Icon = topic.icon;
-                        const hasQuestions = item.questionCount > 0;
-                        return (
-                          <StaggerItem
-                            key={item.name}
-                            className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0"
-                          >
-                            <Link
-                              href={`/quiz/grammar?topic=${encodeURIComponent(topic.name)}`}
-                              className={cn(
-                                "group flex h-full w-full flex-col text-left gap-3 p-5 sm:p-6 transition-colors",
-                                "hover:bg-black/[0.02] active:bg-black/[0.02] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04]"
-                              )}
-                            >
-                              <div className="flex items-start justify-between gap-3">
-                                <div
-                                  className={cn(
-                                    "flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-gradient-to-br text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_2px_8px_-2px_rgba(16,24,40,0.15)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_-2px_rgba(0,0,0,0.5)]",
-                                    topic.gradient
-                                  )}
-                                >
-                                  <Icon className="h-6 w-6" />
-                                </div>
-
-                                {hasQuestions ? (
-                                  <span className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
-                                    {t(
-                                      `${item.questionCount}টি প্রশ্ন`,
-                                      `${item.questionCount} questions`
-                                    )}
-                                  </span>
-                                ) : (
-                                  <span className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-                                    {t("শীঘ্রই আসছে", "Coming soon")}
-                                  </span>
-                                )}
-                              </div>
-
-                              <div className="min-w-0">
-                                <h3 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                                  {t(topic.labelBn, topic.label)}
-                                </h3>
-                                <p className="mt-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
-                                  {t(topic.descBn, topic.desc)}
-                                </p>
-                              </div>
-                            </Link>
-                          </StaggerItem>
-                        );
-                      })}
-                  </StaggerContainer>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5">
+                  {[...quizTypes]
+                    .sort((a, b) => b.questionCount - a.questionCount)
+                    .map((item, i) => (
+                      <StaggerItem key={item.name}>
+                        <GrammarTopicCard
+                          topic={quizTopicMeta(item.name)}
+                          questionCount={item.questionCount}
+                          index={i}
+                        />
+                      </StaggerItem>
+                    ))}
                 </div>
               )}
             </StaggerContainer>

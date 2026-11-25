@@ -44,6 +44,7 @@ import Link from "next/link";
 import { useT } from "@/components/language-provider";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { PASTEL_STYLES } from "@/components/quiz-catalog";
 import { toast } from "sonner";
 
 type LevelOption = "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Random";
@@ -676,10 +677,10 @@ export function QuizVocabularyClient() {
 }
 
 const CARD =
-  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
+  "rounded-[26px] sm:rounded-[30px] border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] shadow-xs";
 
 const ICON_CHIP =
-  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-black/[0.04] dark:bg-white/[0.06] ring-1 ring-inset ring-black/[0.05] dark:ring-white/[0.08]";
+  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] bg-white text-[#242423] shadow-2xs dark:bg-white/10 dark:text-[#f3f3f2]";
 
 function QuizTypeSelect({
   onSelect,
@@ -692,17 +693,18 @@ function QuizTypeSelect({
 }) {
   const t = useT();
   return (
-    <div className="px-4 py-8 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-5">
+      {/* Sunken Inset Header */}
+      <div className="rounded-[18px] sm:rounded-[22px] bg-[#f1f1ef] dark:bg-[#252528] p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-black/[0.04] dark:border-white/[0.06]">
         <div className="flex items-center gap-3">
-          <div className={cn(ICON_CHIP, "text-sky-500")}>
-            <Languages className="size-4.5" />
+          <div className="size-11 rounded-[14px] bg-white text-[#242423] shadow-2xs dark:bg-white/10 dark:text-[#f3f3f2] flex items-center justify-center shrink-0">
+            <Languages className="size-5" />
           </div>
           <div>
-            <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h1 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
               {t("শব্দভাণ্ডার অনুশীলন", "Vocabulary Practice")}
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
               {t(
                 "শব্দভাণ্ডার মজবুত করতে একটি মোড বেছে নিয়ে অনুশীলন শুরু করুন।",
                 "Pick a practice mode and sharpen your word recall."
@@ -712,65 +714,55 @@ function QuizTypeSelect({
         </div>
         <Link
           href="/quiz"
-          className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/60 dark:bg-zinc-900/60 hover:bg-black/[0.03] dark:hover:bg-white/[0.05] px-3 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-300 transition-colors"
+          className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] px-3.5 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-200 transition-colors shadow-2xs"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           {t("সব কুইজ", "All Quizzes")}
         </Link>
       </div>
-      <div className={cn(CARD, "overflow-hidden")}>
-        <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
-          {QUIZ_TYPE_ORDER.map((type) => {
-            const card = QUIZ_TYPE_CONFIG[type];
-            const Icon = card.icon;
-            const isFeatured = type === "english_to_bangla";
-            return (
-              <StaggerItem
-                key={type}
-                className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0"
+
+      <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+        {QUIZ_TYPE_ORDER.map((type, idx) => {
+          const card = QUIZ_TYPE_CONFIG[type];
+          const Icon = card.icon;
+          const isFeatured = type === "english_to_bangla";
+          const pastelClass = PASTEL_STYLES[idx % PASTEL_STYLES.length];
+          return (
+            <StaggerItem key={type}>
+              <button
+                onClick={() => onSelect(type)}
+                className="group flex h-full w-full flex-col text-left justify-between gap-4 p-5 sm:p-6 rounded-[22px] sm:rounded-[26px] border border-black/[0.06] bg-white dark:border-white/[0.08] dark:bg-[#1c1c1e] shadow-[0_1px_2px_rgba(0,0,0,0.03),0_8px_24px_-8px_rgba(0,0,0,0.04)] transition-all cursor-pointer hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 active:scale-[0.99]"
               >
-                <button
-                  onClick={() => onSelect(type)}
-                  className={cn(
-                    "group flex h-full w-full flex-col text-left gap-3 p-5 sm:p-6 transition-colors cursor-pointer",
-                    "hover:bg-black/[0.02] active:bg-black/[0.02] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04]"
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div
-                      className={cn(
-                        "flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_2px_8px_-2px_rgba(16,24,40,0.15)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_-2px_rgba(0,0,0,0.5)]",
-                        card.accent
-                      )}
-                    >
-                      <Icon className="h-6 w-6" />
-                    </div>
-
-                    <span
-                      className={cn(
-                        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold",
-                        card.pill
-                      )}
-                    >
-                      {isFeatured && <Star className="h-3 w-3 fill-amber-400 text-amber-500" />}
-                      {t(card.badgeBn, card.badge)}
-                    </span>
+                <div className="flex items-start justify-between gap-3 w-full">
+                  <div
+                    className={cn(
+                      "size-12 rounded-[14px] border shadow-2xs flex items-center justify-center shrink-0 transition-transform group-hover:scale-105",
+                      pastelClass
+                    )}
+                  >
+                    <Icon className="h-6 w-6" />
                   </div>
 
-                  <div className="min-w-0">
-                    <h3 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                      {t(card.labelBn, card.label)}
-                    </h3>
-                    <p className="mt-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
-                      {t(card.descBn, card.desc)}
-                    </p>
-                  </div>
-                </button>
-              </StaggerItem>
-            );
-          })}
-        </StaggerContainer>
-      </div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] px-2.5 py-0.5 text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">
+                    {isFeatured && <Star className="h-3 w-3 fill-amber-400 text-amber-500" />}
+                    {t(card.badgeBn, card.badge)}
+                  </span>
+                </div>
+
+                <div className="min-w-0 w-full">
+                  <h3 className="text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center justify-between">
+                    <span>{t(card.labelBn, card.label)}</span>
+                    <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0 text-zinc-500" />
+                  </h3>
+                  <p className="mt-1 text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+                    {t(card.descBn, card.desc)}
+                  </p>
+                </div>
+              </button>
+            </StaggerItem>
+          );
+        })}
+      </StaggerContainer>
     </div>
   );
 }
@@ -825,9 +817,9 @@ function SettingsView({
     countLoading || maxCount === null ? "…" : String(maxCount);
 
   const activeStyle =
-    "bg-sky-600 text-white border-sky-600 shadow-sm dark:bg-sky-500 dark:border-sky-500";
+    "rounded-full bg-[#242423] text-white shadow-2xs dark:bg-white dark:text-[#242423] font-semibold";
   const idleStyle =
-    "border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 hover:bg-black/[0.05] dark:hover:bg-white/[0.08]";
+    "rounded-full bg-[#f1f1ef] dark:bg-[#252528] border border-black/[0.04] dark:border-white/[0.06] text-zinc-700 dark:text-zinc-300 hover:bg-black/[0.05] dark:hover:bg-white/[0.08] font-medium";
 
   const suggestedQuantities = useMemo(
     () => getSuggestedQuantities(maxCount),
@@ -851,28 +843,15 @@ function SettingsView({
     (!countLoading && maxCount === 0);
 
   return (
-    <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-3xl mx-auto space-y-4 sm:space-y-5">
-      <button
-        onClick={onBack}
-        className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer"
-      >
-        <ArrowLeft className="h-3.5 w-3.5" />
-        {t("কুইজের ধরনে ফিরে যান", "Back to quiz types")}
-      </button>
-
-      {/* Selected Mode Banner */}
-      <div className={cn(CARD, "p-4 sm:p-5")}>
+    <div className="px-4 py-6 sm:px-6 lg:px-8 max-w-3xl mx-auto space-y-5">
+      {/* Sunken Inset Header */}
+      <div className="rounded-[18px] sm:rounded-[22px] bg-[#f1f1ef] dark:bg-[#252528] p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-black/[0.04] dark:border-white/[0.06]">
         <div className="flex items-center gap-3">
-          <div
-            className={cn(
-              "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br text-white shadow-sm",
-              qt.gradient
-            )}
-          >
-            <QuizIcon className="h-4.5 w-4.5" />
+          <div className="size-11 rounded-[14px] bg-white text-[#242423] shadow-2xs dark:bg-white/10 dark:text-[#f3f3f2] flex items-center justify-center shrink-0">
+            <QuizIcon className="size-5" />
           </div>
           <div>
-            <h2 className="text-sm sm:text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
               {t(qt.labelBn, qt.label)}
             </h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -881,9 +860,16 @@ function SettingsView({
             </p>
           </div>
         </div>
+        <button
+          onClick={onBack}
+          className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] px-3.5 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-200 transition-colors shadow-2xs cursor-pointer"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          {t("ধরন পরিবর্তন", "Change mode")}
+        </button>
       </div>
 
-      <div className="space-y-4 sm:space-y-5">
+      <div className="space-y-4">
         {/* Word Source Card */}
         <div className={cn(CARD, "p-4 sm:p-5")}>
           <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 mb-2.5">
@@ -1141,11 +1127,11 @@ function SettingsView({
         </div>
 
         {/* Start Button */}
-        <div className="pt-1">
+        <div className="pt-2">
           <Button
             onClick={onStart}
             disabled={starting || countLoading || hasNoWords}
-            className="w-full h-11 text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-700 active:bg-sky-700 text-white shadow-md shadow-sky-500/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full h-12 rounded-full bg-[#242423] text-white hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#242423] font-semibold text-sm shadow-sm transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {starting
               ? t("তৈরি হচ্ছে…", "Preparing…")
@@ -1261,14 +1247,13 @@ function QuizView({
         </div>
 
         {/* Progress track */}
-        <div className="h-1.5 w-full bg-black/[0.04] dark:bg-white/[0.06] rounded-full mb-6 overflow-hidden">
+        <div className="relative h-1.5 w-full bg-black/[0.04] dark:bg-white/[0.06] rounded-full mb-6 overflow-hidden">
           <div
-            className={cn(
-              "h-full rounded-full transition-all duration-300 ease-out bg-gradient-to-r",
-              qt.gradient
-            )}
+            className="h-full rounded-full transition-all duration-300 ease-out bg-[#242423] dark:bg-white relative overflow-hidden"
             style={{ width: `${progress}%` }}
-          />
+          >
+            <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+          </div>
         </div>
 
         {/* Word prompt header */}
@@ -1290,19 +1275,17 @@ function QuizView({
             {quizType !== "bangla_to_english" && (
               <button
                 onClick={() => speak(question.word.word)}
-                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors cursor-pointer"
+                className="size-9 rounded-[10px] bg-white text-[#242423] shadow-2xs dark:bg-white/10 dark:text-[#f3f3f2] flex items-center justify-center hover:bg-black/[0.03] dark:hover:bg-white/[0.15] transition-colors cursor-pointer"
                 title={t("উচ্চারণ শুনুন", "Listen to pronunciation")}
               >
-                <Volume2 className="h-4.5 w-4.5" />
+                <Volume2 className="h-4 w-4" />
               </button>
             )}
             <button
               onClick={() => toggleBookmark(question.word.id)}
               className={cn(
-                "p-1.5 rounded-lg transition-colors cursor-pointer",
-                bookmarked
-                  ? "text-amber-500 hover:text-amber-600"
-                  : "text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-black/[0.04] dark:hover:bg-white/[0.06]"
+                "size-9 rounded-[10px] bg-white text-[#242423] shadow-2xs dark:bg-white/10 dark:text-[#f3f3f2] flex items-center justify-center hover:bg-black/[0.03] dark:hover:bg-white/[0.15] transition-colors cursor-pointer",
+                bookmarked && "text-amber-500 dark:text-amber-400"
               )}
               title={
                 bookmarked
@@ -1311,9 +1294,9 @@ function QuizView({
               }
             >
               {bookmarked ? (
-                <BookmarkCheck className="h-4.5 w-4.5" />
+                <BookmarkCheck className="h-4 w-4 fill-amber-500/20" />
               ) : (
-                <Bookmark className="h-4.5 w-4.5" />
+                <Bookmark className="h-4 w-4" />
               )}
             </button>
           </div>
@@ -1348,20 +1331,20 @@ function QuizView({
                 onClick={() => onOptionClick(option)}
                 disabled={isAnswered}
                 className={cn(
-                  "w-full flex items-center gap-3 text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer disabled:cursor-default",
+                  "w-full flex items-center gap-3 text-left p-3.5 sm:p-4 rounded-[18px] sm:rounded-[20px] border transition-all duration-200 cursor-pointer disabled:cursor-default",
                   optionStyle
                 )}
               >
                 <span
                   className={cn(
-                    "flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold",
+                    "flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-[10px] text-xs font-bold shadow-2xs",
                     isAnswered
                       ? isCorrectOption
                         ? "bg-emerald-500 text-white"
                         : isWrongPick
                           ? "bg-rose-500 text-white"
                           : "bg-black/[0.04] dark:bg-white/[0.06] text-zinc-400"
-                      : "bg-black/[0.05] dark:bg-white/[0.08] text-zinc-600 dark:text-zinc-300"
+                      : "bg-white dark:bg-white/10 text-zinc-700 dark:text-zinc-200"
                   )}
                 >
                   {isAnswered && (isCorrectOption || isWrongPick) ? (
@@ -1374,7 +1357,7 @@ function QuizView({
                     (letters[i] ?? "")
                   )}
                 </span>
-                <span className="flex-1 text-sm sm:text-base font-medium leading-relaxed">
+                <span className="flex-1 text-sm sm:text-base font-semibold leading-relaxed text-zinc-900 dark:text-zinc-100">
                   {option.text}
                 </span>
               </button>
@@ -1388,7 +1371,7 @@ function QuizView({
             <Button
               onClick={onNext}
               size="lg"
-              className="px-8 bg-sky-600 hover:bg-sky-700 text-white shadow-md shadow-sky-500/20 cursor-pointer"
+              className="px-8 rounded-full bg-[#242423] text-white hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#242423] font-semibold text-xs sm:text-sm shadow-sm cursor-pointer"
             >
               {currentIndex >= totalQuestions - 1
                 ? t("ফলাফল দেখুন", "See Results")
@@ -1542,21 +1525,34 @@ function ResultsView({
           </p>
         </div>
 
-        {/* Score Hero */}
-        <div className="rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-5 text-center">
-          <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 tabular-nums">
-            {percentage}%
+        {/* Score Metric Tiles */}
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+          <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3.5 sm:p-4 text-center">
+            <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+              {t("সঠিকতা", "Accuracy")}
+            </span>
+            <span className="mt-1 block text-xl sm:text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 tabular-nums">
+              {percentage}%
+            </span>
           </div>
-          <p className="mt-1.5 text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400">
-            <span className="font-bold text-emerald-600 dark:text-emerald-400">
-              {score}
-            </span>{" "}
-            {t("টির মধ্যে সঠিক", "correct out of")}{" "}
-            <span className="font-bold text-zinc-700 dark:text-zinc-300">
-              {total}
-            </span>{" "}
-            {t("টি প্রশ্ন", "questions")}
-          </p>
+
+          <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3.5 sm:p-4 text-center">
+            <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+              {t("সঠিক", "Correct")}
+            </span>
+            <span className="mt-1 block text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 tabular-nums">
+              {score} / {total}
+            </span>
+          </div>
+
+          <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3.5 sm:p-4 text-center">
+            <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+              {t("ভুল", "Incorrect")}
+            </span>
+            <span className="mt-1 block text-xl sm:text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400 tabular-nums">
+              {incorrectAnswers.length}
+            </span>
+          </div>
         </div>
 
         {/* Incorrect Words Deck */}
@@ -1572,28 +1568,28 @@ function ResultsView({
               {incorrectAnswers.map((item, i) => (
                 <div
                   key={i}
-                  className="rounded-xl border border-black/[0.06] dark:border-white/[0.08] bg-white/50 dark:bg-zinc-950/40 p-3 text-xs space-y-1"
+                  className="rounded-[16px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3.5 text-xs space-y-1.5"
                 >
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm">
                       {item.word.word}
                     </span>
-                    <span className="rounded-md bg-black/[0.04] dark:bg-white/[0.06] px-1.5 py-0.5 text-[10px] font-semibold text-zinc-500 dark:text-zinc-400">
+                    <span className="rounded-md bg-white/80 dark:bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold text-zinc-600 dark:text-zinc-300 shadow-2xs">
                       {item.word.wordType.join(", ")}
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-1.5 pt-0.5">
                     {item.userAnswer !== "Time's up!" && (
-                      <span className="rounded-md bg-rose-500/10 text-rose-700 dark:text-rose-300 px-2 py-0.5 font-medium">
+                      <span className="rounded-full bg-rose-500/10 text-rose-700 dark:text-rose-300 px-2.5 py-0.5 font-medium">
                         {t("আপনার উত্তর:", "Your answer:")} {item.userAnswer}
                       </span>
                     )}
                     {item.userAnswer === "Time's up!" && (
-                      <span className="rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 px-2 py-0.5 font-medium">
+                      <span className="rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 px-2.5 py-0.5 font-medium">
                         {t("সময় শেষ", "Time expired")}
                       </span>
                     )}
-                    <span className="rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 font-medium">
+                    <span className="rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 px-2.5 py-0.5 font-medium">
                       {t("সঠিক অর্থ:", "Correct:")} {item.correctMeaning}
                     </span>
                   </div>
@@ -1604,11 +1600,11 @@ function ResultsView({
         )}
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-1">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-2">
           <Button
             onClick={onRestart}
             size="lg"
-            className="w-full sm:w-auto px-6 h-10 text-xs sm:text-sm bg-sky-600 hover:bg-sky-700 text-white shadow-md shadow-sky-500/20 cursor-pointer"
+            className="w-full sm:w-auto px-6 h-11 rounded-full bg-[#242423] text-white hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#242423] font-semibold text-xs sm:text-sm shadow-sm cursor-pointer"
           >
             {t("আবার চেষ্টা করুন", "Try Again")}
           </Button>
@@ -1616,7 +1612,7 @@ function ResultsView({
             asChild
             variant="outline"
             size="lg"
-            className="w-full sm:w-auto px-6 h-10 text-xs sm:text-sm border-black/[0.08] dark:border-white/[0.1] cursor-pointer"
+            className="w-full sm:w-auto px-6 h-11 rounded-full border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] text-xs sm:text-sm font-semibold cursor-pointer shadow-2xs"
           >
             <Link href="/quiz">
               {t("সব কুইজ", "All Quizzes")}
@@ -1626,7 +1622,7 @@ function ResultsView({
             asChild
             variant="ghost"
             size="lg"
-            className="w-full sm:w-auto px-6 h-10 text-xs sm:text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
+            className="w-full sm:w-auto px-6 h-11 rounded-full text-xs sm:text-sm text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 cursor-pointer"
           >
             <Link href="/">
               {t("হোম", "Home")}

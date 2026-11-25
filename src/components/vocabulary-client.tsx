@@ -79,7 +79,12 @@ export interface VocabularyClientProps {
 
 export function VocabularyClient({ facets }: VocabularyClientProps) {
   const { learnedIds, loaded: learnedLoaded } = useLearnedWords();
-  const { todayLearned, streak, dailyGoal, loaded: goalLoaded } = useDailyGoal();
+  const {
+    todayLearned,
+    streak,
+    dailyGoal,
+    loaded: goalLoaded,
+  } = useDailyGoal();
   const t = useT();
 
   const {
@@ -95,8 +100,14 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
 
   const totalWords = facets?.totalWords ?? 0;
   const totalLearned = learnedIds.size;
-  const overallPct = totalWords > 0 ? Math.min(100, Math.round((totalLearned / totalWords) * 100)) : 0;
-  const goalPct = dailyGoal > 0 ? Math.min(100, Math.round((todayLearned / dailyGoal) * 100)) : 0;
+  const overallPct =
+    totalWords > 0
+      ? Math.min(100, Math.round((totalLearned / totalWords) * 100))
+      : 0;
+  const goalPct =
+    dailyGoal > 0
+      ? Math.min(100, Math.round((todayLearned / dailyGoal) * 100))
+      : 0;
   const categoryLabel = facets?.categoryLabel ?? "Oxford 5000";
 
   // Filter levels by tier
@@ -105,9 +116,12 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
     return groups
       .map((group) => {
         const matchingLevels = group.levels.filter((item) => {
-          if (activeTier === "beginner") return ["A1", "A2"].includes(item.level);
-          if (activeTier === "intermediate") return ["B1", "B2"].includes(item.level);
-          if (activeTier === "advanced") return ["C1", "C2"].includes(item.level);
+          if (activeTier === "beginner")
+            return ["A1", "A2"].includes(item.level);
+          if (activeTier === "intermediate")
+            return ["B1", "B2"].includes(item.level);
+          if (activeTier === "advanced")
+            return ["C1", "C2"].includes(item.level);
           return true;
         });
 
@@ -128,7 +142,7 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
           {/* LEFT COLUMN: Overview & Activity Hub                     */}
           {/* ======================================================== */}
           <div className="w-full">
-            <div className="rounded-[22px] border border-black/[0.06] bg-white p-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[26px] sm:p-3.5">
+            <div className="rounded-[22px] border border-black/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[26px] sm:p-5">
               {/* Inset Header */}
               <div className="rounded-[18px] bg-[#f1f1ef] p-2.5 dark:bg-[#252528] sm:rounded-[20px] sm:p-3.5">
                 <div className="flex items-center gap-2.5 sm:gap-3">
@@ -137,9 +151,7 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
                     <div className="flex size-full items-center justify-center rounded-[12px] bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423] sm:rounded-[14px]">
                       <GraduationCap className="size-5 sm:size-6" />
                     </div>
-                    <span
-                      className="absolute -bottom-px -right-px grid size-3 place-items-center sm:size-3.5"
-                    >
+                    <span className="absolute -bottom-px -right-px grid size-3 place-items-center sm:size-3.5">
                       <span
                         className="relative size-full rounded-full ring-2 ring-white dark:ring-[#252528]"
                         style={{ backgroundColor: "rgb(16, 185, 129)" }}
@@ -157,7 +169,12 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
                     </div>
                     <p className="flex items-center gap-1.5 text-[11px] leading-4 text-[#242423]/60 dark:text-zinc-400 sm:text-[12px]">
                       <span className="truncate">{categoryLabel}</span>
-                      <span aria-hidden="true" className="text-[#242423]/30 dark:text-zinc-600">·</span>
+                      <span
+                        aria-hidden="true"
+                        className="text-[#242423]/30 dark:text-zinc-600"
+                      >
+                        ·
+                      </span>
                       <span className="truncate font-medium text-emerald-600 dark:text-emerald-400">
                         {t("CEFR মানসম্মত", "CEFR Aligned")}
                       </span>
@@ -268,13 +285,18 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
               </div>
 
               {/* Daily Target Progress Bar */}
-              <div data-tour="daily-goal" className="mt-2 rounded-[16px] bg-[#242423]/[0.03] p-2.5 dark:bg-white/[0.04] sm:mt-2.5 sm:rounded-[18px] sm:p-3">
+              <div
+                data-tour="daily-goal"
+                className="mt-2 rounded-[16px] bg-[#242423]/[0.03] p-2.5 dark:bg-white/[0.04] sm:mt-2.5 sm:rounded-[18px] sm:p-3"
+              >
                 <div className="flex items-center justify-between text-[11px] sm:text-[12px]">
                   <span className="font-semibold text-[#242423] dark:text-[#f3f3f2]">
                     {t("দৈনিক লক্ষ্য", "Daily Target")}
                   </span>
                   <span className="tabular-nums text-[#242423]/60 dark:text-zinc-400">
-                    {goalLoaded ? `${todayLearned}/${dailyGoal} ${t("শব্দ", "words")}` : "…"}
+                    {goalLoaded
+                      ? `${todayLearned}/${dailyGoal} ${t("শব্দ", "words")}`
+                      : "…"}
                   </span>
                 </div>
 
@@ -294,7 +316,11 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
                 <div className="mt-2 flex items-center justify-between text-[11px] sm:text-[12px]">
                   <span className="flex items-center gap-1 font-medium text-[#242423]/70 dark:text-zinc-400">
                     <Flame className="size-3.5 fill-amber-500 text-amber-500" />
-                    <span>{goalLoaded ? `${streak} ${t("দিনের ধারাবাহিকতা", "day streak")}` : "…"}</span>
+                    <span>
+                      {goalLoaded
+                        ? `${streak} ${t("দিনের ধারাবাহিকতা", "day streak")}`
+                        : "…"}
+                    </span>
                   </span>
                   <span className="font-semibold tabular-nums text-[#242423] dark:text-[#f3f3f2]">
                     {goalLoaded ? `${goalPct}%` : "0%"}
@@ -336,7 +362,7 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
           {/* RIGHT COLUMN: Workspaces-Style Level List                */}
           {/* ======================================================== */}
           <div className="w-full">
-            <div className="rounded-[22px] border border-black/[0.06] bg-white p-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[26px] sm:p-3.5">
+            <div className="rounded-[22px] border border-black/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[26px] sm:p-5">
               {/* Inset Header for CEFR Levels */}
               <div className="rounded-[18px] bg-[#f1f1ef] p-2.5 dark:bg-[#252528] sm:rounded-[20px] sm:p-3.5">
                 <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
@@ -345,7 +371,12 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
                       {t("CEFR লেভেলসমূহ", "CEFR Levels")}
                     </h2>
                     <p className="flex items-center gap-1.5 text-[11px] leading-4 text-[#242423]/60 dark:text-zinc-400 sm:text-[12px]">
-                      <span>{t("লেভেলে ট্যাপ করে শব্দ শিখুন", "Tap any level to explore vocabulary")}</span>
+                      <span>
+                        {t(
+                          "লেভেলে ট্যাপ করে শব্দ শিখুন",
+                          "Tap any level to explore vocabulary",
+                        )}
+                      </span>
                     </p>
                   </div>
 
@@ -363,7 +394,7 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
                         "relative flex h-7 cursor-pointer items-center justify-center rounded-full text-[11px] font-medium outline-none transition-colors duration-150 sm:h-8 sm:px-3 sm:text-[12px]",
                         activeTier === "all"
                           ? "text-[#242423] dark:text-[#f3f3f2]"
-                          : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-200"
+                          : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-200",
                       )}
                     >
                       {activeTier === "all" && (
@@ -379,7 +410,7 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
                         "relative flex h-7 cursor-pointer items-center justify-center rounded-full text-[11px] font-medium outline-none transition-colors duration-150 sm:h-8 sm:px-3 sm:text-[12px]",
                         activeTier === "beginner"
                           ? "text-[#242423] dark:text-[#f3f3f2]"
-                          : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-200"
+                          : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-200",
                       )}
                     >
                       {activeTier === "beginner" && (
@@ -395,7 +426,7 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
                         "relative flex h-7 cursor-pointer items-center justify-center rounded-full text-[11px] font-medium outline-none transition-colors duration-150 sm:h-8 sm:px-3 sm:text-[12px]",
                         activeTier === "intermediate"
                           ? "text-[#242423] dark:text-[#f3f3f2]"
-                          : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-200"
+                          : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-200",
                       )}
                     >
                       {activeTier === "intermediate" && (
@@ -411,7 +442,7 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
                         "relative flex h-7 cursor-pointer items-center justify-center rounded-full text-[11px] font-medium outline-none transition-colors duration-150 sm:h-8 sm:px-3 sm:text-[12px]",
                         activeTier === "advanced"
                           ? "text-[#242423] dark:text-[#f3f3f2]"
-                          : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-200"
+                          : "text-[#242423]/55 hover:text-[#242423] dark:text-zinc-400 dark:hover:text-zinc-200",
                       )}
                     >
                       {activeTier === "advanced" && (
@@ -424,12 +455,19 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
               </div>
 
               {/* Grouped Level Items */}
-              <div data-tour="level-cards" className="mt-2 sm:mt-2.5 flex flex-col gap-1">
+              <div
+                data-tour="level-cards"
+                className="mt-2 sm:mt-2.5 flex flex-col gap-1"
+              >
                 {filteredGroups.map((group) => (
-                  <div key={group.category || group.label} className="flex flex-col gap-1">
+                  <div
+                    key={group.category || group.label}
+                    className="flex flex-col gap-1"
+                  >
                     {/* Section Caption */}
                     <p className="px-2 pb-0.5 pt-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#242423]/45 dark:text-zinc-500">
-                      {group.label} ({group.total.toLocaleString()} {t("শব্দ", "words")})
+                      {group.label} ({group.total.toLocaleString()}{" "}
+                      {t("শব্দ", "words")})
                     </p>
 
                     {/* Level Rows */}
@@ -443,7 +481,9 @@ export function VocabularyClient({ facets }: VocabularyClientProps) {
                             href={`/vocabulary/${lv.toLowerCase()}`}
                             onClick={() =>
                               setSelectedLevel(
-                                lv.toUpperCase() as Parameters<typeof setSelectedLevel>[0]
+                                lv.toUpperCase() as Parameters<
+                                  typeof setSelectedLevel
+                                >[0],
                               )
                             }
                             className="group relative flex min-h-[56px] w-full cursor-pointer items-center justify-between rounded-[14px] px-3 py-2 text-left outline-none transition-all duration-150 hover:bg-[#242423]/[0.04] focus-visible:ring-2 focus-visible:ring-[#242423]/30 active:scale-[0.99] dark:hover:bg-white/[0.05] sm:min-h-[60px] sm:rounded-[16px] sm:px-3.5 sm:py-2.5"

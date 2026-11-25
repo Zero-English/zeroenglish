@@ -48,10 +48,19 @@ import type {
   QuizExamIncorrectAnswer,
   QuizExamSubmitResponse,
 } from "@/types/quiz-exam";
+import { PASTEL_STYLES } from "@/components/quiz-catalog";
 
 const MODE_META: Record<
   string,
-  { label: string; labelBn: string; icon: LucideIcon; gradient: string; text: string; bg: string; border: string }
+  {
+    label: string;
+    labelBn: string;
+    icon: LucideIcon;
+    gradient: string;
+    text: string;
+    bg: string;
+    border: string;
+  }
 > = {
   PRACTICE: {
     label: "Practice Exam",
@@ -83,26 +92,30 @@ const MODE_META: Record<
 };
 
 function GoogleIcon({ className }: { className?: string }) {
-    return (
-        <svg viewBox="0 0 24 24" className={className ?? "h-4 w-4"} aria-hidden="true">
-            <path
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                fill="#4285F4"
-            />
-            <path
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                fill="#34A853"
-            />
-            <path
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                fill="#FBBC05"
-            />
-            <path
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                fill="#EA4335"
-            />
-        </svg>
-    );
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className ?? "h-4 w-4"}
+      aria-hidden="true"
+    >
+      <path
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+        fill="#4285F4"
+      />
+      <path
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+        fill="#34A853"
+      />
+      <path
+        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+        fill="#FBBC05"
+      />
+      <path
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+        fill="#EA4335"
+      />
+    </svg>
+  );
 }
 
 function requestQuizFullscreen(): void {
@@ -202,10 +215,12 @@ function recordExamAbandon(): void {
   const timeTotalQuiz = state.startedAt
     ? Math.round((Date.now() - state.startedAt) / 1000)
     : total * state.timePerQuestion;
-  const answers = Object.entries(state.answers).map(([questionId, selectedOption]) => ({
-    questionId: Number(questionId),
-    selectedOption,
-  }));
+  const answers = Object.entries(state.answers).map(
+    ([questionId, selectedOption]) => ({
+      questionId: Number(questionId),
+      selectedOption,
+    }),
+  );
 
   void submitExamResult({
     clientId: `ab-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
@@ -310,8 +325,10 @@ function sortExams(exams: QuizExamPublicItem[]): QuizExamPublicItem[] {
     const ac = new Date(a.scheduledClosingTime ?? "").getTime();
     const bo = new Date(b.scheduledOpeningTime ?? "").getTime();
     const bc = new Date(b.scheduledClosingTime ?? "").getTime();
-    const aOpen = Number.isFinite(ao) && Number.isFinite(ac) && now >= ao && now < ac;
-    const bOpen = Number.isFinite(bo) && Number.isFinite(bc) && now >= bo && now < bc;
+    const aOpen =
+      Number.isFinite(ao) && Number.isFinite(ac) && now >= ao && now < ac;
+    const bOpen =
+      Number.isFinite(bo) && Number.isFinite(bc) && now >= bo && now < bc;
     if (aOpen && !bOpen) return -1;
     if (!aOpen && bOpen) return 1;
     if (aOpen && bOpen) return ac - bc;
@@ -320,7 +337,7 @@ function sortExams(exams: QuizExamPublicItem[]): QuizExamPublicItem[] {
 }
 
 const CARD =
-  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
+  "rounded-[26px] sm:rounded-[30px] border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] shadow-xs";
 
 function ExamCardItem({
   exam,
@@ -341,125 +358,103 @@ function ExamCardItem({
 
   const opening = new Date(exam.scheduledOpeningTime ?? "").getTime();
   const closing = new Date(exam.scheduledClosingTime ?? "").getTime();
-  const isOpen = Number.isFinite(opening) && Number.isFinite(closing) && now >= opening && now < closing;
+  const isOpen =
+    Number.isFinite(opening) &&
+    Number.isFinite(closing) &&
+    now >= opening &&
+    now < closing;
   const countdownTarget = isOpen ? closing : opening;
   const msLeft = Number.isFinite(countdownTarget) ? countdownTarget - now : 0;
+  const pastelClass = PASTEL_STYLES[index % PASTEL_STYLES.length];
 
   return (
     <div
-      className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60 transition-all duration-300 hover:scale-[1.015] hover:-translate-y-0.5"
-      )}
+      className="group relative flex flex-col justify-between overflow-hidden rounded-[22px] sm:rounded-[26px] border border-black/[0.06] bg-white dark:border-white/[0.08] dark:bg-[#1c1c1e] p-5 sm:p-6 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_8px_24px_-8px_rgba(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.08)] hover:-translate-y-0.5"
       style={{ animationDelay: `${index * 0.05}s` }}
     >
-      <div
-        className={cn(
-          "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-[0.04] dark:group-hover:opacity-[0.08] transition-opacity duration-300",
-          meta.gradient
-        )}
-      />
-
-      <div className="relative flex items-center justify-between p-5 sm:p-6 pb-3">
-        <div
-          className={cn(
-            "flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-gradient-to-br text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_4px_12px_-2px_rgba(16,24,40,0.2)]",
-            meta.gradient
-          )}
-        >
-          <Icon className="h-6 w-6" />
-        </div>
-        <div className="flex flex-col items-end gap-1.5">
-          <span
+      <div>
+        <div className="flex items-start justify-between gap-3 pb-3">
+          <div
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-semibold",
-              isOpen
-                ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"
-                : "bg-sky-50 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300"
+              "size-12 rounded-[14px] border shadow-2xs flex items-center justify-center shrink-0 transition-transform group-hover:scale-105",
+              pastelClass,
             )}
           >
-            <span
-              className={cn(
-                "h-1.5 w-1.5 rounded-full",
-                isOpen ? "bg-emerald-500 animate-pulse" : "bg-sky-400"
-              )}
-            />
-            {isOpen ? t("খোলা আছে (Live)", "Live / Open") : t("আসন্ন (Upcoming)", "Upcoming")}
-          </span>
-          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-400 dark:text-zinc-500 tabular-nums">
-            <Timer className="h-3 w-3" />
-            {Math.floor(exam.timePerQuestion)}s / {t("প্রশ্ন", "q")}
-          </span>
+            <Icon className="h-6 w-6" />
+          </div>
+          <div className="flex flex-col items-end gap-1.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/[0.04] dark:bg-white/[0.06] px-2.5 py-0.5 text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">
+              <span
+                className={cn(
+                  "h-1.5 w-1.5 rounded-full",
+                  isOpen ? "bg-emerald-500 animate-pulse" : "bg-sky-400",
+                )}
+              />
+              {isOpen
+                ? t("খোলা আছে (Live)", "Live / Open")
+                : t("আসন্ন (Upcoming)", "Upcoming")}
+            </span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-500 dark:text-zinc-400 tabular-nums">
+              <Timer className="h-3 w-3" />
+              {Math.floor(exam.timePerQuestion)}s / {t("প্রশ্ন", "q")}
+            </span>
+          </div>
+        </div>
+
+        <div className="min-w-0">
+          <h3 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+            {exam.title}
+          </h3>
+          <p className="text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400 mt-0.5">
+            {t(meta.labelBn, meta.label)}
+          </p>
+
+          <div className="flex flex-wrap items-center gap-1.5 mt-3">
+            <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-black/[0.03] dark:bg-white/[0.05] text-zinc-600 dark:text-zinc-300">
+              <ListChecks className="h-3 w-3 text-amber-500" />
+              {exam.questionCount} {t("প্রশ্ন", "questions")}
+            </span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-black/[0.03] dark:bg-white/[0.05] text-zinc-600 dark:text-zinc-300">
+              {exam.levels.join(", ")}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="relative flex flex-1 flex-col px-5 sm:px-6 pb-5">
-        <h3 className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-          {exam.title}
-        </h3>
-        <p className={cn("text-xs sm:text-sm font-medium mt-0.5", meta.text)}>
-          {t(meta.labelBn, meta.label)}
-        </p>
-
-        <div className="flex flex-wrap items-center gap-1.5 mt-3">
-          <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-black/[0.03] dark:bg-white/[0.05] text-zinc-600 dark:text-zinc-300">
-            <ListChecks className="h-3 w-3 text-orange-500" />
-            {exam.questionCount} {t("প্রশ্ন", "questions")}
-          </span>
-          <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md bg-black/[0.03] dark:bg-white/[0.05] text-zinc-600 dark:text-zinc-300">
-            {exam.levels.join(", ")}
-          </span>
-        </div>
-
-        <div
-          className={cn(
-            "mt-4 rounded-xl border px-3 py-2 flex items-center gap-2 text-xs",
-            isOpen
-              ? "bg-amber-50/70 border-amber-200 dark:bg-amber-950/20 dark:border-amber-800"
-              : "bg-sky-50/70 border-sky-200 dark:bg-sky-950/20 dark:border-sky-800"
-          )}
-        >
+      <div className="mt-4 pt-2 space-y-3">
+        <div className="rounded-[14px] bg-[#f8f8f6] dark:bg-[#252528] px-3 py-2 flex items-center gap-2 text-xs border border-black/[0.04] dark:border-white/[0.06]">
           {isOpen ? (
-            <Hourglass className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+            <Hourglass className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
           ) : (
-            <CalendarClock className="h-3.5 w-3.5 text-sky-500 shrink-0" />
+            <CalendarClock className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
           )}
-          <span
-            className={cn(
-              "font-semibold",
-              isOpen ? "text-amber-700 dark:text-amber-300" : "text-sky-700 dark:text-sky-300"
-            )}
-          >
-            {isOpen ? t("শেষ হতে বাকি:", "Closes in:") : t("শুরু হতে বাকি:", "Opens in:")}
+          <span className="font-semibold text-zinc-600 dark:text-zinc-400">
+            {isOpen
+              ? t("শেষ হতে বাকি:", "Closes in:")
+              : t("শুরু হতে বাকি:", "Opens in:")}
           </span>
-          <span
-            className={cn(
-              "ml-auto font-bold tabular-nums",
-              isOpen ? "text-amber-800 dark:text-amber-200" : "text-sky-800 dark:text-sky-200"
-            )}
-          >
+          <span className="ml-auto font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
             {formatCountdown(msLeft)}
           </span>
         </div>
 
-        <div className="mt-4 pt-2">
-          <Button
-            onClick={() => void onStart(exam)}
-            disabled={loading || !isOpen}
-            size="lg"
-            className={cn(
-              "w-full h-11 text-sm font-semibold shadow-md transition-all cursor-pointer",
-              isOpen
-                ? "bg-orange-600 hover:bg-orange-700 text-white shadow-orange-500/20"
-                : "bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
-            )}
-          >
-            {loading
-              ? t("লোড হচ্ছে...", "Loading...")
-              : isOpen
-                ? t("পরীক্ষা শুরু করুন", "Start Exam")
-                : t("নির্ধারিত সময়ে শুরু হবে", "Scheduled")}
-          </Button>
-        </div>
+        <Button
+          onClick={() => void onStart(exam)}
+          disabled={loading || !isOpen}
+          size="lg"
+          className={cn(
+            "w-full h-11 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm",
+            isOpen
+              ? "bg-[#242423] text-white hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#242423]"
+              : "bg-black/[0.04] text-zinc-400 dark:bg-white/[0.04] dark:text-zinc-500",
+          )}
+        >
+          {loading
+            ? t("লোড হচ্ছে...", "Loading...")
+            : isOpen
+              ? t("পরীক্ষা শুরু করুন", "Start Exam")
+              : t("নির্ধারিত সময়ে শুরু হবে", "Scheduled")}
+        </Button>
       </div>
     </div>
   );
@@ -489,7 +484,11 @@ function ExamListView() {
           success?: boolean;
         };
         if (!cancelled) {
-          setExams(body.success && Array.isArray(body.data) ? sortExams(body.data) : []);
+          setExams(
+            body.success && Array.isArray(body.data)
+              ? sortExams(body.data)
+              : [],
+          );
         }
       } catch {
         if (!cancelled) setExams([]);
@@ -513,7 +512,10 @@ function ExamListView() {
       });
     } catch {
       toast.error(
-        t("কিছু ভুল হয়েছে। আবার চেষ্টা করুন।", "Something went wrong. Please try again.")
+        t(
+          "কিছু ভুল হয়েছে। আবার চেষ্টা করুন।",
+          "Something went wrong. Please try again.",
+        ),
       );
     } finally {
       setAuthBusy(false);
@@ -529,8 +531,8 @@ function ExamListView() {
       toast.error(
         t(
           "পরীক্ষা দেওয়ার জন্য ইন্টারনেট সংযোগ প্রয়োজন।",
-          "An internet connection is required to take the exam."
-        )
+          "An internet connection is required to take the exam.",
+        ),
       );
       return;
     }
@@ -545,7 +547,10 @@ function ExamListView() {
         success?: boolean;
       };
       if (!res.ok || !body.success || !body.data) {
-        toast.error(body.message ?? t("পরীক্ষা শুরু করা যায়নি", "Couldn't start the exam"));
+        toast.error(
+          body.message ??
+            t("পরীক্ষা শুরু করা যায়নি", "Couldn't start the exam"),
+        );
         return;
       }
       const questions = toTakeQuestions(body.data);
@@ -581,27 +586,42 @@ function ExamListView() {
   };
 
   return (
-    <div className="relative min-h-dvh overflow-hidden">
-      <div className="relative px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl w-full">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-            <div className="space-y-1">
-              <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                {t("কুইজ পরীক্ষা", "Quiz Exams")}
-              </h1>
-              <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-                {t(
-                  "সাপ্তাহিক ও নির্ধারিত সময়সূচীর লাইভ পরীক্ষায় অংশ নিন এবং আপনার দক্ষতা যাচাই করুন।",
-                  "Join live scheduled tests, timed drills, and test your vocabulary mastery."
-                )}
-              </p>
+    <div className="relative min-h-dvh overflow-hidden bg-[#f8f8f6] text-[#242423] transition-colors duration-200 dark:bg-[#0c0c0e] dark:text-[#f3f3f2]">
+      <div className="relative px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl w-full space-y-5">
+          {/* Inset Sunken Header */}
+          <div className="rounded-[18px] sm:rounded-[22px] bg-[#f1f1ef] dark:bg-[#252528] p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-black/[0.04] dark:border-white/[0.06]">
+            <div className="flex items-center gap-3">
+              <div className="size-11 rounded-[14px] bg-white text-[#242423] shadow-2xs dark:bg-white/10 dark:text-[#f3f3f2] flex items-center justify-center shrink-0">
+                <ClipboardList className="size-5" />
+              </div>
+              <div>
+                <h1 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                  {t("কুইজ পরীক্ষা", "Quiz Exams")}
+                </h1>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  {t(
+                    "সাপ্তাহিক ও নির্ধারিত সময়সূচীর লাইভ পরীক্ষায় অংশ নিন এবং আপনার দক্ষতা যাচাই করুন।",
+                    "Join live scheduled tests, timed drills, and test your vocabulary mastery.",
+                  )}
+                </p>
+              </div>
             </div>
-            {exams && exams.length > 0 && (
-              <span className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.06] px-3 py-1 text-xs font-semibold text-zinc-600 dark:text-zinc-300 tabular-nums">
-                <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-                {t(`${exams.length}টি পরীক্ষা`, `${exams.length} exams`)}
-              </span>
-            )}
+            <div className="flex items-center gap-2 self-start sm:self-center">
+              {exams && exams.length > 0 && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] px-3 py-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300 tabular-nums shadow-2xs">
+                  <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+                  {t(`${exams.length}টি পরীক্ষা`, `${exams.length} exams`)}
+                </span>
+              )}
+              <Link
+                href="/quiz"
+                className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] px-3.5 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-200 transition-colors shadow-2xs"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                {t("সব কুইজ", "All Quizzes")}
+              </Link>
+            </div>
           </div>
 
           {exams === null ? (
@@ -609,30 +629,36 @@ function ExamListView() {
               {[0, 1].map((i) => (
                 <div
                   key={i}
-                  className="rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-zinc-200/60 dark:bg-zinc-800/40 animate-pulse h-56"
+                  className="rounded-[22px] sm:rounded-[26px] border border-black/[0.06] dark:border-white/[0.08] bg-zinc-200/60 dark:bg-zinc-800/40 animate-pulse h-56"
                 />
               ))}
             </div>
           ) : exams.length === 0 ? (
             <div className={cn(CARD, "p-8 sm:p-10 text-center")}>
-              <div className="inline-flex items-center justify-center h-13 w-13 rounded-2xl bg-zinc-100 dark:bg-zinc-800 mb-4">
+              <div className="inline-flex items-center justify-center size-13 rounded-2xl bg-[#f1f1ef] dark:bg-[#252528] mb-4">
                 <Clock3 className="h-6 w-6 text-zinc-400" />
               </div>
               <h3 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 mb-1">
-                {t("বর্তমানে কোনো নির্ধারিত পরীক্ষা নেই", "No exams are scheduled right now")}
+                {t(
+                  "বর্তমানে কোনো নির্ধারিত পরীক্ষা নেই",
+                  "No exams are scheduled right now",
+                )}
               </h3>
               <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
                 {t(
                   "নির্ধারিত পরীক্ষা আসন্ন হলে সেগুলো এখানে কাউন্টডাউনসহ দেখা যাবে।",
-                  "Upcoming scheduled exams will appear here with a live countdown."
+                  "Upcoming scheduled exams will appear here with a live countdown.",
                 )}
               </p>
-              <Link href="/quiz" className="inline-flex mt-6">
-                <Button variant="outline" className="border-black/[0.08] dark:border-white/[0.1] cursor-pointer">
+              <div className="mt-6 flex justify-center">
+                <Link
+                  href="/quiz"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] px-5 py-2.5 text-xs sm:text-sm font-semibold text-zinc-700 dark:text-zinc-200 transition-colors shadow-2xs"
+                >
                   <ArrowLeft className="h-4 w-4 mr-1.5" />
                   {t("কুইজে ফিরে যান", "Back to Quiz")}
-                </Button>
-              </Link>
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
@@ -649,7 +675,12 @@ function ExamListView() {
           )}
         </div>
 
-        <Drawer open={promptOpen} onOpenChange={(open) => { if (!open) setAuthPrompt(null); }}>
+        <Drawer
+          open={promptOpen}
+          onOpenChange={(open) => {
+            if (!open) setAuthPrompt(null);
+          }}
+        >
           <DrawerContent className="mx-auto max-w-lg rounded-t-3xl">
             <div className="px-6 pb-8 pt-2">
               <div className="mb-5 flex justify-center">
@@ -658,12 +689,15 @@ function ExamListView() {
                 </div>
               </div>
               <DrawerTitle className="text-center text-base font-bold sm:text-lg">
-                {t("পরীক্ষা দেওয়ার জন্য সাইন-ইন দরকার", "Sign in to take the exam")}
+                {t(
+                  "পরীক্ষা দেওয়ার জন্য সাইন-ইন দরকার",
+                  "Sign in to take the exam",
+                )}
               </DrawerTitle>
               <DrawerDescription className="mt-1.5 text-center text-xs sm:text-sm leading-relaxed">
                 {t(
                   "পরীক্ষায় অংশ নেওয়ার জন্য একটি Google অ্যাকাউন্ট দিয়ে সাইন-ইন করতে হবে।",
-                  "You need to sign in with a Google account to take the exam."
+                  "You need to sign in with a Google account to take the exam.",
                 )}
               </DrawerDescription>
               <div className="mt-5 space-y-2">
@@ -673,11 +707,7 @@ function ExamListView() {
                   onClick={() => void handleAuthAction()}
                   disabled={authBusy}
                 >
-                  {authBusy ? (
-                    <Classic className="h-4 w-4" />
-                  ) : (
-                    <GoogleIcon />
-                  )}
+                  {authBusy ? <Classic className="h-4 w-4" /> : <GoogleIcon />}
                   {t("Google দিয়ে চালিয়ে যান", "Continue with Google")}
                 </Button>
                 <DrawerClose asChild>
@@ -720,7 +750,8 @@ function ExamQuizView({
   const timePerQuestion = useQuizExamStore((s) => s.timePerQuestion);
   const answeredCount = useQuizExamStore((s) => Object.keys(s.answers).length);
 
-  const progress = totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
+  const progress =
+    totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
   const letters = ["A", "B", "C", "D", "E", "F"];
 
   const handleOptionClick = (option: string) => {
@@ -728,7 +759,10 @@ function ExamQuizView({
     useQuizExamStore.setState({
       selectedAnswer: option,
       isAnswered: true,
-      answers: { ...useQuizExamStore.getState().answers, [question.id]: option },
+      answers: {
+        ...useQuizExamStore.getState().answers,
+        [question.id]: option,
+      },
     });
   };
 
@@ -801,7 +835,7 @@ function ExamQuizView({
   }, []);
 
   return (
-    <div className="relative min-h-dvh flex flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative min-h-dvh flex flex-col bg-[#f8f8f6] text-[#242423] transition-colors duration-200 dark:bg-[#0c0c0e] dark:text-[#f3f3f2] px-4 py-8 sm:px-6 lg:px-8">
       <div className="w-full max-w-3xl mx-auto">
         <div className={cn(CARD, "p-5 sm:p-7 relative overflow-hidden")}>
           {/* Top HUD */}
@@ -818,7 +852,7 @@ function ExamQuizView({
                     ? "bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300 animate-pulse"
                     : timeLeft <= 10
                       ? "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"
-                      : "bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-300"
+                      : "bg-black/[0.04] dark:bg-white/[0.06] text-zinc-600 dark:text-zinc-300",
                 )}
               >
                 <Timer className="h-3 w-3" />
@@ -840,11 +874,13 @@ function ExamQuizView({
           </div>
 
           {/* Progress bar */}
-          <div className="h-1.5 bg-black/[0.04] dark:bg-white/[0.06] rounded-full mb-6 overflow-hidden">
+          <div className="relative h-1.5 bg-black/[0.04] dark:bg-white/[0.06] rounded-full mb-6 overflow-hidden">
             <div
-              className="h-full rounded-full transition-all duration-300 ease-out bg-gradient-to-r from-violet-500 to-purple-500"
+              className="h-full rounded-full transition-all duration-300 ease-out bg-[#242423] dark:bg-white relative overflow-hidden"
               style={{ width: `${progress}%` }}
-            />
+            >
+              <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+            </div>
           </div>
 
           {/* Question Text */}
@@ -858,7 +894,7 @@ function ExamQuizView({
                 className="p-1.5 rounded-lg text-zinc-400 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-black/[0.04] dark:bg-white/[0.06] transition-colors cursor-pointer"
                 title={t("উচ্চারণ শুনুন", "Pronounce")}
               >
-                <Volume2 className="h-5 w-5" />
+                <Volume2 className="h-4.5 w-4.5" />
               </button>
             </div>
           </div>
@@ -869,7 +905,7 @@ function ExamQuizView({
               const isSelected = isAnswered && option === selectedAnswer;
 
               const optionStyle = isSelected
-                ? "border-violet-500 bg-violet-50 dark:bg-violet-950/40 text-violet-800 dark:text-violet-200 ring-1 ring-violet-500"
+                ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 ring-1 ring-emerald-500 font-semibold"
                 : "border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.04] dark:hover:bg-white/[0.08]";
 
               return (
@@ -878,16 +914,16 @@ function ExamQuizView({
                   onClick={() => handleOptionClick(option)}
                   disabled={isAnswered}
                   className={cn(
-                    "w-full flex items-center gap-3 text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer disabled:cursor-default",
-                    optionStyle
+                    "w-full flex items-center gap-3 text-left p-3.5 sm:p-4 rounded-[18px] sm:rounded-[20px] border transition-all duration-200 cursor-pointer disabled:cursor-default",
+                    optionStyle,
                   )}
                 >
                   <span
                     className={cn(
-                      "flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold",
+                      "flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-[10px] text-xs font-bold shadow-2xs",
                       isSelected
-                        ? "bg-violet-500 text-white"
-                        : "bg-black/[0.05] dark:bg-white/[0.08] text-zinc-600 dark:text-zinc-300"
+                        ? "bg-emerald-500 text-white"
+                        : "bg-white dark:bg-white/10 text-zinc-700 dark:text-zinc-200",
                     )}
                   >
                     {letters[i] ?? ""}
@@ -907,7 +943,7 @@ function ExamQuizView({
               <Button
                 onClick={handleNext}
                 size="lg"
-                className="px-8 bg-violet-600 hover:bg-violet-700 text-white shadow-md shadow-violet-500/20 cursor-pointer"
+                className="px-8 rounded-full bg-[#242423] text-white hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#242423] font-semibold text-xs sm:text-sm shadow-sm cursor-pointer"
               >
                 {currentIndex >= totalQuestions - 1
                   ? t("ফলাফল দেখুন", "See Results")
@@ -925,7 +961,7 @@ function ExamQuizView({
         title={t("পরীক্ষাটি ছেড়ে যাবেন?", "Exit the exam?")}
         description={t(
           "আপনার অগ্রগতি সংরক্ষিত হবে না। আপনি কি নিশ্চিতভাবে প্রস্থান করতে চান?",
-          "Your progress won't be saved. Are you sure you want to exit?"
+          "Your progress won't be saved. Are you sure you want to exit?",
         )}
         confirmText={t("প্রস্থান করুন", "Exit")}
         cancelText={t("চালিয়ে যান", "Keep going")}
@@ -963,7 +999,9 @@ function ExamResultsView({
         ? Math.round((score / total) * 100)
         : 0;
 
-  const [saveState, setSaveState] = useState<"saving" | "saved" | "error">("saving");
+  const [saveState, setSaveState] = useState<"saving" | "saved" | "error">(
+    "saving",
+  );
   const attemptingRef = useRef(false);
 
   const record = useCallback(async () => {
@@ -985,10 +1023,12 @@ function ExamResultsView({
       ? Math.round((Date.now() - state.startedAt) / 1000)
       : total * timePerQuestion;
     try {
-      const answers = Object.entries(state.answers).map(([questionId, selectedOption]) => ({
-        questionId: Number(questionId),
-        selectedOption,
-      }));
+      const answers = Object.entries(state.answers).map(
+        ([questionId, selectedOption]) => ({
+          questionId: Number(questionId),
+          selectedOption,
+        }),
+      );
       let clientId = state.submitClientId;
       if (!clientId) {
         clientId =
@@ -1072,33 +1112,48 @@ function ExamResultsView({
   }
 
   return (
-    <div className="relative min-h-dvh overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative min-h-dvh overflow-hidden bg-[#f8f8f6] text-[#242423] transition-colors duration-200 dark:bg-[#0c0c0e] dark:text-[#f3f3f2] px-4 py-8 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto space-y-6">
         <div className={cn(CARD, "p-6 sm:p-8 space-y-6")}>
           <div className="text-center">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
               {t("পরীক্ষা সমাপ্ত!", "Exam Completed!")}
             </h1>
-            <p className={cn("text-base sm:text-lg font-bold mt-1", resultColor)}>
+            <p
+              className={cn("text-base sm:text-lg font-bold mt-1", resultColor)}
+            >
               {resultLabel}
             </p>
           </div>
 
-          {/* Score Box */}
-          <div className="rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.03] p-6 text-center">
-            <div className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-900 dark:text-zinc-100 tabular-nums">
-              {percentage}%
+          {/* Score Metric Tiles */}
+          <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+            <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3.5 sm:p-4 text-center">
+              <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                {t("সঠিকতা", "Accuracy")}
+              </span>
+              <span className="mt-1 block text-xl sm:text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400 tabular-nums">
+                {percentage}%
+              </span>
             </div>
-            <p className="mt-2 text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400">
-              <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                {score}
-              </span>{" "}
-              {t("টির মধ্যে সঠিক", "correct out of")}{" "}
-              <span className="font-bold text-zinc-700 dark:text-zinc-300">
-                {total}
-              </span>{" "}
-              {t("টি প্রশ্ন", "questions")}
-            </p>
+
+            <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3.5 sm:p-4 text-center">
+              <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                {t("সঠিক", "Correct")}
+              </span>
+              <span className="mt-1 block text-xl sm:text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 tabular-nums">
+                {score} / {total}
+              </span>
+            </div>
+
+            <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3.5 sm:p-4 text-center">
+              <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                {t("ভুল", "Incorrect")}
+              </span>
+              <span className="mt-1 block text-xl sm:text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400 tabular-nums">
+                {incorrectAnswers.length}
+              </span>
+            </div>
           </div>
 
           {/* Missed questions review */}
@@ -1107,7 +1162,7 @@ function ExamResultsView({
               <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 {t(
                   `সঠিক নয় এমন প্রশ্ন (${incorrectAnswers.length})`,
-                  `Questions to Review (${incorrectAnswers.length})`
+                  `Questions to Review (${incorrectAnswers.length})`,
                 )}
               </h3>
               <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1">
@@ -1130,7 +1185,10 @@ function ExamResultsView({
                       )}
                       {item.correctAnswer == null && (
                         <span className="rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 px-2 py-0.5 font-medium">
-                          {t("পরীক্ষা শেষে প্রকাশ করা হবে", "Revealed after exam")}
+                          {t(
+                            "পরীক্ষা শেষে প্রকাশ করা হবে",
+                            "Revealed after exam",
+                          )}
                         </span>
                       )}
                       {item.userAnswer != null && (
@@ -1173,7 +1231,7 @@ function ExamResultsView({
                 <Button
                   onClick={() => resetQuizExamState()}
                   size="lg"
-                  className="w-full sm:w-auto px-8 bg-orange-600 hover:bg-orange-700 text-white shadow-md shadow-orange-500/20 cursor-pointer"
+                  className="w-full sm:w-auto px-8 h-11 rounded-full bg-[#242423] text-white hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#242423] font-semibold text-xs sm:text-sm shadow-sm cursor-pointer"
                 >
                   {t("পরীক্ষার তালিকায় ফিরুন", "Back to Exam List")}
                 </Button>
@@ -1181,11 +1239,9 @@ function ExamResultsView({
                   asChild
                   variant="outline"
                   size="lg"
-                  className="w-full sm:w-auto px-8 border-black/[0.08] dark:border-white/[0.1] cursor-pointer"
+                  className="w-full sm:w-auto px-8 h-11 rounded-full border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] text-xs sm:text-sm font-semibold cursor-pointer shadow-2xs"
                 >
-                  <Link href="/quiz">
-                    {t("কুইজ মেনু", "Quiz Hub")}
-                  </Link>
+                  <Link href="/quiz">{t("কুইজ মেনু", "Quiz Hub")}</Link>
                 </Button>
               </>
             )}
