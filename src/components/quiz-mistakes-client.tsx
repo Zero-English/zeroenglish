@@ -38,7 +38,13 @@ import {
 } from "lucide-react";
 import { Classic } from "@/components/classic";
 
-type PracticePhase = "config" | "loading" | "error" | "empty" | "quiz" | "results";
+type PracticePhase =
+  | "config"
+  | "loading"
+  | "error"
+  | "empty"
+  | "quiz"
+  | "results";
 type DifficultyLevel = "EASY" | "MEDIUM" | "HARD";
 
 interface PlayOption {
@@ -66,7 +72,7 @@ const TIME_OPTIONS = [15, 20, 30];
 const DIFFICULTY_OPTIONS: DifficultyLevel[] = ["EASY", "MEDIUM", "HARD"];
 
 const CARD =
-  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
+  "rounded-[26px] sm:rounded-[30px] border border-black/[0.06] dark:border-white/[0.08] bg-white dark:bg-[#1c1c1e] shadow-xs";
 
 function shuffleArray<T>(arr: T[]): T[] {
   const shuffled = [...arr];
@@ -176,7 +182,9 @@ export function QuizMistakesClient() {
   const [loadingBank, setLoadingBank] = useState(true);
 
   // Configuration settings
-  const [filterMode, setFilterMode] = useState<"unresolved" | "all">("unresolved");
+  const [filterMode, setFilterMode] = useState<"unresolved" | "all">(
+    "unresolved",
+  );
   const [difficulties, setDifficulties] = useState<DifficultyLevel[]>([]);
   const [quantity, setQuantity] = useState(10);
   const [useAllQuestions, setUseAllQuestions] = useState(false);
@@ -191,7 +199,9 @@ export function QuizMistakesClient() {
   const [isAnswered, setIsAnswered] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [deadlineAt, setDeadlineAt] = useState<number | null>(null);
-  const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectRecord[]>([]);
+  const [incorrectAnswers, setIncorrectAnswers] = useState<IncorrectRecord[]>(
+    [],
+  );
   const [exitOpen, setExitOpen] = useState(false);
   const [starting, setStarting] = useState(false);
 
@@ -258,14 +268,14 @@ export function QuizMistakesClient() {
     difficulties.length === 0
       ? basePool
       : basePool.filter((q) =>
-          difficulties.includes(q.difficultyLevel as DifficultyLevel)
+          difficulties.includes(q.difficultyLevel as DifficultyLevel),
         );
 
   const availableCount = availablePool.length;
 
   function toggleDifficulty(d: DifficultyLevel) {
     setDifficulties((prev) =>
-      prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]
+      prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d],
     );
   }
 
@@ -420,8 +430,8 @@ export function QuizMistakesClient() {
           if (q.difficultyLevel === "HARD") return "C1";
           if (q.difficultyLevel === "MEDIUM") return "B1";
           return "A1";
-        })
-      )
+        }),
+      ),
     );
 
     void saveMistakeQuizResultToDb({
@@ -463,35 +473,47 @@ export function QuizMistakesClient() {
 
   const currentQ = quizQuestions[currentIndex];
   const totalQuestions = quizQuestions.length;
-  const progress = totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
+  const progress =
+    totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
   const letters = ["A", "B", "C", "D", "E", "F"];
 
   const activeStyle =
-    "bg-primary text-primary-foreground border-primary shadow-xs font-semibold";
+    "rounded-full bg-[#242423] text-white shadow-2xs dark:bg-white dark:text-[#242423] font-semibold";
   const idleStyle =
-    "border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 hover:bg-black/[0.05] dark:hover:bg-white/[0.08]";
+    "rounded-full bg-[#f1f1ef] dark:bg-[#252528] border border-black/[0.04] dark:border-white/[0.06] text-zinc-700 dark:text-zinc-300 hover:bg-black/[0.05] dark:hover:bg-white/[0.08] font-medium";
 
   return (
-    <div className="relative min-h-[85dvh] px-4 py-6 sm:px-6 lg:px-8">
+    <div className="relative min-h-[85dvh] bg-[#f8f8f6] text-[#242423] transition-colors duration-200 dark:bg-[#0c0c0e] dark:text-[#f3f3f2] px-4 py-6 sm:px-6 lg:px-8">
       {/* ========================================================================= */}
       {/* 1. CONFIGURATION VIEW */}
       {/* ========================================================================= */}
       {phase === "config" && (
-        <div className="mx-auto max-w-2xl space-y-5 sm:space-y-6">
-          {/* Header Title */}
-          <div className="text-center space-y-2">
-            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-rose-500/10 text-rose-600 dark:text-rose-400 ring-1 ring-rose-500/20">
-              <RefreshCw className="size-7" />
+        <div className="mx-auto max-w-2xl space-y-5">
+          {/* Inset Sunken Header */}
+          <div className="rounded-[18px] sm:rounded-[22px] bg-[#f1f1ef] dark:bg-[#252528] p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-black/[0.04] dark:border-white/[0.06]">
+            <div className="flex items-center gap-3">
+              <div className="size-11 rounded-[14px] bg-white text-[#242423] shadow-2xs dark:bg-white/10 dark:text-[#f3f3f2] flex items-center justify-center shrink-0">
+                <RefreshCw className="size-5 text-rose-500" />
+              </div>
+              <div>
+                <h1 className="text-base sm:text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+                  {t("ভুল উত্তর পুনর্বিবেচনা পরীক্ষা", "Mistake Bank Exam")}
+                </h1>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  {t(
+                    "পূর্বে ভুল হওয়া প্রশ্নগুলো পুনরায় অনুশীলন করে ১০০% মাস্টারি অর্জন করুন।",
+                    "Retest questions you missed to achieve full mastery.",
+                  )}
+                </p>
+              </div>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              {t("ভুল উত্তর পুনর্বিবেচনা পরীক্ষা", "Mistake Bank Exam")}
-            </h1>
-            <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">
-              {t(
-                "পূর্বে দেওয়া পরীক্ষা ও কুইজে আপনার ভুল হওয়া প্রশ্নগুলো পুনরায় অনুশীলন করে ১০০% মাস্টারি অর্জন করুন।",
-                "Retest questions you previously missed across all exams and quizzes to achieve full mastery."
-              )}
-            </p>
+            <Link
+              href="/quiz"
+              className="inline-flex self-start sm:self-center items-center gap-1.5 rounded-full border border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] px-3.5 py-1.5 text-xs font-semibold text-zinc-700 dark:text-zinc-200 transition-colors shadow-2xs"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              {t("সব কুইজ", "All Quizzes")}
+            </Link>
           </div>
 
           {!isGoogle ? (
@@ -505,7 +527,7 @@ export function QuizMistakesClient() {
               <p className="text-xs sm:text-sm text-muted-foreground max-w-sm mx-auto">
                 {t(
                   "ভুল উত্তর পুনর্বিবেচনা পরীক্ষা দিতে আপনার ক্লাউড প্রোফাইলে সাইন ইন প্রয়োজন।",
-                  "Sign in to load your personalized mistake bank and track resolved questions."
+                  "Sign in to load your personalized mistake bank and track resolved questions.",
                 )}
               </p>
               <Button
@@ -530,7 +552,7 @@ export function QuizMistakesClient() {
               <p className="text-xs sm:text-sm text-muted-foreground max-w-sm mx-auto">
                 {t(
                   "চমৎকার! আপনার আগের সব প্রশ্নের উত্তর সঠিক হয়েছে অথবা আপনি এখনও কোনো পরীক্ষা দেননি। কুইজ বিভাগে গিয়ে নতুন পরীক্ষা নিন।",
-                  "Great job! You haven't made any mistakes yet or haven't taken any quizzes. Explore the quiz hub to test your skills."
+                  "Great job! You haven't made any mistakes yet or haven't taken any quizzes. Explore the quiz hub to test your skills.",
                 )}
               </p>
               <div className="pt-2">
@@ -545,11 +567,45 @@ export function QuizMistakesClient() {
             </div>
           ) : (
             <div className="space-y-4 sm:space-y-5">
+              {/* Soft Pastel Mistake Summary Tiles */}
+              <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+                <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3.5 sm:p-4 text-center">
+                  <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                    {t("অনুশীলন প্রয়োজন", "Unresolved")}
+                  </span>
+                  <span className="mt-1 block text-xl sm:text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400 tabular-nums">
+                    {bankData.unresolvedQuestionsCount}
+                  </span>
+                </div>
+
+                <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3.5 sm:p-4 text-center">
+                  <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                    {t("মোট ভুল", "Total Recorded")}
+                  </span>
+                  <span className="mt-1 block text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 tabular-nums">
+                    {bankData.totalMistakeQuestions}
+                  </span>
+                </div>
+
+                <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3.5 sm:p-4 text-center">
+                  <span className="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+                    {t("আয়ত্ত করা", "Mastered")}
+                  </span>
+                  <span className="mt-1 block text-xl sm:text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 tabular-nums">
+                    {Math.max(
+                      0,
+                      bankData.totalMistakeQuestions -
+                        bankData.unresolvedQuestionsCount,
+                    )}
+                  </span>
+                </div>
+              </div>
+
               {/* Question Pool Mode Card */}
               <div className={cn(CARD, "p-5 sm:p-6")}>
                 <div className="flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground mb-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400">
-                    <RefreshCw className="h-4 w-4" />
+                  <div className="size-8 rounded-[10px] bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400 flex items-center justify-center">
+                    <RefreshCw className="h-4 w-4 text-rose-500" />
                   </div>
                   {t("ভুল প্রশ্নের ধরন", "Question Pool")}
                 </div>
@@ -559,20 +615,28 @@ export function QuizMistakesClient() {
                     type="button"
                     onClick={() => setFilterMode("unresolved")}
                     className={cn(
-                      "p-3 rounded-xl border text-left transition-all cursor-pointer",
-                      filterMode === "unresolved" ? activeStyle : idleStyle
+                      "p-4 rounded-[18px] sm:rounded-[20px] border text-left transition-all cursor-pointer",
+                      filterMode === "unresolved"
+                        ? "border-[#242423] dark:border-white bg-[#f8f8f6] dark:bg-[#252528] shadow-2xs"
+                        : "border-black/[0.04] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.04]",
                     )}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold">
+                      <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                         {t("অনুশীলন প্রয়োজন এমন প্রশ্ন", "Unresolved Mistakes")}
                       </span>
                       {filterMode === "unresolved" && (
-                        <Check className="size-4 text-primary-foreground" />
+                        <span className="size-5 rounded-full bg-[#242423] dark:bg-white text-white dark:text-[#242423] flex items-center justify-center">
+                          <Check className="size-3" />
+                        </span>
                       )}
                     </div>
-                    <p className="text-[11px] opacity-80 mt-1">
-                      {t("যে প্রশ্নগুলো এখনও আয়ত্ত করা হয়নি", "Questions you haven't mastered yet")} ({bankData.unresolvedQuestionsCount})
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
+                      {t(
+                        "যে প্রশ্নগুলো এখনও আয়ত্ত করা হয়নি",
+                        "Questions you haven't mastered yet",
+                      )}{" "}
+                      ({bankData.unresolvedQuestionsCount})
                     </p>
                   </button>
 
@@ -580,20 +644,28 @@ export function QuizMistakesClient() {
                     type="button"
                     onClick={() => setFilterMode("all")}
                     className={cn(
-                      "p-3 rounded-xl border text-left transition-all cursor-pointer",
-                      filterMode === "all" ? activeStyle : idleStyle
+                      "p-4 rounded-[18px] sm:rounded-[20px] border text-left transition-all cursor-pointer",
+                      filterMode === "all"
+                        ? "border-[#242423] dark:border-white bg-[#f8f8f6] dark:bg-[#252528] shadow-2xs"
+                        : "border-black/[0.04] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.04]",
                     )}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold">
+                      <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                         {t("সকল ভুল প্রশ্ন", "All Past Mistakes")}
                       </span>
                       {filterMode === "all" && (
-                        <Check className="size-4 text-primary-foreground" />
+                        <span className="size-5 rounded-full bg-[#242423] dark:bg-white text-white dark:text-[#242423] flex items-center justify-center">
+                          <Check className="size-3" />
+                        </span>
                       )}
                     </div>
-                    <p className="text-[11px] opacity-80 mt-1">
-                      {t("ইতিপূর্বে ভুল হওয়া সকল প্রশ্ন", "All past mistakes including mastered")} ({bankData.totalMistakeQuestions})
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1">
+                      {t(
+                        "ইতিপূর্বে ভুল হওয়া সকল প্রশ্ন",
+                        "All past mistakes including mastered",
+                      )}{" "}
+                      ({bankData.totalMistakeQuestions})
                     </p>
                   </button>
                 </div>
@@ -614,8 +686,8 @@ export function QuizMistakesClient() {
                       d === "EASY"
                         ? t("সহজ (Easy)", "Easy")
                         : d === "MEDIUM"
-                        ? t("মাঝারি (Medium)", "Medium")
-                        : t("কঠিন (Hard)", "Hard");
+                          ? t("মাঝারি (Medium)", "Medium")
+                          : t("কঠিন (Hard)", "Hard");
                     return (
                       <button
                         key={d}
@@ -623,7 +695,7 @@ export function QuizMistakesClient() {
                         onClick={() => toggleDifficulty(d)}
                         className={cn(
                           "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer flex items-center gap-1.5",
-                          active ? activeStyle : idleStyle
+                          active ? activeStyle : idleStyle,
                         )}
                       >
                         {active && <span className="font-bold">✓</span>}
@@ -634,10 +706,13 @@ export function QuizMistakesClient() {
                 </div>
                 <p className="text-[11px] text-muted-foreground mt-2.5">
                   {difficulties.length === 0
-                    ? t("সব কঠিনতার মাত্রা অন্তর্ভুক্ত", "All difficulty levels included")
+                    ? t(
+                        "সব কঠিনতার মাত্রা অন্তর্ভুক্ত",
+                        "All difficulty levels included",
+                      )
                     : t(
                         `${difficulties.length}টি মাত্রা নির্বাচিত`,
-                        `${difficulties.length} difficulty level${difficulties.length > 1 ? "s" : ""} selected`
+                        `${difficulties.length} difficulty level${difficulties.length > 1 ? "s" : ""} selected`,
                       )}
                 </p>
               </div>
@@ -661,7 +736,9 @@ export function QuizMistakesClient() {
                       }}
                       className={cn(
                         "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer tabular-nums",
-                        !useAllQuestions && quantity === q ? activeStyle : idleStyle
+                        !useAllQuestions && quantity === q
+                          ? activeStyle
+                          : idleStyle,
                       )}
                     >
                       {q}
@@ -672,7 +749,7 @@ export function QuizMistakesClient() {
                     onClick={() => setUseAllQuestions(true)}
                     className={cn(
                       "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer",
-                      useAllQuestions ? activeStyle : idleStyle
+                      useAllQuestions ? activeStyle : idleStyle,
                     )}
                   >
                     {t(`সব (${availableCount}টি)`, `All (${availableCount})`)}
@@ -714,7 +791,9 @@ export function QuizMistakesClient() {
                       }}
                       className={cn(
                         "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer tabular-nums",
-                        !noTimeLimit && timePerQuestion === tm ? activeStyle : idleStyle
+                        !noTimeLimit && timePerQuestion === tm
+                          ? activeStyle
+                          : idleStyle,
                       )}
                     >
                       {tm}s
@@ -725,7 +804,7 @@ export function QuizMistakesClient() {
                     onClick={() => setNoTimeLimit(true)}
                     className={cn(
                       "px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer",
-                      noTimeLimit ? activeStyle : idleStyle
+                      noTimeLimit ? activeStyle : idleStyle,
                     )}
                   >
                     {t("সময়সীমা নেই", "No limit")}
@@ -753,7 +832,7 @@ export function QuizMistakesClient() {
                   size="lg"
                   onClick={handleStart}
                   disabled={starting || availableCount === 0}
-                  className="w-full h-12 text-sm sm:text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-md cursor-pointer"
+                  className="w-full h-12 rounded-full bg-[#242423] text-white hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#242423] font-semibold text-sm shadow-sm transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {starting
                     ? t("তৈরি হচ্ছে…", "Preparing…")
@@ -763,11 +842,11 @@ export function QuizMistakesClient() {
                   {useAllQuestions
                     ? t(
                         `${availableCount}টি প্রশ্ন নির্বাচিত`,
-                        `${availableCount} question${availableCount !== 1 ? "s" : ""} selected`
+                        `${availableCount} question${availableCount !== 1 ? "s" : ""} selected`,
                       )
                     : t(
                         `${Math.min(quantity, availableCount)}টি প্রশ্ন নির্বাচিত`,
-                        `${Math.min(quantity, availableCount)} question${quantity !== 1 ? "s" : ""} selected`
+                        `${Math.min(quantity, availableCount)} question${quantity !== 1 ? "s" : ""} selected`,
                       )}
                 </p>
               </div>
@@ -780,7 +859,7 @@ export function QuizMistakesClient() {
       {/* 2. ACTIVE QUIZ RUNTIME (MANUAL NAVIGATION) */}
       {/* ========================================================================= */}
       {phase === "quiz" && currentQ && (
-        <div className="relative min-h-dvh flex flex-col justify-center px-4 py-8 sm:px-6 lg:px-8">
+        <div className="relative min-h-dvh flex flex-col px-4 py-8 sm:px-6 lg:px-8">
           <div className="w-full max-w-3xl mx-auto">
             <div className={cn(CARD, "p-5 sm:p-7 relative overflow-hidden")}>
               {/* Top bar HUD */}
@@ -802,8 +881,8 @@ export function QuizMistakesClient() {
                         timeLeft <= 5
                           ? "bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300 animate-pulse"
                           : timeLeft <= 10
-                          ? "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"
-                          : "bg-black/[0.04] dark:bg-white/[0.06] text-muted-foreground"
+                            ? "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300"
+                            : "bg-black/[0.04] dark:bg-white/[0.06] text-muted-foreground",
                       )}
                     >
                       <Timer className="h-3 w-3" />
@@ -827,11 +906,13 @@ export function QuizMistakesClient() {
               </div>
 
               {/* Progress track */}
-              <div className="h-1.5 w-full bg-black/[0.04] dark:bg-white/[0.06] rounded-full mb-6 overflow-hidden">
+              <div className="relative h-1.5 w-full bg-black/[0.04] dark:bg-white/[0.06] rounded-full mb-6 overflow-hidden">
                 <div
-                  className="h-full rounded-full transition-all duration-300 ease-out bg-gradient-to-r from-rose-500 via-purple-500 to-indigo-500"
+                  className="h-full rounded-full transition-all duration-300 ease-out bg-[#242423] dark:bg-white relative overflow-hidden"
                   style={{ width: `${progress}%` }}
-                />
+                >
+                  <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                </div>
               </div>
 
               {/* Question Content */}
@@ -861,9 +942,13 @@ export function QuizMistakesClient() {
                 {currentQ.options.map((option, i) => {
                   const isCorrectOption = option.correct;
                   const isWrongPick =
-                    isAnswered && option.text === selectedAnswer && !isCorrectOption;
+                    isAnswered &&
+                    option.text === selectedAnswer &&
+                    !isCorrectOption;
                   const isRightPick =
-                    isAnswered && option.text === selectedAnswer && isCorrectOption;
+                    isAnswered &&
+                    option.text === selectedAnswer &&
+                    isCorrectOption;
 
                   let optionStyle =
                     "border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.04] dark:hover:bg-white/[0.08]";
@@ -889,7 +974,7 @@ export function QuizMistakesClient() {
                       onClick={() => handleOptionClick(option)}
                       className={cn(
                         "w-full flex items-center gap-3 text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer disabled:cursor-default",
-                        optionStyle
+                        optionStyle,
                       )}
                     >
                       <span
@@ -899,9 +984,9 @@ export function QuizMistakesClient() {
                             ? isCorrectOption
                               ? "bg-emerald-500 text-white"
                               : isWrongPick
-                              ? "bg-rose-500 text-white"
-                              : "bg-black/[0.04] dark:bg-white/[0.06] text-muted-foreground"
-                            : "bg-black/[0.05] dark:bg-white/[0.08] text-muted-foreground"
+                                ? "bg-rose-500 text-white"
+                                : "bg-black/[0.04] dark:bg-white/[0.06] text-muted-foreground"
+                            : "bg-black/[0.05] dark:bg-white/[0.08] text-muted-foreground",
                         )}
                       >
                         {isAnswered && (isCorrectOption || isWrongPick) ? (
@@ -911,7 +996,7 @@ export function QuizMistakesClient() {
                             <X className="h-3.5 w-3.5" />
                           )
                         ) : (
-                          letters[i] ?? ""
+                          (letters[i] ?? "")
                         )}
                       </span>
 
@@ -940,7 +1025,7 @@ export function QuizMistakesClient() {
                   <Button
                     onClick={handleNext}
                     size="lg"
-                    className="px-8 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md cursor-pointer"
+                    className="px-8 rounded-full bg-[#242423] text-white hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#242423] font-semibold text-xs sm:text-sm shadow-sm cursor-pointer"
                   >
                     {currentIndex >= totalQuestions - 1
                       ? t("ফলাফল দেখুন", "See Results")
@@ -958,9 +1043,9 @@ export function QuizMistakesClient() {
       {/* ========================================================================= */}
       {phase === "results" && (
         <div className="mx-auto max-w-2xl space-y-6">
-          <div className={cn(CARD, "p-6 sm:p-8 text-center space-y-4")}>
-            <div className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/20">
-              <Trophy className="size-8 text-amber-500" />
+          <div className={cn(CARD, "p-6 sm:p-8 text-center space-y-5")}>
+            <div className="mx-auto flex size-14 items-center justify-center rounded-[18px] bg-white text-[#242423] shadow-2xs dark:bg-white/10 dark:text-[#f3f3f2]">
+              <Trophy className="size-7 text-amber-500" />
             </div>
 
             <div>
@@ -974,32 +1059,46 @@ export function QuizMistakesClient() {
                 {score === totalQuestions
                   ? t("অসাধারণ! শতভাগ সঠিক!", "Flawless Mastery!")
                   : score >= Math.ceil(totalQuestions * 0.7)
-                  ? t("খুব চমৎকার ফলাফল!", "Great Progress!")
-                  : t("ভালো চেষ্টা! আরও অনুশীলন প্রয়োজন।", "Good Effort! Keep practicing.")}
+                    ? t("খুব চমৎকার ফলাফল!", "Great Progress!")
+                    : t(
+                        "ভালো চেষ্টা! আরও অনুশীলন প্রয়োজন।",
+                        "Good Effort! Keep practicing.",
+                      )}
               </h2>
               <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
                 {t(
                   `${totalQuestions}টি প্রশ্নের মধ্যে ${score}টি প্রশ্নের সঠিক উত্তর দিয়েছেন।`,
-                  `You answered ${score} of ${totalQuestions} questions correctly.`
+                  `You answered ${score} of ${totalQuestions} questions correctly.`,
                 )}
               </p>
             </div>
 
-            {/* Stat split */}
-            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-border/60 text-center">
-              <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 block">
-                  {t("আয়ত্ত করা প্রশ্ন", "Mastered")}
+            {/* Soft pastel metric tiles */}
+            <div className="grid grid-cols-3 gap-2.5 sm:gap-3 text-center">
+              <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3 sm:p-3.5">
+                <span className="text-xs font-semibold text-blue-800 dark:text-blue-300 block">
+                  {t("সঠিকতা", "Accuracy")}
                 </span>
-                <span className="text-lg font-bold tabular-nums text-emerald-600 dark:text-emerald-400 mt-0.5 block">
+                <span className="text-lg font-bold tabular-nums text-blue-900 dark:text-blue-100 mt-0.5 block">
+                  {totalQuestions > 0
+                    ? Math.round((score / totalQuestions) * 100)
+                    : 0}
+                  %
+                </span>
+              </div>
+              <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3 sm:p-3.5">
+                <span className="text-xs font-semibold text-emerald-800 dark:text-emerald-300 block">
+                  {t("আয়ত্ত করা", "Mastered")}
+                </span>
+                <span className="text-lg font-bold tabular-nums text-emerald-900 dark:text-emerald-100 mt-0.5 block">
                   {score}
                 </span>
               </div>
-              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20">
-                <span className="text-xs font-semibold text-rose-700 dark:text-rose-300 block">
-                  {t("পুনরায় ভুল", "Still Needs Review")}
+              <div className="rounded-[18px] sm:rounded-[22px] border border-black/[0.06] dark:border-white/[0.08] bg-[#f8f8f6] dark:bg-[#252528] p-3 sm:p-3.5">
+                <span className="text-xs font-semibold text-rose-800 dark:text-rose-300 block">
+                  {t("পুনরায় ভুল", "Needs Review")}
                 </span>
-                <span className="text-lg font-bold tabular-nums text-rose-600 dark:text-rose-400 mt-0.5 block">
+                <span className="text-lg font-bold tabular-nums text-rose-900 dark:text-rose-100 mt-0.5 block">
                   {incorrectAnswers.length}
                 </span>
               </div>
@@ -1009,7 +1108,7 @@ export function QuizMistakesClient() {
             <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
               <Button
                 onClick={handleRestart}
-                className="flex-1 rounded-xl font-semibold gap-1.5 text-xs sm:text-sm cursor-pointer"
+                className="flex-1 h-11 rounded-full bg-[#242423] text-white hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#242423] font-semibold gap-1.5 text-xs sm:text-sm cursor-pointer shadow-sm"
               >
                 <RotateCcw className="size-4" />
                 <span>{t("আবার পরীক্ষা দিন", "Retake Exam")}</span>
@@ -1018,11 +1117,13 @@ export function QuizMistakesClient() {
               <Button
                 variant="outline"
                 asChild
-                className="flex-1 rounded-xl font-semibold gap-1.5 text-xs sm:text-sm cursor-pointer"
+                className="flex-1 h-11 rounded-full border-black/[0.08] dark:border-white/[0.1] bg-white dark:bg-[#1c1c1e] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] font-semibold gap-1.5 text-xs sm:text-sm cursor-pointer shadow-2xs"
               >
                 <Link href="/profile?tab=quiz&subtab=still-learning">
                   <RefreshCw className="size-4" />
-                  <span>{t("ভুল উত্তর ডেকে ফিরে যান", "Mistakes Review Deck")}</span>
+                  <span>
+                    {t("ভুল উত্তর ডেকে ফিরে যান", "Mistakes Review Deck")}
+                  </span>
                 </Link>
               </Button>
             </div>
@@ -1033,14 +1134,22 @@ export function QuizMistakesClient() {
             <div className="space-y-3">
               <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                 <XCircle className="size-4 text-rose-500" />
-                <span>{t("যে প্রশ্নগুলো এখনও ভুল হয়েছে:", "Questions Still Needing Practice:")}</span>
+                <span>
+                  {t(
+                    "যে প্রশ্নগুলো এখনও ভুল হয়েছে:",
+                    "Questions Still Needing Practice:",
+                  )}
+                </span>
               </h3>
 
               <div className="space-y-3">
                 {incorrectAnswers.map((rec, i) => (
                   <div
                     key={i}
-                    className={cn(CARD, "p-4 sm:p-5 space-y-2.5 border-rose-500/30 dark:border-rose-500/20")}
+                    className={cn(
+                      CARD,
+                      "p-4 sm:p-5 space-y-2.5 border-rose-500/30 dark:border-rose-500/20",
+                    )}
                   >
                     <div className="text-xs sm:text-sm font-semibold text-foreground">
                       {rec.question.questionText}
@@ -1048,18 +1157,24 @@ export function QuizMistakesClient() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                       <div className="p-2.5 rounded-lg bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/20">
-                        <span className="font-semibold block">{t("আপনার উত্তর:", "Your Answer:")}</span>
+                        <span className="font-semibold block">
+                          {t("আপনার উত্তর:", "Your Answer:")}
+                        </span>
                         <span>{rec.userAnswer}</span>
                       </div>
                       <div className="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
-                        <span className="font-semibold block">{t("সঠিক উত্তর:", "Correct Answer:")}</span>
+                        <span className="font-semibold block">
+                          {t("সঠিক উত্তর:", "Correct Answer:")}
+                        </span>
                         <span>{rec.correctAnswer}</span>
                       </div>
                     </div>
 
                     {rec.question.explanation && (
                       <div className="p-3 rounded-lg bg-muted/50 text-xs text-muted-foreground leading-relaxed">
-                        <strong className="text-foreground mr-1">{t("ব্যাখ্যা:", "Explanation:")}</strong>
+                        <strong className="text-foreground mr-1">
+                          {t("ব্যাখ্যা:", "Explanation:")}
+                        </strong>
                         {rec.question.explanation}
                       </div>
                     )}
@@ -1078,7 +1193,7 @@ export function QuizMistakesClient() {
         title={t("পরীক্ষা প্রস্থান নিশ্চিত করুন", "Exit Mistake Exam?")}
         description={t(
           "আপনি কি পরীক্ষা ছেড়ে যেতে চান? বর্তমান অগ্রগতির ফলাফল সংরক্ষিত হবে না।",
-          "Are you sure you want to exit? Your current session progress will not be saved."
+          "Are you sure you want to exit? Your current session progress will not be saved.",
         )}
         confirmText={t("প্রস্থান করুন", "Exit")}
         cancelText={t("চালিয়ে যান", "Continue Exam")}

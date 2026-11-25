@@ -1,176 +1,187 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Languages,
   ArrowRight,
   BookOpenCheck,
   GraduationCap,
-  Sparkles,
   Timer,
   CalendarClock,
   Hourglass,
   Zap,
-  Target,
-  Trophy,
-  Layers,
   BarChart3,
   Flame,
   RefreshCw,
+  Trophy,
   type LucideIcon,
 } from "lucide-react";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
 import { useQuizHistory } from "@/lib/use-quiz-history";
+import { useDailyGoal } from "@/lib/use-daily-goal";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { requestGoogleLogin } from "@/lib/login-required";
 import type { QuizExamPublicItem } from "@/types/quiz-exam";
 
-const CARD =
-  "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
-
-const ICON_CHIP =
-  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-black/[0.04] dark:bg-white/[0.06] ring-1 ring-inset ring-black/[0.05] dark:ring-white/[0.08]";
-
-const RING_RADIUS = 22;
-const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
+type QuizCategory = "all" | "daily" | "study" | "exam";
 
 interface QuizCard {
+  id: string;
+  category: "daily" | "study" | "exam";
   label: string;
   labelBn: string;
   desc: string;
   descBn: string;
   href: string;
   icon: LucideIcon;
-  accent: string;
-  arrow: string;
-  pill: string;
-  badge?: string;
-  badgeBn?: string;
+  badge: string;
+  badgeBn: string;
   badgeIcon?: LucideIcon;
+  meta: string;
+  metaBn: string;
+  pastelStyle: string;
+  iconColor: string;
 }
-
-const MUTED_PILL =
-  "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400";
 
 const CARDS: QuizCard[] = [
   {
+    id: "daily",
+    category: "daily",
     label: "Daily Practice",
     labelBn: "দৈনিক অনুশীলন",
-    desc: "10 personalized blitz questions (5 vocab + 5 grammar) in 20s each. Complete once a day to protect your streak!",
-    descBn: "ব্যক্তিগত ১০টি প্রশ্ন (৫টি ভোকাব + ৫টি গ্রামার), প্রতিটি ২০ সেকেন্ডে। স্ট্রিক বাড়াতে প্রতিদিন ১ বার দিন!",
+    desc: "10 personalized blitz questions (5 vocab + 5 grammar) in 20s each. Complete once a day to protect your streak.",
+    descBn: "ব্যক্তিগত ১০টি প্রশ্ন (৫ ভোকাব + ৫ গ্রামার), প্রতিটি ২০ সেকেন্ডে। স্ট্রিক বাড়াতে প্রতিদিন ১ বার দিন।",
     href: "/quiz/daily",
     icon: Flame,
-    accent:
-      "bg-amber-100/80 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300",
-    arrow: "group-hover:bg-amber-500 group-hover:text-white group-active:bg-amber-500 group-active:text-white",
-    pill: "bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300",
     badge: "Daily 10 × 20s",
     badgeBn: "দৈনিক ১০ × ২০ সে.",
     badgeIcon: Flame,
+    meta: "10 Questions · 20s per Q · Streak",
+    metaBn: "১০টি প্রশ্ন · ২০ সে. প্রতি প্রশ্ন · স্ট্রিক",
+    pastelStyle: "bg-[#faf4ee] dark:bg-[#2b2219] border-amber-500/10",
+    iconColor: "text-amber-600 dark:text-amber-400",
   },
   {
-    label: "Quiz Exam",
-    labelBn: "কুইজ পরীক্ষা",
-    desc: "Take weekly and biweekly timed exams on a fixed schedule.",
-    descBn: "নির্ধারিত সময়ে সাপ্তাহিক ও দ্বি-সাপ্তাহিক পরীক্ষা নিন।",
-    href: "/quiz/exam",
-    icon: CalendarClock,
-    accent:
-      "bg-violet-100/80 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
-    arrow: "group-hover:bg-violet-500 group-hover:text-white group-active:bg-violet-500 group-active:text-white",
-    pill: "bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
-    badge: "Exam",
-    badgeBn: "পরীক্ষা",
-    badgeIcon: Timer,
-  },
-  {
+    id: "quick",
+    category: "daily",
     label: "Quick Quiz",
     labelBn: "কুইক কুইজ",
-    desc: "A rapid 20-question mixed quiz with 20 seconds per question from grammar and class topics.",
-    descBn: "গ্রামার ও শ্রেণি টপিক থেকে ২০টি প্রশ্ন, প্রতিটি ২০ সেকেন্ডে দিন।",
+    desc: "Rapid mixed 20-question test with 20s timers across grammar and class topics. Test your instant recall.",
+    descBn: "গ্রামার ও শ্রেণি টপিক থেকে দ্রুত ২০টি প্রশ্ন, প্রতিটি ২০ সেকেন্ডে সমাধান করুন।",
     href: "/quiz/quick",
     icon: Zap,
-    accent:
-      "bg-rose-100/80 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300",
-    arrow: "group-hover:bg-rose-500 group-hover:text-white group-active:bg-rose-500 group-active:text-white",
-    pill: "bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300",
-    badge: "20 × 20s",
-    badgeBn: "২০ × ২০ সে.",
-    badgeIcon: Timer,
+    badge: "20 × 20s Blitz",
+    badgeBn: "২০ × ২০ সে. ব্লিৎজ",
+    badgeIcon: Zap,
+    meta: "20 Questions · Rapid Mixed · Blitz",
+    metaBn: "২০টি প্রশ্ন · দ্রুত ব্লিৎজ · তাৎক্ষণিক স্কোর",
+    pastelStyle: "bg-[#f9f1f5] dark:bg-[#2d1b26] border-rose-500/10",
+    iconColor: "text-rose-600 dark:text-rose-400",
   },
   {
-    label: "Mistake Bank Quiz",
-    labelBn: "ভুল উত্তর কুইজ",
-    desc: "Retest and master questions you previously answered incorrectly across all quizzes and exams.",
-    descBn: "পূর্বে ভুল হওয়া প্রশ্নগুলো পুনরায় পরীক্ষা দিয়ে নিজের দুর্বলতা দূর করুন।",
-    href: "/quiz/mistakes",
-    icon: RefreshCw,
-    accent:
-      "bg-fuchsia-100/80 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300",
-    arrow: "group-hover:bg-fuchsia-500 group-hover:text-white group-active:bg-fuchsia-500 group-active:text-white",
-    pill: "bg-fuchsia-50 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300",
-    badge: "Mistakes",
-    badgeBn: "ভুল ব্যাংক",
-    badgeIcon: RefreshCw,
-  },
-  {
+    id: "vocabulary",
+    category: "study",
     label: "Vocabulary Practice",
     labelBn: "শব্দভাণ্ডার অনুশীলন",
-    desc: "Pick a quiz type and test your word knowledge across all levels.",
-    descBn: "কুইজের ধরন বেছে নিয়ে সব লেভেলের শব্দ পরীক্ষা করুন।",
+    desc: "Deep practice across Oxford CEFR levels (A1 to C2) and curated word lists with native audio pronunciation.",
+    descBn: "অক্সফোর্ড CEFR লেভেল (A1 থেকে C2) ও নির্বাচিত শব্দ তালিকা ধরে অডিওসহ অনুশীলন করুন।",
     href: "/quiz/vocabulary",
     icon: Languages,
-    accent:
-      "bg-sky-100/80 text-sky-600 dark:bg-sky-500/15 dark:text-sky-300",
-    arrow: "group-hover:bg-sky-500 group-hover:text-white group-active:bg-sky-500 group-active:text-white",
-    pill: MUTED_PILL,
-    badge: "Practice",
-    badgeBn: "অনুশীলন",
+    badge: "Vocabulary",
+    badgeBn: "শব্দভাণ্ডার",
+    badgeIcon: Languages,
+    meta: "A1 – C2 CEFR · Oxford 3000 · Audio",
+    metaBn: "A1 – C2 CEFR · অক্সফোর্ড ৩০০০ · উচ্চারণ",
+    pastelStyle: "bg-[#eef5fa] dark:bg-[#162432] border-blue-500/10",
+    iconColor: "text-blue-600 dark:text-blue-400",
   },
   {
+    id: "grammar",
+    category: "study",
     label: "Grammar Topic Quizzes",
     labelBn: "গ্রামার টপিক কুইজ",
-    desc: "Tenses, prepositions, articles, voice change and more.",
-    descBn: "টেন্স, প্রিপজিশন, আর্টিকেল, ভয়েস চেঞ্জ ও আরও অনেক কিছু।",
+    desc: "Focused tests on tenses, prepositions, articles, voice change, conditionals, and core rules.",
+    descBn: "টেন্স, প্রিপজিশন, আর্টিকেল, ভয়েস চেঞ্জ ও অন্যান্য গুরুত্বপূর্ণ গ্রামার টপিক।",
     href: "/quiz/grammar",
     icon: BookOpenCheck,
-    accent:
-      "bg-emerald-100/80 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300",
-    arrow: "group-hover:bg-emerald-500 group-hover:text-white group-active:bg-emerald-500 group-active:text-white",
-    pill: MUTED_PILL,
     badge: "Grammar",
     badgeBn: "গ্রামার",
+    badgeIcon: BookOpenCheck,
+    meta: "Tenses · Voice · Prepositions · Rules",
+    metaBn: "টেন্স · ভয়েস · প্রিপজিশন · নিয়ম",
+    pastelStyle: "bg-[#ecf7f1] dark:bg-[#12281d] border-emerald-500/10",
+    iconColor: "text-emerald-600 dark:text-emerald-400",
   },
   {
+    id: "class",
+    category: "study",
     label: "Class Based Quizzes",
     labelBn: "শ্রেণি ভিত্তিক কুইজ",
-    desc: "Primary, SSC, HSC, IELTS, TOEFL, BCS and university level quizzes.",
-    descBn: "প্রাথমিক, SSC, HSC, IELTS, TOEFL, BCS ও বিশ্ববিদ্যালয় পর্যায়ের কুইজ।",
+    desc: "Curated tests tailored for Primary, SSC, HSC, IELTS, TOEFL, BCS, and University Admission exams.",
+    descBn: "প্রাথমিক, SSC, HSC, IELTS, TOEFL, BCS ও বিশ্ববিদ্যালয় ভর্তি পরীক্ষার কুইজ।",
     href: "/quiz/class",
     icon: GraduationCap,
-    accent:
-      "bg-orange-100/80 text-orange-600 dark:bg-orange-500/15 dark:text-orange-300",
-    arrow: "group-hover:bg-orange-500 group-hover:text-white group-active:bg-orange-500 group-active:text-white",
-    pill: MUTED_PILL,
-    badge: "Class",
-    badgeBn: "শ্রেণি",
+    badge: "Academic",
+    badgeBn: "একাডেমিক",
+    badgeIcon: GraduationCap,
+    meta: "SSC · HSC · IELTS · BCS · Admission",
+    metaBn: "SSC · HSC · IELTS · BCS · ভর্তি পরীক্ষা",
+    pastelStyle: "bg-[#faf4ee] dark:bg-[#2b2219] border-amber-500/10",
+    iconColor: "text-amber-600 dark:text-amber-400",
   },
   {
+    id: "mistakes",
+    category: "study",
+    label: "Mistake Bank Quiz",
+    labelBn: "ভুল উত্তর কুইজ",
+    desc: "Retest and master questions you previously answered incorrectly to eliminate your recurring weak points.",
+    descBn: "পূর্বে ভুল হওয়া প্রশ্নগুলো পুনরায় অনুশীলন করে নিজের দুর্বলতাগুলো দূর করুন।",
+    href: "/quiz/mistakes",
+    icon: RefreshCw,
+    badge: "Smart Review",
+    badgeBn: "স্মার্ট রিভিশন",
+    badgeIcon: RefreshCw,
+    meta: "Smart Retest · Weak Points · Saved",
+    metaBn: "স্মার্ট রিটেস্ট · দুর্বলতা দূরীকরণ · সংরক্ষিত",
+    pastelStyle: "bg-[#f0f5f1] dark:bg-[#1c2820] border-teal-500/10",
+    iconColor: "text-teal-600 dark:text-teal-400",
+  },
+  {
+    id: "exam",
+    category: "exam",
+    label: "Quiz Exam Arena",
+    labelBn: "কুইজ পরীক্ষা",
+    desc: "Take scheduled weekly and bi-weekly timed competitive exams with live timer and leaderboard rankings.",
+    descBn: "নির্ধারিত সময়ে সাপ্তাহিক ও দ্বি-সাপ্তাহিক লাইভ পরীক্ষা এবং লিডারবোর্ড র‍্যাংকিং।",
+    href: "/quiz/exam",
+    icon: CalendarClock,
+    badge: "Scheduled",
+    badgeBn: "নির্ধারিত",
+    badgeIcon: Timer,
+    meta: "Live Timed · Competitive · Leaderboard",
+    metaBn: "লাইভ টাইমার · প্রতিযোগিতা · লিডারবোর্ড",
+    pastelStyle: "bg-[#f3f0fb] dark:bg-[#211a33] border-purple-500/10",
+    iconColor: "text-purple-600 dark:text-purple-400",
+  },
+  {
+    id: "results",
+    category: "exam",
     label: "Past Exam Results",
     labelBn: "পূর্বের পরীক্ষার ফলাফল",
-    desc: "Review your word-level performance across all past practice quizzes.",
-    descBn: "আপনার নেওয়া সব প্র্যাকটিস কুইজের শব্দভিত্তিক ফলাফল দেখুন।",
+    desc: "Review your detailed word-level accuracy, time spent, question breakdowns, and historical analytics.",
+    descBn: "আপনার পূর্ববর্তী সকল কুইজের শব্দভিত্তিক ফলাফল, সময় ও বিস্তারিত বিশ্লেষণ দেখুন।",
     href: "/quiz/results",
     icon: BarChart3,
-    accent:
-      "bg-indigo-100/80 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300",
-    arrow: "group-hover:bg-indigo-500 group-hover:text-white group-active:bg-indigo-500 group-active:text-white",
-    pill: MUTED_PILL,
-    badge: "Results",
-    badgeBn: "ফলাফল",
+    badge: "Analytics",
+    badgeBn: "অ্যানালিটিক্স",
+    badgeIcon: BarChart3,
+    meta: "Answer Review · Accuracy · Speed Trends",
+    metaBn: "উত্তর পর্যালোচনা · নির্ভুলতা · গতি বিশ্লেষণ",
+    pastelStyle: "bg-[#f3f0fb] dark:bg-[#211a33] border-purple-500/10",
+    iconColor: "text-purple-600 dark:text-purple-400",
   },
 ];
 
@@ -202,24 +213,28 @@ function pickNextExam(exams: QuizExamPublicItem[], now: number): QuizExamPublicI
         new Date(b.scheduledClosingTime ?? "").getTime()
     );
   if (open.length > 0) return open[0];
-  return [...exams]
-    .filter((e) => {
-      const o = new Date(e.scheduledOpeningTime ?? "").getTime();
-      return Number.isFinite(o) && o > now;
-    })
-    .sort(
-      (a, b) =>
-        new Date(a.scheduledOpeningTime ?? "").getTime() -
-        new Date(b.scheduledOpeningTime ?? "").getTime()
-    )[0] ?? null;
+  return (
+    [...exams]
+      .filter((e) => {
+        const o = new Date(e.scheduledOpeningTime ?? "").getTime();
+        return Number.isFinite(o) && o > now;
+      })
+      .sort(
+        (a, b) =>
+          new Date(a.scheduledOpeningTime ?? "").getTime() -
+          new Date(b.scheduledOpeningTime ?? "").getTime()
+      )[0] ?? null
+  );
 }
 
 export function QuizMenu() {
   const t = useT();
   const { entries: history, loaded: historyLoaded } = useQuizHistory();
+  const { streak } = useDailyGoal();
+
   const [exam, setExam] = useState<QuizExamPublicItem | null>(null);
-  const [examReady, setExamReady] = useState(false);
   const [now, setNow] = useState(() => Date.now());
+  const [selectedCategory, setSelectedCategory] = useState<QuizCategory>("all");
 
   useEffect(() => {
     let cancelled = false;
@@ -232,15 +247,11 @@ export function QuizMenu() {
           data?: QuizExamPublicItem[];
           success?: boolean;
         };
-        if (!cancelled) {
-          if (body.success && Array.isArray(body.data)) {
-            setExam(pickNextExam(body.data, Date.now()));
-          }
+        if (!cancelled && body.success && Array.isArray(body.data)) {
+          setExam(pickNextExam(body.data, Date.now()));
         }
       } catch {
-        // ignore; countdown simply won't render
-      } finally {
-        if (!cancelled) setExamReady(true);
+        // Exam countdown gracefully optional
       }
     })();
     return () => {
@@ -263,415 +274,200 @@ export function QuizMenu() {
   const total = history.length;
   const wins = history.filter((e) => e.win).length;
   const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
-  const typeCount = new Set(history.map((e) => e.quizType)).size;
-  const last = history.length > 0 ? history[history.length - 1] : null;
+
+  const filteredCards = useMemo(() => {
+    if (selectedCategory === "all") return CARDS;
+    return CARDS.filter((card) => card.category === selectedCategory);
+  }, [selectedCategory]);
+
+  const categories = [
+    { id: "all" as const, labelEn: "All Modes", labelBn: "সব মোড" },
+    { id: "daily" as const, labelEn: "Daily & Blitz", labelBn: "দৈনিক ও দ্রুত" },
+    { id: "study" as const, labelEn: "Skill Mastery", labelBn: "টপিক ও স্কিল" },
+    { id: "exam" as const, labelEn: "Exams & Results", labelBn: "পরীক্ষা ও ফলাফল" },
+  ];
 
   return (
-    <div className="relative min-h-dvh overflow-hidden">
-      <div className="relative px-4 py-10 sm:px-6 lg:px-8">
-        <StaggerContainer className="mx-auto max-w-6xl">
-          <div className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
-            {/* Left rail: overview */}
-            <div className="order-2 space-y-4 sm:space-y-6 lg:order-1">
-              <div className="lg:sticky lg:top-6">
-              <StaggerItem>
-                <div className={cn(CARD, "overflow-hidden")}>
-                  <div className="p-5 sm:p-6">
-                    <div className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.03] dark:bg-white/[0.06] px-3 py-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                      <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-                      {t("কুইজ", "Quizzes")}
-                    </div>
-                    <h1 className="mt-3 text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                      {t("আপনার কুইজ বেছে নিন", "Choose a Quiz")}
-                    </h1>
-                    <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                      {t(
-                        "শব্দভাণ্ডার, গ্রামার, শ্রেণি কিংবা নির্ধারিত পরীক্ষা — যেভাবে চান কুইজ দিয়ে অনুশীলন করুন।",
-                        "Pick a mode and practice your way — vocabulary, grammar, class-based or scheduled exams."
-                      )}
-                    </p>
-                  </div>
+    <div className="relative min-h-dvh bg-[#f8f8f6] px-4 py-6 transition-colors duration-200 dark:bg-[#0c0c0e] sm:px-6 sm:py-8 lg:px-8">
+      <div className="mx-auto max-w-5xl space-y-5 sm:space-y-6">
+        {/* ========================================================== */}
+        {/* CLEAN TYPOGRAPHIC HEADER (Apple / Linear Restrained Style) */}
+        {/* ========================================================== */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between border-b border-black/[0.05] pb-5 dark:border-white/[0.06]">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <div className="flex size-9 items-center justify-center rounded-[12px] bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 shadow-xs">
+                <Trophy className="size-4.5" />
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+                {t("কুইজ এরিনা", "Quiz Arena")}
+              </h1>
+              {streak > 0 && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-xs font-bold text-amber-600 dark:bg-amber-500/20 dark:text-amber-300">
+                  <Flame className="size-3.5 fill-amber-500 text-amber-500" />
+                  {streak}d
+                </span>
+              )}
+            </div>
+            <p className="mt-1.5 text-xs sm:text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+              {t(
+                "শব্দভাণ্ডার ও ব্যাকরণ অনুশীলন এবং নির্ধারিত লাইভ পরীক্ষা।",
+                "Interactive practice, vocabulary recall, and scheduled timed exams."
+              )}
+              {historyLoaded && total > 0 && (
+                <span className="text-zinc-400 dark:text-zinc-500">
+                  {" "}· <span className="font-semibold text-zinc-700 dark:text-zinc-300 tabular-nums">{winRate}% {t("জয়", "win rate")}</span> ({wins}/{total} {t("উত্তীর্ণ", "passed")})
+                </span>
+              )}
+            </p>
+          </div>
 
-                  <div className="flex items-center gap-4 border-y border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4">
-                    <div className="relative h-14 w-14 shrink-0">
-                      <svg viewBox="0 0 52 52" className="h-14 w-14 -rotate-90">
-                        <circle
-                          cx="26"
-                          cy="26"
-                          r={RING_RADIUS}
-                          fill="none"
-                          strokeWidth="5"
-                          className="stroke-black/[0.06] dark:stroke-white/[0.08]"
-                        />
-                        <motion.circle
-                          cx="26"
-                          cy="26"
-                          r={RING_RADIUS}
-                          fill="none"
-                          strokeWidth="5"
-                          strokeLinecap="round"
-                          strokeDasharray={RING_LENGTH}
-                          initial={{ strokeDashoffset: RING_LENGTH }}
-                          animate={{ strokeDashoffset: RING_LENGTH * (1 - (historyLoaded ? winRate : 0) / 100) }}
-                          transition={{ duration: 0.9, ease: "easeOut" }}
-                          className="stroke-orange-500"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xs font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-                          {historyLoaded ? `${winRate}%` : "…"}
+          {/* Segmented Filter Pills */}
+          <div
+            role="radiogroup"
+            className="flex items-center gap-1 rounded-full bg-black/[0.04] p-1 dark:bg-white/[0.06] overflow-x-auto scrollbar-none self-start sm:self-auto shrink-0"
+          >
+            {categories.map((tab) => {
+              const isActive = selectedCategory === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(tab.id)}
+                  className={cn(
+                    "relative flex h-8 cursor-pointer items-center justify-center rounded-full px-3.5 text-xs font-semibold outline-none transition-colors whitespace-nowrap",
+                    isActive
+                      ? "text-zinc-900 dark:text-zinc-100"
+                      : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  )}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="activeCategoryPill"
+                      className="absolute inset-0 rounded-full bg-white shadow-xs dark:bg-[#1c1c1e]"
+                      transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                    />
+                  )}
+                  <span className="relative z-10">{t(tab.labelBn, tab.labelEn)}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Live Exam Notice Strip (Only displayed when an exam is currently active) */}
+        {isOpen && exam && (
+          <Link
+            href="/quiz/exam"
+            className="group flex items-center justify-between rounded-[16px] border border-amber-500/20 bg-amber-50/70 px-4 py-2.5 text-xs text-amber-800 transition-colors hover:bg-amber-100/70 dark:border-amber-500/30 dark:bg-amber-950/30 dark:text-amber-200"
+          >
+            <div className="flex items-center gap-2 truncate">
+              <span className="size-2 rounded-full bg-amber-500 animate-ping shrink-0" />
+              <span className="font-bold uppercase tracking-wider text-[10px] text-amber-600 dark:text-amber-400 shrink-0">
+                {t("লাইভ পরীক্ষা", "LIVE NOW")}:
+              </span>
+              <span className="font-semibold truncate">{exam.title}</span>
+            </div>
+            <span className="flex items-center gap-1.5 font-bold shrink-0 tabular-nums ml-2">
+              {formatCountdown(msLeft)} {t("বাকি", "left")}
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </Link>
+        )}
+
+        {/* ========================================================== */}
+        {/* MODE CATALOG: Clean, Spacious 2-Column Grid               */}
+        {/* ========================================================== */}
+        <StaggerContainer className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4">
+          <AnimatePresence mode="popLayout">
+            {filteredCards.map((card) => {
+              const Icon = card.icon;
+              const BadgeIcon = card.badgeIcon;
+              const isExamCard = card.href === "/quiz/exam";
+
+              return (
+                <StaggerItem key={card.id}>
+                  <Link
+                    href={card.href}
+                    onClick={(e) => {
+                      if (card.href === "/quiz/daily" && requestGoogleLogin()) {
+                        e.preventDefault();
+                      }
+                    }}
+                    className={cn(
+                      "group relative flex h-full flex-col justify-between rounded-[22px] border border-black/[0.06] bg-white p-4.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_8px_24px_-8px_rgba(0,0,0,0.04)] dark:border-white/[0.08] dark:bg-[#1c1c1e]",
+                      "transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.08)] active:scale-[0.99]"
+                    )}
+                  >
+                    {/* Top Row: Squircle Icon Badge + Pill */}
+                    <div>
+                      <div className="flex items-start justify-between gap-3">
+                        <div
+                          className={cn(
+                            "flex size-11 shrink-0 items-center justify-center rounded-[14px] border shadow-2xs transition-transform duration-300 group-hover:scale-105",
+                            card.pastelStyle
+                          )}
+                        >
+                          <Icon className={cn("size-5", card.iconColor)} />
+                        </div>
+
+                        <span className="inline-flex items-center gap-1 rounded-full bg-black/[0.03] px-2.5 py-1 text-[11px] font-semibold text-zinc-600 dark:bg-white/[0.06] dark:text-zinc-300">
+                          {BadgeIcon && <BadgeIcon className="size-3" />}
+                          {t(card.badgeBn, card.badge)}
                         </span>
                       </div>
+
+                      {/* Title & Description */}
+                      <div className="mt-3.5">
+                        <h2 className="text-[15px] sm:text-base font-semibold tracking-tight text-zinc-900 transition-colors duration-200 dark:text-zinc-100">
+                          {t(card.labelBn, card.label)}
+                        </h2>
+                        <p className="mt-1 text-xs sm:text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+                          {t(card.descBn, card.desc)}
+                        </p>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                        {t("জয়ের হার", "Win rate")}
-                      </p>
-                      <p className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-                        {historyLoaded ? (
-                          <>
-                            {wins}
-                            <span className="font-normal text-zinc-400"> / {total}</span>
-                          </>
-                        ) : (
-                          "…"
+
+                    {/* Special Scheduled Exam Info (if applicable) */}
+                    {isExamCard && (
+                      <div
+                        className={cn(
+                          "my-3 flex items-center justify-between rounded-[12px] border px-3 py-1.5 text-xs",
+                          isOpen
+                            ? "border-amber-500/20 bg-amber-50/70 text-amber-700 dark:border-amber-500/30 dark:bg-amber-950/30 dark:text-amber-300"
+                            : "border-sky-500/20 bg-sky-50/70 text-sky-700 dark:border-sky-500/30 dark:bg-sky-950/30 dark:text-sky-300"
                         )}
-                      </p>
-                      <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                        {t("কুইজে জয়", "quizzes won")}
-                      </p>
-                    </div>
-                  </div>
-
-                  <StaggerContainer className="grid grid-cols-2 overflow-hidden">
-                    <StaggerItem className="border-l border-t border-black/[0.06] dark:border-white/[0.08] [&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0">
-                      <StatRow
-                        icon={Target}
-                        labelEn="Quizzes taken"
-                        labelBn="কুইজ নেওয়া হয়েছে"
-                        value={historyLoaded ? `${total}` : "…"}
-                        subEn="across all modes"
-                        subBn="সব মোড মিলিয়ে"
-                        tint="text-orange-500"
-                      />
-                    </StaggerItem>
-                    <StaggerItem className="border-l border-t border-black/[0.06] dark:border-white/[0.08] [&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0">
-                      <StatRow
-                        icon={Trophy}
-                        labelEn="Wins"
-                        labelBn="জয়"
-                        value={historyLoaded ? `${wins}` : "…"}
-                        subEn={total > 0 ? `of ${total} total` : "no quizzes yet"}
-                        subBn={total > 0 ? `মোট ${total}টির মধ্যে` : "এখনো কোনো কুইজ নেই"}
-                        tint="text-emerald-500"
-                      />
-                    </StaggerItem>
-                    <StaggerItem className="border-l border-t border-black/[0.06] dark:border-white/[0.08] [&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0">
-                      <StatRow
-                        icon={Layers}
-                        labelEn="Types"
-                        labelBn="ধরন"
-                        value={historyLoaded ? `${typeCount}` : "…"}
-                        subEn="modes you've tried"
-                        subBn="যে মোডগুলোতে খেলেছেন"
-                        tint="text-sky-500"
-                      />
-                    </StaggerItem>
-                    <StaggerItem className="border-l border-t border-black/[0.06] dark:border-white/[0.08] [&:nth-child(odd)]:border-l-0 [&:nth-child(-n+2)]:border-t-0">
-                      <StatRow
-                        icon={Sparkles}
-                        labelEn="Last result"
-                        labelBn="সর্বশেষ ফলাফল"
-                        value={
-                          last
-                            ? last.win
-                              ? t("জয়", "Won")
-                              : t("পরাজয়", "Lost")
-                            : historyLoaded
-                              ? "–"
-                              : "…"
-                        }
-                        subEn={last ? `${last.numberOfQuestions} questions` : "no quizzes yet"}
-                        subBn={last ? `${last.numberOfQuestions}টি প্রশ্ন` : "এখনো কোনো কুইজ নেই"}
-                        tint="text-violet-500"
-                      />
-                    </StaggerItem>
-</StaggerContainer>
-                  </div>
-                </StaggerItem>
-                </div>
-
-                <StaggerItem>
-                  <div className={cn(CARD, "overflow-hidden")}>
-                    <div className="flex items-center gap-2.5 border-b border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4">
-                      <div className={cn(ICON_CHIP, "text-violet-500")}>
-                        <CalendarClock className="size-4.5" />
-                      </div>
-                      <h2 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                        {t("পরবর্তী পরীক্ষা", "Next Exam")}
-                      </h2>
-                    </div>
-
-                  <div className="px-5 sm:px-6 py-4">
-                    {!examReady ? (
-                      <div className="space-y-2">
-                        <div className="h-5 w-32 rounded-full bg-zinc-200/80 dark:bg-zinc-700/60 animate-pulse" />
-                        <div className="h-3 w-44 rounded-full bg-zinc-200/70 dark:bg-zinc-700/40 animate-pulse" />
-                      </div>
-                    ) : exam ? (
-                      <div>
-                        <div className="flex items-center gap-2">
+                      >
+                        <span className="flex items-center gap-1.5 font-medium">
                           {isOpen ? (
-                            <Hourglass className="h-4 w-4 text-amber-500" />
+                            <Hourglass className="size-3.5 text-amber-500" />
                           ) : (
-                            <Timer className="h-4 w-4 text-sky-500" />
+                            <Timer className="size-3.5 text-sky-500" />
                           )}
-                          <span
-                            className={cn(
-                              "text-xs font-semibold",
-                              isOpen
-                                ? "text-amber-700 dark:text-amber-300"
-                                : "text-sky-700 dark:text-sky-300"
-                            )}
-                          >
-                            {isOpen
-                              ? t("শেষ হতে বাকি:", "Closes in:")
-                              : t("শুরু হতে বাকি:", "Opens in:")}
-                          </span>
-                          <span
-                            className={cn(
-                              "ml-auto text-xl font-bold tabular-nums",
-                              isOpen
-                                ? "text-amber-800 dark:text-amber-200"
-                                : "text-sky-800 dark:text-sky-200"
-                            )}
-                          >
-                            {formatCountdown(msLeft)}
-                          </span>
-                        </div>
-                        <p className="mt-2 truncate text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                          {exam.title}
-                        </p>
-                        <p className="mt-0.5 text-[11px] text-zinc-400 dark:text-zinc-500 tabular-nums">
-                          {t(
-                            `${exam.questionCount}টি প্রশ্ন · প্রতি প্রশ্নে ${exam.timePerQuestion} সেকেন্ড`,
-                            `${exam.questionCount} questions · ${exam.timePerQuestion}s each`
-                          )}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 text-sm text-zinc-400 dark:text-zinc-500">
-                        <Sparkles className="h-4 w-4" />
-                        {t(
-                          "বর্তমানে কোনো নির্ধারিত পরীক্ষা নেই",
-                          "No exams scheduled right now"
-                        )}
+                          {isOpen ? t("পরীক্ষা শেষ হতে:", "Closes in:") : t("পরীক্ষা শুরু হতে:", "Opens in:")}
+                        </span>
+                        <span className="font-bold tabular-nums">
+                          {exam ? formatCountdown(msLeft) : "–"}
+                        </span>
                       </div>
                     )}
-                  </div>
-                </div>
-              </StaggerItem>
-            </div>
 
-            {/* Main column: quiz modes */}
-            <div className="order-1 space-y-4 sm:space-y-6 lg:order-2">
-              <StaggerItem>
-                <section>
-                  <div className="mb-4 px-1">
-                    <h2 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                      {t("কুইজ মোড", "Quiz Modes")}
-                    </h2>
-                    <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                      {t(
-                        "একটি মোড বেছে নিয়ে অনুশীলন শুরু করুন।",
-                        "Pick a mode and start practicing."
-                      )}
-                    </p>
-                  </div>
+                    {/* Bottom Row: Metadata Hint + Circular Arrow Button */}
+                    <div className="mt-4 flex items-center justify-between border-t border-black/[0.04] pt-3 dark:border-white/[0.04]">
+                      <span className="text-[11px] sm:text-xs font-medium text-zinc-400 dark:text-zinc-500">
+                        {t(card.metaBn, card.meta)}
+                      </span>
 
-                  <div className={cn(CARD, "overflow-hidden")}>
-                    <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
-                      {CARDS.map((card) => {
-                        const Icon = card.icon;
-                        const BadgeIcon = card.badgeIcon;
-                        const isExamCard = card.href === "/quiz/exam";
-                        return (
-                          <StaggerItem
-                            key={card.href}
-                            className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0"
-                          >
-                            <Link
-                              href={card.href}
-                              onClick={(e) => {
-                                if (card.href === "/quiz/daily" && requestGoogleLogin()) {
-                                  e.preventDefault();
-                                }
-                              }}
-                              className={cn(
-                                "group flex h-full flex-col gap-3 p-5 sm:p-6 transition-colors",
-                                "hover:bg-black/[0.02] active:bg-black/[0.02] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04]"
-                              )}
-                            >
-                              <div className="flex items-start justify-between gap-3">
-                                <div
-                                  className={cn(
-                                    "flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_2px_8px_-2px_rgba(16,24,40,0.15)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_2px_8px_-2px_rgba(0,0,0,0.5)]",
-                                    card.accent
-                                  )}
-                                >
-                                  <Icon className="h-6 w-6" />
-                                </div>
-
-                              {BadgeIcon && (
-                                <span
-                                  className={cn(
-                                    "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold",
-                                    card.pill
-                                  )}
-                                >
-                                  <BadgeIcon className="h-3 w-3" />
-                                  {t(card.badgeBn!, card.badge!)}
-                                </span>
-                              )}
-                              {!BadgeIcon && (
-                                <span
-                                  className={cn(
-                                    "inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold",
-                                    card.pill
-                                  )}
-                                >
-                                  {t(card.badgeBn!, card.badge!)}
-                                </span>
-                              )}
-                            </div>
-
-                            <div className="min-w-0">
-                              <h3 className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                                {t(card.labelBn, card.label)}
-                              </h3>
-                              <p className="mt-1 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
-                                {t(card.descBn, card.desc)}
-                              </p>
-                            </div>
-
-                            {isExamCard && (
-                              <div
-                                className={cn(
-                                  "flex items-center gap-1.5 rounded-xl border px-3 py-2",
-                                  isOpen
-                                    ? "bg-amber-50/70 dark:bg-amber-500/10 border-amber-200/70 dark:border-amber-800"
-                                    : "bg-sky-50/70 dark:bg-sky-500/10 border-sky-200/70 dark:border-sky-800"
-                                )}
-                              >
-                                {!examReady ? (
-                                  <>
-                                    <Timer className="h-3.5 w-3.5 text-zinc-400" />
-                                    <span className="h-3 w-20 rounded-full bg-zinc-200 dark:bg-zinc-700 animate-pulse" />
-                                  </>
-                                ) : exam ? (
-                                  <>
-                                    {isOpen ? (
-                                      <Hourglass className="h-3.5 w-3.5 text-amber-500" />
-                                    ) : (
-                                      <CalendarClock className="h-3.5 w-3.5 text-sky-500" />
-                                    )}
-                                    <span
-                                      className={cn(
-                                        "text-xs font-semibold",
-                                        isOpen
-                                          ? "text-amber-700 dark:text-amber-300"
-                                          : "text-sky-700 dark:text-sky-300"
-                                      )}
-                                    >
-                                      {isOpen
-                                        ? t("শেষ হতে:", "Closes in:")
-                                        : t("শুরু হতে:", "Opens in:")}
-                                    </span>
-                                    <span
-                                      className={cn(
-                                        "ml-auto text-sm font-bold tabular-nums",
-                                        isOpen
-                                          ? "text-amber-800 dark:text-amber-200"
-                                          : "text-sky-800 dark:text-sky-200"
-                                      )}
-                                    >
-                                      {formatCountdown(msLeft)}
-                                    </span>
-                                  </>
-                                ) : (
-                                  <span className="text-xs font-medium text-zinc-400">
-                                    {t(
-                                      "শিডিউল করা পরীক্ষা নেই",
-                                      "No exams scheduled"
-                                    )}
-                                  </span>
-                                )}
-                              </div>
-                            )}
-
-                            <div className="mt-auto flex items-center justify-between pt-1">
-                              <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-                                {t("শুরু করুন", "Start")}
-                              </span>
-                              <span
-                                className={cn(
-                                  "flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400 transition-colors duration-300",
-                                  card.arrow
-                                )}
-                              >
-                                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-active:translate-x-0.5" />
-                              </span>
-                            </div>
-                          </Link>
-                        </StaggerItem>
-                    );
-                  })}
-                    </StaggerContainer>
-                  </div>
-                </section>
-              </StaggerItem>
-            </div>
-          </div>
+                      <span className="flex size-7.5 items-center justify-center rounded-full bg-[#f1f1ef] text-zinc-600 transition-all duration-300 group-hover:bg-zinc-900 group-hover:text-white dark:bg-[#252528] dark:text-zinc-300 dark:group-hover:bg-white dark:group-hover:text-zinc-900">
+                        <ArrowRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+                      </span>
+                    </div>
+                  </Link>
+                </StaggerItem>
+              );
+            })}
+          </AnimatePresence>
         </StaggerContainer>
-      </div>
-    </div>
-  );
-}
-
-function StatRow({
-  icon: Icon,
-  labelEn,
-  labelBn,
-  value,
-  subEn,
-  subBn,
-  tint,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  labelEn: string;
-  labelBn: string;
-  value: string;
-  subEn: string;
-  subBn: string;
-  tint: string;
-}) {
-  const t = useT();
-
-  return (
-    <div className="flex items-center gap-3 px-5 py-4">
-      <div className={cn(ICON_CHIP, tint)}>
-        <Icon className="size-4.5" />
-      </div>
-      <div className="min-w-0">
-        <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
-          {t(labelBn, labelEn)}
-        </p>
-        <p className="mt-0.5 text-lg font-semibold tracking-tight tabular-nums text-zinc-900 dark:text-zinc-100">
-          {value}
-        </p>
-        <p className="truncate text-[11px] text-zinc-400 dark:text-zinc-500">
-          {t(subBn, subEn)}
-        </p>
       </div>
     </div>
   );

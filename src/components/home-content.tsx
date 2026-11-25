@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useLearnedWords } from "@/lib/use-learned-words";
-import { useTTS } from "@/lib/use-speak";
+import { PixelFeatureCard } from "@/components/pixel-feature-card";
 import { Button } from "@/components/ui/button";
 import {
   LibraryBig,
@@ -33,6 +33,7 @@ import {
   CheckSquare,
   Square,
   Loader2,
+  Flame,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
@@ -251,99 +252,6 @@ const QUIZ_MODES = [
   },
 ];
 
-// Sample vocabulary flashcards for interactive study desk
-const SAMPLE_NOTES = [
-  {
-    word: "Persevere",
-    ipa: "/ˌpɜː.sɪˈvɪər/",
-    pos: "verb",
-    level: "B2",
-    meaningBn: "অধ্যবসায় করা / হাল না ছেড়ে চেষ্টা চালিয়ে যাওয়া",
-    example: "She persevered in her studies until she achieved fluency.",
-  },
-  {
-    word: "Resilient",
-    ipa: "/rɪˈzɪl.jənt/",
-    pos: "adjective",
-    level: "B2",
-    meaningBn: "স্থিতিস্থাপক / প্রতিকূলতা পেরিয়ে ঘুরে দাঁড়ানোর ক্ষমতা সম্পন্ন",
-    example: "Children are often remarkably resilient in challenging times.",
-  },
-  {
-    word: "Eloquent",
-    ipa: "/ˈel.ə.kwənt/",
-    pos: "adjective",
-    level: "C1",
-    meaningBn: "বাকপটু / সুন্দর ও প্রাঞ্জল ভাষায় মনের ভাব প্রকাশের দক্ষ",
-    example: "His eloquent speech inspired the entire classroom.",
-  },
-  {
-    word: "Meticulous",
-    ipa: "/məˈtɪk.jə.ləs/",
-    pos: "adjective",
-    level: "C1",
-    meaningBn: "খুঁতখুঁতে / প্রতিটি ছোট বিষয়ে অত্যন্ত সতর্ক ও নিখুঁত",
-    example: "He kept meticulous notes during every grammar lecture.",
-  },
-];
-
-// Sample grammar rules for interactive study desk
-const SAMPLE_GRAMMAR_RULES = [
-  {
-    topic: "Subject-Verb Agreement",
-    topicBn: "Subject-Verb মিলকরণ নিয়ম",
-    tag: "RULE #01",
-    ruleEn: "Singular subjects take singular verbs; plural subjects take plural verbs.",
-    ruleBn: "Subject একবচন (Third Person Singular) হলে Verb-এর শেষে s/es যুক্ত হয়।",
-    formula: "He / She / It + Verb(s/es)  vs  I / We / They + Base Verb",
-    tokens: [
-      { text: "He", role: "3rd Person Sing." },
-      { text: "goes", role: "Verb + es" },
-      { text: "to office", role: "Prep. Phrase" },
-      { text: "daily", role: "Adverbial" },
-    ],
-    incorrect: "He go to office every day.",
-    correct: "He goes to office every day.",
-    whyBn: "He হলো Third Person Singular, তাই go এর পরিবর্তে goes হবে।",
-    link: "/grammar/parts-of-speech",
-  },
-  {
-    topic: "Present Perfect vs Past Simple",
-    topicBn: "Present Perfect বনাম Past Simple",
-    tag: "RULE #02",
-    ruleEn: "Use Past Simple with finished past time; use Present Perfect for past actions with current impact.",
-    ruleBn: "অতীতের নির্দিষ্ট সময় (yesterday, last year) উল্লেখ থাকলে Past Simple হয়।",
-    formula: "Subject + have/has + V3  vs  Subject + V2 (Past)",
-    tokens: [
-      { text: "I", role: "Subject" },
-      { text: "saw", role: "Past Simple (V2)" },
-      { text: "him", role: "Object" },
-      { text: "yesterday", role: "Past Time" },
-    ],
-    incorrect: "I have seen him yesterday.",
-    correct: "I saw him yesterday.",
-    whyBn: "'Yesterday' অতীত সময় নির্দেশ করে, তাই Past Indefinite (saw) বসবে।",
-    link: "/grammar",
-  },
-  {
-    topic: "Prepositions of Time: In, On, At",
-    topicBn: "সময় নির্দেশক প্রিপজিশন (In, On, At)",
-    tag: "RULE #03",
-    ruleEn: "At for clock times; On for days and dates; In for months, years, and seasons.",
-    ruleBn: "নির্দিষ্ট ঘড়ির সময়ে At; দিন ও নির্দিষ্ট তারিখে On; মাস ও বছরে In বসে।",
-    formula: "At 5:00 PM • On Sunday / 15th Aug • In October / 2026",
-    tokens: [
-      { text: "The meeting starts", role: "Clause" },
-      { text: "on Monday", role: "Day = On" },
-      { text: "in the morning", role: "Period = In" },
-    ],
-    incorrect: "The exam starts in Monday at the morning.",
-    correct: "The exam starts on Monday in the morning.",
-    whyBn: "বারের নামের আগে সর্বদা On এবং 'in the morning' নির্দিষ্ট প্রিপজিশনাল ফ্রেজ।",
-    link: "/grammar",
-  },
-];
-
 // Grammar Sections Showcase
 const GRAMMAR_SHOWCASE = [
   {
@@ -419,21 +327,6 @@ export function HomeContent({
 }) {
   const { learnedIds, loaded } = useLearnedWords();
   const t = useT();
-  const [activeWordIdx, setActiveWordIdx] = useState(0);
-  const [activeRuleIdx, setActiveRuleIdx] = useState(0);
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const {
-    speak: edgeSpeak,
-    isPlaying: isEdgePlaying,
-    isLoading: isEdgeLoading,
-    activeText: edgeActiveText,
-  } = useTTS();
-  const [dailyGoals, setDailyGoals] = useState({
-    vocab: true,
-    grammar: true,
-    quiz: false,
-  });
-
   const countMap = new Map(levelStats.map((s) => [s.level.toUpperCase(), s.count]));
   const totalWords = levelStats.reduce((sum, s) => sum + s.count, 0);
 
@@ -446,28 +339,9 @@ export function HomeContent({
   const overallPct = totalWords > 0 ? Math.round((totalLearned / totalWords) * 100) : 0;
   const liveLevelCount = displayStats.filter((s) => isLevelLive(s.total)).length;
 
-  const currentSample = SAMPLE_NOTES[activeWordIdx];
-  const currentRule = SAMPLE_GRAMMAR_RULES[activeRuleIdx];
-
-  const handleNextSample = () => {
-    setActiveWordIdx((prev) => (prev + 1) % SAMPLE_NOTES.length);
-  };
-
-  const handleNextRule = () => {
-    setActiveRuleIdx((prev) => (prev + 1) % SAMPLE_GRAMMAR_RULES.length);
-  };
-
-  const playWordAudio = (word: string) => {
-    edgeSpeak(word, 0.95);
-  };
-
-  const toggleDailyGoal = (key: "vocab" | "grammar" | "quiz") => {
-    setDailyGoals((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
   return (
     <LenisProvider>
-      <div className="relative min-h-dvh overflow-x-hidden sketch-grid-paper selection:bg-amber-300 selection:text-zinc-950">
+      <div className="relative min-h-dvh overflow-x-hidden bg-[#f8f8f6] dark:bg-[#0c0c0e] text-[#242423] dark:text-[#f4f4f5] selection:bg-amber-300 selection:text-zinc-950">
         {/* Tactile notebook paper texture overlays */}
         <div
           aria-hidden="true"
@@ -477,448 +351,114 @@ export function HomeContent({
         <div className="relative px-3 sm:px-6 lg:px-8 pt-8 pb-20 max-w-6xl xl:max-w-7xl mx-auto">
           {/* Main Content Container */}
           <div className="relative">
-            {/* HERO SECTION */}
-            <section className="relative pt-6 sm:pt-10 pb-12">
-              {/* Header Badges: Stamp & Edition style */}
-              <ScrollReveal direction="down" duration={0.5} className="mb-6">
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm border border-dashed border-amber-600/60 dark:border-amber-400/60 bg-amber-50/80 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 font-mono text-xs uppercase tracking-wider stamp-badge shadow-xs">
-                    <PenTool className="size-3.5 text-orange-600 dark:text-orange-400" />
-                    <span>ZERO ENGLISH // NOTEBOOK ED.</span>
+            {/* ======================================================== */}
+            {/* HERO SECTION: Fluid, Restrained & Modern (DESIGNS.md)   */}
+            {/* ======================================================== */}
+            <section className="relative pt-6 sm:pt-10 pb-12 sm:pb-16">
+              {/* Split 2-Column Responsive Hero Grid (DESIGNS.md) */}
+              <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-center">
+                {/* Left Column: Master Typography & Action Flow */}
+                <div className="space-y-6">
+                  {/* Status Capsule (Reference 1 in DESIGNS.md) */}
+                  <div className="inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-700 shadow-2xs dark:border-white/[0.08] dark:bg-[#1c1c1e] dark:text-zinc-300">
+                    <span className="flex size-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>{t("অক্সফোর্ড CEFR ও ব্যাকরণ পদ্ধতি", "Oxford CEFR & Grammar Framework")}</span>
+                    <span className="text-zinc-300 dark:text-zinc-600">·</span>
+                    <span className="font-bold text-amber-600 dark:text-amber-400 tabular-nums">
+                      {fmt(totalWords)} {t("শব্দ", "Words")}
+                    </span>
                   </div>
 
-                  <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-xs font-mono text-zinc-600 dark:text-zinc-400">
-                    <DoodleStar className="text-amber-500" />
-                    <span>
+                  {/* Primary Heading */}
+                  <div className="space-y-3">
+                    <h1 className="text-3xl sm:text-5xl lg:text-[46px] font-bold tracking-tight text-[#1c1c1e] dark:text-[#f4f4f5] leading-[1.14] sm:leading-[1.12]">
+                      {t("সহজ ও নির্ভুল বাংলা ব্যাখ্যায় ইংরেজি শিখুন।", "Master English Vocabulary & Grammar with Bangla Clarity.")}
+                    </h1>
+                    <p className="text-base sm:text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-xl">
                       {t(
-                        `${fmt(totalWords)}টি শব্দ + ব্যাকরণ নিয়ম`,
-                        `${fmt(totalWords)} Words & Grammar Rules`
+                        `অক্সফোর্ড ৩০০০ ও ৫০০০ তালিকা থেকে বাছাই করা ${fmt(totalWords)}টি ইংরেজি শব্দ এবং পার্টস অব স্পিচ, টেন্স ও সেন্টেন্স মেকানিক্সের পূর্ণাঙ্গ নিয়মাবলী। বাস্তব উদাহরণ, খাঁটি উচ্চারণ ও স্মার্ট কুইজ টেস্ট।`,
+                        `Over ${fmt(totalWords)} graded Oxford words across A1 to C1 levels, core grammar formulas, and instant audio pronunciation. Built for conversational fluency and real exam confidence.`
                       )}
-                    </span>
+                    </p>
                   </div>
 
-                  <div className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-sm bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs font-mono text-emerald-700 dark:text-emerald-300">
-                    <DoodleSparkle className="text-emerald-500" />
-                    <span>100% FREE • NO LOGIN REQUIRED</span>
-                  </div>
-                </div>
-              </ScrollReveal>
-
-              {/* Main Headline with Sketch Highlights */}
-              <ScrollReveal direction="up" delay={0.1} duration={0.6}>
-                <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-[50px] xl:text-[56px] font-black tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.2] sm:leading-[1.18] mb-4">
-                  <span>
-                    {t("ইংরেজি শব্দ ও গ্রামার শিখুন,", "Learn English words & grammar,")}
-                  </span>
-                  <br />
-                  <SketchHighlight color="yellow" className="inline-block mt-1 sm:mt-2">
-                    {t("সহজ বাংলা ব্যাখ্যায়।", "with clear Bangla explanations.")}
-                  </SketchHighlight>
-                </h1>
-
-                <DoodleUnderline className="text-orange-500 dark:text-orange-400 max-w-xs sm:max-w-sm md:max-w-md -mt-1 mb-6 opacity-80" />
-              </ScrollReveal>
-
-              {/* Subtitle / Notebook Memo */}
-              <ScrollReveal direction="up" delay={0.2} duration={0.6}>
-                <div className="relative max-w-2xl bg-white/85 dark:bg-zinc-900/85 backdrop-blur-sm border border-zinc-200/90 dark:border-zinc-800 p-4 sm:p-5 rounded-2xl paper-shadow mb-8 sketch-border-sm">
-                  <p className="text-base sm:text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                    {t(
-                      `অক্সফোর্ড ৩০০০ ও ৫০০০ তালিকা থেকে বাছাই করা ${fmt(totalWords)}টি ইংরেজি শব্দ এবং পার্টস অব স্পিচ, টেন্স ও সেন্টেন্স স্ট্রাকচারের সম্পূর্ণ ব্যাকরণ নিয়মাবলী। প্রতিটি এন্ট্রিতে বাংলা অর্থ, খাঁটি উদাহরণ ও সাধারণ ভুলের সমাধান।`,
-                      `${fmt(totalWords)} graded Oxford words plus comprehensive English grammar lessons (Parts of Speech, Tenses, Sentence Mechanics). Every lesson includes Bangla meanings, real-world examples, and common error corrections.`
-                    )}
-                  </p>
-                  <div className="mt-3 flex items-center justify-between text-xs font-mono text-zinc-400 border-t border-dashed border-zinc-200 dark:border-zinc-800 pt-2.5">
-                    <span className="flex items-center gap-1.5">
-                      <Bookmark className="size-3.5 text-amber-500" />
-                      <span>{t("বিনামূল্যে শিখুন — সাইনআপ অপশনাল", "Free to learn — account optional")}</span>
-                    </span>
-                    <span className="text-zinc-400">VOCAB A1-C1 • GRAMMAR • QUIZZES</span>
-                  </div>
-                </div>
-              </ScrollReveal>
-
-              {/* CTA Action Buttons */}
-              <ScrollReveal direction="up" delay={0.25} duration={0.6}>
-                <div className="mb-10">
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-3.5">
-                    {/* Primary Button: Vocabulary Explorer */}
+                  {/* Action Toolbar (Reference 1 in DESIGNS.md) */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
                     <Link
                       href="/vocabulary"
-                      className="group relative inline-flex items-center justify-between sm:justify-center gap-3 h-12 px-6 rounded-xl bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600 text-white font-semibold text-sm shadow-[0_8px_20px_-4px_rgba(234,88,12,0.38)] hover:shadow-[0_12px_24px_-4px_rgba(234,88,12,0.48)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 border border-orange-400/40 overflow-hidden"
+                      className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#1c1c1e] px-6 py-3.5 text-sm font-semibold text-white shadow-xs transition-all hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#1c1c1e] dark:hover:bg-zinc-200"
                     >
-                      {/* Subtle top specular sheen */}
-                      <div className="absolute inset-x-0 top-0 h-[1px] bg-white/35 pointer-events-none" />
-
-                      <div className="flex items-center gap-2.5">
-                        <span className="flex size-6 items-center justify-center rounded-md bg-white/20 text-white shrink-0">
-                          <LibraryBig className="size-3.5" />
-                        </span>
-                        <span>{t("শব্দতালিকা দেখুন", "Explore Word Lists")}</span>
-                      </div>
-
-                      <span className="flex size-6 items-center justify-center rounded-full bg-white/15 text-white/90 group-hover:bg-white group-hover:text-orange-600 transition-colors">
-                        <ArrowRight className="size-3.5 group-hover:translate-x-0.5 transition-transform" />
-                      </span>
+                      <LibraryBig className="size-4" />
+                      <span>{t("শব্দতালিকা দেখুন", "Explore Word Lists")}</span>
+                      <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                     </Link>
 
-                    {/* Secondary Button: Grammar Lessons */}
                     <Link
                       href="/grammar"
-                      className="group relative inline-flex items-center justify-between sm:justify-center gap-3 h-12 px-6 rounded-xl bg-white/90 dark:bg-zinc-900/90 hover:bg-white dark:hover:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold text-sm border-2 border-zinc-200/90 dark:border-zinc-800 hover:border-emerald-500/60 dark:hover:border-emerald-500/60 shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                      className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3.5 text-sm font-semibold text-[#242423] border border-black/[0.08] shadow-2xs transition-all hover:bg-zinc-50 active:scale-[0.98] dark:bg-[#1c1c1e] dark:text-[#f3f3f2] dark:border-white/[0.1] dark:hover:bg-[#252528]"
                     >
-                      <div className="flex items-center gap-2.5">
-                        <span className="flex size-6 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 shrink-0">
-                          <BookMarked className="size-3.5" />
-                        </span>
-                        <span>{t("গ্রামার রুলস পড়ুন", "Grammar Lessons")}</span>
-                      </div>
-
-                      <span className="flex size-6 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-                        <ArrowRight className="size-3.5 group-hover:translate-x-0.5 transition-transform" />
-                      </span>
+                      <BookMarked className="size-4 text-emerald-600 dark:text-emerald-400" />
+                      <span>{t("গ্রামার রুলস পড়ুন", "Grammar Lessons")}</span>
                     </Link>
 
-                    {/* Tertiary Button: Practice Quizzes */}
                     <Link
                       href="/quiz"
-                      className="group inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white font-medium text-sm hover:bg-black/5 dark:hover:bg-white/5 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-800 transition-all duration-200"
+                      className="group inline-flex items-center justify-center gap-1.5 px-4 py-3 text-xs sm:text-sm font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
                     >
-                      <BookOpenCheck className="size-4 text-orange-600 dark:text-orange-400" />
-                      <span>{t("অনুশীলনী কুইজ", "Practice Quiz")}</span>
-                      <ArrowRight className="size-3.5 text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 group-hover:translate-x-0.5 transition-all" />
+                      <BookOpenCheck className="size-4 text-amber-500" />
+                      <span>{t("কুইজ অনুশীলন", "Practice Quizzes")}</span>
+                      <ArrowRight className="size-3.5 text-zinc-400 group-hover:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>
 
-                  {/* Micro-trust indicator line */}
-                  <div className="mt-3.5 flex items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+                  {/* Micro-Trust Indicator Line */}
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400 dark:text-zinc-500 pt-1">
                     <span className="flex items-center gap-1.5">
                       <CheckCircle2 className="size-3.5 text-emerald-500" />
-                      <span>{t("অ্যাকাউন্ট ছাড়াই শেখা যায়", "No sign-up required to start")}</span>
+                      <span>{t("১০০% ফ্রি ও উন্মুক্ত", "100% Free & Open")}</span>
                     </span>
-                    <span className="text-zinc-300 dark:text-zinc-700">•</span>
-                    <span>{t("১০০% ফ্রি ও উন্মুক্ত", "100% Free & Open")}</span>
+                    <span>·</span>
+                    <span>{t("অ্যাকাউন্ট ছাড়াই শেখা যায়", "No sign-up required")}</span>
+                    <span>·</span>
+                    <span>{t("স্পিচ অডিও উচ্চারণ", "Audio pronunciation")}</span>
                   </div>
-                </div>
-              </ScrollReveal>
 
-              {/* REDESIGNED HERO BOTTOM AREA: THE STUDY DESK */}
-              <div className="space-y-4">
-                {/* 1. Quick Technical Stationery Index Bar */}
-                <ScrollReveal direction="up" delay={0.3}>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                    <div className="p-3 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 paper-shadow flex items-center gap-2.5">
-                      <div className="size-8 rounded-lg bg-orange-100 dark:bg-orange-950/60 text-orange-600 flex items-center justify-center shrink-0">
-                        <LibraryBig className="size-4" />
-                      </div>
-                      <div>
-                        <div className="text-base font-black text-zinc-900 dark:text-zinc-100 leading-none">
-                          {fmt(totalWords)}
-                        </div>
-                        <div className="text-[11px] font-mono text-zinc-500 mt-0.5">
-                          {t("ইংরেজি শব্দ", "Oxford Words")}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 paper-shadow flex items-center gap-2.5">
-                      <div className="size-8 rounded-lg bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center shrink-0">
-                        <BookMarked className="size-4" />
-                      </div>
-                      <div>
-                        <div className="text-base font-black text-zinc-900 dark:text-zinc-100 leading-none">
-                          <span>৮ পদ • ১২ টেন্স</span>
-                        </div>
-                        <div className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">
-                          {t("গ্রামার রুলস", "Grammar Rules")}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 paper-shadow flex items-center gap-2.5">
-                      <div className="size-8 rounded-lg bg-sky-100 dark:bg-sky-950/60 text-sky-600 flex items-center justify-center shrink-0">
-                        <Layers className="size-4" />
-                      </div>
-                      <div>
-                        <div className="text-base font-black text-zinc-900 dark:text-zinc-100 leading-none">
-                          {liveLevelCount} লেভেলস
-                        </div>
-                        <div className="text-[11px] font-mono text-zinc-500 mt-0.5">
-                          {t("CEFR A1 থেকে C1", "CEFR A1 to C1")}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-white/90 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 paper-shadow flex items-center gap-2.5">
-                      <div className="size-8 rounded-lg bg-purple-100 dark:bg-purple-950/60 text-purple-600 flex items-center justify-center shrink-0">
-                        <TrendingUp className="size-4" />
-                      </div>
-                      <div>
-                        <div className="text-base font-black text-purple-600 dark:text-purple-400 leading-none">
-                          {loaded ? `${overallPct}%` : "· · ·"}
-                        </div>
-                        <div className="text-[11px] font-mono text-zinc-500 mt-0.5">
-                          {t("আপনার অগ্রগতি", "Study Progress")}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </ScrollReveal>
-
-                {/* 2. DUAL INTERACTIVE STUDY DESK: Vocabulary Flashnote + Grammar Formula Note */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch pt-2">
-                  {/* Left Note: Vocabulary Flashcard with Native Pronunciation Audio */}
-                  <ScrollReveal
-                    direction="up"
-                    delay={0.35}
-                    className="relative bg-[#fffdf0] dark:bg-amber-950/30 border-2 border-amber-300 dark:border-amber-700/60 p-5 rounded-2xl sticky-shadow paper-dogear rotate-[-0.6deg] hover:rotate-0 transition-transform duration-300 group flex flex-col justify-between"
-                  >
-                    <WashiTape color="amber" />
-                    <div>
-                      <div className="flex items-center justify-between pb-2 border-b border-dashed border-amber-300/70 dark:border-amber-700/60 text-xs font-mono text-amber-800 dark:text-amber-300">
-                        <span className="flex items-center gap-1.5 font-bold">
-                          <Pin className="size-3.5 text-amber-600" />
-                          <span>{t("ভোকাবুলারি নোট", "VOCABULARY FLASHNOTE")}</span>
-                        </span>
-                        <span className="px-2 py-0.5 rounded-sm bg-amber-200 dark:bg-amber-900 font-bold text-amber-900 dark:text-amber-100">
-                          {currentSample.level}
-                        </span>
-                      </div>
-
-                      <div className="mt-3">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <h4 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">
-                              {currentSample.word}
-                            </h4>
-                            {/* Interactive Audio Pronunciation Button */}
-                            {(() => {
-                              const isSampleActive = edgeActiveText === currentSample.word;
-                              const isSampleLoading = isSampleActive && isEdgeLoading;
-                              const isSamplePlaying = (isSampleActive && isEdgePlaying) || isPlayingAudio;
-
-                              return (
-                                <button
-                                  onClick={() => playWordAudio(currentSample.word)}
-                                  type="button"
-                                  disabled={isSampleLoading}
-                                  title="উচ্চারণ শুনুন (Listen to pronunciation)"
-                                  className={cn(
-                                    "size-7 rounded-full flex items-center justify-center transition-all cursor-pointer border",
-                                    isSamplePlaying
-                                      ? "bg-orange-500 text-white border-orange-600 scale-110 animate-pulse shadow-sm"
-                                      : "bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200 border-amber-300/80 hover:bg-orange-500 hover:text-white hover:border-orange-500 disabled:opacity-75"
-                                  )}
-                                >
-                                  {isSampleLoading ? (
-                                    <Loader2 className="size-3.5 animate-spin text-amber-700 dark:text-amber-300" />
-                                  ) : (
-                                    <Volume2 className="size-3.5" />
-                                  )}
-                                </button>
-                              );
-                            })()}
-                          </div>
-                          <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase">
-                            {currentSample.pos}
-                          </span>
-                        </div>
-
-                        <div className="text-xs font-mono text-amber-700 dark:text-amber-400 mt-0.5">
-                          {currentSample.ipa}
-                        </div>
-
-                        <p className="mt-2 text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-                          {currentSample.meaningBn}
-                        </p>
-
-                        <p className="mt-1.5 text-xs text-zinc-600 dark:text-zinc-400 italic">
-                          "{currentSample.example}"
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-2.5 border-t border-dashed border-amber-300/60 dark:border-amber-700/50 flex items-center justify-between">
-                      <button
-                        onClick={handleNextSample}
-                        className="text-xs font-mono font-semibold text-amber-900 dark:text-amber-200 hover:text-orange-600 dark:hover:text-orange-400 flex items-center gap-1 cursor-pointer transition-colors"
-                        type="button"
-                      >
-                        <span>{t("অন্য শব্দ দেখুন ↻", "Next sample note ↻")}</span>
-                      </button>
-
-                      <Link
-                        href="/vocabulary"
-                        className="text-xs font-mono font-bold text-orange-600 dark:text-orange-400 hover:underline flex items-center gap-0.5"
-                      >
-                        <span>{t("শব্দতালিকা খুলুন", "Explore Words")}</span>
-                        <ArrowRight className="size-3" />
-                      </Link>
-                    </div>
-                  </ScrollReveal>
-
-                  {/* Right Note: Grammar Rule Formula & Sentence Anatomy */}
-                  <ScrollReveal
-                    direction="up"
-                    delay={0.4}
-                    className="relative bg-[#f4fbf7] dark:bg-emerald-950/30 border-2 border-emerald-300 dark:border-emerald-700/60 p-5 rounded-2xl sticky-shadow paper-dogear rotate-[0.7deg] hover:rotate-0 transition-transform duration-300 group flex flex-col justify-between"
-                  >
-                    <WashiTape color="neutral" />
-                    <DoodlePaperClip className="absolute -top-3.5 left-5 text-zinc-400/80 dark:text-zinc-500 z-30 drop-shadow-xs rotate-[6deg]" />
-
-                    <div>
-                      <div className="flex items-center justify-between pb-2 border-b border-dashed border-emerald-300/70 dark:border-emerald-700/60 text-xs font-mono text-emerald-800 dark:text-emerald-300 pl-4 sm:pl-0">
-                        <span className="flex items-center gap-1.5 font-bold">
-                          <Lightbulb className="size-3.5 text-emerald-600" />
-                          <span>{t("গ্রামার গোল্ডেন রুল", "GRAMMAR GOLDEN RULE")}</span>
-                        </span>
-                        <span className="px-2 py-0.5 rounded-sm bg-emerald-200 dark:bg-emerald-900 font-bold text-emerald-900 dark:text-emerald-100">
-                          {currentRule.tag}
-                        </span>
-                      </div>
-
-                      <div className="mt-3">
-                        <div className="flex items-baseline justify-between">
-                          <h4 className="text-lg font-black text-zinc-900 dark:text-zinc-100">
-                            {t(currentRule.topicBn, currentRule.topic)}
-                          </h4>
-                          <span className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-bold">
-                            FORMULA
-                          </span>
-                        </div>
-
-                        {/* Formula strip */}
-                        <div className="mt-1 px-2.5 py-1 rounded-sm bg-emerald-100/70 dark:bg-emerald-900/50 border border-emerald-200 dark:border-emerald-800 text-xs font-mono font-semibold text-emerald-900 dark:text-emerald-200">
-                          {currentRule.formula}
-                        </div>
-
-                        {/* Interactive Sentence Anatomy Chips */}
-                        <div className="mt-2.5">
-                          <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-500 uppercase tracking-wider mb-1">
-                            <span>SENTENCE ANATOMY:</span>
-                          </div>
-                          <div className="flex flex-wrap gap-1.5">
-                            {currentRule.tokens.map((token, tIdx) => (
-                              <div
-                                key={tIdx}
-                                className="group/tok relative px-2 py-0.5 rounded-sm bg-white dark:bg-zinc-800/90 border border-emerald-300/80 dark:border-emerald-800 text-xs font-mono text-zinc-800 dark:text-zinc-200 hover:border-emerald-500 transition-colors cursor-default"
-                              >
-                                <span className="font-semibold text-emerald-800 dark:text-emerald-300">{token.text}</span>
-                                <span className="text-[9px] text-zinc-400 dark:text-zinc-500 block leading-none mt-0.5">
-                                  {token.role}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Common Mistake Comparison */}
-                        <div className="mt-2.5 space-y-1 text-xs">
-                          <div className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-mono">
-                            <X className="size-3.5 shrink-0 stroke-[2.5]" />
-                            <span className="line-through">{currentRule.incorrect}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300 font-mono font-bold">
-                            <Check className="size-3.5 shrink-0 stroke-[2.5]" />
-                            <span>{currentRule.correct}</span>
-                          </div>
-                        </div>
-
-                        <p className="mt-1.5 text-xs text-zinc-600 dark:text-zinc-400 leading-tight">
-                          💡 <span className="font-medium text-zinc-800 dark:text-zinc-200">{currentRule.whyBn}</span>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-2.5 border-t border-dashed border-emerald-300/60 dark:border-emerald-700/50 flex items-center justify-between">
-                      <button
-                        onClick={handleNextRule}
-                        className="text-xs font-mono font-semibold text-emerald-900 dark:text-emerald-200 hover:text-emerald-600 flex items-center gap-1 cursor-pointer transition-colors"
-                        type="button"
-                      >
-                        <span>{t("অন্য রুল দেখুন ↻", "Next grammar tip ↻")}</span>
-                      </button>
-
-                      <Link
-                        href={currentRule.link}
-                        className="text-xs font-mono font-bold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-0.5"
-                      >
-                        <span>{t("সব গ্রামার রুলস", "All Grammar Rules")}</span>
-                        <ArrowRight className="size-3" />
-                      </Link>
-                    </div>
-                  </ScrollReveal>
-                </div>
-
-                {/* 3. MINI STUDY HABIT MEMO (Interactive Daily Checklist Widget) */}
-                <ScrollReveal direction="up" delay={0.45}>
-                  <div className="p-3.5 rounded-2xl bg-white/70 dark:bg-zinc-900/60 border border-dashed border-zinc-300 dark:border-zinc-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-mono">
-                    <div className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
-                      <span className="flex size-6 items-center justify-center rounded-md bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300">
-                        <Bookmark className="size-3.5" />
+                  {/* Inset Metric Capsule Bar (Reference 1 & 9 in DESIGNS.md) */}
+                  <div className="grid grid-cols-3 gap-2 rounded-[20px] bg-[#f1f1ef] p-2.5 dark:bg-[#252528] text-center max-w-lg">
+                    <div className="rounded-[14px] bg-white p-2.5 dark:bg-[#1c1c1e] shadow-2xs">
+                      <span className="text-sm sm:text-base font-bold tabular-nums text-zinc-900 dark:text-zinc-100">
+                        {fmt(totalWords)}
                       </span>
-                      <span className="font-bold">{t("আজকের স্টাডি রুটিন:", "DAILY STUDY ROUTINE:")}</span>
+                      <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">
+                        {t("অক্সফোর্ড শব্দ", "Oxford Words")}
+                      </p>
                     </div>
-
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                      <button
-                        onClick={() => toggleDailyGoal("vocab")}
-                        type="button"
-                        className={cn(
-                          "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border transition-all cursor-pointer",
-                          dailyGoals.vocab
-                            ? "bg-emerald-50 dark:bg-emerald-950/50 border-emerald-300 text-emerald-800 dark:text-emerald-300 font-semibold"
-                            : "bg-white/80 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-500"
-                        )}
-                      >
-                        {dailyGoals.vocab ? (
-                          <CheckSquare className="size-3.5 text-emerald-600" />
-                        ) : (
-                          <Square className="size-3.5 text-zinc-400" />
-                        )}
-                        <span>{t("১০টি নতুন শব্দ", "10 New Words")}</span>
-                      </button>
-
-                      <button
-                        onClick={() => toggleDailyGoal("grammar")}
-                        type="button"
-                        className={cn(
-                          "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border transition-all cursor-pointer",
-                          dailyGoals.grammar
-                            ? "bg-emerald-50 dark:bg-emerald-950/50 border-emerald-300 text-emerald-800 dark:text-emerald-300 font-semibold"
-                            : "bg-white/80 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-500"
-                        )}
-                      >
-                        {dailyGoals.grammar ? (
-                          <CheckSquare className="size-3.5 text-emerald-600" />
-                        ) : (
-                          <Square className="size-3.5 text-zinc-400" />
-                        )}
-                        <span>{t("১টি গ্রামার রুল", "1 Grammar Rule")}</span>
-                      </button>
-
-                      <button
-                        onClick={() => toggleDailyGoal("quiz")}
-                        type="button"
-                        className={cn(
-                          "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border transition-all cursor-pointer",
-                          dailyGoals.quiz
-                            ? "bg-emerald-50 dark:bg-emerald-950/50 border-emerald-300 text-emerald-800 dark:text-emerald-300 font-semibold"
-                            : "bg-white/80 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-500"
-                        )}
-                      >
-                        {dailyGoals.quiz ? (
-                          <CheckSquare className="size-3.5 text-emerald-600" />
-                        ) : (
-                          <Square className="size-3.5 text-zinc-400" />
-                        )}
-                        <span>{t("৫ মিনিটের কুইজ", "5-Min Quiz")}</span>
-                      </button>
+                    <div className="rounded-[14px] bg-white p-2.5 dark:bg-[#1c1c1e] shadow-2xs">
+                      <span className="text-sm sm:text-base font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+                        12 / 8
+                      </span>
+                      <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">
+                        {t("টেন্স ও পদ", "Tenses & Parts")}
+                      </p>
+                    </div>
+                    <div className="rounded-[14px] bg-white p-2.5 dark:bg-[#1c1c1e] shadow-2xs">
+                      <span className="text-sm sm:text-base font-bold tabular-nums text-amber-600 dark:text-amber-400">
+                        {liveLevelCount} {t("টি লেভেল", "Levels")}
+                      </span>
+                      <p className="text-[10px] text-zinc-500 dark:text-zinc-400 font-medium">
+                        {t("A1 থেকে C1", "A1 to C1")}
+                      </p>
                     </div>
                   </div>
-                </ScrollReveal>
+                </div>
+
+                {/* Right Column: Motion Brew Pixel Feature Card */}
+                <div className="w-full flex justify-center lg:justify-end">
+                  <PixelFeatureCard />
+                </div>
               </div>
-            </section>
+
+              </section>
 
             {/* CEFR LEVEL CARDS SECTION - "STICKY NOTES" DESIGN WITH SAMPLE WORDS */}
             <section className="py-12 border-t border-dashed border-zinc-200 dark:border-zinc-800 relative">
