@@ -11,12 +11,10 @@ import {
   Compass,
   Link2,
   MessageSquareQuote,
-  MessageCircleHeart,
   ArrowRight,
   BookOpen,
   CheckCircle2,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { useGrammarProgress } from "@/lib/grammar-progress";
 import { useT } from "@/components/language-provider";
 import { cn } from "@/lib/utils";
@@ -30,57 +28,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   Compass,
   Link2,
   MessageSquareQuote,
-  MessageCircleHeart,
-};
-
-const COLOR_MAP: Record<
-  string,
-  {
-    chipBg: string;
-    chipText: string;
-    chipBorder: string;
-  }
-> = {
-  blue: {
-    chipBg: "bg-blue-500/10",
-    chipText: "text-blue-600 dark:text-blue-400",
-    chipBorder: "border-blue-500/20",
-  },
-  emerald: {
-    chipBg: "bg-emerald-500/10",
-    chipText: "text-emerald-600 dark:text-emerald-400",
-    chipBorder: "border-emerald-500/20",
-  },
-  amber: {
-    chipBg: "bg-amber-500/10",
-    chipText: "text-amber-600 dark:text-amber-400",
-    chipBorder: "border-amber-500/20",
-  },
-  rose: {
-    chipBg: "bg-rose-500/10",
-    chipText: "text-rose-600 dark:text-rose-400",
-    chipBorder: "border-rose-500/20",
-  },
-  violet: {
-    chipBg: "bg-violet-500/10",
-    chipText: "text-violet-600 dark:text-violet-400",
-    chipBorder: "border-violet-500/20",
-  },
-  cyan: {
-    chipBg: "bg-cyan-500/10",
-    chipText: "text-cyan-600 dark:text-cyan-400",
-    chipBorder: "border-cyan-500/20",
-  },
-  orange: {
-    chipBg: "bg-orange-500/10",
-    chipText: "text-orange-600 dark:text-orange-400",
-    chipBorder: "border-orange-500/20",
-  },
-  pink: {
-    chipBg: "bg-pink-500/10",
-    chipText: "text-pink-600 dark:text-pink-400",
-    chipBorder: "border-pink-500/20",
-  },
+  MessageCircleHeart: MessageSquareQuote,
 };
 
 interface GrammarCategoryCardProps {
@@ -96,15 +44,11 @@ export function GrammarCategoryCard({
   sectionSlug,
   completedCount,
   className,
-  isGridCell = true,
 }: GrammarCategoryCardProps) {
   const t = useT();
   const IconComponent =
-    category.icon === "MessageCircleHeart"
-      ? MessageSquareQuote
-      : ICON_MAP[category.icon] || BookOpen;
+    ICON_MAP[category.icon] || BookOpen;
 
-  const colors = COLOR_MAP[category.accentColor] || COLOR_MAP.blue;
   const { progress } = useGrammarProgress();
   const completedInCategory =
     completedCount !== undefined
@@ -119,94 +63,86 @@ export function GrammarCategoryCard({
   const titleBanglaRaw =
     category.titleBn.split("(")[1]?.replace(")", "") || category.titleBn;
 
-  const targetSectionSlug = sectionSlug || category.sectionId || "parts-of-speech";
+  const targetSectionSlug =
+    sectionSlug || category.sectionId || "parts-of-speech";
+
+  const totalRules = category.ruleCount || 0;
+  const isAllDone = totalRules > 0 && completedInCategory === totalRules;
 
   return (
     <Link
       href={`/grammar/${targetSectionSlug}/${category.slug}`}
       className={cn(
-        "group relative flex flex-col justify-between p-4 sm:p-5 transition-colors",
-        isGridCell
-          ? "border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0 hover:bg-black/[0.02] active:bg-black/[0.03] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04]"
-          : "rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/60 shadow-xs hover:border-primary/40",
+        "group relative flex flex-col justify-between rounded-[22px] sm:rounded-[24px] border border-black/[0.06] bg-white p-4.5 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] transition-all duration-150 hover:shadow-md hover:border-black/[0.1] dark:hover:border-white/[0.14] active:scale-[0.985] min-h-[175px]",
         className
       )}
     >
       <div className="space-y-3">
-        {/* Header: Icon Chip + Badge */}
-        <div className="flex items-center justify-between">
-          <div
-            className={cn(
-              "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-transform duration-200 group-hover:scale-105 shadow-2xs",
-              colors.chipBg,
-              colors.chipText,
-              colors.chipBorder
-            )}
-          >
-            <IconComponent className="h-5 w-5" />
+        {/* Header: Tactile Squircle Icon + Status */}
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-[12px] bg-[#f1f1ef] text-[#1c1c1e] dark:bg-[#252528] dark:text-[#f4f4f5] transition-transform duration-200 group-hover:scale-105 shadow-2xs">
+            <IconComponent className="size-5" />
           </div>
 
           {completedInCategory > 0 ? (
-            <Badge
-              variant="outline"
-              className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/25 text-[11px] font-medium px-2 py-0.5"
-            >
-              <CheckCircle2 className="h-3 w-3 mr-1" />
-              {completedInCategory}/{category.ruleCount} {t("সম্পন্ন", "Done")}
-            </Badge>
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2.5 py-0.5 text-xs font-semibold tabular-nums">
+              <CheckCircle2 className="size-3" />
+              <span>
+                {completedInCategory}/{totalRules} {isAllDone ? t("সম্পন্ন", "Done") : ""}
+              </span>
+            </span>
           ) : (
-            <span className="font-mono text-[11px] font-medium text-muted-foreground bg-muted/60 px-2 py-0.5 rounded-md border border-border/50">
-              {category.ruleCount} {t("টি নিয়ম", "Rules")}
+            <span className="text-[11px] font-semibold tabular-nums text-[#242423]/40 dark:text-zinc-500">
+              {totalRules} {t("নিয়ম", "rules")}
             </span>
           )}
         </div>
 
-        {/* Title & Bengali label */}
-        <div>
+        {/* Title & Description */}
+        <div className="space-y-1">
           <div className="flex items-baseline gap-1.5 flex-wrap">
-            <h3 className="text-sm sm:text-base font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
+            <h3 className="text-base sm:text-[17px] font-bold tracking-tight text-[#1c1c1e] dark:text-[#f4f4f5] group-hover:text-black dark:group-hover:text-white transition-colors">
               {category.titleEn}
             </h3>
-            <span className="text-xs text-muted-foreground font-bengali">
+            <span className="text-xs text-[#242423]/50 dark:text-zinc-400 font-bengali">
               ({titleBanglaRaw})
             </span>
           </div>
 
-          <p className="mt-1 text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+          <p className="text-xs sm:text-[13px] text-[#242423]/60 dark:text-zinc-400 line-clamp-2 leading-relaxed">
             {t(category.descriptionBn, category.descriptionEn)}
           </p>
         </div>
       </div>
 
-      {/* Footer: Difficulty level indicators + View Rules trigger */}
-      <div className="mt-4 pt-3 border-t border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between text-xs">
-        <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+      {/* Footer: Level Pills + Action */}
+      <div className="mt-4 pt-3 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center justify-between text-xs text-[#242423]/50 dark:text-zinc-400">
+        <div className="flex items-center gap-2 text-[11px] font-medium tabular-nums">
           {category.levels.beginner > 0 && (
             <span className="inline-flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span className="size-1.5 rounded-full bg-emerald-500" />
               <span>{category.levels.beginner} Beg</span>
             </span>
           )}
           {category.levels.intermediate > 0 && (
             <span className="inline-flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+              <span className="size-1.5 rounded-full bg-amber-500" />
               <span>{category.levels.intermediate} Int</span>
             </span>
           )}
           {category.levels.advanced > 0 && (
             <span className="inline-flex items-center gap-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+              <span className="size-1.5 rounded-full bg-indigo-500" />
               <span>{category.levels.advanced} Adv</span>
             </span>
           )}
         </div>
 
-        <span className="inline-flex items-center text-xs font-medium text-muted-foreground group-hover:text-primary transition-colors">
-          <span>{t("নিয়মাবলি", "View Rules")}</span>
-          <ArrowRight className="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+        <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#1c1c1e] dark:text-[#f4f4f5]">
+          <span>{t("দেখুন", "Explore")}</span>
+          <ArrowRight className="size-3.5 transition-transform duration-200 group-hover:translate-x-1" />
         </span>
       </div>
     </Link>
   );
 }
-

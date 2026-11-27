@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils";
 
 export interface PixelFeatureCardProps {
   className?: string;
+  /** Image URL for the phone screen mockup. */
+  screenImageUrl?: string;
   /** Sample avatar image URL (Unsplash demo). Pass custom image file or URL to replace. */
   avatarUrl?: string;
   userName?: string;
@@ -65,6 +67,7 @@ interface Ripple {
 
 export function PixelFeatureCard({
   className,
+  screenImageUrl = "/assets/images/hero-phone-screen.png",
   avatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
   userName = "Alex Morgan",
   greeting = "Good morning",
@@ -395,7 +398,7 @@ export function PixelFeatureCard({
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "group relative mx-auto flex w-full h-[440px] sm:h-[520px] lg:h-[560px] flex-col items-center justify-end overflow-hidden",
+        "group relative mx-auto flex w-full h-[470px] sm:h-[530px] lg:h-[580px] flex-col items-center justify-start pt-8 sm:pt-11 lg:pt-14 overflow-hidden",
         "rounded-[28px] sm:rounded-[36px] bg-white dark:bg-[#151518]",
         "border border-black/[0.06] dark:border-white/[0.08]",
         "shadow-[0_24px_64px_-16px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] dark:shadow-[0_24px_64px_-16px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.06)]",
@@ -417,27 +420,51 @@ export function PixelFeatureCard({
           rotateY: prefersReducedMotion ? 0 : rotateY,
           transformStyle: "preserve-3d",
         }}
-        initial={{ y: 70, opacity: 0 }}
-        whileInView={{ y: 24, opacity: 1 }}
+        initial={{ y: 60, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
         viewport={{ once: true }}
         transition={{
           type: "spring",
-          stiffness: 100,
+          stiffness: 90,
           damping: 20,
           mass: 0.8,
           delay: 0.15,
         }}
-        className="relative z-10 w-[250px] sm:w-[285px] lg:w-[310px] origin-bottom transform-gpu"
+        className="relative z-10 w-[285px] sm:w-[325px] md:w-[350px] lg:w-[370px] origin-top transform-gpu"
       >
         {/* Ink Phone Outer Chassis Frame */}
-        <div className="relative rounded-[46px] bg-[#0d0d0f] p-2 sm:p-[9px] shadow-[0_25px_60px_-12px_rgba(0,0,0,0.45),0_0_0_1px_rgba(255,255,255,0.1)_inset]">
+        <div className="relative rounded-[50px] sm:rounded-[54px] bg-[#0c0c0e] p-2.5 sm:p-3 shadow-[0_32px_80px_-16px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.12)_inset]">
+          {/* Top Speaker Earphone Slit in Bezel */}
+          <div className="pointer-events-none absolute top-1.5 left-1/2 -translate-x-1/2 w-11 sm:w-13 h-1 rounded-full bg-zinc-800/90" />
+
           {/* Side Hardware Buttons */}
-          <div className="absolute -left-[3px] top-24 h-9 w-[3px] rounded-l-sm bg-zinc-700/80" />
-          <div className="absolute -left-[3px] top-36 h-9 w-[3px] rounded-l-sm bg-zinc-700/80" />
-          <div className="absolute -right-[3px] top-28 h-14 w-[3px] rounded-r-sm bg-zinc-700/80" />
+          <div className="absolute -left-[3px] top-20 h-5 w-[3px] rounded-l-sm bg-zinc-700/80" />
+          <div className="absolute -left-[3px] top-28 h-10 w-[3px] rounded-l-sm bg-zinc-700/80" />
+          <div className="absolute -left-[3px] top-41 h-10 w-[3px] rounded-l-sm bg-zinc-700/80" />
+          <div className="absolute -right-[3px] top-30 h-14 w-[3px] rounded-r-sm bg-zinc-700/80" />
 
           {/* Inner Phone Screen */}
-          <div className="relative overflow-hidden rounded-[38px] bg-[#fafafa] dark:bg-[#121214] p-3.5 sm:p-4 pb-7 sm:pb-8 text-zinc-900 dark:text-zinc-100 shadow-inner">
+          {screenImageUrl ? (
+            <div className="relative overflow-hidden rounded-[40px] sm:rounded-[44px] bg-[#fafafa] dark:bg-[#121214] shadow-inner">
+              {/* Dynamic Island Pill */}
+              <div className="pointer-events-none absolute top-2.5 sm:top-3 left-1/2 -translate-x-1/2 z-30 flex h-5 sm:h-5.5 w-22 sm:w-26 items-center justify-between rounded-full bg-black px-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.6)] ring-1 ring-white/10">
+                <span className="size-2 sm:size-2.5 rounded-full bg-[#141416] ring-1 ring-white/15" />
+                <span className="size-1.5 sm:size-2 rounded-full bg-[#0a0a0c] ring-1 ring-white/5" />
+              </div>
+
+              {/* App Screen Image */}
+              <img
+                src={screenImageUrl}
+                alt="Zero English Mobile App"
+                className="w-full h-auto object-cover object-top select-none pointer-events-none block"
+                draggable={false}
+              />
+
+              {/* Subtle glass glare reflection overlay */}
+              <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-tr from-transparent via-white/[0.04] to-white/[0.12] opacity-70" />
+            </div>
+          ) : (
+            <div className="relative overflow-hidden rounded-[40px] sm:rounded-[44px] bg-[#fafafa] dark:bg-[#121214] p-3.5 sm:p-4 pb-7 sm:pb-8 text-zinc-900 dark:text-zinc-100 shadow-inner">
             {/* Dynamic Island Pill */}
             <div className="relative z-20 mx-auto flex h-6 w-24 items-center justify-between rounded-full bg-black px-2.5 shadow-md">
               <span className="size-2 rounded-full bg-[#1c1c1e] ring-1 ring-white/10" />
@@ -609,8 +636,12 @@ export function PixelFeatureCard({
               </div>
             </div>
           </div>
+          )}
         </div>
       </motion.div>
+
+      {/* Subtle floor shadow / ambient depth fade at bottom container edge */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white/20 via-white/5 to-transparent dark:from-black/40 dark:via-black/10 dark:to-transparent z-20" />
     </motion.div>
   );
 }

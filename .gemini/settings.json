@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "motion-brew": {
+      "url": "https://motion-brew.com/mcp",
+      "type": "http"
+    }
+  }
+}
