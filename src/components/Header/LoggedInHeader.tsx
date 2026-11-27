@@ -112,6 +112,17 @@ export function LoggedInHeader() {
                 {backLabel}
               </span>
             </Link>
+          ) : pathname === "/dashboard" ? (
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1 -ml-1 py-1.5 pr-2 text-xs font-semibold text-[#242423] transition-colors hover:text-primary active:scale-95 dark:text-[#f3f3f2]"
+              aria-label={lang === "en" ? "Home" : "মূলপাতা"}
+            >
+              <ChevronLeft className="size-4 shrink-0 text-primary" />
+              <span className="truncate max-w-[100px] sm:max-w-[140px]">
+                {lang === "en" ? "Home" : "মূলপাতা"}
+              </span>
+            </Link>
           ) : (
             <Link
               href="/dashboard"

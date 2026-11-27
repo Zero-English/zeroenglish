@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { ArrowUpRight, Calendar, Newspaper } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useT } from "@/components/language-provider";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 
@@ -24,12 +23,12 @@ export function LatestPosts({ posts }: { posts: LatestPost[] }) {
 
   return (
     <section>
-      <div className="rounded-[24px] sm:rounded-[26px] border border-black/[0.06] bg-white p-3.5 sm:p-4.5 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e] space-y-3">
+      <div className="rounded-[24px] sm:rounded-[26px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] p-3.5 sm:p-4.5 backdrop-blur-[8px] shadow-[var(--hero-glass-shadow)] space-y-3">
         {/* Sunken Inset Header (DESIGNS.md 4.1) */}
-        <div className="rounded-[18px] sm:rounded-[20px] bg-[#f1f1ef] p-3.5 sm:p-4 dark:bg-[#252528] flex items-center justify-between gap-3">
+        <div className="rounded-[20px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] p-3.5 sm:p-4 backdrop-blur-[6px] shadow-[var(--hero-glass-shadow)] flex items-center justify-between gap-3">
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="flex size-7 items-center justify-center rounded-[10px] bg-white shadow-2xs dark:bg-[#1c1c1e] text-[#1c1c1e] dark:text-[#f4f4f5]">
+              <span className="flex size-7 items-center justify-center rounded-[10px] border border-[var(--hero-glass-border)] bg-[var(--hero-surface)] shadow-2xs text-[#1c1c1e] dark:text-[#f4f4f5]">
                 <Newspaper className="size-3.5" />
               </span>
               <h2 className="text-sm sm:text-base font-bold tracking-tight text-[#1c1c1e] dark:text-[#f4f4f5]">
@@ -43,10 +42,10 @@ export function LatestPosts({ posts }: { posts: LatestPost[] }) {
 
           <Link
             href="/news"
-            className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-black/[0.06] bg-white px-3.5 py-1.5 text-xs font-semibold text-[#1c1c1e] shadow-2xs transition-all duration-150 hover:bg-zinc-50 active:scale-[0.98] dark:border-white/[0.08] dark:bg-[#1c1c1e] dark:text-[#f4f4f5] dark:hover:bg-zinc-800"
+            className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] px-3.5 py-1.5 text-xs font-semibold text-[#1c1c1e] backdrop-blur-[6px] shadow-[var(--hero-glass-shadow)] transition-all duration-150 hover:border-[var(--hero-accent-border)] hover:text-[var(--hero-accent-text)] hover:-translate-y-0.5 hover:shadow-[var(--hero-glass-shadow-hover)] active:translate-y-0.5 active:scale-[0.98] dark:text-[#f4f4f5]"
           >
             <span>{t("সব দেখুন", "View all")}</span>
-            <ArrowUpRight className="size-3 text-[#242423]/40 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-zinc-400 transition-transform" />
+            <ArrowUpRight className="size-3 text-[#242423]/40 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--hero-accent)] dark:text-zinc-400 transition-transform" />
           </Link>
         </div>
 
@@ -63,7 +62,7 @@ export function LatestPosts({ posts }: { posts: LatestPost[] }) {
               <StaggerItem key={post.slug}>
                 <Link
                   href={`/news/${post.slug}`}
-                  className="group relative flex items-center justify-between gap-3.5 rounded-[16px] p-2.5 sm:p-3 text-left outline-none transition-all duration-150 hover:bg-[#242423]/[0.04] active:scale-[0.99] dark:hover:bg-white/[0.05]"
+                  className="group relative flex items-center justify-between gap-3.5 rounded-[18px] p-2.5 sm:p-3 text-left outline-none border border-transparent transition-all duration-150 hover:border-[var(--hero-glass-border)] hover:bg-[var(--hero-glass)] hover:backdrop-blur-[6px] hover:shadow-[var(--hero-glass-shadow)] active:scale-[0.99]"
                 >
                   {/* Thumbnail Squircle */}
                   {post.imageUrl ? (
