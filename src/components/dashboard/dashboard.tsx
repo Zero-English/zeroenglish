@@ -31,15 +31,16 @@ import type { LevelStatItem } from "@/lib/data";
 
 // DESIGNS.md Surface & Geometry Tokens (Clean, Calm, Restrained)
 const CARD =
-  "rounded-[24px] sm:rounded-[26px] border border-black/[0.06] bg-white p-4 sm:p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e]";
+  "rounded-[24px] sm:rounded-[26px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] p-4 sm:p-5 backdrop-blur-[8px] shadow-[var(--hero-glass-shadow)]";
 
-const INSET = "rounded-[18px] bg-[#f1f1ef] p-4 sm:p-5 dark:bg-[#252528]";
+const INSET =
+  "rounded-[20px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] p-4 sm:p-5 backdrop-blur-[8px] shadow-[var(--hero-glass-shadow)]";
 
 const BTN_PRIMARY =
-  "inline-flex h-10 sm:h-11 w-full sm:w-auto shrink-0 items-center justify-center gap-2 rounded-full bg-[#1c1c1e] px-5 text-xs sm:text-sm font-semibold text-white shadow-xs transition-all duration-150 hover:bg-black active:scale-[0.98] dark:bg-white dark:text-[#1c1c1e] dark:hover:bg-zinc-200";
+  "inline-flex h-10 sm:h-11 w-full sm:w-auto shrink-0 items-center justify-center gap-2 rounded-[24px] border border-[var(--hero-accent-rim)] bg-[var(--hero-accent)] px-5 text-xs sm:text-sm font-semibold text-white shadow-[var(--hero-btn-3d-shadow)] transition-all duration-150 hover:bg-[var(--hero-accent-hover)] hover:-translate-y-0.5 active:translate-y-0.5 active:scale-[0.985] active:shadow-[var(--hero-btn-3d-shadow-active)]";
 
 const BTN_SECONDARY =
-  "inline-flex h-10 sm:h-11 w-full sm:w-auto shrink-0 items-center justify-center gap-2 rounded-full border border-black/[0.08] bg-white px-5 text-xs sm:text-sm font-semibold text-[#242423] shadow-2xs transition-all duration-150 hover:bg-zinc-50 active:scale-[0.98] dark:border-white/[0.1] dark:bg-[#1c1c1e] dark:text-[#f4f4f5] dark:hover:bg-[#2c2c30]";
+  "inline-flex h-10 sm:h-11 w-full sm:w-auto shrink-0 items-center justify-center gap-2 rounded-[24px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] px-5 text-xs sm:text-sm font-semibold text-[#242423] backdrop-blur-[8px] shadow-[var(--hero-glass-shadow)] transition-all duration-150 hover:border-[var(--hero-accent-border)] hover:text-[var(--hero-accent-text)] hover:-translate-y-0.5 hover:shadow-[var(--hero-glass-shadow-hover)] active:translate-y-0.5 active:scale-[0.985] dark:text-[#f4f4f5]";
 
 const LEVEL_META: Record<
   string,
@@ -219,14 +220,14 @@ export function Dashboard({
                       </div>
 
                       {/* Clean Streak Pill */}
-                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold tabular-nums text-[#242423] shadow-2xs dark:bg-[#1c1c1e] dark:text-[#f4f4f5]">
+                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] px-2.5 py-1 text-[11px] font-semibold tabular-nums text-[#242423] backdrop-blur-[6px] shadow-[var(--hero-glass-shadow)] dark:text-[#f4f4f5]">
                         <Flame className="size-3.5 text-amber-500 fill-amber-500" />
                         <span>{statsReady ? `${streak}d` : "…"}</span>
                       </span>
                     </div>
 
                     {/* Overall Progress Row */}
-                    <div className="flex items-center gap-3.5 rounded-[14px] bg-white p-3 shadow-2xs dark:bg-[#1c1c1e]">
+                    <div className="flex items-center gap-3.5 rounded-[16px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] p-3 backdrop-blur-[6px] shadow-[var(--hero-glass-shadow)]">
                       <div className="relative size-12 shrink-0">
                         <ProgressRing
                           pct={ready ? overallPct : 0}
@@ -357,7 +358,7 @@ export function Dashboard({
                   </div>
 
                   {/* Module 2: Continue Learning with Liquid Progress */}
-                  <div className="rounded-[18px] sm:rounded-[20px] bg-[#242423]/[0.03] p-4 sm:p-5 dark:bg-white/[0.04] flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="rounded-[20px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] p-4 sm:p-5 backdrop-blur-[8px] shadow-[var(--hero-glass-shadow)] flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between">
                     <ContinueLearningContent
                       lastLearned={lastLearnedHydrated ? lastLearned : null}
                       loaded={learnedLoaded}
@@ -367,7 +368,7 @@ export function Dashboard({
                   </div>
 
                   {/* Module 3: Quiz Challenge */}
-                  <div className="rounded-[18px] sm:rounded-[20px] bg-[#242423]/[0.03] p-4 sm:p-5 dark:bg-white/[0.04] flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="rounded-[20px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] p-4 sm:p-5 backdrop-blur-[8px] shadow-[var(--hero-glass-shadow)] flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                       <h2 className="text-[15px] sm:text-base font-semibold tracking-tight text-[#1c1c1e] dark:text-zinc-100">
                         {t("কুইজ চ্যালেঞ্জ", "Quiz Challenge")}
@@ -400,13 +401,13 @@ export function Dashboard({
                         <Link
                           key={href}
                           href={href}
-                          className="group flex flex-col justify-between rounded-[16px] sm:rounded-[18px] bg-[#242423]/[0.04] p-3.5 transition-all duration-150 hover:bg-[#242423]/[0.07] active:scale-[0.97] dark:bg-white/[0.05] dark:hover:bg-white/[0.08]"
+                          className="group flex flex-col justify-between rounded-[18px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] p-3.5 backdrop-blur-[8px] shadow-[var(--hero-glass-shadow)] transition-all duration-150 hover:border-[var(--hero-accent-border)] hover:shadow-[var(--hero-glass-shadow-hover)] hover:-translate-y-0.5 active:translate-y-0.5 active:scale-[0.98]"
                         >
                           <div className="flex items-start justify-between">
-                            <span className="flex size-8 items-center justify-center rounded-[10px] bg-white shadow-2xs dark:bg-[#1c1c1e]">
+                            <span className="flex size-8 items-center justify-center rounded-[10px] border border-[var(--hero-glass-border)] bg-[var(--hero-surface)] shadow-2xs">
                               <Icon className={cn("size-4", iconTint)} />
                             </span>
-                            <ArrowUpRight className="size-3.5 text-[#242423]/35 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-zinc-500" />
+                            <ArrowUpRight className="size-3.5 text-[#242423]/35 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--hero-accent)] dark:text-zinc-500" />
                           </div>
                           <div className="mt-3 min-w-0">
                             <h3 className="truncate text-xs sm:text-[13px] font-semibold text-[#1c1c1e] dark:text-zinc-100">
@@ -606,7 +607,7 @@ function StatTile({
   const t = useT();
 
   return (
-    <div className="rounded-[16px] bg-[#242423]/[0.03] p-3.5 dark:bg-white/[0.04]">
+    <div className="rounded-[18px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] p-3.5 backdrop-blur-[8px] shadow-[var(--hero-glass-shadow)]">
       <div className="flex items-center justify-between gap-2">
         <p className="truncate text-[11px] font-medium text-[#242423]/55 dark:text-zinc-400">
           {t(labelBn, labelEn)}

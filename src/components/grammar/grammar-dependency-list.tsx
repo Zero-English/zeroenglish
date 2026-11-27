@@ -25,7 +25,7 @@ export function GrammarDependencyList({
 
   return (
     <div className={cn("space-y-4", className)}>
-      <div className="rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] overflow-hidden shadow-xs">
+      <div className="rounded-[22px] border border-amber-500/20 bg-amber-500/[0.03] overflow-hidden shadow-xs">
         <div className="p-4 sm:p-5 border-b border-amber-500/15 flex items-center gap-3">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400 shadow-2xs">
             <BookMarked className="h-4 w-4" />
@@ -51,7 +51,7 @@ export function GrammarDependencyList({
             <Link
               key={rule.id}
               href={`/grammar/${rule.sectionSlug || "parts-of-speech"}/${rule.categorySlug}/${rule.slug}`}
-              className="group p-4 border-t border-amber-500/15 first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0 hover:bg-amber-500/[0.08] transition-colors flex flex-col justify-between space-y-2"
+              className="group p-4 border-t border-amber-500/15 first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0 hover:bg-amber-500/[0.06] transition-colors flex flex-col justify-between space-y-2"
             >
               <div className="space-y-1">
                 <div className="flex items-center justify-between gap-2">
@@ -81,4 +81,3 @@ export function GrammarDependencyList({
     </div>
   );
 }
-

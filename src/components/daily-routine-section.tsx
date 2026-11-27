@@ -8,7 +8,7 @@ import { useDailyRoutine } from "@/lib/use-daily-routine";
 import { cn } from "@/lib/utils";
 
 const CARD =
-  "rounded-[22px] sm:rounded-[24px] border border-black/[0.06] bg-white p-3.5 sm:p-4 shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)] dark:border-white/[0.08] dark:bg-[#1c1c1e]";
+  "rounded-[24px] border border-[var(--hero-glass-border)] bg-[var(--hero-glass)] backdrop-blur-[8px] p-3.5 sm:p-4 shadow-[var(--hero-glass-shadow)]";
 
 export function DailyRoutineSection({ className }: { className?: string }) {
   const t = useT();

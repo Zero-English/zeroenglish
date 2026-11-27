@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   type GrammarSection,
@@ -10,83 +10,34 @@ import {
 } from "@/data/grammar-data";
 import {
   Search,
-  Sparkles,
-  LayoutGrid,
-  BookOpenCheck,
-  CheckCircle2,
-  Target,
-  Flame,
-  ArrowRight,
+  SlidersHorizontal,
   X,
+  CheckCircle2,
+  Circle,
+  ArrowRight,
+  ArrowUpDown,
+  RotateCcw,
+  Layers,
+  GraduationCap,
+  BookOpen,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { GrammarSectionCard } from "./grammar-section-card";
-import { searchRules } from "@/lib/grammar";
 import { useGrammarProgress } from "@/lib/grammar-progress";
 import { useT } from "@/components/language-provider";
 import { StaggerContainer, StaggerItem } from "@/components/stagger";
 import { cn } from "@/lib/utils";
 
+export type GrammarStatusFilter = "all" | "completed" | "uncompleted";
+export type GrammarSortOption = "default" | "az" | "za";
+
 const CARD =
-  "relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl shadow-[0_1px_2px_rgba(16,24,40,0.04),0_10px_30px_-12px_rgba(16,24,40,0.10)] dark:border-white/[0.08] dark:bg-zinc-900/60";
-
-const ICON_CHIP =
-  "flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] bg-black/[0.04] dark:bg-white/[0.06] ring-1 ring-inset ring-black/[0.05] dark:ring-white/[0.08]";
-
-function ProgressRing({
-  pct,
-  size = 56,
-  stroke = 5.5,
-  gradientId = "grammar-hero-progress-ring",
-  from = "#f97316",
-  to = "#e11d48",
-}: {
-  pct: number;
-  size?: number;
-  stroke?: number;
-  gradientId?: string;
-  from?: string;
-  to?: string;
-}) {
-  const r = (size - stroke) / 2;
-  const c = 2 * Math.PI * r;
-  const clamped = Math.min(100, Math.max(0, pct));
-  const offset = c - (clamped / 100) * c;
-
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox={`0 0 ${size} ${size}`}
-      className="-rotate-90 shrink-0"
-    >
-      <defs>
-        <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor={from} />
-          <stop offset="100%" stopColor={to} />
-        </linearGradient>
-      </defs>
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={r}
-        strokeWidth={stroke}
-        className="fill-none stroke-black/[0.06] dark:stroke-white/[0.08]"
-      />
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={r}
-        strokeWidth={stroke}
-        strokeLinecap="round"
-        stroke={`url(#${gradientId})`}
-        strokeDasharray={c}
-        strokeDashoffset={offset}
-        className="fill-none transition-all duration-700 ease-out"
-      />
-    </svg>
-  );
-}
+  "rounded-[24px] sm:rounded-[26px] border border-black/[0.06] bg-white dark:border-white/[0.08] dark:bg-[#1c1c1e] shadow-[0_1px_2px_rgba(0,0,0,0.03),0_12px_32px_-12px_rgba(0,0,0,0.06)]";
 
 interface GrammarOverviewProps {
   sections: GrammarSection[];
@@ -102,386 +53,729 @@ export function GrammarOverview({
   const t = useT();
   const { progress } = useGrammarProgress();
 
+  // Search & Filter state
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSection, setSelectedSection] = useState<string>("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState<
-    DifficultyLevel | "All"
-  >("All");
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("All");
+    DifficultyLevel | "all"
+  >("all");
+  const [selectedStatus, setSelectedStatus] =
+    useState<GrammarStatusFilter>("all");
+  const [sortOption, setSortOption] = useState<GrammarSortOption>("default");
 
+  // Filter Dialog Modal state
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+
+  // Pending filter state for dialog
+  const [pendingSection, setPendingSection] = useState(selectedSection);
+  const [pendingDifficulty, setPendingDifficulty] =
+    useState(selectedDifficulty);
+  const [pendingStatus, setPendingStatus] = useState(selectedStatus);
+  const [pendingSort, setPendingSort] = useState(sortOption);
+
+  const openFilterModal = () => {
+    setPendingSection(selectedSection);
+    setPendingDifficulty(selectedDifficulty);
+    setPendingStatus(selectedStatus);
+    setPendingSort(sortOption);
+    setFilterModalOpen(true);
+  };
+
+  const applyPendingFilters = () => {
+    setSelectedSection(pendingSection);
+    setSelectedDifficulty(pendingDifficulty);
+    setSelectedStatus(pendingStatus);
+    setSortOption(pendingSort);
+    setFilterModalOpen(false);
+  };
+
+  const resetAllFilters = () => {
+    setSearchQuery("");
+    setSelectedSection("all");
+    setSelectedDifficulty("all");
+    setSelectedStatus("all");
+    setSortOption("default");
+    setPendingSection("all");
+    setPendingDifficulty("all");
+    setPendingStatus("all");
+    setPendingSort("default");
+  };
+
+  // Has active filters
+  const hasActiveFilters =
+    searchQuery.trim() !== "" ||
+    selectedSection !== "all" ||
+    selectedDifficulty !== "all" ||
+    selectedStatus !== "all" ||
+    sortOption !== "default";
+
+  // Count active non-search filters
+  const activeFilterCount =
+    (selectedSection !== "all" ? 1 : 0) +
+    (selectedDifficulty !== "all" ? 1 : 0) +
+    (selectedStatus !== "all" ? 1 : 0) +
+    (sortOption !== "default" ? 1 : 0);
+
+  // Overall progress
   const completedRulesCount = progress.completedRuleIds.length;
   const progressPercent =
     allRules.length > 0
       ? Math.round((completedRulesCount / allRules.length) * 100)
       : 0;
 
-  const isFiltering =
-    searchQuery.trim() !== "" ||
-    selectedDifficulty !== "All" ||
-    selectedCategoryId !== "All";
+  // Filtered Sections
+  const displayedSections = useMemo(() => {
+    let list = sections.filter((sec) => {
+      // 1. Section Filter
+      if (
+        selectedSection !== "all" &&
+        sec.slug !== selectedSection &&
+        sec.id !== selectedSection
+      ) {
+        return false;
+      }
 
-  const searchResults = isFiltering
-    ? searchRules(allRules, {
-        query: searchQuery,
-        difficulty: selectedDifficulty,
-        categoryId: selectedCategoryId,
-      })
-    : [];
+      // 2. Status Filter
+      if (selectedStatus !== "all") {
+        const secRules = allRules.filter(
+          (r) => r.sectionSlug === sec.slug || r.sectionSlug === sec.id,
+        );
+        const doneCount = secRules.filter((r) =>
+          progress.completedRuleIds.includes(r.id),
+        ).length;
 
-  const clearFilters = () => {
-    setSearchQuery("");
-    setSelectedDifficulty("All");
-    setSelectedCategoryId("All");
-  };
+        if (selectedStatus === "completed" && doneCount === 0) return false;
+        if (
+          selectedStatus === "uncompleted" &&
+          doneCount === secRules.length &&
+          secRules.length > 0
+        )
+          return false;
+      }
+
+      return true;
+    });
+
+    // Sort
+    if (sortOption === "az") {
+      list = [...list].sort((a, b) => a.titleEn.localeCompare(b.titleEn));
+    } else if (sortOption === "za") {
+      list = [...list].sort((a, b) => b.titleEn.localeCompare(a.titleEn));
+    }
+
+    return list;
+  }, [
+    sections,
+    allRules,
+    selectedSection,
+    selectedStatus,
+    sortOption,
+    progress.completedRuleIds,
+  ]);
+
+  // Matching rules when user searches or filters by difficulty
+  const isRuleSearchActive =
+    searchQuery.trim() !== "" || selectedDifficulty !== "all";
+
+  const matchingRules = useMemo(() => {
+    if (!isRuleSearchActive) return [];
+
+    return allRules.filter((rule) => {
+      // Search Query
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchesQuery =
+          rule.titleEn.toLowerCase().includes(q) ||
+          rule.titleBn.toLowerCase().includes(q) ||
+          rule.slug.toLowerCase().includes(q) ||
+          rule.categorySlug.toLowerCase().includes(q) ||
+          (rule.shortDescriptionEn &&
+            rule.shortDescriptionEn.toLowerCase().includes(q)) ||
+          (rule.shortDescriptionBn &&
+            rule.shortDescriptionBn.toLowerCase().includes(q));
+
+        if (!matchesQuery) return false;
+      }
+
+      // Difficulty
+      if (
+        selectedDifficulty !== "all" &&
+        rule.difficulty !== selectedDifficulty
+      ) {
+        return false;
+      }
+
+      // Section
+      if (selectedSection !== "all") {
+        const matchesSec =
+          rule.sectionSlug === selectedSection ||
+          categories.some(
+            (c) =>
+              (c.id === rule.categoryId || c.slug === rule.categorySlug) &&
+              (c.sectionId === selectedSection ||
+                sections.find((s) => s.slug === selectedSection)?.id ===
+                  c.sectionId),
+          );
+        if (!matchesSec) return false;
+      }
+
+      // Status
+      if (selectedStatus !== "all") {
+        const isDone = progress.completedRuleIds.includes(rule.id);
+        if (selectedStatus === "completed" && !isDone) return false;
+        if (selectedStatus === "uncompleted" && isDone) return false;
+      }
+
+      return true;
+    });
+  }, [
+    allRules,
+    categories,
+    sections,
+    isRuleSearchActive,
+    searchQuery,
+    selectedDifficulty,
+    selectedSection,
+    selectedStatus,
+    progress.completedRuleIds,
+  ]);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 space-y-8">
-      {/* Hero Header & Bento Quick Metrics Card */}
-      <section className={cn(CARD, "overflow-hidden")}>
-        {/* Top Accent Gradient Bar */}
-        <span
-          className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-orange-500 via-amber-500 to-rose-500"
-          aria-hidden
-        />
-
-        {/* Hero Header Content */}
-        <div className="p-5 sm:p-7 space-y-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
-              <Sparkles className="h-3 w-3" />
-              <span>{t("ব্যাকরণ ল্যাব", "Grammar Lab")}</span>
-            </span>
-            <span className="inline-flex items-center rounded-full border border-black/[0.06] bg-black/[0.03] px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground dark:border-white/[0.08] dark:bg-white/[0.04] font-mono">
-              {t("দ্বিভাষিক নিয়ম ও ব্যাখ্যা", "Bilingual Rules Engine")}
-            </span>
+    <div className="min-h-dvh bg-[#f8f8f6] dark:bg-[#0c0c0e] text-[#242423] dark:text-[#f4f4f5]">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6 sm:space-y-7">
+        {/* ========================================================= */}
+        {/* 1. QUIET HEADER WITH MASTERY STAT                         */}
+        {/* ========================================================= */}
+        <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-1">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#1c1c1e] dark:text-[#f4f4f5]">
+              {t("ইংরেজি ব্যাকরণ", "English Grammar")}
+            </h1>
+            <p className="mt-1 text-xs sm:text-sm text-[#242423]/60 dark:text-zinc-400 max-w-lg leading-relaxed">
+              {t(
+                "ইংরেজি ব্যাকরণের মৌলিক নিয়মাবলি, পদ প্রকরণ ও কাল সম্বন্ধীয় সহজ পাঠ।",
+                "Structured lessons covering English parts of speech, tenses, sentence mechanics, and usage rules.",
+              )}
+            </p>
           </div>
 
-          <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-            {t("জিরো ইংলিশ ব্যাকরণ গাইড", "Zero English Grammar Guide")}
-          </h1>
-
-          <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed">
-            {t(
-              "দ্বিভাষিক সহজ ব্যাখ্যা, স্পষ্ট নিয়মাবলি, বাস্তব বাক্য প্রয়োগ এবং কমন ভুলত্রুটি বিশ্লেষণের মাধ্যমে ইংরেজি ব্যাকরণ আয়ত্ত করুন।",
-              "Structured, rule-based English grammar lessons tailored for bilingual learners with crystal-clear rules, examples, and common mistake breakdowns."
-            )}
-          </p>
-        </div>
-
-        {/* Circular Progress Gauge Strip */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-black/[0.06] dark:border-white/[0.08] px-5 sm:px-6 py-4 bg-black/[0.015] dark:bg-white/[0.015]">
-          <div className="flex items-center gap-4">
-            <div className="relative h-14 w-14 shrink-0">
-              <ProgressRing pct={progressPercent} size={56} stroke={5.5} />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-xs font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-                  {progressPercent}%
-                </span>
-              </div>
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                {t("সামগ্রিক ব্যাকরণ অগ্রগতি", "Grammar Mastery Progress")}
-              </p>
-              <p className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">
-                {completedRulesCount}{" "}
-                <span className="font-normal text-zinc-400 dark:text-zinc-500">
-                  / {allRules.length} {t("টি সম্পন্ন", "rules completed")}
-                </span>
-              </p>
-              <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
-                {allRules.length - completedRulesCount > 0
-                  ? t(
-                      `${allRules.length - completedRulesCount}টি নিয়ম বাকি রয়েছে`,
-                      `${allRules.length - completedRulesCount} rules remaining`
-                    )
-                  : t("সব নিয়ম সম্পন্ন হয়েছে!", "All rules completed!")}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <div className="inline-flex items-center gap-1.5 rounded-xl border border-black/[0.06] bg-card/80 px-3 py-1.5 text-xs font-medium text-muted-foreground dark:border-white/[0.08] shadow-2xs">
-              <Flame className="h-3.5 w-3.5 text-orange-500" />
-              <span>
-                {t(
-                  `${categories.length}টি ক্যাটাগরি সক্রিয়`,
-                  `${categories.length} Categories Active`
-                )}
+          <div className="text-left sm:text-right shrink-0">
+            <div className="text-xs font-semibold tabular-nums text-[#1c1c1e] dark:text-[#f4f4f5]">
+              {completedRulesCount} / {allRules.length}{" "}
+              <span className="font-normal text-[#242423]/50 dark:text-zinc-400">
+                {t("নিয়ম সম্পন্ন", "rules completed")}
               </span>
             </div>
-          </div>
-        </div>
-
-        {/* 4-Metric Grid with One Frame Internal Cell Dividers */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-black/[0.06] dark:border-white/[0.08]">
-          {/* Metric 1: Modules */}
-          <div className="flex items-center gap-3 p-4 sm:p-5">
-            <div className={cn(ICON_CHIP, "text-orange-500 bg-orange-500/10 ring-orange-500/20")}>
-              <LayoutGrid className="h-4.5 w-4.5" />
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                {t("পাঠ্যক্রম মডিউল", "Curriculum Modules")}
-              </p>
-              <p className="mt-0.5 text-lg sm:text-xl font-semibold tracking-tight tabular-nums text-zinc-900 dark:text-zinc-100">
-                {sections.length}
-              </p>
-              <p className="truncate text-[11px] text-zinc-400 dark:text-zinc-500">
-                {t(`${sections.length}টি মূল অধ্যায়`, `${sections.length} Core Modules`)}
-              </p>
+            <div className="mt-1.5 h-1.5 w-36 sm:w-44 rounded-full bg-black/[0.06] dark:bg-white/[0.08] overflow-hidden">
+              <div
+                className="h-full rounded-full bg-emerald-500 transition-all duration-500"
+                style={{ width: `${progressPercent}%` }}
+              />
             </div>
           </div>
+        </header>
 
-          {/* Metric 2: Grammar Rules */}
-          <div className="flex items-center gap-3 p-4 sm:p-5 border-l border-black/[0.06] dark:border-white/[0.08]">
-            <div className={cn(ICON_CHIP, "text-sky-500 bg-sky-500/10 ring-sky-500/20")}>
-              <BookOpenCheck className="h-4.5 w-4.5" />
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                {t("ব্যাকরণ নিয়ম", "Grammar Rules")}
-              </p>
-              <p className="mt-0.5 text-lg sm:text-xl font-semibold tracking-tight tabular-nums text-zinc-900 dark:text-zinc-100">
-                {allRules.length}
-              </p>
-              <p className="truncate text-[11px] text-zinc-400 dark:text-zinc-500">
-                {t("বাস্তব উদাহরণ সহ", "With Examples")}
-              </p>
-            </div>
-          </div>
-
-          {/* Metric 3: Completed Rules */}
-          <div className="flex items-center gap-3 p-4 sm:p-5 border-t lg:border-t-0 lg:border-l border-black/[0.06] dark:border-white/[0.08]">
-            <div className={cn(ICON_CHIP, "text-emerald-500 bg-emerald-500/10 ring-emerald-500/20")}>
-              <CheckCircle2 className="h-4.5 w-4.5" />
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                {t("সম্পন্ন নিয়ম", "Completed Rules")}
-              </p>
-              <p className="mt-0.5 text-lg sm:text-xl font-semibold tracking-tight tabular-nums text-emerald-600 dark:text-emerald-400">
-                {completedRulesCount}
-              </p>
-              <p className="truncate text-[11px] text-zinc-400 dark:text-zinc-500">
-                {t("অর্জিত দক্ষতা", "Mastered Lessons")}
-              </p>
-            </div>
-          </div>
-
-          {/* Metric 4: Mastery Rate */}
-          <div className="flex items-center gap-3 p-4 sm:p-5 border-t lg:border-t-0 border-l border-black/[0.06] dark:border-white/[0.08]">
-            <div className={cn(ICON_CHIP, "text-amber-500 bg-amber-500/10 ring-amber-500/20")}>
-              <Target className="h-4.5 w-4.5" />
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                {t("সামগ্রিক অর্জন", "Mastery Rate")}
-              </p>
-              <p className="mt-0.5 text-lg sm:text-xl font-semibold tracking-tight tabular-nums text-zinc-900 dark:text-zinc-100">
-                {progressPercent}%
-              </p>
-              <p className="truncate text-[11px] text-zinc-400 dark:text-zinc-500">
-                {t("অগ্রগতি স্কোর", "Progress Score")}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Global Search & Filter Shelf */}
-        <div className="border-t border-black/[0.06] dark:border-white/[0.08] p-4 sm:p-5 bg-black/[0.015] dark:bg-white/[0.015]">
-          <div className="flex flex-col md:flex-row items-center gap-3">
-            {/* Search Input */}
-            <div className="relative w-full flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        {/* ========================================================= */}
+        {/* 2. VOCABULARY-STYLE SEARCH & FILTER BAR                   */}
+        {/* ========================================================= */}
+        <div className="space-y-2.5">
+          <div className="flex flex-wrap items-center gap-2 rounded-[22px] border border-black/[0.06] bg-white p-2 shadow-xs dark:border-white/[0.08] dark:bg-[#1c1c1e] sm:rounded-[26px] sm:p-2.5">
+            {/* Search Input Field */}
+            <div className="relative min-w-[12rem] flex-1">
+              <Search
+                className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#242423]/40 dark:text-zinc-500"
+                aria-hidden
+              />
               <input
-                type="text"
-                placeholder={t(
-                  "নিয়ম খুঁজুন (যেমন: plural, fanboys, modals, prepositions)...",
-                  "Search grammar rules (e.g., plural, fanboys, modals, prepositions)..."
-                )}
+                type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-xl border border-black/[0.06] bg-background/80 pl-10 pr-10 py-2.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-hidden focus:ring-2 focus:ring-primary/20 dark:border-white/[0.08] transition-all"
+                placeholder={t(
+                  "ব্যাকরণ নিয়ম বা অধ্যায় খুঁজুন...",
+                  "Search grammar rules, sections, concepts...",
+                )}
+                aria-label={t("ব্যাকরণ নিয়ম খুঁজুন", "Search grammar rules")}
+                className="h-9.5 w-full rounded-full border-0 bg-[#f1f1ef] pl-10 pr-4 text-[13px] font-medium text-[#242423] placeholder:text-[#242423]/40 focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-[#242423]/30 dark:bg-[#252528] dark:text-[#f3f3f2] dark:placeholder:text-zinc-500"
               />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-0.5"
-                  aria-label={t("অনুসন্ধান মুছুন", "Clear search")}
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
             </div>
 
-            {/* Filter Pills */}
-            <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
-              <div className="flex items-center gap-1.5 shrink-0 text-xs">
-                <span className="text-muted-foreground font-medium text-[11px] mr-0.5">
-                  {t("লেভেল:", "Level:")}
-                </span>
-                {(["All", "Beginner", "Intermediate", "Advanced"] as const).map(
-                  (lvl) => (
-                    <button
-                      key={lvl}
-                      onClick={() => setSelectedDifficulty(lvl)}
-                      className={cn(
-                        "rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all",
-                        selectedDifficulty === lvl
-                          ? "bg-primary text-primary-foreground shadow-2xs font-semibold"
-                          : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
-                      )}
-                    >
-                      {lvl === "All" ? t("সব", "All") : lvl}
-                    </button>
-                  )
-                )}
-              </div>
-
-              {isFiltering && (
-                <button
-                  onClick={clearFilters}
-                  className="shrink-0 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-medium text-rose-500 hover:bg-rose-500/10 transition-colors"
-                >
-                  {t("রিসেট", "Reset")}
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Dynamic Search Results when filtering */}
-      {isFiltering && (
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
-              <Search className="h-4 w-4 text-primary" />
-              <span>
-                {t("অনুসন্ধানের ফলাফল", "Search Results")} ({searchResults.length})
-              </span>
-            </h2>
+            {/* Filter Modal Trigger Button */}
             <button
-              onClick={clearFilters}
-              className="text-xs font-medium text-muted-foreground hover:text-foreground"
+              type="button"
+              onClick={openFilterModal}
+              className={cn(
+                "inline-flex h-9.5 cursor-pointer items-center gap-1.5 rounded-full border px-4 text-[12.5px] font-semibold transition-all active:scale-95",
+                activeFilterCount > 0
+                  ? "border-[#242423] bg-[#242423] text-white dark:border-white dark:bg-white dark:text-[#242423]"
+                  : "border-black/[0.06] bg-[#f1f1ef] text-[#242423] hover:bg-[#eaeae8] dark:border-white/[0.08] dark:bg-[#252528] dark:text-[#f3f3f2] dark:hover:bg-[#2c2c30]",
+              )}
             >
-              {t("ক্লিয়ার করুন", "Clear Search")}
+              <SlidersHorizontal className="size-3.5" />
+              <span>{t("ফিল্টার", "Filter")}</span>
+              {activeFilterCount > 0 && (
+                <span
+                  className={cn(
+                    "flex size-4.5 items-center justify-center rounded-full text-[10px] font-bold tabular-nums",
+                    "bg-white text-[#242423] dark:bg-[#1c1c1e] dark:text-[#f3f3f2]",
+                  )}
+                >
+                  {activeFilterCount}
+                </span>
+              )}
             </button>
+
+            {/* Reset Button */}
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={resetAllFilters}
+                className="inline-flex h-9.5 items-center gap-1 rounded-full px-3 text-[12px] font-semibold text-rose-600 transition-colors hover:bg-rose-500/10 active:scale-95 dark:text-rose-400 cursor-pointer"
+                title={t("সব ফিল্টার মুছুন", "Clear all filters")}
+              >
+                <X className="size-3.5" />
+                <span>{t("রিসেট", "Reset")}</span>
+              </button>
+            )}
           </div>
 
-          {searchResults.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-black/[0.1] bg-card/40 p-8 text-center space-y-1.5 dark:border-white/[0.1]">
-              <p className="text-sm font-medium text-foreground">
-                {t("কোনো ব্যাকরণ নিয়ম পাওয়া যায়নি।", "No matching grammar rules found.")}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {t(
-                  "\"noun\", \"agreement\", \"apostrophe\" বা \"preposition\" লিখে চেষ্টা করুন।",
-                  "Try searching for general terms like \"noun\", \"agreement\", \"apostrophe\", or \"preposition\"."
-                )}
-              </p>
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/60 overflow-hidden shadow-xs">
-              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
-                {searchResults.map((rule) => (
-                  <StaggerItem
-                    key={rule.id}
-                    className="border-t border-black/[0.06] dark:border-white/[0.08] first:border-t-0 sm:border-l sm:[&:nth-child(odd)]:border-l-0 sm:[&:nth-child(-n+2)]:border-t-0 hover:bg-black/[0.02] active:bg-black/[0.03] dark:hover:bg-white/[0.04] dark:active:bg-white/[0.04] transition-colors p-4 sm:p-5 flex flex-col justify-between"
-                  >
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-primary capitalize">
-                          {rule.categorySlug}
-                        </span>
-                        <Badge
-                          variant="outline"
-                          className="text-[10px] px-1.5 py-0 font-medium"
-                        >
-                          {rule.difficulty}
-                        </Badge>
-                      </div>
+          {/* Quick Filter Status Pills (Desktop Quick Select) */}
 
-                      <h3 className="text-sm font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
-                        {rule.titleEn}
-                      </h3>
-                      <p className="text-xs text-muted-foreground font-bengali">
-                        {rule.titleBn}
-                      </p>
-                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                        {t(rule.shortDescriptionBn, rule.shortDescriptionEn)}
-                      </p>
-                    </div>
+          {/* Active Filter Quick-Dismiss Chips Strip */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap items-center gap-1.5 px-1 pt-1">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#242423]/40 dark:text-zinc-500 mr-1">
+                {t("সক্রিয় ফিল্টার:", "Active:")}
+              </span>
 
-                    <div className="mt-3 pt-2 border-t border-black/[0.06] dark:border-white/[0.08] flex items-center justify-end text-xs font-medium text-muted-foreground group-hover:text-primary">
-                      <Link
-                        href={`/grammar/${rule.sectionSlug || "parts-of-speech"}/${rule.categorySlug}/${rule.slug}`}
-                        className="inline-flex items-center gap-1 hover:text-primary transition-colors"
-                      >
-                        <span>{t("নিয়মটি পড়ুন", "Study rule")}</span>
-                        <ArrowRight className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
+              {/* Search query chip */}
+              {searchQuery.trim() && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-[#242423] ring-1 ring-black/5 hover:bg-rose-50 hover:text-rose-600 dark:bg-[#1c1c1e] dark:text-[#f3f3f2] dark:ring-white/10 dark:hover:bg-rose-950/20 dark:hover:text-rose-400"
+                >
+                  <span>&ldquo;{searchQuery}&rdquo;</span>
+                  <X className="size-3 opacity-60" />
+                </button>
+              )}
+
+              {/* Section chip */}
+              {selectedSection !== "all" && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedSection("all")}
+                  className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-[#242423] ring-1 ring-black/5 hover:bg-rose-50 hover:text-rose-600 dark:bg-[#1c1c1e] dark:text-[#f3f3f2] dark:ring-white/10 dark:hover:bg-rose-950/20 dark:hover:text-rose-400"
+                >
+                  <span>
+                    {sections.find((s) => s.slug === selectedSection)
+                      ?.titleEn || selectedSection}
+                  </span>
+                  <X className="size-3 opacity-60" />
+                </button>
+              )}
+
+              {/* Difficulty chip */}
+              {selectedDifficulty !== "all" && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedDifficulty("all")}
+                  className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-[#242423] ring-1 ring-black/5 hover:bg-rose-50 hover:text-rose-600 dark:bg-[#1c1c1e] dark:text-[#f3f3f2] dark:ring-white/10 dark:hover:bg-rose-950/20 dark:hover:text-rose-400"
+                >
+                  <span>{selectedDifficulty}</span>
+                  <X className="size-3 opacity-60" />
+                </button>
+              )}
+
+              {/* Status chip */}
+              {selectedStatus !== "all" && (
+                <button
+                  type="button"
+                  onClick={() => setSelectedStatus("all")}
+                  className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-500/20 hover:bg-rose-50 hover:text-rose-600 dark:bg-emerald-500/15 dark:text-emerald-300 dark:hover:bg-rose-950/20 dark:hover:text-rose-400"
+                >
+                  <span>
+                    {selectedStatus === "completed"
+                      ? t("সম্পন্ন", "Mastered")
+                      : t("অসম্পূর্ণ", "In Progress")}
+                  </span>
+                  <X className="size-3 opacity-60" />
+                </button>
+              )}
+
+              {/* Sort chip */}
+              {sortOption !== "default" && (
+                <button
+                  type="button"
+                  onClick={() => setSortOption("default")}
+                  className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-[#242423] ring-1 ring-black/5 hover:bg-rose-50 hover:text-rose-600 dark:bg-[#1c1c1e] dark:text-[#f3f3f2] dark:ring-white/10 dark:hover:bg-rose-950/20 dark:hover:text-rose-400"
+                >
+                  <span>{sortOption === "az" ? "A → Z" : "Z → A"}</span>
+                  <X className="size-3 opacity-60" />
+                </button>
+              )}
             </div>
           )}
-        </section>
-      )}
+        </div>
 
-      {/* Main Content: Parent Grammar Modules (One Frame Grid Pattern) */}
-      {!isFiltering && (
-        <section className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-black/[0.06] dark:border-white/[0.08] pb-3">
-            <div>
-              <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <LayoutGrid className="h-4 w-4" />
-                </div>
-                <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground">
-                  {t("ব্যাকরণ পাঠ্যক্রমসমূহ", "Grammar Curriculum Modules")}
-                </h2>
-              </div>
-              <p className="mt-0.5 text-xs text-muted-foreground">
+        {/* ========================================================= */}
+        {/* 3. DYNAMIC RULE SEARCH RESULTS (If active rule query)     */}
+        {/* ========================================================= */}
+        {isRuleSearchActive && (
+          <section className="space-y-3 pt-1">
+            <div className="flex items-center justify-between text-xs text-[#242423]/60 dark:text-zinc-400">
+              <span className="font-medium">
                 {t(
-                  "ইংরেজি ব্যাকরণের মূল বিষয়ভিত্তিক অধ্যায়সমূহ। পদ প্রকরণ, কাল, রূপান্তর ও যতিচিহ্নের নিয়মাবলি।",
-                  "Structured curriculum modules from core parts of speech to tenses, sentence structure, and mechanics."
+                  `${matchingRules.length}টি মিলে যাওয়া নিয়ম`,
+                  `${matchingRules.length} matching rules`,
                 )}
-              </p>
+              </span>
             </div>
 
-            <span className="text-xs text-muted-foreground font-mono self-start sm:self-auto">
-              {sections.length} {t("টি মূল মডিউল", "Core Modules")}
-            </span>
-          </div>
+            {matchingRules.length > 0 ? (
+              <div className={CARD}>
+                <StaggerContainer className="divide-y divide-black/[0.04] dark:divide-white/[0.05]">
+                  {matchingRules.map((rule) => {
+                    const isCompleted = progress.completedRuleIds.includes(
+                      rule.id,
+                    );
+                    return (
+                      <StaggerItem key={rule.id}>
+                        <Link
+                          href={`/grammar/${rule.sectionSlug || "parts-of-speech"}/${rule.categorySlug}/${rule.slug}`}
+                          className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 hover:bg-[#242423]/[0.02] dark:hover:bg-white/[0.03] transition-colors"
+                        >
+                          <div className="min-w-0 flex-1 space-y-1">
+                            <div className="flex items-center gap-2">
+                              {isCompleted ? (
+                                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                                  <CheckCircle2 className="size-3.5" />
+                                  <span>{t("সম্পন্ন", "Done")}</span>
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[#242423]/40 dark:text-zinc-500">
+                                  <Circle className="size-3" />
+                                  <span>{t("শেখা বাকি", "Study")}</span>
+                                </span>
+                              )}
+                              <span className="rounded-full bg-black/[0.04] dark:bg-white/[0.06] px-2 py-0.5 text-[10.5px] font-semibold text-[#242423]/70 dark:text-zinc-300 capitalize">
+                                {rule.categorySlug}
+                              </span>
+                              <span className="rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 text-[10.5px] font-semibold">
+                                {rule.difficulty}
+                              </span>
+                            </div>
 
-          {/* Parent Categories in One Frame Grid */}
-          <div className="rounded-2xl border border-black/[0.06] bg-white/70 backdrop-blur-xl dark:border-white/[0.08] dark:bg-zinc-900/60 overflow-hidden shadow-xs">
-            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2">
-              {sections.map((section) => {
+                            <h3 className="text-sm sm:text-base font-bold text-[#1c1c1e] dark:text-[#f4f4f5] group-hover:underline">
+                              {rule.titleEn}
+                            </h3>
+
+                            <p className="text-xs text-[#242423]/55 dark:text-zinc-400 font-bengali">
+                              {rule.titleBn}
+                            </p>
+
+                            <p className="text-xs text-[#242423]/60 dark:text-zinc-400 line-clamp-1">
+                              {t(
+                                rule.shortDescriptionBn,
+                                rule.shortDescriptionEn,
+                              )}
+                            </p>
+                          </div>
+
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#1c1c1e] dark:text-[#f4f4f5] shrink-0 self-start sm:self-center">
+                            <span>{t("পড়ুন", "Study")}</span>
+                            <ArrowRight className="size-3.5 group-hover:translate-x-0.5 transition-transform" />
+                          </span>
+                        </Link>
+                      </StaggerItem>
+                    );
+                  })}
+                </StaggerContainer>
+              </div>
+            ) : (
+              <div className="rounded-[22px] border border-dashed border-black/[0.1] bg-white/40 p-8 text-center space-y-1 dark:border-white/[0.1] dark:bg-[#1c1c1e]/40">
+                <p className="text-sm font-semibold text-[#1c1c1e] dark:text-[#f4f4f5]">
+                  {t(
+                    "কোনো ব্যাকরণ নিয়ম পাওয়া যায়নি।",
+                    "No matching grammar rules found.",
+                  )}
+                </p>
+                <p className="text-xs text-[#242423]/50 dark:text-zinc-400">
+                  {t(
+                    "অন্য কোনো শব্দ দিয়ে খুঁজুন অথবা নিচের অধ্যায়গুলো দেখুন।",
+                    "Try another search term or browse the curriculum sections below.",
+                  )}
+                </p>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* ========================================================= */}
+        {/* 4. CURRICULUM SECTION CARDS                               */}
+        {/* ========================================================= */}
+        <section className="space-y-4 pt-1">
+          {/* <div className="flex items-center justify-between">
+            <h2 className="text-base sm:text-lg font-bold tracking-tight text-[#1c1c1e] dark:text-[#f4f4f5]">
+              {t("পাঠ্যক্রম অধ্যায়সমূহ", "Curriculum Sections")}
+            </h2>
+
+            <span className="text-xs font-semibold tabular-nums text-[#242423]/50 dark:text-zinc-400">
+              {displayedSections.length} {t("টি অধ্যায়", "Sections")}
+            </span>
+          </div> */}
+
+          {displayedSections.length === 0 ? (
+            <div className="rounded-[22px] border border-dashed border-black/[0.1] bg-white/40 p-10 text-center space-y-1.5 dark:border-white/[0.1] dark:bg-[#1c1c1e]/40">
+              <p className="text-sm font-semibold text-[#1c1c1e] dark:text-[#f4f4f5]">
+                {t(
+                  "কোনো অধ্যায় পাওয়া যায়নি।",
+                  "No sections match your filter.",
+                )}
+              </p>
+              <button
+                type="button"
+                onClick={resetAllFilters}
+                className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#1c1c1e] text-white dark:bg-white dark:text-[#1c1c1e] px-3.5 py-1.5 text-xs font-semibold cursor-pointer"
+              >
+                <span>{t("ফিল্টার রিসেট করুন", "Reset Filters")}</span>
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+              {displayedSections.map((section) => {
                 const sectionCompletedCount = allRules.filter(
                   (r) =>
-                    (r.sectionSlug === section.slug || r.sectionSlug === section.id) &&
-                    progress.completedRuleIds.includes(r.id)
+                    (r.sectionSlug === section.slug ||
+                      r.sectionSlug === section.id) &&
+                    progress.completedRuleIds.includes(r.id),
                 ).length;
 
                 return (
-                  <StaggerItem key={section.id}>
-                    <GrammarSectionCard
-                      section={section}
-                      completedRulesCount={sectionCompletedCount}
-                      isGridCell={true}
-                    />
-                  </StaggerItem>
+                  <GrammarSectionCard
+                    key={section.id}
+                    section={section}
+                    completedRulesCount={sectionCompletedCount}
+                  />
                 );
               })}
-            </StaggerContainer>
-          </div>
+            </div>
+          )}
         </section>
-      )}
+
+        {/* ========================================================= */}
+        {/* 5. FILTER MODAL DIALOG (Matches /vocabulary/[level])      */}
+        {/* ========================================================= */}
+        <Dialog open={filterModalOpen} onOpenChange={setFilterModalOpen}>
+          <DialogContent
+            showCloseButton={false}
+            className="max-w-md sm:max-w-lg rounded-[28px] sm:rounded-[32px] bg-white p-5 sm:p-6 shadow-2xl dark:bg-[#1c1c1e] border border-black/[0.06] dark:border-white/[0.08] max-h-[88vh] overflow-y-auto"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3.5 border-b border-black/[0.05] dark:border-white/[0.06]">
+              <div>
+                <DialogTitle className="text-lg font-bold tracking-tight text-[#242423] dark:text-[#f3f3f2]">
+                  {t("ব্যাকরণ ফিল্টার", "Filter Grammar")}
+                </DialogTitle>
+                <DialogDescription className="mt-0.5 text-xs text-[#242423]/55 dark:text-zinc-400">
+                  {t(
+                    "অধ্যায়, কঠিনতার মাত্রা ও শেখার স্ট্যাটাস নির্বাচন করুন।",
+                    "Refine lessons by section, level, and study status.",
+                  )}
+                </DialogDescription>
+              </div>
+              <button
+                type="button"
+                onClick={() => setFilterModalOpen(false)}
+                className="flex size-8 items-center justify-center rounded-full bg-[#f1f1ef] text-[#242423]/70 hover:bg-[#eaeae8] hover:text-[#242423] dark:bg-[#252528] dark:text-zinc-300 dark:hover:bg-[#2c2c30] cursor-pointer"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+
+            <div className="space-y-5 pt-3">
+              {/* 1. Study Status */}
+              <div>
+                <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#242423]/50 dark:text-zinc-400 mb-2">
+                  <CheckCircle2 className="size-3.5" />
+                  <span>{t("শেখার স্ট্যাটাস", "Study Status")}</span>
+                </p>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {[
+                    { value: "all", label: "All Rules", labelBn: "সব নিয়ম" },
+                    {
+                      value: "uncompleted",
+                      label: "In Progress",
+                      labelBn: "অসম্পূর্ণ",
+                    },
+                    {
+                      value: "completed",
+                      label: "Mastered",
+                      labelBn: "সম্পন্ন",
+                    },
+                  ].map((st) => {
+                    const isActive = pendingStatus === st.value;
+                    return (
+                      <button
+                        key={st.value}
+                        type="button"
+                        onClick={() =>
+                          setPendingStatus(st.value as GrammarStatusFilter)
+                        }
+                        className={cn(
+                          "flex items-center justify-center gap-1.5 rounded-full py-2 px-2.5 text-xs font-semibold transition-all active:scale-95 cursor-pointer",
+                          isActive
+                            ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                            : "bg-[#f1f1ef] text-[#242423]/70 hover:bg-[#eaeae8] hover:text-[#242423] dark:bg-[#252528] dark:text-zinc-300 dark:hover:bg-[#2c2c30]",
+                        )}
+                      >
+                        <span>{t(st.labelBn, st.label)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 2. Sections / Modules */}
+              <div>
+                <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#242423]/50 dark:text-zinc-400 mb-2">
+                  <Layers className="size-3.5" />
+                  <span>
+                    {t(
+                      "ব্যাকরণ অধ্যায় (Curriculum Section)",
+                      "Curriculum Section",
+                    )}
+                  </span>
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setPendingSection("all")}
+                    className={cn(
+                      "rounded-full px-3 py-1.5 text-xs font-semibold transition-all active:scale-95 cursor-pointer",
+                      pendingSection === "all"
+                        ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                        : "bg-[#f1f1ef] text-[#242423]/70 hover:bg-[#eaeae8] hover:text-[#242423] dark:bg-[#252528] dark:text-zinc-300 dark:hover:bg-[#2c2c30]",
+                    )}
+                  >
+                    {t("সব অধ্যায়", "All Sections")}
+                  </button>
+                  {sections.map((sec) => {
+                    const isActive = pendingSection === sec.slug;
+                    return (
+                      <button
+                        key={sec.id}
+                        type="button"
+                        onClick={() => setPendingSection(sec.slug)}
+                        className={cn(
+                          "rounded-full px-3 py-1.5 text-xs font-semibold transition-all active:scale-95 cursor-pointer",
+                          isActive
+                            ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                            : "bg-[#f1f1ef] text-[#242423]/70 hover:bg-[#eaeae8] hover:text-[#242423] dark:bg-[#252528] dark:text-zinc-300 dark:hover:bg-[#2c2c30]",
+                        )}
+                      >
+                        {sec.titleEn}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 3. Difficulty Level */}
+              <div>
+                <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#242423]/50 dark:text-zinc-400 mb-2">
+                  <GraduationCap className="size-3.5" />
+                  <span>{t("কঠিনতার মাত্রা", "Difficulty Level")}</span>
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {(
+                    ["all", "Beginner", "Intermediate", "Advanced"] as const
+                  ).map((lvl) => {
+                    const isActive = pendingDifficulty === lvl;
+                    return (
+                      <button
+                        key={lvl}
+                        type="button"
+                        onClick={() => setPendingDifficulty(lvl)}
+                        className={cn(
+                          "rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all active:scale-95 cursor-pointer",
+                          isActive
+                            ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                            : "bg-[#f1f1ef] text-[#242423]/70 hover:bg-[#eaeae8] hover:text-[#242423] dark:bg-[#252528] dark:text-zinc-300 dark:hover:bg-[#2c2c30]",
+                        )}
+                      >
+                        {lvl === "all" ? t("সব লেভেল", "All Levels") : lvl}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 4. Sort Order */}
+              <div>
+                <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#242423]/50 dark:text-zinc-400 mb-2">
+                  <ArrowUpDown className="size-3.5" />
+                  <span>{t("সাজানোর ক্রম", "Sort Order")}</span>
+                </p>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {[
+                    {
+                      value: "default",
+                      label: "Curriculum",
+                      labelBn: "কারিকুলাম",
+                    },
+                    { value: "az", label: "A → Z", labelBn: "A → Z" },
+                    { value: "za", label: "Z → A", labelBn: "Z → A" },
+                  ].map((s) => {
+                    const isActive = pendingSort === s.value;
+                    return (
+                      <button
+                        key={s.value}
+                        type="button"
+                        onClick={() =>
+                          setPendingSort(s.value as GrammarSortOption)
+                        }
+                        className={cn(
+                          "rounded-full py-2 px-2.5 text-xs font-semibold transition-all active:scale-95 cursor-pointer",
+                          isActive
+                            ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                            : "bg-[#f1f1ef] text-[#242423]/70 hover:bg-[#eaeae8] hover:text-[#242423] dark:bg-[#252528] dark:text-zinc-300 dark:hover:bg-[#2c2c30]",
+                        )}
+                      >
+                        {t(s.labelBn, s.label)}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="mt-6 pt-3 border-t border-black/[0.05] dark:border-white/[0.06] flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setPendingSection("all");
+                  setPendingDifficulty("all");
+                  setPendingStatus("all");
+                  setPendingSort("default");
+                }}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:underline cursor-pointer"
+              >
+                <RotateCcw className="size-3" />
+                <span>{t("রিসেট", "Reset")}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={applyPendingFilters}
+                className="rounded-full bg-[#1c1c1e] text-white dark:bg-white dark:text-[#1c1c1e] px-5 py-2 text-xs font-semibold tracking-tight shadow-xs hover:opacity-90 active:scale-95 transition-all cursor-pointer"
+              >
+                {t("ফিল্টার প্রয়োগ করুন", "Apply Filters")}
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 }
-
-

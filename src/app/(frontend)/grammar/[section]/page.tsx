@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { fetchDbSectionBySlug, fetchDbCategories } from "@/services/grammar.service";
+import { GRAMMAR_SECTIONS, GRAMMAR_CATEGORIES } from "@/data/grammar-data";
 import { PartsOfSpeechOverview } from "@/components/grammar/parts-of-speech-overview";
 
 interface SectionPageProps {
@@ -13,7 +13,9 @@ export async function generateMetadata({
   params,
 }: SectionPageProps): Promise<Metadata> {
   const { section: sectionSlug } = await params;
-  const section = await fetchDbSectionBySlug(sectionSlug);
+  const section = GRAMMAR_SECTIONS.find(
+    (s) => s.slug === sectionSlug || s.id === sectionSlug
+  );
 
   if (!section) {
     return {
@@ -34,13 +36,17 @@ export async function generateMetadata({
 
 export default async function SectionPage({ params }: SectionPageProps) {
   const { section: sectionSlug } = await params;
-  const section = await fetchDbSectionBySlug(sectionSlug);
+  const section = GRAMMAR_SECTIONS.find(
+    (s) => s.slug === sectionSlug || s.id === sectionSlug
+  );
 
   if (!section) {
     notFound();
   }
 
-  const categories = await fetchDbCategories(sectionSlug);
+  const categories = GRAMMAR_CATEGORIES.filter(
+    (c) => c.sectionId === section.id || c.sectionId === section.slug
+  );
 
   return <PartsOfSpeechOverview categories={categories} section={section} />;
 }

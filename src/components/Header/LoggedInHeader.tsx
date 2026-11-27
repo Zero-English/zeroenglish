@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { signOut, useSession } from 'next-auth/react'
-import { useTheme } from 'next-themes'
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 import {
   ChevronLeft,
   LayoutDashboard,
@@ -23,77 +23,78 @@ import {
   BookOpen,
   PenTool,
   BrainCircuit,
-} from 'lucide-react'
+} from "lucide-react";
 
-import { useLanguage } from '@/components/language-provider'
-import { useAuthStore } from '@/lib/auth-store'
-import { openNotesDialog } from '@/lib/notes-dialog'
-import { getHeaderPage } from '@/lib/header-page'
-import { UserAvatar } from '@/components/UserAvatar'
+import { useLanguage } from "@/components/language-provider";
+import { useAuthStore } from "@/lib/auth-store";
+import { openNotesDialog } from "@/lib/notes-dialog";
+import { getHeaderPage } from "@/lib/header-page";
+import { UserAvatar } from "@/components/UserAvatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetClose,
   SheetContent,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet'
-import { cn } from '@/lib/utils'
-import logo from '@/public/assets/logo/main-logo.webp'
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import logo from "@/public/assets/logo/main-logo.webp";
 
 export function LoggedInHeader() {
-  const { data: session } = useSession()
-  const logout = useAuthStore((s) => s.logout)
-  const { lang, toggleLanguage } = useLanguage()
-  const { theme, setTheme, systemTheme } = useTheme()
-  const router = useRouter()
-  const pathname = usePathname()
-  const [menuOpen, setMenuOpen] = useState(false)
+  const { data: session } = useSession();
+  const logout = useAuthStore((s) => s.logout);
+  const { lang, toggleLanguage } = useLanguage();
+  const { theme, setTheme, systemTheme } = useTheme();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const user = session?.user
-  const isAdmin = user?.role === 'admin'
-  const canContribute = user?.role === 'admin' || user?.role === 'contributor'
-  const currentTheme = theme === 'system' ? systemTheme : theme
+  const user = session?.user;
+  const isAdmin = user?.role === "admin";
+  const canContribute = user?.role === "admin" || user?.role === "contributor";
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
-  const headerPage = getHeaderPage(pathname)
-  const isDashboard = pathname === '/dashboard' || pathname === '/'
+  const headerPage = getHeaderPage(pathname);
+  const isDashboard = pathname === "/dashboard" || pathname === "/";
 
   // Resolve hierarchy navigation
-  const backHref = headerPage?.parentHref ?? (isDashboard ? null : '/dashboard')
+  const backHref =
+    headerPage?.parentHref ?? (isDashboard ? null : "/dashboard");
   const backLabel =
-    lang === 'en'
-      ? headerPage?.parentTitleEn ?? 'Dashboard'
-      : headerPage?.parentTitleBn ?? 'ড্যাশবোর্ড'
+    lang === "en"
+      ? (headerPage?.parentTitleEn ?? "Dashboard")
+      : (headerPage?.parentTitleBn ?? "ড্যাশবোর্ড");
 
   const currentTitle = headerPage
-    ? lang === 'en'
+    ? lang === "en"
       ? headerPage.titleEn
       : headerPage.titleBn
     : isDashboard
-      ? lang === 'en'
-        ? 'Dashboard'
-        : 'ড্যাশবোর্ড'
-      : 'Zero English'
+      ? lang === "en"
+        ? "Dashboard"
+        : "ড্যাশবোর্ড"
+      : "Zero English";
 
   const toggleTheme = () => {
-    setTheme(currentTheme === 'dark' ? 'light' : 'dark')
-  }
+    setTheme(currentTheme === "dark" ? "light" : "dark");
+  };
 
   const handleSignOut = async () => {
-    logout()
+    logout();
     await Promise.allSettled([
-      fetch('/api/v1/auth/logout', { method: 'POST' }),
+      fetch("/api/v1/auth/logout", { method: "POST" }),
       signOut({ redirect: false }),
-    ])
-    router.push('/')
-    router.refresh()
-  }
+    ]);
+    router.push("/");
+    router.refresh();
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full shrink-0 select-none border-b border-black/[0.06] bg-white/90 backdrop-blur-xl backdrop-saturate-150 transition-colors dark:border-white/[0.08] dark:bg-[#0c0c0e]/90">
@@ -107,7 +108,20 @@ export function LoggedInHeader() {
               aria-label={`Back to ${backLabel}`}
             >
               <ChevronLeft className="size-4 shrink-0 text-primary" />
-              <span className="truncate max-w-[100px] sm:max-w-[140px]">{backLabel}</span>
+              <span className="truncate max-w-[100px] sm:max-w-[140px]">
+                {backLabel}
+              </span>
+            </Link>
+          ) : pathname === "/dashboard" ? (
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1 -ml-1 py-1.5 pr-2 text-xs font-semibold text-[#242423] transition-colors hover:text-primary active:scale-95 dark:text-[#f3f3f2]"
+              aria-label={lang === "en" ? "Home" : "মূলপাতা"}
+            >
+              <ChevronLeft className="size-4 shrink-0 text-primary" />
+              <span className="truncate max-w-[100px] sm:max-w-[140px]">
+                {lang === "en" ? "Home" : "মূলপাতা"}
+              </span>
             </Link>
           ) : (
             <Link
@@ -137,11 +151,11 @@ export function LoggedInHeader() {
           <button
             type="button"
             onClick={toggleLanguage}
-            title={lang === 'bn' ? 'Switch to English' : 'Switch to Bangla'}
+            title={lang === "bn" ? "Switch to English" : "Switch to Bangla"}
             className="hidden sm:inline-flex h-8 items-center gap-1 rounded-lg bg-[#f1f1ef] px-2 text-xs font-semibold text-[#242423] transition-all hover:bg-[#e7e7e4] active:scale-95 dark:bg-[#252528] dark:text-[#f3f3f2] dark:hover:bg-[#2e2e32]"
           >
             <Languages className="size-3" />
-            <span>{lang === 'bn' ? 'বাং' : 'EN'}</span>
+            <span>{lang === "bn" ? "বাং" : "EN"}</span>
           </button>
 
           {/* Theme Toggle */}
@@ -151,7 +165,11 @@ export function LoggedInHeader() {
             aria-label="Toggle theme"
             className="hidden sm:flex size-8 items-center justify-center rounded-lg bg-[#f1f1ef] text-[#242423] transition-all hover:bg-[#e7e7e4] active:scale-95 dark:bg-[#252528] dark:text-[#f3f3f2] dark:hover:bg-[#2e2e32]"
           >
-            {currentTheme === 'dark' ? <Sun className="size-3.5" /> : <Moon className="size-3.5" />}
+            {currentTheme === "dark" ? (
+              <Sun className="size-3.5" />
+            ) : (
+              <Moon className="size-3.5" />
+            )}
           </button>
 
           {/* Desktop Profile Dropdown */}
@@ -180,7 +198,7 @@ export function LoggedInHeader() {
                 >
                   <div className="rounded-[16px] bg-[#f1f1ef] p-2.5 dark:bg-[#252528]">
                     <p className="truncate text-xs font-bold text-[#242423] dark:text-[#f3f3f2]">
-                      {user.name || 'Learner'}
+                      {user.name || "Learner"}
                     </p>
                     {user.email && (
                       <p className="truncate text-[11px] text-[#242423]/60 dark:text-zinc-400">
@@ -189,16 +207,25 @@ export function LoggedInHeader() {
                     )}
                   </div>
                   <DropdownMenuSeparator className="my-1 bg-black/[0.06] dark:bg-white/[0.08]" />
-                  <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
-                    <Link href="/dashboard" className="flex items-center gap-2.5">
+                  <DropdownMenuItem
+                    asChild
+                    className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer"
+                  >
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center gap-2.5"
+                    >
                       <LayoutDashboard className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
-                      <span>{lang === 'en' ? 'Dashboard' : 'ড্যাশবোর্ড'}</span>
+                      <span>{lang === "en" ? "Dashboard" : "ড্যাশবোর্ড"}</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
+                  <DropdownMenuItem
+                    asChild
+                    className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer"
+                  >
                     <Link href="/profile" className="flex items-center gap-2.5">
                       <User className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
-                      <span>{lang === 'en' ? 'My Profile' : 'প্রোফাইল'}</span>
+                      <span>{lang === "en" ? "My Profile" : "প্রোফাইল"}</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
@@ -206,33 +233,64 @@ export function LoggedInHeader() {
                     className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer flex items-center gap-2.5"
                   >
                     <NotebookPen className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
-                    <span>{lang === 'en' ? 'My Notes' : 'আমার নোট'}</span>
+                    <span>{lang === "en" ? "My Notes" : "আমার নোট"}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
-                    <Link href="/profile?tab=learned&type=grammar" className="flex items-center gap-2.5">
+                  <DropdownMenuItem
+                    asChild
+                    className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer"
+                  >
+                    <Link
+                      href="/profile?tab=learned&type=grammar"
+                      className="flex items-center gap-2.5"
+                    >
                       <GraduationCap className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
-                      <span>{lang === 'en' ? 'My Grammar Rules' : 'আমার ব্যাকরণ রুলস'}</span>
+                      <span>
+                        {lang === "en"
+                          ? "My Grammar Rules"
+                          : "আমার ব্যাকরণ রুলস"}
+                      </span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
-                    <Link href="/leaderboard" className="flex items-center gap-2.5">
+                  <DropdownMenuItem
+                    asChild
+                    className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer"
+                  >
+                    <Link
+                      href="/leaderboard"
+                      className="flex items-center gap-2.5"
+                    >
                       <Trophy className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
-                      <span>{lang === 'en' ? 'Leaderboard' : 'লিডারবোর্ড'}</span>
+                      <span>
+                        {lang === "en" ? "Leaderboard" : "লিডারবোর্ড"}
+                      </span>
                     </Link>
                   </DropdownMenuItem>
                   {canContribute && (
-                    <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
-                      <Link href="/contribute" className="flex items-center gap-2.5">
+                    <DropdownMenuItem
+                      asChild
+                      className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer"
+                    >
+                      <Link
+                        href="/contribute"
+                        className="flex items-center gap-2.5"
+                      >
                         <SquarePen className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
-                        <span>{lang === 'en' ? 'Contribute' : 'কন্ট্রিবিউট'}</span>
+                        <span>
+                          {lang === "en" ? "Contribute" : "কন্ট্রিবিউট"}
+                        </span>
                       </Link>
                     </DropdownMenuItem>
                   )}
                   {isAdmin && (
-                    <DropdownMenuItem asChild className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer">
+                    <DropdownMenuItem
+                      asChild
+                      className="rounded-xl px-2.5 py-2 text-xs font-medium cursor-pointer"
+                    >
                       <Link href="/admin" className="flex items-center gap-2.5">
                         <Shield className="size-3.5 text-[#242423]/70 dark:text-zinc-400" />
-                        <span>{lang === 'en' ? 'Admin Panel' : 'অ্যাডমিন প্যানেল'}</span>
+                        <span>
+                          {lang === "en" ? "Admin Panel" : "অ্যাডমিন প্যানেল"}
+                        </span>
                       </Link>
                     </DropdownMenuItem>
                   )}
@@ -243,7 +301,7 @@ export function LoggedInHeader() {
                     className="rounded-xl px-2.5 py-2 text-xs font-semibold cursor-pointer gap-2.5 text-rose-600 focus:text-rose-600 dark:text-rose-400"
                   >
                     <LogOut className="size-3.5" />
-                    <span>{lang === 'en' ? 'Sign out' : 'লগ আউট'}</span>
+                    <span>{lang === "en" ? "Sign out" : "লগ আউট"}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -257,7 +315,7 @@ export function LoggedInHeader() {
                 type="button"
                 className="inline-flex h-8 shrink-0 items-center justify-center rounded-lg bg-[#f1f1ef] px-2.5 text-xs font-semibold text-[#242423] transition-all hover:bg-[#e7e7e4] active:scale-95 dark:bg-[#252528] dark:text-[#f3f3f2] dark:hover:bg-[#2e2e32]"
               >
-                <span>{lang === 'en' ? 'Menu' : 'মেনু'}</span>
+                <span>{lang === "en" ? "Menu" : "মেনু"}</span>
               </button>
             </SheetTrigger>
             <SheetContent
@@ -283,10 +341,10 @@ export function LoggedInHeader() {
                   )}
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-xs font-bold text-[#242423] dark:text-[#f3f3f2]">
-                      {user?.name || 'Learner'}
+                      {user?.name || "Learner"}
                     </p>
                     <p className="truncate text-[10px] text-[#242423]/60 dark:text-zinc-400">
-                      {user?.email || 'Zero English'}
+                      {user?.email || "Zero English"}
                     </p>
                   </div>
                 </div>
@@ -304,7 +362,7 @@ export function LoggedInHeader() {
               {/* Navigation Hierarchy Modules */}
               <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
                 <SheetTitle className="sr-only">
-                  {lang === 'en' ? 'App Navigation' : 'অ্যাপ নেভিগেশন'}
+                  {lang === "en" ? "App Navigation" : "অ্যাপ নেভিগেশন"}
                 </SheetTitle>
 
                 {/* Main Hubs */}
@@ -313,98 +371,108 @@ export function LoggedInHeader() {
                     href="/dashboard"
                     onClick={() => setMenuOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]',
-                      pathname === '/dashboard'
-                        ? 'bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]'
-                        : 'text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]'
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]",
+                      pathname === "/dashboard"
+                        ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                        : "text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]",
                     )}
                   >
                     <LayoutDashboard className="size-4 shrink-0" />
-                    <span>{lang === 'en' ? 'Dashboard' : 'ড্যাশবোর্ড'}</span>
+                    <span>{lang === "en" ? "Dashboard" : "ড্যাশবোর্ড"}</span>
                   </Link>
 
                   <Link
                     href="/vocabulary"
                     onClick={() => setMenuOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]',
-                      pathname.startsWith('/vocabulary')
-                        ? 'bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]'
-                        : 'text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]'
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]",
+                      pathname.startsWith("/vocabulary")
+                        ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                        : "text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]",
                     )}
                   >
                     <BookOpen className="size-4 shrink-0" />
-                    <span>{lang === 'en' ? 'Vocabulary' : 'শব্দভাণ্ডার'}</span>
+                    <span>{lang === "en" ? "Vocabulary" : "শব্দভাণ্ডার"}</span>
                   </Link>
 
                   <Link
                     href="/grammar"
                     onClick={() => setMenuOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]',
-                      pathname.startsWith('/grammar')
-                        ? 'bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]'
-                        : 'text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]'
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]",
+                      pathname.startsWith("/grammar")
+                        ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                        : "text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]",
                     )}
                   >
                     <GraduationCap className="size-4 shrink-0" />
-                    <span>{lang === 'en' ? 'Grammar Lessons' : 'গ্রামার লেসন'}</span>
+                    <span>
+                      {lang === "en" ? "Grammar Lessons" : "গ্রামার লেসন"}
+                    </span>
                   </Link>
 
                   <Link
                     href="/written"
                     onClick={() => setMenuOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]',
-                      pathname.startsWith('/written')
-                        ? 'bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]'
-                        : 'text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]'
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]",
+                      pathname.startsWith("/written")
+                        ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                        : "text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]",
                     )}
                   >
                     <PenTool className="size-4 shrink-0" />
-                    <span>{lang === 'en' ? 'Written Practice' : 'লিখিত প্রস্তুতি'}</span>
+                    <span>
+                      {lang === "en" ? "Written Practice" : "লিখিত প্রস্তুতি"}
+                    </span>
                   </Link>
 
                   <Link
                     href="/quiz/daily"
                     onClick={() => setMenuOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]',
-                      pathname.startsWith('/quiz')
-                        ? 'bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]'
-                        : 'text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]'
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]",
+                      pathname.startsWith("/quiz")
+                        ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                        : "text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]",
                     )}
                   >
                     <BrainCircuit className="size-4 shrink-0" />
-                    <span>{lang === 'en' ? 'Daily Quiz & Exams' : 'দৈনিক কুইজ ও পরীক্ষা'}</span>
+                    <span>
+                      {lang === "en"
+                        ? "Daily Quiz & Exams"
+                        : "দৈনিক কুইজ ও পরীক্ষা"}
+                    </span>
                   </Link>
 
                   <Link
                     href="/leaderboard"
                     onClick={() => setMenuOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]',
-                      pathname === '/leaderboard'
-                        ? 'bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]'
-                        : 'text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]'
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]",
+                      pathname === "/leaderboard"
+                        ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                        : "text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]",
                     )}
                   >
                     <Trophy className="size-4 shrink-0" />
-                    <span>{lang === 'en' ? 'Leaderboard' : 'লিডারবোর্ড'}</span>
+                    <span>{lang === "en" ? "Leaderboard" : "লিডারবোর্ড"}</span>
                   </Link>
 
                   <Link
                     href="/profile"
                     onClick={() => setMenuOpen(false)}
                     className={cn(
-                      'flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]',
-                      pathname === '/profile'
-                        ? 'bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]'
-                        : 'text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]'
+                      "flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all active:scale-[0.98]",
+                      pathname === "/profile"
+                        ? "bg-[#242423] text-white shadow-xs dark:bg-white dark:text-[#242423]"
+                        : "text-[#242423]/80 hover:bg-[#f1f1ef] dark:text-zinc-200 dark:hover:bg-[#252528]",
                     )}
                   >
                     <User className="size-4 shrink-0" />
-                    <span>{lang === 'en' ? 'My Profile' : 'আমার প্রোফাইল'}</span>
+                    <span>
+                      {lang === "en" ? "My Profile" : "আমার প্রোফাইল"}
+                    </span>
                   </Link>
 
                   {isAdmin && (
@@ -414,7 +482,9 @@ export function LoggedInHeader() {
                       className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold text-primary hover:bg-primary/10 transition-all active:scale-[0.98]"
                     >
                       <Shield className="size-4 shrink-0" />
-                      <span>{lang === 'en' ? 'Admin Panel' : 'অ্যাডমিন প্যানেল'}</span>
+                      <span>
+                        {lang === "en" ? "Admin Panel" : "অ্যাডমিন প্যানেল"}
+                      </span>
                     </Link>
                   )}
                 </div>
@@ -429,28 +499,32 @@ export function LoggedInHeader() {
                     className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-[#242423]/70 hover:bg-white active:scale-95 transition-all dark:text-zinc-300 dark:hover:bg-[#1c1c1e]"
                   >
                     <Languages className="size-3.5" />
-                    <span>{lang === 'bn' ? 'বাংলা' : 'English'}</span>
+                    <span>{lang === "bn" ? "বাংলা" : "English"}</span>
                   </button>
                   <button
                     type="button"
                     onClick={toggleTheme}
                     className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-[#242423]/70 hover:bg-white active:scale-95 transition-all dark:text-zinc-300 dark:hover:bg-[#1c1c1e]"
                   >
-                    {currentTheme === 'dark' ? <Sun className="size-3.5" /> : <Moon className="size-3.5" />}
-                    <span>{currentTheme === 'dark' ? 'Light' : 'Dark'}</span>
+                    {currentTheme === "dark" ? (
+                      <Sun className="size-3.5" />
+                    ) : (
+                      <Moon className="size-3.5" />
+                    )}
+                    <span>{currentTheme === "dark" ? "Light" : "Dark"}</span>
                   </button>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => {
-                    setMenuOpen(false)
-                    handleSignOut()
+                    setMenuOpen(false);
+                    handleSignOut();
                   }}
                   className="flex w-full items-center justify-center gap-2 rounded-full bg-rose-500/10 py-2.5 text-xs font-semibold text-rose-600 transition-all hover:bg-rose-500/20 active:scale-95 dark:text-rose-400"
                 >
                   <LogOut className="size-3.5" />
-                  <span>{lang === 'en' ? 'Sign out' : 'লগ আউট'}</span>
+                  <span>{lang === "en" ? "Sign out" : "লগ আউট"}</span>
                 </button>
               </div>
             </SheetContent>
@@ -458,5 +532,5 @@ export function LoggedInHeader() {
         </div>
       </div>
     </header>
-  )
+  );
 }
